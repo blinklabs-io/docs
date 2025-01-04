@@ -20,8 +20,7 @@ const config: DocsThemeConfig = {
     )
   },
   nextThemes: {
-    defaultTheme: 'light',
-    forcedTheme: 'light'
+    defaultTheme: 'light'
   },
   sidebar: {
     toggleButton: true,
@@ -35,8 +34,7 @@ const config: DocsThemeConfig = {
     lightness : {dark : 30 , light : 45 } , 
     hue : {light : 274 , dark : 279  } ,
     saturation : {light : 100 , dark : 100} ,
-  },
-  darkMode: false
+  }
 }
 
 export default config
