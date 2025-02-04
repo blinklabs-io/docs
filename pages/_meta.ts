@@ -1,11 +1,11 @@
 const page = {
-  index: 'Introduction',
-  anotherPage : 'Another Page',
-  fruits: "Fruits",
+  index: 'Blinklabs Introduction',
+  anotherPage : 'Blinklabs Products',
+  fruits: "Blinklabs Products",
   GitHub: {
-    title: 'GitHub',
+    title: 'Blinklabs GitHub',
     type: 'page',
-    href: 'https://github.com/ShrihariMohan/nextra-v3-docs-template',
+    href: 'https://github.com/blinklabs-io',
     newWindow: true
   }
 }
