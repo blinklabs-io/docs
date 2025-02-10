@@ -5,7 +5,7 @@ const withNextra = nextra({
   themeConfig: './theme.config.tsx'
 })
 
-export default withNextra()
+export default withNextra({ images: { unoptimized: true }})
 
 // If you have other Next.js configurations, you can pass them as the parameter:
 // export default withNextra({ /* other next.js config */ })
