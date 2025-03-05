@@ -28,7 +28,7 @@ In this example we downloaded the Adder exe to our desktop, so we can right clic
 
 📝Take note of the path we will need it moving forward✅
 
-<div align="left"><figure><img src="../../../../assets/adder/adder_exe_path.png" alt=""><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../assets/adder/adder_exe_path.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 ## Step 3 - Run Adder in Command Prompt
 
