@@ -27,9 +27,9 @@ Before we breakdown the filters and commands we will use for this example we nee
 
 In order to filter by a Stake Pool (SPO) that we want to watch we need the pool id. We can use tools like cexplorer.io to search by a Pool ticker so we can get the pool id.
 
-In this example we searched the ticker `ECP` on [cexplorer.io](https://www.cexplorer.io)&#x20;
+In this example we searched the ticker `ECP` on [cexplorer.io](https://www.cexplorer.io)
 
-<div align="left"><figure><img src="../../../../assets/adder/assets/pool_id.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../assets/adder/pool_id.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
