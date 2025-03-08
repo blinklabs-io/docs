@@ -1,3 +1,8 @@
+---
+title: Adder Command List
+description: List of Adder Commands.
+---
+
 # <ins>List of commands:</ins>
 
 ## Configuration:
