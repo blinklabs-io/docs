@@ -22,7 +22,7 @@ c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
 
 <br />
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start/quick-start-overview.md) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](quick-start-overview.md) guide.
 
 
 
