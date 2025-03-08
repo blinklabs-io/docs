@@ -1,3 +1,8 @@
+---
+title: Adder - Example 4
+description: Adder Example 4 - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification.
+---
+
 # Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
 
 This example is a bit more advanced, where we use Adder to watch a smart contract to see if a certain asset was added or removed from the contract.
