@@ -1,3 +1,8 @@
+---
+title: Adder - Example 3
+description: Adder Example 3 - Watch an SPO and get an Alert in Discord.
+---
+
 # Watch an SPO and get an Alert in Discord
 
 In this example we will use Adder to send us a Discord notification via webhooks, when there is a change to the stake pool that we want to track. 
