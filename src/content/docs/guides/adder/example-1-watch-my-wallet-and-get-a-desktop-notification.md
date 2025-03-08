@@ -1,3 +1,8 @@
+---
+title: Adder - Example 1
+description: Adder Example 1 - Watch My Wallet and get a Desktop Notification.
+---
+
 # Watch My Wallet and get a Desktop Notification
 
 Let's walk through how to open Adder, input filters and commands so that it tracks your wallet and gives you a desktop notification when there is a change to your wallet.
