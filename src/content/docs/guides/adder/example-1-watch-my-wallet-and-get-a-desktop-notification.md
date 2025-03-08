@@ -7,7 +7,7 @@ description: Adder Example 1 - Watch My Wallet and get a Desktop Notification.
 
 Let's walk through how to open Adder, input filters and commands so that it tracks your wallet and gives you a desktop notification when there is a change to your wallet.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start/quick-start-overview.md) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](quick-start-overview.md) guide.
 
 ***
 <a name="step-1" />
