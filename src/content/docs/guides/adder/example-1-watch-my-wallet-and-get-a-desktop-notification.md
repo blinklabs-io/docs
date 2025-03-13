@@ -16,7 +16,7 @@ Let's walk through how to open Adder, input filters and commands so that it trac
 
 First we need our wallet's receive address or staking address. To find your receive address go to your preferred Cardano wallet. Find the receive tab or button and copy your address. 📝Make a note of address to use later.
 
-<div align="left"><figure><img src="adder/receive_address.png" alt="" width="563"><figcaption><p>Receive Address</p></figcaption></figure></div>
+<div align="left"><figure><img src="../../assets/adder/receive_address.png" alt="" width="563"><figcaption><p>Receive Address</p></figcaption></figure></div>
 
 To find your staking address you can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search your receive address and then copy your staking address
 
