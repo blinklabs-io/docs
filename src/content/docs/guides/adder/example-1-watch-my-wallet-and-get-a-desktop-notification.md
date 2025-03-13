@@ -18,7 +18,7 @@ First we need our wallet's receive address or staking address. To find your rece
 
 <div align="left"><figure><img src="adder/receive_address.png" alt="" width="563"><figcaption><p>Receive Address</p></figcaption></figure></div>
 
-To find your staking address you can use tools like [cexplorer.io](https://www.cexplorer.io) to search your receive address and then copy your staking address
+To find your staking address you can use tools like<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> [cexplorer.io](https://www.cexplorer.io) to search your receive address and then copy your staking address
 
 Staking Address:
 <div align="left"><figure><img src="adder/staking_address.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
