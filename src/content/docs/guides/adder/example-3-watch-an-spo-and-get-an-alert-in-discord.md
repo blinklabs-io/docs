@@ -26,13 +26,13 @@ In this example we will use Adder to send us a Discord notification via webhooks
 
 Before we breakdown the filters and commands we will use for this example we need to get a pool id to track and webhook URL so we can get alerts in our Discord. We will walk through the steps to get both of those below.
 
-<a name="step-1" />
+<a name="step-1"></a>
 
 ## Step 1 - Get Pool ID for the Pool you want to Track
 
 In order to filter by a Stake Pool (SPO) that we want to watch we need the pool id. We can use tools like cexplorer.io to search by a Pool ticker so we can get the pool id.
 
-In this example we searched the ticker `ECP` on [cexplorer.io](https://www.cexplorer.io)
+In this example we searched the ticker `ECP` on <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>
 
 <div align="left"><figure><img src="adder/pool_id.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
@@ -46,7 +46,7 @@ pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
 
 ***
 
-<a name="step-2" />
+<a name="step-2"></a>
 
 ## Step 2 - Get Discord webhook URL
 
