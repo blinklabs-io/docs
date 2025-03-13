@@ -7,7 +7,7 @@ description: Adder Example 2 - Watch a Token and get a Desktop Notification.
 
 In this example we will use Adder to send us a desktop notification when there is a transaction that includes a certain token or asset that we want to track.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](quick-start-overview.md) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](,,/quick-start-overview) guide.
 
 ***
 
@@ -17,7 +17,7 @@ Let us start by picking an asset that we want to follow.
 
 In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like [cexplorer.io](https://www.cexplorer.io) to search by a token name so we can get the asset id / asset fingerprint.
 
-<div align="left"><figure><img src="../../../../assets/adder/cTOSI_cexploer.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/cTOSI_cexploer.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 📝Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
 
@@ -78,7 +78,7 @@ C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.tr
 Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI you will get a desktop alert.
 
 
-<div align="left"><figure><img src="../../../../assets/adder/adder_desktop_alert.png" alt="" width="403"></figure></div>
+<div align="left"><figure><img src="adder/adder_desktop_alert.png" alt="" width="403"></figure></div>
 
 ***
 
@@ -86,7 +86,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a t
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
-1. [Example 1](example-1-watch-my-wallet-and-get-a-desktop-notification.md) - Watch My Wallet and get a Desktop Notification
-2. [Example 2](example-2-watch-a-token-and-get-a-desktop-notification.md) - Watch a Token and get a Desktop Notification
-3. [Example 3](example-3-watch-an-spo-and-get-an-alert-in-discord.md) - Watch an SPO and get an Alert in Discord
-4. [Example 4](example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification.md) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+1. [Example 1](../example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
+2. [Example 2](../example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
+3. [Example 3](../example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
+4. [Example 4](../example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
