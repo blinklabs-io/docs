@@ -169,7 +169,7 @@ description: List of Adder Commands.
   -output-push-accessTokenUrl string
 ```
   
-> specifies the url to get access token from (default "https://www.googleapis.com/auth/firebase.messaging")
+> specifies the url to get access token from (default `https://www.googleapis.com/auth/firebase.messaging`)
 <br />
 
 ```
@@ -204,7 +204,7 @@ description: List of Adder Commands.
   -output-webhook-url string
 ```
   
-> specifies the url to use (default "http://localhost:3000")
+> specifies the url to use (default `http://localhost:3000`)
 <br />
 
 ```
