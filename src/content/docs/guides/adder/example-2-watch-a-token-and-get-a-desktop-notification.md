@@ -7,7 +7,7 @@ description: Adder Example 2 - Watch a Token and get a Desktop Notification.
 
 In this example we will use Adder to send us a desktop notification when there is a transaction that includes a certain token or asset that we want to track.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](,,/quick-start-overview) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start-overview) guide.
 
 ***
 
