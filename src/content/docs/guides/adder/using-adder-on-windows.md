@@ -53,4 +53,4 @@ Now we are ready to run Adder with filters and commands so we can track certain 
 <br />
 
 
-We are now ready to walk through some [examples](../using-adder-examples/) on the usefulness and power💪 of Adder!
+We are now ready to walk through some [examples](../using-adder-examples) on the usefulness and power💪 of Adder!
