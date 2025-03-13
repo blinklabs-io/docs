@@ -17,7 +17,7 @@ To get started follow the steps below
 
 ## Step 1 - Download exe from Blinklabs
 
-First start by going to [https://blinklabs.io/projects-open-source](https://blinklabs.io/projects-open-source) and scroll down to Adder
+First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Adder
 
 <div align="left"><figure><img src="adder/adder_website_blinklabs.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
