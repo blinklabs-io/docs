@@ -14,4 +14,4 @@ It’s easy, just download the Adder executable file from blinklabs.io and open 
 
 ✅Get started with our [Quick Start](../quick-start-overview) guide and learn what Adder can do in our how to guides and examples
 
-<figure><img src="adder/adder-logo-with-text-horizontal.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../adder/adder-logo-with-text-horizontal.png" alt=""><figcaption></figcaption></figure>
