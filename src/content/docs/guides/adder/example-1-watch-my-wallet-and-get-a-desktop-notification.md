@@ -7,7 +7,7 @@ description: Adder Example 1 - Watch My Wallet and get a Desktop Notification.
 
 Let's walk through how to open Adder, input filters and commands so that it tracks your wallet and gives you a desktop notification when there is a change to your wallet.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](quick-start-overview.md) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start-overview) guide.
 
 ***
 <a name="step-1" />
@@ -16,12 +16,12 @@ Let's walk through how to open Adder, input filters and commands so that it trac
 
 First we need our wallet's receive address or staking address. To find your receive address go to your preferred Cardano wallet. Find the receive tab or button and copy your address. 📝Make a note of address to use later.
 
-<div align="left"><figure><img src="../../../../assets/adder/receive_address.png" alt="" width="563"><figcaption><p>Receive Address</p></figcaption></figure></div>
+<div align="left"><figure><img src="adder/receive_address.png" alt="" width="563"><figcaption><p>Receive Address</p></figcaption></figure></div>
 
 To find your staking address you can use tools like [cexplorer.io](https://www.cexplorer.io) to search your receive address and then copy your staking address
 
 Staking Address:
-<div align="left"><figure><img src="../../../../assets/adder/staking_address.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
+<div align="left"><figure><img src="adder/staking_address.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
 
 📝Make note of the wallet address you want to use; we will need it later. For this example, we used the following staking address:
 
@@ -82,16 +82,16 @@ C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.tr
 ```
 
 Final command to run:
-<div align="left"><figure><img src="../../../../assets/adder/final_ex_1_command.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
+<div align="left"><figure><img src="adder/final_ex_1_command.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
 
 After you hit enter to run the command you can minimize the cmd window and let it run in the background. Now when your wallet sends or receives an asset you will get a desktop notification.
 
 Minimize:
-<div align="left"><figure><img src="../../../../assets/adder/minimize_final_ex_1_command.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
+<div align="left"><figure><img src="adder/minimize_final_ex_1_command.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
 
 
 Desktop Alert:
-<div align="left"><figure><img src="../../../../assets/adder/adder_desktop_alert.png" alt="" width="403"><figcaption><p></p></figcaption></figure></div>
+<div align="left"><figure><img src="adder/adder_desktop_alert.png" alt="" width="403"><figcaption><p></p></figcaption></figure></div>
 
 ### Congratulations!&#x20;
 
@@ -102,7 +102,7 @@ Desktop Alert:
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
-1. [Example 1](example-1-watch-my-wallet-and-get-a-desktop-notification.md) - Watch My Wallet and get a Desktop Notification
-2. [Example 2](example-2-watch-a-token-and-get-a-desktop-notification.md) - Watch a Token and get a Desktop Notification
-3. [Example 3](example-3-watch-an-spo-and-get-an-alert-in-discord.md) - Watch an SPO and get an Alert in Discord
-4. [Example 4](example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification.md) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+1. [Example 1](../example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
+2. [Example 2](../example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
+3. [Example 3](../example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
+4. [Example 4](../example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
