@@ -20,7 +20,7 @@ In this example we will use Adder to send us a Discord notification via webhooks
 
 ***
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](quick-start-overview.md) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start-overview) guide.
 
 ***
 
@@ -34,7 +34,7 @@ In order to filter by a Stake Pool (SPO) that we want to watch we need the pool 
 
 In this example we searched the ticker `ECP` on [cexplorer.io](https://www.cexplorer.io)
 
-<div align="left"><figure><img src="../../../../assets/adder/pool_id.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/pool_id.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
@@ -57,37 +57,37 @@ In order to get alerts in our Discord server we will need a webhook URL. The fol
 
 1 ) Click `Edit Channel` in the channel that you would like to receive alerts in
 
-<div align="left"><figure><img src="../../../../assets/adder/discord_edit_channel.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/discord_edit_channel.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
 2 ) Click `Integrations`
 
-<div align="left"><figure><img src="../../../../assets/adder/discord_integrations.png" alt="" width="250"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/discord_integrations.png" alt="" width="250"><figcaption></figcaption></figure></div>
 
 <br />
 
 3 ) Click `Create Webhook`
 
-<div align="left"><figure><img src="../../../../assets/adder/discord_create_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/discord_create_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
 4 ) Click `New Webhook`
 
-<div align="left"><figure><img src="../../../../assets/adder/discord_new_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/discord_new_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
 5 ) Name your Webhook&#x20;
 
-<div align="left"><figure><img src="../../../../assets/adder/discord_rename_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/discord_rename_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
 6 ) Click `Copy Webhook URL`
 
-<div align="left"><figure><img src="../../../../assets/adder/discord_copy_webhook_url.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/discord_copy_webhook_url.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br />
 
@@ -165,7 +165,7 @@ To get Discord notifications when a change occurs to a SPO, we will run the foll
 C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction, chainsync.block -filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 -output webhook -output-webhook-format discord -output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
-<div align="left"><figure><img src="../../../../assets/adder/SPO_block_alert.png" alt="" width="479"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="adder/SPO_block_alert.png" alt="" width="479"><figcaption></figcaption></figure></div>
 
 ### Congratulations!
 
@@ -178,7 +178,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a c
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
-1. [Example 1](example-1-watch-my-wallet-and-get-a-desktop-notification.md) - Watch My Wallet and get a Desktop Notification
-2. [Example 2](example-2-watch-a-token-and-get-a-desktop-notification.md) - Watch a Token and get a Desktop Notification
-3. [Example 3](example-3-watch-an-spo-and-get-an-alert-in-discord.md) - Watch an SPO and get an Alert in Discord
-4. [Example 4](example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification.md) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+1. [Example 1](../example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
+2. [Example 2](../example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
+3. [Example 3](../example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
+4. [Example 4](../example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
