@@ -32,7 +32,7 @@ Let's start by picking an asset that we want to follow. If this asset is used in
 
 ## Step 1 - Get Asset ID / Fingerprint
 
-In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like [cexplorer.io](https://www.cexplorer.io) to search by a token name so we can get the asset id / asset fingerprint.
+In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search by a token name so we can get the asset id / asset fingerprint.
 
 <div align="left"><figure><img src="adder/cTOSI_cexploer.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
