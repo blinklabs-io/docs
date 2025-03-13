@@ -10,9 +10,9 @@ Let's walk through how to open Adder, input filters and commands so that it trac
 > ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start-overview) guide.
 
 ***
-<a name="step-1" />
+<a name="step-1"></a>
 
-## Step 1 - Get Wallet Address
+## Step 1 - Get Wallet Address 
 
 First we need our wallet's receive address or staking address. To find your receive address go to your preferred Cardano wallet. Find the receive tab or button and copy your address. 📝Make a note of address to use later.
 
