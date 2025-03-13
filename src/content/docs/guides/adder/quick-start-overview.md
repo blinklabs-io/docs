@@ -7,7 +7,7 @@ description: Adder Quick Start Overview.
 
 Adder is a tool for tailing the Cardano blockchain and emitting events for each block and transaction seen, based on user configurable filters. These events can be processed in other event-based toolchains to produce rich and reactive applications for Cardano.
 
-Basically, Adder lets you track events you care about, and you can get notified in the way you prefer. For example, Adder can send you a desktop notification when a payment is sent to any wallet address that you want to track. Or maybe you want to be notified in Discord when your Stake Pool Operator (SPO) mints a block. Adder can track the different Cardano blockchain events that you care about and notify you when they occur.
+Basically, Adder lets you track events you care about, and you can get notified in the way you prefer. For example, Adder can send you a desktop notification when a payment is sent to any wallet address that you want to track. Or maybe you want to be notified in Discord when your Stake Pool Operator (SPO) mints a block. Adder can track the different Cardano blockchain events that you care about and notify you when they occur. 
 
 ***
 
