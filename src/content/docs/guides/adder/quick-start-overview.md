@@ -19,13 +19,13 @@ To get started follow the steps below
 
 First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Adder
 
-<div align="left"><figure><img src="../../assets/adder/adder_website_blinklabs.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<img src="/adder/adder_website_blinklabs.png" alt="" width="563">
 
 ## Step 2 - Select Operating System
 
 For this example, we selected Windows x64. Please select your operating system.
 
-<div align="left"><figure><img src="adder/adder_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<img src="/adder/adder_operating_system.png" alt="" width="563">
 
 ## Step 3 Download Executable File
 
