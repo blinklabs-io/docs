@@ -37,6 +37,8 @@ Download the executable file to your preferred location or path.
 
 !<img src="/adder/adder_download.png" alt="image3" width="563">
 
+!<img src="../adder/adder_download.png" alt="image4" width="563">
+
 ### Congratulations you are ready to start using Adder!
 
 Now you are ready to explore the how to use Adder and its amazing features. See our how to use Adder guides and examples to explore Adder.
