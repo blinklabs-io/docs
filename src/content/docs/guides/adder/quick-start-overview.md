@@ -31,7 +31,7 @@ For this example, we selected Windows x64. Please select your operating system.
 
 Download the executable file to your preferred location or path.
 
-!<img src="adder/adder_download.png" alt="image3" width="563">
+!<img src="/adder/adder_download.png" alt="image3" width="563">
 
 ### Congratulations you are ready to start using Adder!
 
