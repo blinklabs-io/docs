@@ -18,19 +18,20 @@ To get started follow the steps below
 ## Step 1 - Download exe from Blinklabs
 
 First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Adder
-![image](/transparent-no-buffer.png)
+
+![image](/_astro/transparent-no-buffer.png)
 
 ## Step 2 - Select Operating System
 
 For this example, we selected Windows x64. Please select your operating system.
 
-<img src="/adder/adder_operating_system.png" alt="" width="563">
+![image2](/adder/adder_operating_system.png)
 
 ## Step 3 Download Executable File
 
 Download the executable file to your preferred location or path.
 
-<div align="left"><figure><img src="adder/adder_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
+!<img src="adder/adder_download.png" alt="image3" width="563">
 
 ### Congratulations you are ready to start using Adder!
 
