@@ -21,6 +21,10 @@ First start by going to <a href="https://blinklabs.io/projects-open-source" targ
 
 ![image](/_astro/transparent-no-buffer.png)
 
+import imageSrc from '@assets/adder/adder_operating_system.png';
+
+![image1a](imageSrc)
+
 ## Step 2 - Select Operating System
 
 For this example, we selected Windows x64. Please select your operating system.
