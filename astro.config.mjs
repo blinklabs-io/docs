@@ -4,9 +4,17 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://blinklabs.io',
 	integrations: [
 		starlight({
-			title: 'Blink Labs Docs',
+			customCss: [
+				'./src/styles/main.css',
+			],
+			title: 'Blink Labs',
+			logo: {
+				src: './src/assets/transparent-no-buffer.png',
+				replacesTitle: true,
+			},
 			social: {
 				github: 'https://github.com/blinklabs-io',
 			},
