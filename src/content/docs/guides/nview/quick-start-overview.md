@@ -53,8 +53,6 @@ For this example, we named the binary file `nview` and saved the file to our `$N
 chmod +x $NODE_HOME/nview
 ```
 
-INSERT IMAGE
-<div align="left"><figure><img src="adder/adder_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 ***
 
