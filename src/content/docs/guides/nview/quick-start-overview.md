@@ -36,7 +36,7 @@ Copy the path to the file and run the following command to download the binary f
 
 <br>
 
-⚠️Adjust link path to correct path for the version you want to download
+⚠️Adjust link path to correct path for the version you want to download. 
 
 ```
 wget -cO - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview-v0.10.7-linux-amd64 > nview
@@ -77,5 +77,7 @@ INSERT IMAGE
 
 
 ### Congratulations you are ready to start monitoring your node using nview!
+
+Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration, which exposes metrics in Prometheus data format on a specific port. However if you need to make change you can run nview with a configuration file. 
 
 Want to adjust the configuration file of nview? See our how to use a configuration file for nview guide.
