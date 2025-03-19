@@ -21,18 +21,18 @@ To get started follow the steps below
 
 2. Select your operating system of your node server.
 
-<div align="left"><figure><img src="../../../assets/nview/blinklabs_site_nview_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
 <br>
 
 3. You can either download the file and move to your node server or...  
 
-<div align="left"><figure><img src="../assets/nview/blinklabs_site_nview_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br>
 
 Copy the path to the file and run the following command to download on your node server
 
-<div align="left"><figure><img src="../assets/nview/blinklabs_site_nview_copy_link.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_copy_link.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br>
 
@@ -53,6 +53,7 @@ For this example, we named the binary file nview and saved the file to our `$NOD
 chmod +x $NODE_HOME/nview
 ```
 
+INSERT IMAGE
 <div align="left"><figure><img src="adder/adder_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 ***
@@ -67,6 +68,7 @@ cd $NODE_HOME
 ./nview
 ```
 
+INSERT IMAGE
 <div align="left"><figure><img src="adder/adder_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 ***
