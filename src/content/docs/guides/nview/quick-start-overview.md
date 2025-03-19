@@ -7,7 +7,7 @@ description: nview Quick Start Overview.
 
 nview is a local monitoring tool for a Cardano Node (cardano-node) meant to complement remote monitoring tools by providing a local view of a running node from the command line. It is a TUI (terminal user interface) designed to fit most screens. 
 
-Simply download the nview binary file from blinklabs.io on to your node server. Run in server command line. It's that simple to use and you will get motioring right out of the box!
+Simply download the nview binary file from blinklabs.io on to your node server. Then run nview in the server command line. It's that simple to use and you will get motioring right out of the box!
 
 ***
 
