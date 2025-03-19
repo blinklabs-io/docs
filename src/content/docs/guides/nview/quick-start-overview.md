@@ -21,7 +21,7 @@ To get started follow the steps below
 
 2. Select your operating system of your node server.
 
-<div align="left"><figure><img src="../assets/nview/blinklabs_site_nview_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../assets/nview/blinklabs_site_nview_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
 <br>
 
 3. You can either download the file and move to your node server or...  
