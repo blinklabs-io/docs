@@ -1,4 +1,3 @@
-
 ---
 title: nview Using Configuration File
 description: nview - How to use a Configuration (YAML) file.
