@@ -68,8 +68,7 @@ cd $NODE_HOME
 ./nview
 ```
 
-INSERT IMAGE
-<div align="left"><figure><img src="adder/adder_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../assets/nview/nview.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 ***
 
