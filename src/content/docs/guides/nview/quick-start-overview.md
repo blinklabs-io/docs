@@ -19,18 +19,18 @@ To get started follow the steps below
 1. First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to nview. 
 <br>
 
-2. Select your operating system of your node server.
+2. Select the operating system of your node server.
 
 <div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
 <br>
 
-3. You can either download the file and move the file to your node server or...  
+3. You can either download the binary file and move the file to your node server or...  
 
 <div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
 <br>
 
-Copy the path to the file and run the following command to download the binary file on your node server
+Copy the path from Blinklabs and run the following command to download the binary file on your node server
 
 <div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_copy_link.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
@@ -76,6 +76,6 @@ INSERT IMAGE
 
 ### Congratulations you are ready to start monitoring your node using nview!
 
-Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration, which exposes metrics in Prometheus data format on a specific port. However if you need to make change you can run nview with a configuration file. 
+Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration, which exposes metrics in Prometheus data format on a specific port. However, if you need to make change you can run nview with a configuration file. 
 
 Want to adjust the configuration file of nview? See our how to use a [configuration file guide](../using-config-file) for nview.
