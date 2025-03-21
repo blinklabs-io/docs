@@ -14,6 +14,5 @@ Simply download the nview binary file from blinklabs.io on to your node server. 
 
 ✅Get started with our [Quick Start](../quick-start-overview) guide and start monitoring your node with nview.
 
-<figure><img src="nvue/nview_main_image.png" alt=""><figcaption></figcaption></figure>
+<div align="left"><figure><img src="../../../../assets/nview/nview.png" alt="" width="563"><figcaption></figcaption></figure></div>
 
-INSERT IMAGE
