@@ -16,7 +16,7 @@ export default defineConfig({
 					items: [
 						// Each item here is one entry in the navigation menu.
 						{ label: 'g0uroboros', slug: 'guides/g0uroboros' },
-						{ label: 'Adder', slug: 'guides/adder' },
+						{ label: 'Adder', autogenerate: { directory: 'guides/adder' } },
 						{ label: 'Dingo', slug: 'guides/dingo' },
 						{ label: 'nview', slug: 'guides/nview' },
 						{ label: 'Tx Submit API', slug: 'guides/txsubmitapi' },
