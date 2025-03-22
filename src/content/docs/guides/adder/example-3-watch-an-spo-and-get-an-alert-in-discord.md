@@ -34,7 +34,7 @@ In order to filter by a Stake Pool (SPO) that we want to watch we need the pool 
 
 In this example we searched the ticker `ECP` on <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>
 
-<div align="left"><figure><img src="adder/pool_id.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-pool-id](/adder-pool-id.png)
 
 <br />
 
@@ -57,37 +57,37 @@ In order to get alerts in our Discord server we will need a webhook URL. The fol
 
 1 ) Click `Edit Channel` in the channel that you would like to receive alerts in
 
-<div align="left"><figure><img src="adder/discord_edit_channel.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-discord-edit-channel](/adder-discord-edit-channel.png)
 
 <br />
 
 2 ) Click `Integrations`
 
-<div align="left"><figure><img src="adder/discord_integrations.png" alt="" width="250"><figcaption></figcaption></figure></div>
+![adder-discord-integrations](/adder-discord-integrations.png)
 
 <br />
 
 3 ) Click `Create Webhook`
 
-<div align="left"><figure><img src="adder/discord_create_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-discord-create-webhook](/adder-discord-create-webhook.png)
 
 <br />
 
 4 ) Click `New Webhook`
 
-<div align="left"><figure><img src="adder/discord_new_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-discord-new-webhook](/adder-discord-new-webhook.png)
 
 <br />
 
-5 ) Name your Webhook&#x20;
+5 ) Name your Webhook 
 
-<div align="left"><figure><img src="adder/discord_rename_webhook.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-discord-rename-webhook](/adder-discord-rename-webhook.png)
 
 <br />
 
 6 ) Click `Copy Webhook URL`
 
-<div align="left"><figure><img src="adder/discord_copy_webhook_url.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-discord-copy-webhook-url](/adder-discord-copy-webhook-url.png)
 
 <br />
 
@@ -165,7 +165,7 @@ To get Discord notifications when a change occurs to a SPO, we will run the foll
 C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction, chainsync.block -filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 -output webhook -output-webhook-format discord -output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
-<div align="left"><figure><img src="adder/SPO_block_alert.png" alt="" width="479"><figcaption></figcaption></figure></div>
+![adder-SPO-block-alert](/adder-SPO-block-alert.png)
 
 ### Congratulations!
 

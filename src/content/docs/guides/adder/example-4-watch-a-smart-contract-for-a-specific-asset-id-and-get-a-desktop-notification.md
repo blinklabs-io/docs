@@ -10,7 +10,7 @@ This example is a bit more advanced, where we use Adder to watch a smart contrac
 > ⚠️Before we breakdown the filters and commands we will use for this example we assume you already have a smart contract policy in mind that you want to watch.
 
 
-<div align="left"><figure><img src="adder/policy_id.png" alt="" width="479"><figcaption></figcaption></figure></div>
+![adder-policy-id](/adder-policy-id.png)
 
 <br />
 
@@ -34,7 +34,7 @@ Let's start by picking an asset that we want to follow. If this asset is used in
 
 In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search by a token name so we can get the asset id / asset fingerprint.
 
-<div align="left"><figure><img src="adder/cTOSI_cexploer.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
 
 <br />
 
@@ -104,7 +104,7 @@ C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.tr
 
 Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI in our smart contract you will get a desktop alert.
 
-<div align="left"><figure><img src="adder/adder_desktop_alert.png" alt="" width="403"></figure></div>
+![adder-desktop-alert](/adder-desktop-alert.png)
 
 ***
 
