@@ -17,13 +17,13 @@ Now that you have the Adder exe file downloaded, we need to open a command line 
 
 To open a command prompt in Windows, go to your Windows start menu
 
-<div align="left"><figure><img src="adder/windows_start_menu.png" alt="" width="375"></figure></div></p>
+![adder-windows-start-menu](/adder-windows-start-menu.png)
 
 
 
 Next type `cmd` in the search box and then click `Open`
 
-<div align="left"><figure><img src="adder/windows_search_cmd.png" alt="" width="563"></figure></div>
+![adder-windows-search-cmd](/adder-windows-search-cmd.png)
 
 ## Step 2 - Get path for Adder exe
 
@@ -33,13 +33,13 @@ In this example we downloaded the Adder exe to our desktop, so we can right clic
 
 📝Take note of the path we will need it moving forward✅
 
-<div align="left"><figure><img src="adder/adder_exe_path.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-exe-path](/adder-exe-path.png)
 
 ## Step 3 - Run Adder in Command Prompt
 
 Now that we have the path for the Adder exe, type the path in or paste it if you copied the path in the previous step.
 
-<div align="left"><figure><img src="adder/cmd_paste_path.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-cmd-paste-path](/adder-cmd-paste-path.png)
 
 ### Congratulations!
 
