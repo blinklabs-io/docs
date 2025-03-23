@@ -17,7 +17,7 @@ Let us start by picking an asset that we want to follow.
 
 In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search by a token name so we can get the asset id / asset fingerprint.
 
-<div align="left"><figure><img src="adder/cTOSI_cexploer.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
 
 📝Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
 
@@ -78,7 +78,7 @@ C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.tr
 Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI you will get a desktop alert.
 
 
-<div align="left"><figure><img src="adder/adder_desktop_alert.png" alt="" width="403"></figure></div>
+![adder-desktop-alert](/adder-desktop-alert.png)
 
 ***
 
