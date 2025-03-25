@@ -1,5 +1,5 @@
 ---
-title: nview Quick Start Overview
+title: nview Quick Start Guide
 description: nview Quick Start Overview.
 ---
 
@@ -79,4 +79,4 @@ cd $NODE_HOME
 
 Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration, which exposes metrics in Prometheus data format on a specific port. However, if you need to make change you can run nview with a configuration file. 
 
-Want to adjust the configuration file of nview? See our how to use a [configuration file guide](../using-config-file) for nview.
+Want to adjust the configuration file of nview? See our how to use a [configuration file guide](../003-using-config-file) for nview.
