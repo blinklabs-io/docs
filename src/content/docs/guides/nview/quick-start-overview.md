@@ -21,19 +21,18 @@ To get started follow the steps below
 
 2. Select the operating system of your node server.
 
-<div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_operating_system.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![nview-blinklabs-site-operating-system](/nview-blinklabs-site-operating-system.png)
 <br>
 
 3. You can either download the binary file and move the file to your node server or...  
 
-<div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_download.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![nview-blinklabs-site-download](/nview-blinklabs-site-download.png)
 
 <br>
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server
 
-<div align="left"><figure><img src="../../../../assets/nview/blinklabs_site_nview_copy_link.png" alt="" width="563"><figcaption></figcaption></figure></div>
-
+![nview-blinklabs-site-copy-link](/nview-blinklabs-site-copy-link.png)
 <br>
 
 ⚠️Adjust link path to correct path for the version you want to download. 
@@ -68,7 +67,7 @@ cd $NODE_HOME
 ./nview
 ```
 
-<div align="left"><figure><img src="../../../../assets/nview/nview.png" alt="" width="563"><figcaption></figcaption></figure></div>
+![nview-screen](/nview-screen.png)
 
 ***
 
