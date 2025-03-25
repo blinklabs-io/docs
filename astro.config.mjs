@@ -28,7 +28,7 @@ export default defineConfig({
 						{ label: 'g0uroboros', slug: 'guides/g0uroboros' },
 						{ label: 'Adder', autogenerate: { directory: 'guides/adder' } },
 						{ label: 'Dingo', slug: 'guides/dingo' },
-						{ label: 'nview', slug: 'guides/nview' },
+						{ label: 'nview', autogenerate: { directory: 'guides/nview' } },
 						{ label: 'Tx Submit API', slug: 'guides/txsubmitapi' },
 						{ label: 'Bluefin', slug: 'guides/bluefin' },
 						{ label: 'Bursa', slug: 'guides/bursa' },
