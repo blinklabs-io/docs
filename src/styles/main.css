@@ -32,8 +32,8 @@
 }
 
 .sl-link-button:where(.astro-xwgiixxa).primary {
-    background: var(--sl-color-orange);
-    border-color: var(--sl-color-orange);
+    background: var(--sl-color-orange) !important;
+    border-color: var(--sl-color-orange) !important;
     color: var(--sl-color-white) !important;
     font-size: 1.5em !important;
     font-weight: bold !important;
