@@ -9,6 +9,7 @@ export default defineConfig({
 		starlight({
 			customCss: [
 				'./src/styles/main.css',
+				'./src/styles/custom.css',
 			],
 			title: 'Blink Labs',
 			logo: {

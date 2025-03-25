@@ -73,7 +73,6 @@ img:where(.astro-m46x6ez3) {
 }
 
 .card:where(.astro-v5tidmuc):nth-child(4n + 1) {
-  border-radius: 1rem;
   --sl-card-border: var(--sl-color-orange);
   --sl-card-bg: var(--sl-color-orange-low);
 }
@@ -156,113 +155,17 @@ body {
   }
 }
 
-.outer-flex {
-  @apply flex justify-center w-full;
+.sidebar-content {
+  background-image: linear-gradient(to bottom, #0f3f8a, #000a1b 70%);
+  background-repeat: no-repeat;
+  background-color: #000a1b;
+  font-size: 2rem;
 }
 
-.inner-flex {
-  @apply max-w-screen-xl w-full px-14;
+.astro-3ii7xxms {
+  font-size: 1rem;
 }
 
-.section-content {
-  @apply flex w-full py-20;
-
-  @media only screen and (max-width: 600px) {
-    @apply py-16;
-  }
-
-  &:first-of-type {
-    @apply pt-4;
-  }
-
-  &.border {
-    border-top: 40px solid transparent;
-    border-image: url("/assets/border-wavy@2x.png") 40 0 0 0 round;
-
-    @media only screen and (max-width: 860px) {
-      border-top: 20px solid transparent;
-      border-image: url("/assets/border-wavy.png") 20 0 0 0 round;
-    }
-  }
-}
-
-.fade-in {
-  @apply opacity-0;
-
-  &.loaded {
-    @apply opacity-100;
-    transition: opacity 200ms 100ms ease-in;
-  }
-}
-
-h1 {
-  @apply text-5xl font-bold;
-}
-
-h2 {
-  @apply text-2xl font-bold;
-}
-
-h3 {
-  @apply text-xl font-bold;
-}
-
-p {
-  @apply text-base text-blue-200;
-}
-
-a,
-.white-hover-amber {
-  @apply font-bold text-white;
-
-  .svg-inline--fa {
-    @apply mr-2;
-  }
-
-  &:hover {
-    @apply text-amber-500;
-  }
-}
-
-a.active {
-  @apply text-amber-500;
-}
-
-strong {
-  color: inherit;
-}
-
-.text {
-  color: vars.$text-color;
-}
-
-.text-inactive {
-  color: vars.$text-color-inactive;
-}
-
-@media only screen and (max-width: 970px) {
-  html {
-    font-size: 12px;
-  }
-}
-
-@media only screen and (max-width: 760px) {
-  html {
-    font-size: 10px;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  html {
-    font-size: 8px;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  html {
-    font-size: 16px;
-  }
-  .inner-flex {
-    @apply px-8;
-  }
+.astro-g2bywc46 {
+  font-size: 1rem;
 }
