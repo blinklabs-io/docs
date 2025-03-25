@@ -1,16 +1,4 @@
-.hero {
-  text-align: center;
-  padding: 50px 0;
-}
-
-.hero h1 {
-  color: var(--sl-color-accent);
-  font-size: 6em;;
-}
-
-.hero p {
-  font-size: 2em;
-}
+@use "./variables" as vars;
 
 /* Dark mode colors. */
 :root {
@@ -44,8 +32,8 @@
 }
 
 .sl-link-button:where(.astro-xwgiixxa).primary {
-    background: #D97706;
-    border-color: #D97706;
+    background: var(--sl-color-orange);
+    border-color: var(--sl-color-orange);
     color: var(--sl-color-white) !important;
     font-size: 1.5em !important;
     font-weight: bold !important;
@@ -121,5 +109,160 @@ svg:where(.astro-c6vsoqas) {
       font-size: var(--sl-text-sm);
       width: 6rem;
       margin-left: 0.5rem;
+  }
+}
+
+* {
+  margin: 0px;
+  outline: none;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  @apply grid content-center w-full min-h-full text;
+  grid-template-rows: auto 1fr auto;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background-image: linear-gradient(to bottom, #0f3f8a, #000a1b 70%);
+  background-repeat: no-repeat;
+  background-color: #000a1b;
+  overflow-x: hidden;
+
+  &.no-scroll {
+    height: calc(var(--window-inner-height) - 1px);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  @media only screen and (max-width: 600px) {
+    background-image: linear-gradient(to bottom, #0f3f8a, #000a1b 60%);
+  }
+
+  @media only screen and (min-width: 601px) {
+    background-attachment: fixed;
+  }
+}
+
+.outer-flex {
+  @apply flex justify-center w-full;
+}
+
+.inner-flex {
+  @apply max-w-screen-xl w-full px-14;
+}
+
+.section-content {
+  @apply flex w-full py-20;
+
+  @media only screen and (max-width: 600px) {
+    @apply py-16;
+  }
+
+  &:first-of-type {
+    @apply pt-4;
+  }
+
+  &.border {
+    border-top: 40px solid transparent;
+    border-image: url("/assets/border-wavy@2x.png") 40 0 0 0 round;
+
+    @media only screen and (max-width: 860px) {
+      border-top: 20px solid transparent;
+      border-image: url("/assets/border-wavy.png") 20 0 0 0 round;
+    }
+  }
+}
+
+.fade-in {
+  @apply opacity-0;
+
+  &.loaded {
+    @apply opacity-100;
+    transition: opacity 200ms 100ms ease-in;
+  }
+}
+
+h1 {
+  @apply text-5xl font-bold;
+}
+
+h2 {
+  @apply text-2xl font-bold;
+}
+
+h3 {
+  @apply text-xl font-bold;
+}
+
+p {
+  @apply text-base text-blue-200;
+}
+
+a,
+.white-hover-amber {
+  @apply font-bold text-white;
+
+  .svg-inline--fa {
+    @apply mr-2;
+  }
+
+  &:hover {
+    @apply text-amber-500;
+  }
+}
+
+a.active {
+  @apply text-amber-500;
+}
+
+strong {
+  color: inherit;
+}
+
+.text {
+  color: vars.$text-color;
+}
+
+.text-inactive {
+  color: vars.$text-color-inactive;
+}
+
+@media only screen and (max-width: 970px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 760px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+  .inner-flex {
+    @apply px-8;
   }
 }
