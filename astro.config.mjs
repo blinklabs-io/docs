@@ -1,12 +1,22 @@
+
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://blinklabs.io',
 	integrations: [
 		starlight({
-			title: 'Blink Labs Docs',
+			customCss: [
+				'./src/styles/main.css',
+				'./src/styles/custom.css',
+			],
+			title: 'Blink Labs',
+			logo: {
+				src: './src/assets/transparent-no-buffer.png',
+				replacesTitle: true,
+			},
 			social: {
 				github: 'https://github.com/blinklabs-io',
 			},
@@ -16,7 +26,7 @@ export default defineConfig({
 					items: [
 						// Each item here is one entry in the navigation menu.
 						{ label: 'g0uroboros', slug: 'guides/g0uroboros' },
-						{ label: 'Adder', slug: 'guides/adder' },
+						{ label: 'Adder', autogenerate: { directory: 'guides/adder' } },
 						{ label: 'Dingo', slug: 'guides/dingo' },
 						{ label: 'nview', slug: 'guides/nview' },
 						{ label: 'Tx Submit API', slug: 'guides/txsubmitapi' },
