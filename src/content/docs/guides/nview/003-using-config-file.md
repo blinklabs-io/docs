@@ -1,5 +1,5 @@
 ---
-title: nview Using Configuration File
+title: nview Using Configuration File Guide
 description: nview - How to use a Configuration (YAML) file.
 ---
 
