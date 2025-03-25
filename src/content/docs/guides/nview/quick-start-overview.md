@@ -16,15 +16,15 @@ To get started follow the steps below
 
 ## Step 1 - Download binary from Blinklabs
 
-1. First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to nview. 
+#### Step 1-A - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to nview. 
 <br>
 
-2. Select the operating system of your node server.
+#### Step 1-B - Select the operating system of your node server.
 
 ![nview-blinklabs-site-operating-system](/nview-blinklabs-site-operating-system.png)
 <br>
 
-3. You can either download the binary file and move the file to your node server or...  
+#### Step 1-C - You can either download the binary file and move the file to your node server or...  
 
 ![nview-blinklabs-site-download](/nview-blinklabs-site-download.png)
 
