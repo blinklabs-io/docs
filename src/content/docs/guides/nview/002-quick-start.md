@@ -59,7 +59,7 @@ chmod +x $NODE_HOME/nview
 ***
 
 
-## Step 3 Run nview
+## Step 3 - Run nview
 
 Run the executable file by running the following command.
 
