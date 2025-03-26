@@ -101,3 +101,5 @@ prometheus:
   timeout: 3
 
 ```
+
+### Congratulations you are ready to start monitoring your node using nview with your own config file!
