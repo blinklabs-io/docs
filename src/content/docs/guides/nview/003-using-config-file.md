@@ -7,7 +7,9 @@ description: nview - How to use a Configuration (YAML) file.
 
 Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration, which exposes metrics in Prometheus data format on a specific port. However if you need to make change you can run nview with a configuration file.
 
-To use a configuration file, run `nview` with a command line flag to set the file to load as a configuration.
+***
+
+To use a configuration file, run `nview` with a command line flag to set the file to load as a configuration. Edit path to match the path to your config.yml file.
 
 ```
 ./nview -config /path/to/config.yml
@@ -27,6 +29,8 @@ prometheus:
   port: 12798
   timeout: 3
 ```
+
+***
 
 A detailed breakdown of the configuration file:
 
