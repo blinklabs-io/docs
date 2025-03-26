@@ -1,5 +1,5 @@
 ---
-title: nview Quick Start Guide
+title: Quick Start Guide
 description: nview Quick Start Overview.
 ---
 
@@ -38,7 +38,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 ![nview-blinklabs-site-copy-link](/nview-blinklabs-site-copy-link.png)
 <br>
 
-⚠️Adjust link path to correct path for the version you want to download. 
+⚠️ Adjust link path to correct path for the version you want to download. 
 
 ```
 wget -cO - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview-v0.10.7-linux-amd64 > nview
@@ -63,7 +63,7 @@ chmod +x $NODE_HOME/nview
 
 Run the executable file by running the following command.
 
-⚠️For this example, we named the binary file `nview` and saved the file to our `$NODE_HOME` folder.
+⚠️ For this example, we named the binary file `nview` and saved the file to our `$NODE_HOME` folder.
 
 ```
 cd $NODE_HOME

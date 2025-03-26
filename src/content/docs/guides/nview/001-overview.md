@@ -1,5 +1,5 @@
 ---
-title: nview
+title: Overview
 description: A guide about nview.
 ---
 
@@ -12,7 +12,7 @@ Running nview against a running Cardano Node will work out of the box with a def
 ## How do I actually use nview?
 Simply download the nview binary file from blinklabs.io on to your node server. Then run nview in the server command line. It's that simple to use and you will get monitoring right out of the box!
 
-✅Get started with our [Quick Start](../002-quick-start) guide and start monitoring your node with nview.
+✅ Get started with our [Quick Start](../002-quick-start) guide and start monitoring your node with nview.
 
 ![nview-screen](/nview-screen.png)
 
