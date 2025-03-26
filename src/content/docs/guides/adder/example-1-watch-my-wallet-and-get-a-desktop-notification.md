@@ -16,12 +16,12 @@ Let's walk through how to open Adder, input filters and commands so that it trac
 
 First we need our wallet's receive address or staking address. To find your receive address go to your preferred Cardano wallet. Find the receive tab or button and copy your address. 📝Make a note of address to use later.
 
-<div align="left"><figure><img src="../../assets/adder/receive_address.png" alt="" width="563"><figcaption><p>Receive Address</p></figcaption></figure></div>
+![adder-receive-address](/adder-receive-address.png)
 
 To find your staking address you can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search your receive address and then copy your staking address
 
 Staking Address:
-<div align="left"><figure><img src="adder/staking_address.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
+![adder-staking-address](/adder-staking-address.png)
 
 📝Make note of the wallet address you want to use; we will need it later. For this example, we used the following staking address:
 
@@ -82,16 +82,16 @@ C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.tr
 ```
 
 Final command to run:
-<div align="left"><figure><img src="adder/final_ex_1_command.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
+![adder-final-ex-1-command](/adder-final-ex-1-command.png)
 
 After you hit enter to run the command you can minimize the cmd window and let it run in the background. Now when your wallet sends or receives an asset you will get a desktop notification.
 
 Minimize:
-<div align="left"><figure><img src="adder/minimize_final_ex_1_command.png" alt="" width="563"><figcaption><p></p></figcaption></figure></div>
+![adder-minimize-final-ex-1-command](/adder-minimize-final-ex-1-command.png)
 
 
 Desktop Alert:
-<div align="left"><figure><img src="adder/adder_desktop_alert.png" alt="" width="403"><figcaption><p></p></figcaption></figure></div>
+![adder-desktop-alert](/adder-desktop-alert.png)
 
 ### Congratulations!&#x20;
 

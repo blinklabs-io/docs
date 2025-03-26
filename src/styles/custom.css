@@ -1,0 +1,48 @@
+.card {
+  position: relative;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  background: linear-gradient(to right, rgb(79, 70, 229), rgb(37, 99, 235));
+  border-radius: 16px;
+  filter: blur(16px);
+  opacity: 0;
+  transition: opacity 1s;
+  z-index: -1;
+}
+
+.card:hover::before {
+  opacity: 0.2;
+  transition-duration: 0.2s;
+}
+
+.link {
+  position: relative;
+  transition: all 0.3s;
+}
+
+.link::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  background: linear-gradient(to right, rgb(79, 70, 229), rgb(37, 99, 235));
+  border-radius: 16px;
+  filter: blur(16px);
+  opacity: 0;
+  transition: opacity 1s;
+  z-index: -1;
+}
+
+.link:hover::before {
+  opacity: 0.2;
+  transition-duration: 0.2s;
+}
