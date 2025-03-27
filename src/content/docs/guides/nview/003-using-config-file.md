@@ -19,6 +19,8 @@ To use a configuration file, run `nview` with the command line flag `-config` to
 
 ***
 
+<br>
+
 Sample config.yaml:
 
 ```
@@ -35,6 +37,8 @@ prometheus:
 ```
 
 ***
+
+<br>
 
 A detailed breakdown of the configuration file:
 
@@ -105,5 +109,7 @@ prometheus:
   timeout: 3
 
 ```
+
+<br>
 
 ### Congratulations you are ready to start monitoring your node using nview with your own configuration file!
