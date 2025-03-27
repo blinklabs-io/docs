@@ -11,9 +11,13 @@ Running nview against a running Cardano Node will work out of the box with a def
 
 To use a configuration file, run `nview` with a command line flag to set the file to load as a configuration. Edit the path to match the path to your `config.yml` file.
 
+⚠️ Adjust the file path below to match your path to the `config.yml` file.
+
 ```
 ./nview -config /path/to/config.yml
 ```
+
+***
 
 config.yaml:
 
@@ -102,4 +106,4 @@ prometheus:
 
 ```
 
-### Congratulations you are ready to start monitoring your node using nview with your own config file!
+### Congratulations you are ready to start monitoring your node using nview with your own configuration file!
