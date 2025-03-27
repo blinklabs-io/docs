@@ -38,7 +38,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 ![nview-blinklabs-site-copy-link](/nview-blinklabs-site-copy-link.png)
 <br>
 
-⚠️ Adjust link path to correct path for the version you want to download. 
+⚠️ Adjust the link path to the correct path for the version you want to download. 
 
 ```
 wget -cO - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview-v0.10.7-linux-amd64 > nview
@@ -50,6 +50,8 @@ wget -cO - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview
 ## Step 2 - Change Permissions
 
 For this example, we named the binary file `nview` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
+
+⚠️ Adjust the file path and file name if needed. 
 
 ```
 chmod +x $NODE_HOME/nview
@@ -79,4 +81,4 @@ cd $NODE_HOME
 
 Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration. However, if you need to make change you can run nview with a configuration file. 
 
-Want to adjust the configuration file of nview? See our how to use a [configuration file guide](../003-using-config-file) for nview.
+Do you want to adjust the configuration file of nview? See our how to use a [configuration file guide](../003-using-config-file) for nview.
