@@ -19,7 +19,7 @@ To use a configuration file, run `nview` with a command line flag to set the fil
 
 ***
 
-config.yaml:
+Sample config.yaml:
 
 ```
 app:
