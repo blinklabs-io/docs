@@ -9,7 +9,7 @@ Running nview against a running Cardano Node will work out of the box with a def
 
 ***
 
-To use a configuration file, run `nview` with a command line flag to set the file to load as a configuration.
+To use a configuration file, run `nview` with the command line flag `-config` to set the file to load as a configuration.
 
 ⚠️ Adjust the file path below to match your path to the `config.yml` file.
 
