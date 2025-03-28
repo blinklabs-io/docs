@@ -14,7 +14,7 @@ Let's walk through how to open Adder, input filters and commands so that it trac
 
 ## Step 1 - Get Wallet Address 
 
-First we need our wallet's receive address or staking address. To find your receive address go to your preferred Cardano wallet. Find the receive tab or button and copy your address. 📝Make a note of address to use later.
+First we need our wallet's receive address or staking address. To find your receive address go to your preferred Cardano wallet. Find the receive tab or button and copy your address. 📝 Make a note of address to use later.
 
 ![adder-receive-address](/adder-receive-address.png)
 
@@ -23,7 +23,7 @@ To find your staking address you can use tools like <a href="https://www.cexplor
 Staking Address:
 ![adder-staking-address](/adder-staking-address.png)
 
-📝Make note of the wallet address you want to use; we will need it later. For this example, we used the following staking address:
+📝 Make note of the wallet address you want to use; we will need it later. For this example, we used the following staking address:
 
 ```
 stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
@@ -69,7 +69,7 @@ Now that we understand the filters and commands that we want to input into Adder
 
 
 
-> ⚠️Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.\
+> ⚠️ Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.\
 \
 Also make sure you replace the below stake address with your receive or stake address from [Step 1](#step-1)
 
@@ -98,7 +98,7 @@ Desktop Alert:
 ***
 
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
