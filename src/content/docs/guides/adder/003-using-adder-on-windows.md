@@ -31,7 +31,7 @@ Next, we will need to get the path of the Adder exe file that we downloaded so w
 
 In this example we downloaded the Adder exe to our desktop, so we can right click on the Adder exe and copy path.
 
-📝Take note of the path we will need it moving forward✅
+📝 Take note of the path we will need it moving forward ✅
 
 ![adder-exe-path](/adder-exe-path.png)
 
@@ -48,9 +48,9 @@ Now we are ready to run Adder with filters and commands so we can track certain 
 <br />
 
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 <br />
 
 
-We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power💪 of Adder!
+We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power 💪 of Adder!
