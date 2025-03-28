@@ -7,7 +7,7 @@ description: Adder Example 4 - Watch a Smart Contract for a Specific Asset ID an
 
 This example is a bit more advanced, where we use Adder to watch a smart contract to see if a certain asset was added or removed from the contract.
 
-> ⚠️Before we breakdown the filters and commands we will use for this example we assume you already have a smart contract policy in mind that you want to watch.
+> ⚠️ Before we breakdown the filters and commands we will use for this example we assume you already have a smart contract policy in mind that you want to watch.
 
 
 ![adder-policy-id](/adder-policy-id.png)
@@ -38,7 +38,7 @@ In order to filter by a Token that we want to watch we need the asset id also kn
 
 <br />
 
-📝Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
+📝 Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
 
 ```
 asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
@@ -109,7 +109,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a t
 ***
 
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
