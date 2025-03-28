@@ -20,7 +20,7 @@ In this example we will use Adder to send us a Discord notification via webhooks
 
 ***
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../002-quick-start-overview) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../002-quick-start-overview) guide.
 
 ***
 
