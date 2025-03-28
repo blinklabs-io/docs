@@ -1,5 +1,5 @@
 ---
-title: Command List Reference Guide
+title: Command Reference Guide
 description: List of Adder Commands.
 ---
 
