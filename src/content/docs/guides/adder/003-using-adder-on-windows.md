@@ -1,5 +1,5 @@
 ---
-title: Using Adder on Windows
+title: Using on Windows
 description: How to use Adder on Windows.
 ---
 
