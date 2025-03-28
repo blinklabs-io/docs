@@ -1,5 +1,5 @@
 ---
-title: Adder - Example 3
+title: Watch an SPO and get an Alert in Discord
 description: Adder Example 3 - Watch an SPO and get an Alert in Discord.
 ---
 
@@ -10,17 +10,17 @@ In this example we will use Adder to send us a Discord notification via webhooks
 
 ### The events that will trigger an alert are the following changes to a SPO:
 
-✅Block Minted - if the SPO we are tracking mints a block
+✅ Block Minted - if the SPO we are tracking mints a block
 
-✅Stake Delegation - if the SPO we are tracking has a new delegator added to the pool
+✅ Stake Delegation - if the SPO we are tracking has a new delegator added to the pool
 
-✅Pool Registration Updates - if the SPO changes items to it registration like, Relays, fix fee, margin, Name or metadata
+✅ Pool Registration Updates - if the SPO changes items to it registration like, Relays, fix fee, margin, Name or metadata
 
-✅Pool Retirement - if the SPO retires their stake pool
+✅ Pool Retirement - if the SPO retires their stake pool
 
 ***
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start-overview) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../002-quick-start-overview) guide.
 
 ***
 
@@ -38,7 +38,7 @@ In this example we searched the ticker `ECP` on <a href="https://www.cexplorer.i
 
 <br />
 
-📝Make note of the Pool ID, we will need it later. For this example, it was:
+📝 Make note of the Pool ID, we will need it later. For this example, it was:
 
 ```
 pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
@@ -91,7 +91,7 @@ In order to get alerts in our Discord server we will need a webhook URL. The fol
 
 <br />
 
-📝Make sure you make note of your Webhook URL we will need it later. For this example, the Webhook URL we used is:
+📝 Make sure you make note of your Webhook URL we will need it later. For this example, the Webhook URL we used is:
 
 ```
 https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
@@ -174,11 +174,11 @@ Now you can minimize the window and let Adder run in the background. Anytime a c
 ***
 
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
-1. [Example 1](../example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
-2. [Example 2](../example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
-3. [Example 3](../example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
-4. [Example 4](../example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+1. [Example 1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
+2. [Example 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
+3. [Example 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
+4. [Example 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
