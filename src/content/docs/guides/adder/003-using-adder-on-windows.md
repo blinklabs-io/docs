@@ -7,7 +7,7 @@ description: How to use Adder on Windows.
 
 This guide will walk you through how to use Adder on Windows. In the following sections we will show you examples of how to use Adder. Remember these are sample to get you familiar to the type of things Adder is capable of. The real power in Adder can be unlocked by your imagination.
 
-> ✅ Note this guide assume you have downloaded the Adder exe from <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. If you have not downloaded the exe please see our [Quick Start](../quick-start-overview)
+> ✅ Note this guide assume you have downloaded the Adder exe from <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. If you have not downloaded the exe please see our [Quick Start](../002-quick-start-overview)
 
 ## Step 1 - Open a Command Prompt on Windows
 
@@ -53,4 +53,4 @@ Now we are ready to run Adder with filters and commands so we can track certain 
 <br />
 
 
-We are now ready to walk through some [examples](../using-adder-examples-desc) on the usefulness and power💪 of Adder!
+We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power💪 of Adder!

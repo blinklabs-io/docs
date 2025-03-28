@@ -12,6 +12,6 @@ Basically, Adder lets you track events you care about, and you can get notified 
 ## How do I actually use Adder?
 It’s easy, just download the Adder executable file from blinklabs.io and open a command prompt on your computer. In the command prompt call the executable file and tell it what Cardano blockchain events you want to be notified of and how you want to be notified. It’s that simple!
 
-✅ Get started with our [Quick Start](../quick-start-overview) guide and learn what Adder can do in our how to guides and examples
+✅ Get started with our [Quick Start](../002-quick-start-overview) guide and learn what Adder can do in our how to guides and examples
 
 ![adder-logo](/adder-logo-with-text-horizontal.png)
