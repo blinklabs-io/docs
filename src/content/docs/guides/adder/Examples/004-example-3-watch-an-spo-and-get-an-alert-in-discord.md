@@ -10,13 +10,13 @@ In this example we will use Adder to send us a Discord notification via webhooks
 
 ### The events that will trigger an alert are the following changes to a SPO:
 
-✅Block Minted - if the SPO we are tracking mints a block
+✅ Block Minted - if the SPO we are tracking mints a block
 
-✅Stake Delegation - if the SPO we are tracking has a new delegator added to the pool
+✅ Stake Delegation - if the SPO we are tracking has a new delegator added to the pool
 
-✅Pool Registration Updates - if the SPO changes items to it registration like, Relays, fix fee, margin, Name or metadata
+✅ Pool Registration Updates - if the SPO changes items to it registration like, Relays, fix fee, margin, Name or metadata
 
-✅Pool Retirement - if the SPO retires their stake pool
+✅ Pool Retirement - if the SPO retires their stake pool
 
 ***
 
@@ -38,7 +38,7 @@ In this example we searched the ticker `ECP` on <a href="https://www.cexplorer.i
 
 <br />
 
-📝Make note of the Pool ID, we will need it later. For this example, it was:
+📝 Make note of the Pool ID, we will need it later. For this example, it was:
 
 ```
 pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
@@ -91,7 +91,7 @@ In order to get alerts in our Discord server we will need a webhook URL. The fol
 
 <br />
 
-📝Make sure you make note of your Webhook URL we will need it later. For this example, the Webhook URL we used is:
+📝 Make sure you make note of your Webhook URL we will need it later. For this example, the Webhook URL we used is:
 
 ```
 https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
@@ -174,7 +174,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a c
 ***
 
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
