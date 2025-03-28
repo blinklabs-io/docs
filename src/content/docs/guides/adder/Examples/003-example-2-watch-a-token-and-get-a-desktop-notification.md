@@ -19,7 +19,7 @@ In order to filter by a Token that we want to watch we need the asset id also kn
 
 ![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
 
-📝Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
+📝 Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
 
 ```
 asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
@@ -82,7 +82,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a t
 
 ***
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
