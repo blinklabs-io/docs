@@ -1,5 +1,5 @@
 ---
-title: Adder - Example 4
+title: Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
 description: Adder Example 4 - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification.
 ---
 
@@ -7,7 +7,7 @@ description: Adder Example 4 - Watch a Smart Contract for a Specific Asset ID an
 
 This example is a bit more advanced, where we use Adder to watch a smart contract to see if a certain asset was added or removed from the contract.
 
-> ⚠️Before we breakdown the filters and commands we will use for this example we assume you already have a smart contract policy in mind that you want to watch.
+> ⚠️ Before we breakdown the filters and commands we will use for this example we assume you already have a smart contract policy in mind that you want to watch.
 
 
 ![adder-policy-id](/adder-policy-id.png)
@@ -22,7 +22,7 @@ c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
 
 <br />
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../quick-start-overview) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../002-quick-start-overview) guide.
 
 
 
@@ -38,7 +38,7 @@ In order to filter by a Token that we want to watch we need the asset id also kn
 
 <br />
 
-📝Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
+📝 Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
 
 ```
 asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
@@ -109,11 +109,11 @@ Now you can minimize the window and let Adder run in the background. Anytime a t
 ***
 
 
-> 💡TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
-1. [Example 1](../example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
-2. [Example 2](../example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
-3. [Example 3](../example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
-4. [Example 4](../example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+1. [Example 1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - Watch My Wallet and get a Desktop Notification
+2. [Example 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
+3. [Example 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
+4. [Example 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
