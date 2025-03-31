@@ -5,9 +5,11 @@ description: TxTop Quick Start Overview.
 
 # Quick Start
 
-<!---
+TxTop is a mempool inspector for Cardano Node software.
 
-nview is a local monitoring tool for a Cardano Node (cardano-node) meant to complement remote monitoring tools by providing a local view of a running node from the command line. It is a TUI (terminal user interface) designed to fit most screens. 
+TxTop is a local monitoring tool for a Cardano Node (cardano-node) meant to provide a local view of a running node's mempool transactions with a simple icon legend for at-a-glance transaction categorization.
+ 
+<!---
 
 Simply download the nview binary file from blinklabs.io on to your node server. Then run nview in the server command line. It's that simple to use and you will get monitoring right out of the box! 
 
@@ -19,7 +21,7 @@ To get started follow the steps below
 ## Step 1 - Download binary from Blinklabs  
 <br>
 
-**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to nview.  
+**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to TxTop.  
 
 ![nview-blinklabs-site](/nview-blinklabs-site.png)
 <br>
@@ -43,7 +45,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
 ```
-wget -cO - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview-v0.10.7-linux-amd64 > nview
+wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop-v0.12.3-linux-amd64 > txtop
 ```
 
 ***
@@ -51,27 +53,27 @@ wget -cO - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview
 
 ## Step 2 - Change Permissions
 
-For this example, we named the binary file `nview` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
+For this example, we named the binary file `txtop` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
 
 ⚠️ Adjust the file path and file name if needed. 
 
 ```
-chmod +x $NODE_HOME/nview
+chmod +x $NODE_HOME/txtop
 ```
 
 
 ***
 
 
-## Step 3 - Run nview
+## Step 3 - Run txtop
 
 Run the executable file by running the following command.
 
-⚠️ For this example, we named the binary file `nview` and saved the file to our `$NODE_HOME` folder.
+⚠️ For this example, we named the binary file `txtop` and saved the file to our `$NODE_HOME` folder.
 
 ```
 cd $NODE_HOME
-./nview
+./txtop
 ```
 
 ![nview-screen](/nview-screen.png)
@@ -79,11 +81,7 @@ cd $NODE_HOME
 ***
 
 
-### Congratulations you are ready to start monitoring your node using nview!
-
-Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration. However, if you need to make change you can run nview with a configuration file. 
-
-Do you want to adjust the configuration file of nview? See our how to use a [configuration file guide](../003-using-config-file) for nview.
+### Congratulations you are ready to start inspecting your mempool transactions with TxTop!
 
 -->
 
