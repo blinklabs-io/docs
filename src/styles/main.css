@@ -15,20 +15,9 @@
 	--sl-color-black: #17181c;
   --sl-color-orange: #D97706;
 }
-/* Light mode colors. */
-:root[data-theme='light'] {
-	--sl-color-accent-low: #c6d8f5;
-	--sl-color-accent: #0049ad;
-	--sl-color-accent-high: #13315f;
-	--sl-color-white: #17181c;
-	--sl-color-gray-1: #24272f;
-	--sl-color-gray-2: #353841;
-	--sl-color-gray-3: #545861;
-	--sl-color-gray-4: #888b96;
-	--sl-color-gray-5: #c0c2c7;
-	--sl-color-gray-6: #eceef2;
-	--sl-color-gray-7: #f5f6f8;
-	--sl-color-black: #ffffff;
+
+header.astro-vrdttmbt {
+  background-color: transparent;
 }
 
 .sl-link-button:where(.astro-xwgiixxa).primary {
@@ -168,4 +157,8 @@ body {
 
 .astro-g2bywc46 {
   font-size: 1rem;
+}
+
+.astro-4yphtoen {
+  display: none;
 }

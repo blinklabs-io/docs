@@ -14,7 +14,7 @@ export default defineConfig({
 			],
 			title: 'Blink Labs',
 			logo: {
-				src: './src/assets/transparent-no-buffer.png',
+				src: './src/assets/blinklabs-white.svg',
 				replacesTitle: true,
 			},
 			social: {
