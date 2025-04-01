@@ -8,10 +8,8 @@ description: TxTop Quick Start Overview.
 TxTop is a mempool inspector for Cardano Node software.
 
 TxTop is a local monitoring tool for a Cardano Node (cardano-node) meant to provide a local view of a running node's mempool transactions with a simple icon legend for at-a-glance transaction categorization.
- 
-<!---
 
-Simply download the nview binary file from blinklabs.io on to your node server. Then run nview in the server command line. It's that simple to use and you will get monitoring right out of the box! 
+Simply download the TxTop binary file from blinklabs.io on to your node server. Then run TxTop in the server command line. It's that simple to use and you will can start inspecting your Cardano Node mempool! 
 
 To get started follow the steps below
 
@@ -23,24 +21,26 @@ To get started follow the steps below
 
 **Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to TxTop.  
 
-![nview-blinklabs-site](/nview-blinklabs-site.png)
+![txtop-blinklabs-site](/txtop-blinklabs-site.png)
 <br>
 
 **Step 1-B** - Select the operating system of your node server.  
 
-![nview-blinklabs-site-operating-system](/nview-blinklabs-site-operating-system.png)
+![txtop-blinklabs-site-operating-system](/txtop-blinklabs-site-operating-system.png)
 <br>
 
 **Step 1-C** - You can either download the binary file and move the file to your node server or...  
 
-![nview-blinklabs-site-download](/nview-blinklabs-site-download.png)
+![txtop-blinklabs-site-download](/txtop-blinklabs-site-download.png)
 
 <br>
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-![nview-blinklabs-site-copy-link](/nview-blinklabs-site-copy-link.png)
+![txtop-blinklabs-site-copy-link](/txtop-blinklabs-site-copy-link.png)
 <br>
+
+<!---
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
