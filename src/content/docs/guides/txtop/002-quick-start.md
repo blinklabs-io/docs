@@ -15,7 +15,6 @@ To get started follow the steps below
 
 ***
 
-
 ## Step 1 - Download binary from Blinklabs  
 <br>
 
@@ -40,8 +39,6 @@ Copy the path from Blinklabs and run the following command to download the binar
 ![txtop-blinklabs-site-copy-link](/txtop-blinklabs-site-copy-link.png)
 <br>
 
-<!---
-
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
 ```
@@ -49,7 +46,6 @@ wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop
 ```
 
 ***
-
 
 ## Step 2 - Change Permissions
 
@@ -61,9 +57,7 @@ For this example, we named the binary file `txtop` and saved the file to our `$N
 chmod +x $NODE_HOME/txtop
 ```
 
-
 ***
-
 
 ## Step 3 - Run txtop
 
@@ -80,8 +74,6 @@ cd $NODE_HOME
 
 ***
 
-
 ### Congratulations you are ready to start inspecting your mempool transactions with TxTop!
 
--->
 
