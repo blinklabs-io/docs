@@ -70,7 +70,7 @@ cd $NODE_HOME
 ./txtop
 ```
 
-![nview-screen](/nview-screen.png)
+![txtop-screen](/txtop-screen.png)
 
 ***
 
