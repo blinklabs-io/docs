@@ -7,7 +7,7 @@ description: A guide about TxTop.
 
 TxTop is a mempool inspector for Cardano Node software.
 
-TxTop is a local monitoring tool for a Cardano Node (cardano-node) meant to provide a local view of a running node's mempool transactions with a simple icon legend for at-a-glance transaction categorization.
+You can use TxTop as a local monitoring tool for a Cardano Node (cardano-node) meant to provide a local view of a running node's mempool transactions with a simple icon legend for at-a-glance transaction categorization.
 
 **Current Icons:**  
 🏹 Dexhunter, 🚰 DripDropz, 👁️ Indigo, 🦛 JPGstore, 💧 Liqwid, 🐱 Minswap, 🅾️ Optim, 
