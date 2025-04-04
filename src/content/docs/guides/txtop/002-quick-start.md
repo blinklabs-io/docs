@@ -76,4 +76,17 @@ cd $NODE_HOME
 
 ### Congratulations you are ready to start inspecting your mempool transactions with TxTop!
 
+<br>
+
+#### 💡 Tip: TxTop connects to the Cardano node using the socket.  
+A user can set these variables on their system through their environment variables to modify the behavior.
+
+- `NETWORK`, `CARDANO_NETWORK` - these set the network name, if both are given, NETWORK "wins" so it works out of the box in a `cardano-node` container, defaults to mainnet
+- `CARDANO_NODE_NETWORK_MAGIC` - (optional) Manually configure network magic
+- `CARDANO_NODE_SOCKET_PATH` - Sets path to UNIX socket of node, defaults to
+    /opt/cardano/ipc/socket unless NETWORK is set, then uses /ipc/node.socket
+- `CARDANO_NODE_SOCKET_TCP_HOST` - Sets the TCP host for NtC communication
+    (socat), defaults to empty
+- `CARDANO_NODE_SOCKET_TCP_PORT` - Sets the TCP port for NtC communication
+    (socat), defaults to 30001
 
