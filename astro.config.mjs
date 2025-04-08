@@ -8,6 +8,7 @@ export default defineConfig({
 	site: 'https://blinklabs.io',
 	integrations: [
 		starlight({
+			favicon: './src/assets/icononly_transparent_nobuffer.png',
 			customCss: [
 				'./src/styles/main.css',
 				'./src/styles/custom.css',
