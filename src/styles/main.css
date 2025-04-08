@@ -17,7 +17,9 @@
 }
 
 header.astro-vrdttmbt {
-  background-color: transparent;
+  background-color: #0B316C;
+  border-bottom: none;
+  border-right: none;
 }
 
 .sl-link-button:where(.astro-xwgiixxa).primary {
@@ -161,4 +163,17 @@ body {
 
 .astro-4yphtoen {
   display: none;
+}
+
+.right-group:where(.astro-kmkmnagf), .social-icons:where(.astro-kmkmnagf) {
+  gap: 0rem;
+  border: none;
+}
+
+.social-icons:where(.astro-kmkmnagf)::after {
+  border-right: none;
+}
+
+.astro-u2l5gyhi {
+  border: none;
 }
