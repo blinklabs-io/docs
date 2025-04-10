@@ -18,9 +18,9 @@ export default defineConfig({
 				src: './src/assets/blinklabs-white.svg',
 				replacesTitle: true,
 			},
-			social: {
-				github: 'https://github.com/blinklabs-io',
-			},
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/blinklabs-io/docs' },
+			],
 			sidebar: [
 				{
 					label: 'Documentation',
