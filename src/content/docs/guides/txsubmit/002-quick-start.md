@@ -9,9 +9,7 @@ Tx Submit API is a Cardano transaction submit API service written in Go which ta
 
 Tx Submit API submits transactions over HTTP making it a faster option for submitting transaction to the Cardano blockchain.
 
-<!--
-
-Simply download the TxTop binary file from blinklabs.io on to your node server. Then run TxTop in the server command line. It's that simple to use and gives you the ability to inspecting your Cardano Node's mempool with at-a-glance simple icons! 
+Simply download the Tx Submit API binary file from blinklabs.io on to your node server. Then run Tx Submit API in the server command line. Configuration can be done using a config file or setting environment variables 
 
 To get started follow the steps below
 
@@ -20,28 +18,30 @@ To get started follow the steps below
 ## Step 1 - Download binary from Blinklabs  
 <br>
 
-**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to TxTop.  
+**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Tx Submit API.  
 
-![txtop-blinklabs-site](/txtop-blinklabs-site.png)
+![txsubmit-blinklabs-site](/txsubmit-blinklabs-site.png)
 <br>
 
 **Step 1-B** - Select the operating system of your node server.  
 
-![txtop-blinklabs-site-operating-system](/txtop-blinklabs-site-operating-system.png)
+![txsubmit-blinklabs-site-operating-system](/txsubmit-blinklabs-site-operating-system.png)
 <br>
 
 **Step 1-C** - You can either download the binary file and move the file to your node server or...  
 
-![txtop-blinklabs-site-download](/txtop-blinklabs-site-download.png)
+![txsubmit-blinklabs-site-download](/txsubmit-blinklabs-site-download.png)
 
 <br>
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-![txtop-blinklabs-site-copy-link](/txtop-blinklabs-site-copy-link.png)
+![txsubmi-blinklabs-site-copy-link](/txsubmit-blinklabs-site-copy-link.png)
 <br>
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
+
+<!--
 
 ```
 wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop-v0.12.3-linux-amd64 > txtop
