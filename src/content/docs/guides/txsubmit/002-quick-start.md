@@ -5,11 +5,11 @@ description: Tx Submit API Quick Start Overview.
 
 # Quick Start
 
+Tx Submit API is a Cardano transaction submit API service written in Go which takes CBOR encoded transaction payloads over HTTP and converts it to the Ouroboros Network LocalTxSubmission mini-protocol via gOuroboros. This project was funded in Project Catalyst Fund 9.
+
+Tx Submit API submits transactions over HTTP making it a faster option for submitting transaction to the Cardano blockchain.
+
 <!--
-
-TxTop is a mempool inspector for Cardano Node software.
-
-You can use TxTop as a local monitoring tool for a Cardano Node (cardano-node) meant to provide a local view of a running node's mempool transactions with a simple icon legend for at-a-glance transaction categorization.
 
 Simply download the TxTop binary file from blinklabs.io on to your node server. Then run TxTop in the server command line. It's that simple to use and gives you the ability to inspecting your Cardano Node's mempool with at-a-glance simple icons! 
 
