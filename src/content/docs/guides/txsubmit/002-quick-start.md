@@ -36,49 +36,51 @@ To get started follow the steps below
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-![txsubmi-blinklabs-site-copy-link](/txsubmit-blinklabs-site-copy-link.png)
+![txsubmit-blinklabs-site-copy-link](/txsubmit-blinklabs-site-copy-link.png)
 <br>
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
-<!--
-
 ```
-wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop-v0.12.3-linux-amd64 > txtop
+wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop-v0.12.3-linux-amd64 > tx-submit-api
 ```
 
 ***
 
 ## Step 2 - Change Permissions
 
-For this example, we named the binary file `txtop` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
+For this example, we named the binary file `tx-submit-api` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
 
 ⚠️ Adjust the file path and file name if needed. 
 
 ```
-chmod +x $NODE_HOME/txtop
+chmod +x $NODE_HOME/tx-submit-api
 ```
 
 ***
 
-## Step 3 - Run txtop
+## Step 3 - Run Tx Submit API
 
 Run the executable file by running the following command.
 
-⚠️ For this example, we named the binary file `txtop` and saved the file to our `$NODE_HOME` folder.
+⚠️ For this example, we named the binary file `tx-submit-api` and saved the file to our `$NODE_HOME` folder.
 
 ```
 cd $NODE_HOME
-./txtop
+./tx-submit-api
 ```
 
-![txtop-screen](/txtop-screen.png)
+![txsubmit-screen](/txsubmit-screen.png)
 
 ***
 
-### Congratulations you are ready to start inspecting your mempool transactions with TxTop!
+### Congratulations you are ready to start submitting transactions with Tx Submit API!
 
 <br>
+
+To submit transactions using Tx Submit API using your wallet we will need to setup a `custom submit endpoint` in your wallet setting. See our setting up your wallet to use Tx Submit API guide 
+
+<!--
 
 #### 💡 Tip: TxTop connects to the Cardano node using the socket.  
 A user can set these variables on their system through their environment variables to modify the behavior.
