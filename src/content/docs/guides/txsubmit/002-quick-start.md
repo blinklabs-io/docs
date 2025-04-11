@@ -13,6 +13,8 @@ Simply download the Tx Submit API binary file from blinklabs.io on to your node 
 
 To get started follow the steps below
 
+⚠️ This guide assumes typical Linux Cardano Node setup. Please adjust commands and paths as needed.
+
 ***
 
 ## Step 1 - Download binary from Blinklabs  
@@ -60,6 +62,12 @@ chmod +x $NODE_HOME/tx-submit-api
 ***
 
 ## Step 3 - Setup Config File
+
+💡 Tip: To find the path to your node socket run the following command:
+
+```
+echo $CARDANO_NODE_SOCKET_PATH
+```
 
 ***
 
