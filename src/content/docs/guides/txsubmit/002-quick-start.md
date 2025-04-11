@@ -63,6 +63,30 @@ chmod +x $NODE_HOME/tx-submit-api
 
 ## Step 3 - Setup Config File
 
+Sample config.yaml:
+
+```
+XXXX
+
+YYYY
+
+ZZZZ
+```
+
+***
+
+<br>
+
+A detailed breakdown of the configuration file:
+
+```
+XXXX
+
+YYYY
+
+ZZZZ
+```
+
 💡 Tip: To find the path to your node socket run the following command:
 
 ```
