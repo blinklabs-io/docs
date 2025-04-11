@@ -42,7 +42,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
 ```
-wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop-v0.12.3-linux-amd64 > tx-submit-api
+wget -cO - https://github.com/blinklabs-io/tx-submit-api/releases/download/v0.20.7/tx-submit-api-v0.20.7-linux-amd64 > tx-submit-api
 ```
 
 ***
