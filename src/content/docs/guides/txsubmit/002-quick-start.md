@@ -59,15 +59,19 @@ chmod +x $NODE_HOME/tx-submit-api
 
 ***
 
-## Step 3 - Run Tx Submit API
+## Step 3 - Setup Config File
 
-Run the executable file by running the following command.
+***
 
-⚠️ For this example, we named the binary file `tx-submit-api` and saved the file to our `$NODE_HOME` folder.
+## Step 4 - Run Tx Submit API With Config File
+
+Run the executable file by running the following with the command line flag `-config` to set the file to load as a configuration.
+
+⚠️ Adjust the file path below to match your path to the `config.yml` file.
 
 ```
 cd $NODE_HOME
-./tx-submit-api
+./tx-submit-api -config /path/to/config.yml
 ```
 
 ![txsubmit-screen](/txsubmit-screen.png)
