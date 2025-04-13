@@ -110,6 +110,12 @@ cd $NODE_HOME
 
 ***
 
+💡 Tip: You can check that Tx Submit API is running by using the following command. Please adjust port if needed.
+
+```
+curl http://localhost:8090/healthcheck
+```
+
 ### Congratulations you are ready to start submitting transactions with Tx Submit API!
 
 <br>
