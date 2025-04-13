@@ -114,7 +114,7 @@ cd $NODE_HOME
 
 <br>
 
-To submit transactions using Tx Submit API using your wallet we will need to setup a `custom submit endpoint` in your wallet setting. See our [setting up your wallet to use Tx Submit API](../003-setting-up-wallet-using-custom-submit-endpoint) guide.
+To submit transactions using Tx Submit API using your wallet we will need to setup a `custom submit endpoint` in your wallet settings. See our [setting up your wallet to use Tx Submit API](../003-setting-up-wallet-using-custom-submit-endpoint) guide.
 
 <!--
 
