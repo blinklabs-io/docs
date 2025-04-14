@@ -23,3 +23,12 @@ While Lace wallet calls the option `Custom Submit API`
 
 ![txsubmit-lace-custom-submit-api-screen](/txsubmit-lace-custom-submit-api-screen.png)
 
+For this guide we will use the Ethernl wallet.
+
+***
+
+## Step 1 - Open Settings in the Eternl Wallet
+
+Open your Eternl wallet and click on the settings option.
+
+![txsubmit-eternl-settings-screen](/txsubmit-eternl-settings-screen.png)
