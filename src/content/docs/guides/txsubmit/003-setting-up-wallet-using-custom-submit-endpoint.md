@@ -15,3 +15,5 @@ To get setup your wallet follow the steps below
 
 ***
 
+The process to connect your wallet to Tx Submit API is pretty similar between each Cardano wallet. However the name of the option may slightly differ. For example the Eternal wallet calls the option custom submit endpoint
+
