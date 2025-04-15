@@ -32,3 +32,9 @@ For this guide we will use the Ethernl wallet.
 Open your Eternl wallet and click on the settings option.
 
 ![txsubmit-eternl-settings-screen](/txsubmit-eternl-settings-screen.png)
+
+## Step 2 - Select App Settings
+
+Click on App settings
+
+![txsubmit-eternl-app-settings-screen](/txsubmit-eternl-app-settings-screen.png)
