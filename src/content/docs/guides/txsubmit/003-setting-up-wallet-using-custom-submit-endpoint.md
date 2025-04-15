@@ -41,6 +41,6 @@ Click on App settings
 
 ## Step 3 - Select Custom Submit Endpoint
 
-Click on Custom Submit Endpoint
+Scroll down and click on Custom Submit Endpoint
 
 ![txsubmit-eternl-custom-submit-endpoint-select-screen](/txsubmit-eternl-custom-submit-endpoint-select-screen.png)
