@@ -38,3 +38,9 @@ Open your Eternl wallet and click on the settings option.
 Click on App settings
 
 ![txsubmit-eternl-app-settings-screen](/txsubmit-eternl-app-settings-screen.png)
+
+## Step 3 - Select Custom Submit Endpoint
+
+Click on Custom Submit Endpoint
+
+![txsubmit-eternl-custom-submit-endpoint-select-screen](/txsubmit-eternl-custom-submit-endpoint-select-screen.png)
