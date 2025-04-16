@@ -66,11 +66,11 @@ chmod +x $NODE_HOME/tx-submit-api
 Sample config.yaml:
 
 ```
-XXXX
-
-YYYY
-
-ZZZZ
+network: mainnet
+address: 192.0.2.1
+port: 8090
+socketPath: /home/user/cardano-my-node/db/socket
+timeout: 3
 ```
 
 ***
@@ -80,11 +80,46 @@ ZZZZ
 A detailed breakdown of the configuration file:
 
 ```
-XXXX
+  # Named Cardano network for cardano-node
+  #
+  # This is a short-cut to select the NetworkMagic and can be used to
+  # select mainnet, preprod, preview, or sancho networks.
+  #
+  # This can also be set via the CARDANO_NETWORK environment variable
+  network: mainnet
 
-YYYY
+  # NetworkMagic for network for cardano-node
+  #
+  # This selects the correct network for operation and can be configured to
+  # any network, not just the named networks.
+  #
+  # This can also be set via the CARDANO_NODE_NETWORK_MAGIC environment variable
+  networkMagic:
 
-ZZZZ
+  # Address of your cardano node
+  #
+  # This can also be set via CARDANO_NODE_SOCKET_TCP_HOST environment variable
+  address:
+
+  # Port
+  #
+  # This can also be set via CARDANO_NODE_SOCKET_TCP_PORT environment variable
+  port:
+
+  # Skip Check
+  #
+  # This can also be set via CARDANO_NODE_SKIP_CHECK environment variable
+  skipCheck:
+
+  # SocketPath
+  #
+  # This can also be set via CARDANO_NODE_SOCKET_PATH environment variable
+  socketPath:
+
+  # Socket Timeout
+  #
+  # This can also be set via CARDANO_NODE_SOCKET_TIMEOUT environment variable
+  timeout:
 ```
 
 💡 Tip: To find the path to your node socket run the following command:
@@ -109,6 +144,14 @@ cd $NODE_HOME
 ![txsubmit-screen](/txsubmit-screen.png)
 
 ***
+
+## Step 5 - Open Firewall on your Port
+
+Make sure your firewall is open on the port you selected. For this example we used port 8090 so open the port on 8090 we run the following command:
+
+`
+sudo ufw allow 8090/tcp
+`
 
 💡 Tip: You can check that Tx Submit API is running by using the following command. Please adjust port if needed.
 
