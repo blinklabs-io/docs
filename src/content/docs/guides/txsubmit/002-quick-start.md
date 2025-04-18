@@ -98,27 +98,38 @@ A detailed breakdown of the configuration file:
 
   # Address of your cardano node
   #
+  # IP address of your cardano node server used to configure a TCP connection
+  #
   # This can also be set via CARDANO_NODE_SOCKET_TCP_HOST environment variable
   address:
 
   # Port
+  #
+  # Port on cardano node server to configure a TCP connection
   #
   # This can also be set via CARDANO_NODE_SOCKET_TCP_PORT environment variable
   port:
 
   # Skip Check
   #
-  # Performs an initial test connection to the node at startup. if this flag is set to true
+  # Performs an initial test connection to the node at startup.
+  # If this flag is set to true, a problem with the node connection won't
+  # be exposed until somebody tries to submit a TX.
   #
   # This can also be set via CARDANO_NODE_SKIP_CHECK environment variable
   skipCheck:
 
   # SocketPath
   #
+  # This is the path to the cardano node's UNIX socket
+  #
   # This can also be set via CARDANO_NODE_SOCKET_PATH environment variable
   socketPath:
 
   # Socket Timeout
+  #
+  # This is how long tx-submit-api will wait for the node to return an accepted/rejected
+  # response when submitting a transaction.
   #
   # This can also be set via CARDANO_NODE_SOCKET_TIMEOUT environment variable
   timeout:
