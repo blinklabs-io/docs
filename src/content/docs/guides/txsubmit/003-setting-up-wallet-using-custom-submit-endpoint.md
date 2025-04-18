@@ -50,3 +50,10 @@ Scroll down and click on Custom Submit Endpoint
 Click on Add Endpoint
 
 ![txsubmit-eternl-add-endpoint-screen](/txsubmit-eternl-add-endpoint-screen.png)
+
+## Step 5 - Enter your Endpoint URL
+
+Enter your Tx Submit API URL. It should look like `http://192.0.2.0:8090/api/submit/tx` ⚠️ Adjust to your IP and Port
+
+![txsubmit-eternl-IP-endpoint-screen](/txsubmit-eternl-IP-endpoint-screen.png)
+
