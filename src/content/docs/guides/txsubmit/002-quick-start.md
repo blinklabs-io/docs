@@ -108,6 +108,8 @@ A detailed breakdown of the configuration file:
 
   # Skip Check
   #
+  # Performs an initial test connection to the node at startup. if this flag is set to true
+  #
   # This can also be set via CARDANO_NODE_SKIP_CHECK environment variable
   skipCheck:
 
@@ -145,9 +147,9 @@ cd $NODE_HOME
 
 ***
 
-## Step 5 - Open Firewall on your Port
+## Step 5 - Open Firewall to your Selected Port
 
-Make sure your firewall is open on the port you selected. For this example we used port 8090 so open the port on 8090 we run the following command:
+Make sure your firewall is open on the port you selected. For this example we used port 8090. To open the port on 8090 we run the following command:
 
 `
 sudo ufw allow 8090/tcp
