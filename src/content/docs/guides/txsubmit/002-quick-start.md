@@ -76,64 +76,7 @@ node:
 
 <br>
 
-A detailed breakdown of the configuration file:
-
-```
-node:
-  # Named Cardano network for cardano-node
-  #
-  # This is a short-cut to select the NetworkMagic and can be used to
-  # select mainnet, preprod, preview, or sancho networks.
-  #
-  # This can also be set via the CARDANO_NETWORK environment variable
-  network: mainnet
-
-  # NetworkMagic for network for cardano-node
-  #
-  # This selects the correct network for operation and can be configured to
-  # any network, not just the named networks.
-  #
-  # This can also be set via the CARDANO_NODE_NETWORK_MAGIC environment variable
-  networkMagic:
-
-  # Address of your cardano node
-  #
-  # IP address of your cardano node server used to configure a TCP connection
-  #
-  # This can also be set via CARDANO_NODE_SOCKET_TCP_HOST environment variable
-  address:
-
-  # Port
-  #
-  # Port on cardano node server to configure a TCP connection
-  #
-  # This can also be set via CARDANO_NODE_SOCKET_TCP_PORT environment variable
-  port:
-
-  # Skip Check
-  #
-  # Performs an initial test connection to the node at startup.
-  # If this flag is set to true, a problem with the node connection won't
-  # be exposed until somebody tries to submit a TX.
-  #
-  # This can also be set via CARDANO_NODE_SKIP_CHECK environment variable
-  skipCheck:
-
-  # SocketPath
-  #
-  # This is the path to the cardano node's UNIX socket
-  #
-  # This can also be set via CARDANO_NODE_SOCKET_PATH environment variable
-  socketPath:
-
-  # Socket Timeout
-  #
-  # This is how many seconds long tx-submit-api will wait for the node to return an accepted/rejected
-  # response when submitting a transaction.
-  #
-  # This can also be set via CARDANO_NODE_SOCKET_TIMEOUT environment variable
-  timeout:
-```
+A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example)
 
 💡 Tip: To find the path to your node socket run the following command:
 
@@ -147,14 +90,16 @@ echo $CARDANO_NODE_SOCKET_PATH
 
 Run the executable file by running the following with the command line flag `-config` to set the file to load as a configuration.
 
-⚠️ Adjust the file path below to match your path to the `config.yml` file.
+⚠️ Adjust the file path below to match your path to the `config.yaml` file.
 
 ```
 cd $NODE_HOME
-./tx-submit-api -config /path/to/config.yml
+./tx-submit-api -config /path/to/config.yaml
 ```
 
 ![txsubmit-screen](/txsubmit-screen.png)
+
+💡 Tip: You can hit `control`+`z` and then type `bg` to run in the backgroud. Hit `fg` to bring back to the foreground
 
 ***
 
