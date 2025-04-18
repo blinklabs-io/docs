@@ -23,7 +23,7 @@ While Lace wallet calls the option `Custom Submit API`
 
 ![txsubmit-lace-custom-submit-api-screen](/txsubmit-lace-custom-submit-api-screen.png)
 
-For this guide we will use the Ethernl wallet.
+For this guide we will use the Eternl wallet.
 
 ***
 
@@ -57,3 +57,4 @@ Enter your Tx Submit API URL. It should look like `http://192.0.2.0:8090/api/sub
 
 ![txsubmit-eternl-IP-endpoint-screen](/txsubmit-eternl-IP-endpoint-screen.png)
 
+### Congratulations you are ready to start submitting transactions with Tx Submit API through your wallet!
