@@ -66,11 +66,11 @@ chmod +x $NODE_HOME/tx-submit-api
 Sample config.yaml:
 
 ```
-network: mainnet
-address: 192.0.2.1
-port: 8090
-socketPath: /home/user/cardano-my-node/db/socket
-timeout: 3
+node:
+  network: mainnet
+  address: 192.0.2.1
+  port: 8090
+  socketPath: /home/user/cardano-my-node/db/socket
 ```
 
 ***
@@ -80,6 +80,7 @@ timeout: 3
 A detailed breakdown of the configuration file:
 
 ```
+node:
   # Named Cardano network for cardano-node
   #
   # This is a short-cut to select the NetworkMagic and can be used to
