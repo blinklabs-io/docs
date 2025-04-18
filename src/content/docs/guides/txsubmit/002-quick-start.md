@@ -68,7 +68,6 @@ Sample config.yaml:
 ```
 node:
   network: mainnet
-  address: 192.0.2.1
   port: 8090
   socketPath: /home/user/cardano-my-node/db/socket
 ```
