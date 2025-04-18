@@ -128,7 +128,7 @@ A detailed breakdown of the configuration file:
 
   # Socket Timeout
   #
-  # This is how long tx-submit-api will wait for the node to return an accepted/rejected
+  # This is how many seconds long tx-submit-api will wait for the node to return an accepted/rejected
   # response when submitting a transaction.
   #
   # This can also be set via CARDANO_NODE_SOCKET_TIMEOUT environment variable
@@ -178,19 +178,3 @@ curl http://localhost:8090/healthcheck
 
 To submit transactions using Tx Submit API using your wallet we will need to setup a `custom submit endpoint` in your wallet settings. See our [setting up your wallet to use Tx Submit API](../003-setting-up-wallet-using-custom-submit-endpoint) guide.
 
-<!--
-
-#### 💡 Tip: TxTop connects to the Cardano node using the socket.  
-A user can set these variables on their system through their environment variables to modify the behavior.
-
-- `NETWORK`, `CARDANO_NETWORK` - these set the network name, if both are given, NETWORK "wins" so it works out of the box in a `cardano-node` container, defaults to mainnet
-- `CARDANO_NODE_NETWORK_MAGIC` - (optional) Manually configure network magic
-- `CARDANO_NODE_SOCKET_PATH` - Sets path to UNIX socket of node, defaults to
-    /opt/cardano/ipc/socket unless NETWORK is set, then uses /ipc/node.socket
-- `CARDANO_NODE_SOCKET_TCP_HOST` - Sets the TCP host for NtC communication
-    (socat), defaults to empty
-- `CARDANO_NODE_SOCKET_TCP_PORT` - Sets the TCP port for NtC communication
-    (socat), defaults to 30001
-
-
--->
