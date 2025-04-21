@@ -61,7 +61,17 @@ chmod +x $NODE_HOME/tx-submit-api
 
 ***
 
-## Step 3 - Setup Config File
+## Step 3 - Open Firewall to your Selected Port
+
+Make sure your firewall is open on the port you selected. For this example we used port 8090. To open the port on 8090 we run the following command:
+
+`
+sudo ufw allow 8090/tcp
+`
+
+***
+
+## Step 4 - Setup Config File
 
 Sample config.yaml:
 
@@ -86,7 +96,7 @@ echo $CARDANO_NODE_SOCKET_PATH
 
 ***
 
-## Step 4 - Run Tx Submit API With Config File
+## Step 5 - Run Tx Submit API With Config File
 
 Run the executable file by running the following with the command line flag `-config` to set the file to load as a configuration.
 
@@ -99,17 +109,11 @@ cd $NODE_HOME
 
 ![txsubmit-screen](/txsubmit-screen.png)
 
-💡 Tip: You can hit `control`+`z` and then type `bg` to run in the backgroud. Hit `fg` to bring back to the foreground
+💡 Tip: You can hit `control`+`z` and then type `bg` to run in the background. Hit `fg` to bring back to the foreground
 
 ***
 
-## Step 5 - Open Firewall to your Selected Port
 
-Make sure your firewall is open on the port you selected. For this example we used port 8090. To open the port on 8090 we run the following command:
-
-`
-sudo ufw allow 8090/tcp
-`
 
 💡 Tip: You can check that Tx Submit API is running by using the following command. Please adjust port if needed.
 
