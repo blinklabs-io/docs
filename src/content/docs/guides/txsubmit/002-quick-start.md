@@ -63,7 +63,7 @@ chmod +x $NODE_HOME/tx-submit-api
 
 ## Step 3 - Open Firewall to your Selected Port
 
-Make sure your firewall is open on the port you selected. For this example we used port 8090. To open the port on 8090 we run the following command:
+Make sure your firewall is open on the port you selected. For this example, we used port 8090. To open the port on 8090 we run the following command:
 
 `
 sudo ufw allow 8090/tcp
@@ -84,15 +84,15 @@ node:
 
 ***
 
-<br>
-
-A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example)
-
 💡 Tip: To find the path to your node socket run the following command:
 
 ```
 echo $CARDANO_NODE_SOCKET_PATH
 ```
+
+<br>
+
+A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example)
 
 ***
 
