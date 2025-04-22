@@ -11,11 +11,11 @@ Tx Submit API submits transactions over HTTP making it a faster option for submi
 
 To submit transactions using Tx Submit API using your wallet we will need to setup a `custom submit endpoint` in your wallet. 
 
-To get setup your wallet follow the steps below
+To get setup your wallet, follow the steps below.
 
 ***
 
-The process to connect your wallet to Tx Submit API is pretty similar between each Cardano wallet. However, the name of the option may slightly differ. For example, the Eternal wallet calls the option `Custom Submit Endpoint`
+The process to connect your wallet to Tx Submit API is similar between each Cardano wallet. However, the name of the option may slightly differ. For example, the Eternal wallet calls the option `Custom Submit Endpoint`
 
 ![txsubmit-eternl-custom-submit-endpoint-screen](/txsubmit-eternl-custom-submit-endpoint-screen.png)
 
