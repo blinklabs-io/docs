@@ -13,9 +13,9 @@ Create a startup script and service file, be sure to edit your paths below. For 
 First Make startup script:
 
 ```
-cat <<'ENDFILE' >> $NODE_HOME/tx-submit-api.sh
+cat << EOF >> $NODE_HOME/tx-submit-api.sh
 /$NODE_HOME/tx-submit-api -config /$NODE_HOME/config.yaml
-ENDFILE
+EOF
 ```
 
 ## Step 2 - Make Startup Script Executable
