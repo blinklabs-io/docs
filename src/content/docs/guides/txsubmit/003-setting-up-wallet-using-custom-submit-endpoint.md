@@ -58,3 +58,5 @@ Enter your Tx Submit API URL. It should look like `http://192.0.2.0:8090/api/sub
 ![txsubmit-eternl-IP-endpoint-screen](/txsubmit-eternl-IP-endpoint-screen.png)
 
 ### Congratulations you are ready to start submitting transactions with Tx Submit API through your wallet!
+
+Want to run Tx Submit API as a `systemd` service so it automatically restarts if processes crash, or when the computer reboots? See our guide on [Creating Startup Scripts and Services](../04-creating-startup-scripts-and-services
