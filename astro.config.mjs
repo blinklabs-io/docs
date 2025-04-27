@@ -30,7 +30,7 @@ export default defineConfig({
 						{ label: 'Adder', autogenerate: { directory: 'guides/adder' } },
 						{ label: 'Dingo', slug: 'guides/dingo' },
 						{ label: 'nview', autogenerate: { directory: 'guides/nview' } },
-						{ label: 'Tx Submit API', slug: 'guides/txsubmitapi' },
+						{ label: 'Tx Submit API', autogenerate: { directory: 'guides/txsubmit' } },
 						{ label: 'Bluefin', slug: 'guides/bluefin' },
 						{ label: 'Bursa', slug: 'guides/bursa' },
 						{ label: 'Cardano Node API', slug: 'guides/cardano-node-api' },
