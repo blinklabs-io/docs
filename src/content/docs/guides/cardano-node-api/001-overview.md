@@ -11,6 +11,8 @@ An HTTP API for interfacing with a local Cardano Node and providing the node int
 
 Cardano Node API is a service written in Go which communicates with a Cardano Node over its private interface and provides a featureful set of HTTP APIs built on collaborative standards.
 
+<br>
+
 ## How do I actually use Cardano Node API?
 Simply download the Cardano Node API binary file from blinklabs.io on to your node server. Then run Cardano Node API in the server command line. Configuration can be done using a config file or setting environment variables
 
