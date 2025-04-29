@@ -5,7 +5,7 @@ description: A guide about Cardano Node API.
 
 # Cardano Node API
 
-An HTTP API for interfacing with a local Cardano Node and providing the node internal data for HTTP clients. This service communicates with a Cardano full node using the Ouroboros network protocol via a UNIX socket and exposes the underlying Node-to-Client (NtC) Ouroboros mini-protocols to clients via a REST API or UTxO RPC gRPC API.
+An HTTP API for interfacing with a local Cardano Node and providing the node internal data for HTTP clients. This service communicates with a Cardano full node using the Ouroboros network protocol via a UNIX socket and exposes the underlying Node-to-Client (NtC) Ouroboros mini-protocols to clients via a REST API or UTxO RPC gRPC API.  
 
 Cardano Node API is a service written in Go which communicates with a Cardano Node over its private interface and provides a featureful set of HTTP APIs built on collaborative standards.
 
