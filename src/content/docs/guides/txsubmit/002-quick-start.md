@@ -38,11 +38,7 @@ To get started follow the steps below
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-<!--
-
 ![txsubmit-blinklabs-site-copy-link](/txsubmit-blinklabs-site-copy-link.png)
-
--->
 
 <br>
 
