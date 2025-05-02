@@ -123,9 +123,15 @@ echo $CARDANO_NODE_SOCKET_PATH
 
 A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example)
 
+-->
+
 ***
 
-## Step 5 - Run Tx Submit API With Config File
+<br>
+
+## Step 5 - Run Cardano Node API With Config File
+
+<br>
 
 Run the executable file by running the following with the command line flag `-config` to set the file to load as a configuration.
 
@@ -133,27 +139,32 @@ Run the executable file by running the following with the command line flag `-co
 
 ```
 cd $NODE_HOME
-./tx-submit-api -config /path/to/config.yaml
+./cardano-node-api -config /path/to/config.yaml
 ```
 
-![txsubmit-screen](/txsubmit-screen.png)
+![cardano-node-api-screen](/cardano-node-api-screen.png)
+
+<br>
 
 💡 Tip: You can hit `control`+`z` and then type `bg` to run in the background. Hit `fg` to bring back to the foreground
 
 ***
 
+<br>
 
 
-💡 Tip: You can check that Tx Submit API is running by using the following command. Please adjust port if needed.
+💡 Tip: You can check the Cardno Node API by going to your IP:port/swagger/index.html. Please adjust port if needed.
 
 ```
-curl http://localhost:8090/healthcheck
+http://localhost:8090/swagger/index.html
 ```
-
-### Congratulations you are ready to start submitting transactions with Tx Submit API!
 
 <br>
 
-To submit transactions using Tx Submit API using your wallet we will need to setup a `custom submit endpoint` in your wallet settings. See our [setting up your wallet to use Tx Submit API](../003-setting-up-wallet-using-custom-submit-endpoint) guide.
+### Congratulations you are ready to start using Cardano Node API!
 
--->
+<br>
+
+Learn more about UTxO RPC [https://utxorpc.org](https://utxorpc.org/)
+
+
