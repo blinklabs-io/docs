@@ -20,4 +20,4 @@ Simply download the Cardano Node API binary file from blinklabs.io on to your no
 
 ✅ Get started with our [Quick Start](../002-quick-start) guide to start using Cardano Node API.
 
-![node-api-logo](/node-api-logo.png)
+![cardano-node-api-logo](/cardano-node-api-logo.png)
