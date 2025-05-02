@@ -23,7 +23,7 @@ To get started follow the steps below
 
 **Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Cardano Node API.  
 
-![txsubmit-blinklabs-site](/txsubmit-blinklabs-site.png)
+![cardano-node-api-blinklabs-site](/cardano-node-api-blinklabs-site.png)
 <br>
 
 <!--
