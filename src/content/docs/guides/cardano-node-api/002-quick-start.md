@@ -7,12 +7,19 @@ description: Cardano Node API Quick Start Overview.
 
 An HTTP API for interfacing with a local Cardano Node and providing the node internal data for HTTP clients. This service communicates with a Cardano full node using the Ouroboros network protocol via a UNIX socket and exposes the underlying Node-to-Client (NtC) Ouroboros mini-protocols to clients via a REST API or UTxO RPC gRPC API.
 
+<br>
 
 Cardano Node API is a service written in Go which communicates with a Cardano Node over its private interface and provides a featureful set of HTTP APIs built on collaborative standards.
 
+<br>
+
 Simply download the Cardano Node API binary file from blinklabs.io on to your node server. Then run Cardano Node API in the server command line. Configuration can be done using a config file or setting environment variables. In this example we will run it with a config file.
 
+<br>
+
 To get started follow the steps below
+
+<br>
 
 ⚠️ This guide assumes typical Linux Cardano Node setup. Please adjust commands and paths as needed.
 
@@ -26,12 +33,12 @@ To get started follow the steps below
 ![cardano-node-api-blinklabs-site](/cardano-node-api-blinklabs-site.png)
 <br>
 
-<!--
-
 **Step 1-B** - Select the operating system of your node server.  
 
-![txsubmit-blinklabs-site-operating-system](/txsubmit-blinklabs-site-operating-system.png)
+![cardano-node-api-blinklabs-site-operating-system](/cardano-node-api-blinklabs-site-operating-system.png)
 <br>
+
+<!--
 
 **Step 1-C** - You can either download the binary file and move the file to your node server or...  
 
