@@ -38,36 +38,34 @@ To get started follow the steps below
 ![cardano-node-api-blinklabs-site-operating-system](/cardano-node-api-blinklabs-site-operating-system.png)
 <br>
 
-<!--
-
 **Step 1-C** - You can either download the binary file and move the file to your node server or...  
 
-![txsubmit-blinklabs-site-download](/txsubmit-blinklabs-site-download.png)
+![cardano-node-api-blinklabs-site-download](/cardano-node-api-blinklabs-site-download.png)
 
 <br>
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-![txsubmit-blinklabs-site-copy-link](/txsubmit-blinklabs-site-copy-link.png)
+![cardano-node-api-blinklabs-site-copy-link](/cardano-node-api-blinklabs-site-copy-link.png)
 
 <br>
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
 ```
-wget -cO - https://github.com/blinklabs-io/tx-submit-api/releases/download/v0.20.7/tx-submit-api-v0.20.7-linux-amd64 > tx-submit-api
+wget -cO - https://github.com/blinklabs-io/cardano-node-api/releases/download/v0.8.4/cardano-node-api-v0.8.4-linux-amd64 > cardano-node-api
 ```
 
 ***
 
 ## Step 2 - Change Permissions
 
-For this example, we named the binary file `tx-submit-api` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
+For this example, we named the binary file `cardano-node-api` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
 
 ⚠️ Adjust the file path and file name if needed. 
 
 ```
-chmod +x $NODE_HOME/tx-submit-api
+chmod +x $NODE_HOME/cardano-node-api
 ```
 
 ***
@@ -102,6 +100,8 @@ echo $CARDANO_NODE_SOCKET_PATH
 ```
 
 <br>
+
+<!--
 
 A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example)
 
