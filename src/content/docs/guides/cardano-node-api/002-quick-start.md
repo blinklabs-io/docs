@@ -5,13 +5,12 @@ description: Cardano Node API Quick Start Overview.
 
 # Quick Start
 
-<!--
+An HTTP API for interfacing with a local Cardano Node and providing the node internal data for HTTP clients. This service communicates with a Cardano full node using the Ouroboros network protocol via a UNIX socket and exposes the underlying Node-to-Client (NtC) Ouroboros mini-protocols to clients via a REST API or UTxO RPC gRPC API.
 
-Tx Submit API is a Cardano transaction submit API service written in Go which takes CBOR encoded transaction payloads over HTTP and converts it to the Ouroboros Network LocalTxSubmission mini-protocol via gOuroboros. This project was funded in Project Catalyst Fund 9.
 
-Tx Submit API submits transactions over HTTP making it a faster option for submitting transaction to the Cardano blockchain.
+Cardano Node API is a service written in Go which communicates with a Cardano Node over its private interface and provides a featureful set of HTTP APIs built on collaborative standards.
 
-Simply download the Tx Submit API binary file from blinklabs.io on to your node server. Then run Tx Submit API in the server command line. Configuration can be done using a config file or setting environment variables 
+Simply download the Cardano Node API binary file from blinklabs.io on to your node server. Then run Cardano Node API in the server command line. Configuration can be done using a config file or setting environment variables. In this example we will run it with a config file.
 
 To get started follow the steps below
 
@@ -22,10 +21,12 @@ To get started follow the steps below
 ## Step 1 - Download binary from Blinklabs  
 <br>
 
-**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Tx Submit API.  
+**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Cardano Node API.  
 
 ![txsubmit-blinklabs-site](/txsubmit-blinklabs-site.png)
 <br>
+
+<!--
 
 **Step 1-B** - Select the operating system of your node server.  
 
