@@ -25,6 +25,8 @@ To get started follow the steps below
 
 ***
 
+<br>
+
 ## Step 1 - Download binary from Blinklabs  
 <br>
 
@@ -58,9 +60,15 @@ wget -cO - https://github.com/blinklabs-io/cardano-node-api/releases/download/v0
 
 ***
 
+<br>
+
 ## Step 2 - Change Permissions
 
+<br>
+
 For this example, we named the binary file `cardano-node-api` and saved the file to our `$NODE_HOME` folder. To make the file executable run the following command:
+
+<br>
 
 ⚠️ Adjust the file path and file name if needed. 
 
@@ -70,7 +78,11 @@ chmod +x $NODE_HOME/cardano-node-api
 
 ***
 
+<br>
+
 ## Step 3 - Open Firewall to your Selected Port
+
+<br>
 
 Make sure your firewall is open on the port you selected. For this example, we used port 8090. To open the port on 8090 we run the following command:
 
@@ -80,7 +92,11 @@ sudo ufw allow 8090/tcp
 
 ***
 
+<br>
+
 ## Step 4 - Setup Config File
+
+<br>
 
 Sample config.yaml:
 
@@ -90,6 +106,8 @@ node:
   port: 8090
   socketPath: /home/user/cardano-my-node/db/socket
 ```
+
+<br>
 
 ***
 
