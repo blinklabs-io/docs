@@ -161,6 +161,10 @@ http://192.0.2.0:8080/swagger/index.html
 
 <br>
 
+![cardano-node-api-swagger](/cardano-node-api-swagger.png)
+
+<br>
+
 ### Congratulations you are ready to start using Cardano Node API!
 
 <br>
