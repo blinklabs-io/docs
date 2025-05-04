@@ -86,9 +86,9 @@ chmod +x $NODE_HOME/cardano-node-api
 
 Make sure your firewall is open on the port you selected. For this example, we used port 8090. To open the port on 8090 we run the following command:
 
-`
-sudo ufw allow 8090/tcp
-`
+```
+sudo ufw allow 8080/tcp
+```
 
 ***
 
@@ -103,7 +103,7 @@ Sample config.yaml:
 ```
 node:
   network: mainnet
-  port: 8090
+  port: 8080
   socketPath: /home/user/cardano-my-node/db/socket
 ```
 
@@ -153,10 +153,10 @@ cd $NODE_HOME
 <br>
 
 
-💡 Tip: You can check the Cardno Node API by going to your IP:port/swagger/index.html. Please adjust port if needed.
+💡 Tip: You can check the Cardno Node API by going to your IP:port/swagger/index.html. Please adjust IP and your port if needed.
 
 ```
-http://localhost:8090/swagger/index.html
+http://192.0.2.0:8080/swagger/index.html
 ```
 
 <br>
