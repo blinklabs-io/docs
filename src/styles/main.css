@@ -1,6 +1,3 @@
-@use "./variables" as vars;
-
-/* Dark mode colors. */
 :root {
 	--sl-color-accent-low: #112341;
 	--sl-color-accent: #4285F4;
@@ -16,8 +13,12 @@
   --sl-color-orange: #D97706;
 }
 
+body {
+  background: linear-gradient(to bottom, #0F3F8A, #000A1B);
+}
+
 header.astro-vrdttmbt {
-  background-color: #0B316C;
+  background-color: transparent;
   border-bottom: none;
   border-right: none;
 }
@@ -28,12 +29,12 @@ header.astro-vrdttmbt {
     color: var(--sl-color-white) !important;
     font-size: 1.5em !important;
     font-weight: bold !important;
-    box-shadow: 0 0 5px 0 rgba(251, 191, 36, 0.2);
-    padding: 0.5em 1em;
+    padding: 0.4em 0.75em;
+    border-radius: 0.5em;
 }
 
 .sl-link-button:where(.astro-xwgiixxa).primary:hover {
-    box-shadow: 0 0 5px 2px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 2px 1px rgba(251, 191, 36, 0.3);
 }
 
 .sl-link-button:where(.astro-xwgiixxa) svg {
@@ -56,124 +57,14 @@ img:where(.astro-m46x6ez3) {
   object-position: 0 90%;
 }
 
-@media (min-width: 50rem) {
-  .hero:where(.astro-jbfsktt5)>img:where(.astro-jbfsktt5), .hero:where(.astro-jbfsktt5)>.hero-html:where(.astro-jbfsktt5) {
-      order: 2;
-      width: min(100%, 20rem);
-  }
-}
-
-.card:where(.astro-v5tidmuc):nth-child(4n + 1) {
-  --sl-card-border: var(--sl-color-orange);
-  --sl-card-bg: var(--sl-color-orange-low);
-}
-
-@media (min-width: 50rem) {
-  .stagger:where(.astro-zntqmydn) {
-    padding-bottom: 0rem;
-  }
-}
-
-@media (min-width: 50rem) {
-  .stagger:where(.astro-zntqmydn)>*:nth-child(2n) {
-    border-radius: 1rem;
-  }
-}
-
-.card:where(.astro-v5tidmuc):nth-child(4n + 3) {
-  border-radius: 1rem;
-  --sl-card-border: var(--sl-color-green);
-  --sl-card-bg: var(--sl-color-green-low);
-}
-
-svg:where(.astro-c6vsoqas) {
-  color: var(--sl-icon-color);
-  font-size: var(--sl-icon-size, 1em);
-  width: 1.5em;
-  height: 1.5em;
-  color: var(--sl-color-gray-2);
-}
-
-@media (min-width: 50rem) {
-  select:where(.astro-4yphtoen) {
-      font-size: var(--sl-text-sm);
-      width: 6rem;
-      margin-left: 0.5rem;
-  }
-}
-
-* {
-  margin: 0px;
-  outline: none;
-}
-
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.wrapper {
-  @apply grid content-center w-full min-h-full text;
-  grid-template-rows: auto 1fr auto;
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
-  background-image: linear-gradient(to bottom, #0f3f8a, #000a1b 70%);
-  background-repeat: no-repeat;
-  background-color: #000a1b;
-  overflow-x: hidden;
-
-  &.no-scroll {
-    height: calc(var(--window-inner-height) - 1px);
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-
-  @media only screen and (max-width: 600px) {
-    background-image: linear-gradient(to bottom, #0f3f8a, #000a1b 60%);
-  }
-
-  @media only screen and (min-width: 601px) {
-    background-attachment: fixed;
-  }
-}
-
-.sidebar-content {
-  background-image: linear-gradient(to bottom, #0f3f8a, #000a1b 70%);
-  background-repeat: no-repeat;
-  background-color: #000a1b;
-  font-size: 2rem;
-}
-
-.astro-3ii7xxms {
-  font-size: 1rem;
-}
-
-.astro-g2bywc46 {
-  font-size: 1rem;
-}
-
 .astro-4yphtoen {
   display: none;
 }
 
-.right-group:where(.astro-kmkmnagf), .social-icons:where(.astro-kmkmnagf) {
-  gap: 0rem;
-  border: none;
+a:where(.astro-wy4te6ga) {
+  color: white;
 }
 
-.social-icons:where(.astro-kmkmnagf)::after {
-  border-right: none;
-}
-
-.astro-u2l5gyhi {
-  border: none;
+.sidebar-content:where(.astro-vrdttmbt) {
+ background: linear-gradient(to bottom, #0F3F8A, #000A1B);
 }
