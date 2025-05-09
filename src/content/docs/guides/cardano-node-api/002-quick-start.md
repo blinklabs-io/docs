@@ -119,11 +119,8 @@ echo $CARDANO_NODE_SOCKET_PATH
 
 <br>
 
-<!--
+A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/cardano-node-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/cardano-node-api/blob/main/config.yaml.example)
 
-A detailed breakdown of the configuration file can be found here: [https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example](https://github.com/blinklabs-io/tx-submit-api/blob/main/config.yaml.example)
-
--->
 
 ***
 
