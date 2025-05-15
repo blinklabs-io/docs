@@ -11,25 +11,18 @@ To get started follow the steps below
 
 ## Step 1 - Download Docker Desktop
 
-First start by going to <a href="https://www.docker.com/products/docker-desktop/" target="_blank">https://www.docker.com/products/docker-desktop/</a> and 
+First start by going to <a href="https://www.docker.com/products/docker-desktop/" target="_blank">https://www.docker.com/products/docker-desktop/</a> and scroll down to `Download Docker Desktop`
 
 ![cardano-up-docker-desktop-website](/cardano-up-docker-desktop-website.png)
 
+## Step 2 - Select Operating System
+
+For this example, we selected Windows - AMD64. Please select your operating system.
+
+![cardano-up-docker-desktop-website-operating-system](/cardano-up-docker-desktop-website-operating-system.png)
+
+
 <!--
-
-Next type `cmd` in the search box and then click `Open`
-
-![adder-windows-search-cmd](/adder-windows-search-cmd.png)
-
-## Step 2 - Get path for Adder exe
-
-Next, we will need to get the path of the Adder exe file that we downloaded so we can run it in the command line.
-
-In this example we downloaded the Adder exe to our desktop, so we can right click on the Adder exe and copy path.
-
-📝 Take note of the path we will need it moving forward ✅
-
-![adder-exe-path](/adder-exe-path.png)
 
 ## Step 3 - Run Adder in Command Prompt
 
