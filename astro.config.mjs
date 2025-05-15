@@ -37,6 +37,7 @@ export default defineConfig({
 						{ label: 'TxTop', autogenerate: { directory: 'guides/txtop' } },
 						{ label: 'Tx Submit API Mirror', slug: 'guides/txsubmitapi-mirror' },
 						{ label: 'cDNSd', slug: 'guides/cdnsd' },
+						{ label: 'Cardano up', autogenerate: { directory: 'guides/cardano-up' } },
 						{ label: 'Docker Images', slug: 'guides/docker-images' },
 
 					],
