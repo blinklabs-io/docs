@@ -9,6 +9,10 @@ Command line utility for managing Cardano services. cardano-up allows you to use
 
 <br>
 
+# Why use cardano-up?
+
+Imagine you are a developer and in order to program or test your application you need a cardano node and maybe kupo or ogmios? With cardano-up you can use a single command line to install each of these services as a docker image. Stop wasting time installing and start coding. 💪
+
 <!--
 
 ## How do I actually use cardano-up?
