@@ -21,6 +21,13 @@ For this example, we selected Windows - AMD64. Please select your operating syst
 
 ![cardano-up-docker-desktop-website-operating-system](/cardano-up-docker-desktop-website-operating-system.png)
 
+Follow the onscreen directions.
+
+![cardano-up-docker-desktop-install](/cardano-up-docker-desktop-install.png)
+
+💡 Tip: Docker Desktop installs a Windows Subsystem for Linux that docker will run in.
+
+![cardano-up-subsystem-install](/cardano-up-subsystem-install.png)
 
 <!--
 
