@@ -57,13 +57,18 @@ wsl --install -d Ubuntu
 
 ## Step 5 - Launch Ubuntu and Finish Setup 
 
-Once Ubuntu is install we will run the following command to finish setup by creating a user and password.
+Once Ubuntu is install we will run the following command to finish setup by creating a user and password. First run Ubuntu command line by running:
 
 ```
 wsl.exe -d Ubuntu
 ```
 
 ![cardano-up-finish-install-ubuntu-wsl-exe](/cardano-up-finish-install-ubuntu-wsl-exe.png)
+
+
+Now type in a username and password. You will need to type in your password twice.
+
+![cardano-up-finish-install-ubuntu-username](/cardano-up-finish-install-ubuntu-username.png)
 
 <!--
 
