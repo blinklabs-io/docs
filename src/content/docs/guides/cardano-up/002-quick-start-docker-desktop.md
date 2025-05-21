@@ -55,9 +55,9 @@ wsl --install -d Ubuntu
 
 ![cardano-up-install-ubuntu-wsl](/cardano-up-install-ubuntu-wsl.png)
 
-## Step 5 - Launch Ubuntu and Finish Setup 
+## Step 5 - Launch WSL and Finish Setup 
 
-Once Ubuntu is install we will run the following command to finish setup by creating a user and password. First run Ubuntu command line by running:
+Once Ubuntu is install we will run the following command to finish setup by creating a user and password. First run WSL by running:
 
 ```
 wsl.exe -d Ubuntu
@@ -73,6 +73,23 @@ Now type in a username and password. You will need to type in your password twic
 Once you add a username a password you will see a `Welcome to Ubuntu...` message. You can now exit out of your PowerShell by typing `exit`
 
 ![cardano-up-install-ubuntu-wsl-successful](/cardano-up-install-ubuntu-wsl-successful.png)
+
+
+## Step 6 - Enable Ubuntu in Docker Desktop
+
+Go back into Docker Desktop and select settings.
+
+![cardano-up-docker-desktop-settings](/cardano-up-docker-desktop-settings.png)
+
+Once in settings select the `Resources` tab on the left side.
+
+![cardano-up-docker-desktop-resources](/cardano-up-docker-desktop-resources.png)
+
+## Step 7 - Launch Ubuntu
+
+To :
+
+
 
 <!--
 
