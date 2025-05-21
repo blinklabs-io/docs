@@ -89,6 +89,10 @@ Under Resources tab select `WSL intergration`
 
 ![cardano-up-docker-desktop-wsl-intergration](/cardano-up-docker-desktop-wsl-intergration.png)
 
+Under WSL intergration select `Ubuntu` and click `Apply & restart`
+
+![cardano-up-docker-desktop-apply-ubuntu](/cardano-up-docker-desktop-apply-ubuntu.png)
+
 ## Step 7 - Launch Ubuntu
 
 To :
