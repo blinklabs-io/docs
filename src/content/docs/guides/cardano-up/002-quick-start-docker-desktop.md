@@ -70,6 +70,10 @@ Now type in a username and password. You will need to type in your password twic
 
 ![cardano-up-finish-install-ubuntu-username](/cardano-up-finish-install-ubuntu-username.png)
 
+Once you add a username a password you will see a `Welcome to Ubuntu...` message. You can now exit out of your PowerShell by typing `exit`
+
+![cardano-up-install-ubuntu-wsl-successful](/cardano-up-install-ubuntu-wsl-successful.png)
+
 <!--
 
 ### Congratulations!
