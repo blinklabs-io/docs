@@ -85,6 +85,10 @@ Once in settings select the `Resources` tab on the left side.
 
 ![cardano-up-docker-desktop-resources](/cardano-up-docker-desktop-resources.png)
 
+Under Resources tab select `WSL intergration`
+
+![cardano-up-docker-desktop-wsl-intergration](/cardano-up-docker-desktop-wsl-intergration.png)
+
 ## Step 7 - Launch Ubuntu
 
 To :
