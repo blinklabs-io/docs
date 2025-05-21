@@ -29,13 +29,23 @@ Follow the onscreen directions.
 
 ![cardano-up-subsystem-install](/cardano-up-subsystem-install.png)
 
+
+
+## Step 3 - Open PowerShell as Administrator 
+
+In your search bar type `powershell` and select run as administrator.
+
+![cardano-up-open-powershell-admin](/cardano-up-open-powershell-admin.png)
+
+💡 Tip: you can verify that docker desktop is running by with the following command in your PowerShell
+
+```
+wsl -l -v
+```
+
+![cardano-up-verify-wsl-docker-desktop](/cardano-up-verify-wsl-docker-desktop.png)
+
 <!--
-
-## Step 3 - Run Adder in Command Prompt
-
-Now that we have the path for the Adder exe, type the path in or paste it if you copied the path in the previous step.
-
-![adder-cmd-paste-path](/adder-cmd-paste-path.png)
 
 ### Congratulations!
 
