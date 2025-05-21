@@ -45,6 +45,26 @@ wsl -l -v
 
 ![cardano-up-verify-wsl-docker-desktop](/cardano-up-verify-wsl-docker-desktop.png)
 
+## Step 4 - Install Ubuntu in WSL 
+
+To install Ubuntu in WSL we run:
+
+```
+wsl --install -d Ubuntu
+```
+
+![cardano-up-install-ubuntu-wsl](/cardano-up-install-ubuntu-wsl.png)
+
+## Step 5 - Launch Ubuntu and Finish Setup 
+
+Once Ubuntu is install we will run the following command to finish setup by creating a user and password.
+
+```
+wsl.exe -d Ubuntu
+```
+
+![cardano-up-finish-install-ubuntu-wsl-exe](/cardano-up-finish-install-ubuntu-wsl-exe.png)
+
 <!--
 
 ### Congratulations!
