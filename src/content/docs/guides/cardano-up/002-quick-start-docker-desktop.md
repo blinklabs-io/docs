@@ -126,16 +126,27 @@ chmod +x cardano-up
 
 ![cardano-up-change-permissions](/cardano-up-change-permissions.png)
 
+## Step 10 - Move cardano-up
+
+For this example we are going to put our cardano-up binary in the `/usr/local/bin` to move the cardano-up binary we can run:
+
+```
+sudo mv cardano-up /usr/local/bin/cardano-up
+```
+
+![cardano-up-move-binary](/cardano-up-move-binary.png)
+
+You will need to entry your password that you created in Step 5
+
+![cardano-up-move-binary-password](/cardano-up-move-binary-password.png)
+
+> 💡 TIP: 
+
 <!--
 
 ### Congratulations!
 
 Now we are ready to run Adder with filters and commands so we can track certain information and pick the way we are notified.
-
-<br />
-
-
-> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
 <br />
 
