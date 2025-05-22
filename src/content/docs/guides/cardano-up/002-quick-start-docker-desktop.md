@@ -25,9 +25,9 @@ Follow the onscreen directions.
 
 ![cardano-up-docker-desktop-install](/cardano-up-docker-desktop-install.png)
 
-💡 Tip: Docker Desktop installs a Windows Subsystem for Linux that docker will run in.
-
-![cardano-up-subsystem-install](/cardano-up-subsystem-install.png)
+> 💡 Tip: Docker Desktop installs a Windows Subsystem for Linux that docker will run in.
+> 
+> ![cardano-up-subsystem-install](/cardano-up-subsystem-install.png)
 
 
 
@@ -37,13 +37,13 @@ In your search bar type `powershell` and select run as administrator.
 
 ![cardano-up-open-powershell-admin](/cardano-up-open-powershell-admin.png)
 
-💡 Tip: you can verify that docker desktop is running by with the following command in your PowerShell
-
-```
-wsl -l -v
-```
-
-![cardano-up-verify-wsl-docker-desktop](/cardano-up-verify-wsl-docker-desktop.png)
+> 💡 Tip: you can verify that docker desktop is running by with the following command in your PowerShell
+> 
+> ```
+> wsl -l -v
+> ```
+> 
+> ![cardano-up-verify-wsl-docker-desktop](/cardano-up-verify-wsl-docker-desktop.png)
 
 ## Step 4 - Install Ubuntu in WSL 
 
@@ -102,6 +102,29 @@ In your search bar type `ubuntu` and select ubuntu app and click open.
 > 💡 TIP: You can check if docker is available by running `docker`. It will show a list of all available docker commands.
 >
 > ![cardano-up-check-docker-available-tip](/cardano-up-check-docker-available-tip.png)
+
+## Step 8 - Download cardano-up binary
+
+You can download the latest cardano-up release from the <a href="https://github.com/blinklabs-io/cardano-up/releases" target="_blank">https://github.com/blinklabs-io/cardano-up/releases</a> page.
+
+We will download by running the following command. ⚠️ Adjust download link to the most current version.
+
+```
+wget -cO - https://github.com/blinklabs-io/cardano-up/releases/download/v0.14.1/cardano-up-v0.14.1-linux-amd64 > cardano-up
+```
+
+![cardano-up-download-cardano-up](/cardano-up-download-cardano-up.png)
+
+
+## Step 9 - Change Permissions
+
+For this example, we named the binary file cardano-up. To make the file executable run the following command:
+
+```
+chmod +x cardano-up
+```
+
+![cardano-up-change-permissions](/cardano-up-change-permissions.png)
 
 <!--
 
