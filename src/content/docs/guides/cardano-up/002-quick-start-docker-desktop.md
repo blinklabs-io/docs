@@ -93,11 +93,15 @@ Under WSL intergration select `Ubuntu` and click `Apply & restart`
 
 ![cardano-up-docker-desktop-apply-ubuntu](/cardano-up-docker-desktop-apply-ubuntu.png)
 
-## Step 7 - Launch Ubuntu
+## Step 7 - Launch Ubuntu app
 
-To :
+In your search bar type `ubuntu` and select ubuntu app and click open.
 
+![cardano-up-launch-ubuntu-app](/cardano-up-launch-ubuntu-app.png)
 
+> 💡 TIP: You can check if docker is available by running `docker`. It will show a list of all available docker commands.
+>
+> ![cardano-up-check-docker-available-tip](/cardano-up-check-docker-available-tip.png)
 
 <!--
 
