@@ -32,7 +32,7 @@ export default defineConfig({
 						{ label: 'nview', autogenerate: { directory: 'guides/nview' } },
 						{ label: 'Tx Submit API', autogenerate: { directory: 'guides/txsubmit' } },
 						{ label: 'Bluefin', slug: 'guides/bluefin' },
-						{ label: 'Bursa', slug: 'guides/bursa' },
+						{ label: 'Bursa', autogenerate: { directory: 'guides/bursa' } },
 						{ label: 'Cardano Node API', autogenerate: { directory: 'guides/cardano-node-api' } },
 						{ label: 'TxTop', autogenerate: { directory: 'guides/txtop' } },
 						{ label: 'Tx Submit API Mirror', slug: 'guides/txsubmitapi-mirror' },
