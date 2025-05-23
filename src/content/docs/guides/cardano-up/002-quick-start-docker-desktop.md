@@ -55,6 +55,8 @@ wsl --install -d Ubuntu
 
 ![cardano-up-install-ubuntu-wsl](/cardano-up-install-ubuntu-wsl.png)
 
+<a name="step-5"></a>
+
 ## Step 5 - Launch WSL and Finish Setup 
 
 Once Ubuntu is install we will run the following command to finish setup by creating a user and password. First run WSL by running:
@@ -136,7 +138,7 @@ sudo mv cardano-up /usr/local/bin/cardano-up
 
 ![cardano-up-move-binary](/cardano-up-move-binary.png)
 
-You will need to entry your password that you created in Step 5
+You will need to entry your password that you created in [Step 5](#step-5)
 
 ![cardano-up-move-binary-password](/cardano-up-move-binary-password.png)
 
