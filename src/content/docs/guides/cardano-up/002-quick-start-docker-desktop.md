@@ -140,17 +140,12 @@ You will need to entry your password that you created in Step 5
 
 ![cardano-up-move-binary-password](/cardano-up-move-binary-password.png)
 
-> 💡 TIP: 
+> 💡 TIP: You can run `which cardano-up` to verify the path of where your cardano-up binary is located.
+>
+> ![cardano-up-verify-binary-path](/cardano-up-verify-binary-path.png)
 
-<!--
 
 ### Congratulations!
 
-Now we are ready to run Adder with filters and commands so we can track certain information and pick the way we are notified.
+Now we are ready to using cardano-up. We are now ready to walk through [how to use cardano-up](../003-using-cardano-up).
 
-<br />
-
-
-We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power 💪 of Adder!
-
--->
