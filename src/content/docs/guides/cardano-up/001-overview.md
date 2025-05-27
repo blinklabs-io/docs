@@ -28,11 +28,13 @@ Docker is required so you can install Docker or Docker Desktop.
 
 ✅ Get started with cardano-up using Docker Desktop using our [Quick Start](../002-quick-start-docker-desktop) guide.
 
+<!--
+
 or 
 
 ✅Get started with cardano-up by installing Docker using our [Quick Start](../002-quick-start-docker) guide.
 
-<!-- IS THERE A CARDANO UP LOGO?
+IS THERE A CARDANO UP LOGO?
 
 ![cardano-up-logo](/cardano-up-logo.png)
 
