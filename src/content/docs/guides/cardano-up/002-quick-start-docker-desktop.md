@@ -67,7 +67,7 @@ wsl --install -d Ubuntu
 
 ## Step 5 - Launch WSL and Finish Setup 
 
-Once Ubuntu is install we will run the following command to finish setup by creating a user and password. First run WSL by running:
+Once Ubuntu is install we will run the following command in our PowerShell to finish setup by creating a user and password. First run WSL by running:
 
 ```
 wsl.exe -d Ubuntu
