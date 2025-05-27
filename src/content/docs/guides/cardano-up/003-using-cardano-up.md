@@ -3,7 +3,7 @@ title: Using cardano-up
 description: A guide how to use cardano-up.
 ---
 
-# Using cardano-up
+# Using cardano-up to install Cardano services
 
 cardano up is a command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install cardano service by using docker images.
 
@@ -13,10 +13,20 @@ Let's walk through how to open cardano-up, and see how we can use it to install 
 
 ***
 
-# List available packages
+## List available packages
 
 We can see what available packages or put another way what available Cardano services we can install with cardano-up by running the following command in our Ubuntu app:
 
 ```
 cardano-up list-available
 ```
+
+***
+
+> 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any > commands/scripts installed readily available
+> 
+> ```
+> export PATH=~/.local/bin:$PATH
+> ```
+
+## Install
