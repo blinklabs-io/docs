@@ -5,6 +5,8 @@ description: How to use cardano-up using Docker Desktop.
 
 # cardano-up using Docker Desktop on Windows
 
+cardano-up is a command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install cardano service by using docker images.
+
 This guide will walk you through how to use cardano-up on Windows using Docker Desktop. 
 
 To get started follow the steps below
