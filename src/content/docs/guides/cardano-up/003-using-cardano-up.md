@@ -41,6 +41,13 @@ The `context` subcommand manages contexts. It has subcommands of its own for the
 
 Create a new context with a given name, optionally specifying a description and a Cardano network
 
+```
+cardano-up context create contextName
+```
+✅ In this sample we name our new context `dev`
+
+![cardano-up-context-create](/cardano-up-context-create.png)
+
 #### `context delete`
 
 Delete the context with the given name, if it exists
@@ -51,13 +58,14 @@ Output environment variables for the active context
 
 #### `context list`
 
+Lists the available contexts
+
 ```
 cardano-up context list
 ```
 
 ![cardano-up-context-list](/cardano-up-context-list.png)
 
-Lists the available contexts
 
 #### `context select`
 
