@@ -55,6 +55,8 @@ Output environment variables for the active context
 cardano-up context list
 ```
 
+![cardano-up-context-list](/cardano-up-context-list.png)
+
 Lists the available contexts
 
 #### `context select`
