@@ -13,19 +13,7 @@ Let's walk through how to open cardano-up, and see how we can use it to install 
 
 ***
 
-## List available packages
-
-We can see what available packages or put another way what available Cardano services we can install with cardano-up by running the following command in our Ubuntu app:
-
-```
-cardano-up list-available
-```
-
-![cardano-up-list-available](/cardano-up-list-available.png)
-
-***
-
-## Contexts
+### Contexts
 
 Before we start installing packages we need to understand what `contexts` are and how cardano-up use them. 
 
@@ -35,49 +23,20 @@ of the node.
 
 Commands such as `install`, `uninstall`, and `list` work in the active context. You can use the `context` command to change the active context or manage available contexts.
 
-The `context` subcommand manages contexts. It has subcommands of its own for the various context-related functions.
+The `context` subcommand manages contexts. It has subcommands of its own for the various context-related functions. Learn more in our [Reference Guide](../004-reference-guide).
 
 #### `context create`
 
-Create a new context with a given name, optionally specifying a description and a Cardano network
+Create a new context with a given name, optionally specifying a description and a Cardano network. We use the `-n` flag to specify the Cardano network and the `-d` flag to give it a description
+
+✅ In this sample we name our new context `dev` and set the network to `preview` with description of `preview test`
 
 ```
-cardano-up context create contextName
-```
-✅ In this sample we name our new context `dev`
-
-![cardano-up-context-create](/cardano-up-context-create.png)
-
-#### `context delete`
-
-Delete the context with the given name, if it exists
-
-```
-cardano-up context delete contextName
+cardano-up context create dev -n preview -d 'preview test'
 ```
 
-✅ In this sample we name our context `dev`
+![cardano-up-context-create-dev-sample](/cardano-up-context-create-dev-sample.png)
 
-![cardano-up-context-delete](/cardano-up-context-delete.png)
-
-#### `context env`
-
-Output environment variables for the active context
-
-#### `context list`
-
-Lists the available contexts
-
-```
-cardano-up context list
-```
-
-![cardano-up-context-list](/cardano-up-context-list.png)
-
-
-#### `context select`
-
-Sets the active context to the given context name
 
 ***
 
