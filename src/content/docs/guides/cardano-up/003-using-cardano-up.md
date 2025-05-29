@@ -13,7 +13,7 @@ Let's walk through how to open cardano-up, and see how we can use it to install 
 
 ***
 
-### Contexts
+## Contexts
 
 Before we start installing packages we need to understand what `contexts` are and how cardano-up use them. 
 
@@ -25,25 +25,12 @@ Commands such as `install`, `uninstall`, and `list` work in the active context. 
 
 The `context` subcommand manages contexts. It has subcommands of its own for the various context-related functions. Learn more in our [Reference Guide](../004-reference-guide).
 
-#### `context create`
-
-Create a new context with a given name, optionally specifying a description and a Cardano network. We use the `-n` flag to specify the Cardano network and the `-d` flag to give it a description
-
-✅ In this sample we name our new context `dev` and set the network to `preview` with description of `preview test`
-
-```
-cardano-up context create dev -n preview -d 'preview test'
-```
-
-![cardano-up-context-create-dev-sample](/cardano-up-context-create-dev-sample.png)
-
-
 ***
+
+## Install
 
 > 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
 > 
 > ```
 > export PATH=~/.local/bin:$PATH
 > ```
-
-## Install
