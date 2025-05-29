@@ -84,11 +84,10 @@ Sets the active context to the given context name
 
 ***
 
+## Install
+
 > 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
 > 
 > ```
 > export PATH=~/.local/bin:$PATH
 > ```
-
-## Install
-
