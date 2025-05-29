@@ -21,6 +21,8 @@ We can see what available packages or put another way what available Cardano ser
 cardano-up list-available
 ```
 
+![cardano-up-list-available](/cardano-up-list-available.png)
+
 ***
 
 ## Contexts
