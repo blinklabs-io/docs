@@ -41,14 +41,15 @@ The `context` subcommand manages contexts. It has subcommands of its own for the
 
 #### `context create`
 
-Create a new context with a given name, optionally specifying a description and a Cardano network
+Create a new context with a given name, optionally specifying a description and a Cardano network. We use the `-n` flag to specify the Cardano network and the `-d` flag to give it a description
+
+✅ In this sample we name our new context `dev` and set the network to `preview` with description of `preview test`
 
 ```
-cardano-up context create contextName
+cardano-up context create dev -n preview -d 'preview test'
 ```
-✅ In this sample we name our new context `dev`
 
-![cardano-up-context-create](/cardano-up-context-create.png)
+![cardano-up-context-create-dev-sample](/cardano-up-context-create-dev-sample.png)
 
 #### `context delete`
 
