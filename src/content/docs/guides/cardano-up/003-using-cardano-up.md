@@ -27,10 +27,12 @@ The `context` subcommand manages contexts. It has subcommands of its own for the
 
 ***
 
-## Install
+## Step 1 - Install a Package
 
 > 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
 > 
 > ```
 > export PATH=~/.local/bin:$PATH
 > ```
+
+For this example we will install into the default context which is set to the prepod network
