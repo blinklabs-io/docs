@@ -52,7 +52,7 @@ Output environment variables for the active context
 #### `context list`
 
 ```
-./cardano-up context list
+cardano-up context list
 ```
 
 Lists the available contexts
