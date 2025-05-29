@@ -23,6 +23,44 @@ cardano-up list-available
 
 ***
 
+## Contexts
+
+Before we start installing packages we need to understand what `contexts` are and how cardano-up use them. 
+
+Contexts are used to allow you to install multiple copies of the same package with different network configurations side by side. They allow you to do things
+such as running a `preprod` and `mainnet` Cardano node on the same machine, or even have multiple `preview` Cardano node instances running different versions
+of the node.
+
+Commands such as `install`, `uninstall`, and `list` work in the active context. You can use the `context` command to change the active context or manage available contexts.
+
+The `context` subcommand manages contexts. It has subcommands of its own for the various context-related functions.
+
+#### `context create`
+
+Create a new context with a given name, optionally specifying a description and a Cardano network
+
+#### `context delete`
+
+Delete the context with the given name, if it exists
+
+#### `context env`
+
+Output environment variables for the active context
+
+#### `context list`
+
+```
+./cardano-up context list
+```
+
+Lists the available contexts
+
+#### `context select`
+
+Sets the active context to the given context name
+
+***
+
 > 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
 > 
 > ```
