@@ -52,6 +52,14 @@ cardano-up context create contextName
 
 Delete the context with the given name, if it exists
 
+```
+cardano-up context delete contextName
+```
+
+✅ In this sample we name our context `dev`
+
+![cardano-up-context-delete](/cardano-up-context-delete.png)
+
 #### `context env`
 
 Output environment variables for the active context
