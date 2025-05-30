@@ -36,3 +36,7 @@ The `context` subcommand manages contexts. It has subcommands of its own for the
 > ```
 
 For this example we will install into the default context which is set to the prepod network
+
+![cardano-up-context-list](/cardano-up-context-list.png)
+
+For this example we will install the Cardano Node
