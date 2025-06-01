@@ -29,7 +29,7 @@ For this guide we will install into the default context which is set to the prep
 
 ***
 
-## Step 1 - Install a Package
+## Install a Package
 
 > 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
 > 
@@ -41,7 +41,7 @@ For this guide we will install into the default context which is set to the prep
 
 ![cardano-up-context-list](/cardano-up-context-list.png)
 
-For this example the package we will install is the Cardano Node. To install the Cardano Node using cardano-up we will run the following command:
+For this example, the package we will install is the Cardano Node. To install the Cardano Node using cardano-up we will run the following command:
 
 ```
 cardano-up install cardano-node
@@ -56,3 +56,9 @@ Once the install is complete we will see the following `successfully installed` 
 > 💡 Tip: We can also now see the Cardano Node in Docker Desktop under our containers.
 >
 > ![cardano-up-docker-desktop-cardano-node](/cardano-up-docker-desktop-cardano-nodee.png)
+
+### Congratulations you have install your first Cardano package with cardano-up and have the docker image ready to use!
+
+Let's view the packages in our context, see available packages and install another package to use with the Cardano Node.
+
+## View Packages in Our Context
