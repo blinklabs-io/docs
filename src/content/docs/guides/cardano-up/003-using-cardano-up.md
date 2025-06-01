@@ -55,7 +55,7 @@ Once the install is complete we will see the following `successfully installed` 
 
 > 💡 Tip: We can also now see the Cardano Node in Docker Desktop under our containers.
 >
-> ![cardano-up-docker-desktop-cardano-node](/cardano-up-docker-desktop-cardano-nodee.png)
+> ![cardano-up-docker-desktop-cardano-node](/cardano-up-docker-desktop-cardano-node.png)
 
 ### Congratulations you have install your first Cardano package with cardano-up and have the docker image ready to use!
 
