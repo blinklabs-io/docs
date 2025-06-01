@@ -52,3 +52,7 @@ cardano-up install cardano-node
 Once the install is complete we will see the following `successfully installed` message. We can note that it installed the following packages that are needed for Cardano Node: cardano-config, cardano-cli, mithril-client, and the cardano-node.
 
 ![cardano-up-install-cardano-node-success-message](/cardano-up-install-cardano-node-success-message.png)
+
+> 💡 Tip: We can also now see the Cardano Node in Docker Desktop under our containers.
+>
+> ![cardano-up-docker-desktop-cardano-node](/cardano-up-docker-desktop-cardano-nodee.png)
