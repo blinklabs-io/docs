@@ -80,3 +80,7 @@ Let's now see what other packages are available that we might need or want to in
 ```
 cardano-up list-available
 ```
+
+![cardano-up-list-available](/cardano-up-list-available.png)
+
+## Output Environment Variables
