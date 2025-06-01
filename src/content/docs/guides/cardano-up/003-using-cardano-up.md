@@ -62,3 +62,21 @@ Once the install is complete we will see the following `successfully installed` 
 Let's view the packages in our context, see available packages and install another package to use with the Cardano Node.
 
 ## View Packages in Our Context
+
+We can now use the `cardano-up list` command to see the packages installed in our default context.
+
+```
+cardano-up list
+```
+
+![cardano-up-default-context-list](/cardano-up-default-context-list.png)
+
+***
+
+## View Available Packages to Install
+
+Let's now see what other packages are available that we might need or want to install. We can run the following command to see available packages.
+
+```
+cardano-up list-available
+```
