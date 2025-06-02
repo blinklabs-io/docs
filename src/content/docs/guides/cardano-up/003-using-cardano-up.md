@@ -59,7 +59,7 @@ Once the install is complete we will see the following `successfully installed` 
 
 ### Congratulations you have install your first Cardano package with cardano-up and have the docker image ready to use!
 
-Let's view the packages in our context, see available packages and install another package to use with the Cardano Node.
+Let's view the packages in our context, Output our environment variables and test by finding the current blockchain tip using cardano-cli and see available packages in case we want to install another package to use with the Cardano Node.
 
 ## View Packages in Our Context
 
