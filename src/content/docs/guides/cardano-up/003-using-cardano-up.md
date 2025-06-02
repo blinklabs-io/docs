@@ -73,6 +73,26 @@ cardano-up list
 
 ***
 
+## Output Environment Variables
+
+We can also add any env vars exported by the installed packages to your env by adding the following to your shell RC/profile:
+
+```
+eval $(cardano-up context env)
+```
+
+Now we should be able to run `cardano-cli` normally.
+
+```
+cardano-cli query tip --testnet-magic 1
+```
+
+![cardano-up-eval-env-plus-tip](/cardano-up-eval-env-plus-tip.png)
+
+> ⚠️ If you get an error you might have to wait for the Cardano Node to finish syncing before running.
+
+***
+
 ## View Available Packages to Install
 
 Let's now see what other packages are available that we might need or want to install. We can run the following command to see available packages.
@@ -87,4 +107,3 @@ cardano-up list-available
 
 ![cardano-up-list-available-tip](/cardano-up-list-available-tip.png)
 
-## Output Environment Variables
