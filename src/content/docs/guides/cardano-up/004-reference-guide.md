@@ -126,6 +126,12 @@ cardano-up context delete contextName
 
 Output environment variables for the active context
 
+```
+cardano-up context env
+```
+
+![cardano-up-context-env](/cardano-up-context-env.png)
+
 #### `context list`
 
 Lists the available contexts
@@ -139,7 +145,13 @@ cardano-up context list
 
 #### `context select`
 
-Sets the active context to the given context name
+Sets the active context to the given context name. In this example we select the `dev` context.
+
+```
+cardano-up context select dev
+```
+
+![cardano-up-context-select](/cardano-up-context-select.png)
 
 ***
 
