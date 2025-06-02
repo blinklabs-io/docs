@@ -14,8 +14,45 @@ This guide further explains how cardano-up works, managing packages and commands
 > ✅ For this guide we assume you have already downloaded the cardano-up binary and have opened the Ubuntu app. If not see our [Quick Start](../002-quick-start-docker-desktop) guide.
 
 ***
+## Command reference
 
-## List available packages
+The `cardano-up` command consists of multiple subcommands. You can list all subcommands by running `cardano-up` with no arguments or with the `--help` option.
+
+```
+$ cardano-up
+Usage:
+  cardano-up [command]
+
+Available Commands:
+  completion     Generate the autocompletion script for the specified shell
+  context        Manage the current context
+  down           Stops all Docker containers
+  help           Help about any command
+  info           Show info for an installed package
+  install        Install package
+  list           List installed packages
+  list-available List available packages
+  logs           Show logs for an installed package
+  uninstall      Uninstall package
+  up             Starts all Docker containers
+  update         Update the package registry cache
+  upgrade        Upgrade package
+  validate       Validate package file(s) in the given directory
+  version        Displays the version
+
+Flags:
+  -D, --debug   enable debug logging
+  -h, --help    help for cardano-up
+  -v, --verbose Show all available versions of packages
+
+Use "cardano-up [command] --help" for more information about a command.
+```
+
+***
+
+## General cardano-up Commands:
+
+#### List available packages
 
 We can see what available packages or put another way what available Cardano services we can install with cardano-up by running the following command in our Ubuntu app:
 
@@ -24,6 +61,28 @@ cardano-up list-available
 ```
 
 ![cardano-up-list-available](/cardano-up-list-available.png)
+
+#### Install a Package
+
+> 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
+> 
+> ```
+> export PATH=~/.local/bin:$PATH
+> ```
+
+To install a package we run `cardano-up install (Package Name)` for this example `cardano-node`
+
+```
+cardano-up install cardano-node
+```
+
+#### Uninstall a Package
+
+To uninstall a package we run `cardano-up uninstall (Package Name)` for this example `cardano-node`
+
+```
+cardano-up uninstall cardano-node
+```
 
 ***
 
@@ -84,10 +143,3 @@ Sets the active context to the given context name
 
 ***
 
-## Install
-
-> 🛑 In order to install a package and interact with it we need to add `~/.local/bin` to your `$PATH` by adding the following to your shell RC/profile to make any commands/scripts installed readily available
-> 
-> ```
-> export PATH=~/.local/bin:$PATH
-> ```
