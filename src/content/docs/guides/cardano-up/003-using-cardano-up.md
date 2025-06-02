@@ -107,3 +107,4 @@ cardano-up list-available
 
 ![cardano-up-list-available-tip](/cardano-up-list-available-tip.png)
 
+Want to see what else you can do or how to fine tune your setup, see our [Reference Guide](../004-reference-guide)
