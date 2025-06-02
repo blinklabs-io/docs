@@ -83,4 +83,8 @@ cardano-up list-available
 
 ![cardano-up-list-available](/cardano-up-list-available.png)
 
+> 💡 Tip: You can see the required packages that will be installed if you install a certain pacakge. For example you can see if you install Cardano Node it `Requires: cardano-config, cardano-cli and mithril-client`
+
+![cardano-up-list-available-tip](/cardano-up-list-available-tip.png)
+
 ## Output Environment Variables
