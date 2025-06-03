@@ -9,12 +9,19 @@ cardano up is a command line utility for managing Cardano services. cardano-up a
 
 This guide further explains how cardano-up works, managing packages and commands you can use. 
 
+### Quick Links:
+
+[Command Reference](#1) | [General cardano-up Commands](#2) | [Contexts](#3)
+
 ***
 
 > ✅ For this guide we assume you have already downloaded the cardano-up binary and have opened the Ubuntu app. If not see our [Quick Start](../002-quick-start-docker-desktop) guide.
 
 ***
-## Command reference
+
+<a name="1"></a>
+
+## Command Reference
 
 The `cardano-up` command consists of multiple subcommands. You can list all subcommands by running `cardano-up` with no arguments or with the `--help` option.
 
@@ -49,6 +56,8 @@ Use "cardano-up [command] --help" for more information about a command.
 ```
 
 ***
+
+<a name="2"></a>
 
 ## General cardano-up Commands:
 
@@ -86,9 +95,9 @@ cardano-up uninstall cardano-node
 
 ***
 
-## Contexts
+<a name="3"></a>
 
-Before we start installing packages we need to understand what `contexts` are and how cardano-up use them. 
+## Contexts
 
 Contexts are used to allow you to install multiple copies of the same package with different network configurations side by side. They allow you to do things
 such as running a `preprod` and `mainnet` Cardano node on the same machine, or even have multiple `preview` Cardano node instances running different versions
