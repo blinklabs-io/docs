@@ -5,7 +5,7 @@ description: How to use cardano-up using Docker Desktop.
 
 # cardano-up using Docker Desktop on Windows
 
-cardano-up is a command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install cardano service by using docker images.
+cardano-up is a command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install Cardano service by using docker images.
 
 This guide will walk you through how to download Docker Desktop, run Ubuntu WSL and download the cardano-up binary on Windows. 
 
@@ -67,7 +67,7 @@ wsl --install -d Ubuntu
 
 ## Step 5 - Launch WSL and Finish Setup 
 
-Once Ubuntu is install we will run the following command in our PowerShell to finish setup by creating a user and password. First run WSL by running:
+Once Ubuntu is installed, we will run the following command in our PowerShell to finish the setup by creating a user and password. First start the Ubuntu WSL by running:
 
 ```
 wsl.exe -d Ubuntu
@@ -80,7 +80,7 @@ Now type in a username and password. You will need to type in your password twic
 
 ![cardano-up-finish-install-ubuntu-username](/cardano-up-finish-install-ubuntu-username.png)
 
-Once you added a username a password you will see a `Welcome to Ubuntu...` message. You can now exit out of your PowerShell by typing `exit`
+Once you added a username and password you will see a `Welcome to Ubuntu...` message. You can now exit out of your PowerShell by typing `exit`
 
 ![cardano-up-install-ubuntu-wsl-successful](/cardano-up-install-ubuntu-wsl-successful.png)
 
@@ -88,7 +88,7 @@ Once you added a username a password you will see a `Welcome to Ubuntu...` messa
 
 ## Step 6 - Enable Ubuntu in Docker Desktop
 
-Go back into Docker Desktop and select settings.
+To enable Ubuntu in Docker Desktop, go back into Docker Desktop and select settings.
 
 ![cardano-up-docker-desktop-settings](/cardano-up-docker-desktop-settings.png)
 
@@ -96,11 +96,11 @@ Once in settings select the `Resources` tab on the left side.
 
 ![cardano-up-docker-desktop-resources](/cardano-up-docker-desktop-resources.png)
 
-Under the Resources tab select `WSL intergration`
+Under the Resources tab select `WSL integration`
 
-![cardano-up-docker-desktop-wsl-intergration](/cardano-up-docker-desktop-wsl-intergration.png)
+![cardano-up-docker-desktop-wsl-integration](/cardano-up-docker-desktop-wsl-intergration.png)
 
-Under WSL intergration select `Ubuntu` and click `Apply & restart`
+Under WSL integration select `Ubuntu` and click `Apply & restart`
 
 ![cardano-up-docker-desktop-apply-ubuntu](/cardano-up-docker-desktop-apply-ubuntu.png)
 
@@ -108,7 +108,7 @@ Under WSL intergration select `Ubuntu` and click `Apply & restart`
 
 ## Step 7 - Launch Ubuntu app
 
-In your search bar type `ubuntu` and select ubuntu app and click open.
+In your search bar type `ubuntu`, select ubuntu app and click open.
 
 ![cardano-up-launch-ubuntu-app](/cardano-up-launch-ubuntu-app.png)
 
@@ -134,7 +134,7 @@ wget -cO - https://github.com/blinklabs-io/cardano-up/releases/download/v0.14.1/
 
 ## Step 9 - Change Permissions
 
-For this example, we named the binary file cardano-up. To make the file executable run the following command:
+For this example, we named the binary file `cardano-up`. To make the file executable run the following command:
 
 ```
 chmod +x cardano-up
@@ -146,7 +146,7 @@ chmod +x cardano-up
 
 ## Step 10 - Move cardano-up
 
-For this example we are going to put our cardano-up binary in the `/usr/local/bin` to move the cardano-up binary we can run:
+For this example, we are going to put our cardano-up binary in the `/usr/local/bin` to move the cardano-up binary we can run:
 
 ```
 sudo mv cardano-up /usr/local/bin/cardano-up
@@ -154,7 +154,7 @@ sudo mv cardano-up /usr/local/bin/cardano-up
 
 ![cardano-up-move-binary](/cardano-up-move-binary.png)
 
-You will need to entry your password that you created in [Step 5](#step-5)
+You will need to enter your password that you created in [Step 5](#step-5)
 
 ![cardano-up-move-binary-password](/cardano-up-move-binary-password.png)
 
@@ -166,5 +166,5 @@ You will need to entry your password that you created in [Step 5](#step-5)
 
 ### Congratulations!
 
-Now we are ready to start using cardano-up. We can now walk through [how to use cardano-up](../003-using-cardano-up) to demostrate the ease of use and power of using cardano-up to install docker images of the services you need.
+Now we are ready to start using cardano-up. We can now walk through [how to use cardano-up](../003-using-cardano-up) to demonstrate the ease of use and power of using cardano-up to install docker images of the Cardano services you need.
 
