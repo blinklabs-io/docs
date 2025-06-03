@@ -15,10 +15,6 @@ This guide further explains how cardano-up works, managing packages and commands
 
 ***
 
-> ✅ For this guide we assume you have already downloaded the cardano-up binary and have opened the Ubuntu app. If not see our [Quick Start](../002-quick-start-docker-desktop) guide.
-
-***
-
 <a name="1"></a>
 
 ## Command Reference
