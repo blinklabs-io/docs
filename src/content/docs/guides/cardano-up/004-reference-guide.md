@@ -59,7 +59,7 @@ Use "cardano-up [command] --help" for more information about a command.
 
 #### List available packages
 
-We can see what available packages or put another way what available Cardano services we can install with cardano-up by running the following command in our Ubuntu app:
+We can see what available packages or put another way what available Cardano services we can install with cardano-up by running the following command:
 
 ```
 cardano-up list-available
@@ -75,7 +75,7 @@ cardano-up list-available
 > export PATH=~/.local/bin:$PATH
 > ```
 
-To install a package we run `cardano-up install (Package Name)` for this example `cardano-node`
+To install a package, we run `cardano-up install (Package Name)` for this example `cardano-node`
 
 ```
 cardano-up install cardano-node
@@ -83,7 +83,7 @@ cardano-up install cardano-node
 
 #### Uninstall a Package
 
-To uninstall a package we run `cardano-up uninstall (Package Name)` for this example `cardano-node`
+To uninstall a package, we run `cardano-up uninstall (Package Name)` for this example `cardano-node`
 
 ```
 cardano-up uninstall cardano-node
