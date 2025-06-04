@@ -1,6 +1,6 @@
 ---
 title: Reference Guide
-description: A guide how to use cardano-up.
+description: Reference guide of commands for cardano-up.
 ---
 
 # Reference Guide
