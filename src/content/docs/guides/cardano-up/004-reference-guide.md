@@ -5,7 +5,7 @@ description: A guide how to use cardano-up.
 
 # Reference Guide
 
-cardano up is a command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install cardano service by using docker images.
+cardano up is a command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install Cardano service by using docker images.
 
 This guide further explains how cardano-up works, managing packages and commands you can use. 
 
