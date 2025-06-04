@@ -89,6 +89,46 @@ To uninstall a package we run `cardano-up uninstall (Package Name)` for this exa
 cardano-up uninstall cardano-node
 ```
 
+#### `down`
+
+Stops all running services for packages in the active context
+
+#### `help`
+
+Displays usage information for commands and subcommands
+
+#### `info`
+
+Shows information for an installed package, including the name, version, context name, any post-install notes, etc.
+
+#### `list`
+
+Lists installed packages in the active context, or all contexts with `-A`
+
+#### `logs`
+
+Displays logs from a running service for the specified package in the active context
+
+#### `up`
+
+Starts all services for packages in the active context
+
+#### `update`
+
+Force a refresh of the package registry cache
+
+#### `upgrade`
+
+Upgrade the specified package
+
+#### `validate`
+
+Validates packages defined in specified path
+
+#### `version`
+
+Displays the version
+
 ***
 
 <a name="3"></a>
