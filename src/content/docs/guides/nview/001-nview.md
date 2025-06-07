@@ -1,9 +1,7 @@
 ---
-title: Overview
-description: A guide about nview.
+title: nview
+description: Introduction to nview.
 ---
-
-# nview
 
 nview is a local monitoring tool for a Cardano Node (cardano-node) meant to complement remote monitoring tools by providing a local view of a running node from the command line. It is a TUI (terminal user interface) designed to fit most screens. 
 

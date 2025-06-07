@@ -1,5 +1,5 @@
 ---
-title: g0uroboros
+title: gOuroboros
 description: A guide about gOuroboros.
 ---
 
