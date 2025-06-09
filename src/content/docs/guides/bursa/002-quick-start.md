@@ -59,7 +59,7 @@ wget -cO - https://github.com/blinklabs-io/bursa/releases/download/v0.11.0/bursa
 
 <br>
 
-<!--
+
 
 ## Step 2 - Change Permissions
 
@@ -79,11 +79,13 @@ chmod +x bursa
 
 <br>
 
-## Step 3 - Open Firewall to your Selected Port
+
+
+## Step 3 - Open Firewall on Port 8080 for API
 
 <br>
 
-Make sure your firewall is open on the port you selected. For this example, we used port 8080. To open the port on 8080 we run the following command:
+Make sure your firewall is open for API. For this example, we used port 8080. To open the port on 8080 we run the following command:
 
 ```
 sudo ufw allow 8080/tcp
@@ -93,4 +95,4 @@ sudo ufw allow 8080/tcp
 
 <br>
 
--->
+
