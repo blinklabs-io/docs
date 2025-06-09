@@ -45,11 +45,11 @@ To get started follow the steps below
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-![bursa-blinklabs-site-copy-link](/bursa-blinklabs-site-copy-link.png)
-
 <br>
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
+
+> 💡 Tip: You can download the latest Bursa release from the https://github.com/blinklabs-io/bursa/releases page.
 
 ```
 wget -cO - https://github.com/blinklabs-io/bursa/releases/download/v0.11.0/bursa-v0.11.0-linux-amd64 > bursa
