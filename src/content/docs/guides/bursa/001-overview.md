@@ -1,6 +1,6 @@
 ---
-title: Overview
-description: A guide about Bursa.
+title: Bursa
+description: Introduction to Bursa.
 ---
 
 # Bursa
