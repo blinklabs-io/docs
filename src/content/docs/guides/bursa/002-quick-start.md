@@ -28,7 +28,7 @@ To get started follow the steps below
 
 
 
-![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
+![bursa-blinklabs-site](/bursa-blinklabs-site.png)
 <br>
 
 
