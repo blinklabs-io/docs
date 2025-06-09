@@ -95,4 +95,6 @@ sudo ufw allow 8080/tcp
 
 <br>
 
+### Congratulations you are ready to start using Bursa!
 
+We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation.
