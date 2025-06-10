@@ -98,3 +98,25 @@ sudo ufw allow 8080/tcp
 ### Congratulations you are ready to start using Bursa!
 
 We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation.
+
+## Use Command Line to Create Wallet and Output Wallet Files
+
+We can...
+
+```
+./bursa wallet create --output
+```
+
+## Use Command Line to Start API
+
+If we want to use the API we can use the command line to start it, by running the following command.
+
+```
+./bursa api
+```
+
+You can check the Bursa API by going to your IP:port/swagger/index.html. Please adjust IP and your port if needed.
+
+```
+http://localhost:8080/swagger/index.html
+```
