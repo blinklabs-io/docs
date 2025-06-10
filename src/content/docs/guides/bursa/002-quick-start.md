@@ -115,6 +115,8 @@ If we want to use the API we can use the command line to start it, by running th
 ./bursa api
 ```
 
+## Access API Swagger Documentation
+
 You can check the Bursa API by going to your IP:port/swagger/index.html. Please adjust IP and your port if needed.
 
 ```
