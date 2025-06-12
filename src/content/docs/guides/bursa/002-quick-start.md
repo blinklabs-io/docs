@@ -111,6 +111,10 @@ We can...
 
 ![bursa-wallet-create-with-output-string](/bursa-wallet-create-with-output-string.png)
 
+Now we will have all the wallet files in our `dev` directory.
+
+![bursa-wallet-files](/bursa-wallet-files.png)
+
 ## Use Command Line to Start API
 
 If we want to use the API we can use the command line to start it, by running the following command.
