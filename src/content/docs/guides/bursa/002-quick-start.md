@@ -101,7 +101,7 @@ We can now use the command line to create a Cardano wallet and output all the fi
 
 ## Use Command Line to Create Wallet and Output Wallet Files
 
-We can...
+We can use the command line to create a wallet and output all the files, like seed phrase, signing keys, staking keys and payment address.
 
 ✅ For this example we create the wallet files to the `dev` folder by using `--output` flag and giving it a directory to output to.
 
@@ -123,6 +123,8 @@ If we want to use the API we can use the command line to start it, by running th
 ./bursa api
 ```
 
+![bursa-start-api](/bursa-start-api.png)
+
 ## Access API Swagger Documentation
 
 You can check the Bursa API by going to your IP:port/swagger/index.html. Please adjust IP and your port if needed.
@@ -130,3 +132,5 @@ You can check the Bursa API by going to your IP:port/swagger/index.html. Please 
 ```
 http://localhost:8080/swagger/index.html
 ```
+
+![bursa-swagger](/bursa-swagger.png)
