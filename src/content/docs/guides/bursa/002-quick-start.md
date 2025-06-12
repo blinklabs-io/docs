@@ -103,9 +103,13 @@ We can now use the command line to create a Cardano wallet and output all the fi
 
 We can...
 
+✅ For this example we create the wallet files to the `dev` folder by using `--output` flag and giving it a directory to output to.
+
 ```
-./bursa wallet create --output
+./bursa wallet create --output dev
 ```
+
+![bursa-wallet-create-with-output-string](/bursa-wallet-create-with-output-string.png)
 
 ## Use Command Line to Start API
 
