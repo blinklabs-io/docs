@@ -43,7 +43,7 @@ To get started follow the steps below
 
 <br>
 
-Copy the path from Blinklabs and run the following command to download the binary file on your node server  
+Copy the path from Blinklabs and run the following command to download the binary file.  
 
 <br>
 
@@ -81,11 +81,11 @@ chmod +x bursa
 
 
 
-## Step 3 - Open Firewall on Port 8080 for API
+## Step 3 - Open Firewall on Port 8080 for the API
 
 <br>
 
-Make sure your firewall is open for API. For this example, we used port 8080. To open the port on 8080 we run the following command:
+Make sure your firewall is open for the API. For this example, we used port 8080. To open the port on 8080 we run the following command:
 
 ```
 sudo ufw allow 8080/tcp
@@ -101,9 +101,9 @@ We can now use the command line to create a Cardano wallet and output all the fi
 
 ## Use Command Line to Create Wallet and Output Wallet Files
 
-We can use the command line to create a wallet and output all the files, like seed phrase, signing keys, staking keys and payment address.
+We can use the command line to create a wallet and output all the files we will need to manage our Cardano wallet.
 
-✅ For this example we create the wallet files to the `dev` folder by using `--output` flag and giving it a directory to output to.
+✅ For this example we create the wallet files to the `dev` folder by using the `--output` flag and giving it a directory to output to.
 
 ```
 ./bursa wallet create --output dev
@@ -127,7 +127,7 @@ If we want to use the API we can use the command line to start it, by running th
 
 ## Access API Swagger Documentation
 
-You can check the Bursa API by going to your IP:port/swagger/index.html. Please adjust IP and your port if needed.
+You can check the Bursa API by going to your IP:port/swagger/index.html. Please adjust the IP and your port if needed.
 
 ```
 http://localhost:8080/swagger/index.html
