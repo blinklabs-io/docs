@@ -1,9 +1,9 @@
 ---
-title: Overview
+title: Cardano Node API
 description: A guide about Cardano Node API.
 ---
 
-# Cardano Node API
+![cardano-node-api-logo](/cardano-node-api-logo.png)
 
 An HTTP API for interfacing with a local Cardano Node and providing the node internal data for HTTP clients. This service communicates with a Cardano full node using the Ouroboros network protocol via a UNIX socket and exposes the underlying Node-to-Client (NtC) Ouroboros mini-protocols to clients via a REST API or UTxO RPC gRPC API.  
 
@@ -20,4 +20,4 @@ Simply download the Cardano Node API binary file from blinklabs.io on to your no
 
 ✅ Get started with our [Quick Start](../002-quick-start) guide to start using Cardano Node API.
 
-![cardano-node-api-logo](/cardano-node-api-logo.png)
+
