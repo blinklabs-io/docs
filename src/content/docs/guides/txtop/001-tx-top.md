@@ -1,9 +1,9 @@
 ---
-title: Overview
+title: TxTop
 description: A guide about TxTop.
 ---
 
-# TxTop
+![txtop-screen](/txtop-screen.png)
 
 TxTop is a mempool inspector for Cardano Node software.
 
@@ -17,5 +17,3 @@ You can use TxTop as a local monitoring tool for a Cardano Node (cardano-node) m
 Simply download the TxTop binary file from blinklabs.io on to your node server. Then run TxTop in the server command line. It's that simple to use and gives you the ability to inspecting your Cardano Node's mempool with at-a-glance simple icons! 
 
 ✅ Get started with our [Quick Start](../002-quick-start) guide and start using TxTop to view you node's mempool.
-
-![txtop-screen](/txtop-screen.png)

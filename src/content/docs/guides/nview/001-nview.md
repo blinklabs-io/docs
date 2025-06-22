@@ -3,6 +3,8 @@ title: nview
 description: Introduction to nview.
 ---
 
+![nview-screen](/nview-screen.png)
+
 nview is a local monitoring tool for a Cardano Node (cardano-node) meant to complement remote monitoring tools by providing a local view of a running node from the command line. It is a TUI (terminal user interface) designed to fit most screens. 
 
 Running nview against a running Cardano Node will work out of the box with a default Cardano Node configuration, which exposes metrics in Prometheus data format on a specific port. However, if you need to make change you can run nview with a configuration file. 
@@ -12,5 +14,5 @@ Simply download the nview binary file from blinklabs.io on to your node server. 
 
 ✅ Get started with our [Quick Start](../002-quick-start) guide and start monitoring your node with nview.
 
-![nview-screen](/nview-screen.png)
+
 
