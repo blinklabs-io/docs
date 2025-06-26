@@ -34,7 +34,7 @@ export default defineConfig({
 						{ label: 'Dingo', slug: 'guides/dingo' },
 						{ label: 'TxTop', autogenerate: { directory: 'guides/txtop' } },
 						{ label: 'cardano-up', autogenerate: { directory: 'guides/cardano-up' } },
-						{ label: 'Bluefin', slug: 'guides/bluefin' },
+						{ label: 'Bluefin', autogenerate: { directory: 'guides/bluefin' } },
 						{ label: 'Bursa', autogenerate: { directory: 'guides/bursa' } },
 						{ label: 'Tx Submit API', autogenerate: { directory: 'guides/txsubmit' } },
 						{ label: 'Cardano Node API', autogenerate: { directory: 'guides/cardano-node-api' } },
