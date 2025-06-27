@@ -9,10 +9,6 @@ Bluefin a standalone Fortuna (TUNA) miner, written in Go, which syncs the chain,
 
 ## How do I actually use Bluefin?
 
-<!--
-
-It’s easy, just download the Adder executable file from blinklabs.io and open a command prompt on your computer. In the command prompt call the executable file and tell it what Cardano blockchain events you want to be notified of and how you want to be notified. It’s that simple!
-
--->
+Bluefin is self-contained and runs with no external dependencies. You can run it via the <a href="https://github.com/blinklabs-io/bluefin/pkgs/container/bluefin" target="_blank">Docker images</a> or binaries from the <a href="https://github.com/blinklabs-io/bluefin/releases" target="_blank">releases page</a>.
 
 ✅ Get started with our [Quick Start](../002-quick-start-overview) guide.
