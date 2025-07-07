@@ -50,7 +50,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 > 💡 Tip: You can download the latest Bluefin release from the <a href="https://github.com/blinklabs-io/bluefin/releases" target="_blank">https://github.com/blinklabs-io/bluefin/releases</a> page.
 
 ```
-wget -cO - https://github.com/blinklabs-io/bluefin/releases/download/v0.13.3/bluefin-v0.13.3-linux-amd64 > bluefin
+wget -cO - https://github.com/blinklabs-io/bluefin/releases/download/v0.13.4/bluefin-v0.13.4-linux-amd64 > bluefin
 ```
 
 ***
