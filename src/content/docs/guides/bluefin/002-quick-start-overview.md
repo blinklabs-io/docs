@@ -5,13 +5,13 @@ description: Bluefin Quick Start Overview.
 
 # Bluefin
 
-Bluefin a standalone Fortuna (TUNA) miner, written in Go, which syncs the chain, mines for TUNA, and submits transactions to remote nodes without any other infrastructure..
+Bluefin a standalone Fortuna (TUNA) miner, written in Go, which syncs the chain, mines for TUNA, and submits transactions to remote nodes without any other infrastructure.
 
 Bluefin is self-contained and runs with no external dependencies. You can run it via the <a href="https://github.com/blinklabs-io/bluefin/pkgs/container/bluefin" target="_blank">Docker images</a> or binaries from the <a href="https://github.com/blinklabs-io/bluefin/releases" target="_blank">releases page</a>.
 
 <br>
 
-For this guide we will walk you through downloading the binary and running the Bluefin binary. To get started follow the steps below.
+For this guide we will walk you through downloading and running the Bluefin binary. To get started follow the steps below.
 
 <br>
 
@@ -81,7 +81,7 @@ chmod +x bluefin
 
 > 📝 Bluefin is designed to take its configuration from environment variables. All examples below show running the bluefin binary directly from the shell and will need to be adapted for use with Docker.
 >
-> When run with no configuration, bluefin defaults to mining TUNA v1 on mainnet. It will generate a new wallet and write the seed phrase to the seed.txt file in the current directory.
+> When running with no configuration, bluefin defaults to mining TUNA v1 on mainnet. It will generate a new wallet and write the seed phrase to the seed.txt file in the current directory.
 
 ```
 ./bluefin
