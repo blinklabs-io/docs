@@ -13,7 +13,7 @@ Bluefin is a standalone Fortuna (TUNA) miner, written in Go, which syncs the cha
 
 TUNA is the token for Fortuna, but what is Fortuna? Fortuna is a proof of work token project built on top of a Cardano smart contract. The Fortuna miner was written in Typescript using Lucid and required access to Kupo and Ogmios or an API provider to do its work. At Blinklabs we wanted our miner to work with no external service dependencies, and this is where Bluefin comes in.  
 
-Bluefin would follow the blockchain using public Cardano nodes and store interesting UTxOs on disk. After mining a block, it would submit transactions directly to public nodes using the NtN (node-to-node) TxSubmission protocol. Like all of Binklabs Go projects, it would run as a single binary on multiple platforms and architectures. Bluefin also supports mining for $TUNA v2.  
+Bluefin follows the blockchain using public Cardano nodes and store interesting UTxOs on disk. After mining a block, it submits transactions directly to public nodes using the NtN (node-to-node) TxSubmission protocol. Like all of Binklabs Go projects, it runs as a single binary on multiple platforms and architectures. Bluefin also supports mining for $TUNA v2.  
 
 Learn more about Fortuna at <a href="https://minefortuna.com/" target="_blank">minefortuna.com/</a>.  
 
