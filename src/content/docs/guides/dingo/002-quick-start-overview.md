@@ -15,7 +15,7 @@ For this guide we will walk you through downloading and running the Dingo binary
 
 <br>
 
-⚠️ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
+✅ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
 
 ***
 
