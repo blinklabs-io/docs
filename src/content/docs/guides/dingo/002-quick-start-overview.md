@@ -54,3 +54,28 @@ wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.12.1/dingo-v0
 ```
 
 ***
+
+## Best Practices - Files Needed to Run Dingo
+1. dingo.yaml
+2. Node Config
+3. Node Topology
+4. Byron Genesis
+5. Shelley Genesis
+6. Alonzo Genesis
+7. Conway Genesis
+
+> ✅ Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+
+## Step 2 - Create Directory and Download Configuration Files
+
+We will create a directory to store our Cardano Configuration Files. For this example the file structure we will create is `/config/cardano/preview/` by running the following command:
+
+```
+mkdir -p config/cardano/preview
+```
+
+Now we will navigate to the `config/cardano/preview` folder and download the Cardano Configuration Files
+
+```
+cd config/cardano/preview
+```
