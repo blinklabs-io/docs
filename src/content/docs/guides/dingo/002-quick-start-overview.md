@@ -102,5 +102,8 @@ wget https://book.play.dev.cardano.org/environments/preview/topology.json
 Lastly we will download the Byron, Shelley, Alonzo, and Conway Genesis files
 
 ```
-wget https://book.play.dev.cardano.org/environments/preview/byron-genesis.json https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
+wget https://book.play.dev.cardano.org/environments/preview/byron-genesis.json \
+https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json \
+https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json \
+https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 ```
