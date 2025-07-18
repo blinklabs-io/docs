@@ -66,7 +66,14 @@ wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.12.1/dingo-v0
 
 > ✅ Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
-## Step 2 - Create Directory and Download Configuration Files
+## Step 2 - Download dingo.yaml Example File
+
+For this guide we will use the dingo.yaml file. We will download it to our main dingo directory by using the following command:
+```
+wget -cO - https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example > dingo.yaml
+```
+
+## Step 3 - Create Directory and Download Configuration Files
 
 We will create a directory to store our Cardano Configuration Files. For this example the file structure we will create is `/config/cardano/preview/` by running the following command:
 
