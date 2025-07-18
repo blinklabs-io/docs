@@ -79,3 +79,21 @@ Now we will navigate to the `config/cardano/preview` folder and download the Car
 ```
 cd config/cardano/preview
 ```
+
+We will now download the Cardano Preview Testnet Non-block-producers config file by running:
+
+```
+wget https://book.play.dev.cardano.org/environments/preview/config.json
+```
+
+Next we will download the Preview Testnet Topology file by running:
+
+```
+wget https://book.play.dev.cardano.org/environments/preview/topology.json
+```
+
+Lastly we will download the Byron, Shelley, Alonzo, and Conway Genesis files
+
+```
+wget https://book.play.dev.cardano.org/environments/preview/byron-genesis.json https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
+```
