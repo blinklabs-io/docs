@@ -99,7 +99,7 @@ Next we will download the Preview Testnet Topology file by running:
 wget https://book.play.dev.cardano.org/environments/preview/topology.json
 ```
 
-For this example we will use the default topology file, as seen below, just to get the node running and synced. Dingo supports all current and legacy topology files.
+✅ For this example we will use the default topology file, as seen below, just to get the node running and synced. Dingo supports all current and legacy topology files.
 
 ```
 {
@@ -138,7 +138,7 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 
 ## Step 4 - Edit dingo.yaml File
 
-Now that we have the configuration files needed we will edit the dingo.yaml file to point to the right directories and files. To edit this file we will run:
+Now that we have the configuration files needed, we will edit the dingo.yaml file to point to the right directories and files. To edit this file, we will run:
 
 > ✅ For this example we save the dingo.yaml file to our root directory so we will use `cd /` to return to that directory, please adjust path and file name if needed.
 
@@ -146,3 +146,71 @@ Now that we have the configuration files needed we will edit the dingo.yaml file
 cd /
 sudo nano dingo.yaml
 ```
+
+We will add a path to our topology file and double check our path to our Cardano config.json file. If you used a different path than `/config/cardano/preview` please adjust as needed.
+
+```
+# Example config file for dingo
+# The values shown below correspond to the in-code defaults
+
+# Public bind address for the Dingo server
+bindAddr: "0.0.0.0"
+
+# Path to the Cardano node configuration file
+#
+# Can be overridden with the config environment variable
+cardanoConfig: "./config/cardano/preview/config.json"
+
+# A directory which contains the ledger database files
+databasePath: ".dingo"
+
+# Path to the UNIX domain socket file used by the server
+socketPath: "dingo.socket"
+
+# Name of the Cardano network
+network: "preview"
+
+# TLS certificate file path (for HTTPS)
+#
+# Can be overridden with the TLS_CERT_FILE_PATH environment variable
+tlsCertFilePath: ""
+
+# TLS key file path (for HTTPS)
+#
+# Can be overridden with the TLS_KEY_FILE_PATH environment variable
+tlsKeyFilePath: ""
+
+# Path to the topology configuration file for Cardano node
+topology: "./config/cardano/preview/topology.json"
+
+# TCP port to bind for Prometheus metrics endpoint
+metricsPort: 12798
+
+# Internal/private address to bind for listening for Ouroboros NtC
+privateBindAddr: "127.0.0.1"
+
+# TCP port to bind for listening for Ouroboros NtC
+privatePort: 3002
+
+# TCP port to bind for listening for Ouroboros NtN
+#
+# Can be overridden with the port environment variable
+relayPort: 3001
+
+# TCP port to bind for listening for UTxO RPC
+utxorpcPort: 9090
+
+# Ignore prior chain history and start from current tip (default: false)
+# This is experimental and may break — use with caution
+intersectTip: false
+
+# Maximum cache size in bytes used by BadgerDB for block/index cache
+# Default: 1073741824 (1 GB)
+badgerCacheSize: 1073741824
+
+# Maximum total size (in bytes) of all transactions allowed in the mempool.
+# Transactions exceeding this limit will be rejected.
+# Default: 1048576 (1 MB)
+mempoolCapacity: 1048576
+```
+## Step 5 - Open Ports
