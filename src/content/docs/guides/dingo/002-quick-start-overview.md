@@ -99,6 +99,33 @@ Next we will download the Preview Testnet Topology file by running:
 wget https://book.play.dev.cardano.org/environments/preview/topology.json
 ```
 
+For this example we will use the default topology file, as seen below, just to get the node running and synced. Dingo supports all current and legacy topology files.
+```
+{
+  "bootstrapPeers": [
+    {
+      "address": "preview-node.play.dev.cardano.org",
+      "port": 3001
+    }
+  ],
+  "localRoots": [
+    {
+      "accessPoints": [],
+      "advertise": false,
+      "trustable": false,
+      "valency": 1
+    }
+  ],
+  "publicRoots": [
+    {
+      "accessPoints": [],
+      "advertise": false
+    }
+  ],
+  "useLedgerAfterSlot": 73267000
+}
+```
+
 Lastly we will download the Byron, Shelley, Alonzo, and Conway Genesis files
 
 ```
@@ -110,4 +137,11 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 
 ## Step 4 - Edit dingo.yaml File
 
-Now that we have the configuration files needed we will edit the dingo.yaml file to point to the right directories and files. To edit
+Now that we have the configuration files needed we will edit the dingo.yaml file to point to the right directories and files. To edit this file we will run:
+
+> ✅ For this example we save the dingo.yaml file to our root directory so we will use `cd /` to return to that directory, please adjust path and file name if needed.
+
+```
+cd /
+sudo nano dingo.yaml
+```
