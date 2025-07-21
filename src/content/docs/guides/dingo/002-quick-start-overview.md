@@ -100,6 +100,7 @@ wget https://book.play.dev.cardano.org/environments/preview/topology.json
 ```
 
 For this example we will use the default topology file, as seen below, just to get the node running and synced. Dingo supports all current and legacy topology files.
+
 ```
 {
   "bootstrapPeers": [
