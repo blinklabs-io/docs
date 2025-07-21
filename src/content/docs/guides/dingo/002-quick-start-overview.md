@@ -214,3 +214,12 @@ badgerCacheSize: 1073741824
 mempoolCapacity: 1048576
 ```
 ## Step 5 - Open Ports
+We will cover how to list and add UFW firewall rules to add the ports needed. Adjust as needed.
+
+> 💡Tip: UFW stands for Uncomplicated Firewall, and is used for managing iptables (netfilter) firewall rules.
+
+To see which ports are currently open we can run:
+
+```
+sudo ufw status numbered
+```
