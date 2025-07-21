@@ -140,10 +140,10 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 
 Now that we have the configuration files needed, we will edit the dingo.yaml file to point to the right directories and files. To edit this file, we will run:
 
-> ✅ For this example we save the dingo.yaml file to our root directory so we will use `cd /` to return to that directory, please adjust path and file name if needed.
+> ✅ For this example we save the dingo.yaml file to our root directory so we will use `cd ~` to return to that directory, please adjust path and file name if needed.
 
 ```
-cd /
+cd ~
 sudo nano dingo.yaml
 ```
 
