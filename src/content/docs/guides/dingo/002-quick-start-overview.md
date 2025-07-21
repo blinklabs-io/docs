@@ -107,3 +107,7 @@ https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json \
 https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json \
 https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 ```
+
+## Step 4 - Edit dingo.yaml File
+
+Now that we have the configuration files needed we will edit the dingo.yaml file to point to the right directories and files. To edit
