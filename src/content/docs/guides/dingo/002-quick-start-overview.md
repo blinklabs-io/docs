@@ -70,7 +70,7 @@ wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.12.1/dingo-v0
 
 For this guide we will use the dingo.yaml file. We will download it to our main dingo directory by using the following command:
 ```
-wget -cO - https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example > dingo.yaml
+wget -cO - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/dingo.yaml.example > dingo.yaml
 ```
 
 ## Step 3 - Create Directory and Download Configuration Files
