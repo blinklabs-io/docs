@@ -223,3 +223,24 @@ To see which ports are currently open we can run:
 ```
 sudo ufw status numbered
 ```
+
+#### Add Port 3001 for Ouroboros Node to Node (NtN) Communication
+In order for us to sync the chain and pass data between nodes we need to open port 3001 or whatever port you selected. To open port 3001 we will run:
+
+```
+sudo ufw allow 3001/tcp
+```
+
+#### Add Port 12798 for Prometheus metrics (Optional)
+If you want track metrics using a tool like Grafana you will want to open port 12798 or whatever port you selected. To open port 12798 we will run:
+
+```
+sudo ufw allow 12798/tcp
+```
+
+#### Add Port 9090 for UTxO RPC (Optional)
+You might want to also add port 9090 or whatever port you selected for UTxO RPC if you want to access chain data or transactions. We can open port 9090 by running:
+
+```
+sudo ufw allow 9090/tcp
+```
