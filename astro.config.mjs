@@ -31,7 +31,7 @@ export default defineConfig({
 						{ label: 'Home', slug: 'home' },
 						{ label: 'Adder', autogenerate: { directory: 'guides/adder' } },
 						{ label: 'nview', autogenerate: { directory: 'guides/nview' } },
-						{ label: 'Dingo', slug: 'guides/dingo' },
+						{ label: 'Dingo', autogenerate: { directory: 'guides/dingo' } },
 						{ label: 'TxTop', autogenerate: { directory: 'guides/txtop' } },
 						{ label: 'cardano-up', autogenerate: { directory: 'guides/cardano-up' } },
 						{ label: 'Bluefin', autogenerate: { directory: 'guides/bluefin' } },
