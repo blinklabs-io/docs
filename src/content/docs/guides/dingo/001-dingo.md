@@ -5,7 +5,7 @@ description: Introduction to Dingo.
 
 ![dingo-logo](/dingo-logo.png)
 
-A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols. This project was funded in Project Catalyst Fund 12.
+A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
 ⚠️ This is a work in progress and is currently under heavy development
 
