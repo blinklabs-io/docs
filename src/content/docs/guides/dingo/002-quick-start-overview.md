@@ -261,7 +261,7 @@ We can now download the Mithril Client binary by running the following:
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
-> 💡 Tip: You can download the latest Dingo release from the <a href="https://github.com/input-output-hk/mithril/releases" target="_blank">https://github.com/input-output-hk/mithril/releases</a> page.
+> 💡 Tip: You can download the latest Mithril release from the <a href="https://github.com/input-output-hk/mithril/releases" target="_blank">https://github.com/input-output-hk/mithril/releases</a> page.
 
 ```
 wget -c https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
