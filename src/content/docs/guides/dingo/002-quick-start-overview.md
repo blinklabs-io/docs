@@ -5,7 +5,7 @@ description: Dingo Quick Start Overview.
 
 # Dingo
 
-A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols. This project was funded in Project Catalyst Fund 12.
+A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
 ⚠️ This is a work in progress and is currently under heavy development
 
@@ -243,4 +243,26 @@ You might want to also add port 9090 or whatever port you selected for UTxO RPC 
 
 ```
 sudo ufw allow 9090/tcp
+```
+
+## Step 6 - Bootstrap syncing Blockchain using Mithril Client (Optional)
+We can can speed up the inital syncing of the blocks also know as a block replay by using the Mithril Clinet to download a Mithril snapshot. This could save you hours of syncing time.
+
+#### Step 6.1 - Install Rust
+We need to start by installing some prerequisites. To install rust we can run:
+
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+Follow on screen instructions.
+
+#### Step 6.2 - Download Mithril Client
+We can now download the Mithril Client binary by running the following:
+
+⚠️ Adjust the link path to the correct path for the version you want to download. 
+
+> 💡 Tip: You can download the latest Dingo release from the <a href="https://github.com/input-output-hk/mithril/releases" target="_blank">https://github.com/input-output-hk/mithril/releases</a> page.
+
+```
+wget -c https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
 ```
