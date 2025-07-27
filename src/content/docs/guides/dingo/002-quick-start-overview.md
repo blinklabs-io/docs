@@ -286,3 +286,33 @@ Genesis verification key variable:
 ```
 export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/input-output-hk/mithril/main/mithril-infra/configuration/pre-release-preview/genesis.vkey)
 ```
+#### Step 6.4 - Find Lastest Snapshot and Download it
+
+> 💡 Tip: it creates the db/ directory in your current folder.
+
+First we run the following to get the current list of snapshots
+
+```
+mithril-client cardano-db snapshot list
+```
+
+To see current snapshot we run:
+
+```
+mithril-client cardano-db snapshot show $SNAPSHOT_DIGEST
+```
+
+Download the current snapshot by running:
+
+```
+mithril-client cardano-db download $SNAPSHOT_DIGEST
+```
+
+It takes some time, maybe up to 2 hours, you can see the progress.
+
+
+### Step 6.5 - Load snapshot into Dingo db
+
+```
+dingo load ~/tmp/immutable/
+```
