@@ -246,7 +246,7 @@ sudo ufw allow 9090/tcp
 ```
 
 ## Step 6 - Bootstrap syncing Blockchain using Mithril Client (Optional)
-We can can speed up the inital syncing of the blocks also know as a block replay by using the Mithril Clinet to download a Mithril snapshot. This could save you hours of syncing time.
+We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
 
 #### Step 6.1 - Install Rust
 We need to start by installing some prerequisites. To install rust we can run:
@@ -265,4 +265,24 @@ We can now download the Mithril Client binary by running the following:
 
 ```
 wget -c https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
+```
+
+#### Step 6.3 - Export Environment Variables
+We will export the following environment variables to download the Mithril snapshot. Run these commands:
+
+Preview Network variable:
+
+```
+export NETWORK=preview
+```
+
+Endpoint variable:
+
+```
+export AGGREGATOR_ENDPOINT=https://aggregator.pre-release-preview.api.mithril.network/aggregator
+```
+
+Genesis verification key variable:
+```
+export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/input-output-hk/mithril/main/mithril-infra/configuration/pre-release-preview/genesis.vkey)
 ```
