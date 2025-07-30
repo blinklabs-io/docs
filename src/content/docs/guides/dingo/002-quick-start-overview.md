@@ -266,7 +266,7 @@ We can now download the Mithril Client binary by running the following:
 > 💡 Tip: You can download the latest Mithril release from the <a href="https://github.com/input-output-hk/mithril/releases" target="_blank">https://github.com/input-output-hk/mithril/releases</a> page.
 
 ```
-cd /dingo/mithril
+cd mithril
 wget -c https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
 ```
 
