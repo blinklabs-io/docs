@@ -311,12 +311,20 @@ Download the current snapshot by running:
 ./mithril-client cardano-db download latest
 ```
 
-It takes some time, maybe up to 2 hours, you can see the progress.
+This takes some time, maybe up to 10 minutes on preview based on your system, you can see the progress.
 
 
 #### Step 6.5 - Load snapshot into Dingo db
+Now we can return to our dingo directory by running:
 
+```
+cd ~/dingo
+```
+
+We will now load the Mithril snapshot into dingo by running the following command
 
 ```
 ./dingo load ~/dingo/mithril/db/immutable
 ```
+
+Dingo will now load the blocks into the dingo database by copying and validating. This will take some time as well, up to...
