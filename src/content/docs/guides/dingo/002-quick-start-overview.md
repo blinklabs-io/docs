@@ -316,6 +316,7 @@ It takes some time, maybe up to 2 hours, you can see the progress.
 
 #### Step 6.5 - Load snapshot into Dingo db
 
+
 ```
-dingo load ~/tmp/immutable/
+dingo load ~/dingo/mithril/db/immutable
 ```
