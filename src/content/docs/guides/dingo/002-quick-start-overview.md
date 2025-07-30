@@ -50,7 +50,9 @@ Copy the path from Blinklabs and run the following command to download the binar
 > 💡 Tip: You can download the latest Dingo release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">https://github.com/blinklabs-io/dingo/releases</a> page.
 
 ```
-wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.12.1/dingo-v0.12.1-linux-amd64.tar.gz -O - | tar -xz
+mkdir dingo
+cd dingo
+wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.13.0/dingo-v0.13.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -140,10 +142,10 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 
 Now that we have the configuration files needed, we will edit the dingo.yaml file to point to the right directories and files. To edit this file, we will run:
 
-> ✅ For this example we save the dingo.yaml file to our root directory so we will use `cd ~` to return to that directory, please adjust path and file name if needed.
+> ✅ For this example we save the dingo.yaml file to our main dingo directory so we will use `cd dingo` to return to that directory, please adjust path and file name if needed.
 
 ```
-cd ~
+cd dingo
 sudo nano dingo.yaml
 ```
 
@@ -248,13 +250,13 @@ sudo ufw allow 9090/tcp
 ## Step 6 - Bootstrap syncing Blockchain using Mithril Client (Optional)
 We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
 
-#### Step 6.1 - Install Rust
-We need to start by installing some prerequisites. To install rust we can run:
+#### Step 6.1 - Create Mithril folder
+We will create folder inside our dingo folder that will will will use to download the mithril binary. To create a folder in our dingo folder we can run:
 
 ```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+cd dingo
+mkdir mithril
 ```
-Follow on screen instructions.
 
 #### Step 6.2 - Download Mithril Client
 We can now download the Mithril Client binary by running the following:
@@ -264,6 +266,7 @@ We can now download the Mithril Client binary by running the following:
 > 💡 Tip: You can download the latest Mithril release from the <a href="https://github.com/input-output-hk/mithril/releases" target="_blank">https://github.com/input-output-hk/mithril/releases</a> page.
 
 ```
+cd /dingo/mithril
 wget -c https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
 ```
 
@@ -293,19 +296,19 @@ export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/inpu
 First we run the following to get the current list of snapshots
 
 ```
-mithril-client cardano-db snapshot list
+./mithril-client cardano-db snapshot list
 ```
 
 To see current snapshot we run:
 
 ```
-mithril-client cardano-db snapshot show $SNAPSHOT_DIGEST
+./mithril-client cardano-db snapshot show $SNAPSHOT_DIGEST
 ```
 
 Download the current snapshot by running:
 
 ```
-mithril-client cardano-db download $SNAPSHOT_DIGEST
+./mithril-client cardano-db download $SNAPSHOT_DIGEST
 ```
 
 It takes some time, maybe up to 2 hours, you can see the progress.
