@@ -318,5 +318,5 @@ It takes some time, maybe up to 2 hours, you can see the progress.
 
 
 ```
-dingo load ~/dingo/mithril/db/immutable
+./dingo load ~/dingo/mithril/db/immutable
 ```
