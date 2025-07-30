@@ -302,13 +302,13 @@ First we run the following to get the current list of snapshots
 To see current snapshot we run:
 
 ```
-./mithril-client cardano-db snapshot show $SNAPSHOT_DIGEST
+./mithril-client cardano-db snapshot show latest
 ```
 
 Download the current snapshot by running:
 
 ```
-./mithril-client cardano-db download $SNAPSHOT_DIGEST
+./mithril-client cardano-db download latest
 ```
 
 It takes some time, maybe up to 2 hours, you can see the progress.
