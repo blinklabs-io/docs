@@ -328,3 +328,5 @@ We will now load the Mithril snapshot into dingo by running the following comman
 ```
 
 Dingo will now load the blocks into the dingo database by copying and validating. This will take some time as well, up to 15 minutes depeding on your system.
+
+![dingo-load-snapshot](/dingo-load-snapshot.png)
