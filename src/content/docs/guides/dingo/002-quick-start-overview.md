@@ -327,6 +327,12 @@ We will now load the Mithril snapshot into dingo by running the following comman
 ./dingo load ~/dingo/mithril/db/immutable
 ```
 
-Dingo will now load the blocks into the dingo database by copying and validating. This will take some time as well, up to 2 hours depending on your system.
+Dingo will now load the blocks into the dingo database by copying and loading them by run a ledger replay. This will take some time as well, up to 2 hours depending on your system.
 
 ![dingo-load-snapshot](/dingo-load-snapshot.png)
+
+> 📝 If you choose not to load a Mithril snapshot you can start dingo with `./dingo` and let the normal ledger replay start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
+
+### Congratulations you are ready to start using Dingo!
+
+[Learn how to interact with Dingo using the Cardano CLI](../003-using-dingo-with-cardano-cli).
