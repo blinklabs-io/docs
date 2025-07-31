@@ -251,7 +251,7 @@ sudo ufw allow 9090/tcp
 We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
 
 #### Step 6.1 - Create Mithril folder
-We will create folder inside our dingo folder that will will will use to download the mithril binary. To create a folder in our dingo folder we can run:
+We will create folder inside our dingo folder that we will use to download the mithril binary into. To create a folder in our dingo folder we can run:
 
 ```
 cd dingo
@@ -289,7 +289,7 @@ Genesis verification key variable:
 ```
 export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/input-output-hk/mithril/main/mithril-infra/configuration/pre-release-preview/genesis.vkey)
 ```
-#### Step 6.4 - Find Lastest Snapshot and Download it
+#### Step 6.4 - Find Latest Snapshot and Download it
 
 > 💡 Tip: it creates the db/ directory in your current folder.
 
@@ -327,6 +327,6 @@ We will now load the Mithril snapshot into dingo by running the following comman
 ./dingo load ~/dingo/mithril/db/immutable
 ```
 
-Dingo will now load the blocks into the dingo database by copying and validating. This will take some time as well, up to 2 hours depeding on your system.
+Dingo will now load the blocks into the dingo database by copying and validating. This will take some time as well, up to 2 hours depending on your system.
 
 ![dingo-load-snapshot](/dingo-load-snapshot.png)
