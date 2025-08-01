@@ -18,3 +18,23 @@ For this guide we will walk you through downloading and running the Cardano CLI 
 > ✅ For this guide we assume you have already downloaded Dingo and synced the chain. If not see our [Quick Start](../../002-quick-start-overview) guide.
 
 ***
+
+## Step 1 - Download the latest Cardano CLI binary 
+
+First start by going to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
+
+You can either download the binary file and move the file to your preferred location or... 
+
+<br>
+
+Copy the path to the latest the Cardano CLI binary file and run the following command to download the binary file.
+
+<br>
+
+⚠️ Adjust the link path to the correct path for the version you want to download. 
+
+```
+wget -c https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
+```
+
+***
