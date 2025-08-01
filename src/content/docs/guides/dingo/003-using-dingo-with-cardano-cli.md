@@ -3,7 +3,7 @@ title: Using Dingo with Cardano CLI
 description: Dingo - How to use Dingo with Cardano CLI.
 ---
 
-# How to use Dingo with Cardano CLI
+# How to use Dingo with the Cardano CLI
 
 Dingo is a Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
@@ -50,10 +50,9 @@ For this example, we will name the binary file `cardano-cli`. To rename the bina
 mv cardano-cli-x86_64-linux cardano-cli
 ```
 
+<br>
 
 To make the file executable run the following command:
-
-<br>
 
 ```
 chmod +x cardano-cli
@@ -72,5 +71,44 @@ We will run the following command to query the tip:
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
+> ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
+
+***
+
+#### Using Environment Variables 
+Instead of specifiying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
+
+We can run the following commands to export the varaible for our current session.
+
+Socket Path:
+
+```
+export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket
+```
+
+Node Network:
+
+```
+export CARDANO_NODE_NETWORK_ID=2
+```
+
+> 💡 Tip: Here are the current Network IDs
+> ```
+> # SanchoNet testnet
+> export CARDANO_NODE_NETWORK_ID=4
+>
+> # Preview testnet
+> export CARDANO_NODE_NETWORK_ID=2
+>
+> # Pre-production testnet
+> export CARDANO_NODE_NETWORK_ID=1
+>
+> # Mainnet
+> export CARDANO_NODE_NETWORK_ID=mainnet
+> ```
+
+
+
+
 
 ***
