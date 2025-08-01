@@ -31,10 +31,25 @@ Copy the path to the latest the Cardano CLI binary file and run the following co
 
 <br>
 
-⚠️ Adjust the link path to the correct path for the version you want to download. 
+⚠️ For this example we put the Cardano-cli binary in our `dingo` folder. Adjust the link path to the correct path for the version you want to download. 
 
 ```
-wget -c https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
+cd dingo
+wget -c https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar. > cardano-cli -O - | tar -xz
+```
+
+***
+
+## Step 2 - Change Permissions for the Cardano CLI 
+
+For this example, we named the binary file `cardano-cli`. To make the file executable run the following command:
+
+<br>
+
+⚠️ Adjust the file path and file name if needed. 
+
+```
+chmod +x cardano-cli
 ```
 
 ***
