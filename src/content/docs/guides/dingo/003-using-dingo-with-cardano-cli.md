@@ -60,3 +60,17 @@ chmod +x cardano-cli
 ```
 
 ***
+
+#### Congratulations we can now use the cardano-cli to communicate with the node.
+
+Let run our first Cardano CLI command to query what the tip of the preview blockchain is using Dingo to prodive the data.  
+
+We will run the following command to query the tip:
+
+```
+./cardano-cli query tip \
+--testnet-magic 2 \
+--socket-path dingo.socket
+```
+
+***
