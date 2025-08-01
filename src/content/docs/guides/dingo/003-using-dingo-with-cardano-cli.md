@@ -62,6 +62,7 @@ chmod +x cardano-cli
 
 #### Congratulations we can now use the cardano-cli to communicate with the node.
 
+## Step 3 - Run  Cardano CLI Command to Query Tip
 Let run our first Cardano CLI command to query the tip of the preview blockchain using Dingo node to provide the data.  
 
 We will run the following command to query the tip:
@@ -75,8 +76,10 @@ We will run the following command to query the tip:
 
 ***
 
-#### Using Environment Variables 
+## Step 4 - Using Environment Variables 
 Instead of specifiying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
+
+### Setting Environment Variables for Current Session
 
 We can run the following commands to export the varaible for our current session.
 
@@ -91,6 +94,25 @@ Node Network:
 ```
 export CARDANO_NODE_NETWORK_ID=2
 ```
+
+### Setting Environment Variables Permanently
+To make an environment variable persistent across sessions, you need to add it to your shell's configuration file.
+
+Socket Path:
+
+```
+echo CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
+```
+
+Node Network:
+
+```
+echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
+```
+
+***
+
+<br>
 
 > 💡 Tip: Here are the current Network IDs
 > ```
