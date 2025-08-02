@@ -77,11 +77,11 @@ We will run the following command to query the tip:
 ***
 
 ## Step 4 - Using Environment Variables 
-Instead of specifiying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
+Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
 
 ### Setting Environment Variables for Current Session
 
-We can run the following commands to export the varaible for our current session.
+We can run the following commands to export the variable for our current session.
 
 Socket Path:
 
