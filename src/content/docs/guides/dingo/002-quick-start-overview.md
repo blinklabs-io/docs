@@ -147,10 +147,10 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 
 Now that we have the configuration files needed, we will edit the dingo.yaml file to point to the right directories and files. To edit this file, we will run:
 
-> ✅ For this example we save the dingo.yaml file to our main dingo directory so we will use `cd dingo` to return to that directory, please adjust path and file name if needed.
+> ✅ For this example we save the dingo.yaml file to our main dingo directory so we will use `cd ~/dingo` to return to that directory, please adjust path and file name if needed.
 
 ```
-cd dingo
+cd ~/dingo
 sudo nano dingo.yaml
 ```
 
@@ -259,7 +259,7 @@ We can speed up the initial syncing of the blocks also known as a block replay b
 We will create folder inside our dingo folder that we will use to download the mithril binary into. To create a folder in our dingo folder we can run:
 
 ```
-cd dingo
+cd ~/dingo
 mkdir mithril
 ```
 
