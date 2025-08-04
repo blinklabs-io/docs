@@ -129,8 +129,7 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 > export CARDANO_NODE_NETWORK_ID=mainnet
 > ```
 
-
-
-
-
 ***
+
+### Congratulations you are ready to start using Dingo using the Cardano CLI!
+[Learn more about the Cardano CLI at https://developers.cardano.org](https://developers.cardano.org/docs/operate-a-stake-pool/cli-operations/basic-operations/get-started)
