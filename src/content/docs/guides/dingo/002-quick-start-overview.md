@@ -11,7 +11,7 @@ A Cardano blockchain data node written in Go which actively participates in netw
 
 <br>
 
-For this guide we will walk you through downloading and running the Dingo binary. To get started follow the steps below.
+For this guide we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
 
 <br>
 
