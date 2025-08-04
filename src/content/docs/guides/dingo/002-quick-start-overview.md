@@ -82,6 +82,7 @@ wget -cO - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/
 We will create a directory to store our Cardano Configuration Files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
 
 ```
+cd dingo
 mkdir -p config/cardano/preview
 ```
 
