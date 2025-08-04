@@ -140,19 +140,20 @@ https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json \
 https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 ```
 
-> ✅ Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
 ## Step 4 - Edit dingo.yaml File
 
 Now that we have the configuration files needed, we will edit the dingo.yaml file to point to the right directories and files. To edit this file, we will run:
-
-> ✅ For this example we save the dingo.yaml file to our main dingo directory so we will use `cd ~/dingo` to return to that directory, please adjust path and file name if needed.
 
 ```
 cd ~/dingo
 sudo nano dingo.yaml
 ```
 
+> ✅ For this example we save the dingo.yaml file to our main dingo directory so we will use `cd ~/dingo` to return to that directory, please adjust path and file name if needed.
+
+#### Add paths to dingo.yaml
 We will add a path to our topology file and double check our path to our Cardano config.json file. If you used a different path than `/config/cardano/preview` please adjust as needed.
 
 ```
@@ -219,6 +220,7 @@ badgerCacheSize: 1073741824
 # Default: 1048576 (1 MB)
 mempoolCapacity: 1048576
 ```
+
 ## Step 5 - Open Ports
 We will cover how to list and add UFW firewall rules to add the ports needed. Adjust as needed.
 
