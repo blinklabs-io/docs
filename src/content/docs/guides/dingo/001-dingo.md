@@ -3,7 +3,7 @@ title: Dingo
 description: Introduction to Dingo.
 ---
 
-![dingo-logo](/dingo-logo.png)
+![dingo-logo](/dingo-logo-250.png)
 
 A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.  
 
