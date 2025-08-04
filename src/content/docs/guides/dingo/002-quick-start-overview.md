@@ -257,7 +257,7 @@ sudo ufw allow 9090/tcp
 We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
 
 #### Step 6.1 - Create Mithril folder
-We will create folder inside our dingo folder that we will use to download the mithril binary into. To create a folder in our dingo folder we can run:
+We will create a folder inside our dingo folder that we will use to download the mithril binary into. To create a folder in our dingo folder we can run:
 
 ```
 cd ~/dingo
@@ -297,7 +297,7 @@ export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/inpu
 ```
 #### Step 6.4 - Find Latest Snapshot and Download it
 
-> 💡 Tip: it creates the db/ directory in your current folder.
+> 💡 Tip: Mithril creates the db/ directory in your current folder. In our case, the `mithril` folder we created.
 
 First we run the following to get the current list of snapshots
 
@@ -317,7 +317,7 @@ Download the current snapshot by running:
 ./mithril-client cardano-db download latest
 ```
 
-This takes some time, maybe up to 10 minutes on preview based on your system, you can see the progress.
+This takes some time, maybe up to 10 minutes on preview based on your system. You can see the progress on screen.
 
 
 #### Step 6.5 - Load snapshot into Dingo db
@@ -327,18 +327,18 @@ Now we can return to our dingo directory by running:
 cd ~/dingo
 ```
 
-We will now load the Mithril snapshot into dingo by running the following command
+We will now load the Mithril snapshot into dingo by running the following command:
 
 ```
 ./dingo load ~/dingo/mithril/db/immutable
 ```
 
-Dingo will now load the blocks into the dingo database by copying and loading them by run a ledger replay. This will take some time as well, up to 2 hours depending on your system.
+Dingo will now load the blocks into the dingo database by copying and loading them by running a ledger replay. This will take some time as well, up to 2 hours depending on your system.
 
 ![dingo-load-snapshot](/dingo-load-snapshot.png)
 
 > 📝 If you choose not to load a Mithril snapshot you can start dingo with `./dingo` and let the normal ledger replay start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
 
-### Congratulations you are ready to start using Dingo!
+### Congratulations you are ready to start using the Dingo node!
 
 [Learn how to interact with Dingo using the Cardano CLI](../003-using-dingo-with-cardano-cli).
