@@ -61,7 +61,7 @@ wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.13.0/dingo-v0
 ***
 
 ## Best Practices - Files Needed to Run Dingo
-The following files are need to run Dingo. We will walk through the steps to download and edit the files in the next few steps.  
+The following files are needed to run Dingo. We will walk through the steps to download and edit the files in the next few steps.  
 1. dingo.yaml
 2. Node Config
 3. Node Topology
@@ -82,7 +82,6 @@ wget -cO - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/
 We will create a directory to store our Cardano Configuration Files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
 
 ```
-cd dingo
 mkdir -p config/cardano/preview
 ```
 
