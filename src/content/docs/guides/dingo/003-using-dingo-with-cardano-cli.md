@@ -9,6 +9,8 @@ Dingo is a Cardano blockchain data node written in Go which actively participate
 
 <br>
 
+***
+
 For this guide we will walk you through downloading and running the Cardano CLI binary and running some Cardano CLI commands. To get started follow the steps below.
 
 <br>
