@@ -81,7 +81,7 @@ We will run the following command to query the tip:
 ## Step 4 - Using Environment Variables (Optional)
 Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
 
-### Setting Environment Variables for Current Session
+### Setting Environment Variables for Current Session (Option 1)
 
 We can run the following commands to export the variable for our current session.
 
@@ -97,7 +97,7 @@ Node Network:
 export CARDANO_NODE_NETWORK_ID=2
 ```
 
-### Setting Environment Variables Permanently
+### Setting Environment Variables Permanently (Option 2)
 To make an environment variable persistent across sessions, you need to add it to your shell's configuration file.
 
 Socket Path:
