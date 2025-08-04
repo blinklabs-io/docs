@@ -49,6 +49,9 @@ Copy the path from Blinklabs and run the following command to download the binar
 
 > 💡 Tip: You can download the latest Dingo release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">https://github.com/blinklabs-io/dingo/releases</a> page.
 
+
+We will first make a `dingo` directory for all our dingo related files before downloading the Dingo binary.  
+
 ```
 mkdir dingo
 cd dingo
@@ -58,6 +61,7 @@ wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.13.0/dingo-v0
 ***
 
 ## Best Practices - Files Needed to Run Dingo
+The following files are need to run Dingo. We will walk through the steps to download and edit the files in the next few steps.  
 1. dingo.yaml
 2. Node Config
 3. Node Topology
@@ -65,8 +69,6 @@ wget -c https://github.com/blinklabs-io/dingo/releases/download/v0.13.0/dingo-v0
 5. Shelley Genesis
 6. Alonzo Genesis
 7. Conway Genesis
-
-> ✅ Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
 ## Step 2 - Download dingo.yaml Example File
 
@@ -137,6 +139,8 @@ https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json \
 https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json \
 https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 ```
+
+> ✅ Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
 ## Step 4 - Edit dingo.yaml File
 
