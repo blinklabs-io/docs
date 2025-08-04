@@ -97,7 +97,7 @@ We will now download the Cardano Preview Testnet Non-block-producers config file
 wget https://book.play.dev.cardano.org/environments/preview/config.json
 ```
 
-Next we will download the Preview Testnet Topology file by running:
+Next, we will download the Preview Testnet Topology file by running:
 
 ```
 wget https://book.play.dev.cardano.org/environments/preview/topology.json
@@ -131,7 +131,7 @@ wget https://book.play.dev.cardano.org/environments/preview/topology.json
 }
 ```
 
-Lastly we will download the Byron, Shelley, Alonzo, and Conway Genesis files
+Lastly, we will download the Byron, Shelley, Alonzo, and Conway Genesis files
 
 ```
 wget https://book.play.dev.cardano.org/environments/preview/byron-genesis.json \
@@ -224,7 +224,7 @@ mempoolCapacity: 1048576
 ## Step 5 - Open Ports
 We will cover how to list and add UFW firewall rules to add the ports needed. Adjust as needed.
 
-> 💡Tip: UFW stands for Uncomplicated Firewall, and is used for managing iptables (netfilter) firewall rules.
+> 💡Tip: UFW stands for Uncomplicated Firewall and is used for managing iptables (netfilter) firewall rules.
 
 To see which ports are currently open we can run:
 
@@ -305,7 +305,7 @@ First, we run the following to get the current list of snapshots
 ./mithril-client cardano-db snapshot list
 ```
 
-To see current snapshot we run:
+To see the current snapshot we run:
 
 ```
 ./mithril-client cardano-db snapshot show latest
@@ -337,7 +337,7 @@ Dingo will now load the blocks into the dingo database by copying and loading th
 
 ![dingo-load-snapshot](/dingo-load-snapshot.png)
 
-> 📝 If you choose not to load a Mithril snapshot you can start dingo with `./dingo` and let the normal ledger replay start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
+> 📝 If you choose not to load a Mithril snapshot you can start dingo with the `./dingo` command and let the normal ledger replay start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
 
 ### Congratulations you are ready to start using the Dingo node!
 
