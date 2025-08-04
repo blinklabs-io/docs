@@ -74,6 +74,8 @@ We will run the following command to query the tip:
 ```
 > ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
 
+![dingo-query-tip](/dingo-query-tip.png)
+
 ***
 
 ## Step 4 - Using Environment Variables 
