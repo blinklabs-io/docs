@@ -3,8 +3,6 @@ title: Using Dingo with Cardano CLI
 description: Dingo - How to use Dingo with Cardano CLI.
 ---
 
-# How to use Dingo with the Cardano CLI
-
 Dingo is a Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
 ⚠️ This is a work in progress and is currently under heavy development
@@ -34,7 +32,7 @@ Copy the path to the latest the Cardano CLI binary file and run the following co
 ⚠️ For this example we put the Cardano-cli binary in our `dingo` folder. Adjust the link path to the correct path for the version you want to download. 
 
 ```
-cd dingo
+cd ~/dingo
 wget -c https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
@@ -72,13 +70,13 @@ We will run the following command to query the tip:
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
-> ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
+> ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location, please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
 ***
 
-## Step 4 - Using Environment Variables 
+## Step 4 - Using Environment Variables (Optional)
 Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
 
 ### Setting Environment Variables for Current Session
@@ -116,7 +114,7 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 
 <br>
 
-> 💡 Tip: Here are the current Network IDs
+> 💡 Tip: Below are the current Network IDs
 > ```
 > # SanchoNet testnet
 > export CARDANO_NODE_NETWORK_ID=4
@@ -133,5 +131,5 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 
 ***
 
-### Congratulations you are ready to start using Dingo using the Cardano CLI!
+### Congratulations you are ready to start using Dingo node with the Cardano CLI!
 [Learn more about the Cardano CLI at https://developers.cardano.org](https://developers.cardano.org/docs/operate-a-stake-pool/cli-operations/basic-operations/get-started)
