@@ -151,7 +151,7 @@ cd ~/dingo
 sudo nano dingo.yaml
 ```
 
-> ✅ For this example we save the dingo.yaml file to our main dingo directory so we will use `cd ~/dingo` to return to that directory, please adjust path and file name if needed.
+> ✅ For this example, we save the dingo.yaml file to our main dingo directory so we will use `cd ~/dingo` to return to that directory, please adjust path and file name if needed.
 
 #### Add paths to dingo.yaml
 We will add a path to our topology file and double check our path to our Cardano config.json file. If you used a different path than `/config/cardano/preview` please adjust as needed.
@@ -299,7 +299,7 @@ export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/inpu
 
 > 💡 Tip: Mithril creates the db/ directory in your current folder. In our case, the `mithril` folder we created.
 
-First we run the following to get the current list of snapshots
+First, we run the following to get the current list of snapshots
 
 ```
 ./mithril-client cardano-db snapshot list
