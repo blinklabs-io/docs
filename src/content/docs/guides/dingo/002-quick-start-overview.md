@@ -254,6 +254,8 @@ sudo ufw allow 12798/tcp
 #### Add Port 9090 for UTxO RPC (Optional)
 You might want to also add port 9090 or whatever port you selected for UTxO RPC if you want to access chain data or transactions. We can open port 9090 by running:
 
+> ⚠️ Caution exposing this port outside of your local machine.
+
 ```
 sudo ufw allow 9090/tcp
 ```
@@ -342,7 +344,7 @@ Dingo will now load the blocks into the dingo database by copying and loading th
 
 ![dingo-load-snapshot](/dingo-load-snapshot.png)
 
-> 📝 If you choose not to load a Mithril snapshot you can start dingo with the `./dingo` command and let the normal ledger replay start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
+> 📝 If you choose not to load a Mithril snapshot you can start dingo with the `./dingo` command and let the normal chainsync process start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
 
 ### Congratulations you are ready to start using the Dingo node!
 
