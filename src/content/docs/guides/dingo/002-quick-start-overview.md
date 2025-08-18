@@ -76,7 +76,7 @@ The following files are needed to run Dingo. We will walk through the steps to d
 
 For this guide we will use the dingo.yaml file. We will download it to our main dingo directory by using the following command:
 ```
-wget -cO - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/dingo.yaml.example > dingo.yaml
+wget -O - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/dingo.yaml.example > dingo.yaml
 ```
 
 ## Step 3 - Create Directory and Download Configuration Files
