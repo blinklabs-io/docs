@@ -35,7 +35,7 @@ Copy the path to the latest the Cardano CLI binary file and run the following co
 
 ```
 cd ~/dingo
-wget -c https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
+wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
 ***
