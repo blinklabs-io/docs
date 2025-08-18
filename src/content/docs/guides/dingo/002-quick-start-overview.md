@@ -280,7 +280,7 @@ We can now download the Mithril Client binary by running the following:
 
 ```
 cd mithril
-wget -c https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
+wget https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
 ```
 
 #### Step 6.3 - Export Environment Variables
