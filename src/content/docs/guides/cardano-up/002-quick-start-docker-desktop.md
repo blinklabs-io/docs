@@ -125,7 +125,7 @@ You can download the latest cardano-up release from the <a href="https://github.
 We will download the cardano-up binary by running the following command. ⚠️ Adjust download link to the most current version.
 
 ```
-wget -cO - https://github.com/blinklabs-io/cardano-up/releases/download/v0.14.1/cardano-up-v0.14.1-linux-amd64 > cardano-up
+wget -O - https://github.com/blinklabs-io/cardano-up/releases/download/v0.14.2/cardano-up-v0.14.2-linux-amd64 > cardano-up
 ```
 
 ![cardano-up-download-cardano-up](/cardano-up-download-cardano-up.png)
