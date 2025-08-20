@@ -120,9 +120,11 @@ In your search bar type `ubuntu`, select ubuntu app and click open.
 
 ## Step 8 - Download cardano-up binary
 
-You can download the latest cardano-up release from the <a href="https://github.com/blinklabs-io/cardano-up/releases" target="_blank">https://github.com/blinklabs-io/cardano-up/releases</a> page.
+⚠️ Adjust download link to the most current version.
 
-We will download the cardano-up binary by running the following command. ⚠️ Adjust download link to the most current version.
+> 💡 Tip: You can download the latest cardano-up release from the <a href="https://github.com/blinklabs-io/cardano-up/releases" target="_blank">https://github.com/blinklabs-io/cardano-up/releases</a> page.
+
+We will download the cardano-up binary by running the following command:
 
 ```
 wget -O - https://github.com/blinklabs-io/cardano-up/releases/download/v0.14.2/cardano-up-v0.14.2-linux-amd64 > cardano-up
