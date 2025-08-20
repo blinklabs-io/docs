@@ -54,8 +54,10 @@ Copy the path from Blinklabs and run the following command to download the binar
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
+> 💡 Tip: You can download the latest Cardano Node API release from the <a href="https://github.com/blinklabs-io/cardano-node-api/releases" target="_blank">https://github.com/blinklabs-io/cardano-node-api/releases</a> page.
+
 ```
-wget -cO - https://github.com/blinklabs-io/cardano-node-api/releases/download/v0.8.4/cardano-node-api-v0.8.4-linux-amd64 > cardano-node-api
+wget -O - https://github.com/blinklabs-io/cardano-node-api/releases/download/v0.9.0/cardano-node-api-v0.9.0-linux-amd64 > cardano-node-api
 ```
 
 ***
