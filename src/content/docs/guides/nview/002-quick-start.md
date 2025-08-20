@@ -40,7 +40,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
-> 💡 Tip: You can download the latest nview release from the https://github.com/blinklabs-io/nview/releases page.
+> 💡 Tip: You can download the latest nview release from the <a href="https://github.com/blinklabs-io/nview/releases" target="_blank">https://github.com/blinklabs-io/nview/releases</a> page.
 
 ```
 wget -O - https://github.com/blinklabs-io/nview/releases/download/v0.10.7/nview-v0.10.7-linux-amd64 > nview
