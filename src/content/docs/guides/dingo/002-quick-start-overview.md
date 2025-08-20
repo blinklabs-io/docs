@@ -57,7 +57,7 @@ We will first make a `dingo` directory for all our dingo related files before do
 ```
 mkdir dingo
 cd dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.14.1/dingo-v0.14.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.15.1/dingo-v0.15.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
