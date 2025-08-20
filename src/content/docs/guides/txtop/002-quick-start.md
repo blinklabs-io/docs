@@ -41,8 +41,10 @@ Copy the path from Blinklabs and run the following command to download the binar
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
+> 💡 Tip: You can download the latest TxTop release from the <a href="https://github.com/blinklabs-io/txtop/releases" target="_blank">https://github.com/blinklabs-io/txtop/releases</a> page.
+
 ```
-wget -cO - https://github.com/blinklabs-io/txtop/releases/download/v0.12.3/txtop-v0.12.3-linux-amd64 > txtop
+wget -O - https://github.com/blinklabs-io/txtop/releases/download/v0.13.0/txtop-v0.13.0-linux-amd64 > txtop
 ```
 
 ***
