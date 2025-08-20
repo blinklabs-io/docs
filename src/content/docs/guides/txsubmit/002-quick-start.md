@@ -44,8 +44,10 @@ Copy the path from Blinklabs and run the following command to download the binar
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
 
+> 💡 Tip: You can download the latest Tx Submit API release from the <a href="https://github.com/blinklabs-io/tx-submit-api/releases" target="_blank">https://github.com/blinklabs-io/tx-submit-api/releases</a> page.  
+
 ```
-wget -cO - https://github.com/blinklabs-io/tx-submit-api/releases/download/v0.20.7/tx-submit-api-v0.20.7-linux-amd64 > tx-submit-api
+wget -O - https://github.com/blinklabs-io/tx-submit-api/releases/download/v0.20.8/tx-submit-api-v0.20.8-linux-amd64 > tx-submit-api
 ```
 
 ***
