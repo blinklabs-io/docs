@@ -45,7 +45,7 @@ mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 First we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
 
-> ⚠️ Please adjust the `User=` line. Our User was `test` and our [Quick Start](../002-quick-start-overview) guide please adjust to your username.  
+> ⚠️ Please adjust the `User=` line. In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.  
 > 💡 Tip: you can run `echo $USER` to find your username.
 
 ```
