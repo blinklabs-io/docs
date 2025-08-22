@@ -23,5 +23,55 @@ For this guide we will walk you through setting up a a `systemd` service. Using 
 
 <br>
 
-##Step 1 - Create dingo.service unit Configuration File
+## Step 1 - Move Dingo and dingo.yaml Files  
 
+Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo Binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
+
+> ⚠️ Please adjust paths below if needed. Paths are based on our [Quick Start](../002-quick-start-overview) guide.
+
+```
+mv /home/test/dingo/dingo /usr/local/bin/
+```
+
+and:
+
+```
+mv /home/test/dingo/dingo.yaml /etc/dingo/
+```
+
+***
+
+## Step 2 - Create dingo.service unit Configuration File
+
+First we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
+
+> ⚠️ Please adjust `User=` line. Our User name was `test` and our [Quick Start](../002-quick-start-overview) guide please adjust to your username. 💡 Tip: you can run `echo $USER` to find your username.
+
+```
+cat <<'ENDFILE' >> /tmp/dingo.service
+[Unit]
+Description=Dingo Node
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=10
+User=test
+WorkingDirectory=/usr/local/bin/
+ExecStart=/usr/local/bin/dingo
+SyslogIdentifier=dingo
+TimeoutStopSec=3
+
+[Install]
+WantedBy=multi-user.target
+ENDFILE
+```
+
+## Step 3 - Move dingo.service
+
+Move dingo.service to /etc/systemd/system/ so it can operated via systemd:
+
+```
+sudo mv /tmp/dingo.service /etc/systemd/system/
+```
