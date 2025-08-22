@@ -45,7 +45,8 @@ mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 First we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
 
-> ⚠️ Please adjust `User=` line. Our User name was `test` and our [Quick Start](../002-quick-start-overview) guide please adjust to your username. 💡 Tip: you can run `echo $USER` to find your username.
+> ⚠️ Please adjust the `User=` line. Our User was `test` and our [Quick Start](../002-quick-start-overview) guide please adjust to your username.  
+> 💡 Tip: you can run `echo $USER` to find your username.
 
 ```
 cat <<'ENDFILE' >> /tmp/dingo.service
@@ -70,7 +71,7 @@ ENDFILE
 
 ## Step 3 - Move dingo.service
 
-Move dingo.service to /etc/systemd/system/ so it can operated via systemd:
+Move dingo.service to `/etc/systemd/system/` so it can operated via systemd:
 
 ```
 sudo mv /tmp/dingo.service /etc/systemd/system/
