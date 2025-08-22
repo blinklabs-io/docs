@@ -1,0 +1,24 @@
+---
+title: Create Startup Service
+description: Create Startup Service for Dingo.
+---
+
+# Dingo
+
+A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
+
+⚠️ This is a work in progress and is currently under heavy development
+
+<br>
+
+***
+
+For this guide we will walk you through setting up a a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the dingo when the computer reboots. To get started follow the steps below.
+
+<br>
+
+✅ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
+
+***
+
+<br>
