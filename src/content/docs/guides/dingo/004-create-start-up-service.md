@@ -100,7 +100,7 @@ sudo mv /tmp/dingo.service /etc/systemd/system/
 ## Step 4 - Edit Paths in dingo.yaml File 
 
 #### Add paths to dingo.yaml
-We will add a path to our topology file and double check our path to our Cardano config.json file. If you used a different path than `./config/cardano/preview` please adjust as needed.
+We will edit our paths to our `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:` paths below. Please adjust as needed with correct paths to match your username and system.
 
 ```
 # Example config file for dingo
@@ -112,13 +112,13 @@ bindAddr: "0.0.0.0"
 # Path to the Cardano node configuration file
 #
 # Can be overridden with the config environment variable
-cardanoConfig: "./config/cardano/preview/config.json"
+cardanoConfig: "/home/test/dingo/config/cardano/preview/config.json"
 
 # A directory which contains the ledger database files
-databasePath: ".dingo"
+databasePath: "/home/test/dingo/dingo"
 
 # Path to the UNIX domain socket file used by the server
-socketPath: "dingo.socket"
+socketPath: "/home/test/dingo.socket"
 
 # Name of the Cardano network
 network: "preview"
@@ -134,7 +134,7 @@ tlsCertFilePath: ""
 tlsKeyFilePath: ""
 
 # Path to the topology configuration file for Cardano node
-topology: "./config/cardano/preview/topology.json"
+topology: "/home/test/dingo/config/cardano/preview/topology.json"
 
 # TCP port to bind for Prometheus metrics endpoint
 metricsPort: 12798
@@ -195,6 +195,12 @@ You can ensure that dingo.service is active by checking its status by running:
 
 ```
 sudo systemctl status dingo.service
+```
+
+If you have an error you can use the following command to see the error logs
+
+```
+journalctl -u dingo.service
 ```
 
 ***
