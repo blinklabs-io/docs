@@ -44,6 +44,8 @@ mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 ***
 
+<br>
+
 ## Step 2 - Create dingo.service Unit Configuration File
 
 First we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
@@ -72,6 +74,10 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
+***
+
+<br>
+
 ## Step 3 - Move dingo.service
 
 Move dingo.service to `/etc/systemd/system/` so it can operated via systemd:
@@ -80,7 +86,11 @@ Move dingo.service to `/etc/systemd/system/` so it can operated via systemd:
 sudo mv /tmp/dingo.service /etc/systemd/system/
 ```
 
-## Step 4 - Enable the Service and Start Service.
+***
+
+<br>
+
+## Step 4 - Enable the Service and Start Service
 
 Next, we enable the service to run at start and turn it on by running:
 
@@ -93,3 +103,9 @@ Then:
 ```
 sudo systemctl start dingo.service
 ```
+
+***
+
+<br>
+
+## Step 5 - Check Status
