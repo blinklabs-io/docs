@@ -13,7 +13,7 @@ A Cardano blockchain data node written in Go which actively participates in netw
 
 ***
 
-For this guide we will walk you through setting up a a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the dingo when the computer reboots. To get started follow the steps below.
+For this guide we will walk you through setting up a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the dingo when the computer reboots. To get started follow the steps below.
 
 <br>
 
@@ -28,7 +28,7 @@ For this guide we will walk you through setting up a a `systemd` service. Using 
 Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo Binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
 
 > ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
-> 💡 Tip: to find your path to dingo you can run `realpath dingo` command.
+> 💡 Tip: to find your path to dingo you can run the `realpath dingo` command.
 
 ```
 mv /home/test/dingo/dingo /usr/local/bin/
@@ -48,7 +48,7 @@ mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 ## Step 2 - Create dingo.service Unit Configuration File
 
-First we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
+Next, we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
 
 > ⚠️ Please adjust the `User=` line. In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.  
 > 💡 Tip: you can run `echo $USER` command to find your username.
@@ -80,7 +80,7 @@ ENDFILE
 
 ## Step 3 - Move dingo.service
 
-Move dingo.service to `/etc/systemd/system/` so it can operated via systemd:
+Move dingo.service to `/etc/systemd/system/` so it can operate via systemd by running:
 
 ```
 sudo mv /tmp/dingo.service /etc/systemd/system/
@@ -92,7 +92,7 @@ sudo mv /tmp/dingo.service /etc/systemd/system/
 
 ## Step 4 - Enable the Service and Start Service
 
-Next, we enable the service to run at start and turn it on by running:
+Now we will enable the service to run at start and turn it on by running:
 
 ```
 sudo systemctl enable dingo.service
@@ -109,3 +109,13 @@ sudo systemctl start dingo.service
 <br>
 
 ## Step 5 - Check Status
+
+You can ensure that dingo.service is active by checking its status by running:
+
+```
+sudo systemctl status dingo.service
+```
+
+***
+
+<br>
