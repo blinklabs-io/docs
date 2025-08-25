@@ -31,15 +31,23 @@ Best Practices: Since we will be using a `systemd` to startup Dingo we will move
 > 💡 Tip: to find your path to dingo you can run the `realpath dingo` command.
 
 ```
-mv /home/test/dingo/dingo /usr/local/bin/
+sudo mv /home/test/dingo/dingo /usr/local/bin/
 ```
 
-and:
+> ✅ You can check that dingo was moved by running `which dingo`
 
-> ⚠️ Please adjust path below.
+Now we will create the `/etc/dingo/` directory:
 
 ```
-mv /home/test/dingo/dingo.yaml /etc/dingo/
+sudo mkdir /etc/dingo/
+```
+
+and then move our dingo.yaml file to `/etc/dingo/`:
+
+> ⚠️ Please adjust path below. Paths are based on `USER=test`
+
+```
+sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
 ```
 
 ***
