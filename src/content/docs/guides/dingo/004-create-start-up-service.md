@@ -27,7 +27,8 @@ For this guide we will walk you through setting up a a `systemd` service. Using 
 
 Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo Binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
 
-> ⚠️ Please adjust paths below if needed. Paths are based on our [Quick Start](../002-quick-start-overview) guide.
+> ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
+> 💡 Tip: to find your path to dingo you can run `realpath dingo` command.
 
 ```
 mv /home/test/dingo/dingo /usr/local/bin/
@@ -35,18 +36,20 @@ mv /home/test/dingo/dingo /usr/local/bin/
 
 and:
 
+> ⚠️ Please adjust path below.
+
 ```
 mv /home/test/dingo/dingo.yaml /etc/dingo/
 ```
 
 ***
 
-## Step 2 - Create dingo.service unit Configuration File
+## Step 2 - Create dingo.service Unit Configuration File
 
 First we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
 
 > ⚠️ Please adjust the `User=` line. In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.  
-> 💡 Tip: you can run `echo $USER` to find your username.
+> 💡 Tip: you can run `echo $USER` command to find your username.
 
 ```
 cat <<'ENDFILE' >> /tmp/dingo.service
@@ -75,4 +78,18 @@ Move dingo.service to `/etc/systemd/system/` so it can operated via systemd:
 
 ```
 sudo mv /tmp/dingo.service /etc/systemd/system/
+```
+
+## Step 4 - Enable the Service and Start Service.
+
+Next, we enable the service to run at start and turn it on by running:
+
+```
+sudo systemctl enable dingo.service
+```
+
+Then:
+
+```
+sudo systemctl start dingo.service
 ```
