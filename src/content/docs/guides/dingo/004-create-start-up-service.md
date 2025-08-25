@@ -72,7 +72,6 @@ Type=simple
 Restart=on-failure
 RestartSec=10
 User=test
-WorkingDirectory=/usr/local/bin/
 ExecStart=/usr/local/bin/dingo
 SyslogIdentifier=dingo
 TimeoutStopSec=3
@@ -98,7 +97,81 @@ sudo mv /tmp/dingo.service /etc/systemd/system/
 
 <br>
 
-## Step 4 - Enable the Service and Start Service
+## Step 4 - Edit Paths in dingo.yaml File 
+
+#### Add paths to dingo.yaml
+We will add a path to our topology file and double check our path to our Cardano config.json file. If you used a different path than `./config/cardano/preview` please adjust as needed.
+
+```
+# Example config file for dingo
+# The values shown below correspond to the in-code defaults
+
+# Public bind address for the Dingo server
+bindAddr: "0.0.0.0"
+
+# Path to the Cardano node configuration file
+#
+# Can be overridden with the config environment variable
+cardanoConfig: "./config/cardano/preview/config.json"
+
+# A directory which contains the ledger database files
+databasePath: ".dingo"
+
+# Path to the UNIX domain socket file used by the server
+socketPath: "dingo.socket"
+
+# Name of the Cardano network
+network: "preview"
+
+# TLS certificate file path (for HTTPS)
+#
+# Can be overridden with the TLS_CERT_FILE_PATH environment variable
+tlsCertFilePath: ""
+
+# TLS key file path (for HTTPS)
+#
+# Can be overridden with the TLS_KEY_FILE_PATH environment variable
+tlsKeyFilePath: ""
+
+# Path to the topology configuration file for Cardano node
+topology: "./config/cardano/preview/topology.json"
+
+# TCP port to bind for Prometheus metrics endpoint
+metricsPort: 12798
+
+# Internal/private address to bind for listening for Ouroboros NtC
+privateBindAddr: "127.0.0.1"
+
+# TCP port to bind for listening for Ouroboros NtC
+privatePort: 3002
+
+# TCP port to bind for listening for Ouroboros NtN
+#
+# Can be overridden with the port environment variable
+relayPort: 3001
+
+# TCP port to bind for listening for UTxO RPC
+utxorpcPort: 9090
+
+# Ignore prior chain history and start from current tip (default: false)
+# This is experimental and may break — use with caution
+intersectTip: false
+
+# Maximum cache size in bytes used by BadgerDB for block/index cache
+# Default: 1073741824 (1 GB)
+badgerCacheSize: 1073741824
+
+# Maximum total size (in bytes) of all transactions allowed in the mempool.
+# Transactions exceeding this limit will be rejected.
+# Default: 1048576 (1 MB)
+mempoolCapacity: 1048576
+```
+
+***
+
+<br>
+
+## Step 5 - Enable the Service and Start Service
 
 Now we will enable the service to run at start and turn it on by running:
 
@@ -116,7 +189,7 @@ sudo systemctl start dingo.service
 
 <br>
 
-## Step 5 - Check Status
+## Step 6 - Check Status
 
 You can ensure that dingo.service is active by checking its status by running:
 
