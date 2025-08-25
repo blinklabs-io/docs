@@ -14,11 +14,11 @@
 }
 
 body {
-  background: #000A1B
+  background: #072252
 }
 
 header.astro-vrdttmbt {
-  background: #000A1B;
+  background: #072252;
   border-right: none;
 }
 
@@ -65,9 +65,9 @@ a:where(.astro-wy4te6ga) {
 }
 
 .sidebar-content:where(.astro-vrdttmbt) {
- background:  #000A1B
+ background:  #072252
 }
 
 summary:where(.astro-doynk5tl) {
-  background: #000A1B;
+  background: #072252;
 }
