@@ -62,7 +62,10 @@ sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 ## Step 2 - Edit Paths in dingo.yaml File 
 
-Now we will edit our dingo.yaml file to update the following paths now that we moved our yaml to `/ect/dingo/`.  
+Now we will edit our dingo.yaml file to update the following paths now that we moved our yaml to `/etc/dingo/`.  
+
+<br> 
+
 We will need to edit the following paths: `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:` paths below. 
 
 ✅ Please adjust as needed with correct paths to match your username and directories.
