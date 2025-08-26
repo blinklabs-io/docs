@@ -62,11 +62,11 @@ sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 ## Step 2 - Edit Paths in dingo.yaml File 
 
-Now we will edit our dingo.yaml file to update the following paths now that we moved our yaml to `/etc/dingo/`.  
+Now we will edit our dingo.yaml file to update the following paths since we moved our yaml to `/etc/dingo/`.  
 
 <br> 
 
-We will need to edit the following paths: `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:` paths below. 
+We will need to edit the following paths below: `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:`. 
 
 ✅ Please adjust as needed with correct paths to match your username and directories.
 
@@ -141,9 +141,10 @@ mempoolCapacity: 1048576
 
 ## Step 3 - Create dingo.service Unit Configuration File
 
-Next, we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
+Next, we will write the dingo.service unit configuration file or 'service' file, which will be run by `systemd`.
 
-> ⚠️ Please adjust the `User=` line. In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.
+> ⚠️ Please adjust the `User=` line below.
+> In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.
 > 
 > 💡 Tip: you can run `echo $USER` command to find your username.
 
