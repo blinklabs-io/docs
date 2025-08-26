@@ -19,6 +19,8 @@ For this guide we will walk you through downloading and running the Cardano CLI 
 
 ***
 
+<br>
+
 ## Step 1 - Download the latest Cardano CLI binary 
 
 First start by going to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
@@ -40,6 +42,8 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 ***
 
+<br>
+
 ## Step 2 - Rename File and Change Permissions for the Cardano CLI 
 
 For this example, we will name the binary file `cardano-cli`. To rename the binary will we run the following:
@@ -60,7 +64,11 @@ chmod +x cardano-cli
 
 ***
 
+<br>
+
 #### Congratulations we can now use the cardano-cli to communicate with the node.
+
+<br>
 
 ## Step 3 - Run  Cardano CLI Command to Query Tip
 Let run our first Cardano CLI command to query the tip of the preview blockchain using Dingo node to provide the data.  
@@ -78,8 +86,12 @@ We will run the following command to query the tip:
 
 ***
 
+<br>
+
 ## Step 4 - Using Environment Variables (Optional)
 Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
+
+<br>
 
 ### Setting Environment Variables for Current Session (Option 1)
 
@@ -96,6 +108,8 @@ Node Network:
 ```
 export CARDANO_NODE_NETWORK_ID=2
 ```
+
+<br>
 
 ### Setting Environment Variables Permanently (Option 2)
 To make an environment variable persistent across sessions, you need to add it to your shell's configuration file.
@@ -132,6 +146,8 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 > ```
 
 ***
+
+<br>
 
 ### Congratulations you are ready to start using Dingo node with the Cardano CLI!
 [Learn more about the Cardano CLI at https://developers.cardano.org](https://developers.cardano.org/docs/operate-a-stake-pool/cli-operations/basic-operations/get-started)
