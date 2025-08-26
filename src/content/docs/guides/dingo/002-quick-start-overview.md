@@ -62,6 +62,8 @@ wget https://github.com/blinklabs-io/dingo/releases/download/v0.15.1/dingo-v0.15
 
 ***
 
+<br>
+
 ## Best Practices - Files Needed to Run Dingo
 The following files are needed to run Dingo. We will walk through the steps to download and edit the files in the next few steps.  
 1. dingo.yaml
@@ -80,6 +82,8 @@ wget -O - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/d
 ```
 
 ***
+
+<br>
 
 ## Step 3 - Create Directory and Download Configuration Files
 
@@ -147,6 +151,8 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 > 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
 ***
+
+<br>
 
 ## Step 4 - Edit dingo.yaml File
 
@@ -229,6 +235,8 @@ mempoolCapacity: 1048576
 
 ***
 
+<br>
+
 ## Step 5 - Open Ports
 We will cover how to list and add UFW firewall rules to add the ports needed. Adjust as needed.
 
@@ -268,8 +276,12 @@ sudo ufw allow 9090/tcp
 
 ***
 
+<br>
+
 ## Step 6 - Bootstrap syncing Blockchain using Mithril Client (Optional)
 We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
+
+<br>
 
 #### Step 6.1 - Create Mithril folder
 We will create a folder inside our dingo folder that we will use to download the mithril binary into. To create a folder in our dingo folder we can run:
@@ -278,6 +290,8 @@ We will create a folder inside our dingo folder that we will use to download the
 cd ~/dingo
 mkdir mithril
 ```
+
+<br>
 
 #### Step 6.2 - Download Mithril Client
 We can now download the Mithril Client binary by running the following:
@@ -290,6 +304,8 @@ We can now download the Mithril Client binary by running the following:
 cd mithril
 wget https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
 ```
+
+<br>
 
 #### Step 6.3 - Export Environment Variables
 We will export the following environment variables to download the Mithril snapshot. Run these commands:
@@ -310,6 +326,9 @@ Genesis verification key variable:
 ```
 export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/input-output-hk/mithril/main/mithril-infra/configuration/pre-release-preview/genesis.vkey)
 ```
+
+<br>
+
 #### Step 6.4 - Find Latest Snapshot and Download it
 
 > 💡 Tip: Mithril creates the db/ directory in your current folder. In our case, the `mithril` folder we created.
@@ -334,6 +353,8 @@ Download the current snapshot by running:
 
 This takes some time, maybe up to 10 minutes on preview based on your system. You can see the progress on screen.  
 
+<br>
+
 #### Step 6.5 - Load snapshot into Dingo db
 Now we can return to our dingo directory by running:
 
@@ -355,11 +376,14 @@ Dingo will now load the blocks into the dingo database by copying and loading th
 
 ***
 
+<br>
 
 
 [Learn how to create a startup service Dingo](../004-create-start-up-service).
 
 ***
+
+<br>
 
 ### Congratulations you are ready to start using the Dingo node!
 
