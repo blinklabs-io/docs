@@ -79,6 +79,8 @@ For this guide we will use the dingo.yaml file. We will download it to our main 
 wget -O - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/dingo.yaml.example > dingo.yaml
 ```
 
+***
+
 ## Step 3 - Create Directory and Download Configuration Files
 
 We will create a directory to store our Cardano Configuration Files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
@@ -143,6 +145,8 @@ https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
 ```
 
 > 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+
+***
 
 ## Step 4 - Edit dingo.yaml File
 
@@ -223,6 +227,8 @@ badgerCacheSize: 1073741824
 mempoolCapacity: 1048576
 ```
 
+***
+
 ## Step 5 - Open Ports
 We will cover how to list and add UFW firewall rules to add the ports needed. Adjust as needed.
 
@@ -259,6 +265,8 @@ You might want to also add port 9090 or whatever port you selected for UTxO RPC 
 ```
 sudo ufw allow 9090/tcp
 ```
+
+***
 
 ## Step 6 - Bootstrap syncing Blockchain using Mithril Client (Optional)
 We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
@@ -324,8 +332,7 @@ Download the current snapshot by running:
 ./mithril-client cardano-db download latest
 ```
 
-This takes some time, maybe up to 10 minutes on preview based on your system. You can see the progress on screen.
-
+This takes some time, maybe up to 10 minutes on preview based on your system. You can see the progress on screen.  
 
 #### Step 6.5 - Load snapshot into Dingo db
 Now we can return to our dingo directory by running:
@@ -344,7 +351,15 @@ Dingo will now load the blocks into the dingo database by copying and loading th
 
 ![dingo-load-snapshot](/dingo-load-snapshot.png)
 
-> 📝 If you choose not to load a Mithril snapshot you can start dingo with the `./dingo` command and let the normal chainsync process start. It will take several more hours than using a Mithril snapshot for the chain to sync. 
+> 📝 If you choose not to load a Mithril snapshot you can start dingo with the `./dingo` command and let the normal chainsync process start. It will take several more hours than using a Mithril snapshot for the chain to sync.
+
+***
+
+
+
+[Learn how to create a startup service Dingo](../004-create-start-up-service).
+
+***
 
 ### Congratulations you are ready to start using the Dingo node!
 
