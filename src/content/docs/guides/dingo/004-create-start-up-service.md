@@ -110,7 +110,6 @@ sudo mv /tmp/dingo.service /etc/systemd/system/
 
 ## Step 4 - Edit Paths in dingo.yaml File 
 
-#### Add paths to dingo.yaml
 We will edit our paths to our `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:` paths below. Please adjust as needed with correct paths to match your username and directories.
 
 ```
@@ -208,7 +207,7 @@ You can ensure that dingo.service is active by checking its status by running:
 sudo systemctl status dingo.service
 ```
 
-If you have an error you can use the following command to see the error logs
+If you have an error, you can use the following command to see the error logs:
 
 ```
 journalctl -u dingo.service
