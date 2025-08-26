@@ -378,7 +378,7 @@ Dingo will now load the blocks into the dingo database by copying and loading th
 
 <br>
 
-#### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the dingo when the computer reboots? 
+#### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the Dingo node when the computer reboots? 
 [See our guide on how to create a startup service for Dingo](../004-create-start-up-service).
 
 ***
