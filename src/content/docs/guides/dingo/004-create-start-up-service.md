@@ -27,6 +27,8 @@ For this guide we will walk you through setting up a `systemd` service. Using a 
 
 Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo Binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
 
+<br>
+
 > ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
 > 💡 Tip: to find your path to dingo, navigate to you dingo binary directory, then you can run the `realpath dingo` command.
 
