@@ -29,7 +29,8 @@ Best Practices: Since we will be using a `systemd` to startup Dingo we will move
 
 <br>
 
-> ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.  
+> ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
+>  
 > 💡 Tip: to find your path to dingo, navigate to you dingo binary directory, then you can run the `realpath dingo` command.
 
 ```
@@ -67,7 +68,8 @@ sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 Next, we will write the dingo.service unit configuration file (i.e., 'service' file), which will be run by `systemd`.
 
-> ⚠️ Please adjust the `User=` line. In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.  
+> ⚠️ Please adjust the `User=` line. In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.
+> 
 > 💡 Tip: you can run `echo $USER` command to find your username.
 
 ```
