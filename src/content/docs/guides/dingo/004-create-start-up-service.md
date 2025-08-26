@@ -29,7 +29,7 @@ Best Practices: Since we will be using a `systemd` to startup Dingo we will move
 
 <br>
 
-> ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
+> ⚠️ Please adjust paths below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
 >  
 > 💡 Tip: to find your path to the Dingo binary, navigate to your Dingo binary directory, then you can run the `realpath dingo` command.
 
@@ -50,11 +50,7 @@ sudo mkdir /etc/dingo/
 
 <br>
 
-and then move our dingo.yaml file to `/etc/dingo/`:
-
-<br>
-
-> ⚠️ Please adjust path below. Paths are based on `USER=test`
+Then we will move our dingo.yaml file to the `/etc/dingo/`:  
 
 ```
 sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
@@ -66,7 +62,10 @@ sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
 
 ## Step 2 - Edit Paths in dingo.yaml File 
 
-We will edit our paths to our `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:` paths below. Please adjust as needed with correct paths to match your username and directories.
+Now we will edit our dingo.yaml file to update the following paths now that we moved our yaml to `/ect/dingo/`.  
+We will need to edit the following paths: `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:` paths below. 
+
+✅ Please adjust as needed with correct paths to match your username and directories.
 
 ```
 # Example config file for dingo
