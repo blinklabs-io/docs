@@ -25,7 +25,7 @@ For this guide we will walk you through setting up a `systemd` service. Using a 
 
 ## Step 1 - Move Dingo and dingo.yaml Files  
 
-Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo Binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
+Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
 
 <br>
 
