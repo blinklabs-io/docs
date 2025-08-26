@@ -35,8 +35,11 @@ Best Practices: Since we will be using a `systemd` to startup Dingo we will move
 ```
 sudo mv /home/test/dingo/dingo /usr/local/bin/
 ```
+<br>
 
 > ✅ You can check that dingo was moved by running `which dingo`
+
+<br>
 
 Now we will create the `/etc/dingo/` directory:
 
@@ -44,7 +47,11 @@ Now we will create the `/etc/dingo/` directory:
 sudo mkdir /etc/dingo/
 ```
 
+<br>
+
 and then move our dingo.yaml file to `/etc/dingo/`:
+
+<br>
 
 > ⚠️ Please adjust path below. Paths are based on `USER=test`
 
