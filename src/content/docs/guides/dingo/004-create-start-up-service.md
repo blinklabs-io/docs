@@ -29,7 +29,7 @@ Best Practices: Since we will be using a `systemd` to startup Dingo we will move
 
 <br>
 
-> ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
+> ⚠️ Please adjust path below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.  
 > 💡 Tip: to find your path to dingo, navigate to you dingo binary directory, then you can run the `realpath dingo` command.
 
 ```
