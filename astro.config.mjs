@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://blinklabs.io',
+	site: 'https://docs.blinklabs.io',
 	redirects: {
 		'/': '/home',
 	},
