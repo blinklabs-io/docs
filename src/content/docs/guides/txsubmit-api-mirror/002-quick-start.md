@@ -38,8 +38,6 @@ To get started follow the steps below
 
 Copy the path from Blinklabs and run the following command to download the binary file on your node server  
 
-![txsubmit-mirror-blinklabs-site-copy-link](/txsubmit-mirror-blinklabs-site-copy-link.png)
-
 <br>
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
@@ -75,3 +73,60 @@ sudo ufw allow 8090/tcp
 ***
 
 ## Step 4 - Setup Config File
+
+Sample config.yaml:
+
+```
+node:
+  network: mainnet
+  port: 8090
+  socketPath: /home/user/cardano-my-node/db/socket
+  backends: http://tx1, http://tx2, http://tx3
+```
+
+✅ `BACKENDS` is a comma separated list of HTTP Cardano transaction submission service API URIs
+
+***
+
+💡 Tip: To find the path to your node socket run the following command:
+
+```
+echo $CARDANO_NODE_SOCKET_PATH
+```
+
+<br>
+
+More infomation on configuration file or Environment variables can be found here: [https://github.com/blinklabs-io/tx-submit-api-mirror](https://github.com/blinklabs-io/tx-submit-api-mirror)
+
+***
+
+## Step 5 - Run Tx Submit Mirror API With Config File
+
+Run the executable file by running the following with the command line flag `-config` to set the file to load as a configuration.
+
+⚠️ Adjust the file path below to match your path to the `config.yaml` file.
+
+```
+cd $NODE_HOME
+./tx-submit-api -config /path/to/config.yaml
+```
+
+💡 Tip: You can hit `control`+`z` and then type `bg` to run in the background. Hit `fg` to bring back to the foreground
+
+***
+
+<br>
+
+💡 Tip: You can check that Tx Submit Mirror API is running by using the following command. Please adjust port if needed.
+
+```
+curl http://localhost:8090/healthcheck
+```
+
+### Congratulations you are ready to start submitting transactions with Tx Submit Mirror API!
+
+<br>
+
+## Step 6 - Submit Transactions to your Tx Submit Mirror URL
+
+Submit transactions to your Tx Submit Mirror API URL. It should look like `http://192.0.2.0:8090/api/submit/tx` ⚠️ Adjust to your IP and Port
