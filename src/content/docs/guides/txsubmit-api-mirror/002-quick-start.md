@@ -108,7 +108,7 @@ Run the executable file by running the following with the command line flag `-co
 
 ```
 cd $NODE_HOME
-./tx-submit-api -config /path/to/config.yaml
+./tx-submit-api-mirror -config /path/to/config.yaml
 ```
 
 💡 Tip: You can hit `control`+`z` and then type `bg` to run in the background. Hit `fg` to bring back to the foreground
