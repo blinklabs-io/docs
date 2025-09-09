@@ -9,11 +9,13 @@ Tx Submit API Mirror is a simple Cardano transaction submission API service whic
 
 A simple HTTP API which accepts a CBOR encoded Cardano transaction as a payload body and submits it to one or more configured backend transaction submission API services.
 
-Simply download the Tx Submit API Mirro binary file from blinklabs.io on to your node server. Configuration can be done using a config file or setting environment variables.  
+Simply download the Tx Submit API Mirror binary file from blinklabs.io on to your node server. Configuration can be done using a config file or setting environment variables.  
 
 To get started follow the steps below
 
 ⚠️ This guide assumes typical Linux Cardano Node setup. Please adjust commands and paths as needed.
+
+> 💡 Tip: Don't have a Cardano Node yet? Try [cardano-up](../../cardano-up/001-cardano-up)
 
 ***
 
