@@ -15,6 +15,8 @@ To get started follow the steps below
 
 ⚠️ This guide assumes typical Linux Cardano Node setup. Please adjust commands and paths as needed.
 
+<br>
+
 > 💡 Tip: Don't have a Cardano Node yet? Try [cardano-up](../../cardano-up/001-cardano-up)
 
 ***
