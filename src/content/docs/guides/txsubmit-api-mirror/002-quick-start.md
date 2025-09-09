@@ -100,7 +100,7 @@ echo $CARDANO_NODE_SOCKET_PATH
 
 <br>
 
-More infomation on configuration file or Environment variables can be found here: [https://github.com/blinklabs-io/tx-submit-api-mirror](https://github.com/blinklabs-io/tx-submit-api-mirror)
+More information on configuration file or Environment variables can be found here: [https://github.com/blinklabs-io/tx-submit-api-mirror](https://github.com/blinklabs-io/tx-submit-api-mirror)
 
 ***
 
