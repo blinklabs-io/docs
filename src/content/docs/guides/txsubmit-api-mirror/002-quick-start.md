@@ -133,4 +133,8 @@ curl http://localhost:8090/healthcheck
 
 ## Step 6 - Submit Transactions to your Tx Submit Mirror URL
 
-Submit transactions to your Tx Submit Mirror API URL. It should look like `http://192.0.2.0:8090/api/submit/tx` ⚠️ Adjust to your IP and Port
+Submit transactions to your Tx Submit Mirror API URL. It should look like `http://192.0.2.0:8090/api/submit/tx` ⚠️ Adjust to your IP and Port as need.
+
+This implementation shares an API spec with IOHK's Haskell implementation. The
+same instructions apply. Follow the steps to
+[build and submit a transaction](https://github.com/input-output-hk/cardano-node/tree/master/cardano-submit-api#build-and-submit-a-transaction)
