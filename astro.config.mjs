@@ -40,7 +40,7 @@ export default defineConfig({
 						{ label: 'Cardano Node API', autogenerate: { directory: 'guides/cardano-node-api' } },
 						{ label: 'Tx Submit API Mirror', autogenerate: { directory: 'guides/txsubmit-api-mirror' } },
 						{ label: 'cDNSd', slug: 'guides/cdnsd' },
-						{ label: 'gOuroboros', slug: 'guides/gouroboros' },
+						{ label: 'gOuroboros', autogenerate: { directory: 'guides/gouroboros' } },
 						{ label: 'Docker Images', slug: 'guides/docker-images' },
 					],
 				},
