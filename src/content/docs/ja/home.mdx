@@ -1,0 +1,28 @@
+---
+title: ドキュメントホーム
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkButton } from '@astrojs/starlight/components';
+import '../../../styles/custom.css';
+
+Blink Labsドキュメントサイトへようこそ。
+
+左側のナビゲーションバーを使用してサイトを閲覧できます。
+
+## 発見
+
+<CardGrid>
+	<Card title="ブロックチェーンツールをチェック！" icon="open-book">
+		オープンソースプロジェクトを試してみてください！
+		<LinkButton href="https://blinklabs.io/projects-open-source">
+			オープンソース
+		</LinkButton>
+	</Card>
+	<Card title="詳細情報" icon="information">
+		blinklabs.ioでBlink Labsについてもっと学ぶ
+		<LinkButton href="https://blinklabs.io">
+			blinklabs.io
+		</LinkButton>
+	</Card>
+</CardGrid>

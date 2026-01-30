@@ -1,0 +1,28 @@
+---
+title: Inicio de Documentación
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkButton } from '@astrojs/starlight/components';
+import '../../../styles/custom.css';
+
+Bienvenido al sitio de documentación de Blink Labs.
+
+La barra de navegación a la izquierda se puede usar para explorar el sitio.
+
+## Descubrir
+
+<CardGrid>
+	<Card title="¡Descubre nuestras herramientas Blockchain!" icon="open-book">
+		¡Prueba nuestros proyectos de código abierto!
+		<LinkButton href="https://blinklabs.io/projects-open-source">
+			Código Abierto
+		</LinkButton>
+	</Card>
+	<Card title="Más Información" icon="information">
+		Aprende más sobre Blink Labs en blinklabs.io
+		<LinkButton href="https://blinklabs.io">
+			blinklabs.io
+		</LinkButton>
+	</Card>
+</CardGrid>
