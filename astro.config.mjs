@@ -23,6 +23,21 @@ export default defineConfig({
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/blinklabs-io/docs' },
 			],
+			defaultLocale: 'root',
+			locales: {
+				root: {
+					label: 'English',
+					lang: 'en',
+				},
+				ja: {
+					label: '日本語',
+					lang: 'ja',
+				},
+				es: {
+					label: 'Español',
+					lang: 'es',
+				},
+			},
 			sidebar: [
 				{
 					label: 'Documentation',
