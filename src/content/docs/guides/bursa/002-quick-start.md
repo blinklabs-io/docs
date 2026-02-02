@@ -52,7 +52,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 > 💡 Tip: You can download the latest Bursa release from the <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a> page.
 
 ```
-wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.11.1/bursa-v0.11.1-linux-amd64 > bursa
+wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.12.0/bursa-v0.12.0-linux-amd64 > bursa
 ```
 
 ***
