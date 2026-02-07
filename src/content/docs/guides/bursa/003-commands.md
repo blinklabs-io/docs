@@ -40,3 +40,21 @@ http://localhost:8080/swagger/index.html
 ```
 
 ![bursa-swagger](/bursa-swagger.png)
+
+## Create Certificates for Stake Pool Operation
+Example... 
+```
+./bursa cert opcert --kes-vkey kes.vkey --cold-skey cold.skey --counter 0 --kes-period 200 --out node.cert
+```
+
+## Create hashes for metadata files or anchor data
+Examples..
+
+```
+./bursa hash metadata pool-metadata.json
+```
+
+anchor data example
+```
+./bursa hash anchor-data --file-text constitution.txt
+```
