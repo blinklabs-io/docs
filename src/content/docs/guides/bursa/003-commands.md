@@ -9,9 +9,9 @@ There are 7 categories of commands that Bursa can run:
 
 1. [wallet](#wallet)
 2. [api](#api)
-3. [cert](#cert) - Commands for generating various Cardano certificates
-4. [hash](#hash) - Commands for generating cryptographic hashes used in Cardano
-5. [key](#key) - Commands for deriving individual keys from a mnemonic
+3. [cert](#cert)  - Commands for generating various Cardano certificates
+4. [hash](#hash)  - Commands for generating cryptographic hashes used in Cardano
+5. [key](#key)    - Commands for deriving individual keys from a mnemonic
 6. script
 7. address
 
