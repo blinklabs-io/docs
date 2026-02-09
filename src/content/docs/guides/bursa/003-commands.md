@@ -8,8 +8,8 @@ We can now use the command line to create a Cardano wallet and output all the fi
 1. address
 2. api
 3. cert
-4. hash
-5. key - commands for deriving individual keys from a mnemonic
+4. hash - Commands for generating cryptographic hashes used in Cardano
+5. key - Commands for deriving individual keys from a mnemonic
 6. script
 7. wallet
 
@@ -56,8 +56,13 @@ Example...
 ```
 
 ## Create hashes for metadata files or anchor data
-Examples..
+We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
+> Hash types: <br>
+> metadata  - Blake2b-256 hash of pool/DRep metadata JSON <br>
+> anchor-data - Blake2b-256 hash of anchor data (constitutions, governance proposals) 
+
+metadata example
 ```
 ./bursa hash metadata pool-metadata.json
 ```
