@@ -62,7 +62,15 @@ We can use Bursa to create hashes for metadata or anchor-data, often used in Car
 > metadata  - Blake2b-256 hash of pool/DRep metadata JSON <br>
 > anchor-data - Blake2b-256 hash of anchor data (constitutions, governance proposals) 
 
-metadata example
+### Metadata
+The hash metadata commands are used for pool and DRep metadata registration.
+The hash is calculated from the canonical JSON representation.
+
+Supported metadata types:
+  - pool: Pool registration metadata
+  - drep: DRep registration metadata
+    
+pool metadata command example
 ```
 ./bursa hash metadata pool-metadata.json
 ```
