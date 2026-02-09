@@ -7,13 +7,17 @@ We can now use the command line to create a Cardano wallet and output all the fi
 
 There are 7 categories of commands that Bursa can run:
 
-1. address
-2. api
+1. [wallet](#wallet)
+2. [api](#api)
 3. cert
 4. [hash](#hash) - Commands for generating cryptographic hashes used in Cardano
 5. key - Commands for deriving individual keys from a mnemonic
 6. script
-7. wallet
+7. address
+
+***
+
+<a name="wallet"></a>
 
 ## Use Command Line to Create Wallet and Output Wallet Files
 
@@ -30,6 +34,10 @@ We can use the command line to create a wallet and output all the files we will 
 Now we will have all the wallet files in our `dev` directory.
 
 ![bursa-wallet-files](/bursa-wallet-files.png)
+
+***
+
+<a name="api"></a>
 
 ## Use Command Line to Start API
 
@@ -57,7 +65,10 @@ Example...
 ./bursa cert opcert --kes-vkey kes.vkey --cold-skey cold.skey --counter 0 --kes-period 200 --out node.cert
 ```
 
+***
+
 <a name="hash"></a>
+
 ## Create hashes for metadata files or anchor data
 We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
