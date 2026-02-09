@@ -8,7 +8,7 @@ We can now use the command line to create a Cardano wallet and output all the fi
 1. address
 2. api
 3. cert
-4. hash - Commands for generating cryptographic hashes used in Cardano
+4. [hash](#hash) - Commands for generating cryptographic hashes used in Cardano
 5. key - Commands for deriving individual keys from a mnemonic
 6. script
 7. wallet
@@ -55,6 +55,7 @@ Example...
 ./bursa cert opcert --kes-vkey kes.vkey --cold-skey cold.skey --counter 0 --kes-period 200 --out node.cert
 ```
 
+<a name="hash"></a>
 ## Create hashes for metadata files or anchor data
 We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
