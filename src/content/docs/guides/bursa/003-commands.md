@@ -76,7 +76,10 @@ pool metadata command example
 ./bursa hash metadata pool-metadata.json
 ```
 
-anchor data example
+#### Anchor Data
+The hash anchor-data commands are used to generate a Blake2b-256 hash of anchor data used in Cardano governance. For example you might want to create an anchor data hash for constitutions, governance proposals, and other documents that are anchored to on-chain governance actions.
+
+anchor-data command example
 ```
 ./bursa hash anchor-data --file-text constitution.txt
 ```
