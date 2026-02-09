@@ -3,7 +3,15 @@ title: Command Line Guide
 description: Bursa Command Line Guide.
 ---
 
-We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation.
+We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation. Bursa can also be used to generate hashes, keys, including keys and cetificates need to run a Cardano stake pool. There are 7 categories of commands that Bursa can run:
+
+1. address
+2. api
+3. cert
+4. hash
+5. key - commands for deriving individual keys from a mnemonic
+6. script
+7. wallet
 
 ## Use Command Line to Create Wallet and Output Wallet Files
 
@@ -58,3 +66,6 @@ anchor data example
 ```
 ./bursa hash anchor-data --file-text constitution.txt
 ```
+
+## Create Keys
+Keys 
