@@ -73,14 +73,14 @@ Example...
 
 <a name="hash"></a>
 
-## Create hashes for metadata files or anchor data
+## Create Hashes for Metadata Files or Anchor Data
 We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
 > Hash types: <br>
 > metadata  - Blake2b-256 hash of pool/DRep metadata JSON <br>
 > anchor-data - Blake2b-256 hash of anchor data (constitutions, governance proposals) 
 
-### Metadata
+#### Metadata
 The hash metadata commands are used for pool and DRep metadata registration.
 The hash is calculated from the canonical JSON representation.
 
