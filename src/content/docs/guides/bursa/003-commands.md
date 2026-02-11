@@ -9,9 +9,9 @@ There are 7 categories of commands that Bursa can run:
 
 1. [wallet](#wallet)
 2. [api](#api)
-3. [cert](#cert)  - Commands for generating various Cardano certificates
+3. [cert](#cert)   &nbsp; - Commands for generating various Cardano certificates
 4. [hash](#hash)  - Commands for generating cryptographic hashes used in Cardano
-5. [key](#key)    - Commands for deriving individual keys from a mnemonic
+5. [key](#key)     &nbsp; - Commands for deriving individual keys from a mnemonic
 6. script
 7. address
 
@@ -69,10 +69,10 @@ Bursa can be used to create certificates for stake pool operations, stake delega
 The `op-cert` command can be used to generate an operational certificate, aka `node.cert`, linking a KES key to a pool cold key. Stake Pools need to create a new node.cert when rotating their KES key. So SPOs can use Bursa to create a new `node.cert` with their new kes.vkey, cold key and kes period.
 
 > Required inputs: <br>
->   --kes-vkey      KES verification key file (bech32 or hex format) <br>
->   --cold-skey     Pool cold signing key file (bech32 or hex format) <br>
->   --counter       Certificate sequence number (must increment with each new cert) <br>
->   --kes-period    KES period at certificate creation time
+>   --kes-vkey &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
+>   --cold-skey &emsp; &nbsp; Pool cold signing key file (bech32 or hex format) <br>
+>   --counter &emsp; &nbsp; &nbsp; &nbsp;Certificate sequence number (must increment with each new cert) <br>
+>   --kes-period &emsp; KES period at certificate creation time
 
 ✅ The counter value must be incremented each time a new operational certificate
 is created, if and only if, you minted a block with old KES key. The KES period is the current slot divided by the slots per KES
