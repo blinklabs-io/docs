@@ -68,11 +68,11 @@ Bursa can be used to create certificates for stake pool operations, stake delega
 
 The `op-cert` command can be used to generate an operational certificate, aka `node.cert`, linking a KES key to a pool cold key. Stake Pools need to create a new node.cert when rotating their KES key. So SPOs can use Bursa to create a new `node.cert` with their new kes.vkey, cold key and kes period.
 
-> Required inputs:
->   --kes-vkey    KES verification key file (bech32 or hex format)
->   --cold-skey   Pool cold signing key file (bech32 or hex format)
->   --counter     Certificate sequence number (must increment with each new cert)
->   --kes-period  KES period at certificate creation time
+> Required inputs: <br>
+>   --kes-vkey      KES verification key file (bech32 or hex format) <br>
+>   --cold-skey     Pool cold signing key file (bech32 or hex format) <br>
+>   --counter       Certificate sequence number (must increment with each new cert) <br>
+>   --kes-period    KES period at certificate creation time
 
 ✅ The counter value must be incremented each time a new operational certificate
 is created, if and only if, you minted a block with old KES key. The KES period is the current slot divided by the slots per KES
