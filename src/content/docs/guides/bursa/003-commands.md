@@ -82,7 +82,7 @@ Output format of `node.cert` is compatible with cardano-cli operational certific
 
 To create `node.cert` we can run the following command.
 
-> ⚠️ Please adjust the paths to your kes and cold keys. Also please adjust your counter and kes peiord below.
+> ⚠️ Please adjust the paths to your kes and cold keys. Also please adjust your counter and kes period below.
 
 ```
 ./bursa cert opcert --kes-vkey /path/kes.vkey --cold-skey /path/cold.skey --counter 0 --kes-period 200 --out node.cert
