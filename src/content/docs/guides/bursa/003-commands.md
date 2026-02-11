@@ -134,9 +134,35 @@ Keys
 <a name="script"></a>
 
 ## Commands for Multi-Signature Operations
+Bursa can also be used to generate multi-signature script. The Bursa script command has 3 command types that you can run.
 
+> Script command types:
+>  - **create:** Creates a new multi-signature script
+>  - **validate:** Validates a script against signatures and slot
+>  - **address:** Generate mainnet address from script
 
-Script command types:
-  - create: Creates a new multi-signature script
-  - validate: Validates a script against signatures and slot
-  - address: Generate mainnet address from script
+#### Create Multi-Signature Script
+
+- Create a 2-of-3 multi-sig script
+  
+  ```
+  bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13,abcdef1234567890abcdef1234567890abcdef14
+  ```
+
+- Create an all-signers-required script
+
+  ```
+  bursa script create --all --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13
+  ```
+
+- Create an any-signer script
+  
+  ```
+  bursa script create --any --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13,abcdef1234567890abcdef1234567890abcdef14
+  ```
+
+- Create a timelocked script (valid after slot 1000000)
+  
+  ```
+  bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
+  ```
