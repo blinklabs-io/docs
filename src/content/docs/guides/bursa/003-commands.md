@@ -9,10 +9,10 @@ There are 7 categories of commands that Bursa can run:
 
 1. [wallet](#wallet)
 2. [api](#api)
-3. [cert](#cert)   &nbsp; - Commands for generating various Cardano certificates
-4. [hash](#hash)  - Commands for generating cryptographic hashes used in Cardano
-5. [key](#key)     &nbsp; - Commands for deriving individual keys from a mnemonic
-6. script
+3. [cert](#cert)   &emsp; - Commands for generating various Cardano certificates
+4. [hash](#hash)  &nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+5. [key](#key)  &emsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+6. [script](#script) &nbsp; - Commands for multi-signature operations
 7. address
 
 ***
@@ -122,5 +122,21 @@ anchor-data command example
 ./bursa hash anchor-data --file-text constitution.txt
 ```
 
+***
+
+<a name="key"></a>
+
 ## Create Keys
 Keys 
+
+***
+
+<a name="script"></a>
+
+## Commands for Multi-Signature Operations
+
+
+Script command types:
+  - create: Creates a new multi-signature script
+  - validate: Validates a script against signatures and slot
+  - address: Generate mainnet address from script
