@@ -68,6 +68,8 @@ Bursa can be used to create certificates for stake pool operations, stake delega
 
 The `op-cert` command can be used to generate an operational certificate, aka `node.cert`, linking a KES key to a pool cold key. Stake Pools need to create a new node.cert when rotating their KES key. So SPOs can use Bursa to create a new `node.cert` with their new kes.vkey, cold key and kes period.
 
+🔁 Output format is compatible with cardano-cli operational certificates.
+
 > Required inputs: <br>
 >   --kes-vkey &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
 >   --cold-skey &emsp; &nbsp; Pool cold signing key file (bech32 or hex format) <br>
