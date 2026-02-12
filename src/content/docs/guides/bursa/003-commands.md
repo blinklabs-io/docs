@@ -7,13 +7,13 @@ We can now use the command line to create a Cardano wallet and output all the fi
 
 There are 7 categories of commands that Bursa can run:
 
-1. [wallet](#wallet)
-2. [api](#api)
-3. [cert](#cert)   &emsp; - Commands for generating various Cardano certificates
-4. [hash](#hash)  &nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-5. [key](#key)  &emsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-6. [script](#script) &nbsp; - Commands for multi-signature operations
-7. address
+1. [wallet](#wallet) &nbsp; - Commands for generating wallet and output all the files needed to manage a Cardano wallet
+2. [api](#api)  &emsp;&nbsp;&nbsp; - Commands for running API
+3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+5. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+6. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
+7. [address](#address) - Commands for 
 
 ***
 
@@ -166,3 +166,10 @@ Bursa can also be used to generate multi-signature script. The Bursa script comm
   ```
   ./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
   ```
+
+  ***
+
+<a name="address"></a>
+
+## Address
+Addres...
