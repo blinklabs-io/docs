@@ -127,7 +127,28 @@ anchor-data command example
 <a name="key"></a>
 
 ## Create Keys
-Keys 
+Bursa can be used to derive individual keys from a mnemonic. 
+
+> Keys are derived following Cardano CIP standards and output in bech32 format suitable for use with cardano-cli and other tools.
+> 
+> Derivation paths by key type:
+> -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
+> -  CIP-1853: pool-cold (m/1853'/1815'/...)
+> -  CIP-1855: policy (m/1855'/1815'/...)
+> -  CIP-0105: drep, committee-cold, committee-hot (m/1852'/1815'/account'/role/...)
+> -  CIP-88/151: calidus (m/1852'/1815'/account'/0/index, SPO authentication)
+
+Examples:
+1.  `./bursa key root --mnemonic "word1 word2 ..."`
+2.  `./bursa key account --mnemonic "word1 word2 ..." --index 0`
+3.  `./bursa key payment --mnemonic "word1 word2 ..."`
+4.  `./bursa key stake --mnemonic "word1 word2 ..."`
+5.  `./bursa key pool-cold --mnemonic "word1 word2 ..."`
+6.  `./bursa key policy --mnemonic "word1 word2 ..."`
+7.  `./bursa key calidus --mnemonic "word1 word2 ..."`
+8.  `./bursa key drep --mnemonic "word1 word2 ..."`
+9.  `./bursa key committee-cold --mnemonic "word1 word2 ..."`
+10.  `./bursa key committee-hot --mnemonic "word1 word2 ..."` 
 
 ***
 
