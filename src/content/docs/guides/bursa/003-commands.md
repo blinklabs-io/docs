@@ -138,17 +138,65 @@ Bursa can be used to derive individual keys from a mnemonic.
 > -  CIP-0105: drep, committee-cold, committee-hot (m/1852'/1815'/account'/role/...)
 > -  CIP-88/151: calidus (m/1852'/1815'/account'/0/index, SPO authentication)
 
-Examples:
-1.  `./bursa key root --mnemonic "word1 word2 ..."`
-2.  `./bursa key account --mnemonic "word1 word2 ..." --index 0`
-3.  `./bursa key payment --mnemonic "word1 word2 ..."`
-4.  `./bursa key stake --mnemonic "word1 word2 ..."`
-5.  `./bursa key pool-cold --mnemonic "word1 word2 ..."`
-6.  `./bursa key policy --mnemonic "word1 word2 ..."`
-7.  `./bursa key calidus --mnemonic "word1 word2 ..."`
-8.  `./bursa key drep --mnemonic "word1 word2 ..."`
-9.  `./bursa key committee-cold --mnemonic "word1 word2 ..."`
-10.  `./bursa key committee-hot --mnemonic "word1 word2 ..."` 
+#### Root Key
+```
+./bursa key root --mnemonic "word1 word2 ..."
+```
+
+#### Account Key
+```
+./bursa key account --mnemonic "word1 word2 ..." --index 0
+```
+
+#### Payment Key
+```
+./bursa key payment --mnemonic "word1 word2 ..."
+```
+
+#### Stake
+```
+./bursa key stake --mnemonic "word1 word2 ..."
+```
+
+#### Pool Cold Key
+```
+./bursa key pool-cold --mnemonic "word1 word2 ..."
+```
+
+#### Policy Key
+```
+./bursa key policy --mnemonic "word1 word2 ..."
+```
+
+#### Calidus Key
+```
+./bursa key calidus --mnemonic "word1 word2 ..."
+```
+
+#### VRF Key Pair
+```
+./bursa key vrf --mnemonic "word1 word2 ... word24"
+```
+
+#### KES Key Pair
+```
+./bursa key kes --mnemonic "word1 word2 ... word24"
+```
+
+#### drep Key
+```
+./bursa key drep --mnemonic "word1 word2 ..."
+```
+
+#### Constitutional Committee Cold Key
+```
+./bursa key committee-cold --mnemonic "word1 word2 ..."
+```
+
+#### Constitutional Committee Hot Key
+```
+./bursa key committee-hot --mnemonic "word1 word2 ..."
+``` 
 
 ***
 
