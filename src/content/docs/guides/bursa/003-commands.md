@@ -174,14 +174,17 @@ Bursa supports all CIP-0019 address types:
 - Reward addresses (stake only)
 - Byron/Bootstrap addresses (legacy)
 
+#### Base addresses (payment + stake credentials)
 ```
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
 ```
 
+#### Enterprise addresses (payment only)
 ```
 ./bursa address build --payment-key addr_vk1... --network mainnet --type enterprise
 ```
 
+#### Reward addresses (stake only)
 ```
 ./bursa address build --stake-key stake_vk1... --network mainnet --type reward`
 ```
