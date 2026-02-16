@@ -165,8 +165,26 @@ Bursa can also be used to generate multi-signature script. The Bursa script comm
 <a name="address"></a>
 
 ## Address
-Addres...
+Bursa can be used to generate Cardano wallet addresses from a payment verification key through the `build` command. Bursa can also be used to parse out addresses and display its components using `info`.
 
+Bursa supports all CIP-0019 address types:
+- Base addresses (payment + stake credentials)
+- Enterprise addresses (payment only)
+- Pointer addresses (payment + stake pointer)
+- Reward addresses (stake only)
+- Byron/Bootstrap addresses (legacy)
+
+```
+./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
+```
+
+```
+./bursa address build --payment-key addr_vk1... --network mainnet --type enterprise
+```
+
+```
+./bursa address build --stake-key stake_vk1... --network mainnet --type reward`
+```
 ***
 
 <a name="key"></a>
