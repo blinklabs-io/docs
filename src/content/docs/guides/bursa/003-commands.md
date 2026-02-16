@@ -3,7 +3,7 @@ title: Command Line Guide
 description: Bursa Command Line Guide.
 ---
 
-We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation. Bursa can also be used to generate hashes, keys, including keys and cetificates need to run a Cardano stake pool. 
+We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation. Bursa can also be used to generate hashes, keys, including keys and certificates need to run a Cardano stake pool. 
 
 There are currently 7 categories of commands that Bursa can run:
 
@@ -98,7 +98,7 @@ To create `node.cert` we can run the following command.
 We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
 > Hash types: <br>
-> metadata  - Blake2b-256 hash of pool/DRep metadata JSON <br>
+> metadata - Blake2b-256 hash of pool/DRep metadata JSON <br>
 > anchor-data - Blake2b-256 hash of anchor data (constitutions, governance proposals) 
 
 #### Metadata
@@ -115,7 +115,7 @@ pool metadata command example
 ```
 
 #### Anchor Data
-The hash anchor-data commands are used to generate a Blake2b-256 hash of anchor data used in Cardano governance. For example you might want to create an anchor data hash for constitutions, governance proposals, and other documents that are anchored to on-chain governance actions.
+The hash anchor-data commands are used to generate a Blake2b-256 hash of anchor data used in Cardano governance. For example, you might want to create an anchor data hash for constitutions, governance proposals, and other documents that are anchored to on-chain governance actions.
 
 anchor-data command example
 ```
