@@ -7,7 +7,7 @@ We can now use the command line to create a Cardano wallet and output all the fi
 
 There are currently 7 categories of commands that Bursa can run:
 
-1. [wallet](#wallet) &nbsp; - Commands for generating wallet and output all the files needed to manage a Cardano wallet
+1. [wallet](#wallet) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 2. [api](#api)  &emsp;&nbsp;&nbsp; - Commands for running API
 3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
 4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
