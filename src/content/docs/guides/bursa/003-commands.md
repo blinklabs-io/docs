@@ -70,7 +70,7 @@ The `op-cert` command can be used to generate an operational certificate, aka `n
 
 🔁 Output format is compatible with cardano-cli operational certificates.
 
-> Required inputs: <br>
+> **Required inputs:** <br>
 >   --kes-vkey &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
 >   --cold-skey &emsp; &nbsp; Pool cold signing key file (bech32 or hex format) <br>
 >   --counter &emsp; &nbsp; &nbsp; &nbsp;Certificate sequence number (must increment with each new cert) <br>
@@ -97,15 +97,15 @@ To create `node.cert` we can run the following command.
 ## Create Hashes for Metadata Files or Anchor Data
 We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
-> Hash types: <br>
-> metadata - Blake2b-256 hash of pool/DRep metadata JSON <br>
-> anchor-data - Blake2b-256 hash of anchor data (constitutions, governance proposals) 
+> **Hash types:**
+> - metadata - Blake2b-256 hash of pool/DRep metadata JSON <br>
+> - anchor-data - Blake2b-256 hash of anchor data (constitutions, governance proposals) 
 
 #### Metadata
 The hash metadata commands are used for pool and DRep metadata registration.
 The hash is calculated from the canonical JSON representation.
 
-Supported metadata types:
+**Supported metadata types:**
   - pool: Pool registration metadata
   - drep: DRep registration metadata
     
@@ -129,7 +129,7 @@ anchor-data command example
 ## Commands for Multi-Signature Operations
 Bursa can also be used to generate multi-signature script. The Bursa script command has 3 command types that you can run.
 
-> Script command types:
+> **Script command types:**
 >  - **create:** Creates a new multi-signature script
 >  - **validate:** Validates a script against signatures and slot
 >  - **address:** Generate mainnet address from script
@@ -167,7 +167,7 @@ Bursa can also be used to generate multi-signature script. The Bursa script comm
 ## Address
 Bursa can be used to generate Cardano wallet addresses from a payment verification key through the `build` command. Bursa can also be used to parse out addresses and display its components using `info`.
 
-> Bursa supports all CIP-0019 address types:
+> **Bursa supports all CIP-0019 address types:**
 > - Base addresses (payment + stake credentials)
 > - Enterprise addresses (payment only)
 > - Pointer addresses (payment + stake pointer)
@@ -216,7 +216,7 @@ Bursa can be used to derive individual keys from a mnemonic.
 
 > Keys are derived following Cardano CIP standards and output in bech32 format suitable for use with cardano-cli and other tools.
 > 
-> Derivation paths by key type:
+> **Derivation paths by key type:**
 > -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
 > -  CIP-1853: pool-cold (m/1853'/1815'/...)
 > -  CIP-1855: policy (m/1855'/1815'/...)
