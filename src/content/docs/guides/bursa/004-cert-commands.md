@@ -1,6 +1,6 @@
 ---
 title: Cert Command Line Guide
-description: Bursa Command Line Guide - Commands for generating various Cardano certificates.
+description: Bursa Command Line Guide for Generating Various Cardano Certificates.
 ---
 
 There are currently 7 categories of commands that Bursa can run which makes it a power tool for Cardano users.
