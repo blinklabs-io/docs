@@ -195,7 +195,7 @@ They are useful for simple payments without staking delegation.
 
 - Reward addresses (stake only)
 ```
-./bursa address build --stake-key stake_vk1... --network mainnet --type reward`
+./bursa address build --stake-key stake_vk1... --network mainnet --type reward
 ```
 
 #### Address Info
