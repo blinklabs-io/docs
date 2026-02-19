@@ -3,23 +3,26 @@ title: Command Line Guide
 description: Bursa Command Line Guide.
 ---
 
-We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation. Bursa can also be used to generate hashes, keys, including keys and certificates need to run a Cardano stake pool. 
+We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation. 
 
-There are currently 7 categories of commands that Bursa can run:
+Bursa can also be used to generate multi-signature scripts, hashes, keys, including keys and certificates need to run a Cardano stake pool. 
 
-1. [wallet](#wallet) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
-2. [api](#api)  &emsp;&nbsp;&nbsp; - Commands for running API
-3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
-4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-5. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
-6. [address](#address) - Commands for working with Cardano addresses
-7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+There are currently 7 categories of commands that Bursa can run which makes it a power tool for Cardano users.
+
+> **Bursa Command Categories**
+> 1. [wallet](#wallet) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
+> 2. [api](#api)  &emsp;&nbsp;&nbsp; - Commands for running API
+> 3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 5. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
+> 6. [address](#address) - Commands for working with Cardano addresses
+> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
 
 <a name="wallet"></a>
 
-## Use Command Line to Create Wallet and Output Wallet Files
+## Use Command Line to Create a Wallet and Output Wallet Files
 
 We can use the command line to create a wallet and output all the files we will need to manage our Cardano wallet.
 
