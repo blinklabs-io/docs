@@ -179,13 +179,13 @@ Bursa can be used to generate Cardano wallet addresses from a payment verificati
 > - Reward addresses (stake only)
 > - Byron/Bootstrap addresses (legacy) 
 
-## Address Build
-#### Base addresses (payment + stake credentials)
+#### Address Build
+- Base addresses (payment + stake credentials)
 ```
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
 ```
 
-#### Enterprise addresses (payment only)
+- Enterprise addresses (payment only)
 Enterprise addresses contain only a payment credential and no stake credential.
 They are useful for simple payments without staking delegation. 
 
@@ -193,21 +193,21 @@ They are useful for simple payments without staking delegation.
 ./bursa address build --payment-key addr_vk1... --network mainnet --type enterprise
 ```
 
-#### Reward addresses (stake only)
+- Reward addresses (stake only)
 ```
 ./bursa address build --stake-key stake_vk1... --network mainnet --type reward`
 ```
 
-## Address Info
+#### Address Info
 We can use the `address info` command to display information about a Cardano address. 
 Credentials are displayed in both bech32 and hex formats. 
 
-#### Base Address Example:
+- Base Address Example:
 ```
 ./bursa address info addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer...
   ```
 
-#### Stake Address Example:
+- Stake Address Example:
 ```
 ./bursa address info stake1uy9ggsc9qls4pu46g9...
 ```
