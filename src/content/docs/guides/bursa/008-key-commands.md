@@ -8,7 +8,7 @@ There are currently 7 categories of commands that Bursa can run which makes it a
 > **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
 > 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
 > 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 6. [address](../007-address-commands) - Commands for working with Cardano addresses
