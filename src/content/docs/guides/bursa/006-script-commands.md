@@ -12,8 +12,8 @@ There are currently 7 categories of commands that Bursa can run which makes it a
 > 3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
 > 4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
 > 5. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](#address) - Commands for working with Cardano addresses
-> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 6. [address](../07-address-commands) - Commands for working with Cardano addresses
+> 7. [key](../08-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
 
