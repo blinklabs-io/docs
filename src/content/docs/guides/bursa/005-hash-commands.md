@@ -1,7 +1,6 @@
-
 ---
-title: Command Line Guide
-description: Bursa Command Line Guide.
+title: Hash Command Line Guide
+description: Bursa Command Line Guide for Generating Cryptographic Hashes used in Cardano.
 ---
 
 There are currently 7 categories of commands that Bursa can run which makes it a power tool for Cardano users.
