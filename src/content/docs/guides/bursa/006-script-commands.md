@@ -1,4 +1,3 @@
-
 ---
 title: Script Command Line Guide
 description: Bursa Command Line Guide for Multi-Signature Operations.
