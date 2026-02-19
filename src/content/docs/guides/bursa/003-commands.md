@@ -202,12 +202,12 @@ They are useful for simple payments without staking delegation.
 We can use the `address info` command to display information about a Cardano address. 
 Credentials are displayed in both bech32 and hex formats. 
 
-Base Address Example:
+#### Base Address Example:
 ```
 ./bursa address info addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer...
   ```
 
-Stake Address Example:
+#### Stake Address Example:
 ```
 ./bursa address info stake1uy9ggsc9qls4pu46g9...
 ```
