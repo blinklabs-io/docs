@@ -112,15 +112,17 @@ The hash is calculated from the canonical JSON representation.
   - pool: Pool registration metadata
   - drep: DRep registration metadata
     
-pool metadata command example
+**Pool Metadata Command Example**
 ```
 ./bursa hash metadata pool-metadata.json
 ```
 
 #### Anchor Data
-The hash anchor-data commands are used to generate a Blake2b-256 hash of anchor data used in Cardano governance. For example, you might want to create an anchor data hash for constitutions, governance proposals, and other documents that are anchored to on-chain governance actions.
+The hash anchor-data commands are used to generate a Blake2b-256 hash of anchor data used in Cardano governance. 
 
-anchor-data command example
+For example, you might want to create an anchor data hash for constitutions, governance proposals, and other documents that are anchored to on-chain governance actions.
+
+**Anchor-Data Command Example**
 ```
 ./bursa hash anchor-data --file-text constitution.txt
 ```
