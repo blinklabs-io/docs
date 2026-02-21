@@ -33,10 +33,10 @@ The `op-cert` command can be used to generate an operational certificate, aka `n
 🔁 Output format is compatible with cardano-cli operational certificates.
 
 > **Required inputs:** <br>
->   --kes-vkey &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
->   --cold-skey &emsp; &nbsp; Pool cold signing key file (bech32 or hex format) <br>
->   --counter &emsp; &nbsp; &nbsp; &nbsp;Certificate sequence number (must increment with each new cert) <br>
->   --kes-period &emsp; KES period at certificate creation time
+>   `--kes-vkey` &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
+>   `--cold-skey` &emsp; &nbsp; Pool cold signing key file (bech32 or hex format) <br>
+>   `--counter` &emsp; &nbsp; &nbsp; &nbsp;Certificate sequence number (must increment with each new cert) <br>
+>   `--kes-period` &emsp; KES period at certificate creation time
 
 ✅ The counter value must be incremented each time a new operational certificate
 is created, if and only if, you minted a block with old KES key. The KES period is the current slot divided by the slots per KES
