@@ -172,6 +172,31 @@ Output format is a cardano-cli compatible JSON text envelope.
 
 ***
 
+<a name="drep-registration"></a>
+
+## Create a DRep Registration Certificate (Conway)
+
+This certificate registers a Delegated Representative (DRep) on-chain, which allows the DRep to receive vote delegations and participate in governance actions.
+
+A deposit amount in lovelace is required. An optional anchor URL and hash can be provided for DRep metadata.
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+**Register DRep with Anchor Metadata Example**
+
+> ⚠️ Please adjust path below.
+> 
+```
+./bursa cert drep-registration \
+    --drep-vkey /path/drep.vkey \
+    --deposit 500000000 \
+    --anchor-url https://example.com/drep.json \
+    --anchor-hash abc123... \
+    --out drep-reg.cert
+```
+
+***
+
 Explore other Bursa Commands
 
 > **Bursa Command Categories**
