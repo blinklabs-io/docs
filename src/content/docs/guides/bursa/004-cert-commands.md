@@ -61,16 +61,16 @@ To create `node.cert` we can run the following command.
 The pool registration certificate registers a new stake pool or updates an existing registration on the Cardano blockchain.
 
 > Required inputs:
-> -  --cold-vkey       Pool cold verification key file
-> -  --vrf-vkey        VRF verification key file
-> -  --pledge          Pledge amount in lovelace
-> -  --cost            Fixed cost per epoch in lovelace
-> -  --margin          Pool margin (0.0 to 1.0)
-> -  --reward-account  Reward account address (bech32 stake address)
+> -  `--cold-vkey`       Pool cold verification key file
+> -  `--vrf-vkey`        VRF verification key file
+> -  `--pledge`          Pledge amount in lovelace
+> -  `--cost`            Fixed cost per epoch in lovelace
+> -  `--margin`          Pool margin (0.0 to 1.0)
+> -  `--reward-account`  Reward account address (bech32 stake address)
 
 >Optional inputs:
-> -  --metadata-url    Pool metadata URL
-> -  --metadata-hash   Pool metadata hash (hex)
+> -  `--metadata-url`    Pool metadata URL
+> -  `--metadata-hash`   Pool metadata hash (hex)
 
 Output format is compatible with cardano-cli certificates.
 
@@ -93,8 +93,8 @@ Output format is compatible with cardano-cli certificates.
 The pool retirement certificate signals that a stake pool will retire at the specified epoch boundary.
 
 > Required inputs:
-> -  --cold-vkey  Pool cold verification key file
-> -  --epoch      Retirement epoch
+> -  `--cold-vkey`  Pool cold verification key file
+> -  `--epoch`      Retirement epoch
 
 Output format is compatible with cardano-cli certificates.
 
