@@ -172,7 +172,7 @@ Output format is a cardano-cli compatible JSON text envelope.
 **Register DRep with Anchor Metadata Example**
 
 > ⚠️ Please adjust path below.
-> 
+
 ```
 ./bursa cert drep-registration \
     --drep-vkey /path/drep.vkey \
@@ -181,6 +181,63 @@ Output format is a cardano-cli compatible JSON text envelope.
     --anchor-hash abc123... \
     --out drep-reg.cert
 ```
+
+***
+
+<a name="drep-deregistration"></a>
+
+## Create a DRep Deregistration Certificate (Conway)
+
+This certificate deregisters a DRep from on-chain governance, returning the deposit refund amount.
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa cert drep-deregistration \
+    --drep-vkey /path/drep.vkey \
+    --deposit-refund 500000000 \
+    --out drep-dereg.cert
+```
+
+***
+
+<a name="vote-delegation"></a>
+
+## Create a Vote Delegation Certificate (Conway)
+
+This certificate delegates voting power from a stake key to a DRep, or to special voting options (always-abstain or always-no-confidence).
+
+<table>
+  <tr>
+    <th colspan="2" align="left">Exactly one delegation target must be specified:</th>
+  </tr>
+<tr>
+    <td>--drep-vkey-hash</td>
+    <td>Delegate to a DRep by key hash (hex)</td>
+</tr>
+<tr>
+    <td>--drep-id</td>
+    <td>Delegate to a DRep by ID (bech32 or hex)</td>
+</tr>
+<tr>
+    <td>--always-abstain</td>
+    <td>Always abstain from voting</td>
+</tr>
+<tr>
+    <td>--always-no-confidence</td>
+    <td>Always vote no confidence</td>
+</tr>
+</table>
+
+Exactly one delegation target must be specified:
+-  --drep-vkey-hash  &emsp; &emsp;&emsp; - Delegate to a DRep by key hash (hex)
+-  --drep-id &emsp; &emsp; &emsp;&emsp;&emsp;&emsp;&nbsp; - Delegate to a DRep by ID (bech32 or hex)
+-  --always-abstain &emsp; &emsp;&emsp;&nbsp; - Always abstain from voting
+-  --always-no-confidence &nbsp; - Always vote no confidence
+
+Output format is a cardano-cli compatible JSON text envelope.
 
 ***
 
