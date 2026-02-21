@@ -59,6 +59,6 @@ Explore other Bursa Commands
 > 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
 > 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 6. [address](#address) - Commands for working with Cardano addresses
-> 7. [key](../08-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
