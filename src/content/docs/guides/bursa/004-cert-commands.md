@@ -59,19 +59,19 @@ Output format of `node.cert` is compatible with cardano-cli operational certific
 
 To create `node.cert` we can run the following command.
 
-> ⚠️ Please adjust the paths to your kes and cold keys. Also please adjust your counter and kes period below.
+> ⚠️ Please adjust the paths to your kes and cold key. Also please adjust your counter and kes period below.
 
 ```
 ./bursa cert opcert --kes-vkey /path/kes.vkey --cold-skey /path/cold.skey --counter 0 --kes-period 200 --out node.cert
 ```
 
 ***
+
 <a name="pool-registration"></a>
 
 ## Generate a Pool Registration Certificate
 
-The pool registration certificate registers a new stake pool or
-updates an existing registration on the Cardano blockchain.
+The pool registration certificate registers a new stake pool or updates an existing registration on the Cardano blockchain.
 
 > Required inputs:
 > -  --cold-vkey       Pool cold verification key file
@@ -96,4 +96,40 @@ Output format is compatible with cardano-cli certificates.
     --reward-account stake1... \
     --metadata-url "https://example.com/pool.json" \
     --metadata-hash "abc123..." --out pool-reg.cert
+```
+
+***
+
+<a name="pool-retirement"></a>
+
+## Generate a Pool Retirement Certificate
+The pool retirement certificate signals that a stake pool will retire at the specified epoch boundary.
+
+> Required inputs:
+> -  --cold-vkey  Pool cold verification key file
+> -  --epoch      Retirement epoch
+
+Output format is compatible with cardano-cli certificates.
+
+> ⚠️ Please adjust the paths to your cold key.
+```
+./bursa cert pool-retirement --cold-vkey /path/cold.vkey \
+    --epoch 300 --out pool-retire.cert
+```
+
+***
+
+<a name="stake-registration"></a>
+
+## Create a Stake Address Registration Certificate
+
+This certificate registers a stake address on-chain, which is required before the stake key can be used for delegation or reward withdrawal.
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust path below.
+> 
+```
+./bursa cert stake-registration \
+    --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
