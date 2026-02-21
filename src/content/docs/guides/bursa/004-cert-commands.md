@@ -5,22 +5,56 @@ description: Bursa Command Line Guide for Generating Various Cardano Certificate
 
 <a name="cert"></a>
 ## Using Bursa to Create Certificates
-These Bursa commands create certificates for stake pool operations,
-stake delegation, and Conway era governance.
+These Bursa commands create certificates for stake pool operations, stake delegation, and Conway era governance.
 
-
-Certificate types:
-- [op-cert](#op) &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; - Operational certificate for block production
-- [pool-registration](#pool-registration) &emsp;&emsp;&nbsp; - Pool registration certificate
-- [pool-retirement](#pool-retirement) &emsp;&emsp;&nbsp;&nbsp;&nbsp; - Pool retirement certificate
-- [stake-registration](#stake-registration) &emsp;&emsp;&nbsp; - Stake address registration
-- [stake-deregistration](#stake-deregistration) &emsp; - Stake address deregistration
-- [stake-delegation](#stake-delegation) &emsp;&emsp;&nbsp;&nbsp; - Stake delegation to a pool
-- [drep-registration](#drep-registration) &emsp;&emsp;&nbsp;&nbsp; - DRep registration (Conway)
-- [drep-deregistration](#drep-deregistration) &emsp;&nbsp;&nbsp; - DRep deregistration (Conway)
-- [vote-delegation](#vote-delegation) &emsp;&emsp;&emsp;&nbsp; - Vote delegation (Conway)
-- [committee-hot-auth](#committee-hot-auth) &emsp;&nbsp; - Committee hot key auth (Conway)
-- [committee-cold-resign](#committee-cold-resign) &nbsp; - Committee cold key resign (Conway)
+<table>
+  <tr>
+    <th colspan="2" align="left">Certificate types:</th>
+  </tr>
+<tr>
+    <td><a href="#op">op-cert</a></td>
+    <td>- Operational certificate for block production</td>
+</tr>
+<tr>
+    <td><a href="#pool-registration">pool-registration</a></td>
+    <td>- Pool registration certificate</td>
+</tr>
+<tr>
+    <td><a href="#pool-retirement">pool-retirement</a></td>
+    <td>- Pool retirement certificate</td>
+</tr>
+<tr>
+    <td><a href="#stake-registration">stake-registration</a></td>
+    <td>- Stake address registration</td>
+<tr>
+    <td><a href="#stake-deregistration">stake-deregistration</a></td>
+    <td>- Stake address deregistration</td>
+</tr>
+<tr>
+    <td><a href="#stake-delegation">stake-delegation</a></td>
+    <td>- Stake delegation to a pool</td>
+</tr>
+<tr>
+    <td><a href="#drep-registration">drep-registration</a></td>
+    <td>- DRep registration (Conway)</td>
+</tr>
+<tr>
+    <td><a href="#drep-deregistration">drep-deregistration</a></td>
+    <td>- DRep deregistration (Conway)</td>
+</tr>
+<tr>
+    <td><a href="#vote-delegation">vote-delegation</a></td>
+    <td>- Vote delegation (Conway)</td>
+</tr>
+<tr>
+    <td><a href="#committee-hot-auth">committee-hot-auth</a></td>
+    <td>- Committee hot key auth (Conway)</td>
+</tr>
+<tr>
+    <td><a href="#committee-cold-resign">committee-cold-resign</a></td>
+    <td>- Committee cold key resign (Conway)</td>
+</tr>
+</table>
 
 ***
 <a name="op"></a>
