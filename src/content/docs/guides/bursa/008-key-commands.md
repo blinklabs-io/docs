@@ -3,19 +3,6 @@ title: Key Command Line Guide
 description: Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 ---
 
-There are currently 7 categories of commands that Bursa can run which makes it a power tool for Cardano users.
-
-> **Bursa Command Categories**
-> 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
-> 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
-> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-
-***
-
 <a name="key"></a>
 
 ## Create Keys
@@ -89,5 +76,18 @@ Bursa can be used to derive individual keys from a mnemonic.
 ```
 ./bursa key committee-hot --mnemonic "word1 word2 ..."
 ``` 
+
+***
+
+Explore other Bursa Commands
+
+> **Bursa Command Categories**
+> 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
+> 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
+> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
+> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
+> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
