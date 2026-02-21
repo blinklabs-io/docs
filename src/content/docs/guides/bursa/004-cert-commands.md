@@ -87,9 +87,11 @@ updates an existing registration on the Cardano blockchain.
 
 Output format is compatible with cardano-cli certificates.
 
+> ⚠️ Please adjust paths below.
+
 ```
 ./bursa cert pool-registration \
-    --cold-vkey cold.vkey --vrf-vkey vrf.vkey \
+    --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
     --pledge 1000000000 --cost 340000000 --margin 0.01 \
     --reward-account stake1... \
     --metadata-url "https://example.com/pool.json" \
