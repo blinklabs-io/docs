@@ -128,8 +128,59 @@ This certificate registers a stake address on-chain, which is required before th
 Output format is a cardano-cli compatible JSON text envelope.
 
 > ⚠️ Please adjust path below.
-> 
+
 ```
 ./bursa cert stake-registration \
     --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
+
+***
+
+<a name="stake-deregistration"></a>
+
+## Create a Stake Address Deregistration Certificate
+
+This certificate deregisters a stake address, returning the deposit and removing the stake key from on-chain registration.
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust path below.
+
+```
+ ./bursa cert stake-deregistration \
+    --stake-vkey /path/stake.vkey --out stake-dereg.cert
+```
+
+***
+
+<a name="stake-delegation"></a>
+
+## Create a Stake Delegation Certificate
+
+This certificate delegates stake from a stake key to a specific stake pool identified by its pool ID (bech32 or hex format).
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa cert stake-delegation \
+    --stake-vkey /path/stake.vkey \
+    --pool-id pool1... \
+    --out stake-deleg.cert
+```
+
+***
+
+Explore other Bursa Commands
+
+> **Bursa Command Categories**
+> 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
+> 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
+> 3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 5. [script](../06-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
+> 6. [address](../07-address-commands) - Commands for working with Cardano addresses
+> 7. [key](../08-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+
+***
