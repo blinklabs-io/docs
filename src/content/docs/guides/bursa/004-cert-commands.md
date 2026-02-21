@@ -23,20 +23,20 @@ stake delegation, and Conway era governance.
 
 
 Certificate types:
-- op-cert &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; - Operational certificate for block production
-- pool-registration &emsp;&emsp;&nbsp; - Pool registration certificate
-- pool-retirement &emsp;&emsp;&nbsp;&nbsp;&nbsp; - Pool retirement certificate
-- stake-registration &emsp;&emsp;&nbsp; - Stake address registration
-- stake-deregistration &emsp; - Stake address deregistration
-- stake-delegation &emsp;&emsp;&nbsp;&nbsp; - Stake delegation to a pool
-- drep-registration &emsp;&emsp;&nbsp;&nbsp; - DRep registration (Conway)
-- drep-deregistration &emsp;&nbsp;&nbsp; - DRep deregistration (Conway)
-- vote-delegation &emsp;&emsp;&emsp;&nbsp; - Vote delegation (Conway)
-- committee-hot-auth &emsp;&nbsp; - Committee hot key auth (Conway)
-- committee-cold-resign &nbsp; - Committee cold key resign (Conway)
+- [op-cert](#op) &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; - Operational certificate for block production
+- [pool-registration](#pool-registration) &emsp;&emsp;&nbsp; - Pool registration certificate
+- [pool-retirement](#pool-retirement) &emsp;&emsp;&nbsp;&nbsp;&nbsp; - Pool retirement certificate
+- [stake-registration](#stake-registration) &emsp;&emsp;&nbsp; - Stake address registration
+- [stake-deregistration](#stake-deregistration) &emsp; - Stake address deregistration
+- [stake-delegation](#stake-delegation) &emsp;&emsp;&nbsp;&nbsp; - Stake delegation to a pool
+- [drep-registration](#drep-registration) &emsp;&emsp;&nbsp;&nbsp; - DRep registration (Conway)
+- [drep-deregistration](#drep-deregistration) &emsp;&nbsp;&nbsp; - DRep deregistration (Conway)
+- [vote-delegation](#vote-delegation) &emsp;&emsp;&emsp;&nbsp; - Vote delegation (Conway)
+- [committee-hot-auth](#committee-hot-auth) &emsp;&nbsp; - Committee hot key auth (Conway)
+- [committee-cold-resign](#committee-cold-resign) &nbsp; - Committee cold key resign (Conway)
 
 ***
-
+<a name="op"></a>
 ## Create Certificates for Stake Pool Operation
 Bursa can be used to create certificates for stake pool operations, stake delegation, and Conway era governance.
 
