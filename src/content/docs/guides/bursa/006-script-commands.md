@@ -49,7 +49,7 @@ Bursa can also be used to generate multi-signature script. The Bursa script comm
 > 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
 > 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
 > 5. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](../07-address-commands) - Commands for working with Cardano addresses
-> 7. [key](../08-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
+> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
