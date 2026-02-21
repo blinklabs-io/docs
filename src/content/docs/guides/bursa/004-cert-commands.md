@@ -37,6 +37,7 @@ Certificate types:
 
 ***
 <a name="op"></a>
+
 ## Create Certificates for Stake Pool Operation
 Bursa can be used to create certificates for stake pool operations, stake delegation, and Conway era governance.
 
@@ -65,4 +66,32 @@ To create `node.cert` we can run the following command.
 ```
 
 ***
+<a name="pool-registration"></a>
 
+## Generate a Pool Registration Certificate
+
+The pool registration certificate registers a new stake pool or
+updates an existing registration on the Cardano blockchain.
+
+> Required inputs:
+> -  --cold-vkey       Pool cold verification key file
+> -  --vrf-vkey        VRF verification key file
+> -  --pledge          Pledge amount in lovelace
+> -  --cost            Fixed cost per epoch in lovelace
+> -  --margin          Pool margin (0.0 to 1.0)
+> -  --reward-account  Reward account address (bech32 stake address)
+
+>Optional inputs:
+> -  --metadata-url    Pool metadata URL
+> -  --metadata-hash   Pool metadata hash (hex)
+
+Output format is compatible with cardano-cli certificates.
+
+```
+./bursa cert pool-registration \
+    --cold-vkey cold.vkey --vrf-vkey vrf.vkey \
+    --pledge 1000000000 --cost 340000000 --margin 0.01 \
+    --reward-account stake1... \
+    --metadata-url "https://example.com/pool.json" \
+    --metadata-hash "abc123..." --out pool-reg.cert
+```
