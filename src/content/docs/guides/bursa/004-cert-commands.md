@@ -231,13 +231,25 @@ This certificate delegates voting power from a stake key to a DRep, or to specia
 </tr>
 </table>
 
-Exactly one delegation target must be specified:
--  --drep-vkey-hash  &emsp; &emsp;&emsp; - Delegate to a DRep by key hash (hex)
--  --drep-id &emsp; &emsp; &emsp;&emsp;&emsp;&emsp;&nbsp; - Delegate to a DRep by ID (bech32 or hex)
--  --always-abstain &emsp; &emsp;&emsp;&nbsp; - Always abstain from voting
--  --always-no-confidence &nbsp; - Always vote no confidence
-
 Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust path below.
+
+#### Delegate to a specific DRep
+```
+  ./bursa cert vote-delegation \
+    --stake-vkey /path/stake.vkey \
+    --drep-id drep1... \
+    --out vote-deleg.cert
+```
+
+#### Always abstain
+```
+  ./bursa cert vote-delegation \
+    --stake-vkey /path/stake.vkey \
+    --always-abstain \
+    --out vote-deleg.cert
+```
 
 ***
 
