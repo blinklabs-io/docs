@@ -17,6 +17,25 @@ There are currently 7 categories of commands that Bursa can run which makes it a
 ***
 
 <a name="cert"></a>
+## Using Bursa to Create Certificates
+These Bursa commands create certificates for stake pool operations,
+stake delegation, and Conway era governance.
+
+
+Certificate types:
+- op-cert &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; - Operational certificate for block production
+- pool-registration &emsp;&emsp;&nbsp; - Pool registration certificate
+- pool-retirement &emsp;&emsp;&nbsp;&nbsp;&nbsp; - Pool retirement certificate
+- stake-registration &emsp;&emsp;&nbsp; - Stake address registration
+- stake-deregistration &emsp; - Stake address deregistration
+- stake-delegation &emsp;&emsp;&nbsp;&nbsp; - Stake delegation to a pool
+- drep-registration &emsp;&emsp;&nbsp;&nbsp; - DRep registration (Conway)
+- drep-deregistration &emsp;&nbsp;&nbsp; - DRep deregistration (Conway)
+- vote-delegation &emsp;&emsp;&emsp;&nbsp; - Vote delegation (Conway)
+- committee-hot-auth &emsp;&nbsp; - Committee hot key auth (Conway)
+- committee-cold-resign &nbsp; - Committee cold key resign (Conway)
+
+***
 
 ## Create Certificates for Stake Pool Operation
 Bursa can be used to create certificates for stake pool operations, stake delegation, and Conway era governance.
