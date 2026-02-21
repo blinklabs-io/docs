@@ -253,6 +253,53 @@ Output format is a cardano-cli compatible JSON text envelope.
 
 ***
 
+<a name="committee-hot-auth"></a>
+
+## Create a Committee Hot Key Authorization Certificate (Conway)
+
+This certificate authorizes a hot key to act on behalf of a committee cold key for governance voting. The cold key remains offline while the hot key participates in governance.
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust paths below.
+
+```
+./bursa cert committee-hot-auth \
+    --cold-vkey /path/cc-cold.vkey \
+    --hot-vkey /path/cc-hot.vkey \
+    --out cc-hot-auth.cert
+```
+
+***
+
+<a name="committee-cold-resign"></a>
+
+## Create a Committee Cold Key Resignation Certificate (Conway)
+
+This certificate resigns a committee member by their cold key. An optional anchor URL and hash can be provided to reference a rationale document.
+
+Output format is a cardano-cli compatible JSON text envelope.
+
+> ⚠️ Please adjust paths below.
+
+#### Resign Without Anchor
+```
+  ./bursa cert committee-cold-resign \
+    --cold-vkey /path/cc-cold.vkey \
+    --out cc-resign.cert
+```
+
+#### Resign with Anchor Rationale
+```  
+  ./bursa cert committee-cold-resign \
+    --cold-vkey /path/cc-cold.vkey \
+    --anchor-url https://example.com/resign.json \
+    --anchor-hash abc123... \
+    --out cc-resign.cert
+```
+
+***
+
 Explore other Bursa Commands
 
 > **Bursa Command Categories**
