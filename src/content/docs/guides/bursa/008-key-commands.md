@@ -43,6 +43,8 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 ./bursa key root --signing-key-file /path/root.skey
 ```
 
+***
+
 #### Account Key
 The account key follows CIP-1852 path: m/1852'/1815'/account'  
 Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specified.
@@ -51,6 +53,8 @@ Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specif
 ./bursa key account --mnemonic "word1 word2 ..." --index 0
 ```
 
+***
+
 #### Payment Key
 The payment key follows CIP-1852 path: m/1852'/1815'/account'/0/index  
 Output is in bech32 format (addr_xsk prefix) unless key files are specified.
@@ -58,12 +62,16 @@ Output is in bech32 format (addr_xsk prefix) unless key files are specified.
 ./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
+***
+
 #### Stake Key
 The stake key follows CIP-1852 path: m/1852'/1815'/account'/2/index  
 Output is in bech32 format (stake_xsk prefix) unless key files are specified.
 ```
 ./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
+
+***
 
 #### Pool Cold Key
 The pool cold key follows CIP-1853 path: m/1853'/1815'/0'/index'  
@@ -73,6 +81,8 @@ Output is in bech32 format (pool_xsk prefix) unless key files are specified.
 ./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
 ```
 
+***
+
 #### Policy Key
 The policy key follows CIP-1855 path: m/1855'/1815'/policy_ix'  
 These keys are used for native asset minting/burning policies.  
@@ -80,6 +90,8 @@ Output is in bech32 format (policy_xsk prefix) unless key files are specified.
 ```
 ./bursa key policy --mnemonic "word1 word2 ..." --index 0
 ```
+
+***
 
 #### Calidus Key
 The Calidus key is the SPO on-chain authentication hot key defined by  
@@ -103,25 +115,35 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 ./bursa key calidus --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
 ```
 
+***
+
 #### VRF Key Pair
 ```
 ./bursa key vrf --mnemonic "word1 word2 ... word24"
 ```
+
+***
 
 #### KES Key Pair
 ```
 ./bursa key kes --mnemonic "word1 word2 ... word24"
 ```
 
+***
+
 #### drep Key
 ```
 ./bursa key drep --mnemonic "word1 word2 ..."
 ```
 
+***
+
 #### Constitutional Committee Cold Key
 ```
 ./bursa key committee-cold --mnemonic "word1 word2 ..."
 ```
+
+***
 
 #### Constitutional Committee Hot Key
 ```
