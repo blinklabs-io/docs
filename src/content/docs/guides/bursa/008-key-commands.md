@@ -118,6 +118,9 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 ***
 
 #### VRF Key Pair
+VRF keys are used by stake pool operators for leader election in the Praos consensus protocol. The seed is derived deterministically from the mnemonic, allowing for key recovery.
+
+Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech32 format unless key files are specified.
 ```
 ./bursa key vrf --mnemonic "word1 word2 ... word24"
 ```
