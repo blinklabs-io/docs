@@ -4,8 +4,11 @@ description: Bursa Command Line Guide for Generating Various Cardano Certificate
 ---
 
 <a name="cert"></a>
+
+Bursa can be used to create certificates for stake pool operations, stake delegation, and Conway era governance.
+
 ## Using Bursa to Create Certificates
-These Bursa commands create certificates for stake pool operations, stake delegation, and Conway era governance.
+These Bursa commands can be used for generating various Cardano certificates.
 
 <table>
   <tr>
@@ -60,7 +63,6 @@ These Bursa commands create certificates for stake pool operations, stake delega
 <a name="op"></a>
 
 ## Create Certificates for Stake Pool Operation
-Bursa can be used to create certificates for stake pool operations, stake delegation, and Conway era governance.
 
 The `op-cert` command can be used to generate an operational certificate, aka `node.cert`, linking a KES key to a pool cold key. Stake Pools need to create a new node.cert when rotating their KES key. So SPOs can use Bursa to create a new `node.cert` with their new kes.vkey, cold key and kes period.
 
