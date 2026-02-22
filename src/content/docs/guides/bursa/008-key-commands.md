@@ -66,13 +66,19 @@ Output is in bech32 format (stake_xsk prefix) unless key files are specified.
 ```
 
 #### Pool Cold Key
+The pool cold key follows CIP-1853 path: m/1853'/1815'/0'/index'  
+These keys are used as the long-term identity keys for stake pool operators.  
+Output is in bech32 format (pool_xsk prefix) unless key files are specified.
 ```
-./bursa key pool-cold --mnemonic "word1 word2 ..."
+./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
 ```
 
 #### Policy Key
+The policy key follows CIP-1855 path: m/1855'/1815'/policy_ix'  
+These keys are used for native asset minting/burning policies.  
+Output is in bech32 format (policy_xsk prefix) unless key files are specified.
 ```
-./bursa key policy --mnemonic "word1 word2 ..."
+./bursa key policy --mnemonic "word1 word2 ..." --index 0
 ```
 
 #### Calidus Key
