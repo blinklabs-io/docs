@@ -44,18 +44,25 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 ```
 
 #### Account Key
+The account key follows CIP-1852 path: m/1852'/1815'/account'  
+Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specified.
+
 ```
 ./bursa key account --mnemonic "word1 word2 ..." --index 0
 ```
 
 #### Payment Key
+The payment key follows CIP-1852 path: m/1852'/1815'/account'/0/index  
+Output is in bech32 format (addr_xsk prefix) unless key files are specified.
 ```
-./bursa key payment --mnemonic "word1 word2 ..."
+./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
 #### Stake Key
+The stake key follows CIP-1852 path: m/1852'/1815'/account'/2/index  
+Output is in bech32 format (stake_xsk prefix) unless key files are specified.
 ```
-./bursa key stake --mnemonic "word1 word2 ..."
+./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
 #### Pool Cold Key
