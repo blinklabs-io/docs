@@ -35,7 +35,10 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 ./bursa key root --mnemonic "word1 word2 ..."
 ```
 
-**Signing Key Example:**
+**Root Key with Signing Key File Example:**
+
+> ⚠️ Please adjust path below.
+
 ```
 ./bursa key root --signing-key-file /path/root.skey
 ```
