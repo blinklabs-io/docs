@@ -10,6 +10,13 @@ Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 ## Create Keys
 Bursa can be used to derive individual keys from a mnemonic. 
 
+**The mnemonic can be provided via:**
+  1. --mnemonic flag
+  2. MNEMONIC environment variable
+  3. --mnemonic-file flag
+  4. Default file "seed.txt"
+<br>
+
 > Keys are derived following Cardano CIP standards and output in bech32 format suitable for use with cardano-cli and other tools.
 > 
 > **Derivation paths by key type:**
@@ -19,9 +26,18 @@ Bursa can be used to derive individual keys from a mnemonic.
 > -  CIP-0105: drep, committee-cold, committee-hot (m/1852'/1815'/account'/role/...)
 > -  CIP-88/151: calidus (m/1852'/1815'/account'/0/index, SPO authentication)
 
+***
+
 #### Root Key
+The root key is the master key from which all other keys are derived.  
+Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specified.
 ```
 ./bursa key root --mnemonic "word1 word2 ..."
+```
+
+**Signing Key Example:**
+```
+./bursa key root --signing-key-file /path/root.skey
 ```
 
 #### Account Key
