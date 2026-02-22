@@ -82,8 +82,25 @@ Output is in bech32 format (policy_xsk prefix) unless key files are specified.
 ```
 
 #### Calidus Key
+The Calidus key is the SPO on-chain authentication hot key defined by  
+CIP-88/CIP-151. It uses the same derivation path as the payment key:  
+m/1852'/1815'/account'/0/index  
+
+The key is functionally identical to the payment key but uses different  
+bech32 prefixes (calidus_xsk/calidus_xvk) and different cardano-cli  
+text envelope types for SPO identity purposes.  
+
+Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 ```
-./bursa key calidus --mnemonic "word1 word2 ..."
+./bursa key calidus --mnemonic "word1 word2 ..." --account-index 0 --index 0
+```
+
+**Calidus Key with Key Files Example**
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa key calidus --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
 ```
 
 #### VRF Key Pair
