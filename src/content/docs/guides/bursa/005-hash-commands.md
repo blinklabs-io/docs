@@ -5,6 +5,8 @@ description: Bursa Command Line Guide for Generating Cryptographic Hashes used i
 
 <a name="hash"></a>
 
+Bursa Command Line Guide for Generating Cryptographic Hashes used in Cardano.
+
 ## Create Hashes for Metadata Files or Anchor Data
 We can use Bursa to create hashes for metadata or anchor-data, often used in Cardano Governance or in Stake Pool Operation.
 
