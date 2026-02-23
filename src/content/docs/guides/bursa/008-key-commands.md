@@ -94,13 +94,10 @@ Output is in bech32 format (policy_xsk prefix) unless key files are specified.
 ***
 
 #### Calidus Key
-The Calidus key is the SPO on-chain authentication hot key defined by  
-CIP-88/CIP-151. It uses the same derivation path as the payment key:  
+The Calidus key is the SPO on-chain authentication hot key defined by CIP-88/CIP-151. It uses the same derivation path as the payment key:  
 m/1852'/1815'/account'/0/index  
 
-The key is functionally identical to the payment key but uses different  
-bech32 prefixes (calidus_xsk/calidus_xvk) and different cardano-cli  
-text envelope types for SPO identity purposes.  
+The key is functionally identical to the payment key but uses different bech32 prefixes (calidus_xsk/calidus_xvk) and different cardano-cli text envelope types for SPO identity purposes.  
 
 Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 ```
@@ -117,19 +114,50 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 
 ***
 
-#### VRF Key Pair
+#### VRF (Verifiable Random Function) Key Pair
 VRF keys are used by stake pool operators for leader election in the Praos consensus protocol. The seed is derived deterministically from the mnemonic, allowing for key recovery.
 
 Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech32 format unless key files are specified.
+
 ```
 ./bursa key vrf --mnemonic "word1 word2 ... word24"
+```
+
+```
+./bursa key vrf --mnemonic "word1 word2 ..." --index 0
+```
+
+**VRF with Key Files Example**
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa key vrf --signing-key-file vrf.skey --verification-key-file vrf.vkey
 ```
 
 ***
 
 #### KES Key Pair
+KES keys are used by stake pool operators for block signing in the Praos consensus protocol. KES provides forward-secure signatures where compromising the current key does not compromise past signatures.  
+
+This implementation uses Cardano's depth 6, providing 64 time periods.  
+The seed is derived deterministically from the mnemonic, allowing for key recovery.  
+
+Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_vk, 32 bytes) in bech32 format unless key files are specified.
 ```
 ./bursa key kes --mnemonic "word1 word2 ... word24"
+```
+
+```
+./bursa key kes --mnemonic "word1 word2 ..." --index 0
+```
+
+**KES Key with Key Files Example**
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa key kes --signing-key-file kes.skey --verification-key-file kes.vkey
 ```
 
 ***
