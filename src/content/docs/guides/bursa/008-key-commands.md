@@ -120,10 +120,6 @@ VRF keys are used by stake pool operators for leader election in the Praos conse
 Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech32 format unless key files are specified.
 
 ```
-./bursa key vrf --mnemonic "word1 word2 ... word24"
-```
-
-```
 ./bursa key vrf --mnemonic "word1 word2 ..." --index 0
 ```
 
@@ -144,9 +140,6 @@ This implementation uses Cardano's depth 6, providing 64 time periods.
 The seed is derived deterministically from the mnemonic, allowing for key recovery.  
 
 Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_vk, 32 bytes) in bech32 format unless key files are specified.
-```
-./bursa key kes --mnemonic "word1 word2 ... word24"
-```
 
 ```
 ./bursa key kes --mnemonic "word1 word2 ..." --index 0
