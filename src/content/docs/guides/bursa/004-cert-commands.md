@@ -29,6 +29,7 @@ These Bursa commands can be used for generating various Cardano certificates.
 <tr>
     <td><a href="#stake-registration">stake-registration</a></td>
     <td>- Stake address registration</td>
+</tr>
 <tr>
     <td><a href="#stake-deregistration">stake-deregistration</a></td>
     <td>- Stake address deregistration</td>
