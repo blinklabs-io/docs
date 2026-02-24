@@ -201,7 +201,7 @@ Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_v
 
 <a name="drep"></a>
 
-#### drep Key
+#### DRep Key
 The DRep key follows CIP-0105 path: m/1852'/1815'/account'/3/index  
 These keys are used for governance participation as a Delegated Representative.  
 Output is in bech32 format (drep_xsk prefix) unless key files are specified.  
