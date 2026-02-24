@@ -128,7 +128,7 @@ Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech3
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key vrf --signing-key-file vrf.skey --verification-key-file vrf.vkey
+./bursa key vrf --signing-key-file /paht/vrf.skey --verification-key-file /path/vrf.vkey
 ```
 
 ***
@@ -150,29 +150,65 @@ Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_v
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key kes --signing-key-file kes.skey --verification-key-file kes.vkey
+./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
 
 ***
 
 #### drep Key
+The DRep key follows CIP-0105 path: m/1852'/1815'/account'/3/index  
+These keys are used for governance participation as a Delegated Representative.  
+Output is in bech32 format (drep_xsk prefix) unless key files are specified.  
+
 ```
-./bursa key drep --mnemonic "word1 word2 ..."
+./bursa key drep --mnemonic "word1 word2 ..." --account-index 0 --index 0
+```
+
+**DRep Key with Key Files Example**
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa key drep --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
 ```
 
 ***
 
 #### Constitutional Committee Cold Key
+The committee cold key follows CIP-0105 path: m/1852'/1815'/account'/4/index  
+These keys are used for Constitutional Committee membership (long-term identity).  
+Output is in bech32 format (cc_cold_xsk prefix) unless key files are specified.  
+
 ```
-./bursa key committee-cold --mnemonic "word1 word2 ..."
+./bursa key committee-cold --mnemonic "word1 word2 ..." --account-index 0 --index 0
+```
+
+**Consititutional Committee Cold Key with Key Files Example**
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa key committee-cold --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
 ```
 
 ***
 
 #### Constitutional Committee Hot Key
+The committee hot key follows CIP-0105 path: m/1852'/1815'/account'/5/index  
+These keys are used for Constitutional Committee voting (operational key).  
+Output is in bech32 format (cc_hot_xsk prefix) unless key files are specified.  
+
 ```
-./bursa key committee-hot --mnemonic "word1 word2 ..."
-``` 
+./bursa key committee-hot --mnemonic "word1 word2 ..." --account-index 0 --index 0
+```
+
+**Consititutional Committee Cold Key with Key Files Example**
+
+> ⚠️ Please adjust path below.
+
+```
+./bursa key committee-hot --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
+```
 
 ***
 
