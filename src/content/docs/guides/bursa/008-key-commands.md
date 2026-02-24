@@ -77,7 +77,7 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 
 #### Account Key
 The account key follows CIP-1852 path: m/1852'/1815'/account'  
-Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specified.
+Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specified.  
 
 ```
 ./bursa key account --mnemonic "word1 word2 ..." --index 0
@@ -89,7 +89,7 @@ Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specif
 
 #### Payment Key
 The payment key follows CIP-1852 path: m/1852'/1815'/account'/0/index  
-Output is in bech32 format (addr_xsk prefix) unless key files are specified.
+Output is in bech32 format (addr_xsk prefix) unless key files are specified.  
 ```
 ./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
@@ -100,7 +100,7 @@ Output is in bech32 format (addr_xsk prefix) unless key files are specified.
 
 #### Stake Key
 The stake key follows CIP-1852 path: m/1852'/1815'/account'/2/index  
-Output is in bech32 format (stake_xsk prefix) unless key files are specified.
+Output is in bech32 format (stake_xsk prefix) unless key files are specified.  
 ```
 ./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
@@ -112,7 +112,7 @@ Output is in bech32 format (stake_xsk prefix) unless key files are specified.
 #### Pool Cold Key
 The pool cold key follows CIP-1853 path: m/1853'/1815'/0'/index'  
 These keys are used as the long-term identity keys for stake pool operators.  
-Output is in bech32 format (pool_xsk prefix) unless key files are specified.
+Output is in bech32 format (pool_xsk prefix) unless key files are specified.  
 ```
 ./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
 ```
@@ -124,7 +124,7 @@ Output is in bech32 format (pool_xsk prefix) unless key files are specified.
 #### Policy Key
 The policy key follows CIP-1855 path: m/1855'/1815'/policy_ix'  
 These keys are used for native asset minting/burning policies.  
-Output is in bech32 format (policy_xsk prefix) unless key files are specified.
+Output is in bech32 format (policy_xsk prefix) unless key files are specified.  
 ```
 ./bursa key policy --mnemonic "word1 word2 ..." --index 0
 ```
@@ -139,7 +139,8 @@ m/1852'/1815'/account'/0/index
 
 The key is functionally identical to the payment key but uses different bech32 prefixes (calidus_xsk/calidus_xvk) and different cardano-cli text envelope types for SPO identity purposes.  
 
-Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
+Output is in bech32 format (calidus_xsk prefix) unless key files are specified.  
+
 ```
 ./bursa key calidus --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
@@ -159,7 +160,7 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 #### VRF (Verifiable Random Function) Key Pair
 VRF keys are used by stake pool operators for leader election in the Praos consensus protocol. The seed is derived deterministically from the mnemonic, allowing for key recovery.
 
-Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech32 format unless key files are specified.
+Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech32 format unless key files are specified.  
 
 ```
 ./bursa key vrf --mnemonic "word1 word2 ..." --index 0
@@ -183,7 +184,7 @@ KES keys are used by stake pool operators for block signing in the Praos consens
 This implementation uses Cardano's depth 6, providing 64 time periods.  
 The seed is derived deterministically from the mnemonic, allowing for key recovery.  
 
-Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_vk, 32 bytes) in bech32 format unless key files are specified.
+Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_vk, 32 bytes) in bech32 format unless key files are specified.  
 
 ```
 ./bursa key kes --mnemonic "word1 word2 ..." --index 0
