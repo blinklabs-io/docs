@@ -128,7 +128,7 @@ Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech3
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key vrf --signing-key-file /paht/vrf.skey --verification-key-file /path/vrf.vkey
+./bursa key vrf --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
 ```
 
 ***
