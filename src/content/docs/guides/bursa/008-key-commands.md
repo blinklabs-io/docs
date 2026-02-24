@@ -183,7 +183,7 @@ Output is in bech32 format (cc_cold_xsk prefix) unless key files are specified.
 ./bursa key committee-cold --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
-**Consititutional Committee Cold Key with Key Files Example**
+**Constitutional Committee Cold Key with Key Files Example**
 
 > ⚠️ Please adjust path below.
 
@@ -202,7 +202,7 @@ Output is in bech32 format (cc_hot_xsk prefix) unless key files are specified.
 ./bursa key committee-hot --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
-**Consititutional Committee Cold Key with Key Files Example**
+**Constitutional Committee Cold Key with Key Files Example**
 
 > ⚠️ Please adjust path below.
 
