@@ -3,12 +3,54 @@ title: Key Command Line Guide
 description: Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 ---
 
-<a name="key"></a>
-
-Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
-
 ## Create Keys
 Bursa can be used to derive individual keys from a mnemonic. 
+
+<table>
+  <tr>
+    <th>Key types:</th>
+  </tr>
+<tr>
+    <td><a href="#root">Root Key</a></td>
+</tr>
+<tr>
+    <td><a href="#account">Account Key</a></td>
+</tr>
+<tr>
+    <td><a href="#payment">Payment Key</a></td>
+</tr>
+<tr>
+    <td><a href="#stake">Stake Key</a></td>
+</tr>
+<tr>
+    <td><a href="#pool-cold">Pool Cold Key</a></td>
+</tr>
+<tr>
+    <td><a href="#policy">Policy Key</a></td>
+</tr>
+<tr>
+    <td><a href="#calidus">Calidus Key</a></td>
+</tr>
+<tr>
+    <td><a href="#vrf">VRF keys</a></td>
+</tr>
+<tr>
+    <td><a href="#kes">KES Key Pair</a></td>
+</tr>
+<tr>
+    <td><a href="#drep">DRep key </a></td>
+</tr>
+<tr>
+    <td><a href="#committee-cold">Constitutional Committee Cold Key</a></td>
+</tr>
+<tr>
+    <td><a href="#committee-hot">Constitutional Committee Hot Key</a></td>
+</tr>
+</table>
+
+***
+
+Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 
 **The mnemonic can be provided via:**
   1. --mnemonic flag
@@ -28,6 +70,8 @@ Bursa can be used to derive individual keys from a mnemonic.
 
 ***
 
+<a name="root"></a>
+
 #### Root Key
 The root key is the master key from which all other keys are derived.  
 Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specified.
@@ -45,6 +89,8 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 
 ***
 
+<a name="account"></a>
+
 #### Account Key
 The account key follows CIP-1852 path: m/1852'/1815'/account'  
 Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specified.
@@ -54,6 +100,8 @@ Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specif
 ```
 
 ***
+
+<a name="payment"></a>
 
 #### Payment Key
 The payment key follows CIP-1852 path: m/1852'/1815'/account'/0/index  
