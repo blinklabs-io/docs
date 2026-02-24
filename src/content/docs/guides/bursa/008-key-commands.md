@@ -8,43 +8,27 @@ Bursa can be used to derive individual keys from a mnemonic.
 
 <table>
   <tr>
-    <th>Key types:</th>
+    <th colspan="3" align="left">Key types:</th>
   </tr>
 <tr>
-    <td><a href="#root">Root Key</a></td>
+  <td><a href="#root">Root Key</a></td>
+  <td><a href="#account">Account Key</a></td>
+  <td><a href="#payment">Payment Key</a></td>
 </tr>
 <tr>
-    <td><a href="#account">Account Key</a></td>
+  <td><a href="#stake">Stake Key</a></td>
+  <td><a href="#pool-cold">Pool Cold Key</a></td>
+  <td><a href="#policy">Policy Key</a></td>
 </tr>
 <tr>
-    <td><a href="#payment">Payment Key</a></td>
+  <td><a href="#calidus">Calidus Key</a></td>
+  <td><a href="#vrf">VRF keys</a></td>
+  <td><a href="#kes">KES Key Pair</a></td>
 </tr>
 <tr>
-    <td><a href="#stake">Stake Key</a></td>
-</tr>
-<tr>
-    <td><a href="#pool-cold">Pool Cold Key</a></td>
-</tr>
-<tr>
-    <td><a href="#policy">Policy Key</a></td>
-</tr>
-<tr>
-    <td><a href="#calidus">Calidus Key</a></td>
-</tr>
-<tr>
-    <td><a href="#vrf">VRF keys</a></td>
-</tr>
-<tr>
-    <td><a href="#kes">KES Key Pair</a></td>
-</tr>
-<tr>
-    <td><a href="#drep">DRep key </a></td>
-</tr>
-<tr>
-    <td><a href="#committee-cold">Constitutional Committee Cold Key</a></td>
-</tr>
-<tr>
-    <td><a href="#committee-hot">Constitutional Committee Hot Key</a></td>
+  <td><a href="#drep">DRep key </a></td>
+  <td><a href="#committee-cold">Constitutional Committee Cold Key</a></td>
+  <td><a href="#committee-hot">Constitutional Committee Hot Key</a></td>
 </tr>
 </table>
 
@@ -112,6 +96,8 @@ Output is in bech32 format (addr_xsk prefix) unless key files are specified.
 
 ***
 
+<a name="stake"></a>
+
 #### Stake Key
 The stake key follows CIP-1852 path: m/1852'/1815'/account'/2/index  
 Output is in bech32 format (stake_xsk prefix) unless key files are specified.
@@ -120,6 +106,8 @@ Output is in bech32 format (stake_xsk prefix) unless key files are specified.
 ```
 
 ***
+
+<a name="pool-cold"></a>
 
 #### Pool Cold Key
 The pool cold key follows CIP-1853 path: m/1853'/1815'/0'/index'  
@@ -131,6 +119,8 @@ Output is in bech32 format (pool_xsk prefix) unless key files are specified.
 
 ***
 
+<a name="policy"></a>
+
 #### Policy Key
 The policy key follows CIP-1855 path: m/1855'/1815'/policy_ix'  
 These keys are used for native asset minting/burning policies.  
@@ -140,6 +130,8 @@ Output is in bech32 format (policy_xsk prefix) unless key files are specified.
 ```
 
 ***
+
+<a name="calidus"></a>
 
 #### Calidus Key
 The Calidus key is the SPO on-chain authentication hot key defined by CIP-88/CIP-151. It uses the same derivation path as the payment key:  
@@ -162,6 +154,8 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 
 ***
 
+<a name="vrf"></a>
+
 #### VRF (Verifiable Random Function) Key Pair
 VRF keys are used by stake pool operators for leader election in the Praos consensus protocol. The seed is derived deterministically from the mnemonic, allowing for key recovery.
 
@@ -180,6 +174,8 @@ Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech3
 ```
 
 ***
+
+<a name="kes"></a>
 
 #### KES Key Pair
 KES keys are used by stake pool operators for block signing in the Praos consensus protocol. KES provides forward-secure signatures where compromising the current key does not compromise past signatures.  
@@ -203,6 +199,8 @@ Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_v
 
 ***
 
+<a name="drep"></a>
+
 #### drep Key
 The DRep key follows CIP-0105 path: m/1852'/1815'/account'/3/index  
 These keys are used for governance participation as a Delegated Representative.  
@@ -222,6 +220,8 @@ Output is in bech32 format (drep_xsk prefix) unless key files are specified.
 
 ***
 
+<a name="committee-cold"></a>
+
 #### Constitutional Committee Cold Key
 The committee cold key follows CIP-0105 path: m/1852'/1815'/account'/4/index  
 These keys are used for Constitutional Committee membership (long-term identity).  
@@ -240,6 +240,8 @@ Output is in bech32 format (cc_cold_xsk prefix) unless key files are specified.
 ```
 
 ***
+
+<a name="committee-hot"></a>
 
 #### Constitutional Committee Hot Key
 The committee hot key follows CIP-0105 path: m/1852'/1815'/account'/5/index  
