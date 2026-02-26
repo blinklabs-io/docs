@@ -19,33 +19,33 @@ Bursa can also be used to generate multi-signature script. The Bursa script comm
 
 - Create a 2-of-3 multi-sig script
   
-  ```
-  ./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13,abcdef1234567890abcdef1234567890abcdef14
-  ```
+```
+./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13,abcdef1234567890abcdef1234567890abcdef14
+```
 
 - Create an all-signers-required script
 
-  ```
-  ./bursa script create --all --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13
-  ```
+```
+./bursa script create --all --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13
+```
 
 - Create an any-signer script
   
-  ```
-  ./bursa script create --any --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13,abcdef1234567890abcdef1234567890abcdef14
-  ```
+```
+./bursa script create --any --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13,abcdef1234567890abcdef1234567890abcdef14
+```
 
 - Create a timelocked script (valid after slot 1000000)
   
-  ```
-  ./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
-  ```
+```
+./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
+```
 
-  ***
+***
 
-  Explore other Bursa Commands
+Explore other Bursa Commands
 
-  > **Bursa Command Categories**
+> **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
 > 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
