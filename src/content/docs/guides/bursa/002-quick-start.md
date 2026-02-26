@@ -52,7 +52,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 > 💡 Tip: You can download the latest Bursa release from the <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a> page.
 
 ```
-wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.11.1/bursa-v0.11.1-linux-amd64 > bursa
+wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64 > bursa
 ```
 
 ***
@@ -97,40 +97,8 @@ sudo ufw allow 8080/tcp
 
 ### Congratulations you are ready to start using Bursa!
 
-We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation.
+We can now use the command line to create a Cardano wallet and output all the files we will need to manage the wallet. We can also start the API and access the API Swagger documentation.  
 
-## Use Command Line to Create Wallet and Output Wallet Files
+Bursa can also be used to generate multi-signature scripts, hashes, keys, including keys and certificates needed to run a Cardano stake pool.  
 
-We can use the command line to create a wallet and output all the files we will need to manage our Cardano wallet.
-
-✅ For this example we create the wallet files to the `dev` folder by using the `--output` flag and giving it a directory to output to.
-
-```
-./bursa wallet create --output dev
-```
-
-![bursa-wallet-create-with-output-string](/bursa-wallet-create-with-output-string.png)
-
-Now we will have all the wallet files in our `dev` directory.
-
-![bursa-wallet-files](/bursa-wallet-files.png)
-
-## Use Command Line to Start API
-
-If we want to use the API we can use the command line to start it, by running the following command.
-
-```
-./bursa api
-```
-
-![bursa-start-api](/bursa-start-api.png)
-
-## Access API Swagger Documentation
-
-You can check the Bursa API by going to your IP:port/swagger/index.html. Please adjust the IP and your port if needed.
-
-```
-http://localhost:8080/swagger/index.html
-```
-
-![bursa-swagger](/bursa-swagger.png)
+[Learn more about how to use Bursa with the command line and useful commands that you can run.](../003-commands)
