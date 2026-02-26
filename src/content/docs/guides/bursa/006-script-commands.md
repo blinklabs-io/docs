@@ -8,7 +8,7 @@ description: Bursa Command Line Guide for Multi-Signature Operations.
 Bursa Command Line Guide for Multi-Signature Operations.
 
 ## Commands for Multi-Signature Operations
-Bursa can also be used to generate multi-signature script. The Bursa script command has 3 command types that you can run.
+Bursa can also be used to generate multi-signature scripts. The Bursa script command has 3 command types that you can run.
 
 > **Script command types:**
 >  - **create:** Creates a new multi-signature script
