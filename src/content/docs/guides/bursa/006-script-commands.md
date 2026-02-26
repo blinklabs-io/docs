@@ -13,7 +13,7 @@ Bursa can also be used to generate multi-signature scripts. The Bursa script com
 > **Script command types:**
 >  - **create:** Creates a new multi-signature script
 >  - **validate:** Validates a script against signatures and slot
->  - **address:** Generate mainnet address from script
+>  - **address:** Generates mainnet address from script
 
 #### Create Multi-Signature Script
 
