@@ -63,6 +63,12 @@ description: List of Adder Commands.
 ```
   
 > specifies event type to filter on
+> 
+> **4 Event Types:**
+> 1. `input.block` - A new block was observed.
+> 2. `input.rollback` -	A rollback occurred to a previous chain point.
+> 3. `input.transaction` -	A transaction was seen in a block.
+> 4. `input.governance` -	A governance-related event (CIP-1694 era).
         
 ***
 
