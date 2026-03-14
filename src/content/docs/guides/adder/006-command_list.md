@@ -80,6 +80,8 @@ description: List of Adder Commands.
 > input plugin to use, 'list' to show available (default "chainsync")
 <br />
 
+### input-chainsync:
+
 ```
   --input-chainsync-address string
 ```
@@ -95,10 +97,10 @@ description: List of Adder Commands.
 <br />
 
 ```
-  --input-chainsync-bulk-mode
+  --input-chainsync-delay-confirmations uint
 ```
   
-> use the 'bulk' sync mode with NtN (node-to-node). This should only be used against your own nodes for resource usage reasons
+> number of confirmations required before emitting events
 <br />
 
 ```
@@ -120,13 +122,6 @@ description: List of Adder Commands.
 ```
   
 > start syncing at the chain tip (defaults to chain genesis) (default true)
-<br />
-
-```
-  --input-chainsync-kupo-url string
-```
-  
-> kupo-url address
 <br />
 
 ```
@@ -158,6 +153,84 @@ description: List of Adder Commands.
 
 ***
 
+```
+  --input-chainsync-kupo-url string
+```
+  
+> kupo-url address
+<br />
+
+
+### input-mempool:
+
+```
+  --input-mempool-address string
+```
+  
+> TCP address (host:port); requires ntc-tcp=true
+<br />
+
+```
+  --input-mempool-include-cbor
+```
+  
+> include transaction CBOR in events
+<br />
+
+```
+  --input-mempool-kupo-url string
+```
+  
+> Kupo API URL for resolving transaction inputs (e.g. http://localhost:1442). Kupo must index the outputs you need (e.g. run with --match "*") or resolution will be empty.
+<br />
+
+```
+  --input-mempool-network string
+```
+  
+> well-known Cardano network name (e.g. mainnet, preprod) (default "mainnet")
+<br />
+
+```
+  --input-mempool-network-magic uint
+```
+  
+> network magic value (overrides network name)
+<br />
+
+```
+  --input-mempool-ntc-tcp
+```
+  
+> use NtC over TCP (e.g. when exposing socket via socat)
+<br />
+
+```
+  --input-mempool-poll-interval string
+```
+  
+> how often to poll the mempool (e.g. 5s, 1m) (default "5s")
+<br />
+
+```
+  --input-mempool-socket-path string
+```
+  
+> path to the node's UNIX socket (NtC)
+
+***
+
+## Logging:
+
+```
+  --logging-level string
+```
+  
+> logging level (debug, info, warn, error) (default "info")
+<br />
+
+***
+
 ## Output:
 
 ```
@@ -168,10 +241,10 @@ description: List of Adder Commands.
 <br />
 
 ```
-  --output-log-level string
+  --output-log-format string
 ```
   
-> specifies the log level to use (default "info")
+> specifies the output format: text (human-readable, default) or json (machine-parseable) (default "text")
 <br />
 
 ```
@@ -193,6 +266,34 @@ description: List of Adder Commands.
 ```
   
 > specifies the path to the service account file
+<br />
+
+```
+  --output-telegram-bot-token string
+```
+  
+> Telegram Bot API token (from @BotFather)
+<br />
+
+```
+  --output-telegram-chat-id string
+```
+  
+> Telegram chat ID to send messages to (user, group, or channel)
+<br />
+
+```
+  --output-telegram-disable-preview
+```
+  
+> disable link preview in messages
+<br />
+
+```
+  --output-telegram-parse-mode string
+```
+  
+> message parse mode (HTML, Markdown, MarkdownV2) (default "HTML")
 <br />
 
 ```
