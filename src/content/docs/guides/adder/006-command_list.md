@@ -9,7 +9,7 @@ description: List of Adder Commands.
 
 
 ```
- -config string
+ --config string
 ```
  
 > path to config file to load
@@ -19,7 +19,7 @@ description: List of Adder Commands.
 ## Filter:
 
 ```
-  -filter-address string
+  --filter-address string
 ```
   
 > specifies address to filter on
@@ -27,28 +27,37 @@ description: List of Adder Commands.
 
 
 ```
-  -filter-asset string
+  --filter-asset string
 ```
   
 > specifies the asset fingerprint (asset1xxx) to filter on
 <br />
 
+
 ```
-  -filter-policy string
+  --filter-drep string
+```
+  
+> specifies DRep ID(s) to filter on (comma-separated, hex or bech32)
+<br />
+
+
+```
+  --filter-policy string
 ```
   
 > specifies asset policy ID to filter on
 <br />
 
 ```
-  -filter-pool string
+  --filter-pool string
 ```
   
 > specifies Pool ID to filter on
 <br />
 
 ```
-  -filter-type string
+  --filter-type string
 ```
   
 > specifies event type to filter on
@@ -58,84 +67,91 @@ description: List of Adder Commands.
 ## Input:
 
 ```
-  -input string
+  --input list
 ```
   
 > input plugin to use, 'list' to show available (default "chainsync")
 <br />
 
 ```
-  -input-chainsync-address string
+  --input string
+```
+  
+> input plugin to use, 'list' to show available (default "chainsync")
+<br />
+
+```
+  --input-chainsync-address string
 ```
   
 > specifies the TCP address of the node to connect to in the form 'host:port'
 <br />
 
  ```
-  -input-chainsync-auto-reconnect
+  --input-chainsync-auto-reconnect
 ```
   
 > auto-reconnect if the connection is broken (default true)
 <br />
 
 ```
-  -input-chainsync-bulk-mode
+  --input-chainsync-bulk-mode
 ```
   
 > use the 'bulk' sync mode with NtN (node-to-node). This should only be used against your own nodes for resource usage reasons
 <br />
 
 ```
-  -input-chainsync-include-cbor
+  --input-chainsync-include-cbor
 ```
   
 > include original CBOR for block/transaction in events
 <br />
 
 ```
-  -input-chainsync-intersect-point string
+  --input-chainsync-intersect-point string
 ```
   
 > start syncing at the specified chain point(s) in '<slot>.<hash>' format
 <br />
 
 ```
-  -input-chainsync-intersect-tip
+  --input-chainsync-intersect-tip
 ```
   
 > start syncing at the chain tip (defaults to chain genesis) (default true)
 <br />
 
 ```
-  -input-chainsync-kupo-url string
+  --input-chainsync-kupo-url string
 ```
   
 > kupo-url address
 <br />
 
 ```
-  -input-chainsync-network string
+  --input-chainsync-network string
 ```
   
 > specifies a well-known Cardano network name (default "mainnet")
 <br />
 
 ```
-  -input-chainsync-network-magic uint
+  --input-chainsync-network-magic uint
 ```
   
 > specifies the network magic value to use, overrides 'network'
 <br />
 
 ```
-  -input-chainsync-ntc-tcp
+  --input-chainsync-ntc-tcp
 ```
   
 > use the NtC (node-to-client) protocol over TCP, for use when exposing a node's UNIX socket via socat or similar
 <br />
 
 ```
-  -input-chainsync-socket-path string
+  --input-chainsync-socket-path string
 ```
   
 > specifies the path to the UNIX socket to connect to
@@ -145,70 +161,70 @@ description: List of Adder Commands.
 ## Output:
 
 ```
-  -output string
+  --output string
 ```
   
 > output plugin to use, 'list' to show available (default "log")
 <br />
 
 ```
-  -output-log-level string
+  --output-log-level string
 ```
   
 > specifies the log level to use (default "info")
 <br />
 
 ```
-  -output-notify-title string
+  --output-notify-title string
 ```
   
 > specifies the title to use (default "Adder")
 <br />
 
 ```
-  -output-push-accessTokenUrl string
+  --output-push-accessTokenUrl string
 ```
   
 > specifies the url to get access token from (default `https://www.googleapis.com/auth/firebase.messaging`)
 <br />
 
 ```
-  -output-push-serviceAccountFilePath string
+  --output-push-serviceAccountFilePath string
 ```
   
 > specifies the path to the service account file
 <br />
 
 ```
-  -output-webhook-format string
+  --output-webhook-format string
 ```
   
 > specifies the webhook payload format to use (default "adder")
 <br />
 
 ```
-  -output-webhook-password string
+  --output-webhook-password string
 ```
   
 > specifies the password for basic auth
 <br />
 
 ```
-  -output-webhook-tls-skip-verify
+  --output-webhook-tls-skip-verify
 ```
   
 > skip tls verification (for self-signed certs)
 <br />
 
 ```
-  -output-webhook-url string
+  --output-webhook-url string
 ```
   
 > specifies the url to use (default `http://localhost:3000`)
 <br />
 
 ```
-  -output-webhook-username string
+  --output-webhook-username string
 ```
   
 > specifies the username for basic auth
@@ -218,7 +234,7 @@ description: List of Adder Commands.
 ## Version:
 
 ```
-  -version
+  --version
 ```
   
 > show version and exit
