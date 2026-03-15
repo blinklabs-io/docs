@@ -38,7 +38,7 @@ Now that we have our asset id / fingerprint that we want to monitor, we are read
 We can use the asset fingerprint from above for cTOSI to have Adder track transactions with that fingerprint by using the following filter:
 
 ```
--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
+--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 ```
 
 ## Filter Type - Transaction
@@ -46,7 +46,7 @@ We can use the asset fingerprint from above for cTOSI to have Adder track transa
 For this example, we want to get alerts when a transaction occurs using the cTOSI asset id / fingerprint. To do this we will add the following filter:
 
 ```
--filter-type chainsync.transaction
+--filter-type input.transaction
 ```
 
 ## Output
@@ -54,7 +54,7 @@ For this example, we want to get alerts when a transaction occurs using the cTOS
 We want the output to be a desktop notification. So that when a transaction that contains cTOSI occurs, we will receive a desktop notification. To do this we will add the following command:
 
 ```
--output notify
+--output notify
 ```
 
 
@@ -69,7 +69,7 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction -filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 -output notify
+C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output notify
 ```
 
 
