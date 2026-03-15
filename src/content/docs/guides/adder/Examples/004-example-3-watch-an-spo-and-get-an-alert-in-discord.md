@@ -115,7 +115,7 @@ Now that we have the pool id that we want to monitor and our Discord webhook URL
 We don't want alerts of block rollbacks so we can use the filter type transaction and block. Since we want to use two filter types we separate them with a comma. To have Adder exclude the rollback alerts by using transaction and block filter, we will use the following filter:
 
 ```
--filter-type chainsync.transaction,chainsync.block
+--filter-type input.transaction,input.block
 ```
 
 ## Filter Pool
@@ -123,7 +123,7 @@ We don't want alerts of block rollbacks so we can use the filter type transactio
 We can use the pool id from [Step 1](#step-1) to have Adder track our SPO by using the following filter:
 
 ```
--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
+--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
 ```
 
 ## Output Webhook
@@ -131,7 +131,7 @@ We can use the pool id from [Step 1](#step-1) to have Adder track our SPO by usi
 We need to add a command to let Adder know that we want to use a webhook. To do this we will add the following command:
 
 ```
--output webhook
+--output webhook
 ```
 
 ## Output Webhook Format
@@ -139,7 +139,7 @@ We need to add a command to let Adder know that we want to use a webhook. To do 
 Since we want Adder to notify us in Discord, we need to tell Adder the webhook format we want to use is Discord. To do this we will add the following command:
 
 ```
--output-webhook-format discord
+--output-webhook-format discord
 ```
 
 ## Output Webhook URL
@@ -147,7 +147,7 @@ Since we want Adder to notify us in Discord, we need to tell Adder the webhook f
 For us to get a notification in our preferred Discord channel, we need to tell Adder the URL to the Discord Webhook. To do this we will add the following command using the Webhook URL from [Step 2](#step-2):
 
 ```
--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
 
@@ -162,7 +162,7 @@ To get Discord notifications when a change occurs to a SPO, we will run the foll
 > Also adjust the pool id and webhook URL.
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction, chainsync.block -filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 -output webhook -output-webhook-format discord -output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
 ![adder-SPO-block-alert](/adder-SPO-block-alert.png)
