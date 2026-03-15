@@ -58,7 +58,7 @@ Now that we have our asset id / asset fingerprint that we want to monitor, we ar
 We will use the smart contract policy id from above to tell Adder to watch this policy by using the following filter:
 
 ```
--filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
+--filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
 ```
 
 ## Filter Asset
@@ -66,7 +66,7 @@ We will use the smart contract policy id from above to tell Adder to watch this 
 We can use the asset fingerprint for cTOSI from above to have Adder track transactions with that fingerprint by using the following filter:
 
 ```
--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
+--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 ```
 
 ## Filter Type - Transaction
@@ -74,7 +74,7 @@ We can use the asset fingerprint for cTOSI from above to have Adder track transa
 For this example, we want to get alerts when a transaction occurs with the smart contract, either when sending or receiving the cTOSI asset. To do this we will add the following filter:
 
 ```
--filter-type chainsync.transaction
+--filter-type input.transaction
 ```
 
 ## Output
@@ -82,7 +82,7 @@ For this example, we want to get alerts when a transaction occurs with the smart
 We want the output to be a desktop notification. So when a transaction that contains cTOSI occurs with the smart contract, we will receive a desktop notification. To do this we will add the following command:
 
 ```
--output notify
+--output notify
 ```
 
 ***
@@ -96,7 +96,7 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction -filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 -filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b -output notify
+C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b --output notify
 ```
 
 
