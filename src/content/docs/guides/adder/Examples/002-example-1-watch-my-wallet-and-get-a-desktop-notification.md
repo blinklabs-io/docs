@@ -42,7 +42,7 @@ Now that we have our wallet address that we want to monitor, we are ready to loo
 The first filter we will add is the filter type. For this example, we want to get alerts when a transaction occurs within our wallet, either when we send or receive an asset. To do this we will add the following filter:
 
 ```
--filter-type chainsync.transaction
+--filter-type input.transaction
 ```
 
 ## Filter Address
@@ -50,7 +50,7 @@ The first filter we will add is the filter type. For this example, we want to ge
 Next we want to get alerts just for our wallet address. In this example we will use our staking address. To get alerts just for our staking address we will add the following filter:
 
 ```
--filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
+--filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
 ```
 
 ## Output
@@ -58,7 +58,7 @@ Next we want to get alerts just for our wallet address. In this example we will 
 We want the output to be a desktop notification, so that when a transaction occurs with our wallet, we will receive a desktop notification. To do this we will add the following command:
 
 ```
--output notify
+--output notify
 ```
 
 ***
@@ -78,7 +78,7 @@ Command to run once you adjust Adder exe path and your wallet address:
 
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction -filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta -output notify
+C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
 ```
 
 Final command to run:
