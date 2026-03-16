@@ -86,5 +86,19 @@ In order to get alerts in Telegram we will need a bot token from BotFather:
 
 ***
 
+7. Click `Message` to start chat with Bot
+
+![adder-botfather-click-message-bot](/adder-botfather-click-message-bot.png)
+
+8. Click Start
+
+![adder-bot-chat-click-start](/adder-bot-chat-click-start.png)
+
+
+9. Open this URL in a browser `https://api.telegram.org/bot{our_bot_token}/getUpdates`
+
+See we need to prefix our token with a word `bot`
+
+> Eg: https://api.telegram.org/bot87xxxxxx07:AAG8xxxxxx1hi-C8xxxxxxTB2/getUpdates
 
 <br />
