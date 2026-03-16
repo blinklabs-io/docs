@@ -1,6 +1,6 @@
 ---
 title: Watch a drep and get an Alert
-description: Adder Example 5 - Watch an drep and get an alert.
+description: Adder Example 5 - Watch an DRep and get an Alert in Telegram.
 ---
 
 # Watch an DRep and get an Alert in Telegram
