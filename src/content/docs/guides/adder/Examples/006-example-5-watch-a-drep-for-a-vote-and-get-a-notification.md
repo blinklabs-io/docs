@@ -50,14 +50,15 @@ drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc
 
 In order to get alerts in Telegram we will need a bot token from BotFather:
 
-Open BotFather in Telegram
+1. Open BotFather in Telegram by searching for `BotFather`
 
-Run:
+![adder-search-botfather](/adder-search-botfather.png)
 
-```
-/newbot
-```
+2. Create a New Bot
 
+![adder-botfather-create-new-bot](/adder-botfather-create-new-bot.png)
+
+3. 
 Copy the Bot Token
 
 
