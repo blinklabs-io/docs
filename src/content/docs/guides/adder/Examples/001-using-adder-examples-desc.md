@@ -13,29 +13,31 @@ Before we walk you through some examples let's familiarize you with some of the 
 
 ### Filter Options:
 
-1. `-filter-type` (There are 3 filter types: Transaction, Block and Rollback)
-   * [x] -filter-type chainsync.transaction
-   * [x] -filter-type chainsync.rollback
-   * [x] -filter-type chainsync.block
-2. `-filter-policy xyz...` (filter by policy id)
-3. `-filter-asset asset1xyz...` (filter by asset id)
-4. `-filter-address addr1xyz...` (filter by wallet receive address)
-5. `-filter-address stake1xyz...` (filter by stake address)
-6. `-filter-pool poolxyz...` (filter by stake pool id)
+1. `--filter-type` (There are 3 filter types: Transaction, Block and Rollback)
+   * [x] --filter-type input.transaction
+   * [x] --filter-type input.rollback
+   * [x] --filter-type input.block
+2. `--filter-policy xyz...` (filter by policy id)
+3. `--filter-asset asset1xyz...` (filter by asset id)
+4. `--filter-drep drepxyz...` (filter by drep id)
+5. `--filter-address addr1xyz...` (filter by wallet receive address)
+6. `--filter-address stake1xyz...` (filter by stake address)
+7. `--filter-pool poolxyz...` (filter by stake pool id)
 
 ### Output Options:
 
-1. -output log
-2. -output notify
-3. -output webhook
-4. -output push
+1. --output log
+2. --output notify
+3. --output telegram
+4. --output webhook
+5. --output push
 
 ### Change Network
 
 * -input-chainsync-network (There are 3 networks: preview, preprod, mainnet)
-  * [x] -input-chainsync-network preview
-  * [x] -input-chainsync-network preprod
-  * [x] -input-chainsync-network mainnet
+  * [x] --input-chainsync-network preview
+  * [x] --input-chainsync-network preprod
+  * [x] --input-chainsync-network mainnet
 
 
 
