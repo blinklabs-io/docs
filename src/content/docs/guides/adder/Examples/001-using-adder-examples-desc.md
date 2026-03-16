@@ -47,3 +47,4 @@ Now that we have an overview of the type of filters and commands you can use, le
 2. [Example 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
 3. [Example 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
 4. [Example 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+5. [Example 5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - Watch an DRep and get an Alert in Telegram
