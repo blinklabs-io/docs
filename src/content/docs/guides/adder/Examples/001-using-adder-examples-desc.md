@@ -14,9 +14,9 @@ Before we walk you through some examples let's familiarize you with some of the 
 ### Filter Options:
 
 1. `--filter-type` (There are 3 filter types: Transaction, Block and Rollback)
-   * [x] --filter-type input.transaction
-   * [x] --filter-type input.rollback
-   * [x] --filter-type input.block
+   * [x] `--filter-type input.transaction`
+   * [x] `--filter-type input.rollback`
+   * [x] `--filter-type input.block`
 2. `--filter-policy xyz...` (filter by policy id)
 3. `--filter-asset asset1xyz...` (filter by asset id)
 4. `--filter-drep drepxyz...` (filter by drep id)
@@ -26,19 +26,18 @@ Before we walk you through some examples let's familiarize you with some of the 
 
 ### Output Options:
 
-1. --output log
-2. --output notify
-3. --output telegram
-4. --output webhook
-5. --output push
+1. `--output log`
+2. `--output notify`
+3. `--output telegram`
+4. `--output webhook`
+5. `--output push`
 
 ### Change Network
 
 * -input-chainsync-network (There are 3 networks: preview, preprod, mainnet)
-  * [x] --input-chainsync-network preview
-  * [x] --input-chainsync-network preprod
-  * [x] --input-chainsync-network mainnet
-
+  * [x] `--input-chainsync-network preview`
+  * [x] `--input-chainsync-network preprod`
+  * [x] `--input-chainsync-network mainnet`
 
 
 Now that we have an overview of the type of filters and commands you can use, let's walk through some examples to get you familiar with the power of Adder.
