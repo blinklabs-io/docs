@@ -158,7 +158,7 @@ Now that we have the DRep id that we want to monitor and our Telegram Token and 
 
 ***
 
-## Filter Type
+### Filter Type
 
 We don't want alerts of block rollbacks so we can use the filter type transaction and block. Since we want to use two filter types we separate them with a comma. To have Adder exclude the rollback alerts by using transaction and block filter, we will use the following filter:
 
@@ -166,7 +166,7 @@ We don't want alerts of block rollbacks so we can use the filter type transactio
 --filter-type input.transaction, input.block
 ```
 
-## Filter DRep
+### Filter DRep
 
 We can use the DRep id from [Step 1](#step-1) to have Adder track our DRep by using the following filter:
 
@@ -174,7 +174,7 @@ We can use the DRep id from [Step 1](#step-1) to have Adder track our DRep by us
 --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc
 ```
 
-## Output Telegram
+### Output Telegram
 
 We need to add a command to let Adder know that we want to use Telegram. To do this we will add the following command:
 
@@ -182,7 +182,7 @@ We need to add a command to let Adder know that we want to use Telegram. To do t
 --output telegram
 ```
 
-## Output Telegram Bot Token
+### Output Telegram Bot Token
 
 Since we want Adder to notify us in Telegram, we need to tell Adder the Bot Token we want to use in Telegram. To do this we will add the following command using the Bot Token from [Step 2-5](#step-2-5):
 
@@ -190,7 +190,7 @@ Since we want Adder to notify us in Telegram, we need to tell Adder the Bot Toke
 --output-telegram-bot-token $TELEGRAM_TOKEN
 ```
 
-## Output Telegram Chat Id
+### Output Telegram Chat Id
 
 For us to get a notification in our preferred Telegram channel, we need to tell Adder the chat id to the Telegram bot. To do this we will add the following command using the Chat Id from [Step 2-9](#step-2-9):
 
@@ -200,7 +200,7 @@ For us to get a notification in our preferred Telegram channel, we need to tell 
 
 ***
 
-## Putting it All Together
+## Step 4 - Putting it All Together
 
 To get Telegram notifications when a action occurs by a DRep, we will run the following command in our command prompt:
 
