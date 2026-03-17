@@ -1,5 +1,5 @@
 ---
-title: Watch a drep and get an Alert
+title: Watch an DRep and get an Alert in Telegram
 description: Adder Example 5 - Watch an DRep and get an Alert in Telegram.
 ---
 
@@ -50,25 +50,25 @@ drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc
 
 In order to get alerts in Telegram we will need a bot token from BotFather:
 
-2-1. Open BotFather in Telegram by searching for `BotFather`
+**2-1.** Open BotFather in Telegram by searching for `BotFather`
 
 ![adder-search-botfather](/adder-search-botfather.png)
 
 ***
 
-2-2. Create a New Bot
+**2-2.** Create a New Bot
 
 ![adder-botfather-create-new-bot](/adder-botfather-create-new-bot.png)
 
 ***
 
-2-3. Name your bot and give it a unique username
+**2-3.** Name your bot and give it a unique username
 
 ![adder-botfather-new-bot-details](/adder-botfather-new-bot-details.png)
 
 ***
 
-2-4. Then click `Create Bot`
+**2-4.** Then click `Create Bot`
 
 ![adder-botfather-click-create-bot](/adder-botfather-click-create-bot.png)
 
@@ -76,7 +76,7 @@ In order to get alerts in Telegram we will need a bot token from BotFather:
 
 <a name="step-2-5"></a>
 
-2-5. Copy the Bot Token
+**2-5.** Copy the Bot Token
 
 📝 Make note of the Bot Token, we will need it later. 
 
@@ -84,23 +84,23 @@ In order to get alerts in Telegram we will need a bot token from BotFather:
 
 ***
 
-2-6. Click Username
+**2-6.** Click `Username`
 
 ![adder-botfather-click-username](/adder-botfather-click-username.png)
 
 ***
 
-2-7. Click `Message` to start chat with Bot
+**2-7.** Click `Message` to start chat with Bot
 
 ![adder-botfather-click-message-bot](/adder-botfather-click-message-bot.png)
 
-2-8. Click Start
+**2-8.** Click `Start`
 
 ![adder-bot-chat-click-start](/adder-bot-chat-click-start.png)
 
 <a name="step-2-9"></a>
 
-2-9. Open this URL in a browser `https://api.telegram.org/bot{our_bot_token}/getUpdates`
+**2-9.** Open this URL in a browser `https://api.telegram.org/bot{our_bot_token}/getUpdates`
 
 See we need to prefix our token with a word `bot`
 
