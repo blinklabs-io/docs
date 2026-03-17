@@ -3,10 +3,7 @@ title: Watch an DRep and get an Alert in Telegram
 description: Adder Example 5 - Watch an DRep and get an Alert in Telegram.
 ---
 
-# Watch an DRep and get an Alert in Telegram
-
 In this example we will use Adder to send us a Telegram notification, when there is an action by the DRep that we want to track. 
-
 
 ### The events that will trigger an alert are the following actions by our DRep:
 
@@ -22,7 +19,7 @@ In this example we will use Adder to send us a Telegram notification, when there
 
 ***
 
-Before we breakdown the filters and commands we will use for this example we need to get a DRep id to track and Telgram bot token and chat id so we can get alerts in our Telegram. We will walk through the steps below.
+Before we breakdown the filters and commands we will use for this example we need to get a DRep id to track also a Telgram bot token and chat id so we can get alerts in Telegram. We will walk through the steps below.
 
 <a name="step-1"></a>
 
@@ -30,7 +27,7 @@ Before we breakdown the filters and commands we will use for this example we nee
 
 In order to filter by a DRep that we want to watch we need the DRep id. We can use tools like adastat.net to search by a DRep so we can get the DRep id.
 
-In this example we searched  `Ear Coin Pool` on <a href="https://adastat.net/dreps" target="_blank">https://adastat.net/dreps</a>
+In this example we searched  `Earn Coin Pool` on <a href="https://adastat.net/dreps" target="_blank">https://adastat.net/dreps</a>
 
 ![adder-drep-id](/adder-drep-id.png)
 
@@ -48,7 +45,7 @@ drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc
 
 ## Step 2 - Creating the Telegram Bot (Required Once)
 
-In order to get alerts in Telegram we will need a bot token from BotFather:
+In order to get alerts in Telegram we will need a bot token from BotFather and then a chat id:
 
 **2-1.** Open BotFather in Telegram by searching for `BotFather`
 
@@ -100,7 +97,7 @@ In order to get alerts in Telegram we will need a bot token from BotFather:
 
 <a name="step-2-9"></a>
 
-**2-9.** Open this URL in a browser `https://api.telegram.org/bot{our_bot_token}/getUpdates`
+**2-9.** Open this URL in a browser with your bot token from [Step 2-5](#step-2-5) `https://api.telegram.org/bot{your_bot_token}/getUpdates`
 
 See we need to prefix our token with a word `bot`
 
@@ -166,7 +163,7 @@ Now that we have the DRep id that we want to monitor and our Telegram Token and 
 We don't want alerts of block rollbacks so we can use the filter type transaction and block. Since we want to use two filter types we separate them with a comma. To have Adder exclude the rollback alerts by using transaction and block filter, we will use the following filter:
 
 ```
---filter-type input.transaction,input.block
+--filter-type input.transaction, input.block
 ```
 
 ## Filter DRep
