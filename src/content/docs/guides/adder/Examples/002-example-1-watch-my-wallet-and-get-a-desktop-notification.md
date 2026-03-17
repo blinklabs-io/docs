@@ -3,8 +3,6 @@ title: Watch My Wallet and get a Desktop Notification
 description: Adder Example 1 - Watch My Wallet and get a Desktop Notification.
 ---
 
-# Watch My Wallet and get a Desktop Notification
-
 Let's walk through how to open Adder, input filters and commands so that it tracks your wallet and gives you a desktop notification when there is a change to your wallet.
 
 > ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../002-quick-start-overview) guide.
@@ -31,13 +29,14 @@ stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
 
 ***
 
+## Step 2 - Selecting Adder Commands
 Now that we have our wallet address that we want to monitor, we are ready to look at the filters and commands we will use. For this example, we will use:
 
 * Filter type
 * Filter Address
 * Output
 
-## Filter type
+### Filter type
 
 The first filter we will add is the filter type. For this example, we want to get alerts when a transaction occurs within our wallet, either when we send or receive an asset. To do this we will add the following filter:
 
@@ -45,7 +44,7 @@ The first filter we will add is the filter type. For this example, we want to ge
 --filter-type input.transaction
 ```
 
-## Filter Address
+### Filter Address
 
 Next we want to get alerts just for our wallet address. In this example we will use our staking address. To get alerts just for our staking address we will add the following filter:
 
@@ -53,7 +52,7 @@ Next we want to get alerts just for our wallet address. In this example we will 
 --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
 ```
 
-## Output
+### Output
 
 We want the output to be a desktop notification, so that when a transaction occurs with our wallet, we will receive a desktop notification. To do this we will add the following command:
 
@@ -63,10 +62,9 @@ We want the output to be a desktop notification, so that when a transaction occu
 
 ***
 
-## Step 2 - Putting it All Together
+## Step 3 - Putting it All Together
 
 Now that we understand the filters and commands that we want to input into Adder in order to get desktop alerts when we send or receive an asset, we will run the following command in our command prompt:
-
 
 
 > ⚠️ Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.\
@@ -96,7 +94,6 @@ Desktop Alert:
 ### Congratulations!&#x20;
 
 ***
-
 
 > 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
 
