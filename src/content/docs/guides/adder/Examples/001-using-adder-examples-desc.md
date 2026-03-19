@@ -11,7 +11,7 @@ description: Overview of common Adder filters and commands.
 
 Before we walk you through some examples let's familiarize you with some of the common commands and filters you can use.
 
-> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `--help` flag.
 
 ### Filter Options:
 
