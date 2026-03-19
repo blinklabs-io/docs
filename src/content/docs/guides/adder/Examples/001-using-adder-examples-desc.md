@@ -19,6 +19,7 @@ Before we walk you through some examples let's familiarize you with some of the 
    * [x] `--filter-type input.transaction`
    * [x] `--filter-type input.rollback`
    * [x] `--filter-type input.block`
+   * [x] `--filter-type input.governance`
 2. `--filter-policy xyz...` (filter by policy id)
 3. `--filter-asset asset1xyz...` (filter by asset id)
 4. `--filter-drep drepxyz...` (filter by drep id)
