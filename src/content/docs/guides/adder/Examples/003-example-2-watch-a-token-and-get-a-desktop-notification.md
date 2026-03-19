@@ -79,7 +79,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a t
 
 ***
 
-> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `--help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
