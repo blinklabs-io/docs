@@ -160,10 +160,10 @@ Now that we have the DRep id that we want to monitor and our Telegram Token and 
 
 ### Filter Type
 
-We don't want alerts of block rollbacks so we can use the filter type transaction and block. Since we want to use two filter types we separate them with a comma. To have Adder exclude the rollback alerts by using transaction and block filter, we will use the following filter:
+We want to get an alert only when a Governance event occurs so we can use the filter type governance. We will use the following filter:
 
 ```
---filter-type input.transaction, input.block
+--filter-type input.governance
 ```
 
 ### Filter DRep
@@ -208,7 +208,7 @@ To get Telegram notifications when a action occurs by a DRep, we will run the fo
 > Also adjust the DRep id, $TELEGRAM_TOKEN, and $CHAT_ID.
 
 ```
-C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction, input.block --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc --output telegram --output-telegram-bot-token $TELEGRAM_TOKEN --output-telegram-chat-id $CHAT_ID
+C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.governance --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc --output telegram --output-telegram-bot-token $TELEGRAM_TOKEN --output-telegram-chat-id $CHAT_ID
 ```
 
 ![adder-DRep-alert](/adder-DRep-alert.png)
