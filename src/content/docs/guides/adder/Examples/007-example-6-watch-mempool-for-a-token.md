@@ -43,7 +43,7 @@ We need to specifiy socket path for the mempool of a Cardano Node that we are ru
 ⚠️ Adjust the file path below to match your path
 
 ```
----input-mempool-socket-path /home/user/cardano-my-node/db/socket
+--input-mempool-socket-path /home/user/cardano-my-node/db/socket
 ```
 
 💡 Tip: To find the path to your node socket run the following command:
@@ -82,13 +82,13 @@ We want the output events to console using logger. So that when a transaction th
 
 ## Step 3 - Putting it All Together
 
-To get desktop notifications when a transaction includes the Tosidrop token cTOSI, we will run the following command in our command prompt:
+To get a log notification when a transaction includes the Tosidrop token cTOSI, we will run the following command in our command prompt:
 
 > ⚠️ Please adjust socket path
 
 
 ```
-./adder ---input-mempool-address backbone.cardano.iog.io:3001 --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output log
+./adder --input-mempool-socket-path /home/user/cardano-my-node/db/socket --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output log
 ```
 
 ### Congratulations!
