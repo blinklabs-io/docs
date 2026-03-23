@@ -3,7 +3,7 @@ title: Watch Mempool for a transaction with a Token
 description: Adder Example 6 - Watch Mempool for a Transaction with a Token.
 ---
 
-In this example we will use Adder to send us a desktop notification when there is a transaction in our mempool that includes a certain token or asset that we want to track.
+In this example we will use Adder to get a log notification when there is a transaction in our mempool that includes a certain token or asset that we want to track.
 
 ⚠️ Mempool is used for pre-accepted transactions. If higher assurance is needed, use `input-chainsync`.
 
