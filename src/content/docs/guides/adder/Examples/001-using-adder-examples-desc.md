@@ -9,7 +9,7 @@ Before we walk you through some examples let's familiarize you with some of the 
 
 ### Filter Options:
 
-1. `--filter-type` (There are 4 filter types: Transaction, Block and Rollback)
+1. `--filter-type` (There are 4 filter types: Transaction, Block, Rollback, and Governance)
    * [x] `--filter-type input.transaction`
    * [x] `--filter-type input.rollback`
    * [x] `--filter-type input.block`
