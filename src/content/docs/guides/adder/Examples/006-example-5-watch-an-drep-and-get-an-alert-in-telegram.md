@@ -229,4 +229,4 @@ See our other examples to see what else Adder can do and unlock the power of Add
 3. [Example 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
 4. [Example 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
 5. [Example 5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - Watch an DRep and get an Alert in Telegram
-6. [Example 6](../007-example-6-watch-mempool-for-a-token-and-get-a-desktop-notification) - Watch Mempool for a Transaction with a Token and get a Desktop Notification
+6. [Example 6](../007-example-6-watch-mempool-for-a-token) - Watch Mempool for a Transaction with a Token
