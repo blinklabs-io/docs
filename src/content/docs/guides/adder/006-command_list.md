@@ -64,7 +64,7 @@ description: List of Adder Commands.
   
 > specifies event type to filter on
 > 
-> **4 Event Types:**
+> **Event Types:**
 > 1. `input.block` - A new block was observed.
 > 2. `input.rollback` -	A rollback occurred to a previous chain point.
 > 3. `input.transaction` -	A transaction was seen in a block.
@@ -75,17 +75,14 @@ description: List of Adder Commands.
 ## Input:
 
 ```
-  --input list
-```
-  
-> input plugin to use, 'list' to show available (default "chainsync")
-<br />
-
-```
   --input string
 ```
   
 > input plugin to use, 'list' to show available (default "chainsync")
+>
+> **Input Types:**
+> 1. `chainsync` - syncs blocks from a Cardano node using either NtC (node-to-client) or NtN (node-to-node)
+> 2. `mempool` - reads unconfirmed transactions from a Cardano node's mempool via LocalTxMonitor (NtC)
 <br />
 
 ### input-chainsync:
