@@ -37,6 +37,8 @@ Now that we have our asset id / fingerprint that we want to monitor, we are read
 * Filter Type
 * Output
 
+<br>
+
 ### Input Mempool
 
 We need to specifiy that the input we want to use is our mempool by using the following flag: 
@@ -44,6 +46,8 @@ We need to specifiy that the input we want to use is our mempool by using the fo
 ```
 --input mempool
 ```
+
+<br>
 
 ### Input Mempool Socket Path
 
@@ -71,6 +75,8 @@ We can use the asset fingerprint from above for cTOSI to have Adder track transa
 --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 ```
 
+<br>
+
 ### Filter Type - Transaction
 
 For this example, we want to get alerts when a transaction occurs using the cTOSI asset id / fingerprint. To do this we will add the following filter:
@@ -78,6 +84,8 @@ For this example, we want to get alerts when a transaction occurs using the cTOS
 ```
 --filter-type input.transaction
 ```
+
+<br>
 
 ### Output
 
