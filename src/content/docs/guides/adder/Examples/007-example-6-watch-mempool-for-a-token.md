@@ -31,10 +31,19 @@ asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 
 Now that we have our asset id / fingerprint that we want to monitor, we are ready to look at the filters and commands we will use. For this example, we will use:
 
+* Input Mempool
 * Input Mempool Socket Path
 * Filter Asset
 * Filter Type
 * Output
+
+### Input Mempool
+
+We need to specifiy that the input we want to use is our mempool by using the following flag: 
+
+```
+--input mempool
+```
 
 ### Input Mempool Socket Path
 
@@ -88,7 +97,7 @@ To get a log notification when a transaction includes the Tosidrop token cTOSI, 
 
 
 ```
-./adder --input-mempool-socket-path /home/user/cardano-my-node/db/socket --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output log
+./adder --input mempool --input-mempool-socket-path /home/user/cardano-my-node/db/socket --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output log
 ```
 
 ### Congratulations!
