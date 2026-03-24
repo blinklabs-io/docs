@@ -104,6 +104,8 @@ To get a log notification when a transaction includes the Tosidrop token cTOSI, 
 
 Anytime a transaction appears in our mempool containing cTOSI you will get a log event.
 
+![adder-mempool-log](/adder-mempool-log.png)
+
 ***
 
 > 💡 TIP: You can get a list of all available commands by using the `-h` or `--help` flag.
