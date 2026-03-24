@@ -19,7 +19,7 @@ In this example we will use Adder to send us a Telegram notification, when there
 
 ***
 
-Before we breakdown the filters and commands we will use for this example we need to get a DRep id to track also a Telgram bot token and chat id so we can get alerts in Telegram. We will walk through the steps below.
+Before we break down the filters and commands, we will use for this example we need to get a DRep id to track also a Telegram bot token and chat id so we can get alerts in Telegram. We will walk through the steps below.
 
 <a name="step-1"></a>
 
@@ -99,7 +99,7 @@ In order to get alerts in Telegram we will need a bot token from BotFather and t
 
 **2-9.** Open this URL in a browser with your bot token from [Step 2-5](#step-2-5) `https://api.telegram.org/bot{your_bot_token}/getUpdates`
 
-See we need to prefix our token with a word `bot`
+⚠️ Notice we need to prefix our token with a word `bot`
 
 > Eg: https://api.telegram.org/bot87xxxxxx07:AAG8xxxxxx1hi-C8xxxxxxTB2/getUpdates
 
