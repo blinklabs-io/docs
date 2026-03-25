@@ -50,76 +50,54 @@ You can verify the binary works by running:
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 
-Create a `dingo.yaml` file in your dingo directory:
+Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
 ```
-nano ~/dingo/dingo.yaml
-```
-
-Paste the following configuration:
-
-```yaml
-# Dingo node configuration - Preview network
-
-bindAddr: "0.0.0.0"
-
-# Network name — Dingo uses embedded configs for preview, preprod, mainnet
-network: "preview"
-
-# Database configuration
+cat <<EOF > ~/dingo/dingo.yaml
+# Database
 database:
   blob:
     plugin: "badger"
     badger:
-      data-dir: "/home/YOUR_USER/dingo/.dingo/badger"
-      # Setting caches to 0 uses OS page cache (mmap) instead of BadgerDB's
-      # internal LRU caches. Dramatically reduces memory usage.
       block-cache-size: 0
-      index-cache-size: 0
-      # Compression must be disabled when caches are set to 0
       compression: false
+      data-dir: "$HOME/dingo/.dingo/badger"
       gc: true
+      index-cache-size: 0
   metadata:
     plugin: "sqlite"
     sqlite:
-      data-dir: "/home/YOUR_USER/dingo/.dingo/metadata.db"
+      data-dir: "$HOME/dingo/.dingo/metadata.db"
+databasePath: "$HOME/dingo/.dingo"
 
-# Database root directory
-databasePath: "/home/YOUR_USER/dingo/.dingo"
-
-# UNIX domain socket for Cardano CLI (NtC)
-socketPath: "/home/YOUR_USER/dingo/dingo.socket"
-
-# Relay port for node-to-node communication
-relayPort: 3001
-
-# Private port for node-to-client (NtC) communication
-privateBindAddr: "127.0.0.1"
-privatePort: 3002
-
-# Prometheus metrics
-metricsPort: 12798
-
-# Storage mode: "core" for relay/BP, "api" for data nodes with APIs enabled
-storageMode: "core"
-
-# API ports (0 = disabled)
-utxorpcPort: 0
-blockfrostPort: 0
-meshPort: 0
-
-# Mempool capacity in bytes
+# Mempool
 mempoolCapacity: 1048576
 
-# Mithril snapshot bootstrap
+# Mithril
 mithril:
-  enabled: true
   aggregatorUrl: ""
   cleanupAfterLoad: true
+  enabled: true
   verifyCertificates: true
+
+# Network
+bindAddr: "0.0.0.0"
+metricsPort: 12798
+network: "preview"
+privateBindAddr: "127.0.0.1"
+privatePort: 3002
+relayPort: 3001
+socketPath: "$HOME/dingo/dingo.socket"
+
+# Storage
+blockfrostPort: 0
+meshPort: 0
+storageMode: "core"
+utxorpcPort: 0
+EOF
 ```
 
-> ⚠️ Replace `YOUR_USER` with your actual username in all paths above. You can find it by running `echo $USER`.
+> 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
 ***
 
@@ -155,7 +133,7 @@ Run the following command from your dingo directory:
 
 ```
 cd ~/dingo
-./dingo mithril sync --config dingo.yaml
+./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
 Dingo will:
@@ -177,7 +155,7 @@ Once the Mithril snapshot has loaded, start the node:
 
 ```
 cd ~/dingo
-./dingo serve --config dingo.yaml
+./dingo serve --config ~/dingo/dingo.yaml
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
