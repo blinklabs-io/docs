@@ -23,362 +23,148 @@ For this guide we will walk you through downloading the Dingo binary and all the
 
 <br>
 
-## Step 1 - Download binary from Blinklabs  
+## Step 1 - Download Dingo Binary
 <br>
 
-**Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Dingo.
+Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
-![dingo-blinklabs-site](/dingo-blinklabs-site.png)
-<br>
-
-
-**Step 1-B** - Select the operating system that you want to use to run Dingo.  
-
-![dingo-blinklabs-site-operating-system](/dingo-blinklabs-site-operating-system.png)
-<br>
-
-**Step 1-C** - You can either download the binary file and move the file to your preferred location or...  
-
-![dingo-blinklabs-site-download](/dingo-blinklabs-site-download.png)
-
-<br>
-
-Copy the path from Blinklabs and run the following command to download the binary file.  
-
-<br>
-
-⚠️ Adjust the link path to the correct path for the version you want to download. 
-
-> 💡 Tip: You can download the latest Dingo release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">https://github.com/blinklabs-io/dingo/releases</a> page.
-
-
-We will first make a `dingo` directory for all our dingo related files before downloading the Dingo binary.  
+⚠️ Adjust the version and architecture to match your system.
 
 ```
-mkdir dingo
-cd dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.15.1/dingo-v0.15.1-linux-amd64.tar.gz -O - | tar -xz
-```
-
-***
-
-<br>
-
-## Best Practices - Files Needed to Run Dingo
-The following files are needed to run Dingo. We will walk through the steps to download and edit the files in the next few steps.  
-1. dingo.yaml
-2. Node Config
-3. Node Topology
-4. Byron Genesis
-5. Shelley Genesis
-6. Alonzo Genesis
-7. Conway Genesis
-
-## Step 2 - Download dingo.yaml Example File
-
-For this guide we will use the dingo.yaml file. We will download it to our main dingo directory by using the following command:
-```
-wget -O - https://raw.githubusercontent.com/blinklabs-io/dingo/refs/heads/main/dingo.yaml.example > dingo.yaml
-```
-
-***
-
-<br>
-
-## Step 3 - Create Directory and Download Configuration Files
-
-We will create a directory to store our Cardano Configuration Files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
-
-```
-mkdir -p config/cardano/preview
-```
-
-Now we will navigate to the `config/cardano/preview` folder and download the Cardano Configuration Files
-
-```
-cd config/cardano/preview
-```
-
-We will now download the Cardano Preview Testnet Non-block-producers config file by running:
-
-```
-wget https://book.play.dev.cardano.org/environments/preview/config.json
-```
-
-Next, we will download the Preview Testnet Topology file by running:
-
-```
-wget https://book.play.dev.cardano.org/environments/preview/topology.json
-```
-
-✅ For this example we will use the default topology file, as seen below, just to get the node running and synced. Dingo supports all current and legacy topology files.
-
-```
-{
-  "bootstrapPeers": [
-    {
-      "address": "preview-node.play.dev.cardano.org",
-      "port": 3001
-    }
-  ],
-  "localRoots": [
-    {
-      "accessPoints": [],
-      "advertise": false,
-      "trustable": false,
-      "valency": 1
-    }
-  ],
-  "publicRoots": [
-    {
-      "accessPoints": [],
-      "advertise": false
-    }
-  ],
-  "useLedgerAfterSlot": 73267000
-}
-```
-
-Lastly, we will download the Byron, Shelley, Alonzo, and Conway Genesis files
-
-```
-wget https://book.play.dev.cardano.org/environments/preview/byron-genesis.json \
-https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json \
-https://book.play.dev.cardano.org/environments/preview/alonzo-genesis.json \
-https://book.play.dev.cardano.org/environments/preview/conway-genesis.json
-```
-
-> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
-
-***
-
-<br>
-
-## Step 4 - Edit dingo.yaml File
-
-Now that we have the configuration files needed, we will edit the dingo.yaml file to point to the right directories and files. To edit this file, we will run:
-
-```
+mkdir -p ~/dingo
 cd ~/dingo
-nano dingo.yaml
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.27.7/dingo-v0.27.7-linux-amd64.tar.gz -O - | tar -xz
 ```
 
-> ✅ For this example, we save the dingo.yaml file to our main dingo directory so we will use `cd ~/dingo` to return to that directory, please adjust path and file name if needed.
-
-#### Add paths to dingo.yaml
-We will add a path to our topology file and double check our path to our Cardano config.json file. If you used a different path than `./config/cardano/preview` please adjust as needed.
+You can verify the binary works by running:
 
 ```
-# Example config file for dingo
-# The values shown below correspond to the in-code defaults
-
-# Public bind address for the Dingo server
-bindAddr: "0.0.0.0"
-
-# Path to the Cardano node configuration file
-#
-# Can be overridden with the config environment variable
-cardanoConfig: "./config/cardano/preview/config.json"
-
-# A directory which contains the ledger database files
-databasePath: ".dingo"
-
-# Path to the UNIX domain socket file used by the server
-socketPath: "dingo.socket"
-
-# Name of the Cardano network
-network: "preview"
-
-# TLS certificate file path (for HTTPS)
-#
-# Can be overridden with the TLS_CERT_FILE_PATH environment variable
-tlsCertFilePath: ""
-
-# TLS key file path (for HTTPS)
-#
-# Can be overridden with the TLS_KEY_FILE_PATH environment variable
-tlsKeyFilePath: ""
-
-# Path to the topology configuration file for Cardano node
-topology: "./config/cardano/preview/topology.json"
-
-# TCP port to bind for Prometheus metrics endpoint
-metricsPort: 12798
-
-# Internal/private address to bind for listening for Ouroboros NtC
-privateBindAddr: "127.0.0.1"
-
-# TCP port to bind for listening for Ouroboros NtC
-privatePort: 3002
-
-# TCP port to bind for listening for Ouroboros NtN
-#
-# Can be overridden with the port environment variable
-relayPort: 3001
-
-# TCP port to bind for listening for UTxO RPC
-utxorpcPort: 9090
-
-# Ignore prior chain history and start from current tip (default: false)
-# This is experimental and may break — use with caution
-intersectTip: false
-
-# Maximum cache size in bytes used by BadgerDB for block/index cache
-# Default: 1073741824 (1 GB)
-badgerCacheSize: 1073741824
-
-# Maximum total size (in bytes) of all transactions allowed in the mempool.
-# Transactions exceeding this limit will be rejected.
-# Default: 1048576 (1 MB)
-mempoolCapacity: 1048576
+./dingo version
 ```
 
 ***
 
 <br>
 
-## Step 5 - Open Ports
-We will cover how to list and add UFW firewall rules to add the ports needed. Adjust as needed.
+## Step 2 - Create dingo.yaml Configuration File
 
-> 💡Tip: UFW stands for Uncomplicated Firewall and is used for managing iptables (netfilter) firewall rules.
+Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 
-To see which ports are currently open we can run:
+Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
+
+```
+cat <<EOF > ~/dingo/dingo.yaml
+# Database
+database:
+  blob:
+    plugin: "badger"
+    badger:
+      block-cache-size: 0
+      compression: false
+      data-dir: "$HOME/dingo/.dingo/badger"
+      gc: true
+      index-cache-size: 0
+  metadata:
+    plugin: "sqlite"
+    sqlite:
+      data-dir: "$HOME/dingo/.dingo/metadata.db"
+databasePath: "$HOME/dingo/.dingo"
+
+# Mempool
+mempoolCapacity: 1048576
+
+# Mithril
+mithril:
+  aggregatorUrl: ""
+  cleanupAfterLoad: true
+  enabled: true
+  verifyCertificates: true
+
+# Network
+bindAddr: "0.0.0.0"
+metricsPort: 12798
+network: "preview"
+privateBindAddr: "127.0.0.1"
+privatePort: 3002
+relayPort: 3001
+socketPath: "$HOME/dingo/dingo.socket"
+
+# Storage
+blockfrostPort: 0
+meshPort: 0
+storageMode: "core"
+utxorpcPort: 0
+EOF
+```
+
+> 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
+
+***
+
+<br>
+
+## Step 3 - Open Ports
+
+We will cover how to add UFW firewall rules for the ports Dingo needs.
+
+> 💡 Tip: UFW stands for Uncomplicated Firewall and is used for managing iptables (netfilter) firewall rules.
+
+To see which ports are currently open:
 
 ```
 sudo ufw status numbered
 ```
 
 #### Add Port 3001 for Ouroboros Node to Node (NtN) Communication
-In order for us to sync the chain and pass data between nodes we need to open port 3001 or whatever port you selected. To open port 3001 we will run:
 
 ```
 sudo ufw allow 3001/tcp
 ```
-<!--
-
-#### Add Port 12798 for Prometheus metrics (Optional)
-If you want track metrics using a tool like Grafana you will want to open port 12798 or whatever port you selected. To open port 12798 we will run:
-
-```
-sudo ufw allow 12798/tcp
-```
-
--->
-
-#### Add Port 9090 for UTxO RPC (Optional)
-You might want to also add port 9090 or whatever port you selected for UTxO RPC if you want to access chain data or transactions. We can open port 9090 by running:
-
-> ⚠️ Caution exposing this port outside of your local machine.
-
-```
-sudo ufw allow 9090/tcp
-```
 
 ***
 
 <br>
 
-## Step 6 - Bootstrap syncing Blockchain using Mithril Client (Optional)
-We can speed up the initial syncing of the blocks also known as a block replay by using the Mithril Client to download a Mithril snapshot. This could save you hours of syncing time.
+## Step 4 - Bootstrap from Mithril Snapshot
 
-<br>
+Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-#### Step 6.1 - Create Mithril folder
-We will create a folder inside our dingo folder that we will use to download the mithril binary into. To create a folder in our dingo folder we can run:
+Run the following command from your dingo directory:
 
 ```
 cd ~/dingo
-mkdir mithril
+./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-<br>
+Dingo will:
+1. Download the latest Mithril snapshot for your configured network
+2. Verify the certificate chain
+3. Load the snapshot into the database
 
-#### Step 6.2 - Download Mithril Client
-We can now download the Mithril Client binary by running the following:
+This takes approximately 10-15 minutes depending on your system and network speed.
 
-⚠️ Adjust the link path to the correct path for the version you want to download. 
-
-> 💡 Tip: You can download the latest Mithril release from the <a href="https://github.com/input-output-hk/mithril/releases" target="_blank">https://github.com/input-output-hk/mithril/releases</a> page.
-
-```
-cd mithril
-wget https://github.com/input-output-hk/mithril/releases/download/2524.0/mithril-2524.0-linux-x64.tar.gz -O - | tar -xz
-```
-
-<br>
-
-#### Step 6.3 - Export Environment Variables
-We will export the following environment variables to download the Mithril snapshot. Run these commands:
-
-Preview Network variable:
-
-```
-export NETWORK=preview
-```
-
-Endpoint variable:
-
-```
-export AGGREGATOR_ENDPOINT=https://aggregator.pre-release-preview.api.mithril.network/aggregator
-```
-
-Genesis verification key variable:
-```
-export GENESIS_VERIFICATION_KEY=$(curl -s https://raw.githubusercontent.com/input-output-hk/mithril/main/mithril-infra/configuration/pre-release-preview/genesis.vkey)
-```
-
-<br>
-
-#### Step 6.4 - Find Latest Snapshot and Download it
-
-> 💡 Tip: Mithril creates the db/ directory in your current folder. In our case, the `mithril` folder we created.
-
-First, we run the following to get the current list of snapshots
-
-```
-./mithril-client cardano-db snapshot list
-```
-
-To see the current snapshot we run:
-
-```
-./mithril-client cardano-db snapshot show latest
-```
-
-Download the current snapshot by running:
-
-```
-./mithril-client cardano-db download latest
-```
-
-This takes some time, maybe up to 10 minutes on preview based on your system. You can see the progress on screen.  
-
-<br>
-
-#### Step 6.5 - Load snapshot into Dingo db
-Now we can return to our dingo directory by running:
-
-```
-cd ~/dingo
-```
-
-We will now load the Mithril snapshot into dingo by running the following command:
-
-```
-./dingo load ~/dingo/mithril/db/immutable
-```
-
-Dingo will now load the blocks into the dingo database by copying and loading them by running a ledger replay. This will take some time as well, up to 2 hours depending on your system.
-
-![dingo-load-snapshot](/dingo-load-snapshot.png)
-
-> 📝 If you choose not to load a Mithril snapshot you can start dingo with the `./dingo` command and let the normal chainsync process start. It will take several more hours than using a Mithril snapshot for the chain to sync.
+> 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
 ***
 
 <br>
 
-#### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the Dingo node when the computer reboots? 
+## Step 5 - Start Dingo
+
+Once the Mithril snapshot has loaded, start the node:
+
+```
+cd ~/dingo
+./dingo serve --config ~/dingo/dingo.yaml
+```
+
+You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+***
+
+<br>
+
+#### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the Dingo node when the computer reboots?
 [See our guide on how to create a startup service for Dingo](../004-create-start-up-service).
 
 ***
