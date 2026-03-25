@@ -46,30 +46,7 @@ You can verify the binary works by running:
 
 <br>
 
-## Step 2 - Create Directory Structure
-
-We will create a clean directory layout for Dingo:
-
-```
-mkdir -p ~/dingo/.dingo
-```
-
-Your directory should look like this:
-
-```
-~/dingo/
-├── dingo              # binary
-├── dingo.yaml         # configuration (created in Step 3)
-└── .dingo/            # database directory (managed by Dingo)
-    ├── badger/        # blob storage (created automatically)
-    └── metadata.db    # metadata (created automatically)
-```
-
-***
-
-<br>
-
-## Step 3 - Create dingo.yaml Configuration File
+## Step 2 - Create dingo.yaml Configuration File
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 
@@ -148,7 +125,7 @@ mithril:
 
 <br>
 
-## Step 4 - Open Ports
+## Step 3 - Open Ports
 
 We will cover how to add UFW firewall rules for the ports Dingo needs.
 
@@ -170,7 +147,7 @@ sudo ufw allow 3001/tcp
 
 <br>
 
-## Step 5 - Bootstrap from Mithril Snapshot
+## Step 4 - Bootstrap from Mithril Snapshot
 
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
@@ -194,7 +171,7 @@ This takes approximately 10-15 minutes depending on your system and network spee
 
 <br>
 
-## Step 6 - Start Dingo
+## Step 5 - Start Dingo
 
 Once the Mithril snapshot has loaded, start the node:
 
