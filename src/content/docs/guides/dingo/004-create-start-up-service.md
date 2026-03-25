@@ -23,116 +23,92 @@ For this guide we will walk you through setting up a `systemd` service. Using a 
 
 <br>
 
-## Step 1 - Move Dingo and dingo.yaml Files  
+## Step 1 - Move Dingo Binary and Configuration Files
 
-Best Practices: Since we will be using a `systemd` to startup Dingo we will move our Dingo binary to the `/usr/local/bin/` and our dingo.yaml to the `/etc/dingo/` directory by running the following:
+Best Practices: Since we will be using `systemd` to run Dingo we will move our binary to `/usr/local/bin/` and our configuration to `/etc/dingo/`.
 
 <br>
 
-> ⚠️ Please adjust paths below. Paths are based on our [Quick Start](../002-quick-start-overview) guide and `USER=test`.
->  
+> ⚠️ Please adjust paths below. Paths are based on our [Quick Start](../002-quick-start-overview) guide.
+>
 > 💡 Tip: to find your path to the Dingo binary, navigate to your Dingo binary directory, then you can run the `realpath dingo` command.
 
-```
-sudo mv /home/test/dingo/dingo /usr/local/bin/
-```
-<br>
-
-> ✅ You can check that Dingo binary was moved by running `which dingo`
-
-<br>
-
-Now we will create the `/etc/dingo/` directory:
+Move the binary:
 
 ```
-sudo mkdir /etc/dingo/
+sudo cp ~/dingo/dingo /usr/local/bin/
 ```
+
+> ✅ You can check that the Dingo binary was moved by running `which dingo`
 
 <br>
 
-Then we will move our dingo.yaml file to the `/etc/dingo/`:  
+Create the config directory and copy the configuration:
 
 ```
-sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
+sudo mkdir -p /etc/dingo
+sudo cp ~/dingo/dingo.yaml /etc/dingo/
 ```
 
 ***
 
 <br>
 
-## Step 2 - Edit Paths in dingo.yaml File 
+## Step 2 - Edit Paths in dingo.yaml File
 
-Now we will edit our dingo.yaml file to update the following paths since we moved our yaml to `/etc/dingo/`.  
-
-<br> 
-
-We will need to edit the following paths below: `cardanoConfig:`, `databasePath:`, `socketPath:`, and `topology:`. 
-
-✅ Please adjust as needed with correct paths to match your username and directories.
+Now we will edit the dingo.yaml to use absolute paths that work with the systemd service.
 
 ```
-# Example config file for dingo
-# The values shown below correspond to the in-code defaults
+sudo nano /etc/dingo/dingo.yaml
+```
 
-# Public bind address for the Dingo server
+Update the following paths. Replace `YOUR_USER` with your actual username:
+
+```yaml
+# Dingo node configuration - Preview network
+
 bindAddr: "0.0.0.0"
 
-# Path to the Cardano node configuration file
-#
-# Can be overridden with the config environment variable
-cardanoConfig: "/home/test/dingo/config/cardano/preview/config.json"
-
-# A directory which contains the ledger database files
-databasePath: "/home/test/dingo/dingo"
-
-# Path to the UNIX domain socket file used by the server
-socketPath: "/home/test/dingo.socket"
-
-# Name of the Cardano network
 network: "preview"
 
-# TLS certificate file path (for HTTPS)
-#
-# Can be overridden with the TLS_CERT_FILE_PATH environment variable
-tlsCertFilePath: ""
+database:
+  blob:
+    plugin: "badger"
+    badger:
+      data-dir: "/home/YOUR_USER/dingo/.dingo/badger"
+      block-cache-size: 0
+      index-cache-size: 0
+      compression: false
+      gc: true
+  metadata:
+    plugin: "sqlite"
+    sqlite:
+      data-dir: "/home/YOUR_USER/dingo/.dingo/metadata.db"
 
-# TLS key file path (for HTTPS)
-#
-# Can be overridden with the TLS_KEY_FILE_PATH environment variable
-tlsKeyFilePath: ""
+databasePath: "/home/YOUR_USER/dingo/.dingo"
 
-# Path to the topology configuration file for Cardano node
-topology: "/home/test/dingo/config/cardano/preview/topology.json"
+socketPath: "/home/YOUR_USER/dingo/dingo.socket"
 
-# TCP port to bind for Prometheus metrics endpoint
-metricsPort: 12798
-
-# Internal/private address to bind for listening for Ouroboros NtC
-privateBindAddr: "127.0.0.1"
-
-# TCP port to bind for listening for Ouroboros NtC
-privatePort: 3002
-
-# TCP port to bind for listening for Ouroboros NtN
-#
-# Can be overridden with the port environment variable
 relayPort: 3001
 
-# TCP port to bind for listening for UTxO RPC
-utxorpcPort: 9090
+privateBindAddr: "127.0.0.1"
+privatePort: 3002
 
-# Ignore prior chain history and start from current tip (default: false)
-# This is experimental and may break — use with caution
-intersectTip: false
+metricsPort: 12798
 
-# Maximum cache size in bytes used by BadgerDB for block/index cache
-# Default: 1073741824 (1 GB)
-badgerCacheSize: 1073741824
+storageMode: "core"
 
-# Maximum total size (in bytes) of all transactions allowed in the mempool.
-# Transactions exceeding this limit will be rejected.
-# Default: 1048576 (1 MB)
+utxorpcPort: 0
+blockfrostPort: 0
+meshPort: 0
+
 mempoolCapacity: 1048576
+
+mithril:
+  enabled: true
+  aggregatorUrl: ""
+  cleanupAfterLoad: true
+  verifyCertificates: true
 ```
 
 ***
@@ -141,11 +117,10 @@ mempoolCapacity: 1048576
 
 ## Step 3 - Create dingo.service Unit Configuration File
 
-Next, we will write the dingo.service unit configuration file or 'service' file, which will be run by `systemd`.
+Next, we will create the systemd service file.
 
-> ⚠️ Please adjust the `User=` line below.
-> In our [Quick Start](../002-quick-start-overview) guide we used the user `test` please adjust this to your username.
-> 
+> ⚠️ Replace `YOUR_USER` with your actual username below.
+>
 > 💡 Tip: you can run `echo $USER` command to find your username.
 
 ```
@@ -158,10 +133,10 @@ After=network-online.target
 Type=simple
 Restart=on-failure
 RestartSec=10
-User=test
-ExecStart=/usr/local/bin/dingo
+User=YOUR_USER
+ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=3
+TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
@@ -184,11 +159,25 @@ sudo mv /tmp/dingo.service /etc/systemd/system/
 
 <br>
 
+## Step 5 - Bootstrap from Mithril (First Run Only)
 
+Before starting the service for the first time, bootstrap the database from a Mithril snapshot:
 
-## Step 5 - Enable the Service and Start Service
+```
+dingo mithril sync --config /etc/dingo/dingo.yaml
+```
 
-Now we will enable the service to run at start and turn it on by running:
+This downloads and loads a snapshot, saving hours of sync time. See [Step 5 of the Quick Start guide](../002-quick-start-overview#step-5---bootstrap-from-mithril-snapshot) for details.
+
+> 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
+
+***
+
+<br>
+
+## Step 6 - Enable the Service and Start Service
+
+Now we will enable the service to run at boot and start it:
 
 ```
 sudo systemctl enable dingo.service
@@ -204,18 +193,24 @@ sudo systemctl start dingo.service
 
 <br>
 
-## Step 6 - Check Status
+## Step 7 - Check Status
 
-You can ensure that dingo.service is active by checking its status by running:
+You can ensure that dingo.service is active by checking its status:
 
 ```
 sudo systemctl status dingo.service
 ```
 
-If you have an error, you can use the following command to see the error logs:
+To follow the logs in real time:
 
 ```
-journalctl -u dingo.service
+sudo journalctl -u dingo -f
+```
+
+If you have an error, you can see recent logs with:
+
+```
+sudo journalctl -u dingo -n 50 --no-pager
 ```
 
 ***
