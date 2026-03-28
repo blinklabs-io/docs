@@ -212,7 +212,7 @@ To get Telegram notifications when a action occurs by a DRep, we will run the fo
 > Also adjust the DRep id, $TELEGRAM_TOKEN, and $CHAT_ID.
 
 ```
-C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.governance --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc --output telegram --output-telegram-bot-token $TELEGRAM_TOKEN --output-telegram-chat-id $CHAT_ID
+"C:\Users\richm\Desktop\adder.exe" --filter-type input.governance --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc --output telegram --output-telegram-bot-token $TELEGRAM_TOKEN --output-telegram-chat-id $CHAT_ID
 ```
 
 ![adder-DRep-alert](/adder-DRep-alert.png)
