@@ -76,7 +76,7 @@ Command to run once you adjust Adder exe path and your wallet address:
 
 
 ```
-C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
+"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
 ```
 
 Final command to run:
