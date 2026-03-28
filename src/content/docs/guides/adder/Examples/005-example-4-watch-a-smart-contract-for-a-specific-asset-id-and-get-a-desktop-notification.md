@@ -96,7 +96,7 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 
 ```
-C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b --output notify
+"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b --output notify
 ```
 
 
