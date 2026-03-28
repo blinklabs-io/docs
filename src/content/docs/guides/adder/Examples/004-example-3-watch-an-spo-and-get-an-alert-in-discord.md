@@ -159,7 +159,7 @@ To get Discord notifications when a change occurs to a SPO, we will run the foll
 > Also adjust the pool id and webhook URL.
 
 ```
-C:\Users\richm\Desktop\adder-v0.39.1-windows-amd64.exe --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
 ![adder-SPO-block-alert](/adder-SPO-block-alert.png)
