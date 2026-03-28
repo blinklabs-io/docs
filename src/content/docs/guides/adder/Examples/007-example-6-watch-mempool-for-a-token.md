@@ -89,7 +89,7 @@ For this example, we want to get alerts when a transaction occurs using the cTOS
 
 ### Output
 
-We want the output events to console using logger. So that when a transaction that contains cTOSI occurs, we will receive log to console. To do this we will add the following command:
+We want the output events to console using logger. So that when a transaction that contains cTOSI occurs, we will receive log to console. To do this we will add the following flag:
 
 ```
 --output log
