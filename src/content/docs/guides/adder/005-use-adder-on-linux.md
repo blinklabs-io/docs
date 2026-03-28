@@ -11,7 +11,7 @@ You can download the latest Adder release from the <a href="https://github.com/b
 We will download the Adder binary by running the following command. ⚠️ Adjust download link to the most current version.
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.30.1/adder-v0.30.1-linux-amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0.39.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
@@ -19,7 +19,7 @@ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.30.1/adder-v0
 
 ## Run Adder with Filters and Commands
 
-Now we can run Adder `./adder` with filters and commands. For example you can get a list of all available commandline arguments by using the `-h`/`-help` flag.
+Now we can run Adder `./adder` with filters and commands. For example you can get a list of all available commandline arguments by using the `-h`/`--help` flag.
 
 ```
 ./adder -h

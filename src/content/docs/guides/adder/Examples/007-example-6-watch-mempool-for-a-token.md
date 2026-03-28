@@ -1,11 +1,13 @@
 ---
-title: Watch a Token and get a Desktop Notification
-description: Adder Example 2 - Watch a Token and get a Desktop Notification.
+title: Watch Mempool for a transaction with a Token
+description: Adder Example 6 - Watch Mempool for a Transaction with a Token.
 ---
 
-In this example we will use Adder to send us a desktop notification when there is a transaction that includes a certain token or asset that we want to track.
+In this example we will use Adder to get a log notification when there is a transaction in our mempool that includes a certain token or asset that we want to track.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../002-quick-start-overview) guide.
+⚠️ Mempool is used for pre-accepted transactions. If higher assurance is needed, use `input-chainsync`.
+
+> ✅ For this guide we assume you are running Adder on same machine as your node. If not see our [Adder Linux Guide](../../005-use-adder-on-linux).
 
 ***
 
@@ -29,9 +31,41 @@ asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 
 Now that we have our asset id / fingerprint that we want to monitor, we are ready to look at the filters and commands we will use. For this example, we will use:
 
+* Input Mempool
+* Input Mempool Socket Path
 * Filter Asset
 * Filter Type
 * Output
+
+<br>
+
+### Input Mempool
+
+We need to specifiy that the input we want to use is our mempool by using the following flag: 
+
+```
+--input mempool
+```
+
+<br>
+
+### Input Mempool Socket Path
+
+We need to specifiy socket path for the mempool of a Cardano Node that we are running Adder on. 
+
+⚠️ Adjust the file path below to match your path
+
+```
+--input-mempool-socket-path /home/user/cardano-my-node/db/socket
+```
+
+💡 Tip: To find the path to your node socket run the following command:
+
+```
+echo $CARDANO_NODE_SOCKET_PATH
+```
+
+<br>
 
 ### Filter Asset
 
@@ -41,6 +75,8 @@ We can use the asset fingerprint from above for cTOSI to have Adder track transa
 --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 ```
 
+<br>
+
 ### Filter Type - Transaction
 
 For this example, we want to get alerts when a transaction occurs using the cTOSI asset id / fingerprint. To do this we will add the following filter:
@@ -49,33 +85,34 @@ For this example, we want to get alerts when a transaction occurs using the cTOS
 --filter-type input.transaction
 ```
 
+<br>
+
 ### Output
 
-We want the output to be a desktop notification. So that when a transaction that contains cTOSI occurs, we will receive a desktop notification. To do this we will add the following command:
+We want the output events to console using logger. So that when a transaction that contains cTOSI occurs, we will receive log to console. To do this we will add the following flag:
 
 ```
---output notify
+--output log
 ```
 
 ***
 
 ## Step 3 - Putting it All Together
 
-To get desktop notifications when a transaction includes the Tosidrop token cTOSI, we will run the following command in our command prompt:
+To get a log notification when a transaction includes the Tosidrop token cTOSI, we will run the following command in our command prompt:
 
-> ⚠️ Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.
+> ⚠️ Please adjust socket path
 
 
 ```
-"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output notify
+./adder --input mempool --input-mempool-socket-path /home/user/cardano-my-node/db/socket --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output log
 ```
 
 ### Congratulations!
 
-Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI you will get a desktop alert.
+Anytime a transaction appears in our mempool containing cTOSI you will get a log event.
 
-
-![adder-desktop-alert](/adder-desktop-alert.png)
+![adder-mempool-log](/adder-mempool-log.png)
 
 ***
 

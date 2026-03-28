@@ -3,10 +3,7 @@ title: Watch an SPO and get an Alert in Discord
 description: Adder Example 3 - Watch an SPO and get an Alert in Discord.
 ---
 
-# Watch an SPO and get an Alert in Discord
-
 In this example we will use Adder to send us a Discord notification via webhooks, when there is a change to the stake pool that we want to track. 
-
 
 ### The events that will trigger an alert are the following changes to a SPO:
 
@@ -99,6 +96,8 @@ https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5U
 
 ***
 
+## Step 3 - Selecting Adder Commands
+
 Now that we have the pool id that we want to monitor and our Discord webhook URL, we are ready to look at the filters and commands we will use. For this example, we will use:
 
 * Filter Type
@@ -110,51 +109,49 @@ Now that we have the pool id that we want to monitor and our Discord webhook URL
 
 ***
 
-## Filter Type
+### Filter Type
 
 We don't want alerts of block rollbacks so we can use the filter type transaction and block. Since we want to use two filter types we separate them with a comma. To have Adder exclude the rollback alerts by using transaction and block filter, we will use the following filter:
 
 ```
--filter-type chainsync.transaction,chainsync.block
+--filter-type input.transaction,input.block
 ```
 
-## Filter Pool
+### Filter Pool
 
 We can use the pool id from [Step 1](#step-1) to have Adder track our SPO by using the following filter:
 
 ```
--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
+--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
 ```
 
-## Output Webhook
+### Output Webhook
 
 We need to add a command to let Adder know that we want to use a webhook. To do this we will add the following command:
 
 ```
--output webhook
+--output webhook
 ```
 
-## Output Webhook Format
+### Output Webhook Format
 
 Since we want Adder to notify us in Discord, we need to tell Adder the webhook format we want to use is Discord. To do this we will add the following command:
 
 ```
--output-webhook-format discord
+--output-webhook-format discord
 ```
 
-## Output Webhook URL
+### Output Webhook URL
 
 For us to get a notification in our preferred Discord channel, we need to tell Adder the URL to the Discord Webhook. To do this we will add the following command using the Webhook URL from [Step 2](#step-2):
 
 ```
--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
-
-
 
 ***
 
-## Putting it All Together
+## Step 4 - Putting it All Together
 
 To get Discord notifications when a change occurs to a SPO, we will run the following command in our command prompt:
 
@@ -162,7 +159,7 @@ To get Discord notifications when a change occurs to a SPO, we will run the foll
 > Also adjust the pool id and webhook URL.
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction, chainsync.block -filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 -output webhook -output-webhook-format discord -output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
 ![adder-SPO-block-alert](/adder-SPO-block-alert.png)
@@ -173,8 +170,7 @@ Now you can minimize the window and let Adder run in the background. Anytime a c
 
 ***
 
-
-> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `--help` flag.
 
 See our other examples to see what else Adder can do and unlock the power of Adder 💪
 
@@ -182,3 +178,5 @@ See our other examples to see what else Adder can do and unlock the power of Add
 2. [Example 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Watch a Token and get a Desktop Notification
 3. [Example 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Watch an SPO and get an Alert in Discord
 4. [Example 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
+5. [Example 5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - Watch an DRep and get an Alert in Telegram
+6. [Example 6](../007-example-6-watch-mempool-for-a-token) - Watch Mempool for a Transaction with a Token
