@@ -148,7 +148,7 @@ In this example, `1902914866` is your CHAT_ID.
 
 ## Step 3 - Selecting Adder Commands
 
-Now that we have the DRep id that we want to monitor and our Telegram Token and chat id, we are ready to look at the filters and commands we will use. For this example, we will use:
+Now that we have the DRep id that we want to monitor, our Telegram Token, and chat id, we are ready to look at the filters and commands we will use. For this example, we will use:
 
 * Filter Type
 * Filter DRep
@@ -176,7 +176,7 @@ We can use the DRep id from [Step 1](#step-1) to have Adder track our DRep by us
 
 ### Output Telegram
 
-We need to add a command to let Adder know that we want to use Telegram. To do this we will add the following command:
+We need to add a flag to let Adder know that we want to use Telegram. To do this we will add the following flag:
 
 ```
 --output telegram
@@ -184,7 +184,9 @@ We need to add a command to let Adder know that we want to use Telegram. To do t
 
 ### Output Telegram Bot Token
 
-Since we want Adder to notify us in Telegram, we need to tell Adder the Bot Token we want to use in Telegram. To do this we will add the following command using the Bot Token from [Step 2-5](#step-2-5):
+Since we want Adder to notify us in Telegram, we need to tell Adder the Bot Token we want to use in Telegram. To do this we will add the following flag using the Bot Token from [Step 2-5](#step-2-5):
+
+> ⚠️ Replace $TELEGRAM_TOKEN with your token from [Step 2-5](#step-2-5)
 
 ```
 --output-telegram-bot-token $TELEGRAM_TOKEN
@@ -192,7 +194,9 @@ Since we want Adder to notify us in Telegram, we need to tell Adder the Bot Toke
 
 ### Output Telegram Chat Id
 
-For us to get a notification in our preferred Telegram channel, we need to tell Adder the chat id to the Telegram bot. To do this we will add the following command using the Chat Id from [Step 2-9](#step-2-9):
+For us to get a notification in our preferred Telegram channel, we need to tell Adder the chat id to the Telegram bot. To do this we will add the following flag using the chat id from [Step 2-9](#step-2-9):
+
+> ⚠️ Replace $CHAT_ID with your chat id
 
 ```
 --output-telegram-chat-id $CHAT_ID
