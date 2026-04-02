@@ -41,7 +41,7 @@ Now that we have our asset id / fingerprint that we want to monitor, we are read
 
 ### Input Mempool
 
-We need to specifiy that the input we want to use is our mempool by using the following flag: 
+We need to specify that the input we want to use is our mempool by using the following flag: 
 
 ```
 --input mempool
