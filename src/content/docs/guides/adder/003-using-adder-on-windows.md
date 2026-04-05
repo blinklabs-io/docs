@@ -48,7 +48,7 @@ Now we are ready to run Adder with filters and commands so we can track certain 
 <br />
 
 
-> 💡 TIP: You can get a list of all available commands by using the `-h` or `-help` flag.
+> 💡 TIP: You can get a list of all available commands by using the `-h` or `--help` flag.
 
 <br />
 
