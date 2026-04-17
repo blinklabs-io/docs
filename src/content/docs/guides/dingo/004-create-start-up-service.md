@@ -117,6 +117,8 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
+> 📝 In v0.35.1, long running service operation is more efficient and stable without any service file or config format changes. Dingo now reuses stored block nonce records when they are available and still falls back automatically for older databases, chain selection near the tip avoids unnecessary peer switching when peers differ only slightly, and SQLite backed UTxO RPC queries are more reliable when `utxorpcPort` is enabled because malformed or cyclic predicates now stop safely instead of disrupting evaluation.
+
 ***
 
 <br>

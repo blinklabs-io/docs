@@ -160,6 +160,12 @@ cd ~/dingo
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
+> 📝 **Operational note for v0.35.1:** No configuration changes are required for these improvements.
+>
+> - Startup and ongoing sync use stored nonce records when they are available, which reduces repeated work during sync. Dingo still falls back automatically for older databases.
+> - Peer selection near chain tip now stays more stable because Dingo suppresses unnecessary switches when peers make effectively the same progress.
+> - If `utxorpcPort` is enabled, UTxO RPC queries are more reliable with SQLite metadata, and Dingo now treats malformed or cyclic predicates as unevaluable instead of recursing indefinitely.
+
 ***
 
 <br>
