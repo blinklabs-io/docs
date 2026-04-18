@@ -19,6 +19,8 @@ For this guide we will walk you through downloading the Dingo binary and all the
 
 ✅ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
 
+> 📝 **v0.35.2 note:** Dingo now keeps hard fork era history near the chain tip within `ledger tip + safe zone`, which gives operators and developers safer era boundaries when clients query recent chain history and helps avoid depending on slot to time conversions too far into the future. Dingo also now includes `gouroboros` v0.165.1, which keeps runtime and protocol library compatibility current for this release.
+
 ***
 
 <br>
