@@ -121,6 +121,8 @@ sudo ufw status numbered
 sudo ufw allow 3001/tcp
 ```
 
+> 📝 In v0.35.3, Dingo only sends peer sharing requests to remote peers that advertise peer sharing support. Dingo skips peer sharing requests for peers with peer sharing disabled, which avoids `UnknownMiniProtocol` errors and connection resets from unsupported requests.
+
 ***
 
 <br>
