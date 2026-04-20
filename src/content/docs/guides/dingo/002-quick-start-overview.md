@@ -97,6 +97,16 @@ utxorpcPort: 0
 EOF
 ```
 
+Use `storageMode: "core"` for relays and block producers. Any node that serves the Blockfrost compatible API or UTxO RPC must use `storageMode: "api"` and set the related service port values.
+
+```yaml
+storageMode: "api"
+blockfrostPort: 3000
+utxorpcPort: 9090
+```
+
+The Blockfrost compatible API now supports native asset lookups at `GET /api/v0/assets/{asset}`. Set `{asset}` to the concatenated hex asset identifier `{policy_id}{asset_name}`. Invalid identifiers return a client error, and unknown assets return not found.
+
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
 ***
@@ -159,6 +169,8 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+> 📝 Operator note: Dingo now reports ledger and era history changes more clearly during era rollovers. It tracks whether a transition is pending, in progress, or cannot occur in the current epoch, uses one consistent rollover path, and reports the exact upcoming era boundary when it is known. It also reports corrected block header protocol minor values on forged blocks, rejects missing or zero Ouroboros security parameter K values instead of continuing with unsafe rollback handling, and surfaces fork resolution ancestor lookup failures as real errors instead of treating them as ordinary block not found cases. Single relay block producer topologies now connect and recover correctly after the connection hang fix, so minimal upstream layouts are more reliable.
 
 ***
 
