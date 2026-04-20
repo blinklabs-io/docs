@@ -101,6 +101,18 @@ utxorpcPort: 0
 EOF"
 ```
 
+This example keeps the service host in consensus only mode. `storageMode: "core"` fits relay and block producer deployments that do not expose client APIs.
+
+If the same service host must expose APIs, use `storageMode: "api"` and enable the required ports:
+
+```yaml
+storageMode: "api"
+blockfrostPort: 3000
+utxorpcPort: 9090
+```
+
+API facing services require `api` storage mode. The Blockfrost compatible service also supports native asset lookups at `GET /api/v0/assets/{asset}`, where `{asset}` is the concatenated hex policy ID and asset name.
+
 ***
 
 <br>
@@ -181,6 +193,13 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+### Operational notes for v0.36.0
+
+- Correct any missing or zero Ouroboros security parameter `K` values in the active protocol state or network configuration. Dingo now rejects those values, so startup failures or rollback problems point to configuration or protocol state that needs correction.
+- Investigate fork resolution database lookup failures directly from the logs. Dingo now reports those failures as real errors instead of treating them like an ordinary missing ancestor during chain recovery.
+- Review era transition logs closely during upgrades and boundary events. Dingo now reports pending transitions, impossible transitions, and exact known era boundaries more explicitly.
+- Expect more reliable recovery with a single upstream relay. Dingo now handles block producer connectivity correctly in minimal relay topologies where one relay provides the upstream path.
 
 ***
 
