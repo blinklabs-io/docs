@@ -101,6 +101,13 @@ utxorpcPort: 0
 EOF"
 ```
 
+> 📝 Operators who want Blockfrost compatible HTTP endpoints, including native asset lookup at `GET /api/v0/assets/{asset}`, must switch to API capable storage and set `blockfrostPort` to a non zero value.
+
+```yaml
+storageMode: "api"
+blockfrostPort: 3000
+```
+
 ***
 
 <br>
@@ -116,6 +123,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
+
+> 📝 Startup now fails fast when Ouroboros security parameter `K` is unset or zero, and single relay producer topologies benefit from the `v0.36.0` connection handling fix because a trusted relay that dials inbound first no longer leaves the producer stuck.
 
 ***
 
