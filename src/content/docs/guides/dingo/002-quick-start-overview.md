@@ -98,6 +98,7 @@ EOF
 ```
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`. Version `0.36.0` adds native asset lookup support at `GET /api/v0/assets/{asset}`.
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
 ```yaml
 blockfrostPort: 3000
@@ -167,7 +168,6 @@ cd ~/dingo
 ```
 
 > 📝 Operator note: Dingo now stops at startup if Ouroboros security parameter `K` is unset or `0`. Era history now reports known transitions and confirmed epoch ends more precisely. Dingo forged blocks now use minor protocol version `69` and keep the major version from on chain parameters. Single relay producer deployments should upgrade to this behavior because trusted inbound relay connections no longer leave the producer stuck.
-
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
 ***
