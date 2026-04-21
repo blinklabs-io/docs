@@ -116,6 +116,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
+>
+> 📝 On v0.36.1, a node that is still catching up waits longer before it recycles a stalled chainsync connection. This is expected during large Mithril catch up gaps and reduces connection churn, dropped rollbacks, and source port `TIME_WAIT` exhaustion. Once the node reaches tip, the normal shorter recovery thresholds apply again.
 
 ***
 
@@ -158,6 +160,8 @@ sudo systemctl enable dingo.service
 sudo systemctl start dingo.service
 ```
 
+> 📝 During a large catch up after the first start, v0.36.1 keeps stalled chainsync connections alive longer until the node reaches tip. This reduces unnecessary reconnect cycles while the service works through a large Mithril gap.
+
 ***
 
 <br>
@@ -181,6 +185,10 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+> 📝 v0.36.1 improves rollback troubleshooting in the service logs. A rollback undo decode failure now reports a ledger error and a `LedgerErrorEvent` with operation `rollback_tx_undo_decode` plus the block slot and hash, instead of only a warning.
+>
+> 📝 v0.36.1 also fixes `DatabaseWorkerPool` coordination and blocking result delivery issues, which reduces the chance of dropped ledger operation errors or startup and shutdown hangs while monitoring a service managed node.
 
 ***
 
