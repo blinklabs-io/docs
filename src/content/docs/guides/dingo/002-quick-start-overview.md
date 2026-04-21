@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.35.1/dingo-v0.35.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.36.1/dingo-v0.36.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -158,7 +158,39 @@ cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
 
-You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+If the node is still catching up after loading a Mithril snapshot, `v0.36.1` increases chainsync stall detection thresholds by `5x`. Expect longer delays before Dingo treats a peer as stalled and recycles the connection during catch up. This behavior is intentional and helps the node finish catch up more reliably by avoiding unnecessary pipeline resets and excess `TIME_WAIT` socket churn while the node remains behind tip. Once the node reaches tip, normal faster stall recovery returns.
+
+Watch for these signs of healthy catch up in the logs:
+
+- Confirm that log output shows peer connections.
+- Confirm that log output continues to show sync progress as Dingo works through the remaining blocks toward tip.
+- Treat slower peer recycling during catch up in `v0.36.1` as expected behavior, not as a failure signal by itself.
+
+If rollback transaction undo decoding fails during sync, Dingo now emits a `LedgerErrorEvent` with the `rollback_tx_undo_decode` operation and logs structured ledger error details that include the rollback point. This makes rollback related inconsistencies easier to diagnose instead of leaving the problem mostly silent. A separate internal ledger fix also improves shutdown and result delivery in the database worker pool, which supports more reliable ledger processing during startup and recovery.
+
+**日本語**
+
+Mithril スナップショットの読み込み後もノードが追いつき中の場合、`v0.36.1` は chainsync の stall 検知しきい値を `5x` に引き上げます。そのため、Dingo がピアを stalled と判断して接続を再作成するまでの待ち時間は、追いつき中は長くなります。これは意図した動作であり、ノードが tip に遅れている間の不要なパイプラインのリセットや過剰な `TIME_WAIT` ソケット増加を避け、より安定して追いつきを完了しやすくします。ノードが tip に到達すると、通常のより速い stall 回復に戻ります。
+
+ログでは次の点を確認してください。
+
+- ピア接続を示すログ出力が続いていることを確認します。
+- Dingo が tip に向けて残りブロックを同期し続けていることを示すログ出力を確認します。
+- `v0.36.1` で追いつき中のピア再作成が遅くなることだけを、障害の兆候と判断しないでください。
+
+同期中に rollback transaction undo のデコードに失敗した場合、Dingo は `rollback_tx_undo_decode` を操作名として持つ `LedgerErrorEvent` を発行し、rollback point を含む構造化された ledger エラー詳細をログに出力します。これにより、これまで見えにくかった rollback 関連の不整合を診断しやすくなります。加えて、database worker pool の shutdown と結果配信に関する内部修正により、起動時と回復時の ledger 処理の安定性も向上します。
+
+**Español**
+
+Si el nodo todavía se está poniendo al día después de cargar una instantánea de Mithril, `v0.36.1` aumenta los umbrales de detección de bloqueo de chainsync en `5x`. Por eso, Dingo tarda más en considerar que un par quedó bloqueado y en reciclar la conexión durante la puesta al día. Este comportamiento es intencional y ayuda a que el nodo complete la puesta al día con más fiabilidad al evitar reinicios innecesarios de la canalización y un exceso de sockets en estado `TIME_WAIT` mientras el nodo sigue detrás del tip. Cuando el nodo alcanza el tip, vuelve el comportamiento normal de recuperación más rápida ante bloqueos.
+
+En los registros, conviene observar estas señales de una puesta al día sana:
+
+- Confirmar que la salida de los registros muestra conexiones con pares.
+- Confirmar que la salida de los registros sigue mostrando progreso de sincronización mientras Dingo avanza por los bloques restantes hacia el tip.
+- Considerar que un reciclado más lento de pares durante la puesta al día en `v0.36.1` es un comportamiento esperado y no una señal de fallo por sí sola.
+
+Si falla la decodificación de rollback transaction undo durante la sincronización, Dingo ahora emite un `LedgerErrorEvent` con la operación `rollback_tx_undo_decode` y registra detalles estructurados del error del ledger que incluyen el punto de rollback. Esto ayuda a diagnosticar inconsistencias relacionadas con rollback en lugar de dejar el problema casi en silencio. Además, una corrección interna en el database worker pool mejora el apagado y la entrega de resultados, lo que respalda un procesamiento del ledger más fiable durante el arranque y la recuperación.
 
 ***
 
