@@ -117,13 +117,6 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
-> 📝 In v0.35.1, operators who expose UTxO RPC with `utxorpcPort` enabled should upgrade so malformed or cyclic predicates stop safely instead of hanging query evaluation.
-
-> 📝 **Helpful v0.35.1 tips**
-> - Stored block nonce reuse can make long running sync and restart behavior more efficient, and Dingo falls back automatically for older databases.
-> - Peer selection near the chain tip is steadier and should reduce unnecessary switching.
-> - If `utxorpcPort` is enabled with SQLite metadata, UTxO RPC queries are more reliable.
-
 ***
 
 <br>
