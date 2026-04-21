@@ -1,3 +1,40 @@
+
+This example keeps the service host in consensus only mode. `storageMode: "core"` fits relay and block producer deployments that do not expose client APIs.
+
+If the same service host must expose APIs, use `storageMode: "api"` and enable the required ports:
+
+```yaml
+storageMode: "api"
+blockfrostPort: 3000
+utxorpcPort: 9090
+```
+
+API facing services require `api` storage mode. The Blockfrost compatible service also supports native asset lookups at `GET /api/v0/assets/{asset}`, where `{asset}` is the concatenated hex policy ID and asset name.
+
+日本語: この例は合意専用のサービスホスト向けです。`storageMode: "core"` は、クライアント API を公開しないリレーやブロックプロデューサーに適しています。API を公開する場合は `storageMode: "api"` を設定し、必要なポートを有効にします。API を提供するサービスでは `api` ストレージモードが必要です。Blockfrost 互換サービスは `GET /api/v0/assets/{asset}` でネイティブ資産の検索も提供します。`{asset}` には、16 進数のポリシー ID と資産名を連結した識別子を指定します。
+
+Español: Este ejemplo mantiene el host del servicio en modo solo consenso. `storageMode: "core"` encaja en relés y productores de bloques que no exponen API para clientes. Si el mismo host debe exponer API, configure `storageMode: "api"` y habilite los puertos necesarios. Los servicios con API requieren el modo de almacenamiento `api`. El servicio compatible con Blockfrost también admite búsquedas de activos nativos en `GET /api/v0/assets/{asset}`, donde `{asset}` es el identificador formado por la concatenación en hexadecimal del ID de política y el nombre del activo.
+
+### Operational notes for v0.36.0
+
+- Correct any missing or zero Ouroboros security parameter `K` values in the active protocol state or network configuration. Dingo now rejects those values, so startup failures or rollback problems point to configuration or protocol state that needs correction.
+- Investigate fork resolution database lookup failures directly from the logs. Dingo now reports those failures as real errors instead of treating them like an ordinary missing ancestor during chain recovery.
+- Review era transition logs closely during upgrades and boundary events. Dingo now reports pending transitions, impossible transitions, and exact known era boundaries more explicitly.
+- Expect more reliable recovery with a single upstream relay. Dingo now handles block producer connectivity correctly in minimal relay topologies where one relay provides the upstream path.
+
+日本語:
+
+- アクティブなプロトコル状態またはネットワーク設定で、Ouroboros のセキュリティパラメーター `K` が未設定または `0` になっていないか修正します。Dingo は現在これらの値を拒否するため、起動失敗やロールバックの問題は設定またはプロトコル状態の修正が必要であることを示します。
+- フォーク解決時のデータベース参照失敗は、ログで直接調査します。Dingo は現在、これらの失敗を通常の祖先不足として扱わず、実際のエラーとして記録します。
+- アップグレード時や境界イベント時には、時代遷移のログを注意して確認します。Dingo は現在、保留中の遷移、不可能な遷移、既知の正確な時代境界をより明確に報告します。
+- 単一の上流リレー構成では、より安定した復旧が期待できます。Dingo は現在、1 台のリレーだけが上流経路を提供する最小構成でも、ブロックプロデューサー接続を正しく処理します。
+
+Español:
+
+- Corrija cualquier valor ausente o igual a cero del parámetro de seguridad Ouroboros `K` en el estado activo del protocolo o en la configuración de red. Dingo ahora rechaza esos valores, por lo que los fallos de inicio o los problemas de reversión apuntan a una configuración o a un estado del protocolo que requiere corrección.
+- Investigue directamente en los registros los fallos de consulta de base de datos durante la resolución de bifurcaciones. Dingo ahora muestra esos fallos como errores reales en lugar de tratarlos como un ancestro ausente normal durante la recuperación de cadena.
+- Revise con atención los registros de transición de era durante actualizaciones y eventos de límite. Dingo ahora informa con más claridad las transiciones pendientes, las transiciones imposibles y los límites exactos de era conocidos.
+- Espere una recuperación más confiable con un solo relé ascendente. Dingo ahora maneja correctamente la conectividad del productor de bloques en topologías mínimas donde un solo relé proporciona la ruta ascendente.
 ---
 title: Create Startup Service
 description: Create Startup Service for Dingo.
