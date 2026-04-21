@@ -23,6 +23,18 @@ For this guide we will walk you through downloading the Dingo binary and all the
 
 <br>
 
+## Operator notes for v0.35.1
+
+- Dingo now makes chain selection decisions near the tip based on observed chain progress instead of only advertised remote tips. This reduces unnecessary peer switching and oscillation near the chain tip.
+- Leader schedule calculation is much faster because Dingo computes the VRF threshold once per epoch instead of once per slot. This brings the biggest benefit on lower powered hardware such as Raspberry Pi and other ARM systems.
+- Candidate nonce and evolving nonce calculation now uses stored block nonces when available. This reduces expensive per block decoding and improves performance, while still falling back safely when older databases do not yet contain stored nonce rows.
+- utxorpc predicate handling now enforces a recursion depth limit. This turns malformed or cyclic predicates into unevaluable requests instead of letting them recurse indefinitely, which improves stability for advanced utxorpc integrations.
+- Version 0.35.1 also includes internal dependency updates, including gouroboros v0.165.0 and related dependency refreshes. No new setup steps are required for this guide.
+
+***
+
+<br>
+
 ## Step 1 - Download Dingo Binary
 <br>
 
