@@ -145,6 +145,8 @@ This takes approximately 10-15 minutes depending on your system and network spee
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
+> 📝 During large catch-up runs, Dingo v0.36.1 uses 5x longer stall detection grace, plateau, and recycle cooldown thresholds while the node is behind tip. The node may wait longer before it recycles a slow chainsync connection during bulk sync, but this behavior is expected and helps avoid pipeline resets, `TIME_WAIT` socket exhaustion, and dropped rollbacks. Normal faster stall recovery resumes after the node reaches tip.
+
 ***
 
 <br>
@@ -159,6 +161,12 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+> 📝 During large catch-up runs, Dingo v0.36.1 keeps the same 5x longer stall detection grace, plateau, and recycle cooldown thresholds until the node reaches tip. The node may wait longer before it recycles a slow chainsync connection during bulk sync, but this behavior is expected and helps avoid pipeline resets, `TIME_WAIT` socket exhaustion, and dropped rollbacks while it catches up.
+
+> 💡 If Dingo cannot decode rollback undo data for a rolled back block, v0.36.1 now logs the condition as a ledger error and emits a `LedgerErrorEvent` with operation `rollback_tx_undo_decode`, including the block slot and hash. This improves observability for operators watching logs or event consumers.
+
+> 💡 Dingo v0.36.1 also fixes a ledger `DatabaseWorkerPool` issue that could previously drop results or mishandle shutdown coordination, so operators should expect fewer stuck or misleading ledger processing failures during startup and catch-up.
 
 ***
 
