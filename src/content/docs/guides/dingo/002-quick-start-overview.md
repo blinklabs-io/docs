@@ -97,6 +97,14 @@ utxorpcPort: 0
 EOF
 ```
 
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
+
+```yaml
+blockfrostPort: 3000
+storageMode: "api"
+utxorpcPort: 0
+```
+
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
 ***
