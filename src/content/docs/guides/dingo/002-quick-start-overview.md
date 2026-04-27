@@ -52,8 +52,6 @@ Dingo ships with embedded Cardano network configurations (genesis files, config.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
-Most configuration keys now also have matching CLI flags. Operators can choose a config file, environment variables, or CLI flags based on the deployment style. This example shows the same user visible settings that commonly move between those approaches, including `network`, `socketPath`, `metricsPort`, `storageMode`, and the API ports.
-
 ```
 cat <<EOF > ~/dingo/dingo.yaml
 # Database
@@ -99,9 +97,7 @@ utxorpcPort: 0
 EOF
 ```
 
-After configuring the network and storage settings, Dingo also exposes Prometheus metrics on `metricsPort`. Recent operator visible metrics improve visibility into stake snapshots and leader election activity.
-
-> 💡 To serve Blockfrost compatible HTTP endpoints, set `storageMode` to `"api"` and assign a non zero `blockfrostPort`. After enabling API mode, the current endpoint coverage includes the latest block, block lookup by hash or height, `/network`, `/network/eras`, and `/genesis`.
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
 ```yaml
 blockfrostPort: 3000
@@ -139,7 +135,7 @@ sudo ufw allow 3001/tcp
 
 ## Step 4 - Bootstrap from Mithril Snapshot
 
-Dingo has a built in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
+Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
 Run the following command from your dingo directory:
 
@@ -152,13 +148,10 @@ Dingo will:
 1. Download the latest Mithril snapshot for your configured network
 2. Verify the certificate chain
 3. Load the snapshot into the database
-4. Resume safely if the process restarts before the load completes
 
-This takes approximately 10-15 minutes depending on your system and network speed.
+This takes approximately 10 to 15 minutes depending on your system and network speed.
 
-API mode nodes can also run metadata backfill and checkpoint recovery work after the snapshot import finishes. Let that recovery complete before treating the API node as fully ready.
-
-> 📝 If this step is skipped, Dingo starts from origin in Genesis bootstrap mode and then returns to normal Praos block selection when it gets close enough to tip. This path takes significantly longer than loading a Mithril snapshot.
+> 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
 ***
 
@@ -168,14 +161,12 @@ API mode nodes can also run metadata backfill and checkpoint recovery work after
 
 Once the Mithril snapshot has loaded, start the node:
 
-API operators can enable Blockfrost, UTxO RPC, or other interfaces through config or flags before launching `serve`.
-
 ```
 cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
 
-You should see log output showing the node connecting to peers, finishing any remaining recovery work, and syncing the remaining blocks to reach the chain tip.
+You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
 ***
 
