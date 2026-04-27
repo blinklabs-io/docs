@@ -52,6 +52,8 @@ Dingo ships with embedded Cardano network configurations (genesis files, config.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
+Most configuration keys now also have matching CLI flags. Operators can choose a config file, environment variables, or CLI flags based on the deployment style. This example points to settings that commonly move between those approaches, including `network`, `socketPath`, `metricsPort`, `storageMode`, and the API ports.
+
 ```
 cat <<EOF > ~/dingo/dingo.yaml
 # Database
@@ -97,7 +99,9 @@ utxorpcPort: 0
 EOF
 ```
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
+After configuring the network and storage settings, Dingo exposes Prometheus metrics on `metricsPort`. Recent operator visible metrics improve visibility into stake snapshots and leader election activity.
+
+> 💡 To serve Blockfrost compatible HTTP endpoints, set `storageMode` to `"api"` and assign a non zero `blockfrostPort`. After enabling API mode, Dingo can serve the latest block, block lookup by hash or height, `/network`, `/network/eras`, and `/genesis`.
 
 ```yaml
 blockfrostPort: 3000
@@ -149,7 +153,7 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-This takes approximately 10 to 15 minutes depending on your system and network speed.
+This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
