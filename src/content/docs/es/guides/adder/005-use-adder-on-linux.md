@@ -1,17 +1,17 @@
 ---
 title: Uso en Linux
-description: Como usar Adder en Linux.
+description: Cómo usar Adder en Linux.
 ---
 
 
 ## Descargar binario de Adder
 
-Puedes descargar la ultima version de Adder desde la pagina <a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a>.
+Puedes descargar la última versión de Adder desde la página <a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a>.
 
-Descargaremos el binario de Adder ejecutando el siguiente comando. Ajusta el enlace de descarga a la version mas actual.
+Descargaremos el binario de Adder ejecutando el siguiente comando. Ajusta el enlace de descarga a la versión más actual.
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.30.1/adder-v0.30.1-linux-amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0.39.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
@@ -19,7 +19,7 @@ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.30.1/adder-v0
 
 ## Ejecutar Adder con Filtros y Comandos
 
-Ahora podemos ejecutar Adder `./adder` con filtros y comandos. Por ejemplo, puedes obtener una lista de todos los argumentos de linea de comandos disponibles usando la bandera `-h`/`-help`.
+Ahora podemos ejecutar Adder `./adder` con filtros y comandos. Por ejemplo, puedes obtener una lista de todos los argumentos de línea de comandos disponibles usando la bandera `-h`/`--help`.
 
 ```
 ./adder -h

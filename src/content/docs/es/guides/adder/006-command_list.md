@@ -1,225 +1,346 @@
 ---
-title: Guia de Referencia de Comandos
+title: Guía de referencia de comandos
 description: Lista de Comandos de Adder.
 ---
 
 # <ins>Lista de comandos:</ins>
 
-## Configuracion:
+<br />
+
+## Configuración:
 
 
+```text
+ --config string
 ```
- -config string
-```
 
-> ruta al archivo de configuracion a cargar
+> ruta al archivo de configuración a cargar
 
 ***
 
 ## Filtro:
 
-```
-  -filter-address string
+```text
+  --filter-address string
 ```
 
-> especifica la direccion para filtrar
+> especifica la dirección para filtrar
 <br />
 
 
-```
-  -filter-asset string
+```text
+  --filter-asset string
 ```
 
 > especifica la huella digital del activo (asset1xxx) para filtrar
 <br />
 
-```
-  -filter-policy string
+
+```text
+  --filter-drep string
 ```
 
-> especifica el ID de politica del activo para filtrar
+> especifica el(los) ID(s) de DRep para filtrar (separados por coma, hex o bech32)
 <br />
 
+
+```text
+  --filter-policy string
 ```
-  -filter-pool string
+
+> especifica el ID de política del activo para filtrar
+<br />
+
+```text
+  --filter-pool string
 ```
 
 > especifica el ID del Pool para filtrar
 <br />
 
-```
-  -filter-type string
+```text
+  --filter-type string
 ```
 
 > especifica el tipo de evento para filtrar
+>
+> **Tipos de Evento:**
+> 1. `input.block` - Se observó un nuevo bloque.
+> 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
+> 3. `input.transaction` -	Se vio una transacción en un bloque.
+> 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
 
 ***
 
 ## Entrada:
 
-```
-  -input string
+```text
+  --input string
 ```
 
 > plugin de entrada a usar, 'list' para mostrar disponibles (predeterminado "chainsync")
+>
+> **Tipos de Entrada:**
+> 1. `chainsync` - sincroniza bloques desde un nodo Cardano usando NtC (nodo-a-cliente) o NtN (nodo-a-nodo)
+> 2. `mempool` - lee transacciones no confirmadas desde el mempool de un nodo Cardano vía LocalTxMonitor (NtC)
 <br />
 
-```
-  -input-chainsync-address string
+### input-chainsync:
+
+```text
+  --input-chainsync-address string
 ```
 
-> especifica la direccion TCP del nodo al que conectarse en el formato 'host:puerto'
+> especifica la dirección TCP del nodo al que conectarse en el formato 'host:puerto'
 <br />
 
- ```
-  -input-chainsync-auto-reconnect
+ ```text
+  --input-chainsync-auto-reconnect
 ```
 
-> reconectar automaticamente si la conexion se interrumpe (predeterminado true)
+> reconectar automáticamente si la conexión se interrumpe (predeterminado true)
 <br />
 
-```
-  -input-chainsync-bulk-mode
+```text
+  --input-chainsync-delay-confirmations uint
 ```
 
-> usar el modo de sincronizacion 'bulk' con NtN (nodo-a-nodo). Esto solo debe usarse contra tus propios nodos por razones de uso de recursos
+> número de confirmaciones requeridas antes de emitir eventos
 <br />
 
-```
-  -input-chainsync-include-cbor
+```text
+  --input-chainsync-include-cbor
 ```
 
-> incluir CBOR original para bloque/transaccion en eventos
+> incluir CBOR original para bloque/transacción en eventos
 <br />
 
-```
-  -input-chainsync-intersect-point string
+```text
+  --input-chainsync-intersect-point string
 ```
 
-> comenzar sincronizacion en el(los) punto(s) de cadena especificado(s) en formato '<slot>.<hash>'
+> comenzar la sincronización en el(los) punto(s) de cadena especificado(s) en formato '<slot>.<hash>'
 <br />
 
-```
-  -input-chainsync-intersect-tip
+```text
+  --input-chainsync-intersect-tip
 ```
 
-> comenzar sincronizacion en la punta de la cadena (predeterminado genesis de la cadena) (predeterminado true)
+> comenzar la sincronización en la punta de la cadena (predeterminado: génesis de la cadena) (predeterminado true)
 <br />
 
-```
-  -input-chainsync-kupo-url string
-```
-
-> direccion kupo-url
-<br />
-
-```
-  -input-chainsync-network string
+```text
+  --input-chainsync-network string
 ```
 
 > especifica un nombre de red Cardano conocido (predeterminado "mainnet")
 <br />
 
-```
-  -input-chainsync-network-magic uint
+```text
+  --input-chainsync-network-magic uint
 ```
 
 > especifica el valor magic de red a usar, anula 'network'
 <br />
 
-```
-  -input-chainsync-ntc-tcp
+```text
+  --input-chainsync-ntc-tcp
 ```
 
 > usar el protocolo NtC (nodo-a-cliente) sobre TCP, para usar cuando se expone el socket UNIX de un nodo via socat o similar
 <br />
 
-```
-  -input-chainsync-socket-path string
+```text
+  --input-chainsync-socket-path string
 ```
 
 > especifica la ruta al socket UNIX al que conectarse
 
 ***
 
+```text
+  --input-chainsync-kupo-url string
+```
+
+> URL de la API de Kupo
+<br />
+
+
+### input-mempool:
+
+```text
+  --input-mempool-address string
+```
+
+> dirección TCP (host:puerto); requiere ntc-tcp=true
+<br />
+
+```text
+  --input-mempool-include-cbor
+```
+
+> incluir CBOR de la transacción en eventos
+<br />
+
+```text
+  --input-mempool-kupo-url string
+```
+
+> URL de la API de Kupo para resolver entradas de transacciones (ej. http://localhost:1442). Kupo debe indexar las salidas que necesitas (ej. ejecutar con --match "*") o la resolución estará vacía.
+<br />
+
+```text
+  --input-mempool-network string
+```
+
+> nombre de red Cardano conocido (ej. mainnet, preprod) (predeterminado "mainnet")
+<br />
+
+```text
+  --input-mempool-network-magic uint
+```
+
+> valor magic de red (anula el nombre de red)
+<br />
+
+```text
+  --input-mempool-ntc-tcp
+```
+
+> usar NtC sobre TCP (ej. cuando se expone el socket vía socat)
+<br />
+
+```text
+  --input-mempool-poll-interval string
+```
+
+> con qué frecuencia consultar el mempool (ej. 5s, 1m) (predeterminado "5s")
+<br />
+
+```text
+  --input-mempool-socket-path string
+```
+
+> ruta al socket UNIX del nodo (NtC)
+
+***
+
+## Logging:
+
+```text
+  --logging-level string
+```
+
+> nivel de logging (debug, info, warn, error) (predeterminado "info")
+<br />
+
+***
+
 ## Salida:
 
-```
-  -output string
+```text
+  --output string
 ```
 
 > plugin de salida a usar, 'list' para mostrar disponibles (predeterminado "log")
 <br />
 
-```
-  -output-log-level string
+```text
+  --output-log-format string
 ```
 
-> especifica el nivel de log a usar (predeterminado "info")
+> especifica el formato de salida: text (legible por humanos, predeterminado) o json (parseable por máquina) (predeterminado "text")
 <br />
 
-```
-  -output-notify-title string
+```text
+  --output-notify-title string
 ```
 
-> especifica el titulo a usar (predeterminado "Adder")
+> especifica el título a usar (predeterminado "Adder")
 <br />
 
-```
-  -output-push-accessTokenUrl string
+```text
+  --output-push-accessTokenUrl string
 ```
 
 > especifica la url para obtener token de acceso (predeterminado `https://www.googleapis.com/auth/firebase.messaging`)
 <br />
 
-```
-  -output-push-serviceAccountFilePath string
+```text
+  --output-push-serviceAccountFilePath string
 ```
 
 > especifica la ruta al archivo de cuenta de servicio
 <br />
 
+```text
+  --output-telegram-bot-token string
 ```
-  -output-webhook-format string
+
+> token de la API de Telegram Bot (de @BotFather)
+<br />
+
+```text
+  --output-telegram-chat-id string
+```
+
+> ID de chat de Telegram al que enviar mensajes (usuario, grupo o canal)
+<br />
+
+```text
+  --output-telegram-disable-preview
+```
+
+> deshabilitar la vista previa de enlaces en mensajes
+<br />
+
+```text
+  --output-telegram-parse-mode string
+```
+
+> modo de parseo de mensajes (HTML, Markdown, MarkdownV2) (predeterminado "HTML")
+<br />
+
+```text
+  --output-webhook-format string
 ```
 
 > especifica el formato de carga del webhook a usar (predeterminado "adder")
 <br />
 
-```
-  -output-webhook-password string
+```text
+  --output-webhook-password string
 ```
 
-> especifica la contrasena para autenticacion basica
+> especifica la contraseña para autenticación básica
 <br />
 
-```
-  -output-webhook-tls-skip-verify
+```text
+  --output-webhook-tls-skip-verify
 ```
 
-> omitir verificacion tls (para certificados autofirmados)
+> omitir verificación TLS (para certificados autofirmados)
 <br />
 
-```
-  -output-webhook-url string
+```text
+  --output-webhook-url string
 ```
 
 > especifica la url a usar (predeterminado `http://localhost:3000`)
 <br />
 
-```
-  -output-webhook-username string
+```text
+  --output-webhook-username string
 ```
 
-> especifica el nombre de usuario para autenticacion basica
+> especifica el nombre de usuario para autenticación básica
 
 ***
 
 ## Version:
 
-```
-  -version
+```text
+  --version
 ```
 
-> mostrar version y salir
-
+> mostrar versión y salir

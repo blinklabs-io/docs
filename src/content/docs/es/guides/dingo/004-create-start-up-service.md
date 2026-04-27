@@ -7,149 +7,134 @@ description: Crear Servicio de Inicio para Dingo.
 
 Un nodo de datos de la blockchain Cardano escrito en Go que participa activamente en las comunicaciones de red en la blockchain Cardano utilizando la familia de mini-protocolos Node-to-Node de la Red Ouroboros.
 
-⚠️ Este es un trabajo en progreso y actualmente esta en desarrollo activo
+⚠️ Este es un trabajo en progreso y actualmente está en desarrollo activo
 
 <br>
 
 ***
 
-En esta guia te guiaremos a traves de la configuracion de un servicio `systemd`. Usar un servicio `systemd` para ejecutar un Nodo Dingo maximiza el tiempo de actividad reiniciando automaticamente el nodo Dingo cuando la computadora se reinicia. Para comenzar, sigue los pasos a continuacion.
+En esta guía te guiaremos a través de la configuración de un servicio `systemd`. Usar un servicio `systemd` para ejecutar un nodo Dingo maximiza el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia. Para comenzar, sigue los pasos a continuación.
 
 <br>
 
-✅ Esta guia asume una configuracion tipica de Linux. Por favor ajusta los comandos y rutas segun sea necesario.
+✅ Esta guía asume una configuración típica de Linux. Por favor ajusta los comandos y rutas según sea necesario.
+
+> ✅ Para esta guía asumimos que ya has completado la guía de [inicio rápido](../002-quick-start-overview).
 
 ***
 
 <br>
 
-## Paso 1 - Mover Archivos Dingo y dingo.yaml
+## Paso 1 - Mover binario de Dingo y configuración
 
-Mejores Practicas: Como usaremos un `systemd` para iniciar Dingo, moveremos nuestro binario de Dingo a `/usr/local/bin/` y nuestro dingo.yaml al directorio `/etc/dingo/` ejecutando lo siguiente:
-
-<br>
-
-> ⚠️ Por favor ajusta las rutas a continuacion. Las rutas estan basadas en nuestra guia de [Inicio Rapido](../002-quick-start-overview) y `USER=test`.
->
-> 💡 Consejo: para encontrar tu ruta al binario de Dingo, navega a tu directorio del binario de Dingo, luego puedes ejecutar el comando `realpath dingo`.
-
-```
-sudo mv /home/test/dingo/dingo /usr/local/bin/
-```
-<br>
-
-> ✅ Puedes verificar que el binario de Dingo fue movido ejecutando `which dingo`
+Moveremos el binario de Dingo a `/usr/local/bin/` y la configuración a `/etc/dingo/` para que sean accesibles a nivel de sistema.
 
 <br>
 
-Ahora crearemos el directorio `/etc/dingo/`:
+Copia el binario:
 
+```bash
+sudo cp ~/dingo/dingo /usr/local/bin/
 ```
-sudo mkdir /etc/dingo/
-```
+
+> ✅ Puedes verificar que el binario fue copiado ejecutando `which dingo`
 
 <br>
 
-Luego moveremos nuestro archivo dingo.yaml a `/etc/dingo/`:
+Crea el directorio de configuración y copia la configuración:
 
-```
-sudo mv /home/test/dingo/dingo.yaml /etc/dingo/
+```bash
+sudo mkdir -p /etc/dingo
+sudo cp ~/dingo/dingo.yaml /etc/dingo/
 ```
 
 ***
 
 <br>
 
-## Paso 2 - Editar Rutas en el Archivo dingo.yaml
+## Paso 2 - Actualizar Rutas en dingo.yaml
 
-Ahora editaremos nuestro archivo dingo.yaml para actualizar las siguientes rutas ya que movimos nuestro yaml a `/etc/dingo/`.
+Como el servicio se ejecutará como tu usuario pero la configuración ahora está en `/etc/dingo/`, debemos asegurarnos de que las rutas de la base de datos y el socket usen rutas absolutas. Ejecuta lo siguiente para regenerar la configuración con tu `$HOME` expandido:
 
-<br>
+```bash
+sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
+# Database
+database:
+  blob:
+    plugin: \"badger\"
+    badger:
+      block-cache-size: 0
+      compression: false
+      data-dir: \"$HOME/dingo/.dingo/badger\"
+      gc: true
+      index-cache-size: 0
+  metadata:
+    plugin: \"sqlite\"
+    sqlite:
+      data-dir: \"$HOME/dingo/.dingo/metadata.db\"
+databasePath: \"$HOME/dingo/.dingo\"
 
-Necesitaremos editar las siguientes rutas: `cardanoConfig:`, `databasePath:`, `socketPath:` y `topology:`.
-
-✅ Por favor ajusta segun sea necesario con las rutas correctas para que coincidan con tu nombre de usuario y directorios.
-
-```
-# Archivo de configuracion de ejemplo para dingo
-# Los valores mostrados a continuacion corresponden a los valores predeterminados en el codigo
-
-# Direccion de enlace publico para el servidor Dingo
-bindAddr: "0.0.0.0"
-
-# Ruta al archivo de configuracion del nodo Cardano
-#
-# Puede ser anulado con la variable de entorno config
-cardanoConfig: "/home/test/dingo/config/cardano/preview/config.json"
-
-# Un directorio que contiene los archivos de base de datos del libro mayor
-databasePath: "/home/test/dingo/dingo"
-
-# Ruta al archivo de socket de dominio UNIX usado por el servidor
-socketPath: "/home/test/dingo.socket"
-
-# Nombre de la red Cardano
-network: "preview"
-
-# Ruta del archivo de certificado TLS (para HTTPS)
-#
-# Puede ser anulado con la variable de entorno TLS_CERT_FILE_PATH
-tlsCertFilePath: ""
-
-# Ruta del archivo de clave TLS (para HTTPS)
-#
-# Puede ser anulado con la variable de entorno TLS_KEY_FILE_PATH
-tlsKeyFilePath: ""
-
-# Ruta al archivo de configuracion de topologia para el nodo Cardano
-topology: "/home/test/dingo/config/cardano/preview/topology.json"
-
-# Puerto TCP para enlazar el endpoint de metricas de Prometheus
-metricsPort: 12798
-
-# Direccion interna/privada para enlazar y escuchar Ouroboros NtC
-privateBindAddr: "127.0.0.1"
-
-# Puerto TCP para enlazar y escuchar Ouroboros NtC
-privatePort: 3002
-
-# Puerto TCP para enlazar y escuchar Ouroboros NtN
-#
-# Puede ser anulado con la variable de entorno port
-relayPort: 3001
-
-# Puerto TCP para enlazar y escuchar UTxO RPC
-utxorpcPort: 9090
-
-# Ignorar el historial de cadena anterior y comenzar desde la punta actual (predeterminado: false)
-# Esto es experimental y puede fallar — usar con precaucion
-intersectTip: false
-
-# Tamano maximo de cache en bytes usado por BadgerDB para cache de bloques/indices
-# Predeterminado: 1073741824 (1 GB)
-badgerCacheSize: 1073741824
-
-# Tamano total maximo (en bytes) de todas las transacciones permitidas en el mempool.
-# Las transacciones que excedan este limite seran rechazadas.
-# Predeterminado: 1048576 (1 MB)
+# Mempool
 mempoolCapacity: 1048576
+
+# Mithril
+mithril:
+  aggregatorUrl: \"\"
+  cleanupAfterLoad: true
+  enabled: true
+  verifyCertificates: true
+
+# Network
+bindAddr: \"0.0.0.0\"
+metricsPort: 12798
+network: \"preview\"
+privateBindAddr: \"127.0.0.1\"
+privatePort: 3002
+relayPort: 3001
+socketPath: \"$HOME/dingo/dingo.socket\"
+
+# Storage
+blockfrostPort: 0
+meshPort: 0
+storageMode: \"core\"
+utxorpcPort: 0
+EOF"
+```
+
+> 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer `blockfrostPort` a un valor distinto de cero.
+
+```yaml
+storageMode: "api"
+blockfrostPort: 3000
 ```
 
 ***
 
 <br>
 
-## Paso 3 - Crear Archivo de Configuracion de Unidad dingo.service
+## Paso 3 - Iniciar desde Mithril (solo primera ejecución)
 
-A continuacion, escribiremos el archivo de configuracion de unidad dingo.service o archivo de 'servicio', que sera ejecutado por `systemd`.
+Antes de iniciar el servicio por primera vez, inicia la base de datos desde una instantánea de Mithril:
 
-> ⚠️ Por favor ajusta la linea `User=` a continuacion.
-> En nuestra guia de [Inicio Rapido](../002-quick-start-overview) usamos el usuario `test`, por favor ajusta esto a tu nombre de usuario.
->
-> 💡 Consejo: puedes ejecutar el comando `echo $USER` para encontrar tu nombre de usuario.
-
+```bash
+dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
-cat <<'ENDFILE' >> /tmp/dingo.service
+
+Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
+
+> 📝 Solo necesitas hacer esto una vez. Después del inicio inicial, el servicio systemd mantendrá el nodo sincronizado.
+
+
+***
+
+<br>
+
+## Paso 4 - Crear Archivo de Unidad dingo.service
+
+Crea el archivo de servicio systemd. Reemplaza `YOUR_USER` con tu nombre de usuario (`echo $USER`):
+
+```bash
+cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
 [Unit]
 Description=Dingo Node
 After=network-online.target
@@ -158,10 +143,10 @@ After=network-online.target
 Type=simple
 Restart=on-failure
 RestartSec=10
-User=test
-ExecStart=/usr/local/bin/dingo
+User=YOUR_USER
+ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=3
+TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
@@ -172,31 +157,12 @@ ENDFILE
 
 <br>
 
-## Paso 4 - Mover dingo.service
+## Paso 5 - Habilitar e Iniciar el Servicio
 
-Mueve dingo.service a `/etc/systemd/system/` para que pueda operar a traves de systemd ejecutando:
+Habilita el servicio para que se inicie en el arranque e inícialo ahora:
 
-```
-sudo mv /tmp/dingo.service /etc/systemd/system/
-```
-
-***
-
-<br>
-
-
-
-## Paso 5 - Habilitar el Servicio e Iniciar Servicio
-
-Ahora habilitaremos el servicio para que se ejecute al inicio y lo encenderemos ejecutando:
-
-```
+```bash
 sudo systemctl enable dingo.service
-```
-
-Luego:
-
-```
 sudo systemctl start dingo.service
 ```
 
@@ -206,16 +172,22 @@ sudo systemctl start dingo.service
 
 ## Paso 6 - Verificar Estado
 
-Puedes asegurarte de que dingo.service esta activo verificando su estado ejecutando:
+Verifica que el servicio está ejecutándose:
 
-```
+```bash
 sudo systemctl status dingo.service
 ```
 
-Si tienes un error, puedes usar el siguiente comando para ver los registros de errores:
+Para seguir los registros en tiempo real:
 
+```bash
+sudo journalctl -u dingo -f
 ```
-journalctl -u dingo.service
+
+Para ver los registros recientes si hay un error:
+
+```bash
+sudo journalctl -u dingo -n 50 --no-pager
 ```
 
 ***
