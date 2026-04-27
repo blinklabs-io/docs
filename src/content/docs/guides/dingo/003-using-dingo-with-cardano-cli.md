@@ -128,7 +128,7 @@ echo 'export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket' >> ~/.bashrc
 Node Network:
 
 ```
-echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
+echo 'export CARDANO_NODE_NETWORK_ID=2' >> ~/.bashrc
 ```
 
 ***
