@@ -56,6 +56,8 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 
 Since the service will run as your user but the config is now in `/etc/dingo/`, we need to make sure the database and socket paths use absolute paths. Run the following to regenerate the config with your `$HOME` expanded:
 
+Many of these settings also have CLI flag equivalents. This service example keeps them in `dingo.yaml` so operators can keep startup behavior consistent across reboots and routine service operations.
+
 ```
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 # Database
@@ -101,7 +103,9 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+> 📝 Operators who want Blockfrost compatible HTTP endpoints must run with `storageMode: "api"` and set `blockfrostPort` to a non zero value. Current endpoint coverage includes the latest block endpoint, explicit block lookup, `/network`, `/network/eras`, and `/genesis`.
+
+> 📝 Dingo serves Prometheus metrics on `metricsPort`. Recent observability improvements add clearer stake snapshot, leader election, and peer governor visibility for service operators.
 
 ```yaml
 storageMode: "api"
@@ -122,7 +126,9 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
-> 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
+> 📝 Bootstrap remains a first run step. Restart and resume handling is safer now, but API mode services can continue metadata backfill and checkpoint work after snapshot import. Let that work finish before treating the HTTP APIs as fully ready.
+
+> 📝 When the node starts from origin, it now selects a Genesis style bootstrap chain automatically and then returns to normal Praos chain selection near the tip. Early sync behavior can differ from older guidance.
 
 
 ***
@@ -132,6 +138,8 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 ## Step 4 - Create dingo.service Unit File
 
 Create the systemd service file. Replace `YOUR_USER` with your username (`echo $USER`):
+
+Use `journalctl` and the service logs during startup to watch bootstrap progress, metadata backfill, and peer governor behavior. Recent log output makes those stages easier to follow.
 
 ```
 cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
