@@ -11,7 +11,7 @@ Dingo is a Cardano blockchain data node written in Go which actively participate
 
 ***
 
-This guide covers downloading and running the Cardano CLI binary so it can inspect Dingo local state and ledger data through the Dingo node socket. To get started follow the steps below.
+For this guide we will walk you through downloading and running the Cardano CLI binary and running some Cardano CLI commands. To get started follow the steps below.
 
 <br>
 
@@ -66,12 +66,12 @@ chmod +x cardano-cli
 
 <br>
 
-#### Congratulations the `cardano-cli` can now communicate with the node.
+#### Congratulations we can now use the cardano-cli to communicate with the node.
 
 <br>
 
-## Step 3 - Run Cardano CLI Command to Query Tip
-Run a first Cardano CLI command to query the tip of the preview blockchain and confirm that the CLI can read data from the Dingo node.
+## Step 3 - Run  Cardano CLI Command to Query Tip
+Let run our first Cardano CLI command to query the tip of the preview blockchain using Dingo node to provide the data.  
 
 We will run the following command to query the tip:
 
@@ -80,12 +80,7 @@ We will run the following command to query the tip:
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
-> ⚠️ Please note the socket path above assumes the Cardano CLI binary is in the `dingo` folder. If the `cardano-cli` binary is in a different location, adjust the path. Use `realpath dingo.socket` to find the absolute path to `dingo.socket`.
-
-After this command succeeds, Cardano CLI and other compatible tools can target the same Dingo socket to inspect more of the ledger state than earlier versions supported. This includes delegation and reward account information, along with Conway era governance state where the client tooling supports those queries.
-
-- Expect better answers from local state queries that read governance, committee, and proposal state, because Dingo now exposes substantially more complete Conway era query data than older guidance implied.
-- Operators can also expose API oriented interfaces such as Blockfrost separately, but Cardano CLI still connects through the Dingo node socket path shown in this guide.
+> ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location, please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
@@ -94,7 +89,7 @@ After this command succeeds, Cardano CLI and other compatible tools can target t
 <br>
 
 ## Step 4 - Using Environment Variables (Optional)
-Instead of specifying the Cardano node network and Cardano node socket each time a `cardano-cli` command runs, use environment variables.
+Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
 
 <br>
 
@@ -122,13 +117,13 @@ To make an environment variable persistent across sessions, you need to add it t
 Socket Path:
 
 ```
-echo 'export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket' >> ~/.bashrc
+echo CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
 Node Network:
 
 ```
-echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
+echo 'export CARDANO_NODE_NETWORK_ID=2' >> ~/.bashrc
 ```
 
 ***
@@ -154,5 +149,5 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 
 <br>
 
-### Congratulations the Dingo node is ready for Cardano CLI queries.
-For node setup details, see the [Quick Start](../002-quick-start-overview) guide. For HTTP based access instead of node to client queries, see the API mode setup documentation. Learn more about the Cardano CLI at [https://developers.cardano.org](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/)
+### Congratulations you are ready to start using Dingo node with the Cardano CLI!
+Learn more about the Cardano CLI at [https://developers.cardano.org](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/)
