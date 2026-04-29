@@ -82,6 +82,8 @@ We will run the following command to query the tip:
 ```
 > ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location, please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
 
+> 💡 Troubleshooting: If transaction submission or validation fails because the transaction era does not match the current ledger era, Dingo now returns a structured era mismatch error instead of a generic failure. Verify that the node is fully synced and confirm that the transaction or transaction body matches the current network era. This matters most around hard fork and era boundaries.
+
 ![dingo-query-tip](/dingo-query-tip.png)
 
 ***
