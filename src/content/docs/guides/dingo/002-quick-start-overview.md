@@ -105,8 +105,6 @@ storageMode: "api"
 utxorpcPort: 0
 ```
 
-> 💡 `metricsPort: 12798` exposes Dingo metrics for Prometheus and Grafana monitoring. Dingo v0.38.0 also includes a published dashboard set that covers node overview, block production, peer health, mempool activity, and resource usage.
-
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
 ***
@@ -173,13 +171,13 @@ You should see log output showing the node connecting to peers and syncing the r
 ### Troubleshooting and operator notes
 
 - Check connection failure logs for the remote peer name. This makes it easier to identify which peer failed during startup or recovery.
-- Expect peer selection to change near the chain tip. Dingo may prefer lower latency peers and may request small block batches from a second peer in parallel, which can improve responsiveness without indicating a fault.
-- Let an in flight block batch finish during chain switches. Dingo now keeps that work instead of restarting the batch every time the preferred peer changes.
-- Watch logs and metrics when block serving problems appear. Dingo now surfaces async block serving failures instead of hiding them.
+- Expect peer selection to change near the chain tip. Dingo may prefer faster peers and may request small block batches from a second peer at the same time, which can improve responsiveness without indicating a fault.
+- Let an active block batch finish during chain switches. Dingo now keeps that work instead of restarting the batch every time the preferred peer changes.
+- Watch logs and metrics when block serving problems appear. Dingo now reports background block serving failures instead of hiding them.
 
 ### Era transition note
 
-Dingo now shows upcoming hard fork transitions earlier and advances one era at a time. This gives operators clearer transition visibility and safer handling at era boundaries instead of abrupt multi era jumps.
+Dingo now shows upcoming hard fork transitions earlier and advances one era at a time. This gives operators clearer transition visibility and safer handling during era changes instead of abrupt multi era jumps.
 
 ***
 
