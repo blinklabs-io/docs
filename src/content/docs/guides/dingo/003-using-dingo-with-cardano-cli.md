@@ -11,7 +11,7 @@ Dingo is a Cardano blockchain data node written in Go which actively participate
 
 ***
 
-This guide covers downloading and running the Cardano CLI binary so it can inspect Dingo local state and ledger data through the Dingo node socket. To get started follow the steps below.
+This guide covers downloading and running Cardano CLI commands so it can inspect Dingo local state and ledger data through the Dingo node socket. To get started follow the steps below.
 
 <br>
 
@@ -80,12 +80,9 @@ We will run the following command to query the tip:
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
-> ⚠️ Please note the socket path above assumes you downloaded Cardano CLI to the `dingo` folder. If the `cardano-cli` binary is in a different location, adjust the path. Use `realpath dingo.socket` to find the absolute path to `dingo.socket`.
+> ⚠️ Please note the socket path above assumes you downloaded Cardano CLI to the `dingo` folder. If the cardano-cli binary is in a different location, adjust the path. Use realpath dingo.socket to find the absolute path to the socket path.
 
-After this command succeeds, Cardano CLI and other compatible tools can target the same Dingo socket to inspect more of the ledger state than before. This includes delegation and reward account information, along with Conway era governance state where the client tooling supports those queries.
-
-- Expect better answers from local state queries that read governance, committee, and proposal state, because Dingo now exposes substantially more complete Conway era query data than older guidance implied.
-- Operators can also expose API oriented interfaces such as Blockfrost separately, but Cardano CLI still talks over the Dingo node socket path shown in this guide.
+Dingo now supports more governance related local state queries, which improves compatibility with Cardano CLI governance queries.
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
@@ -117,7 +114,7 @@ export CARDANO_NODE_NETWORK_ID=2
 <br>
 
 ### Setting Environment Variables Permanently (Option 2)
-To make an environment variable persistent across sessions, you need to add it to your shell's configuration file.
+To make an environment variable persistent across sessions add it to your shell's configuration file.
 
 Socket Path:
 
@@ -155,4 +152,4 @@ echo 'export CARDANO_NODE_NETWORK_ID=2' >> ~/.bashrc
 <br>
 
 ### Congratulations you are ready to start using Dingo node with the Cardano CLI!
-For node setup details, see the [Quick Start](../002-quick-start-overview) guide. For HTTP based access instead of node to client queries, see the API mode setup documentation. Learn more about the Cardano CLI at [https://developers.cardano.org](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/)
+For more details on how to set up the node see our [Quick Start](../002-quick-start-overview) guide. To learn more about the Cardano CLI check out the [Cardano documentation](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/).
