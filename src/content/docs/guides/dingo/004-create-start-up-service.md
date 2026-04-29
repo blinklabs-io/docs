@@ -108,6 +108,8 @@ storageMode: "api"
 blockfrostPort: 3000
 ```
 
+> 📝 The configured `metricsPort: 12798` exposes metrics that Prometheus can scrape and the Dingo dashboard set can use to monitor long-running service instances.
+
 ***
 
 <br>
@@ -189,6 +191,12 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+For troubleshooting, use these logs to check peer connection failures and block serving issues. Failed peer connections now include the remote peer name, and block serving problems now appear in logs instead of failing silently.
+
+Near the chain tip, Dingo may prefer lower latency peers, race a second peer for small batches, and keep an in flight blockfetch batch during a chain switch. These patterns can appear in logs and metrics during healthy operation and help improve resilience rather than signal a fault.
+
+Upcoming era transitions now appear more clearly and Dingo handles them one era at a time, which helps operators interpret boundary period behavior.
 
 ***
 
