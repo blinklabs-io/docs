@@ -52,7 +52,7 @@ Dingo ships with embedded Cardano network configurations (genesis files, config.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
-Most configuration keys now also have matching CLI flags. Operators can choose a config file, environment variables, or CLI flags based on the deployment style. This example points to settings that commonly move between those approaches, including `network`, `socketPath`, `metricsPort`, `storageMode`, and the API ports.
+Most configuration keys now also have matching CLI flags, so operators can choose a config file, environment variables, or flags based on the deployment style.
 
 ```
 cat <<EOF > ~/dingo/dingo.yaml
@@ -99,9 +99,9 @@ utxorpcPort: 0
 EOF
 ```
 
-After configuring the network and storage settings, Dingo exposes Prometheus metrics on `metricsPort`. Recent operator visible metrics improve visibility into stake snapshots and leader election activity.
+After configuring the network and storage settings, Dingo exposes Prometheus metrics on `metricsPort`. Recent metrics improve visibility into stake snapshots and leader election activity.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, set `storageMode` to `"api"` and assign a non zero `blockfrostPort`. After enabling API mode, Dingo can serve the latest block, block lookup by hash or height, `/network`, `/network/eras`, and `/genesis`.
+> 💡 To serve Blockfrost compatible HTTP endpoints, set `storageMode` to `"api"` and assign a non zero `blockfrostPort`. API mode serves block lookup by hash or height, `/network`, `/network/eras`, and `/genesis`.
 
 ```yaml
 blockfrostPort: 3000
@@ -156,9 +156,9 @@ Dingo will:
 
 This takes approximately 10 to 15 minutes depending on your system and network speed.
 
-API mode nodes can also run metadata backfill and checkpoint recovery work after the snapshot import finishes. Let that recovery complete before assuming the API node is fully ready.
+API mode nodes can continue backfill, recovery, and checkpoint work after the snapshot import finishes. Let that work complete before treating the API node as fully ready.
 
-> 📝 If this step is skipped, Dingo starts from origin in Genesis bootstrap mode and then returns to normal Praos selection when it gets close enough to tip. This path takes significantly longer than loading a Mithril snapshot.
+> 📝 If this step is skipped, Dingo starts from origin in Genesis bootstrap mode and later returns to Praos near tip. This path takes significantly longer than loading a Mithril snapshot.
 
 ***
 
@@ -168,7 +168,7 @@ API mode nodes can also run metadata backfill and checkpoint recovery work after
 
 Once the Mithril snapshot has loaded, start the node:
 
-API operators can enable Blockfrost, UTxO RPC, or other interfaces through config or flags before launching `serve`.
+API interfaces can be enabled through config or flags before launching `serve`.
 
 ```
 cd ~/dingo
