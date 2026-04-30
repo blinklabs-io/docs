@@ -83,6 +83,7 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+ debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -94,8 +95,15 @@ blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
 utxorpcPort: 0
+ barkBaseUrl: ""
+ barkPort: 0
+ barkPrunerFrequency: 1h
 EOF
 ```
+
+ > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+
+ > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
@@ -167,6 +175,16 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+#### Notes for operators on v0.39.0
+
+- Bark now uses the ledger derived stability window automatically when it decides when to fall back near tip instead of expecting a separate manual safety window value.
+- Bark pruning now follows `barkPrunerFrequency`, so pruning can run on the cadence that fits the deployment instead of staying fixed at one hour.
+- Shadow blockfetch now suppresses duplicate near tip fetches when the active peer performs close to the observed median latency after enough peer samples accumulate, and it falls back to a fixed threshold before that point.
+- Slot clock warnings now allow up to `500ms` of normal wakeup delay before logging drift warnings.
+- Ledger nonce handling now keeps verification more stable around epoch boundaries when candidate nonce metadata is temporarily unavailable.
+- VRF and nonce handling now stays correct at TPraos era boundaries such as Shelley to Allegra.
+- Forging now supports pre Conway eras instead of assuming Conway era block construction.
 
 ***
 
