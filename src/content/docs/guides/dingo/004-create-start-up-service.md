@@ -87,6 +87,7 @@ mithril:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
@@ -94,12 +95,17 @@ relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
 
 # Storage
+barkBaseUrl: \"\"
+barkPort: 0
+barkPrunerFrequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+Current releases derive the Bark near tip safety window from ledger state, so operators no longer set a manual Bark security window value.
 
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
@@ -153,6 +159,10 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
+> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` unless temporary profiling or debugging requires it.
+
+> 📝 `barkPrunerFrequency` controls how often Bark prunes archived blobs older than the ledger stability window. Set a cadence that fits the storage and retention pattern in the environment.
+
 ***
 
 <br>
@@ -189,6 +199,8 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+> 📝 Current releases can change runtime behavior in a few practical ways. Near tip, Dingo uses median peer latency when enough samples exist before it starts shadow blockfetch from a second peer. The slot clock now tolerates up to `500ms` of drift by default, which reduces noisy timing warnings on busy systems. Ledger processing now recovers more cleanly if candidate nonce metadata is missing. Forging now handles TPraos era boundaries such as Shelley to Allegra correctly, and it also supports pre-Conway eras.
 
 ***
 
