@@ -105,6 +105,8 @@ utxorpcPort: 0
 EOF"
 ```
 
+Current releases derive the Bark near tip safety window from ledger state, so operators no longer configure a manual Bark security window value.
+
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
 ```yaml
@@ -127,7 +129,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
-
 
 ***
 
@@ -158,6 +159,8 @@ ENDFILE
 ```
 
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
+
+> 📝 `barkPrunerFrequency` controls how often Bark prunes archived blobs older than the ledger stability window. Set a cadence that fits the storage and retention pattern in the environment.
 
 ***
 
@@ -195,6 +198,8 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+> 📝 Current releases can change runtime behavior in a few practical ways. Near the tip, Dingo now uses median peer latency when enough samples exist before it sends the same block request to a second peer, which helps it avoid extra duplicate work when the primary peer is already responding quickly. The slot clock now tolerates up to `500ms` of drift by default, which reduces noisy timing warnings on busy systems. Ledger processing now recovers more cleanly if stored candidate nonce metadata is missing. Forging now handles TPraos era boundaries such as Shelley to Allegra correctly, and it also supports pre-Conway eras.
 
 ***
 
