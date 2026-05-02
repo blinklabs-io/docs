@@ -1,9 +1,7 @@
 ---
-title: Dingo
-description: Release Notes
+title: Latest Releases
+description: Dingo Release Notes
 ---
-
-# Latest Releases
 
 Stay up to date with the most recent releases of Dingo Node. New releases often include performance improvements, new features, and/or important fixes. Select a version below to view the full release notes.
 
