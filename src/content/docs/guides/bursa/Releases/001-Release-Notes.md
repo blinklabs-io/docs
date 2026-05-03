@@ -3,7 +3,7 @@ title: Latest Releases
 description: Bursa Release Notes
 ---
 
-## Keep your Bursa Wallet current to ensure you're always running the latest performance boosts💪, new features✨, critical fixes🛠️, and security enhancements🔐. 
+## Keep your Bursa Wallet current to ensure you're always running the latest performance boosts💪, new features✨, critical fixes🔧, and security enhancements🔐. 
 
 <br>
 
