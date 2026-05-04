@@ -1,4 +1,6 @@
 ---
 title: Uso en Mac
-description: Como usar Adder en Mac.
+description: Cómo usar Adder en Mac.
 ---
+
+# Próximamente

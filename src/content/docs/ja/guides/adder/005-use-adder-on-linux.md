@@ -11,7 +11,7 @@ description: LinuxでAdderを使用する方法。
 以下のコマンドを実行してAdderバイナリをダウンロードします。ダウンロードリンクを最新バージョンに調整してください。
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.30.1/adder-v0.30.1-linux-amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0.39.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
@@ -19,7 +19,7 @@ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.30.1/adder-v0
 
 ## フィルターとコマンドでAdderを実行
 
-これでフィルターとコマンドを使用してAdder `./adder`を実行できます。例えば、`-h`/`-help`フラグを使用すると、利用可能なすべてのコマンドライン引数のリストを取得できます。
+これでフィルターとコマンドを使用してAdder `./adder`を実行できます。例えば、`-h`/`--help`フラグを使用すると、利用可能なすべてのコマンドライン引数のリストを取得できます。
 
 ```
 ./adder -h

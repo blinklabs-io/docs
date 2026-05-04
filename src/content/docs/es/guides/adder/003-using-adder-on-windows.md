@@ -48,7 +48,7 @@ Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos
 <br />
 
 
-> CONSEJO: Puedes obtener una lista de todos los comandos disponibles usando la bandera `-h` o `-help`.
+> CONSEJO: Puedes obtener una lista de todos los comandos disponibles usando la bandera `-h` o `--help`.
 
 <br />
 
