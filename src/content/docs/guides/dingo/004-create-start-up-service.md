@@ -87,6 +87,7 @@ mithril:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
@@ -94,6 +95,9 @@ relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
 
 # Storage
+barkBaseUrl: \"\"
+barkPort: 0
+barkPrunerFrequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
@@ -152,6 +156,8 @@ TimeoutStopSec=5
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
 
 ***
 

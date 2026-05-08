@@ -117,7 +117,7 @@ To make an environment variable persistent across sessions, you need to add it t
 Socket Path:
 
 ```
-echo CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
+echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
 Node Network:

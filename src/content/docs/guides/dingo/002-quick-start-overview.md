@@ -83,6 +83,7 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+ debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -94,8 +95,15 @@ blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
 utxorpcPort: 0
+ barkBaseUrl: ""
+ barkPort: 0
+ barkPrunerFrequency: 1h
 EOF
 ```
+
+ > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+
+ > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
