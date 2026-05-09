@@ -103,7 +103,7 @@ Socket Path:
 export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket
 ```
 
-Use `--testnet-magic 2` for Preview or `--mainnet` for Mainnet when you run `cardano-cli` commands.
+Pass the matching network selection flag to each `cardano-cli` command. Use `--testnet-magic 2` for Preview, `--testnet-magic 1` for Pre-production, or `--mainnet` for Mainnet.
 
 <br>
 
@@ -116,7 +116,7 @@ Socket Path:
 echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
-Continue to pass the normal network selection flags to `cardano-cli`, such as `--testnet-magic 2` for Preview or `--mainnet` for Mainnet.
+Pass the matching network selection flag to each `cardano-cli` command. Use `--testnet-magic 2` for Preview, `--testnet-magic 1` for Pre-production, or `--mainnet` for Mainnet.
 
 ***
 
