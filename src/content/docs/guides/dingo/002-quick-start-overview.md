@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.41.0/dingo-v0.41.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.43.0/dingo-v0.43.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -83,7 +83,7 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
- debugPort: 0
+debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -95,9 +95,9 @@ blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
 utxorpcPort: 0
- barkBaseUrl: ""
- barkPort: 0
- barkPrunerFrequency: 1h
+barkBaseUrl: ""
+barkPort: 0
+barkPrunerFrequency: 1h
 EOF
 ```
 
