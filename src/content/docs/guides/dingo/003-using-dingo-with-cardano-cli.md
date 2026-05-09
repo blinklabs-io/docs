@@ -89,13 +89,13 @@ We will run the following command to query the tip:
 <br>
 
 ## Step 4 - Using Environment Variables (Optional)
-Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
+You can export the Cardano node socket path for `cardano-cli`, but you must still pass the normal network selection flags with each command.
 
 <br>
 
 ### Setting Environment Variables for Current Session (Option 1)
 
-We can run the following commands to export the variable for our current session.
+Run the following command to export the socket path for the current session.
 
 Socket Path:
 
@@ -103,16 +103,12 @@ Socket Path:
 export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket
 ```
 
-Node Network:
-
-```
-export CARDANO_NODE_NETWORK_ID=2
-```
+Use `--testnet-magic 2` for Preview or `--mainnet` for Mainnet when you run `cardano-cli` commands.
 
 <br>
 
 ### Setting Environment Variables Permanently (Option 2)
-To make an environment variable persistent across sessions, you need to add it to your shell's configuration file.
+To make the socket path persistent across sessions, add it to the shell configuration file.
 
 Socket Path:
 
@@ -120,29 +116,25 @@ Socket Path:
 echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
-Node Network:
-
-```
-echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
-```
+Continue to pass the normal network selection flags to `cardano-cli`, such as `--testnet-magic 2` for Preview or `--mainnet` for Mainnet.
 
 ***
 
 <br>
 
-> 💡 Tip: Below are the current Network IDs
+> 💡 Tip: Use these `cardano-cli` network selection flags with a Dingo node
 > ```
-> # SanchoNet testnet
-> export CARDANO_NODE_NETWORK_ID=4
+> # Historical SanchoNet example, if applicable
+> --testnet-magic 4
 >
 > # Preview testnet
-> export CARDANO_NODE_NETWORK_ID=2
+> --testnet-magic 2
 >
 > # Pre-production testnet
-> export CARDANO_NODE_NETWORK_ID=1
+> --testnet-magic 1
 >
 > # Mainnet
-> export CARDANO_NODE_NETWORK_ID=mainnet
+> --mainnet
 > ```
 
 ***
