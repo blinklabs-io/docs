@@ -75,7 +75,10 @@ database:
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
-mempoolCapacity: 1048576
+# `mempoolCapacity` overrides the mode default.
+# Default: 1 MiB for Praos / normal serve mode; 25 MiB for Leios mode.
+# Leave commented or omit the key to use the mode default.
+# mempoolCapacity: 1048576
 
 # Mithril
 mithril:
