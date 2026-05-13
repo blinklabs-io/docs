@@ -75,7 +75,10 @@ database:
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
-mempoolCapacity: 1048576
+# `mempoolCapacity` reemplaza el valor predeterminado del modo.
+# Predeterminado: 1 MiB para Praos / modo serve normal; 25 MiB para modo Leios.
+# Deja la clave comentada u omítela para usar el valor predeterminado del modo.
+# mempoolCapacity: 1048576
 
 # Mithril
 mithril:
