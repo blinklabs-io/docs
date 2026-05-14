@@ -100,7 +100,7 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 If `mempoolCapacity` is omitted, Dingo uses the mode default: `1 MiB` in normal Praos and `serve` mode, and `25 MiB` in `runMode: "leios"`. Explicit YAML, environment, or CLI values still override that default.
+> 📝 If `mempoolCapacity` is omitted, Dingo uses the mode default: `1 MiB` in normal Praos/serve usage and `25 MiB` in `runMode: "leios"`. Explicit YAML, environment, or CLI values still override the default.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
