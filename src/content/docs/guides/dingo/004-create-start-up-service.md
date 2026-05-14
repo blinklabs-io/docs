@@ -92,7 +92,7 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
- # peerSharing controls local peer sharing. The peer sharing protocol now enforces this setting.
+ # peerSharing controls whether this node shares peers locally. Dingo now follows this setting at startup.
  # peerSharing: true
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
@@ -113,7 +113,7 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 When SQLite metadata boots from network genesis data, Dingo can also seed Conway governance state such as initial DReps and delegations when that data exists. This matters most when restoring from snapshots on supported networks.
+> 📝 When SQLite metadata starts from network genesis data, Dingo can also seed Conway governance state such as initial DReps and delegations when that data exists. This matters most when restoring from snapshots on supported networks.
 
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
@@ -171,7 +171,7 @@ ENDFILE
 
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
 
-> 📝 For block producers, leader schedule evaluation now uses ledger aware slot to epoch resolution. Dingo can safely decline production for slots outside the known epoch range instead of guessing from a fixed slots per epoch value.
+> 📝 For block producers, leader schedule evaluation now uses the known ledger view to map slots to epochs. Dingo can safely decline production for slots outside the known epoch range instead of guessing from a fixed slots per epoch value.
 
 ***
 
@@ -210,7 +210,7 @@ To see recent logs if there is an error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-> 📝 Startup can log a rollback to a common ancestor or a rewind of the primary chain before normal sync resumes if the stored ledger tip is not on the selected primary chain. Operators can expect this protective recovery path after snapshot gaps, forks, or an interrupted startup.
+> 📝 Startup can log a rollback to a common ancestor or a rewind of the primary chain before normal sync resumes if the stored ledger tip is not on the selected primary chain. Operators can expect this protective recovery path after snapshot gaps, forks, or interrupted startup.
 
 ***
 
