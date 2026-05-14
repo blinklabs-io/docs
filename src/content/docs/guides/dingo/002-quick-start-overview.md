@@ -100,7 +100,7 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 If `mempoolCapacity` is omitted, Dingo uses the mode default: `1 MiB` in normal Praos and `serve` usage, and `25 MiB` in `runMode: "leios"`. Explicit YAML, environment, or CLI values override that default.
+> 📝 If `mempoolCapacity` is omitted, Dingo uses the mode default: `1 MiB` in normal Praos and `serve` mode, and `25 MiB` in `runMode: "leios"`. Explicit YAML, environment, or CLI values still override that default.
 
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
@@ -160,7 +160,7 @@ Dingo will:
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
-> 📝 If `storageMode: "api"` is used for Blockfrost, UTxO RPC, or Mesh, `dingo mithril sync` also backfills historical metadata after it loads the snapshot so API data is complete from genesis.
+> 📝 If `storageMode: "api"` is used for Blockfrost, UTxO RPC, or Mesh, `dingo mithril sync` also backfills historical metadata after it loads the snapshot so API data becomes complete from genesis.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
