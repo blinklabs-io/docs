@@ -75,7 +75,6 @@ database:
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
-mempoolCapacity: 1048576
 
 # Mithril
 mithril:
@@ -105,6 +104,8 @@ utxorpcPort: 0
 EOF"
 ```
 
+> 📝 Leaving `mempoolCapacity` out uses Dingo's run mode default: `1048576` bytes (1 MiB) for normal Praos and `serve` usage, and `26214400` bytes (25 MiB) when `runMode: "leios"`. Explicit YAML, environment, and CLI overrides still take priority.
+
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
 ```yaml
@@ -125,6 +126,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+
+> 📝 When `storageMode: "api"` is set for Blockfrost, UTxO RPC, or Mesh, the Mithril sync process also backfills historical metadata after it loads the snapshot so API data stays complete from genesis.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
