@@ -111,7 +111,7 @@ EOF
 
 > 📝 When the selected network defines Conway genesis governance bootstrap data, SQLite metadata bootstrapping imports the initial DReps and genesis delegations at slot `0`.
 
-> 📝 Snapshot and ledger based restoration now restores pool state and pool metadata more reliably for UTxO HD style `PState` layouts.
+> 📝 Snapshot and ledger based restoration now restores pool state and pool metadata more reliably on networks that use UTxO HD style pool state layouts.
 
 > 📝 Set `peerSharing` to `false` to disable local peer sharing. Dingo now applies that setting directly to peer sharing behavior.
 
@@ -173,7 +173,7 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-> 📝 On networks that define Conway genesis governance bootstrap data, snapshot startup and later recovery now preserve that genesis rooted governance and delegation state correctly for SQLite metadata.
+> 📝 On networks that define Conway genesis governance bootstrap data, snapshot startup and later recovery now preserve the genesis rooted governance and delegation state correctly in SQLite metadata.
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
@@ -194,7 +194,7 @@ cd ~/dingo
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
-> 📝 If the selected primary chain and the stored ledger tip do not match at startup, Dingo now checks for a common ancestor, rewinds the primary chain when needed, and rolls metadata back to that ancestor before it resumes syncing. This improves safety after snapshot gaps, forks, or interrupted recovery.
+> 📝 If the selected primary chain and the stored ledger tip do not match at startup, Dingo now checks for a common ancestor, rewinds the primary chain when needed, and rolls metadata back to that ancestor before it resumes syncing. This improves startup safety after snapshot gaps, forks, or interrupted recovery.
 
 ***
 
