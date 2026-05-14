@@ -94,15 +94,28 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
+# `peerSharing` controls whether Dingo participates in local peer sharing.
+# peerSharing: true
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
+# uTxoRPC TLS uses this certificate and key pair during startup when TLS is enabled.
+# utxorpcTlsCertFilePath: "$HOME/dingo/certs/utxorpc.crt"
+# utxorpcTlsKeyFilePath: "$HOME/dingo/certs/utxorpc.key"
 utxorpcPort: 0
 barkBaseUrl: ""
 barkPort: 0
 barkPrunerFrequency: 1h
 EOF
 ```
+
+> 📝 When the selected network defines Conway genesis governance bootstrap data, SQLite metadata bootstrapping imports the initial DReps and genesis delegations at slot `0`.
+
+> 📝 Snapshot and ledger based restoration now restores pool state and pool metadata more reliably for UTxO HD style `PState` layouts.
+
+> 📝 Set `peerSharing` to `false` to disable local peer sharing. Dingo now applies that setting directly to peer sharing behavior.
+
+> 📝 TLS enabled `uTxoRPC` startup now uses the certificate and key pair that Dingo already loaded at startup. This improves robustness for TLS enabled deployments and does not add a new startup step.
 
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
@@ -160,6 +173,8 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
+> 📝 On networks that define Conway genesis governance bootstrap data, snapshot startup and later recovery now preserve that genesis rooted governance and delegation state correctly for SQLite metadata.
+
 This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
@@ -178,6 +193,8 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+> 📝 If the selected primary chain and the stored ledger tip do not match at startup, Dingo now checks for a common ancestor, rewinds the primary chain when needed, and rolls metadata back to that ancestor before it resumes syncing. This improves safety after snapshot gaps, forks, or interrupted recovery.
 
 ***
 
