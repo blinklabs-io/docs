@@ -71,7 +71,6 @@ database:
 databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
-mempoolCapacity: 1048576
 
 # Mithril
 mithril:
@@ -100,6 +99,8 @@ barkPort: 0
 barkPrunerFrequency: 1h
 EOF
 ```
+
+> 📝 If `mempoolCapacity` is omitted, Dingo uses the mode default: `1 MiB` in normal Praos and `serve` usage, and `25 MiB` in `runMode: "leios"`. Explicit YAML, environment, or CLI values override that default.
 
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
@@ -158,6 +159,8 @@ Dingo will:
 3. Load the snapshot into the database
 
 This takes approximately 10-15 minutes depending on your system and network speed.
+
+> 📝 If `storageMode: "api"` is used for Blockfrost, UTxO RPC, or Mesh, `dingo mithril sync` also backfills historical metadata after it loads the snapshot so API data is complete from genesis.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
