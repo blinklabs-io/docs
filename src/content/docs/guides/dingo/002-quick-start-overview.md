@@ -87,6 +87,8 @@ mithril:
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
+# `peerSharing` controls whether Dingo participates in local peer sharing.
+# peerSharing: true
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -94,8 +96,6 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
-# `peerSharing` controls whether Dingo participates in local peer sharing.
-# peerSharing: true
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
