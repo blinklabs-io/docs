@@ -3,7 +3,7 @@ title: plutigo
 description: Introduction to plutigo.
 ---
 
-plutigo is a pure Go implementation of Plutus focused on Untyped Plutus Core evaluation.
+plutigo is a pure Go implementation of Plutus focused on evaluating Untyped Plutus Core programs.
 
 ## What plutigo supports
 
@@ -13,10 +13,10 @@ plutigo covers representative Cardano Improvement Proposal support for `serialis
 
 ## Core architecture
 
-- `CEK machine`: evaluates Untyped Plutus Core programs and applies the correct execution budget rules.
-- `syntax`: parses programs, converts names into De Bruijn form, and pretty prints results.
-- `builtins`: provides the built in functions that Plutus programs use during evaluation.
-- `data`: encodes and decodes Plutus data values.
+- `CEK machine`: runs Plutus programs and applies the correct execution budget rules.
+- `syntax`: reads programs, converts names into De Bruijn form, and pretty prints results.
+- `builtins`: provides the functions that Plutus programs call during evaluation.
+- `data`: encodes and decodes the data values that programs read and return.
 
 ## Installation
 
