@@ -26,7 +26,7 @@ go get github.com/blinklabs-io/plutigo
 
 ## Basic usage
 
-The normal flow parses UPLC input, converts names to De Bruijn form, creates an evaluation context, runs the machine, and pretty prints the result.
+This flow parses UPLC input, converts names to De Bruijn form, creates an evaluation context, runs the machine, and pretty prints the result.
 
 ```go
 package main
