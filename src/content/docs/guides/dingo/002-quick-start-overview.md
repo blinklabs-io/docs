@@ -87,6 +87,8 @@ mithril:
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
+# `peerSharing` controls whether Dingo participates in local peer sharing.
+# peerSharing: true
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -97,6 +99,9 @@ socketPath: "$HOME/dingo/dingo.socket"
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
+# uTxoRPC TLS uses this certificate and key pair during startup when TLS is enabled.
+# utxorpcTlsCertFilePath: "$HOME/dingo/certs/utxorpc.crt"
+# utxorpcTlsKeyFilePath: "$HOME/dingo/certs/utxorpc.key"
 utxorpcPort: 0
 barkBaseUrl: ""
 barkPort: 0
