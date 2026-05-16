@@ -136,7 +136,6 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
-
 ***
 
 <br>
