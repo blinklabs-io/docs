@@ -165,8 +165,6 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-> 📝 On networks that define Conway genesis governance bootstrap data, snapshot startup and later recovery now preserve the genesis rooted governance and delegation state correctly in SQLite metadata.
-
 This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
@@ -185,8 +183,6 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
-
-> 📝 If the selected primary chain and the stored ledger tip do not match at startup, Dingo now checks for a common ancestor, rewinds the primary chain when needed, and rolls metadata back to that ancestor before it resumes syncing. This improves startup safety after snapshot gaps, forks, or interrupted recovery.
 
 ***
 
