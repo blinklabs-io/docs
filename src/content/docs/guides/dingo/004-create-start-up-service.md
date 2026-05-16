@@ -113,8 +113,6 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 When SQLite metadata starts from network genesis data, Dingo can also seed Conway governance state such as initial DReps and delegations when that data exists. This matters most when restoring from snapshots on supported networks.
-
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
 ```yaml
@@ -137,8 +135,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
-
-> ⚠️ During startup, a block producer stops if Dingo cannot capture the genesis snapshot because leader election depends on it. A relay logs a warning and continues startup.
 
 
 ***
@@ -170,8 +166,6 @@ ENDFILE
 ```
 
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
-
-> 📝 For block producers, leader schedule evaluation now uses the known ledger view to map slots to epochs. Dingo can safely decline production for slots outside the known epoch range instead of guessing from a fixed slots per epoch value.
 
 ***
 
@@ -209,8 +203,6 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
-
-> 📝 Startup can log a rollback to a common ancestor or a rewind of the primary chain before normal sync resumes if the stored ledger tip is not on the selected primary chain. Operators can expect this protective recovery path after snapshot gaps, forks, or interrupted startup.
 
 ***
 
