@@ -109,14 +109,6 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 When the selected network defines Conway genesis governance bootstrap data, SQLite metadata bootstrapping imports the initial DReps and genesis delegations at slot `0`.
-
-> 📝 Snapshot and ledger based restoration now restores pool state and pool metadata more reliably on networks that use UTxO HD style layouts.
-
-> 📝 Set `peerSharing` to `false` to disable local peer sharing. Dingo now applies that setting directly to peer sharing behavior.
-
-> 📝 TLS enabled `uTxoRPC` startup now uses the certificate and key pair that Dingo already loaded at startup. This improves robustness for TLS deployments and does not add a new startup step.
-
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
  > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
