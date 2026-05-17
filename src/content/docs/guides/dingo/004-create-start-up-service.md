@@ -115,6 +115,8 @@ storageMode: "api"
 blockfrostPort: 3000
 ```
 
+> 📝 v0.46.3 adds more metadata database indexes for governance lookups and stake by pool queries, so nodes that serve API or query heavy traffic can return results faster after the upgrade.
+
 ***
 
 <br>
@@ -198,6 +200,8 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+> 📝 In always on `systemd` deployments, v0.46.3 improves recovery after a local tip plateau by reconnecting peers on a fresh chainsync session after the plateau clears. This reduces the chance that the service stays stuck after an epoch boundary fork or a disagreement between trusted peers.
 
 ***
 
