@@ -118,6 +118,8 @@ utxorpcPort: 0
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
+> 📝 Dingo v0.46.3 adds metadata database indexes for governance related account and UTxO lookups and for stake by pool queries. Operators serving API or query heavy workloads may see faster responses after upgrading.
+
 ***
 
 <br>
@@ -163,6 +165,8 @@ Dingo will:
 This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
+
+> 📝 Dingo v0.46.3 restarts chain sync on a fresh connection after post plateau peer realignment. This reduces the risk of the node getting stuck after a local tip plateau or an epoch boundary fork when trusted peers disagree.
 
 ***
 
