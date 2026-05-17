@@ -201,7 +201,7 @@ To see recent logs if there is an error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-> 📝 In always on `systemd` deployments, v0.46.3 improves recovery after a local tip plateau by reconnecting peers on a fresh chainsync session after the plateau clears. This reduces the chance that the service stays stuck after an epoch boundary fork or a disagreement between trusted peers.
+> 📝 In always on `systemd` deployments, v0.46.3 improves recovery after a local tip plateau by reconnecting peers on a new sync session after the plateau clears. This reduces the chance that the service stays stuck after an epoch boundary fork or a disagreement between trusted peers.
 
 ***
 
