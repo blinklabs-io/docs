@@ -71,9 +71,6 @@ database:
 databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
-# 📝 For simple setups, keep `database.metadata.plugin: "sqlite"` as the default path. On `v0.46.4` and newer, operators can also expect improved metadata path behavior during normal SQLite use.
-# 📝 If an environment uses `mysql` or `postgresql` for metadata, `v0.46.4` and newer now bootstrap correctly from genesis on networks and devnets whose Shelley or Conway genesis already includes pools, delegations, or DReps. This matters for preview, preprod, sanchonet, and custom devnets, while mainnet usually did not expose this issue.
-# 📝 On `v0.46.4` and newer, safer restart, rollback, and repeated bootstrap behavior applies to genesis based governance state across `sqlite`, `mysql`, and `postgresql`. A documented Shelley genesis stake delegation rollback limitation still remains.
 # `mempoolCapacity` is an optional override, not a required setting.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Leios mode.
 # Leave the key commented or omit it to use the mode default.
@@ -106,6 +103,12 @@ barkPort: 0
 barkPrunerFrequency: 1h
 EOF
 ```
+
+> 📝 For simple setups, keep `database.metadata.plugin: "sqlite"` as the default path. On `v0.46.4` and newer, operators can expect smoother metadata handling with SQLite during normal use.
+
+> 📝 If an environment uses `mysql` or `postgresql` for metadata, `v0.46.4` and newer bootstrap correctly from genesis on networks and devnets whose Shelley or Conway genesis already includes pools, delegations, or DReps. This matters for preview, preprod, sanchonet, and custom devnets, while mainnet usually did not expose this issue.
+
+> 📝 On `v0.46.4` and newer, Dingo now keeps bootstrap state more consistent across `sqlite`, `mysql`, and `postgresql` during restart, rollback, and repeated bootstrap runs. This makes resumed bootstrap runs safer for genesis origin governance state. A documented Shelley genesis stake delegation rollback limitation still remains.
 
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
