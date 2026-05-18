@@ -104,7 +104,7 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 For simple setups, keep `database.metadata.plugin: "sqlite"` as the default path. On `v0.46.4` and newer, operators can expect smoother metadata handling with SQLite during normal use.
+> 📝 For simple setups, keep `database.metadata.plugin: "sqlite"` as the default path. On `v0.46.4` and newer, operators can expect smoother metadata handling with SQLite during bootstrap and normal use.
 
 > 📝 If an environment uses `mysql` or `postgresql` for metadata, `v0.46.4` and newer bootstrap correctly from genesis on networks and devnets whose Shelley or Conway genesis already includes pools, delegations, or DReps. This matters for preview, preprod, sanchonet, and custom devnets, while mainnet usually did not expose this issue.
 
