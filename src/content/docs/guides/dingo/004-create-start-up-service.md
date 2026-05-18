@@ -135,7 +135,7 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
-> 📝 `dingo mithril sync` now exposes Prometheus progress metrics on the configured `metricsPort` while the bootstrap runs. With the example config above, these temporary bootstrap metrics are available on port `12798` before `dingo serve` starts under `systemd`.
+> 📝 `dingo mithril sync` now exposes Prometheus progress metrics on the configured `metricsPort` while the bootstrap runs. With the example config above, operators can monitor temporary bootstrap metrics on port `12798` before `dingo serve` starts under `systemd`.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
