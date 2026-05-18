@@ -108,6 +108,12 @@ utxorpcPort: 0
 EOF"
 ```
 
+> 📝 SQLite remains the simple documented default for `metadata`, and v0.46.4 improves metadata path performance for this default setup.
+
+> 📝 If a systemd managed node uses `mysql` or `postgres` for `metadata`, v0.46.4 now lets genesis bootstrap complete on preview, preprod, and custom devnets whose genesis files include initial pools, delegations, or DReps. This matters on non mainnet networks because their genesis state exercises these paths.
+
+> 📝 v0.46.4 also improves repeated or resumed genesis bootstrap behavior across `sqlite`, `mysql`, and `postgres` when genesis governance state is present.
+
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
 ```yaml
@@ -128,6 +134,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+
+> 📝 `dingo mithril sync` now exposes Prometheus progress metrics on the configured `metricsPort` while the bootstrap runs. With the example config above, these temporary bootstrap metrics are available on port `12798` before `dingo serve` starts under `systemd`.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
