@@ -71,6 +71,9 @@ database:
 databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
+# 📝 For simple setups, keep `database.metadata.plugin: "sqlite"` as the default path. On `v0.46.4` and newer, operators can also expect improved metadata path behavior during normal SQLite use.
+# 📝 If an environment uses `mysql` or `postgresql` for metadata, `v0.46.4` and newer now bootstrap correctly from genesis on networks and devnets whose Shelley or Conway genesis already includes pools, delegations, or DReps. This matters for preview, preprod, sanchonet, and custom devnets, while mainnet usually did not expose this issue.
+# 📝 On `v0.46.4` and newer, safer restart, rollback, and repeated bootstrap behavior applies to genesis based governance state across `sqlite`, `mysql`, and `postgresql`. A documented Shelley genesis stake delegation rollback limitation still remains.
 # `mempoolCapacity` is an optional override, not a required setting.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Leios mode.
 # Leave the key commented or omit it to use the mode default.
@@ -161,6 +164,8 @@ Dingo will:
 3. Load the snapshot into the database
 
 This takes approximately 10-15 minutes depending on your system and network speed.
+
+> 📝 On `v0.46.4` and newer, `./dingo mithril sync` exposes dedicated Prometheus progress metrics on the configured `metricsPort` while the command runs. Scrape the `metricsPort` value from this guide's configuration example to monitor download, ledger import, ImmutableDB copy, gap processing, and completion.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
