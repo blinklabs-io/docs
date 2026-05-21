@@ -106,7 +106,7 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 `chainsyncStallTimeout` controls how long Dingo waits before it treats a chain sync peer as stalled. Dingo raises values below the protocol minimum automatically.
+> 📝 `chainsyncStallTimeout` controls how long Dingo waits before it treats a chain sync peer as stalled. Dingo raises any lower value to the protocol minimum automatically.
 
 > 📝 `serverTimeout` limits long running UTxO RPC handlers, including `WaitForTx`, so watch style requests do not stay open forever.
 
