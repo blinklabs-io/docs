@@ -85,6 +85,7 @@ mithril:
 
 # Network
 bindAddr: "0.0.0.0"
+chainsyncStallTimeout: 2m
 metricsPort: 12798
 debugPort: 0
 network: "preview"
@@ -97,6 +98,7 @@ socketPath: "$HOME/dingo/dingo.socket"
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
+serverTimeout: 1h
 utxorpcPort: 0
 barkBaseUrl: ""
 barkPort: 0
@@ -104,11 +106,17 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
+> 📝 `chainsyncStallTimeout` controls how long Dingo waits before it treats a chain sync peer as stalled. Dingo raises values below the protocol minimum automatically.
+
+> 📝 `serverTimeout` limits long running UTxO RPC handlers, including `WaitForTx`, so watch style requests do not stay open forever.
+
+> 📝 API storage mode keeps spent UTxOs instead of pruning them so historical API queries can continue to use that data.
+
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
  > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`. In v0.47.0, API mode also resumes backfill more efficiently by using lightweight input address lookup, running SQLite `ANALYZE` before backfill work, and avoiding duplicate Mithril UTxO offset writes.
 
 ```yaml
 blockfrostPort: 3000
@@ -160,6 +168,8 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
+When Dingo resumes sync after the snapshot load, it now includes the Mithril trust boundary when it chooses intersect points. Dingo also detects idle Mithril downloads and sync stalls, then retries or resumes automatically instead of waiting forever. These changes make interrupted bootstrap and backfill runs safer to resume.
+
 This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
@@ -178,6 +188,8 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+> 📝 In API storage mode, v0.47.0 improves resume behavior and preserves more complete historical API data after an upgrade. API mode also keeps spent UTxOs intentionally, so the database preserves more history over time.
 
 ***
 
