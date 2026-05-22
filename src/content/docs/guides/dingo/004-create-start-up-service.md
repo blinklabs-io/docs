@@ -92,8 +92,6 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
- # peerSharing controls whether this node shares peers locally. Dingo now follows this setting at startup.
- # peerSharing: true
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
@@ -107,9 +105,6 @@ blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
 utxorpcPort: 0
- # TLS enabled uTxoRPC loads this certificate and key pair during startup.
- # utxorpcTlsCertFilePath: \"/etc/dingo/utxorpc.crt\"
- # utxorpcTlsKeyFilePath: \"/etc/dingo/utxorpc.key\"
 EOF"
 ```
 
