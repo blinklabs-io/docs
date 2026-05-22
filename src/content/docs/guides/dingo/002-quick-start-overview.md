@@ -179,8 +179,6 @@ cd ~/dingo
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
-> 📝 If local tip progress stalls while peers continue to move ahead on the same slot, Dingo now tries to reconcile local ledger state before it reconnects to an upstream peer. This often lets live sync recover in place without repeated peer reconnects or a manual service restart.
-
 ***
 
 <br>
