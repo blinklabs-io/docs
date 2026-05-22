@@ -104,12 +104,6 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 For simple setups, keep `database.metadata.plugin: "sqlite"` as the default path. On `v0.46.4` and newer, operators can expect smoother metadata handling with SQLite during bootstrap and normal use.
-
-> 📝 If an environment uses `mysql` or `postgresql` for metadata, `v0.46.4` and newer bootstrap correctly from genesis on networks and devnets whose Shelley or Conway genesis already includes pools, delegations, or DReps. This matters for preview, preprod, sanchonet, and custom devnets, while mainnet usually did not expose this issue.
-
-> 📝 On `v0.46.4` and newer, Dingo now keeps bootstrap state more consistent across `sqlite`, `mysql`, and `postgresql` during restart, rollback, and repeated bootstrap runs. This makes resumed bootstrap runs safer for genesis origin governance state. A documented Shelley genesis stake delegation rollback limitation still remains.
-
  > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
  > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
@@ -167,8 +161,6 @@ Dingo will:
 3. Load the snapshot into the database
 
 This takes approximately 10-15 minutes depending on your system and network speed.
-
-> 📝 On `v0.46.4` and newer, `./dingo mithril sync` exposes dedicated Prometheus progress metrics on the configured `metricsPort` while the command runs. Scrape the `metricsPort` value from this guide's configuration example to monitor download, ledger import, ImmutableDB copy, gap processing, and completion.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
