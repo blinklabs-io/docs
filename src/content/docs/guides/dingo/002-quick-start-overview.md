@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.46.2/dingo-v0.46.2-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.47.1/dingo-v0.47.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -162,8 +162,6 @@ Dingo will:
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
-> 📝 After the snapshot load finishes, Dingo now completes imported outputs during the follow up sync. As replay reaches the transaction that created each output, Dingo adds the correct transaction linkage and slot order instead of leaving snapshot loaded data incomplete.
-
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
 ***
@@ -180,8 +178,6 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
-
-> 📝 On governance era networks, treasury withdrawals and expired proposal deposit refunds only credit reward accounts that already exist and remain active. If the target reward account is missing or inactive, Dingo leaves the unclaimed amount in treasury instead of creating or reactivating the account.
 
 > 📝 If local tip progress stalls while peers continue to move ahead on the same slot, Dingo now tries to reconcile local ledger state before it reconnects to an upstream peer. This often lets live sync recover in place without repeated peer reconnects or a manual service restart.
 
