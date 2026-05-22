@@ -58,6 +58,7 @@ export default defineConfig({
 						{ label: 'Tx Submit API Mirror', collapsed: true, autogenerate: { directory: 'guides/txsubmit-api-mirror' } },
 						{ label: 'cDNSd', collapsed: true, slug: 'guides/cdnsd' },
 						{ label: 'gOuroboros', collapsed: true, autogenerate: { directory: 'guides/gouroboros' } },
+						{ label: 'plutigo', collapsed: true, autogenerate: { directory: 'guides/plutigo' } },
 						{ label: 'Docker Images', collapsed: true, slug: 'guides/docker-images' },
 					],
 				},
