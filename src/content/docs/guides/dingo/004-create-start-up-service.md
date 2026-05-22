@@ -159,6 +159,8 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
+> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
+
 ***
 
 <br>
