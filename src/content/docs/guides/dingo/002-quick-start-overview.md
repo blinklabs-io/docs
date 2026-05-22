@@ -162,6 +162,8 @@ Dingo will:
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
+> 📝 After the snapshot load finishes, Dingo now completes imported outputs during the follow up backfill. As replay reaches each producing transaction, the imported output picks up the correct transaction link and slot ordering details instead of remaining as snapshot only data.
+
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
 ***
@@ -178,6 +180,10 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+> 📝 On governance era networks, treasury withdrawals and expired proposal deposit refunds only credit reward accounts that already exist and remain active. If the target reward account is missing or inactive, Dingo leaves the unclaimed amount in treasury instead of creating or reactivating the account.
+
+> 📝 If local tip progress stalls while peers continue to move ahead on the same slot, Dingo now tries to reconcile local ledger state before it recycles the chainsync peer. This often lets live sync recover in place without repeated peer resyncs or a manual service restart.
 
 ***
 
