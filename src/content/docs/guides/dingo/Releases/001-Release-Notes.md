@@ -10,4 +10,8 @@ description: Dingo Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.47.0 - *[View Release Notes](../003-v0-47-0)*
+- Version: v0.46.4 - *[View Release Notes](../v0-46-4)*
+- Version: v0.46.3 - *[View Release Notes](../v0-46-3)*
+- Version: v0.46.2 - *[View Release Notes](../v0-46-2)*
+- Version: v0.46.1 - *[View Release Notes](../v0-46-1)*
 - Version: v0.39.1 - *[View Release Notes](../002-v0-39-1)*

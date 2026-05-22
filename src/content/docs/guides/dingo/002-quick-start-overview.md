@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.46.0/dingo-v0.46.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.46.2/dingo-v0.46.2-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -106,15 +106,9 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 `chainsyncStallTimeout` controls how long Dingo waits before it treats a chain sync peer as stalled. Dingo raises any lower value to the protocol minimum automatically.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
-> 📝 `serverTimeout` limits long running UTxO RPC handlers, including `WaitForTx`, so watch style requests do not stay open forever.
-
-> 📝 API storage mode keeps spent UTxOs instead of pruning them so historical API queries can continue to use that data.
-
- > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
-
- > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
+> 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`. In v0.47.0, API mode also resumes backfill more efficiently by using lightweight input address lookup, running SQLite `ANALYZE` before backfill work, and avoiding duplicate Mithril UTxO offset writes.
 
