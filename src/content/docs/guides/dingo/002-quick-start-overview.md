@@ -162,7 +162,7 @@ Dingo will:
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
-> 📝 After the snapshot load finishes, Dingo now completes imported outputs during the follow up sync. As replay reaches the transaction that created each output, Dingo fills in the missing source transaction and correct slot order instead of leaving snapshot loaded data incomplete.
+> 📝 After the snapshot load finishes, Dingo now completes imported outputs during the follow up sync. As replay reaches the transaction that created each output, Dingo adds the correct transaction linkage and slot order instead of leaving snapshot loaded data incomplete.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
