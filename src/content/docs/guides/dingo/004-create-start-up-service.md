@@ -186,8 +186,6 @@ Verify the service is running:
 sudo systemctl status dingo.service
 ```
 
-On `v0.47.1`, Dingo may log that it resolved a local tip plateau through ledger reconciliation before it recycles a chainsync peer. During a silent same slot fork divergence in live sync, Dingo may recover in place and continue syncing, which reduces cases where operators previously needed to restart the service manually. Dingo attempts reconciliation before peer recycle, so some plateaus can still continue to peer recycle.
-
 To follow the logs in real time:
 
 ```
