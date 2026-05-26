@@ -84,6 +84,10 @@ databasePath: \"$HOME/dingo/.dingo\"
 mithril:
   aggregatorUrl: \"\"
   cleanupAfterLoad: true
+  # downloadIdleTimeout controls how long a stalled download can sit idle before Dingo retries it.
+  # downloadIdleTimeout: 30s
+  # downloadMaxIdleRetries controls how many idle retries Dingo allows before it stops the download.
+  # downloadMaxIdleRetries: 5
   enabled: true
   verifyCertificates: true
 
@@ -101,6 +105,8 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 barkPrunerFrequency: 1h
+# backfillBatchSize tunes API mode metadata backfill batching and defaults to 100.
+# backfillBatchSize: 100
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
@@ -108,12 +114,15 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+> 📝 Blockfrost, Mesh, and UTxO RPC are client facing APIs and require an API capable `storageMode`. Bark is a separate Dingo to Dingo archive and control plane service, so Bark alone does not require `storageMode: "api"`.
 
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+utxorpcPort: 9090
 ```
+
+> 📝 Lower `backfillBatchSize` to reduce memory pressure during historical API backfill. Raise it on larger systems to increase throughput.
 
 ***
 
@@ -130,6 +139,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
+
+> 📝 Mithril now resumes partial download progress. Tune `mithril.downloadIdleTimeout` and `mithril.downloadMaxIdleRetries` when links are slow or unstable.
 
 ***
 
@@ -159,7 +170,7 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
+> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. It can also run during `dingo mithril sync`. Leave it at `0` in normal operation and enable it only for temporary profiling.
 
 ***
 
