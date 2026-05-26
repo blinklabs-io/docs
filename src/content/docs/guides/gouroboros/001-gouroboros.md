@@ -5,7 +5,7 @@ description: Introduction to gOuroboros.
 
 ![gOuroboros-logo](/gOuroboros-logo.png)
 
-gOuroboros is a powerful and versatile framework for building Go apps that interact with the Cardano blockchain. Quickly and easily write Go apps that communicate with Cardano nodes or manage blocks/transactions. Sync the blockchain from a local or remote node, query a local node for protocol parameters or UTxOs by address, and much more.
+gOuroboros is a powerful and versatile framework for building Go apps that interact with the Cardano blockchain. It helps developers build apps that communicate with Cardano nodes, manage blocks and transactions, and inspect CBOR, Cardano transactions, and Cardano blocks with Cardano-aware diagnostic output and programmatic diagnostic APIs. The repository also includes first-party example applications for common workflows such as chain sync, block fetch, peer sharing, state query, transaction monitoring, and transaction submission under `examples/`.
 
 ***
 
