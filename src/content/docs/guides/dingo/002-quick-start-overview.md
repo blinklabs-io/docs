@@ -80,8 +80,6 @@ databasePath: "$HOME/dingo/.dingo"
 mithril:
   aggregatorUrl: ""
   cleanupAfterLoad: true
-  # downloadIdleTimeout: 30s
-  # downloadMaxIdleRetries: 3
   enabled: true
   verifyCertificates: true
 
@@ -98,7 +96,6 @@ socketPath: "$HOME/dingo/dingo.socket"
 # Storage
 blockfrostPort: 0
 meshPort: 0
-# backfillBatchSize: 100 # Controls API mode metadata backfill block batching. Default: 100
 storageMode: "core"
 utxorpcPort: 0
 barkBaseUrl: ""
@@ -107,19 +104,17 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 Leave `debugPort` set to `0` unless temporary profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and can expose `/debug/pprof/` during `dingo mithril sync` as well as normal runtime.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
-> 📝 Bark is Dingo's Dingo to Dingo archive and control plane service, not a general end user API. Enabling Bark does not by itself require `storageMode: "api"`. Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
+> 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 Blockfrost, Mesh, and UTxO RPC are client facing APIs and require an API capable `storageMode`. Bark remains separate from those APIs.
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
 ```yaml
-storageMode: "api"
 blockfrostPort: 3000
-utxorpcPort: 9090
+storageMode: "api"
+utxorpcPort: 0
 ```
-
-> 📝 `backfillBatchSize` controls API mode metadata backfill batching. Smaller values flush more often and can reduce memory pressure during historical metadata catch up. Larger values can improve throughput on well provisioned systems.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
@@ -166,10 +161,6 @@ Dingo will:
 3. Load the snapshot into the database
 
 This takes approximately 10-15 minutes depending on your system and network speed.
-
-> 📝 Snapshot downloads resume partial progress if a transfer stops before completion. In most cases the default Mithril download settings are sufficient. Adjust `mithril.downloadIdleTimeout` and `mithril.downloadMaxIdleRetries` only for slow or unstable links.
-
-> 📝 Set `debugPort` to expose `/debug/pprof/` during Mithril sync when temporary profiling is required.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
