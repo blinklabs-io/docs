@@ -115,7 +115,6 @@ storageMode: "api"
 blockfrostPort: 3000
 ```
 
-
 ***
 
 <br>
@@ -131,7 +130,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
-
 
 ***
 
