@@ -97,7 +97,7 @@ socketPath: "$HOME/dingo/dingo.socket"
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
-utxorpcPort: 0
+utxorpcPort: 0 # Set a non zero value to expose the UTxO RPC API, including for the DingoSwap Preview example.
 barkBaseUrl: ""
 barkPort: 0
 barkPrunerFrequency: 1h
@@ -108,13 +108,23 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
+> 💡 To serve Blockfrost compatible HTTP endpoints, set `storageMode: "api"` and assign a non zero `blockfrostPort`.
 
 ```yaml
 blockfrostPort: 3000
 storageMode: "api"
 utxorpcPort: 0
 ```
+
+> 💡 To serve UTxO RPC clients, set `storageMode: "api"` and assign a non zero `utxorpcPort`.
+
+```yaml
+blockfrostPort: 0
+storageMode: "api"
+utxorpcPort: 9090
+```
+
+> 📝 When Leios mode is enabled, downstream node to client ChainSync consumers receive transaction data merged from ranking blocks and endorser blocks.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
@@ -164,6 +174,8 @@ This takes approximately 10-15 minutes depending on your system and network spee
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
+> 📝 Dingo now keeps reward state snapshots across restarts and removes them on rollback, so reward and governance history stays safe through restart and rollback events.
+
 ***
 
 <br>
@@ -178,6 +190,8 @@ cd ~/dingo
 ```
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
+
+> 📝 For stake pool operator governance, Dingo now follows snapshot frozen CIP 1694 reward account delegation when a pool does not submit an explicit SPO vote. An explicit SPO vote still takes precedence.
 
 ***
 
