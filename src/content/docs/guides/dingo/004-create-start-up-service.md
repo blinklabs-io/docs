@@ -56,6 +56,8 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 
 Since the service will run as your user but the config is now in `/etc/dingo/`, we need to make sure the database and socket paths use absolute paths. Run the following to regenerate the config with your `$HOME` expanded:
 
+Set `utxorpcPort` to a non zero value when the service must expose the Dingo UTxO RPC API for local tools or frontends such as the DingoSwap Preview example.
+
 ```
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 # Database
@@ -115,6 +117,13 @@ storageMode: "api"
 blockfrostPort: 3000
 ```
 
+> 📝 To serve the UTxO RPC API, set `storageMode: "api"` and set `utxorpcPort` to a non zero value.
+
+```yaml
+storageMode: "api"
+utxorpcPort: 9090
+```
+
 ***
 
 <br>
@@ -128,6 +137,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+
+> 📝 Dingo now keeps reward state snapshots across restarts and removes them during rollback when needed, which preserves restart safe and rollback safe historical reward data for long running services.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
@@ -160,6 +171,10 @@ ENDFILE
 ```
 
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
+
+> 📝 Leios enabled services now deliver merged ranking block and endorser block transaction data to node to client consumers, so downstream NtC clients behind the service can observe the merged view.
+
+> 📝 When no explicit SPO vote exists, SPO governance auto vote behavior follows snapshot frozen CIP 1694 reward account delegation semantics. An explicit SPO vote still overrides the auto vote result.
 
 ***
 
