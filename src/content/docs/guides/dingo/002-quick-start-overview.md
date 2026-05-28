@@ -113,7 +113,7 @@ EOF
 ```yaml
 blockfrostPort: 3000
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 0 # Set a non zero value to expose the UTxO RPC API. The DingoSwap Preview example uses this interface.
 ```
 
 > 💡 To serve UTxO RPC clients, set `storageMode: "api"` and assign a non zero `utxorpcPort`.
