@@ -15,6 +15,8 @@ description: Dingo Release Notes
 
 - Version: v0.49.0 - *[View Release Notes](../v0-49-0)*
 
+- Version: v0.49.0 - *[View Release Notes](../v0-49-0)*
+
 - Version: v0.48.0 - *[View Release Notes](../v0-48-0)*
 
 - Version: v0.47.1 - *[View Release Notes](../v0-47-1)*
