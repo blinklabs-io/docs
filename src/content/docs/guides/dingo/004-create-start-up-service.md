@@ -54,7 +54,7 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 
 ## Step 2 - Update Paths in dingo.yaml
 
-Since the service will run as your user but the config is now in `/etc/dingo/`, we need to make sure the database and socket paths use absolute paths. Run the following to regenerate the config with your `$HOME` expanded:
+Since the service will run as your user but the config is now in `/etc/dingo/`, we need to make sure the database and socket paths use absolute paths. Run the following to regenerate the config with your `$HOME` expanded. Set `utxorpcPort` to a non zero value when the service must expose Dingo's UTxO RPC API for local tools or frontends such as the DingoSwap Preview example:
 
 Set `utxorpcPort` to a non zero value when the service must expose the Dingo UTxO RPC API for local tools or frontends such as the DingoSwap Preview example.
 
@@ -110,11 +110,16 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to `storageMode: "api"` and set `blockfrostPort` to a non zero value. Operators who want UTxO RPC serving must switch to `storageMode: "api"` and set `utxorpcPort` to a non zero value.
 
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+```
+
+```yaml
+storageMode: "api"
+utxorpcPort: 9090
 ```
 
 > 📝 To serve the UTxO RPC API, set `storageMode: "api"` and set `utxorpcPort` to a non zero value.
@@ -137,6 +142,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+
+> 📝 Dingo now keeps reward state snapshots across restarts and removes them on rollback when needed, preserving restart safe and rollback safe historical reward data.
 
 > 📝 Dingo now keeps reward state snapshots across restarts and removes them during rollback when needed, which preserves restart safe and rollback safe historical reward data for long running services.
 
@@ -171,6 +178,10 @@ ENDFILE
 ```
 
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
+
+> 📝 Leios enabled services now deliver merged ranking block and endorser block transaction data to node to client consumers, so downstream NtC clients behind the service can observe the merged view.
+
+> 📝 When no explicit SPO vote exists, SPO governance auto vote behavior now follows snapshot frozen CIP 1694 reward account delegation semantics. Explicit SPO votes still override the auto vote outcome.
 
 > 📝 Leios enabled services now deliver merged ranking block and endorser block transaction data to node to client consumers, so downstream NtC clients behind the service can observe the merged view.
 
