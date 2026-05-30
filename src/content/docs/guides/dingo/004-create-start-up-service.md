@@ -104,7 +104,6 @@ barkPrunerFrequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
-utxorpcPort: 0
 EOF"
 ```
 
