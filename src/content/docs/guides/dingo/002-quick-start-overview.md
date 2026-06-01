@@ -122,7 +122,7 @@ utxorpcPort: 0
 
 > 📝 Configure browser CORS for Blockfrost, Mesh, UTxO RPC, or Bark with `corsAllowedOrigins`, `DINGO_CORS_ALLOWED_ORIGINS`, or `--cors-allowed-origins`. The default is `[*]`. Set an empty list to disable CORS headers.
 
-> 💡 A normal API node keeps local blob storage and enables the client facing ports it needs. An archive node uses an object storage blob backend with signed URLs, either `s3` or `gcs`, and enables `barkPort`. A pruning node keeps local blob storage, points `barkBaseUrl` at an archive node, and can continue to use Badger for its local store. Use Badger for a pruning node local store, not for a Bark archive backend.
+> 💡 A normal API node keeps local blob storage and enables the client facing ports it needs. An archive node uses an object storage blob backend with signed URLs, either `s3` or `gcs`, and enables `barkPort`. A pruning node keeps local blob storage, points `barkBaseUrl` at an archive node, and can continue to use Badger for its local store. Use Badger for a pruning node local store, not as the Bark archive backend.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
@@ -170,11 +170,11 @@ Dingo will:
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
-When `storageMode` is `api`, the Mithril bootstrap can continue with historical metadata backfill and deferred metadata index rebuild work before the node becomes ready to serve APIs. This behavior is expected after the snapshot load completes and does not indicate a separate recovery task.
+When `storageMode` is `api`, the Mithril bootstrap can continue with historical metadata backfill and later metadata index rebuild work before the node becomes ready to serve APIs. This behavior is expected after the snapshot load completes and does not indicate a separate recovery task.
 
 During API mode backfill, v0.50.0 exposes richer progress details in logs and metrics, including current slot, completion percentage, blocks per second, and per stage and interval counters.
 
-> 📝 Compose based example stacks that depend on Mithril loaded metadata now wait more accurately for the one shot sync job to finish before dependent services start.
+> 📝 Compose based example stacks that depend on Mithril loaded metadata now wait more accurately for the sync job to finish before dependent services start.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
@@ -193,7 +193,7 @@ cd ~/dingo
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
-> 📝 On block producer deployments, if forging wins a slot but the generated block fails to decode again, v0.50.0 logs bounded Cardano aware CBOR diagnostics that identify malformed top level fields. Use this output as a diagnostic aid when investigating a forging failure.
+> 📝 On block producer deployments, if forging wins a slot but the generated block fails to decode again, v0.50.0 logs bounded diagnostics for the generated block data that identify malformed top level fields. Use this output as a diagnostic aid when investigating a forging failure.
 
 ***
 
