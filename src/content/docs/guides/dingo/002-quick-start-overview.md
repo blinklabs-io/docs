@@ -104,7 +104,7 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 Keep a separate `databasePath` or separate SQL database for each Cardano network such as `preview`, `preprod`, and `mainnet`. Do not reuse one database across networks. Dingo now applies the configured `network` consistently during Mithril sync, sync state checks, and backfill resume, so a reused database with the wrong network can surface as cross network state problems.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
