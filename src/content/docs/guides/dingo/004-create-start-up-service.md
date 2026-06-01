@@ -75,6 +75,10 @@ database:
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
+# `mempoolCapacity` is an optional override, not a required setting.
+# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Leios mode.
+# Leave the key commented or omit it to use the mode default.
+# mempoolCapacity: 1048576
 
 # Mithril
 mithril:
@@ -100,7 +104,15 @@ barkPrunerFrequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
+utxorpcPort: 0
 EOF"
+```
+
+> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+
+```yaml
+storageMode: "api"
+blockfrostPort: 3000
 ```
 
 ***
@@ -146,6 +158,8 @@ TimeoutStopSec=5
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
 
 ***
 
