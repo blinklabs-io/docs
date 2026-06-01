@@ -106,8 +106,6 @@ EOF
 
 > 📝 Keep a separate `databasePath` or separate SQL database for each Cardano network such as `preview`, `preprod`, and `mainnet`. Do not reuse one database across networks. Dingo now applies the configured `network` consistently during Mithril sync, sync state checks, and backfill resume, so a reused database with the wrong network can surface as cross network state problems.
 
-> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
-
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
@@ -163,8 +161,6 @@ Dingo will:
 3. Load the snapshot into the database
 
 This takes approximately 10-15 minutes depending on your system and network speed.
-
-> 📝 In API mode, historical backfill should populate missing transaction metadata after the snapshot load finishes. PostgreSQL and MySQL queries are now more reliable after Mithril bootstrap and backfill, especially for produced outputs, collateral returns, and epoch snapshot readiness.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
