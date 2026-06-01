@@ -206,7 +206,7 @@ To see recent logs if there is an error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-Version `0.50.0` also adds richer Mithril API backfill progress and timing counters in logs and metrics, and forging failures now include bounded CBOR diagnostics when a forged block cannot be decoded again.
+Version `0.50.0` also shows richer Mithril API backfill progress and timing counters in logs and metrics, and forging failures now include bounded CBOR diagnostics when a forged block cannot be decoded again.
 
 ***
 
