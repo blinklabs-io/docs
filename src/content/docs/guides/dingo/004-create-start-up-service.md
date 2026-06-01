@@ -137,7 +137,7 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
-> 📝 API mode bootstrap can continue with historical metadata backfill and deferred index rebuild work after the snapshot load finishes. Wait for that work to finish before treating the service as ready for API traffic.
+> 📝 In API mode, wait for historical metadata backfill and deferred index rebuild work to finish before treating the service as ready for API traffic.
 
 ***
 
