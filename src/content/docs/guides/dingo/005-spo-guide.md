@@ -23,5 +23,6 @@ description: SPO Guide for Dingo Pools.
 
 There are X number of steps that it take to get a Dingo Node running on a Preview
 
-- [x] 1.
+- [x] 1. Complete the [Quick Start](../002-quick-start-overview) guide.
 - [x] 2.
+- [x] 3. 
