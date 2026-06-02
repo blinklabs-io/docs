@@ -160,7 +160,7 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-This takes approximately 10-15 minutes depending on your system and network speed.
+This takes approximately 20-30 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
