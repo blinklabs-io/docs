@@ -110,7 +110,6 @@ EOF"
 
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
-
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
@@ -131,7 +130,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
-
 
 ***
 
@@ -199,7 +197,6 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
-
 
 ***
 
