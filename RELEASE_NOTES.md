@@ -15,14 +15,14 @@ This release introduces initial Dijkstra era support as the headline change, fix
 
 ### New Features
 
-* Added initial Dijkstra era support so integrations can work with the new era across block handling, transactions, protocol versions, and validation flows.
+* Added initial Dijkstra era support so applications can handle the new era more reliably.
 
 ### Bug Fixes
 
-* Fixed `CIP-0164` Leios vote and endorser block certificate handling so stake based committees use the correct vote identifiers and certificate data.
-* Corrected Leios stake and parameter handling so Dijkstra genesis data, governance updates, and protocol parameters remain consistent.
-* Resolved rewards calculation for stake pools whose total rewards are lower than the fixed fee so operator rewards no longer underflow delegator payouts.
-* Prevented `BlockFetch` invalid configuration panics so invalid settings now return errors instead of crashing callers.
+* Fixed `CIP-0164` Leios vote and endorser block certificate handling so stake based committees now process votes and certificates correctly.
+* Corrected Leios stake and parameter handling so Dijkstra era settings stay consistent during startup and updates.
+* Resolved rewards calculation for stake pools whose total rewards are lower than the fixed fee so reward distribution stays correct.
+* Prevented `BlockFetch` invalid configuration panics so invalid settings now fail with clear errors.
 
 ### Additional Changes
 
