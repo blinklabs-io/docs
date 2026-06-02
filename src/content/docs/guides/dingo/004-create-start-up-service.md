@@ -102,8 +102,6 @@ barkBaseUrl: \"\"
 barkPort: 0
 barkPrunerFrequency: 1h
 blockfrostPort: 0
-corsAllowedOrigins:
-  - "*"
 meshPort: 0
 storageMode: \"core\"
 utxorpcPort: 0
@@ -112,9 +110,6 @@ EOF"
 
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
-> 📝 Browser facing APIs can use `corsAllowedOrigins`, `DINGO_CORS_ALLOWED_ORIGINS`, or `--cors-allowed-origins`. Dingo allows all origins by default with `"*"`, and an empty list disables CORS.
-
-> 📝 Archive nodes need an object storage blob backend such as `s3` or `gcs` and a non zero `barkPort`. Pruning nodes keep local storage and set `barkBaseUrl` to an archive node. Badger does not fit an archive backend because Bark archive responses require signed URLs.
 
 ```yaml
 storageMode: "api"
@@ -137,7 +132,6 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
-> 📝 In API mode, wait for historical metadata backfill and deferred index rebuild work to finish before treating the service as ready for API traffic.
 
 ***
 
@@ -206,7 +200,6 @@ To see recent logs if there is an error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-Version `0.50.0` also shows richer Mithril API backfill progress and timing counters in logs and metrics, and forging failures now include bounded CBOR diagnostics when a forged block cannot be decoded again.
 
 ***
 
