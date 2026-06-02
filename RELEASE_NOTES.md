@@ -15,19 +15,19 @@ This release introduces initial Dijkstra era support as the headline change, fix
 
 ### New Features
 
-* Added initial Dijkstra era support so applications can handle the new era more reliably.
+* Added initial Dijkstra era support so applications can work with the new era more reliably.
 
 ### Bug Fixes
 
-* Fixed `CIP-0164` Leios vote and endorser block certificate handling so stake based committees now process votes and certificates correctly.
-* Corrected Leios stake and parameter handling so Dijkstra era settings stay consistent during startup and updates.
-* Resolved rewards calculation for stake pools whose total rewards are lower than the fixed fee so reward distribution stays correct.
-* Prevented `BlockFetch` invalid configuration panics so invalid settings now fail with clear errors.
+* Fixed `CIP-0164` Leios vote and endorser block certificate handling so stake based committees now accept votes and certificates correctly.
+* Corrected Leios stake and parameter handling so Dijkstra era settings remain consistent during startup and updates.
+* Resolved rewards calculation for stake pools whose total rewards are lower than the fixed fee so rewards now stay accurate.
+* Prevented `BlockFetch` invalid configuration panics so invalid settings now return clear errors.
 
 ### Additional Changes
 
-* Refined rewards formatting cleanup around ledger reward calculation output.
-* Tidied minor ledger test cleanups and coverage updates.
+* Refined rewards formatting so reward output reads more cleanly.
+* Tidied minor ledger test cleanups and related coverage updates.
 * Updated `github.com/blinklabs-io/plutigo` from `v0.1.13` to `v0.1.14`.
 * Documented `RELEASE_NOTES.md` maintenance to add the prior `v0.179.0` entry.
 
