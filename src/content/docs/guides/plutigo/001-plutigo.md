@@ -1,18 +1,9 @@
 ---
 title: plutigo
-description: Overview of Plutigo, a pure Go Untyped Plutus Core runtime for Cardano use cases.
+description: Introduction to plutigo.
 ---
 
-Plutigo is a pure Go implementation of Untyped Plutus Core for Cardano use cases. It delivers portable script evaluation without CGO dependencies.
+An implementation of [Plutus](https://github.com/IntersectMBO/plutus) in pure Go.
 
-Core capabilities include:
-
-- An optimized CEK evaluation engine for fast and efficient script execution.
-- Support for Plutus V1, V2, V3, and initial V4 support.
-- Version aware cost models and builtin behavior, with automatic selection based on the Plutus program version.
-- Strong conformance coverage through comprehensive conformance testing, property based testing, and fuzz testing.
-
-## Runtime budgeting
-
-In restricting validation mode, successful evaluation can skip the final slippage flush when `EvalContext.SkipFinalSlippageFlush = true`. Keep this option disabled when exact cost evaluation matters so the final unbudgeted batch still flushes and counts against the budget.
+This package aims to only support Untyped Plutus Core because that is all that is needed for a full node. The other stuff like Typed Plutus Core and Plutus IR is for Plinth.
 
