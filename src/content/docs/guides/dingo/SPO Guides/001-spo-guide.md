@@ -1,5 +1,5 @@
 ---
-title: SPO Guide
+title: SPO Guide Overview
 description: SPO Guide for Dingo Pools.
 ---
 
