@@ -163,6 +163,13 @@ ENDFILE
 
 ***
 
+We can view and verify our dingo.yaml file by running:
+
+```
+cd /etc/dingo/
+sudo nano dingo.yaml
+```
+
 <br>
 
 ## Step 5 - Enable and Start the Service
