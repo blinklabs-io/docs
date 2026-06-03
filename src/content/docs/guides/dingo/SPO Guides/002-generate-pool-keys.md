@@ -10,10 +10,10 @@ We will now generate the Pool Keys needed for Block Production on the Preview Ne
 
 | Key	| Purpose	| Where it lives
 |-------|---------------|-------------------|
-|Cold key (cold.skey / cold.vkey)	|Authorizes pool registration and KES rotation	|Air-gapped machine only — never transferred
-|KES key (kes.skey / kes.vkey)	|Signs blocks; rotated every ~90 days	|kes.skey - Block producer
-|VRF key (vrf.skey / vrf.vkey)	|Proves slot leadership	|vrf.skey - Block producer
-|Operational certificate (node.cert)	|Binds KES key to cold key for the node	|Block producer
+|Cold key<br> (cold.skey / cold.vkey)	|Authorizes pool registration and KES rotation	|Air-gapped machine only — never transferred
+|KES key<br> (kes.skey / kes.vkey)	|Signs blocks; rotated every ~90 days	|kes.skey - Block producer
+|VRF key<br> (vrf.skey / vrf.vkey)	|Proves slot leadership	|vrf.skey - Block producer
+|Operational certificate<br> (node.cert)	|Binds KES key to cold key for the node	|Block producer
 
 
 For background on what these keys do, see <a href="https://developers.cardano.org/docs/operate-a-stake-pool/basics/cardano-key-pairs/" target="new" >Cardano Key Pairs</a>.
@@ -28,11 +28,34 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
+## Step 1 - Generate KES key pair
 
+```
+cd ~/dingo
+cardano-cli conway node key-gen-KES \
+    --verification-key-file kes.vkey \
+    --signing-key-file kes.skey
+```
 
-## Step 1 
+## Step 2 - Make a directory to store your cold keys
 
+⚠️ On Air Gapped
+```
+mkdir $HOME/dingo/cold-keys
+pushd $HOME/dingo/cold-keys
+```
 
+## Step 3 - Generate set of cold keys and create the cold counter file
+
+⚠️ On Air Gapped
+```
+cardano-cli conway node key-gen \
+    --cold-verification-key-file node.vkey \
+    --cold-signing-key-file $HOME/dingo/cold-keys/node.skey \
+    --operational-certificate-issue-counter node.counter
+```
+
+## Step 4 -
 
 A Block Producer node only requires 3 files:
 
