@@ -117,6 +117,13 @@ blockfrostPort: 3000
 
 ***
 
+We can view and verify our `dingo.yaml` file by running:
+
+```
+cd /etc/dingo/
+sudo nano dingo.yaml
+```
+
 <br>
 
 ## Step 3 - Bootstrap from Mithril (First Run Only)
@@ -163,11 +170,10 @@ ENDFILE
 
 ***
 
-We can view and verify our dingo.yaml file by running:
+We can view and verify our `dingo.service` file by running:
 
 ```
-cd /etc/dingo/
-sudo nano dingo.yaml
+sudo nano /etc/systemd/system/dingo.service
 ```
 
 <br>
