@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.50.0/dingo-v0.50.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.50.2/dingo-v0.50.2-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -185,12 +185,6 @@ You should see log output showing the node connecting to peers and syncing the r
 
 #### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the Dingo node when the computer reboots?
 [See our guide on how to create a startup service for Dingo](../004-create-start-up-service).
-
-## Operator notes for v0.50.2
-
-- When Dingo backfills API mode data, it now reuses outputs created earlier in the same batch for provenance and related address lookups before it falls back to database or blob recovery. This reduces unnecessary lookup work during dense backfills and more reliably repairs partially written spent rows when a backfill resumes.
-- Dingo now checks leader slot membership with sorted schedules and binary search, which makes large schedules faster to evaluate. It also sorts stored schedules when it loads them, so older or unsorted saved data does not disrupt slot checks.
-- Dingo now rejects peer `FindIntersect` requests larger than 1000 points with a warning and an `IntersectNotFound` style failure, while normal requests continue to work. This reduces avoidable load from buggy or malicious peers.
 
 ***
 
