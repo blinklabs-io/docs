@@ -198,16 +198,6 @@ To see recent logs if there is an error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-## Operator notes for v0.50.1
-
-Dingo v0.50.1 includes several behavior fixes that affect node operation and monitoring.
-
-- Dingo now stops recomputing the next epoch nonce for the same epoch after it determines that the value is ready, which reduces unnecessary CPU work during stalled or slow progress conditions.
-- Dingo now reports chain density in a way that follows `cardano-node` more closely and stays more stable across restarts or rollbacks, so Prometheus density readings should better match `cardano-node` behavior.
-- Dingo now disconnects peers that keep requesting blocks from the same missing point after 5 consecutive failures for the same start point, so those stuck peers can reconnect and recover instead of continuing to waste work.
-
-When operators validate these behaviors on a service managed node, the existing `journalctl -u dingo -f` command from Step 6 together with Prometheus metrics can show peer resets and corrected density behavior.
-
 ***
 
 <br>
