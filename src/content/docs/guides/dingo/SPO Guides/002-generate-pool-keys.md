@@ -65,6 +65,32 @@ cardano-cli conway node key-gen \
 
 ## Step 4 - Find the starting KES period
 
+We need the Shelley Genesis json file to run our CLI command
+
+Sw we will create a directory to store our Cardano Configuration Files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
+
+```
+cd ~/dingo
+mkdir -p config/cardano/preview
+```
+
+Now we will navigate to the `config/cardano/preview` folder and download the Cardano Configuration Files
+
+```
+cd config/cardano/preview
+```
+
+we will download the Shelley Genesis files by running:
+
+```
+wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
+```
+
+> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+
+***
+
+Now we can find the starting KES period by running:
 ```
 slotNo=$(cardano-cli conway query tip --mainnet | jq -r '.slot')
 slotsPerKESPeriod=$(cat $HOME/dingo/config/cardano/preview/shelley-genesis.json | jq -r '.slotsPerKESPeriod')
