@@ -5,7 +5,7 @@ description: Understand how gOuroboros encodes Plutus V1 and V2 txInfoMint acros
 
 ## Overview
 
-gOuroboros introduced protocol aware `txInfoMint` encoding in release `v0.180.1`. The change affects Plutus V1 and Plutus V2 script contexts only. It changes how `txInfoMint` is encoded inside the script context so the encoded result follows the active protocol major version.
+Release `v0.180.1` introduced protocol aware `txInfoMint` encoding in gOuroboros. gOuroboros applies the change only to Plutus V1 and Plutus V2 script contexts. The library now chooses the `txInfoMint` encoding based on the active protocol major version.
 
 This guide covers script context encoding behavior. It does not describe a general transaction format change. It also does not target Plutus V3, because the referenced change applies specifically to Plutus V1 and Plutus V2 mint handling.
 
@@ -21,13 +21,13 @@ In practical terms, the same transaction can produce different script context CB
 
 ## Where gOuroboros applies the rule
 
-gOuroboros now carries `ProtocolMajor` into `TxInfoV1` and `TxInfoV2`. It uses that value when it builds script contexts under Conway rules and under Dijkstra rules.
+gOuroboros now carries `ProtocolMajor` into `TxInfoV1` and `TxInfoV2`. The library uses that value when it builds script contexts for Conway era validation and Dijkstra era validation.
 
 That means the behavior follows the ledger rules that apply at the time of script context construction:
 
-- Conway path builds Plutus V1 and V2 script contexts with the active protocol major version.
-- Dijkstra path builds Plutus V1 and V2 script contexts with the active protocol major version.
-- Both paths use that version to decide whether `txInfoMint` keeps the earlier encoding or receives the zero ADA entry for PV10 and later.
+- Conway era validation builds Plutus V1 and Plutus V2 script contexts with the active protocol major version.
+- Dijkstra era validation builds Plutus V1 and Plutus V2 script contexts with the active protocol major version.
+- Both validation paths use that version to decide whether `txInfoMint` keeps the earlier encoding or receives the zero ADA entry for PV10 and later.
 
 ## What to check when CBOR differs
 
@@ -42,4 +42,4 @@ This matters most when an integration compares raw CBOR bytes or validates scrip
 
 ## Summary
 
-Release `v0.180.1` makes gOuroboros encode Plutus V1 and Plutus V2 `txInfoMint` in a protocol aware way. Pre PV10 behavior stays the same, while PV10 and later prepend a zero ADA mint entry so script context encoding matches `cardano-ledger`, including the case where nothing is minted. Integrations that compare CBOR should account for the active protocol major version before treating mint encoding differences as regressions.
+Pre PV10 behavior stays the same in `v0.180.1`, while PV10 and later prepend a zero ADA mint entry so Plutus V1 and Plutus V2 script context encoding matches `cardano-ledger`, including the case where nothing is minted. Integrations that compare CBOR should account for the active protocol major version before treating mint encoding differences as regressions.
