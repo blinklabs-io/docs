@@ -37,25 +37,93 @@ cardano-cli conway node key-gen-KES \
     --signing-key-file kes.skey
 ```
 
+***
+
 ## Step 2 - Make a directory to store your cold keys
 
 ⚠️ On Air Gapped
+
 ```
 mkdir $HOME/dingo/cold-keys
 pushd $HOME/dingo/cold-keys
 ```
 
+***
+
 ## Step 3 - Generate set of cold keys and create the cold counter file
 
 ⚠️ On Air Gapped
+
 ```
 cardano-cli conway node key-gen \
     --cold-verification-key-file node.vkey \
-    --cold-signing-key-file $HOME/dingo/cold-keys/node.skey \
+    --cold-signing-key-file node.skey \
     --operational-certificate-issue-counter node.counter
 ```
 
-## Step 4 -
+***
+
+## Step 4 - Find the starting KES period
+
+```
+slotNo=$(cardano-cli conway query tip --mainnet | jq -r '.slot')
+slotsPerKESPeriod=$(cat $HOME/dingo/config/cardano/preview/shelley-genesis.json | jq -r '.slotsPerKESPeriod')
+kesPeriod=$((${slotNo} / ${slotsPerKESPeriod}))
+startKesPeriod=${kesPeriod}
+echo startKesPeriod: ${startKesPeriod}
+```
+
+📝 WRITE DOWN THIS NUMBER
+
+***
+
+## Step 5 - Generate operational certificate for your pool
+
+✅ Change the <startKesPeriod> value you wrote down in the previous step.
+
+⚠️ On Air Gapped once you have copied kes.vkey to your cold environment.
+
+```
+cd ~/dingo
+cardano-cli conway node issue-op-cert \
+    --kes-verification-key-file kes.vkey \
+    --cold-signing-key-file $HOME/dingo/cold-keys/node.skey \
+    --operational-certificate-issue-counter $HOME/dingo/cold-keys/node.counter \
+    --kes-period <startKesPeriod> \
+    --out-file node.cert
+```
+
+***
+
+## Step 6 - Copy node.cert to your hot environment
+
+***
+
+## Step 7 - Generate a a VRF key pair
+
+```
+cd ~/dingo
+cardano-cli conway node key-gen-VRF \
+    --verification-key-file vrf.vkey \
+    --signing-key-file vrf.skey
+```
+
+***
+
+## Step 8 - Update vrf key permissions to read-only. You must also copy vrf.vkey to your cold environment.
+
+```
+chmod 400 vrf.skey
+```
+
+***
+
+## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate.
+
+```
+```
+
+***
 
 A Block Producer node only requires 3 files:
 
