@@ -30,3 +30,11 @@ There are 7 main steps that we will cover to get a Dingo Node registered and run
 - [x] 5. Generate Payment and Stake Keys
 - [x] 6. Register Your Stake Address
 - [x] 7. Register Your Stake Pool
+
+***
+
+📝 This guide assumes you hardened your server security. For information on Hardening an Server <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-i-installation/hardening-an-ubuntu-server" target="_blank">see Coincashew guide</a>  
+
+<br>
+
+✅ This guide also skips Air-Gapped setup and assumes you secured files as necessary.
