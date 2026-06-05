@@ -28,6 +28,8 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
+✅ This guide assume you files are in the $HOME/dingo folder. Adjust paths below if necessary.
+
 ## Step 1 - Generate KES key pair
 
 ```
@@ -144,15 +146,47 @@ chmod 400 vrf.skey
 
 ***
 
-## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate.
+## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate
 
 ```
+sudo nano /etc/dingo/dingo.yaml
+```
+
+Add the following lines to your `dingo.yaml` file:
+
+```
+# Validator / block producer (core storage, API ports ignored):
+storageMode: "core"
+blockProducer: true
+shelleyVrfKey: "$HOME/dingo/vrf.skey"
+shelleyKesKey: "$HOME/dingo/kes.skey"
+shelleyOperationalCertificate: "$HOME/dingo/opcert.cert"
 ```
 
 ***
 
-A Block Producer node only requires 3 files:
+## Step 10 - Start Digno Node
 
-- stake pool cold key (node.cert)
-- stake pool hot key (kes.skey)
-- stake pool VRF key (vrf.skey)
+```
+sudo systemctl start dingo
+```
+
+***
+
+> ### Reminder
+>**Block-producing Node**
+> The only stake pool keys and certs that are should be on the block producer, are the following three files.
+> 
+> ```
+> ###
+> ### On block producer node
+> ###
+> KES = kes.skey
+> VRF = vrf.skey
+> CERT = node.cert
+> ```
+> 
+> **All other keys must remain offline in your air-gapped offline cold environment.**
+> 
+> **Relay Nodes**
+> Relay nodes must NOT store any operational certificates, vrf, skey or cold keys.
