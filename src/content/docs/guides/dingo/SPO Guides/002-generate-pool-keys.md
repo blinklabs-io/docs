@@ -149,19 +149,17 @@ chmod 400 vrf.skey
 
 ## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate
 
-```
-sudo nano /etc/dingo/dingo.yaml
-```
-
-Add the following lines to your `dingo.yaml` file:
+Add the following lines to your `dingo.yaml` file by running:
 
 ```
+sudo bash -c 'cat <<EOF >> /etc/dingo/dingo.yaml
 # Validator / block producer (core storage, API ports ignored):
 storageMode: "core"
 blockProducer: true
 shelleyVrfKey: "$HOME/dingo/vrf.skey"
 shelleyKesKey: "$HOME/dingo/kes.skey"
 shelleyOperationalCertificate: "$HOME/dingo/opcert.cert"
+EOF'
 ```
 
 ***
