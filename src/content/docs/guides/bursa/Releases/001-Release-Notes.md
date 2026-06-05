@@ -9,4 +9,4 @@ description: Bursa Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
-- Version: v0.16.0 - *[View Release Notes](../002-v0-16-0)*
+- Version: v0.16.0 - *[View Release Notes](../v0-16-0)*
