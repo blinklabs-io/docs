@@ -20,7 +20,7 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
-> ⚠️ The following guide assumes your have already completed the following 3 steps. If not please do them first and return here when done. 
+> ⚠️ The following guide assumes you have already completed the following 3 steps. If not please do them first and return here when you done. 
 > 
 > - [x] 1. Complete the [Quick Start](../002-quick-start-overview) guide.
 > - [x] 2. [Create Start Up Serivce](../003-create-start-up-service)
@@ -28,7 +28,7 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
-✅ This guide assume you files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assume your files are in the $HOME/dingo folder. Adjust paths below if necessary.
 
 ## Step 1 - Generate KES key pair
 
@@ -69,20 +69,20 @@ cardano-cli conway node key-gen \
 
 We need the Shelley Genesis json file to run our CLI command
 
-Sw we will create a directory to store our Cardano Configuration Files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
+So we will create a directory to store our Cardano configuration files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
 
 ```
 cd ~/dingo
 mkdir -p config/cardano/preview
 ```
 
-Now we will navigate to the `config/cardano/preview` folder and download the Cardano Configuration Files
+Now we will navigate to the `config/cardano/preview` folder and download the Cardano Shelley Genesis file.
 
 ```
 cd config/cardano/preview
 ```
 
-we will download the Shelley Genesis files by running:
+To download the Shelley Genesis file run:
 
 ```
 wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
@@ -125,6 +125,7 @@ cardano-cli conway node issue-op-cert \
 
 ## Step 6 - Copy node.cert to your hot environment
 
+Copy your `node.cert` file to your Block Producer.
 ***
 
 ## Step 7 - Generate a a VRF key pair
@@ -175,7 +176,7 @@ sudo systemctl start dingo
 
 > ### Reminder
 >**Block-producing Node**
-> The only stake pool keys and certs that are should be on the block producer, are the following three files.
+> The only stake pool keys and certs that should be on the block producer, are the following three files.
 > 
 > ```
 > ###
