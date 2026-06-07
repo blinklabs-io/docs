@@ -111,7 +111,7 @@ EOF
 
 > 📝 Dingo v0.51.0 writes human readable text logs by default. Set `logging.format: json`, `DINGO_LOGGING_FORMAT=json`, or `--logging-format json` when stdout feeds a JSON log pipeline. `logging.level` accepts `debug`, `info`, `warn`, or `error`, and `--debug` still overrides the configured level.
 
-> 📝 This guide stays on Preview. For the experimental Leios testnet, use the embedded Leios network configuration, set `runMode: "leios"`, set the network and startup values required for that experimental network, and use the bundled topology and peer snapshot that bootstrap from `leios-node.play.dev.cardano.org:3001`.
+> 📝 This guide stays on Preview. For the experimental Leios testnet, use the embedded Leios network configuration, set `network: "leios"`, `runMode: "leios"`, and `startEra: "dijkstra"`, and use the bundled topology and peer snapshot that bootstrap from `leios-node.play.dev.cardano.org:3001`.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
