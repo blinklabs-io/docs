@@ -199,8 +199,6 @@ To follow the logs in real time:
 sudo journalctl -u dingo -f
 ```
 
-Text output is now the default in v0.51.0. Set `logging.format: json`, `DINGO_LOGGING_FORMAT=json`, or add `--logging-format json` to `ExecStart` when log collection depends on structured JSON. `--debug` still forces debug level output.
-
 To see recent logs if there is an error:
 
 ```
