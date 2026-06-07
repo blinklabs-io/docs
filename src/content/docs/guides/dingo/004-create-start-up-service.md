@@ -97,6 +97,11 @@ privatePort: 3002
 relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
 
+ # Logging
+ logging:
+   format: text
+   level: info
+ 
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
@@ -108,7 +113,7 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value. Epoch protocol parameter responses now also include Conway era governance fields, reference script cost fields, and `cost_models_raw`, so downstream integrations should confirm that those responses still match current expectations.
 
 ```yaml
 storageMode: "api"
@@ -161,6 +166,8 @@ ENDFILE
 
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
 
+> 📝 Dingo v0.51.0 now writes text logs by default. Operators who need JSON in `journalctl` or another log pipeline must set `logging.format: json`, `DINGO_LOGGING_FORMAT=json`, or add `--logging-format json` to `ExecStart`. The `--debug` flag still forces debug level output.
+
 ***
 
 <br>
@@ -191,6 +198,8 @@ To follow the logs in real time:
 ```
 sudo journalctl -u dingo -f
 ```
+
+Text output is now the default in v0.51.0. Set `logging.format: json`, `DINGO_LOGGING_FORMAT=json`, or add `--logging-format json` to `ExecStart` when log collection depends on structured JSON. `--debug` still forces debug level output.
 
 To see recent logs if there is an error:
 
