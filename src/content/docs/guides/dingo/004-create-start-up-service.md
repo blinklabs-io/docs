@@ -97,11 +97,11 @@ privatePort: 3002
 relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
 
- # Logging
- logging:
-   format: text
-   level: info
- 
+# Logging
+logging:
+  format: text
+  level: info
+
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
