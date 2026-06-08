@@ -100,13 +100,17 @@ storageMode: "core"
 utxorpcPort: 0
 barkBaseUrl: ""
 barkPort: 0
-barkPrunerFrequency: 1h
+historyExpiry:
+  enabled: false
+  frequency: 1h
 EOF
 ```
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
-> 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
+> 📝 `historyExpiry.enabled` turns on local expiry of immutable block CBOR older than the ledger stability window. `historyExpiry.frequency` controls how often Dingo scans for blocks to expire. `barkBaseUrl` is an optional archive fallback for expired or missing historical blocks, not the setting that turns on local expiry.
+
+> 📝 `barkPrunerFrequency` is obsolete in v0.52.0. To keep the older local pruning with archive fallback behavior, enable `historyExpiry` and optionally set `barkBaseUrl`.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
