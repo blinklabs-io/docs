@@ -13,6 +13,6 @@ A Cardano blockchain data node written in Go which actively participates in netw
 
 ## How do I actually use Dingo?
 
-In this guide readers will get the Dingo binary, use built in Cardano network settings for supported networks, and bootstrap the Dingo node using a Mithril snapshot. The guide also covers using the Cardano CLI to interact with the Dingo node. The linked quick start guide covers configuring and bootstrapping a node on the Cardano Preview network, which remains the primary guided path. Version 0.51.0 also includes built in Leios testnet settings for experimental Leios use.  
+In this guide we will walk you through getting the Dingo binary, downloading the Cardano configuration files and how to bootstrap the Dingo node using a Mithril snapshot. We will also explore how to use the Cardano CLI to interact with the Dingo node. Please note this guide will run the Dingo node using the Cardano Preview network.  
 
 ✅ Get started with our [Quick Start](../002-quick-start-overview) guide.  
