@@ -15,7 +15,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Address.
 
 ```
 cd ~/dingo
-cardano-cli stake-address registration-certificate \
+cardano-cli conway stake-address registration-certificate \
     --stake-verification-key-file stake.vkey \
     --out-file stake.cert
 ```
