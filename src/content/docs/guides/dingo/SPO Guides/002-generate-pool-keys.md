@@ -164,7 +164,7 @@ blockProducer: true
 shelleyVrfKey: \"$HOME/dingo/vrf.skey\"
 shelleyKesKey: \"$HOME/dingo/kes.skey\"
 shelleyOperationalCertificate: \"$HOME/dingo/opcert.cert\"
-EOF'
+EOF"
 ```
 
 ***
