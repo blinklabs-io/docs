@@ -100,13 +100,19 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
-barkPrunerFrequency: 1h
+historyExpiry:
+  enabled: false
+  frequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+> 📝 `historyExpiry` controls local expiry of immutable block history. `barkBaseUrl` only configures optional remote archive fallback when historical blocks have expired locally or are otherwise missing.
+
+> 📝 Operators upgrading an older service config should remove any legacy `barkPrunerFrequency` entry from `/etc/dingo/dingo.yaml` and use `historyExpiry.enabled` and `historyExpiry.frequency` instead.
 
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
