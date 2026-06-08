@@ -94,7 +94,7 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 
 Now we can find the starting KES period by running:
 ```
-slotNo=$(cardano-cli conway query tip --mainnet | jq -r '.slot')
+slotNo=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
 slotsPerKESPeriod=$(cat $HOME/dingo/config/cardano/preview/shelley-genesis.json | jq -r '.slotsPerKESPeriod')
 kesPeriod=$((${slotNo} / ${slotsPerKESPeriod}))
 startKesPeriod=${kesPeriod}
