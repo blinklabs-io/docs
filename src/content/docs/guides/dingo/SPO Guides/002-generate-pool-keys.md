@@ -157,7 +157,7 @@ sudo systemctl stop dingo
 Add the following lines to your `dingo.yaml` file by running:
 
 ```
-sudo bash -c 'cat <<EOF >> /etc/dingo/dingo.yaml
+sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
 # Validator / block producer (core storage, API ports ignored):
 storageMode: "core"
 blockProducer: true
