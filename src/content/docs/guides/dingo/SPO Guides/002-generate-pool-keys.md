@@ -162,7 +162,7 @@ sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
 blockProducer: true
 shelleyVrfKey: \"$HOME/dingo/vrf.skey\"
 shelleyKesKey: \"$HOME/dingo/kes.skey\"
-shelleyOperationalCertificate: \"$HOME/dingo/opcert.cert\"
+shelleyOperationalCertificate: \"$HOME/dingo/node.cert\"
 EOF"
 ```
 
