@@ -30,7 +30,8 @@ Copy stake.cert to your hot environment to your dingo folder.
 Query the current slot (used for --invalid-hereafter):
 
 ```
-currentSlot=$(cardano-cli query tip | jq -r '.slot')
+currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
+echo Current Slot: $currentSlot
 ```
 
 Build the transaction — transaction build calculates fees and change automatically:
