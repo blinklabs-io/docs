@@ -70,7 +70,7 @@ cardano-cli conway address build \
 --testnet-magic 2
 ```
 
-Copy payment.addr to your hot environment.
+✅ **Copy payment.addr to your hot environment.**
 
 Run the following to see and copy your payment address.
 ```
@@ -80,4 +80,12 @@ cat payment.addr
 ***
 
 ## Step 6 -  Fund your wallet
-On testnet, use the Cardano faucet to get test ADA. Select the Pre-Production testnet and paste your payment.addr.
+On testnet, use the <a href="https://docs.cardano.org/cardano-testnets/tools/faucet" target="_blank">Cardano faucet</a> to get test ADA. Select the Preview testnet and paste your payment.addr.
+
+After funding your account, check your payment address balance.
+
+```
+cardano-cli conway query utxo \
+--address $(cat payment.addr) \
+--testnet-magic 2
+```
