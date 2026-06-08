@@ -28,7 +28,7 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
-✅ This guide assume your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
 
 ## Step 1 - Generate KES key pair
 
