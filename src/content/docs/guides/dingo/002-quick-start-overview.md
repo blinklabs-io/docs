@@ -160,7 +160,7 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-This takes approximately 10-15 minutes depending on your system and network speed.
+This takes approximately 20-30 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
@@ -184,7 +184,7 @@ You should see log output showing the node connecting to peers and syncing the r
 <br>
 
 #### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the Dingo node when the computer reboots?
-[See our guide on how to create a startup service for Dingo](../004-create-start-up-service).
+[See our guide on how to create a startup service for Dingo](../003-create-start-up-service).
 
 ***
 
@@ -192,4 +192,4 @@ You should see log output showing the node connecting to peers and syncing the r
 
 ### Congratulations you are ready to start using the Dingo node!
 
-[Learn how to interact with Dingo using the Cardano CLI](../003-using-dingo-with-cardano-cli).
+[Learn how to interact with Dingo using the Cardano CLI](../004-using-dingo-with-cardano-cli).

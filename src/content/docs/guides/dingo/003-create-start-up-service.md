@@ -117,6 +117,13 @@ blockfrostPort: 3000
 
 ***
 
+We can view and verify our `dingo.yaml` file by running:
+
+```
+cd /etc/dingo/
+sudo nano dingo.yaml
+```
+
 <br>
 
 ## Step 3 - Bootstrap from Mithril (First Run Only)
@@ -162,6 +169,12 @@ ENDFILE
 > ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
 
 ***
+
+We can view and verify our `dingo.service` file by running:
+
+```
+sudo nano /etc/systemd/system/dingo.service
+```
 
 <br>
 
