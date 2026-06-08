@@ -46,20 +46,20 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 ## Step 2 - Rename File and Change Permissions for the Cardano CLI 
 
-For this example, we will name the binary file `cardano-cli`. To rename the binary will we run the following:
-
-⚠️ Adjust the file path and file name if needed. 
+To make the file executable run the following command:
 
 ```
-mv cardano-cli-x86_64-linux cardano-cli
+chmod +x cardano-cli-x86_64-linux
 ```
 
 <br>
 
-To make the file executable run the following command:
+For this example, we will name the binary file `cardano-cli`. To rename the binary and move to our `/usr/local/bin/` will we run the following:
+
+⚠️ Adjust the file path and file name if needed. 
 
 ```
-chmod +x cardano-cli
+sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 ```
 
 ***
