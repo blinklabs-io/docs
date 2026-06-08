@@ -48,7 +48,7 @@ You can verify the binary works by running:
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-Dingo ships with embedded Cardano network configuration assets for its built in supported networks, including Preview and the experimental Leios testnet, so there is no need to download those files separately.
+Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
@@ -93,11 +93,6 @@ privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
-# Logging
-logging:
-  format: text
-  level: info
-
 # Storage
 blockfrostPort: 0
 meshPort: 0
@@ -109,15 +104,11 @@ barkPrunerFrequency: 1h
 EOF
 ```
 
-> 📝 Dingo v0.51.0 writes human readable text logs by default. Set `logging.format: json`, `DINGO_LOGGING_FORMAT=json`, or `--logging-format json` when stdout feeds a JSON log pipeline. `logging.level` accepts `debug`, `info`, `warn`, or `error`, and `--debug` still overrides the configured level.
-
-> 📝 This guide stays on Preview. For the experimental Leios testnet, use the embedded Leios network configuration, set `network: "leios"`, `runMode: "leios"`, and `startEra: "dijkstra"`, and use the bundled topology and peer snapshot that bootstrap from `leios-node.play.dev.cardano.org:3001`.
-
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`. In v0.51.0, the epoch protocol parameter endpoints include Conway era governance fields, reference script cost fields, and `cost_models_raw`. Earlier eras still return those keys with `null` values where they do not apply.
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
 ```yaml
 blockfrostPort: 3000
