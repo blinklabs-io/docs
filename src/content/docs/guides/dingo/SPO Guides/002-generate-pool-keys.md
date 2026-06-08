@@ -34,7 +34,7 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ```
 cd ~/dingo
-./cardano-cli conway node key-gen-KES \
+cardano-cli conway node key-gen-KES \
 --verification-key-file kes.vkey \
 --signing-key-file kes.skey
 ```
@@ -57,7 +57,7 @@ pushd $HOME/dingo/cold-keys
 ⚠️ On Air Gapped
 
 ```
-./cardano-cli conway node key-gen \
+cardano-cli conway node key-gen \
 --cold-verification-key-file node.vkey \
 --cold-signing-key-file node.skey \
 --operational-certificate-issue-counter node.counter
@@ -94,7 +94,7 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 
 Now we can find the starting KES period by running:
 ```
-slotNo=$(./cardano-cli conway query tip --mainnet | jq -r '.slot')
+slotNo=$(cardano-cli conway query tip --mainnet | jq -r '.slot')
 slotsPerKESPeriod=$(cat $HOME/dingo/config/cardano/preview/shelley-genesis.json | jq -r '.slotsPerKESPeriod')
 kesPeriod=$((${slotNo} / ${slotsPerKESPeriod}))
 startKesPeriod=${kesPeriod}
@@ -113,7 +113,7 @@ echo startKesPeriod: ${startKesPeriod}
 
 ```
 cd ~/dingo
-./cardano-cli conway node issue-op-cert \
+cardano-cli conway node issue-op-cert \
 --kes-verification-key-file kes.vkey \
 --cold-signing-key-file $HOME/dingo/cold-keys/node.skey \
 --operational-certificate-issue-counter $HOME/dingo/cold-keys/node.counter \
@@ -132,9 +132,9 @@ Copy your `node.cert` file to your Block Producer.
 
 ```
 cd ~/dingo
-./cardano-cli conway node key-gen-VRF \
-    --verification-key-file vrf.vkey \
-    --signing-key-file vrf.skey
+cardano-cli conway node key-gen-VRF \
+--verification-key-file vrf.vkey \
+--signing-key-file vrf.skey
 ```
 
 ***
