@@ -82,6 +82,8 @@ We will run the following command to query the tip:
 ```
 > ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location, please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
 
+> ℹ️ Operator note: Dingo `v0.52.0` corrects Conway era fee calculation and minimum fee handling, including transactions that use reference scripts. Operators that use Dingo for local validation or to troubleshoot `cardano-cli` transaction submission should upgrade if earlier versions showed fee or script validation mismatches.
+
 ![dingo-query-tip](/dingo-query-tip.png)
 
 ***
