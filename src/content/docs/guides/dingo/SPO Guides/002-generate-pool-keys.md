@@ -167,12 +167,24 @@ shelleyOperationalCertificate: \"$HOME/dingo/opcert.cert\"
 EOF"
 ```
 
+You can view and verify our `dingo.yaml` file by running:
+
+```
+sudo nano /etc/dingo/dingo.yaml
+```
+
 ***
 
 ## Step 10 - Start Digno Node
 
 ```
 sudo systemctl start dingo
+```
+
+Verify Dingo is running:
+
+```
+sudo systemctl status dingo
 ```
 
 ***
