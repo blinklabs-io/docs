@@ -26,8 +26,8 @@ Generate a new payment key pair: `payment.skey` and `payment.vkey`
 ```
 cd ~/dingo
 cardano-cli conway address key-gen \
-    --verification-key-file payment.vkey \
-    --signing-key-file payment.skey
+--verification-key-file payment.vkey \
+--signing-key-file payment.skey
 ```
 
 ***
@@ -39,8 +39,8 @@ Generate a new stake address key pair: `stake.skey` and `stake.vkey`
 
 ```
 cardano-cli conway stake-address key-gen \
-    --verification-key-file stake.vkey \
-    --signing-key-file stake.skey
+--verification-key-file stake.vkey \
+--signing-key-file stake.skey
 ```
 
 ***
