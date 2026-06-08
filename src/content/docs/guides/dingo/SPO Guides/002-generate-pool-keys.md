@@ -161,9 +161,9 @@ sudo bash -c 'cat <<EOF >> /etc/dingo/dingo.yaml
 # Validator / block producer (core storage, API ports ignored):
 storageMode: "core"
 blockProducer: true
-shelleyVrfKey: "$HOME/dingo/vrf.skey"
-shelleyKesKey: "$HOME/dingo/kes.skey"
-shelleyOperationalCertificate: "$HOME/dingo/opcert.cert"
+shelleyVrfKey: \"$HOME/dingo/vrf.skey\"
+shelleyKesKey: \"$HOME/dingo/kes.skey\"
+shelleyOperationalCertificate: \"$HOME/dingo/opcert.cert\"
 EOF'
 ```
 
