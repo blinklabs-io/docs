@@ -149,6 +149,11 @@ chmod 400 vrf.skey
 
 ## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate
 
+Stop Dingo node by running:
+```
+sudo systemctl stop dingo
+```
+
 Add the following lines to your `dingo.yaml` file by running:
 
 ```
