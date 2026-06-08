@@ -7,8 +7,6 @@ description: gOuroboros Release Notes
 
 <br>
 
-> Note: The next documented release window after `v0.180.1` introduces a built in Leios testnet network, `VotingProcedures` helpers for vote handling, cardano-cli metadata JSON helpers, and the dedicated `LeiosEndorserBlock` block type.
-
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.181.0 - *[View Release Notes](../v0-181-0)*
