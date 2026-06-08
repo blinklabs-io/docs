@@ -110,7 +110,7 @@ EOF
 
 > 📝 `historyExpiry.enabled` turns on local expiry of immutable block CBOR older than the ledger stability window. `historyExpiry.frequency` controls how often Dingo scans for blocks to expire. `barkBaseUrl` is an optional archive fallback for expired or missing historical blocks, not the setting that turns on local expiry.
 
-> 📝 `barkPrunerFrequency` is obsolete in v0.52.0. To keep the older local pruning pattern, enable `historyExpiry` and set `barkBaseUrl` only when archive fallback is needed.
+> 📝 `barkPrunerFrequency` is obsolete in v0.52.0. To keep the older local pruning with archive fallback behavior, enable `historyExpiry` and set `barkBaseUrl` when archived historical reads should fall back to Bark.
 
 > 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
 
