@@ -160,7 +160,7 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-> 📝 After a Mithril bootstrap, API mode startup now reuses an existing non empty Mark snapshot window for the current epoch and the prior two epochs instead of calculating those stake snapshots again. This reduces startup work and helps avoid the stall condition that could appear after a Mithril restore.
+> 📝 After a Mithril bootstrap, API mode startup now reuses existing non empty stake snapshots for the current epoch and the prior two epochs instead of calculating them again. This reduces startup work and helps avoid the stall condition that could appear after a Mithril restore.
 
 This takes approximately 10-15 minutes depending on your system and network speed.
 
