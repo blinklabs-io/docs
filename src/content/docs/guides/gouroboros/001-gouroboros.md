@@ -13,7 +13,7 @@ gOuroboros is a powerful and versatile framework for building Go apps that inter
 
 gOuroboros now includes clearer Conway governance query examples and reference guidance for governance state queries. The `drep-state` example shows how to inspect registered DReps, including their deposit, expiry, and optional metadata anchor. The `committee-state` example shows how to inspect constitutional committee members, their authorization status, their term status, and the current committee threshold. The `proposals` example shows how to inspect active governance actions, their voting window, and the votes recorded so far. The `vote-delegatees` example shows how to inspect which DRep each stake credential delegates its voting rights to.
 
-The local state query reference also explains when to use each governance query, what each one returns, and when a narrower query fits better than a full governance snapshot. This guidance covers `GetConstitution`, `GetGovState`, `GetDRepState`, `GetDRepStakeDistr`, `GetCommitteeMembersState`, `GetFilteredVoteDelegatees`, `GetSPOStakeDistr`, `GetProposals`, and `GetRatifyState`. Each of these governance queries requires Conway era ledger state.
+The governance query reference also explains when to use each governance query, what each one returns, and when a narrower query fits better than a full governance snapshot. This guidance covers `GetConstitution`, `GetGovState`, `GetDRepState`, `GetDRepStakeDistr`, `GetCommitteeMembersState`, `GetFilteredVoteDelegatees`, `GetSPOStakeDistr`, `GetProposals`, and `GetRatifyState`. Each of these governance queries requires Conway era ledger state.
 
 ### Governance action and proposal constructors
 
