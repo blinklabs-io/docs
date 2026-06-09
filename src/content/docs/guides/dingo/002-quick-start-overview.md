@@ -100,9 +100,6 @@ storageMode: "core"
 utxorpcPort: 0
 barkBaseUrl: ""
 barkPort: 0
-historyExpiry:
-  enabled: false
-  frequency: 1h
 EOF
 ```
 
