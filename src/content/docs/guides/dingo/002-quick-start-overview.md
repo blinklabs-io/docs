@@ -105,13 +105,16 @@ EOF
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
+> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
+
+These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
@@ -157,6 +160,8 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
+> 📝 After a Mithril bootstrap, API mode startup now reuses an existing non empty Mark snapshot window for the current epoch and the prior two epochs instead of calculating those stake snapshots again. This reduces startup work and helps avoid the stall condition that could appear after a Mithril restore.
+
 This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
@@ -173,6 +178,8 @@ Once the Mithril snapshot has loaded, start the node:
 cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
+
+> 📝 If the node loses its active chainsync connection, Dingo now clears stale upstream tip state before continuing. This helps the epoch clock resume correctly after reconnect or failover.
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
