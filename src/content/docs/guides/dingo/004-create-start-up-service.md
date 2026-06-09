@@ -100,7 +100,6 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
-barkPrunerFrequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
