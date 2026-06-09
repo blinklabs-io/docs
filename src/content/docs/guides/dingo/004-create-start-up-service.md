@@ -112,7 +112,11 @@ EOF"
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+utxorpcPort: 9090
+meshPort: 8080
 ```
+
+These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
 
 ***
 
@@ -127,6 +131,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+
+> 📝 On v0.52.1, an API mode node that starts after Mithril bootstrap reuses the imported Mark snapshot window when it is already present, which makes the first startup after a restore smoother and avoids unnecessary work.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
@@ -190,6 +196,8 @@ To follow the logs in real time:
 ```
 sudo journalctl -u dingo -f
 ```
+
+> 📝 On v0.52.1, the service also recovers epoch timing more reliably after a connection drop, so a restarted or reconnecting node is less likely to stall its epoch clock during chainsync recovery.
 
 To see recent logs if there is an error:
 
