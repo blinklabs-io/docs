@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.51.0/dingo-v0.51.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.52.1/dingo-v0.52.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -160,8 +160,6 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-> 📝 After a Mithril bootstrap, API mode startup now reuses existing non empty stake snapshots for the current epoch and the prior two epochs instead of calculating them again. This reduces startup work and helps avoid the stall condition that could appear after a Mithril restore.
-
 This takes approximately 10-15 minutes depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
@@ -178,8 +176,6 @@ Once the Mithril snapshot has loaded, start the node:
 cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
-
-> 📝 If the node loses its active chainsync connection, Dingo now clears stale upstream tip state before continuing. This helps the epoch clock resume correctly after reconnect or failover.
 
 You should see log output showing the node connecting to peers and syncing the remaining blocks to reach the chain tip.
 
