@@ -112,7 +112,11 @@ EOF"
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+utxorpcPort: 9090
+meshPort: 8080
 ```
+
+These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
 
 ***
 
