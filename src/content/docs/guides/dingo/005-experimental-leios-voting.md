@@ -27,13 +27,13 @@ This guide covers experimental Leios voting in Dingo. It explains when operators
 
 Use Leios mode when an operator needs to evaluate Dijkstra and Leios behavior on a test network, including committee voting and vote handling.
 
-This mode supports experimentation, validation, and devnet style testing. It does not represent the normal mainline Praos path, and operators should treat it as experimental from startup through validation.
+This mode supports experimentation, validation, and devnet style testing. It does not represent the normal mainline Praos path.
 
 ***
 
 <br>
 
-## Step 2 - Enable the Experimental Startup Gates
+## Step 2 - Enable the Experimental Startup Settings
 
 Dingo keeps Dijkstra era behavior behind experimental startup settings. Operators must enable both the Leios run mode and the Dijkstra start era before the node can participate in Leios voting.
 
@@ -95,9 +95,7 @@ leiosVoterPublicKeys:
 
 ## Step 5 - Understand When Dingo Emits Votes
 
-Dingo signs and emits exactly one uniform vote for each endorser block that it observes.
-
-It emits that vote only while the pool belongs to the committee for that epoch.
+Dingo signs and emits exactly one vote for each observed endorser block when the pool belongs to the committee for that epoch.
 
 Configuration alone does not produce votes. Dingo must run in Leios mode, start as a block producer, load a signing key, and observe an endorser block while the pool remains in the committee.
 
@@ -107,11 +105,11 @@ Configuration alone does not produce votes. Dingo must run in Leios mode, start 
 
 ## Step 6 - Understand Quorum and Certificates
 
-The committee is the deterministic set of stake selected pools for the epoch.
+Dingo computes the committee as a deterministic set of pools chosen from stake for the epoch.
 
 Quorum means enough verified committee stake reaches the configured threshold. Dingo does not treat quorum as a simple count of how many voters replied.
 
-A certificate is proof that enough verified committee stake voted for an endorser block. It contains the set of signers together with one aggregated BLS signature.
+A certificate proves that enough verified committee stake voted for an endorser block. It contains the set of signers together with one combined BLS signature.
 
 > 💡 Operators can treat the certificate as proof that the required committee stake backed a specific endorser block, not as proof from every committee member.
 
