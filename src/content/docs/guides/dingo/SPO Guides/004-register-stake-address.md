@@ -42,7 +42,7 @@ cardano-cli conway transaction build \
 --tx-in $(cardano-cli query utxo --address $(cat payment.addr) --out-file /dev/stdout | jq -r 'keys[0]') \
 --change-address $(cat payment.addr) \
 --certificate-file stake.cert \
---invalid-hereafter $(( currentSlot + 1000 )) \
+--invalid-hereafter $(( ${currentSlot} + 1000 )) \
 --witness-override 2 \
 --out-file tx.raw
 ```
