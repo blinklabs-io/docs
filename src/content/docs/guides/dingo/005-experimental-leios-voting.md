@@ -97,7 +97,7 @@ leiosVoterPublicKeys:
 
 Dingo signs and emits exactly one vote for each observed endorser block when the pool belongs to the committee for that epoch.
 
-Configuration alone does not produce votes. Dingo must run in Leios mode, start as a block producer, load a signing key, and observe an endorser block while the pool remains in the committee.
+Configuration alone does not produce votes. Dingo must run in Leios mode, start as a block producer, load a signing key, and observe an endorser block at a time when the pool belongs to the committee.
 
 ***
 
@@ -109,7 +109,7 @@ Dingo computes the committee as a deterministic set of pools chosen from stake f
 
 Quorum means enough verified committee stake reaches the configured threshold. Dingo does not treat quorum as a simple count of how many voters replied.
 
-A certificate proves that enough verified committee stake voted for an endorser block. It contains the set of signers together with one combined BLS signature.
+A certificate proves that enough verified committee stake voted for an endorser block. It contains the set of signers together with one combined signature for the verified votes.
 
 > 💡 Operators can treat the certificate as proof that the required committee stake backed a specific endorser block, not as proof from every committee member.
 
