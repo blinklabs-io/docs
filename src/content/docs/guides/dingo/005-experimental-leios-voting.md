@@ -83,8 +83,8 @@ This registry currently fills the role of the not yet finalized key registration
 
 ```yaml
 leiosVoterPublicKeys:
-  "7f3a2c5d9e1b4a6c8d0e2f11223344556677889900aabbccddeeff0011223344": "a1b2c3d4e5f60123456789abcdef00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00"
-  "1a2b3c4d5e6f7081928374655647382910ffeeddccbbaa009988776655443322": "b1c2d3e4f5061234567890abcdef00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff11"
+  "<pool-key-hash-hex-1>": "<compressed-bls12-381-public-key-hex-1>"
+  "<pool-key-hash-hex-2>": "<compressed-bls12-381-public-key-hex-2>"
 ```
 
 > 📝 Keep this mapping accurate across the committee members that matter for testing. Dingo can only verify signatures for voters that appear in the configured registry.
@@ -95,7 +95,7 @@ leiosVoterPublicKeys:
 
 ## Step 5 - Understand When Dingo Emits Votes
 
-Dingo signs and emits exactly one vote for each observed endorser block when the pool belongs to the committee for that epoch.
+Dingo signs and emits exactly one uniform vote for each observed endorser block when the pool belongs to the committee for that epoch.
 
 Configuration alone does not produce votes. Dingo must run in Leios mode, start as a block producer, load a signing key, and observe an endorser block at a time when the pool belongs to the committee.
 
