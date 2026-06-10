@@ -81,6 +81,8 @@ Dingo validates this registry during startup and stops immediately if an entry i
 
 This registry currently fills the role of the not yet finalized key registration flow. Operators define which voter signatures Dingo can verify by maintaining this mapping directly.
 
+Use placeholder labels such as the following example values, then replace them with the real pool key hash and compressed public key hex strings for the target environment.
+
 ```yaml
 leiosVoterPublicKeys:
   "<pool-key-hash-hex-1>": "<compressed-bls12-381-public-key-hex-1>"
