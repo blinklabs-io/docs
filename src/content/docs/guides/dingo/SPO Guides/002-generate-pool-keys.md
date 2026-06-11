@@ -147,47 +147,6 @@ chmod 400 vrf.skey
 
 ***
 
-## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate
-
-Stop Dingo node by running:
-```
-sudo systemctl stop dingo
-```
-
-Add the following lines to your `dingo.yaml` file by running:
-
-```
-sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
-# Validator / block producer (core storage, API ports ignored):
-blockProducer: true
-shelleyVrfKey: \"$HOME/dingo/vrf.skey\"
-shelleyKesKey: \"$HOME/dingo/kes.skey\"
-shelleyOperationalCertificate: \"$HOME/dingo/node.cert\"
-EOF"
-```
-
-You can view and verify our `dingo.yaml` file by running:
-
-```
-sudo nano /etc/dingo/dingo.yaml
-```
-
-***
-
-## Step 10 - Start Digno Node
-
-```
-sudo systemctl start dingo
-```
-
-Verify Dingo is running:
-
-```
-sudo systemctl status dingo
-```
-
-***
-
 > ### Reminder
 >**Block-producing Node**
 > The only stake pool keys and certs that should be on the block producer, are the following three files.
