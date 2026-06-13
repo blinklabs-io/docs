@@ -146,7 +146,7 @@ cd $HOME/dingo/pool-scripts
 ```
 
 ### Step 5.6 - Copy pool.cert to your hot environment
-Copy `pool.cert` to your hot environment either your BP or Relay.
+Copy `pool.cert` to your hot environment either your BP or Relay in your dingo folder.
 
 ***
 
@@ -159,6 +159,77 @@ cardano-cli conway stake-address stake-delegation-certificate \
 --stake-verification-key-file stake.vkey \
 --cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
 --out-file deleg.cert
+```
+
+***
+
+## Step 7 - Submit the certificates
+Build the transaction and sign it to submit both the `pool.cert` and the `deleg.cert`
+
+### Step 7.1 - Query the current slot
+```
+currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
+echo Current Slot: $currentSlot
+```
+
+### Step 7.2 - Build the transaction
+```
+cd ~/dingo
+cardano-cli conway transaction build \
+    --tx-in $(cardano-cli query utxo --address $(cat payment.addr) --out-file /dev/stdout | jq -r 'keys[0]') \
+    --change-address $(cat payment.addr) \
+    --certificate-file pool.cert \
+    --certificate-file deleg.cert \
+    --invalid-hereafter $(( ${currentSlot} + 1000 )) \
+    --witness-override 3 \
+    --out-file tx.raw
+```
+
+### Step 7.3 - Sign the transacation
+Copy tx.raw to your cold environment in your dingo folder
+
+⚠️ On Air Gapped
+```
+cd ~/dingo
+cardano-cli conway transaction sign \
+--tx-body-file tx.raw \
+--signing-key-file payment.skey \
+--signing-key-file $HOME/dingo/cold-keys/node.skey \
+--signing-key-file stake.skey \
+--out-file tx.signed
+```
+
+### Step 7.4 - Submit transaction
+Copy tx.signed to your hot environment either your BP or Relay in your dingo folder.
+
+```
+cd ~/dingo
+cardano-cli conway transaction submit --tx-file tx.signed
+```
+
+***
+
+## Step 8 - Verify registration
+
+### Step 8.1 - Create `stakepoolid.txt file:
+
+⚠️ On Air Gapped
+```
+cardano-cli stake-pool id \
+--cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
+--output-format hex \
+> stakepoolid.txt
+
+cat stakepoolid.txt
+```
+
+### Step 8.2 - Copy `stakepoolid.txt` to your hot environment
+Copy `stakepoolid.txt` to your hot environment either your BP or Relay in your dingo folder
+
+### Step 8.3 - Check it has appeared on-chain:
+```
+cd ~/dingo
+cardano-cli query stake-snapshot --stake-pool-id $(cat stakepoolid.txt)
 ```
 
 ***
