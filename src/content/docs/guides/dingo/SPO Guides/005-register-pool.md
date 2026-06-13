@@ -72,7 +72,9 @@ mkdir pool-scripts
 ```
 
 ### Step 5.2 - Create an env file
-Create an env file for our pool in the pool-scripts folder:
+Create an env file for our pool in the pool-scripts folder.
+
+✅ Update the below data with your metadata URL, your relay node IP and port, pool pledge amount and cost(min pool fee) and margin.
 
 ```
 cat > $HOME/dingo/pool-scripts/env << 'EOF' 
@@ -91,6 +93,74 @@ METADATA_URL=https://webstie.com/preview-pool-metadata.json
 METADATA_HASH=$(cat $HOME/dingo/poolMetaDataHash.txt)
 EOF
 ```
+
+> The above examples uses IP addresses if you are using DNS use the following example:
+> ```
+> --single-host-pool-relay <relaynode1.pool.example.com> \
+> --pool-relay-port 6000 \
+> --single-host-pool-relay <relaynode2.pool.example.com> \
+> --pool-relay-port 6000 \
+>```
+
+### Step 5.3 - Create pool-registration.sh script
+Create pool-registration.sh script in the pool-scripts folder:
+
+```
+cat > $HOME/dingo/pool-scripts/pool-registration.sh << EOF 
+#!/bin/bash
+
+source ./env
+
+cardano-cli conway stake-pool registration-certificate \
+--cold-verification-key-file $HOME/digno/cold-keys/node.vkey \
+--vrf-verification-key-file $HOME/dingo/vrf.vkey \
+--pool-pledge \${PLEDGE} \
+--pool-cost \${COST} \
+--pool-margin \${MARGIN} \
+--pool-reward-account-verification-key-file $HOME/dingo/stake.vkey \
+--pool-owner-stake-verification-key-file $HOME/dingo/stake.vkey \
+\${NET} \
+--pool-relay-ipv4 \${RELAY1_HOST} \
+--pool-relay-port \${RELAY1_PORT} \
+--pool-relay-ipv4 \${RELAY2_HOST} \
+--pool-relay-port \${RELAY2_PORT} \
+--metadata-url \${METADATA_URL} \
+--metadata-hash \${METADATA_HASH} \
+--out-file $HOME/dingo/pool.cert
+EOF
+```
+
+### Step 5.4 - Add execute permissions
+Add execute permissions to the pool-registration script
+
+```
+chmod +x $HOME/dingo/pool-scripts/pool-registration.sh
+```
+
+### Step 5.5 - Execute Script
+he script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
+
+```
+cd $HOME/dingo/pool-scripts
+./pool-registration.sh
+```
+
+### Step 5.6 - Copy pool.cert to your hot environment
+Copy `pool.cert` to your hot environment either your BP or Relay.
+
+***
+
+## Step 6 - Pledge stake to your stake pool
+⚠️ On Air Gapped
+
+```
+cd ~/dingo
+cardano-cli conway stake-address stake-delegation-certificate \
+--stake-verification-key-file stake.vkey \
+--cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
+--out-file deleg.cert
+```
+
 ***
 
 ## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate
