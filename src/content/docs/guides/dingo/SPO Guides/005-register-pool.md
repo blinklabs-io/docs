@@ -5,7 +5,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Pool.
 
 # Dingo - Registering Your Stake Pool
 
-✅ This guide assume your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
 
 ## Step 1 - Create your pool's metadata json file
 Update below with your pool's information. 
@@ -61,7 +61,7 @@ cat poolMetaDataHash.txt
 
 ## Step 5  Create a registration certificate for your stake pool
 
-To make udpating your Pool certificate easier if you need to make changes in the furture, we will create a `env` file with our pool information and a script to generate the `pool.cert` file.
+To make updating your Pool certificate easier if you need to make changes in the future, we will create a `env` file with our pool information and a script to generate the `pool.cert` file.
 
 ### Step 5.1 - Create a pool-scripts folder
 ⚠️ On Air Gapped
@@ -74,7 +74,7 @@ mkdir pool-scripts
 ### Step 5.2 - Create an env file
 Create an env file for our pool in the pool-scripts folder.
 
-✅ Update the below data with your metadata URL, your relay node IP and port, pool pledge amount and cost(min pool fee) and margin.
+✅ Update the data below with your metadata URL, your relay node IP and port, pool pledge amount and cost (min pool fee) and margin.
 
 ```
 cat > $HOME/dingo/pool-scripts/env << 'EOF' 
@@ -94,7 +94,7 @@ METADATA_HASH=$(cat $HOME/dingo/poolMetaDataHash.txt)
 EOF
 ```
 
-> The above examples uses IP addresses if you are using DNS use the following example:
+> The above example uses IP addresses if you are using DNS use the following example:
 > ```
 > --single-host-pool-relay <relaynode1.pool.example.com> \
 > --pool-relay-port 6000 \
@@ -112,7 +112,7 @@ cat > $HOME/dingo/pool-scripts/pool-registration.sh << EOF
 source ./env
 
 cardano-cli conway stake-pool registration-certificate \
---cold-verification-key-file $HOME/digno/cold-keys/node.vkey \
+--cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
 --vrf-verification-key-file $HOME/dingo/vrf.vkey \
 --pool-pledge \${PLEDGE} \
 --pool-cost \${COST} \
@@ -138,7 +138,7 @@ chmod +x $HOME/dingo/pool-scripts/pool-registration.sh
 ```
 
 ### Step 5.5 - Execute Script
-he script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
+The script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
 
 ```
 cd $HOME/dingo/pool-scripts
@@ -185,7 +185,7 @@ cardano-cli conway transaction build \
     --out-file tx.raw
 ```
 
-### Step 7.3 - Sign the transacation
+### Step 7.3 - Sign the transaction
 Copy tx.raw to your cold environment in your dingo folder
 
 ⚠️ On Air Gapped
@@ -261,7 +261,7 @@ sudo nano /etc/dingo/dingo.yaml
 
 ***
 
-## Step 10 - Start Digno Node
+## Step 10 - Start Dingo Node
 
 ```
 sudo systemctl start dingo
