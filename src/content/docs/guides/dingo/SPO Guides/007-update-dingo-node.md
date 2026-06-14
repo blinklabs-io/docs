@@ -1,5 +1,5 @@
 ---
-title: Operational Tips and Maintenance
+title: Update Dingo Node
 description: SPO Guide for Dingo Pools - How to update your Dingo Node .
 ---
 
