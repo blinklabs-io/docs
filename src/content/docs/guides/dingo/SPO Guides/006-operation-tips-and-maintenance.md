@@ -3,7 +3,7 @@ title: Operational Tips and Maintenance
 description: SPO Guide for Dingo Pools - Operational Tips and Maintenance.
 ---
 
-Additional guides for Dingo SPOs - (Coming Soon)
+## Additional guides for Dingo SPOs
 
 How to update your Dingo Node - (Coming Soon)
 
