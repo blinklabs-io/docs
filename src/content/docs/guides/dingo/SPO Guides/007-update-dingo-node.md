@@ -1,12 +1,12 @@
 ---
 title: Update Dingo Node
-description: SPO Guide for Dingo Pools - How to update your Dingo Node .
+description: SPO Guide for Dingo Pools - How to update your Dingo Node.
 ---
 
 ## How to update your Dingo Node 
 
-## Step 1 - Download
-Download the latest release from the Dingo releases page.
+## Step 1 - Download latest release
+Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
 ⚠️ Adjust the version and architecture to match your system.
 ```
@@ -34,7 +34,21 @@ Verify it has been copied by `which dingo`
 
 ***
 
-## Step 4 - Start Dingo Node
+## Step 4 - Check for Config file updates
+Check to make sure no config updates are required.
+
+Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release notes and the [Quick Start](../002-quick-start-overview) guide.
+
+> 💡 To view and edit `dingo.yaml` file run:
+>
+> ```
+> sudo nano /etc/dingo/dingo.yaml
+> ```
+> ⚠️ Adjust path as needed
+
+***
+
+## Step 5 - Start Dingo Node
 
 ```
 sudo sytemctl start dingo
@@ -45,7 +59,9 @@ Check Version is updated:
 dingo version
 ```
 
-## Step 5 Check Status
+***
+
+## Step 6 - Check Status
 Verify the service is running:
 ```
 sudo systemctl status dingo.service
