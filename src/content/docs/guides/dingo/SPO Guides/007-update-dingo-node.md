@@ -37,7 +37,7 @@ Verify it has been copied by `which dingo`
 ## Step 4 - Check for Config file updates
 Check to make sure no config updates are required.
 
-Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release notes and the [Quick Start](../002-quick-start-overview) guide.
+Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release notes and the [Quick Start](../../002-quick-start-overview) guide.
 
 > 💡 To view and edit `dingo.yaml` file run:
 >
