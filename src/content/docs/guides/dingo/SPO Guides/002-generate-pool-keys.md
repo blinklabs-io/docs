@@ -22,9 +22,9 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 > ⚠️ The following guide assumes you have already completed the following 3 steps. If not please do them first and return here when you are done. 
 > 
-> - [x] 1. Complete the [Quick Start](../002-quick-start-overview) guide.
-> - [x] 2. [Create Start Up Service](../003-create-start-up-service)
-> - [x] 3. [Install Cardano CLI](../004-using-dingo-with-cardano-cli)
+> - [x] 1. Complete the [Quick Start](../../002-quick-start-overview) guide.
+> - [x] 2. [Create Start Up Service](../../003-create-start-up-service)
+> - [x] 3. [Install Cardano CLI](../../004-using-dingo-with-cardano-cli)
 
 ***
 
