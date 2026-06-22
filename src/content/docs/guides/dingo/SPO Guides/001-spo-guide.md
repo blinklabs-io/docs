@@ -23,9 +23,9 @@ description: SPO Guide for Dingo Pools.
 
 There are 7 main steps that we will cover to get a Dingo Node registered and running on the Preview Network.
 
-- [x] 1. Complete the [Quick Start](../002-quick-start-overview) guide.
-- [x] 2. [Create Start Up Service](../003-create-start-up-service)
-- [x] 3. [Install Cardano CLI](../004-using-dingo-with-cardano-cli)
+- [x] 1. Complete the [Quick Start](../../002-quick-start-overview) guide.
+- [x] 2. [Create Start Up Service](../../003-create-start-up-service)
+- [x] 3. [Install Cardano CLI](../../004-using-dingo-with-cardano-cli)
 - [x] 4. Generate Pool Keys
 - [x] 5. Generate Payment and Stake Keys
 - [x] 6. Register Your Stake Address
