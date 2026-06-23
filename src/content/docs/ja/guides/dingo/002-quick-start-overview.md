@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.55.0）とアーキテクチャを調整してください。
+ ⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.56.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.55.0/dingo-v0.55.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.56.0/dingo-v0.56.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -72,7 +72,7 @@ databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
-# 既定値: Praos モードと通常の serve モードでは 1 MiB、Leios モードでは 25 MiB です。
+# 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
 # モードの既定値を使うには、このキーをコメントアウトするか省略します。
 # mempoolCapacity: 1048576
 
