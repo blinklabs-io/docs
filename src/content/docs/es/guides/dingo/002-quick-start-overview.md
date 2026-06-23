@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.55.0/dingo-v0.55.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.56.0/dingo-v0.56.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -72,7 +72,7 @@ databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
 # `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
-# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Leios.
+# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
 # Deja la clave comentada o omítela para usar el valor predeterminado del modo.
 # mempoolCapacity: 1048576
 
