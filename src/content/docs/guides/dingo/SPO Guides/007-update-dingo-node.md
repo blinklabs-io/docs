@@ -51,7 +51,7 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 ## Step 5 - Start Dingo Node
 
 ```
-sudo sytemctl start dingo
+sudo systemctl start dingo
 ```
 
 Check Version is updated:
