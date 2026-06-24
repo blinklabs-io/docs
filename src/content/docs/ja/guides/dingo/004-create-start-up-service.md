@@ -76,7 +76,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
-# 既定値: Praos モードと通常の serve モードでは 1 MiB、Leios モードでは 25 MiB です。
+# 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
 # モードの既定値を使うには、このキーをコメントアウトするか省略します。
 # mempoolCapacity: 1048576
 

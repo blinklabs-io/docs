@@ -76,7 +76,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
 # `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
-# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Leios.
+# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
 # Deja la clave comentada o omítela para usar el valor predeterminado del modo.
 # mempoolCapacity: 1048576
 
