@@ -84,7 +84,7 @@ mithril:
   verifyCertificates: true
 
 # Optional validation
-# Leave `validateForgedBlock` disabled unless forged blocks should be self validated before diffusion.
+# Enable `validateForgedBlock` only when Dingo should validate forged blocks before diffusion.
 validateForgedBlock: false
 
 # Network
@@ -107,7 +107,7 @@ barkPort: 0
 EOF
 ```
 
-> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+> 📝 Leave `debugPort` set to `0` unless runtime profiling is required. This port stays separate from `metricsPort` and remains disabled at `0`.
 
 > 📝 Leave `validateForgedBlock` set to `false` unless forged blocks should be validated before diffusion. This setting is optional and stays disabled by default.
 
@@ -122,7 +122,7 @@ utxorpcPort: 9090
 
 These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
 
-> 📝 Some non default storage backends are optional plugins. If `storageMode` selects S3, GCS, Postgres, or MySQL and Dingo reports a missing plugin, use a binary built with extra plugin support.
+> 📝 Some non default storage backends are optional plugins. If `storageMode` selects S3, GCS, Postgres, or MySQL and Dingo reports that the plugin is unavailable, use a binary built with extra plugin support.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
