@@ -16,6 +16,8 @@ description: Lista de Comandos de Adder.
 
 > ruta al archivo de configuración a cargar
 
+> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: indicadores de CLI > archivo de configuración YAML > variables de entorno.
+
 ***
 
 ## Filtro:
