@@ -84,7 +84,7 @@ mithril:
   verifyCertificates: true
 
 # Validación opcional
-# Deja `validateForgedBlock` desactivado salvo que sea necesario validar los bloques forjados antes de su difusión.
+# Activa `validateForgedBlock` solo cuando Dingo deba validar los bloques forjados antes de su difusión.
 validateForgedBlock: false
 
 # Network
@@ -119,7 +119,7 @@ utxorpcPort: 0
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
-> 📝 Algunos backends de almacenamiento no predeterminados son complementos opcionales. Si `storageMode` selecciona S3, GCS, Postgres o MySQL y Dingo muestra un error de missing plugin, usa un binario compilado con soporte adicional para complementos.
+> 📝 Algunos backends de almacenamiento no predeterminados son complementos opcionales. Si `storageMode` selecciona S3, GCS, Postgres o MySQL y Dingo indica que el complemento no está disponible, usa un binario compilado con soporte adicional para complementos.
 
 ***
 
