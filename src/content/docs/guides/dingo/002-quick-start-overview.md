@@ -84,7 +84,6 @@ mithril:
   verifyCertificates: true
 
 # Optional validation
-# Leave `validateForgedBlock` disabled unless Dingo should validate forged blocks before diffusion.
 validateForgedBlock: false
 
 # Network
@@ -109,7 +108,7 @@ EOF
 
 > 📝 Leave `validateForgedBlock` set to `false` unless forged blocks should be validated before diffusion. This setting is optional and stays disabled by default.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API compatible setting and assign a non-zero value to `blockfrostPort`.
+> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
 
 ```yaml
 blockfrostPort: 3000
