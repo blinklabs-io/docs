@@ -83,9 +83,14 @@ mithril:
   enabled: true
   verifyCertificates: true
 
+# Validación opcional
+# Deja `validateForgedBlock` desactivado salvo que sea necesario validar los bloques forjados antes de su difusión.
+validateForgedBlock: false
+
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -93,6 +98,8 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
+barkBaseUrl: ""
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
@@ -102,6 +109,8 @@ EOF
 
 > 💡 Para servir endpoints HTTP compatibles con Blockfrost, cambia `storageMode` a una configuración compatible con API y asigna un valor distinto de cero a `blockfrostPort`.
 
+> 📝 `validateForgedBlock` es una opción opcional. Actívala solo cuando sea necesario validar los bloques forjados antes de su difusión y, en caso contrario, déjala en el valor predeterminado `false`.
+
 ```yaml
 blockfrostPort: 3000
 storageMode: "api"
@@ -109,6 +118,8 @@ utxorpcPort: 0
 ```
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
+
+> 📝 Algunos backends de almacenamiento no predeterminados son complementos opcionales. Si `storageMode` selecciona S3, GCS, Postgres o MySQL y Dingo muestra un error de missing plugin, usa un binario compilado con soporte adicional para complementos.
 
 ***
 
