@@ -16,7 +16,7 @@ description: List of Adder Commands.
  
 > path to config file to load
 
-> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > YAML config file > environment variables.
+> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > YAML configuration file > environment variables.
 
 ***
 
