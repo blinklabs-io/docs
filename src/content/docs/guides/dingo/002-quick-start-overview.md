@@ -119,7 +119,7 @@ utxorpcPort: 9090
 
 These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
 
-> 📝 `midnight.authTokenPolicyId` only applies when API storage mode is used with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
+> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
