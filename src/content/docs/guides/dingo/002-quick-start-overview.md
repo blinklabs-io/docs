@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.56.0/dingo-v0.56.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.58.0/dingo-v0.58.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -83,9 +83,6 @@ mithril:
   enabled: true
   verifyCertificates: true
 
-# Optional validation
-validateForgedBlock: false
-
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
@@ -106,8 +103,6 @@ barkPort: 0
 EOF
 ```
 
-> 📝 Leave `validateForgedBlock` set to `false` unless forged blocks should be validated before diffusion. This setting is optional and stays disabled by default.
-
 > 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
 
 ```yaml
@@ -115,8 +110,6 @@ blockfrostPort: 3000
 storageMode: "api"
 utxorpcPort: 0
 ```
-
-> 📝 Some non default storage backends are optional plugins. If `storageMode` selects S3, GCS, Postgres, or MySQL and Dingo reports that the plugin is unavailable, use a binary built with extra plugin support.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
