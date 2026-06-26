@@ -84,6 +84,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 mithril:
   aggregatorUrl: \"\"
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
@@ -112,11 +113,15 @@ EOF"
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+midnight:
+  authTokenPolicyId: ""
 utxorpcPort: 9090
 meshPort: 8080
 ```
 
 These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
+
+> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing.
 
 ***
 
@@ -129,6 +134,8 @@ Before starting the service for the first time, bootstrap the database from a Mi
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
