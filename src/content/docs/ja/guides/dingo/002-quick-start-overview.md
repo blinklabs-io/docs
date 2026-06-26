@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.56.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.58.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.56.0/dingo-v0.56.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.58.0/dingo-v0.58.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -83,10 +83,6 @@ mithril:
   enabled: true
   verifyCertificates: true
 
-# オプションの検証
-# Dingo が forged block を拡散前に検証する場合のみ `validateForgedBlock` を有効にします。
-validateForgedBlock: false
-
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
@@ -109,8 +105,6 @@ EOF
 
 > 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、ゼロ以外の`blockfrostPort`を割り当てます。
 
-> 📝 `validateForgedBlock` は任意の設定です。Dingo が forged block を拡散前に検証する場合のみ `true` にし、それ以外は既定値の `false` のままにします。
-
 ```yaml
 blockfrostPort: 3000
 storageMode: "api"
@@ -118,8 +112,6 @@ utxorpcPort: 0
 ```
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
-
-> 📝 一部の非既定ストレージバックエンドは任意のプラグインです。`storageMode` で S3、GCS、Postgres、または MySQL を選択してプラグインが利用できないというエラーが表示される場合は、追加のプラグイン対応を含むバイナリを使用します。
 
 ***
 
