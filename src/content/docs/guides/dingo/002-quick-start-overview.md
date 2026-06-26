@@ -86,7 +86,6 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
-debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -101,14 +100,6 @@ utxorpcPort: 0
 barkBaseUrl: ""
 barkPort: 0
 EOF
-```
-
-> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
-
-```yaml
-blockfrostPort: 3000
-storageMode: "api"
-utxorpcPort: 0
 ```
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
