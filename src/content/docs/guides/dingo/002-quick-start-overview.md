@@ -103,7 +103,7 @@ barkPort: 0
 EOF
 ```
 
-Leave `debugPort` at `0` unless profiling is required.
+Leave `debugPort` at `0` unless it is required for profiling.
 
 > 💡 Dingo can be served in API mode by switching `storageMode` to an API capable setting and assigning the ports to expose.
 
