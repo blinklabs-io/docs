@@ -121,7 +121,7 @@ meshPort: 8080
 
 These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
 
-> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing.
+> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
 ***
 
