@@ -103,18 +103,18 @@ barkPort: 0
 EOF
 ```
 
-Leave `debugPort` at `0` unless it is required for profiling.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
-> 💡 Dingo can be served in API mode by switching `storageMode` to an API capable setting and assigning the ports to expose.
+> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
 
 ```yaml
 blockfrostPort: 3000
-meshPort: 0
+meshPort: 8080
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
 
-Those ports are optional and only need to be set when exposing the corresponding APIs.
+These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
