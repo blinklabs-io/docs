@@ -86,6 +86,7 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
