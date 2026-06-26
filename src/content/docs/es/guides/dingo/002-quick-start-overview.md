@@ -80,6 +80,7 @@ databasePath: "$HOME/dingo/.dingo"
 mithril:
   aggregatorUrl: ""
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
@@ -104,9 +105,13 @@ EOF
 
 ```yaml
 blockfrostPort: 3000
+midnight:
+  authTokenPolicyId: ""
 storageMode: "api"
 utxorpcPort: 0
 ```
+
+> 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
@@ -146,6 +151,8 @@ Ejecuta el siguiente comando desde tu directorio dingo:
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada
