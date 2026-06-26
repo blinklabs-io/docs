@@ -103,6 +103,19 @@ barkPort: 0
 EOF
 ```
 
+Leave `debugPort` at `0` unless profiling is required.
+
+> 💡 Dingo can be served in API mode by switching `storageMode` to an API capable setting and assigning the ports to expose.
+
+```yaml
+blockfrostPort: 3000
+meshPort: 0
+storageMode: "api"
+utxorpcPort: 0
+```
+
+Those ports are optional and only need to be set when exposing the corresponding APIs.
+
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
 ***
