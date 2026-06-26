@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.56.0/dingo-v0.56.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.58.0/dingo-v0.58.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -83,10 +83,6 @@ mithril:
   enabled: true
   verifyCertificates: true
 
-# Validación opcional
-# Activa `validateForgedBlock` solo cuando Dingo deba validar los bloques forjados antes de su difusión.
-validateForgedBlock: false
-
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
@@ -109,8 +105,6 @@ EOF
 
 > 💡 Para servir endpoints HTTP compatibles con Blockfrost, cambia `storageMode` a una configuración compatible con API y asigna un valor distinto de cero a `blockfrostPort`.
 
-> 📝 `validateForgedBlock` es una opción opcional. Actívala solo cuando sea necesario validar los bloques forjados antes de su difusión y, en caso contrario, déjala en el valor predeterminado `false`.
-
 ```yaml
 blockfrostPort: 3000
 storageMode: "api"
@@ -118,8 +112,6 @@ utxorpcPort: 0
 ```
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
-
-> 📝 Algunos backends de almacenamiento no predeterminados son complementos opcionales. Si `storageMode` selecciona S3, GCS, Postgres o MySQL y Dingo indica que el complemento no está disponible, usa un binario compilado con soporte adicional para complementos.
 
 ***
 
