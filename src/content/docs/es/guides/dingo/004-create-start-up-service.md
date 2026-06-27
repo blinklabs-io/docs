@@ -84,6 +84,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 mithril:
   aggregatorUrl: \"\"
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
@@ -109,7 +110,11 @@ EOF"
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+midnight:
+  authTokenPolicyId: ""
 ```
+
+> 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
 ***
 
@@ -122,6 +127,8 @@ Antes de iniciar el servicio por primera vez, inicia la base de datos desde una 
 ```bash
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
 Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
 
