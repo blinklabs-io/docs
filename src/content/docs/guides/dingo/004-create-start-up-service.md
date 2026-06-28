@@ -74,6 +74,8 @@ database:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
 databasePath: \"$HOME/dingo/.dingo\"
 
+# Optional: S3 and GCS blob plugins require a build with `-tags dingo_extra_plugins` or an official release binary.
+
 # Mempool
 # `mempoolCapacity` is an optional override, not a required setting.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
@@ -113,13 +115,11 @@ EOF"
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 utxorpcPort: 9090
-meshPort: 8080
 ```
-
-These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
@@ -169,7 +169,7 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
+> ⚠️ `debugPort` controls a separate optional `pprof` listener. Leave it at `0` unless profiling or debugging is required.
 
 ***
 
