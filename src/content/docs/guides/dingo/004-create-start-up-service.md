@@ -110,7 +110,7 @@ EOF"
 
 > 📝 S3 and GCS blob plugins are optional. Use a build with `-tags dingo_extra_plugins` or an official release binary when configuring either plugin.
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+> 📝 Operators who want API endpoints must switch to API capable storage and set the API ports they plan to expose.
 
 ```yaml
 storageMode: "api"
