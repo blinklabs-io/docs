@@ -74,6 +74,8 @@ database:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
 databasePath: \"$HOME/dingo/.dingo\"
 
+# Opcional: los plugins de blobs S3 y GCS requieren una compilación con `-tags dingo_extra_plugins` o un binario oficial de lanzamiento.
+
 # Mempool
 # `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
 # Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
@@ -105,13 +107,15 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer `blockfrostPort` a un valor distinto de cero.
+> 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer los puertos que se expondrán.
 
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
+utxorpcPort: 9090
 ```
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
@@ -162,6 +166,8 @@ TimeoutStopSec=5
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+> ⚠️ `debugPort` controla un listener `pprof` independiente y opcional. Déjalo en `0` salvo que se necesite para depuración o perfilado.
 
 ***
 
