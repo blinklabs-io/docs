@@ -70,6 +70,8 @@ database:
       data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
 
+# オプション: S3 および GCS の blob プラグインを使うには、`-tags dingo_extra_plugins` を付けてビルドするか、公式リリースバイナリを使用します。
+
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
 # 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
@@ -104,14 +106,15 @@ utxorpcPort: 0
 EOF
 ```
 
-> 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、ゼロ以外の`blockfrostPort`を割り当てます。
+> 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、公開するポートを割り当てます。
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
