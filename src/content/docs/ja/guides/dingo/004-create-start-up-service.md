@@ -74,8 +74,6 @@ database:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
 databasePath: \"$HOME/dingo/.dingo\"
 
-# オプション: S3 および GCS の blob プラグインを使うには、`-tags dingo_extra_plugins` を付けてビルドするか、公式リリースバイナリを使用します。
-
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
 # 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
@@ -106,6 +104,8 @@ storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+> 📝 S3 および GCS の blob プラグインはオプションです。いずれかを設定する場合は、`-tags dingo_extra_plugins` を付けてビルドするか、公式リリースバイナリを使用します。
 
 > 📝 Blockfrost互換のHTTPエンドポイントを必要とするオペレーターは、API対応のストレージに切り替え、`blockfrostPort`をゼロ以外の値に設定する必要があります。
 
