@@ -74,8 +74,6 @@ database:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
 databasePath: \"$HOME/dingo/.dingo\"
 
-# Optional: S3 and GCS blob plugins require a build with `-tags dingo_extra_plugins` or an official release binary.
-
 # Mempool
 # `mempoolCapacity` is an optional override, not a required setting.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
@@ -109,6 +107,8 @@ storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+> 📝 S3 and GCS blob plugins are optional. Use a build with `-tags dingo_extra_plugins` or an official release binary when configuring either plugin.
 
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
 
