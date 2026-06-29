@@ -91,6 +91,7 @@ mithril:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
@@ -107,12 +108,18 @@ EOF"
 
 > 📝 Blockfrost互換のHTTPエンドポイントを必要とするオペレーターは、API対応のストレージに切り替え、`blockfrostPort`をゼロ以外の値に設定する必要があります。
 
+> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
+
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
+utxorpcPort: 9090
 ```
+
+これらのポートは、更新後のローカル Blockfrost エクスプローラーの例に合わせた値です。これらのサービスが必要な場合にのみ有効にできます.
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
