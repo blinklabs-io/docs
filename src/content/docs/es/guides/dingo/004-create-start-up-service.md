@@ -91,6 +91,7 @@ mithril:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
@@ -98,6 +99,8 @@ relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
 
 # Storage
+ barkBaseUrl: ""
+ barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
@@ -105,14 +108,20 @@ utxorpcPort: 0
 EOF"
 ```
 
+> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
+
 > 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer `blockfrostPort` a un valor distinto de cero.
 
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
+utxorpcPort: 9090
 ```
+
+Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
