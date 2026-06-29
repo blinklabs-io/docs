@@ -105,8 +105,6 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 S3 および GCS の blob プラグインはオプションです。いずれかを設定する場合は、`-tags dingo_extra_plugins` を付けてビルドするか、公式リリースバイナリを使用します。
-
 > 📝 Blockfrost互換のHTTPエンドポイントを必要とするオペレーターは、API対応のストレージに切り替え、`blockfrostPort`をゼロ以外の値に設定する必要があります。
 
 ```yaml
