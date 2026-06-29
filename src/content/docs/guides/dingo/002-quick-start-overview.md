@@ -106,14 +106,15 @@ EOF
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
-> 💡 To serve Blockfrost-compatible HTTP endpoints, switch `storageMode` to an API-capable setting and assign a non-zero `blockfrostPort`.
+> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
 
 These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
