@@ -33,7 +33,7 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.59.0/dingo-v0.59.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.60.0/dingo-v0.60.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -104,17 +104,14 @@ utxorpcPort: 0
 EOF
 ```
 
-> 📝 S3 および GCS の blob プラグインはオプションです。いずれかを設定する場合は、`-tags dingo_extra_plugins` を付けてビルドするか、公式リリースバイナリを使用します。
-
-> 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、公開するポートを割り当てます。
+> 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、ゼロ以外の`blockfrostPort`を割り当てます。
 
 ```yaml
 blockfrostPort: 3000
-meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 9090
+utxorpcPort: 0
 ```
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
