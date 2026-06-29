@@ -107,15 +107,13 @@ EOF"
 
 > 📝 S3 および GCS の blob プラグインはオプションです。いずれかを設定する場合は、`-tags dingo_extra_plugins` を付けてビルドするか、公式リリースバイナリを使用します。
 
-> 📝 APIエンドポイントを使用するオペレーターは、API対応のストレージに切り替え、公開するAPIポートを設定します。
+> 📝 Blockfrost互換のHTTPエンドポイントを必要とするオペレーターは、API対応のストレージに切り替え、`blockfrostPort`をゼロ以外の値に設定する必要があります。
 
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
-meshPort: 8080
 midnight:
   authTokenPolicyId: ""
-utxorpcPort: 9090
 ```
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
@@ -166,8 +164,6 @@ TimeoutStopSec=5
 WantedBy=multi-user.target
 ENDFILE
 ```
-
-> ⚠️ `debugPort` は別の任意の `pprof` リスナーを制御します。プロファイリングやデバッグが必要になるまで `0` のままにします。
 
 ***
 
