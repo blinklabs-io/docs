@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.60.0/dingo-v0.60.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.60.1/dingo-v0.60.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -104,15 +104,20 @@ utxorpcPort: 0
 EOF
 ```
 
-> 💡 Para servir endpoints HTTP compatibles con Blockfrost, cambia `storageMode` a una configuración compatible con API y asigna un valor distinto de cero a `blockfrostPort`.
+> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
+
+> 💡 Para servir Dingo en modo API, cambia `storageMode` a una configuración compatible con API y asigna los puertos que deban exponerse.
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
+
+Estos puertos son opcionales, pero los operadores que usen el ejemplo del explorador local o quieran una superficie de API más amplia deben habilitar `utxorpcPort` y `meshPort` de forma explícita.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 

@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.60.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.60.1）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.60.0/dingo-v0.60.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.60.1/dingo-v0.60.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -104,15 +104,20 @@ utxorpcPort: 0
 EOF
 ```
 
-> 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、ゼロ以外の`blockfrostPort`を割り当てます。
+> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
+
+> 💡 Dingo を API モードで提供するには、`storageMode` を API 対応の設定に切り替え、必要なポートを割り当てます。
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
+
+これらのポートは任意ですが、ローカルエクスプローラーの例を使う場合や、より広い API を使う場合は `utxorpcPort` と `meshPort` を明示的に有効にしてください。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
