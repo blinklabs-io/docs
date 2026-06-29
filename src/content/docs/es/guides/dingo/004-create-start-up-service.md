@@ -105,8 +105,6 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Los plugins de blobs S3 y GCS son opcionales. Usa una compilación con `-tags dingo_extra_plugins` o un binario oficial de lanzamiento al configurar cualquiera de ellos.
-
 > 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer `blockfrostPort` a un valor distinto de cero.
 
 ```yaml
