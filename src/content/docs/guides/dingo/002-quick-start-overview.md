@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.59.1/dingo-v0.59.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.60.0/dingo-v0.60.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -95,12 +95,12 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
+barkBaseUrl: ""
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
 utxorpcPort: 0
-barkBaseUrl: ""
-barkPort: 0
 EOF
 ```
 
