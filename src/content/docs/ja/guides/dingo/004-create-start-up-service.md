@@ -72,8 +72,6 @@ database:
     plugin: \"sqlite\"
     sqlite:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
-  # `database.blob` または `database.metadata` の無効なプラグイン設定は、設定の読み込みを停止するようになりました。
-  # プラグインセレクターは文字列のままにし、プラグイン固有の設定はマップとしてネストしたままにします。
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
@@ -111,6 +109,8 @@ storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+> 📝 `database.blob` と `database.metadata` のプラグインセレクターは文字列のままにし、プラグイン固有の設定はマップとしてネストしたままにします。無効なプラグイン設定は設定の読み込みを停止します。
 
 > 📝 Blockfrost互換のHTTPエンドポイントを必要とするオペレーターは、API対応のストレージに切り替え、`blockfrostPort`をゼロ以外の値に設定する必要があります。
 
