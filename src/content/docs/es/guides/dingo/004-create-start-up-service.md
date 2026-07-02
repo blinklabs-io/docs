@@ -72,6 +72,8 @@ database:
     plugin: \"sqlite\"
     sqlite:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
+  # Una configuración inválida del plugin en `database.blob` o `database.metadata` ahora detiene la carga de la configuración.
+  # Mantén los selectores de plugin como cadenas y la configuración específica del plugin anidada como mapas.
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
@@ -97,6 +99,10 @@ privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
+tracing: false
+# Corresponde a `--tracing` y `DINGO_TRACING_ENABLED`.
+tracingStdout: false
+# Corresponde a `--tracing-stdout` y `DINGO_TRACING_STDOUT`. Activa primero `tracing`.
 
 # Storage
 blockfrostPort: 0
