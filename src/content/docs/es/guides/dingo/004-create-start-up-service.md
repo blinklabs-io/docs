@@ -72,8 +72,6 @@ database:
     plugin: \"sqlite\"
     sqlite:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
-  # Una configuración inválida del plugin en `database.blob` o `database.metadata` ahora detiene la carga de la configuración.
-  # Mantén los selectores de plugin como cadenas y la configuración específica del plugin anidada como mapas.
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
@@ -111,6 +109,8 @@ storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+> 📝 Mantén los selectores de plugin de `database.blob` y `database.metadata` como cadenas y la configuración específica del plugin anidada como mapas. Una configuración inválida del plugin ahora detiene la carga de la configuración.
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
