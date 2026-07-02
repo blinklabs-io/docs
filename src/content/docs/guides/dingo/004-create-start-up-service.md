@@ -72,8 +72,6 @@ database:
     plugin: \"sqlite\"
     sqlite:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
-  # Invalid `database.blob` or `database.metadata` plugin configuration now stops config loading.
-  # Keep plugin selectors as strings, and keep plugin specific settings nested as maps.
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
@@ -113,6 +111,8 @@ storageMode: \"core\"
 utxorpcPort: 0
 EOF"
 ```
+
+> 📝 Keep `database.blob` and `database.metadata` plugin selectors as strings, and keep plugin specific settings nested as maps. Invalid plugin configuration now stops config loading.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
