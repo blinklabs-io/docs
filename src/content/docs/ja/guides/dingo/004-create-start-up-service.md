@@ -103,6 +103,8 @@ tracingStdout: false
 # `--tracing-stdout` と `DINGO_TRACING_STDOUT` に対応します。先に `tracing` を有効にします。
 
 # Storage
+barkBaseUrl: \"\"
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
