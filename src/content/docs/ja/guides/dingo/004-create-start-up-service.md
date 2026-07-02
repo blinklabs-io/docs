@@ -72,6 +72,8 @@ database:
     plugin: \"sqlite\"
     sqlite:
       data-dir: \"$HOME/dingo/.dingo/metadata.db\"
+  # `database.blob` または `database.metadata` の無効なプラグイン設定は、設定の読み込みを停止するようになりました。
+  # プラグインセレクターは文字列のままにし、プラグイン固有の設定はマップとしてネストしたままにします。
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
@@ -97,6 +99,10 @@ privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
+tracing: false
+# `--tracing` と `DINGO_TRACING_ENABLED` に対応します。
+tracingStdout: false
+# `--tracing-stdout` と `DINGO_TRACING_STDOUT` に対応します。先に `tracing` を有効にします。
 
 # Storage
 blockfrostPort: 0
