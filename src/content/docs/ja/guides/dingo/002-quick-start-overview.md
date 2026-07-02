@@ -69,7 +69,7 @@ database:
     sqlite:
       data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
-# `database.blob` と `database.metadata` はマップのままにし、各 `plugin` の値は文字列のままにしてください。そうしないと、Dingo は起動時に設定を読み込めません。
+# `database.blob` と `database.metadata` はマップのままにし、各 `plugin` の値は文字列のままにしてください。そうしないと、Dingo は起動しません。
 
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
@@ -90,8 +90,8 @@ bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
 network: "preview"
-tracing: false # `--tracing` と `DINGO_TRACING_ENABLED` に対応します
-tracingStdout: false # `--tracing-stdout` と `DINGO_TRACING_STDOUT` に対応し、`tracing: true` も必要です
+tracing: false # `--tracing` と `DINGO_TRACING_ENABLED` と同じ設定です
+tracingStdout: false # `--tracing-stdout` と `DINGO_TRACING_STDOUT` と同じ設定です。`tracing` も有効にします
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
