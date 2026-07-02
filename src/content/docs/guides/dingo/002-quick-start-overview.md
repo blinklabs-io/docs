@@ -69,7 +69,7 @@ database:
     sqlite:
       data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
-# Keep `database.blob` and `database.metadata` as maps, and keep each `plugin` value as a string, or Dingo will fail to load the configuration at startup.
+# Keep `database.blob` and `database.metadata` as maps, and keep each `plugin` value as a string, or Dingo will not start.
 
 # Mempool
 # `mempoolCapacity` is an optional override, not a required setting.
@@ -90,8 +90,8 @@ bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
 network: "preview"
-tracing: false # Maps to `--tracing` and `DINGO_TRACING_ENABLED`
-tracingStdout: false # Maps to `--tracing-stdout` and `DINGO_TRACING_STDOUT`; requires `tracing: true`
+tracing: false # Same setting as `--tracing` and `DINGO_TRACING_ENABLED`
+tracingStdout: false # Same setting as `--tracing-stdout` and `DINGO_TRACING_STDOUT`; also enable `tracing`
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
