@@ -69,7 +69,6 @@ database:
     sqlite:
       data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
-# Mantén `database.blob` y `database.metadata` como mapas, y cada valor `plugin` como cadena, o Dingo no iniciará.
 
 # Mempool
 # `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
