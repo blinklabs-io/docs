@@ -69,7 +69,6 @@ database:
     sqlite:
       data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
-# `database.blob` と `database.metadata` はマップのままにし、各 `plugin` の値は文字列のままにしてください。そうしないと、Dingo は起動しません。
 
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
