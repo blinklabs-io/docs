@@ -97,10 +97,6 @@ privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
-tracing: false
-# Maps to `--tracing` and `DINGO_TRACING_ENABLED`.
-tracingStdout: false
-# Maps to `--tracing-stdout` and `DINGO_TRACING_STDOUT`. Enable `tracing` first.
 
 # Storage
 barkBaseUrl: \"\"
