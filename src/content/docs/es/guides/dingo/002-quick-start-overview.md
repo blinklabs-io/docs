@@ -90,8 +90,6 @@ bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
 network: "preview"
-tracing: false # Mismo ajuste que `--tracing` y `DINGO_TRACING_ENABLED`
-tracingStdout: false # Mismo ajuste que `--tracing-stdout` y `DINGO_TRACING_STDOUT`; activa también `tracing`
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
