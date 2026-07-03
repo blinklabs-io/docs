@@ -69,7 +69,6 @@ database:
     sqlite:
       data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
-# Keep `database.blob` and `database.metadata` as maps, and keep each `plugin` value as a string, or Dingo will not start.
 
 # Mempool
 # `mempoolCapacity` is an optional override, not a required setting.
