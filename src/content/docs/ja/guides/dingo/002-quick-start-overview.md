@@ -90,8 +90,6 @@ bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
 network: "preview"
-tracing: false # `--tracing` と `DINGO_TRACING_ENABLED` と同じ設定です
-tracingStdout: false # `--tracing-stdout` と `DINGO_TRACING_STDOUT` と同じ設定です。`tracing` も有効にします
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
