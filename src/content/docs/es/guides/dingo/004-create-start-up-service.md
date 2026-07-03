@@ -108,8 +108,6 @@ utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Mantén los selectores de plugin de `database.blob` y `database.metadata` como cadenas y la configuración específica del plugin anidada como mapas. Una configuración inválida del plugin ahora detiene la carga de la configuración.
-
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
 > 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer `blockfrostPort` a un valor distinto de cero.
