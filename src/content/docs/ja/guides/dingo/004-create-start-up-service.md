@@ -99,6 +99,8 @@ relayPort: 3001
 socketPath: \"$HOME/dingo/dingo.socket\"
 
 # Storage
+barkBaseUrl: \"\"
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
