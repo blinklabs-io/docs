@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.61.2/dingo-v0.61.2-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.61.3/dingo-v0.61.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
