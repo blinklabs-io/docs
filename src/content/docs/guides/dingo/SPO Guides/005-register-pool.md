@@ -56,7 +56,7 @@ cardano-cli conway stake-pool metadata-hash --pool-metadata-file <(curl -s -L <h
 
 Make sure this hash matches the hash here:
 ```
-cat poolMetaDataHash.txt
+cat previewPoolMetaDataHash.txt
 ```
 
 ***
