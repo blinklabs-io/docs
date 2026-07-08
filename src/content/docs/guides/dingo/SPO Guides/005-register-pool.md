@@ -32,7 +32,7 @@ Calculate the hash of your metadata file. It's saved to `previewPoolMetaDataHash
 
 ```
 cardano-cli conway stake-pool metadata-hash \
---pool-metadata-file \
+--pool-metadata-file preview-pool-metadata.json \
 --out-file previewPoolMetaDataHash.txt
 ```
 
