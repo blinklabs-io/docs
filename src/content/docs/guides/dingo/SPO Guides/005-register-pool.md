@@ -61,7 +61,7 @@ cat previewPoolMetaDataHash.txt
 
 ***
 
-## Step 5  Create a registration certificate for your stake pool
+## Step 5 - Create a registration certificate for your stake pool
 
 To make updating your Pool certificate easier if you need to make changes in the future, we will create a `env` file with our pool information and a script to generate the `pool.cert` file.
 
