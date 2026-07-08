@@ -31,7 +31,9 @@ EOF
 Calculate the hash of your metadata file. It's saved to `previewPoolMetaDataHash.txt`
 
 ```
-cardano-cli conway stake-pool metadata-hash --preview-pool-metadata.json > previewPoolMetaDataHash.txt
+cardano-cli conway stake-pool metadata-hash \
+--pool-metadata-file \
+--out-file previewPoolMetaDataHash.txt
 ```
 
 Copy previewPoolMetaDataHash.txt to your air-gapped
