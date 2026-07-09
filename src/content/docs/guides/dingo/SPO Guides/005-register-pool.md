@@ -92,7 +92,7 @@ RELAY1_PORT=6000
 RELAY2_HOST=55.23.123.206
 RELAY2_PORT=6000
 METADATA_URL=https://webstie.com/preview-pool-metadata.json
-METADATA_HASH=$(cat $HOME/dingo/poolMetaDataHash.txt)
+METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
 EOF
 ```
 
