@@ -104,6 +104,14 @@ EOF
 > --pool-relay-port 6000 \
 >```
 
+💡 Tip: Make sure the Port you use on your relays is open in firewall rules.
+
+To see which ports are currently open:
+
+```
+sudo ufw status numbered
+```
+
 ### Step 5.3 - Create pool-registration.sh script
 Create pool-registration.sh script in the pool-scripts folder:
 
