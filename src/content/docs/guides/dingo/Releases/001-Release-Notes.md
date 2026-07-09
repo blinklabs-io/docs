@@ -3,6 +3,36 @@ title: Latest Releases
 description: Dingo Release Notes
 ---
 
+## v0.62.0 (July 9, 2026)
+
+**Title:** Improved Mithril catch-up, operational certificate validation, and database lookups
+
+**Date:** July 9, 2026
+
+**Version:** v0.62.0
+
+This release improves core catch-up safety, tightens block validation, speeds up transaction lookups, and expands Blockfrost asset holder coverage.
+
+### Recommended Network Compatibility ⚠️
+
+| Network             | Compatible |
+|---------------------|------------|
+| mainnet             | ⛔         |
+| preprod-testnet     | ⛔         |
+| preview-testnet     | ✅         |
+
+### ✨ Highlights
+
+* Improved core mode Mithril v2 catch-up so Dingo preserves immutable markers, detects divergence earlier, and reconciles stale ledger state without forcing a full resync when the chain still matches.
+
+* Added inbound operational certificate validation for block headers and block apply so forged, expired, stale, or gapped certificate counters fail fast.
+
+* Accelerated `SetTransaction` lookups in MySQL and Postgres by batching UTxO reads and indexing reference-input addresses for faster database access.
+
+* Validated MySQL database names before `CREATE DATABASE` runs so startup failures from invalid target names surface earlier.
+
+* Expanded the Blockfrost API with asset holder address lookup support.
+
 ## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧. 
 
 <br>
