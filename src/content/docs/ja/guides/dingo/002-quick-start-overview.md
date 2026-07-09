@@ -33,7 +33,7 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 ```
 mkdir -p ~/dingo
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.62.0/dingo-v0.62.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.62.0/dingo-v0.62.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
