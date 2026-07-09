@@ -11,7 +11,7 @@ description: Dingo Release Notes
 
 **Version:** v0.62.0
 
-This release improves catch-up safety, hardens block validation, speeds up database lookups, and expands Blockfrost asset holder coverage.
+This release improves catch-up safety, hardens block validation, speeds up database access, and expands Blockfrost asset holder coverage.
 
 ### Recommended Network Compatibility ⚠️
 
@@ -27,11 +27,11 @@ This release improves catch-up safety, hardens block validation, speeds up datab
 
 * Added operational certificate checks for block headers and block application so forged, expired, stale, or gapped certificate data fails fast.
 
-* Accelerated UTxO lookups for transaction sets in MySQL and Postgres by batching reads and indexing reference-input addresses.
+* Accelerated transaction lookups in MySQL and Postgres by batching UTxO reads and indexing reference-input addresses.
 
 * Validated MySQL database names before database creation so invalid names fail early.
 
-* Expanded the Blockfrost API with asset holder address lookup support.
+* Expanded the Blockfrost API with asset holder address lookups.
 
 ### 🧪 Testing, Docs, and Tooling
 
@@ -39,7 +39,7 @@ This release improves catch-up safety, hardens block validation, speeds up datab
 
 * Updated the `gouroboros` dependency and kept Dijkstra and Leios support aligned with upstream changes.
 
-* Refreshed the release history entry for `v0.61.4` to keep the release archive current.
+* Refreshed the `v0.61.4` release history entry to keep the release list current.
 
 ## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧. 
 
