@@ -5,13 +5,13 @@ description: Dingo Release Notes
 
 ## v0.62.0 (July 9, 2026)
 
-**Title:** Improved Mithril catch-up, operational certificate validation, and database lookups
+**Title:** Improved Mithril catch-up, certificate checks, and database lookups
 
 **Date:** July 9, 2026
 
 **Version:** v0.62.0
 
-This release improves core catch-up safety, tightens block validation, speeds up transaction lookups, and expands Blockfrost asset holder coverage.
+This release improves catch-up safety, hardens block validation, speeds up database lookups, and expands Blockfrost asset holder coverage.
 
 ### Recommended Network Compatibility ⚠️
 
@@ -23,23 +23,23 @@ This release improves core catch-up safety, tightens block validation, speeds up
 
 ### ✨ Highlights
 
-* Improved core mode Mithril v2 catch-up so Dingo preserves immutable markers, detects divergence earlier, and reconciles stale ledger state without forcing a full resync when the chain still matches.
+* Improved core mode Mithril v2 catch-up so Dingo keeps immutable markers, detects divergence earlier, and reconciles stale ledger state without forcing a full resync when the chain still matches.
 
-* Added inbound operational certificate validation for block headers and block apply so forged, expired, stale, or gapped certificate counters fail fast.
+* Added operational certificate checks for block headers and block application so forged, expired, stale, or gapped certificate data fails fast.
 
-* Accelerated `SetTransaction` lookups in MySQL and Postgres by batching UTxO reads and indexing reference-input addresses for faster database access.
+* Accelerated UTxO lookups for transaction sets in MySQL and Postgres by batching reads and indexing reference-input addresses.
 
-* Validated MySQL database names before `CREATE DATABASE` runs so startup failures from invalid target names surface earlier.
+* Validated MySQL database names before database creation so invalid names fail early.
 
 * Expanded the Blockfrost API with asset holder address lookup support.
 
 ### 🧪 Testing, Docs, and Tooling
 
-* Created direct tests for `LedgerDelta.apply` to cover ledger delta application behavior.
+* Created direct tests for ledger delta application to cover apply behavior.
 
-* Updated the `gouroboros` dependency and aligned Dijkstra and Leios compatibility with upstream behavior.
+* Updated the `gouroboros` dependency and kept Dijkstra and Leios support aligned with upstream changes.
 
-* Refreshed the previous release note entry for `v0.61.4` to keep the release history current.
+* Refreshed the release history entry for `v0.61.4` to keep the release archive current.
 
 ## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧. 
 
