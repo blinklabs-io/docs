@@ -225,7 +225,7 @@ cardano-cli conway transaction submit --tx-file tx.signed
 
 ⚠️ On Air Gapped
 ```
-cardano-cli stake-pool id \
+cardano-cli conway stake-pool id \
 --cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
 --output-format hex \
 > stakepoolid.txt
