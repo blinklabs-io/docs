@@ -3,7 +3,6 @@ title: Latest Releases
 description: Dingo Release Notes
 ---
 
-## v0.62.0 (July 9, 2026)
 ## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧. 
 
 <br>
