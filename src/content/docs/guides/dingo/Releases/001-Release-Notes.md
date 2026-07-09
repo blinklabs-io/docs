@@ -33,6 +33,14 @@ This release improves core catch-up safety, tightens block validation, speeds up
 
 * Expanded the Blockfrost API with asset holder address lookup support.
 
+### 🧪 Testing, Docs, and Tooling
+
+* Created direct tests for `LedgerDelta.apply` to cover ledger delta application behavior.
+
+* Updated the `gouroboros` dependency and aligned Dijkstra and Leios compatibility with upstream behavior.
+
+* Refreshed the previous release note entry for `v0.61.4` to keep the release history current.
+
 ## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧. 
 
 <br>
