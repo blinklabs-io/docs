@@ -6,7 +6,8 @@ description: SPO Guide for Dingo Pools - Update Pool Certificate.
 # Dingo - Updating Pool Certificate
 From time to time you might what to adjust your pool cert with updated pledge amount, fees or relay information. This guide will walk you through the process.
 
-> ⚠️ This guide assumes you used the process to generate your pool cert as described [Register pool guide](../005-register-pool)
+> ⚠️ This guide assumes you used the process to generate your pool cert as described in the [Register pool guide](../005-register-pool)
+> 
 > If you're changing your poolMetaData.json, remember to calculate the hash of your metadata file and re-upload the updated poolMetaData.json file. Follow steps listed in [Register pool guide](../005-register-pool)
 
 
@@ -107,4 +108,4 @@ cardano-cli conway transaction submit --tx-file tx.signed
 ## Step 8 - Verify registration
 Changes take effect in two epochs. After the next epoch transition, verify that your pool settings are correct.
 
-Wait a few minutes for transaction to reach chain, then you can go to your favorite Cardano explorer to see if transaction was successful like: https://cardanoscan.io/
+Wait a few minutes for the transaction to reach the chain, then you can go to your favorite Cardano explorer to see if transaction was successful like: https://cardanoscan.io/
