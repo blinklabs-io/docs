@@ -53,8 +53,8 @@ Copy `pool.cert` to your hot environment either your BP or Relay in your dingo f
 
 ***
 
-## Step 4 - Submit the certificates
-Build the transaction and sign it to submit the `pool.cert`
+## Step 4 - Submit Pool Cert
+Build the transaction and sign it to submit the `pool.cert` to chain.
 
 ### Step 4.1 - Query the current slot
 ```
