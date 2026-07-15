@@ -143,6 +143,8 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
+> 📝 When Dingo starts after an upgrade from an older version with an existing database, it may rebuild reward live-stake metadata before normal ledger processing resumes if the stored aggregates are incomplete. Operators do not need extra flags or configuration changes for this automatic rebuild.
+
 ***
 
 <br>
