@@ -9,4 +9,4 @@ gOuroboros is a powerful and versatile framework for building Go apps that inter
 
 ***
 
-The pkg.go.dev package reference covers detailed gOuroboros protocol types, callbacks, and related behavior: <a href="https://pkg.go.dev/github.com/blinklabs-io/gouroboros" target="_blank">https://pkg.go.dev/github.com/blinklabs-io/gouroboros</a>.  
+The pkg.go.dev package reference documents detailed gOuroboros API behavior, including protocol types, callbacks, and other package details: <a href="https://pkg.go.dev/github.com/blinklabs-io/gouroboros" target="_blank">https://pkg.go.dev/github.com/blinklabs-io/gouroboros</a>.  
