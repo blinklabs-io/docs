@@ -143,7 +143,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 > 📝 これは一度だけ行う必要があります。初回ブートストラップ後は、systemdサービスがノードの同期を維持します。
 
-
 ***
 
 <br>

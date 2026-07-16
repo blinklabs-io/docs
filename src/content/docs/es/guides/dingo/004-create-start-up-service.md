@@ -143,7 +143,6 @@ Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronizac
 
 > 📝 Solo necesitas hacer esto una vez. Después del inicio inicial, el servicio systemd mantendrá el nodo sincronizado.
 
-
 ***
 
 <br>
