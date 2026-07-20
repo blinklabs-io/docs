@@ -9,7 +9,7 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
-- Version: v0.188.1 - *[View Release Notes](../v0-188-1)* — Improves the response when requested block or transaction data is unavailable; fixes Conway withdrawal gating for PV10 and PV11 without DRep delegation; and improves chain-sync stop shutdown handling.
+- Version: v0.188.1 - *[View Release Notes](../v0-188-1)* — Improves responses when block or transaction data is unavailable; fixes Conway withdrawal gating for PV10 and PV11 without DRep delegation; and makes chain-sync stop shutdown handling more reliable.
 - Version: v0.188.0 - *[View Release Notes](../v0-188-0)*
 - Version: v0.187.4 - *[View Release Notes](../v0-187-4)*
 - Version: v0.187.3 - *[View Release Notes](../v0-187-3)*
