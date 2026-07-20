@@ -3,13 +3,13 @@ title: Latest Releases
 description: Dingo Release Notes
 ---
 
-## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧. 
+## Keep your Dingo Node current to ensure you're always running the latest performance boosts💪, new features✨, and critical fixes🔧.
 
 <br>
 
 ☑️ Select a version below to view the full release notes.
 
- - Version: v0.66.1 - *[View Release Notes](../v0-66-1)* 
+- Version: v0.66.1 - *[View Release Notes](../v0-66-1)*
 
 - Version: v0.66.0 - *[View Release Notes](../v0-66-0)*
 
