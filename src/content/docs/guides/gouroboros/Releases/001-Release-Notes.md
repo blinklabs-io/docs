@@ -9,6 +9,7 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.188.1 - *[View Release Notes](../v0-188-1)* — Improves leiosfetch not-found responses, fixes Conway withdrawal gating for PV10 and PV11 when no DRep delegation is present, and makes chain-sync shutdown more reliable.
 - Version: v0.188.0 - *[View Release Notes](../v0-188-0)*
 - Version: v0.187.4 - *[View Release Notes](../v0-187-4)*
 - Version: v0.187.3 - *[View Release Notes](../v0-187-3)*
