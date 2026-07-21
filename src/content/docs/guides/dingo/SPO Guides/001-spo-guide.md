@@ -16,8 +16,9 @@ description: SPO Guide for Dingo Pools.
 > | Network             | Compatible |
 > |---------------------|------------|
 > | mainnet             | ⛔         |
-> | preprod-testnet     | ⛔         |
+> | preprod-testnet     | ✅         |
 > | preview-testnet     | ✅         |
+> | musashi             | ✅         |
 
 <br>
 
