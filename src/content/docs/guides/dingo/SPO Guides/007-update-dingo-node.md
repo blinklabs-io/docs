@@ -52,12 +52,6 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 Since Dingo is in heavy devolpment it's recommended during upgrading to delete database and start fresh.
 
 ### Step 5.1 -  Delete `.dingo` Database
-First let's delete the .dingo database file by running:
-```
-cd ~/dingo
-rm -r .dingo
-```
-
 > 💡 To view hidden files and double check path run:
 > ```
 > cd ~/dingo
@@ -66,23 +60,36 @@ rm -r .dingo
 >
 > You should see `.dingo`. If not check your dingo.yaml file for the path you used.
 
-### Step 5.2 - Mithril Sync
+Delete the .dingo database file by running:
+```
+cd ~/dingo
+rm -r .dingo
+```
 
+### Step 5.2 - Mithril Sync
+Sync with latest Mithril snapshot by running:
 ```
 dingo sync --mithril
 ```
+
+### Step 5.3 - Start Dingo
+Once the Mithril snapshot has loaded,start the node:
+```
+cd ~/dingo
+dingo serve
+```
 ***
 
-## Step 6 - Start Dingo Node
-
-```
-sudo systemctl start dingo
-```
-
+## Step 6 - Verify the Update
 Check Version is updated:
 ```
 dingo version
 ```
+
+> If you skipped Step 5 then start the Dingo node by running:
+> ```
+> sudo systemctl start dingo
+> ```
 
 ***
 
