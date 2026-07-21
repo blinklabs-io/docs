@@ -28,7 +28,7 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.66.2）とアーキテクチャを調整してください.
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.66.2）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
