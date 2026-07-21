@@ -11,7 +11,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 ```
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.55.0/dingo-v0.55.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.66.1/dingo-v0.66.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -48,7 +48,32 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 
 ***
 
-## Step 5 - Start Dingo Node
+## Step 5 - RECOMMENDED - Remove `.dingo` Database and Resync Mithril Snapshot
+Since Dingo is in heavy devolpment it's recommended during upgrading to delete database and start fresh.
+
+### Step 5.1 -  Delete `.dingo` Database
+First let's delete the .dingo database file by running:
+```
+cd ~/dingo
+rm -r .dingo
+```
+
+> 💡 To view hidden files and double check path run:
+> ```
+> cd ~/dingo
+> ls -a
+> ```
+>
+> You should see `.dingo`. If not check your dingo.yaml file for the path you used.
+
+### Step 5.2 - Mithril Sync
+
+```
+dingo sync --mithril
+```
+***
+
+## Step 6 - Start Dingo Node
 
 ```
 sudo systemctl start dingo
@@ -61,7 +86,7 @@ dingo version
 
 ***
 
-## Step 6 - Check Status
+## Step 7 - Check Status
 Verify the service is running:
 ```
 sudo systemctl status dingo.service
