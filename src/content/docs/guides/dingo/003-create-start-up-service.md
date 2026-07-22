@@ -19,7 +19,7 @@ For this guide we will walk you through setting up a `systemd` service. Using a 
 
 ✅ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
 
-> ✅ For this guide we assume you have already completed the [Quick Start](../002-quick-start-overview) guide.
+> ⚠️ For this guide we assume you have already completed the [Quick Start](../002-quick-start-overview) guide.
 
 ***
 
