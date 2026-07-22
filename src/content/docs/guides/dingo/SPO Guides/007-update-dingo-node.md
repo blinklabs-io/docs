@@ -67,13 +67,23 @@ rm -r .dingo
 ```
 
 ### Step 5.2 - Mithril Sync
-Sync with latest Mithril snapshot by running:
+Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
+
+Run the following command from your dingo directory:
 ```
 dingo sync --mithril
 ```
+Dingo will:
+1. Download the latest Mithril snapshot for your configured network
+2. Verify the certificate chain
+3. Load the snapshot into the database
+
+This takes approximately 20-30 minutes depending on your system and network speed.
+
+> 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
 ### Step 5.3 - Start Dingo
-Once the Mithril snapshot has loaded, start the node:
+Once the Mithril snapshot has finished loading, start the node:
 ```
 cd ~/dingo
 dingo serve
