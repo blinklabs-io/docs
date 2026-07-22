@@ -300,3 +300,9 @@ sudo journalctl -u dingo -n 50 --no-pager
 ```
 
 ***
+
+>💡 Tip: You can use the <a href="https://docs.cardano.org/cardano-testnets/tools/faucet" target="_blank">Cardano faucet</a> to request some test ADA be delegated to your pool. Select the Preview testnet and select `receive pool delegation`. Then paste your pool id which you can copy from your favorite Cardano Explorer.
+
+***
+
+### Congratulations you are now a preview SPO running a Dingo Node!
