@@ -3,13 +3,13 @@ title: SPO Guide Overview
 description: SPO Guide for Dingo Pools.
 ---
 
-# Dingo
+# Dingo Node
 
-## This guide will walk you through the steps needed to set up a test pool on the Preview network. 
+## This guide walks you through the steps required to set up a test pool on the Preview network using the Dingo Node. 
 
-⚠️ Dingo Node is a work in progress and is currently under heavy development, as such Dingo Block production is currently recommend for testnets only. 
+⚠️ The Dingo Node is a work in progress and is currently under heavy development, as such Dingo Block production is currently recommended for testnets only. 
 
-> 📝 Note: See Release Notes to see the recommendeded Network Compatibility chart.
+> 📝 Note: See the Release Notes to see the recommended Network Compatibility chart.
 > 
 > ### Recommended Network Compatibility ⚠️
 > 
@@ -34,8 +34,8 @@ There are 7 main steps that we will cover to get a Dingo Node registered and run
 
 ***
 
-📝 This guide assumes you hardened your server security. For information on Hardening a Server <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-i-installation/hardening-an-ubuntu-server" target="_blank">see Coincashew guide</a>  
+📝 This guide assumes you have hardened your server security. For information on hardening your Server <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-i-installation/hardening-an-ubuntu-server" target="_blank">see Coincashew guide</a>  
 
 <br>
 
-✅ This guide also skips Air-Gapped setup and assumes you secured files as necessary.
+⚠️ This guide also omits Air-Gapped setup and assumes you secured files as necessary.
