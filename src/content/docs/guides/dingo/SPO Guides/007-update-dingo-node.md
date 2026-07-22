@@ -86,7 +86,7 @@ This takes approximately 20-30 minutes depending on your system and network spee
 Once the Mithril snapshot has finished loading, start the node:
 ```
 cd ~/dingo
-dingo serve
+sudo systemctl start dingo
 ```
 ***
 
@@ -95,11 +95,6 @@ Check Version is updated:
 ```
 dingo version
 ```
-
-> If you skipped Step 5 then start the Dingo node by running:
-> ```
-> sudo systemctl start dingo
-> ```
 
 ***
 
