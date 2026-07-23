@@ -16,7 +16,7 @@ From time to time you might what to adjust your pool cert with updated pledge am
 ## Step 1 - Edit env file
 Update your env file with the updated information for your pool.
 
-⚠️ON Air Gapped Machine
+⚠️ On an air-gapped machine
 
 ```
 sudo nano $HOME/dingo/pool-scripts/env
@@ -84,7 +84,7 @@ cardano-cli conway transaction build \
 ### Step 4.3 - Sign the transaction
 Copy tx.raw to your cold environment in your dingo folder
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 ```
 cd ~/dingo
 cardano-cli conway transaction sign \
