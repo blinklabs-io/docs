@@ -7,8 +7,8 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Pool.
 
 ✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
 
-## Step 1 - Create your pool's metadata json file
-Update below with your pool's information. 
+## Step 1 - Create your pool's metadata JSON file
+Update the values below with your pool's information. 
 
 📝 **ticker** must be between 3-5 characters in length
 📝 **description** cannot exceed 255 characters in length.
@@ -28,7 +28,7 @@ EOF
 ***
 
 ## Step 2 - Calculate the metadata hash
-Calculate the hash of your metadata file. It's saved to `previewPoolMetaDataHash.txt`
+Calculate the hash of your metadata file. The hash is saved to `previewPoolMetaDataHash.txt`
 
 ```
 cardano-cli conway stake-pool metadata-hash \
@@ -36,25 +36,26 @@ cardano-cli conway stake-pool metadata-hash \
 --out-file previewPoolMetaDataHash.txt
 ```
 
-Copy previewPoolMetaDataHash.txt to your air-gapped
+Copy `previewPoolMetaDataHash.txt` to your air-gapped machine.
 
 ***
 
-## Step 3 - Upload preview-pool-metadata.json to public web site
+## Step 3 - Upload `preview-pool-metadata.json` to a public website
 
-Upload your `preview-pool-metadata.json` file to a Web site that you administer or a public Web site. For example, you can upload your pool metadata to GitHub. <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-v-tips/uploading-pool-metadata-to-github" target="_blank">See Coincashew guide here for uploading to GitHub.</a> 
+Upload your `preview-pool-metadata.json` file to a website that you administer or a public Web site. For example, you can upload your pool metadata to GitHub. <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-v-tips/uploading-pool-metadata-to-github" target="_blank">See Coincashew guide here for uploading to GitHub.</a> 
 
 ***
 
 ## Step 4 - Verify the metadata hashes
-First we will get the metadata hash from your metadata json URL.  
+First retrieve the metadata hash from your metadata JSON URL.  
 
 Replace <https://www.METADATA-URL.com> with your actual URL from Step 3.
 ```
 cardano-cli conway stake-pool metadata-hash --pool-metadata-file <(curl -s -L <https://www.METADATA-URL.com>)
 ```
 
-Make sure this hash matches the hash here:
+Verify that this hash matches the value here:
+
 ```
 cat previewPoolMetaDataHash.txt
 ```
@@ -63,7 +64,7 @@ cat previewPoolMetaDataHash.txt
 
 ## Step 5 - Create a registration certificate for your stake pool
 
-To make updating your Pool certificate easier if you need to make changes in the future, we will create a `env` file with our pool information and a script to generate the `pool.cert` file.
+To simplify future updates to your pool registration certificate, create an environment (`env`) file containing your pool configuration and a script to generate `pool.cert`.
 
 ### Step 5.1 - Create a pool-scripts folder
 ⚠️ On an air-gapped machine
@@ -74,9 +75,9 @@ mkdir pool-scripts
 ```
 
 ### Step 5.2 - Create an env file
-Create an env file for our pool in the pool-scripts folder.
+Create an environment (`env`) file for our pool in the pool-scripts folder.
 
-✅ Update the data below with your metadata URL, your relay node IP and port, pool pledge amount and cost (min pool fee) and margin.
+✅ Update the values below with your metadata URL, your relay node IP and port, pool pledge amount and cost (min pool fee) and margin.
 
 ```
 cat > $HOME/dingo/pool-scripts/env << 'EOF' 
@@ -91,12 +92,12 @@ RELAY1_HOST=55.209.117.58
 RELAY1_PORT=6000
 RELAY2_HOST=55.23.123.206
 RELAY2_PORT=6000
-METADATA_URL=https://webstie.com/preview-pool-metadata.json
+METADATA_URL=https://website.com/preview-pool-metadata.json
 METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
 EOF
 ```
 
-> The above example uses IP addresses if you are using DNS use the following example:
+> The example above uses IP addresses. If your relay nodes use DNS names instead, use the following options:
 > ```
 > --single-host-pool-relay <relaynode1.pool.example.com> \
 > --pool-relay-port 6000 \
@@ -104,7 +105,7 @@ EOF
 > --pool-relay-port 6000 \
 >```
 
-💡 Tip: Make sure the Port you use on your relays is open in firewall rules.
+💡 Tip: Make sure the `RELAY_PORT` you use on your relays is open in firewall rules.
 
 To see which ports are currently open:
 
@@ -112,7 +113,7 @@ To see which ports are currently open:
 sudo ufw status numbered
 ```
 
-### Step 5.3 - Create pool-registration.sh script
+### Step 5.3 - Create `pool-registration.sh` script
 Create pool-registration.sh script in the pool-scripts folder:
 
 ```
@@ -141,13 +142,13 @@ EOF
 ```
 
 ### Step 5.4 - Add execute permissions
-Add execute permissions to the pool-registration script
+Add execute permissions to the `pool-registration.sh` script.
 
 ```
 chmod +x $HOME/dingo/pool-scripts/pool-registration.sh
 ```
 
-### Step 5.5 - Execute Script
+### Step 5.5 - Execute the Script
 The script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
 
 ```
@@ -156,7 +157,7 @@ cd $HOME/dingo/pool-scripts
 ```
 
 ### Step 5.6 - Copy pool.cert to your hot environment
-Copy `pool.cert` to your hot environment either your BP or Relay in your dingo folder.
+Copy `pool.cert` to the `~/dingo` directory on your hot environment (block producer or relay node).
 
 ***
 
@@ -174,7 +175,7 @@ cardano-cli conway stake-address stake-delegation-certificate \
 ***
 
 ## Step 7 - Submit the certificates
-Build the transaction and sign it to submit both the `pool.cert` and the `deleg.cert`
+Build and sign the transaction to submit both the `pool.cert` and the `deleg.cert`.
 
 ### Step 7.1 - Query the current slot
 ```
@@ -196,7 +197,7 @@ cardano-cli conway transaction build \
 ```
 
 ### Step 7.3 - Sign the transaction
-Copy tx.raw to your cold environment in your dingo folder
+Copy `tx.raw` to the `~/dingo` directory on your air-gapped machine.
 
 ⚠️ On an air-gapped machine
 ```
@@ -210,7 +211,7 @@ cardano-cli conway transaction sign \
 ```
 
 ### Step 7.4 - Submit transaction
-Copy tx.signed to your hot environment either your BP or Relay in your dingo folder.
+Copy `tx.signed` to the `~/dingo` directory on your hot environment (block producer or relay node).
 
 ```
 cd ~/dingo
@@ -221,7 +222,7 @@ cardano-cli conway transaction submit --tx-file tx.signed
 
 ## Step 8 - Verify registration
 
-### Step 8.1 - Create `stakepoolid.txt file:
+### Step 8.1 - Create `stakepoolid.txt` file
 
 ⚠️ On an air-gapped machine
 ```
@@ -234,9 +235,9 @@ cat stakepoolid.txt
 ```
 
 ### Step 8.2 - Copy `stakepoolid.txt` to your hot environment
-Copy `stakepoolid.txt` to your hot environment either your BP or Relay in your dingo folder
+Copy `stakepoolid.txt` to the `~/dingo` directory on your hot environment (block producer or relay node).
 
-### Step 8.3 - Check it has appeared on-chain:
+### Step 8.3 - Verify that the pool has appeared on-chain:
 ```
 cd ~/dingo
 cardano-cli query stake-snapshot --stake-pool-id $(cat stakepoolid.txt)
@@ -244,9 +245,11 @@ cardano-cli query stake-snapshot --stake-pool-id $(cat stakepoolid.txt)
 
 ***
 
-## Step 9 - Update your `dingo.yaml` with the new KES, VRF and Operation Certificate
+## Step 9 - Update your `dingo.yaml` with the new KES key, VRF key and operation certificate
 
-Stop Dingo node by running:
+⚠️ On Block Producer
+
+Stop the Dingo node by running:
 ```
 sudo systemctl stop dingo
 ```
@@ -281,7 +284,7 @@ sudo systemctl start dingo
 
 ## Step 11 - Check Status
 
-Verify Dingo is running:
+Verify that Dingo is running:
 
 ```
 sudo systemctl status dingo
@@ -305,4 +308,4 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 ***
 
-### Congratulations you are now a preview SPO running a Dingo Node!
+### Congratulations! You are now running a Dingo stake pool on the Preview network.
