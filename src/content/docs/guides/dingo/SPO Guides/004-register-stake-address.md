@@ -11,7 +11,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Address.
 
 ## Step 1 - Generate stake registration certificate
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cd ~/dingo
@@ -57,7 +57,7 @@ Copy tx.raw to your air gapped dingo folder.
 
 Sign with both the payment and stake signing keys:
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cd ~/dingo
