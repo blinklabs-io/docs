@@ -1,13 +1,13 @@
 ---
 title: Grafana Dashboards 
-description: SPO Guide for Dingo Pools - Grafana dashboards.
+description: SPO Guide for Dingo Pools - Grafana Dashboards.
 ---
 
 # Dingo Grafana Dashboards
 
-Monitoring dashboards for [Dingo](https://github.com/blinklabs-io/dingo), the Go Cardano node by Blink Labs.
+Monitoring dashboards for [Dingo](https://github.com/blinklabs-io/dingo), the Go implementation of a Cardano node developed by Blink Labs.
 
-More information and resources on dashboards can be found here <a href="https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards" target="_blank">https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards</a>
+Additional dashboard documentation and resources are available in the Dingo repository: <a href="https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards" target="_blank">https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards</a>
 
 ## Dashboards
 
