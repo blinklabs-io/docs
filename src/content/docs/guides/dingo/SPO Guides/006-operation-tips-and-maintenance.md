@@ -5,13 +5,13 @@ description: SPO Guide for Dingo Pools - Operational Tips and Maintenance.
 
 ## Additional guides for Dingo SPOs
 
-[How to update your Dingo Node](../007-update-dingo-node)
+[How to Update Your Dingo Node](../007-update-dingo-node)
 
-[How to set up Grafana dashboard](../008-grafana-dashboard)
+[How to Set Up Grafana Dashboard](../008-grafana-dashboard)
 
-[Updating your Pledge, Fee or other items on your pool.cert](../009-update-pool-cert) 
+[Updating Your Pool Pledge, Fee or Other Data on Your pool.cert](../009-update-pool-cert) 
 
-Using nview to monitor a Dingo Node - (Coming Soon)
+Using nview to Monitor Your Dingo Nodes - (Coming Soon)
 
-More coming soon!
+More Coming Soon!
 
