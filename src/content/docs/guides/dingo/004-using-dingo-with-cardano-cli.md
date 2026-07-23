@@ -3,19 +3,19 @@ title: Using Dingo with Cardano CLI
 description: Dingo - How to use Dingo with Cardano CLI.
 ---
 
-Dingo is a Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
+Dingo is a Cardano blockchain node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
-⚠️ This is a work in progress and is currently under heavy development
+⚠️ Dingo is a work in progress and is currently under heavy development
 
 <br>
 
 ***
 
-For this guide we will walk you through downloading and running the Cardano CLI binary and running some Cardano CLI commands. To get started follow the steps below.
+In this guide, we will walk you through downloading and running the Cardano CLI binary, then demonstrate several Cardano CLI commands. To get started follow the steps below.
 
 <br>
 
-> ✅ For this guide we assume you have already downloaded Dingo and synced the chain. If not see our [Quick Start](../002-quick-start-overview) guide.
+> ✅ This guide we assume you have already downloaded Dingo and synced the blockchain. If not see our [Quick Start](../002-quick-start-overview) guide.
 
 ***
 
@@ -23,17 +23,17 @@ For this guide we will walk you through downloading and running the Cardano CLI 
 
 ## Step 1 - Download the latest Cardano CLI binary 
 
-First start by going to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
+First, go to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
 
-You can either download the binary file and move the file to your preferred location or... 
-
-<br>
-
-Copy the path to the latest the Cardano CLI binary file and run the following command to download the binary file.
+You can either download the binary and move the file to your preferred location or... 
 
 <br>
 
-⚠️ For this example we put the Cardano-cli binary in our `dingo` folder. Adjust the link path to the correct path for the version you want to download. 
+Copy the download URL for the latest Cardano CLI binary and run the following command:
+
+<br>
+
+⚠️ For this example we place the `cardano-cli` binary in our `~dingo` directory. Adjust the link path to the correct path for the version you want to download. 
 
 ```
 cd ~/dingo
@@ -44,7 +44,7 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 <br>
 
-## Step 2 - Rename File and Change Permissions for the Cardano CLI 
+## Step 2 - Rename the Cardano CLI Binary and Set Execute Permissions 
 
 To make the file executable run the following command:
 
@@ -54,7 +54,7 @@ chmod +x cardano-cli-x86_64-linux
 
 <br>
 
-For this example, we will name the binary file `cardano-cli`. To rename the binary and move to our `/usr/local/bin/` will we run the following:
+For this example, we will rename the binary to `cardano-cli` and move it to `/usr/local/bin/`:
 
 ⚠️ Adjust the file path and file name if needed. 
 
@@ -66,7 +66,7 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 <br>
 
-#### Congratulations we can now use the cardano-cli to communicate with the node.
+#### Congratulations! You can now use cardano-cli to communicate with your Dingo node.
 
 <br>
 
