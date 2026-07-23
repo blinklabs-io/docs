@@ -3,15 +3,15 @@ title: Generate Pool Keys
 description: SPO Guide for Dingo Pools - Generate Pool Keys.
 ---
 
-# Dingo - Block Production Keys
+# Dingo Node - Block Production Keys
 
-We will now generate the Pool Keys needed for Block Production on the Preview Network. 
+We will now generate the pool keys needed for block production on the Preview network. 
 
 
 | Key	| Purpose	| Where it lives
 |-------|---------------|-------------------|
-|Cold key<br> (cold.skey / cold.vkey)	|Authorizes pool registration and KES rotation	|Air-gapped machine only — never transferred
-|KES key<br> (kes.skey / kes.vkey)	|Signs blocks; rotated every ~90 days	|kes.skey - Block producer
+|Cold key<br> (node.skey / node.vkey)	|Authorizes pool registration and KES rotation	|Air-gapped machine only — never transferred
+|KES key<br> (kes.skey / kes.vkey)	|Signs blocks; rotated before KES expiration	|kes.skey - Block producer
 |VRF key<br> (vrf.skey / vrf.vkey)	|Proves slot leadership	|vrf.skey - Block producer
 |Operational certificate<br> (node.cert)	|Binds KES key to cold key for the node	|Block producer
 
@@ -20,10 +20,10 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
-> ⚠️ The following guide assumes you have already completed the following 3 steps. If not please do them first and return here when you are done. 
+> ⚠️ The following guide assumes you have already completed the following 3 steps. If not please complete them first and return here when you are done. 
 > 
 > - [x] 1. Complete the [Quick Start](../../002-quick-start-overview) guide.
-> - [x] 2. [Create Start Up Service](../../003-create-start-up-service)
+> - [x] 2. [Create Startup Service](../../003-create-start-up-service)
 > - [x] 3. [Install Cardano CLI](../../004-using-dingo-with-cardano-cli)
 
 ***
@@ -52,7 +52,7 @@ pushd $HOME/dingo/cold-keys
 
 ***
 
-## Step 3 - Generate set of cold keys and create the cold counter file
+## Step 3 - Generate a set of cold keys and create the cold counter file
 
 ⚠️ On Air Gapped
 
@@ -69,20 +69,20 @@ cardano-cli conway node key-gen \
 
 We need the Shelley Genesis json file to run our CLI command
 
-So we will create a directory to store our Cardano configuration files. For this example, the file structure we will create is `/config/cardano/preview/` by running the following command in our `dingo` directory:
+We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/cardano/preview/` by running the following command in our `dingo` directory:
 
 ```
 cd ~/dingo
 mkdir -p config/cardano/preview
 ```
 
-Now we will navigate to the `config/cardano/preview` folder and download the Cardano Shelley Genesis file.
+Next, navigate to the `config/cardano/preview` folder and download the Cardano Shelley Genesis file.
 
 ```
 cd config/cardano/preview
 ```
 
-To download the Shelley Genesis file run:
+To download the Shelley Genesis file, run:
 
 ```
 wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
@@ -105,11 +105,11 @@ echo startKesPeriod: ${startKesPeriod}
 
 ***
 
-## Step 5 - Generate operational certificate for your pool
+## Step 5 - Generate the operational certificate for your pool
 
 ✅ Change the <startKesPeriod> value you wrote down in the previous step.
 
-⚠️ On Air Gapped once you have copied kes.vkey to your cold environment.
+⚠️ On Air Gapped once you have copied `kes.vkey` to your cold environment.
 
 ```
 cd ~/dingo
@@ -139,7 +139,7 @@ cardano-cli conway node key-gen-VRF \
 
 ***
 
-## Step 8 - Update vrf key permissions to read-only. You must also copy vrf.vkey to your cold environment.
+## Step 8 - Update VRF key permissions to read-only. You must also copy vrf.vkey to your cold environment.
 
 ```
 chmod 400 vrf.skey
@@ -149,7 +149,7 @@ chmod 400 vrf.skey
 
 > ### Reminder
 >**Block-producing Node**
-> The only stake pool keys and certs that should be on the block producer, are the following three files.
+> The only stake pool keys and certs that should be stored on the block producer, are the following three files:
 > 
 > ```
 > ###
@@ -160,7 +160,7 @@ chmod 400 vrf.skey
 > CERT = node.cert
 > ```
 > 
-> **All other keys must remain offline in your air-gapped offline cold environment.**
+> **All other keys must remain offline in your air-gapped cold environment.**
 > 
 > **Relay Nodes**
-> Relay nodes must NOT store any operational certificates, vrf, skey or cold keys.
+> Relay nodes must NOT store any operational certificates, VRF keys, signing keys or cold keys.
