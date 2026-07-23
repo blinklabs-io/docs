@@ -3,9 +3,9 @@ title: Update Dingo Node
 description: SPO Guide for Dingo Pools - How to update your Dingo Node.
 ---
 
-## How to update your Dingo Node 
+## How to Update Your Dingo Node 
 
-## Step 1 - Download latest release
+## Step 1 - Download Latest Release
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
 ⚠️ Adjust the version and architecture to match your system.
@@ -16,7 +16,7 @@ wget https://github.com/blinklabs-io/dingo/releases/download/v0.66.2/dingo-v0.66
 
 ***
 
-## Step 2 - Stop Dingo Node
+## Step 2 - Stop the Dingo Node
 
 ```
 sudo systemctl stop dingo
@@ -24,7 +24,7 @@ sudo systemctl stop dingo
 
 ***
 
-## Step 3 - Copy Dingo node to `/usr/local/bin/`
+## Step 3 - Copy Dingo Binary to `/usr/local/bin/`
 
 ```
 sudo cp ~/dingo/dingo /usr/local/bin/
@@ -34,10 +34,10 @@ Verify it has been copied by `which dingo`
 
 ***
 
-## Step 4 - Check for Config file updates
+## Step 4 - Check for Configuration File Updates
 Check to make sure no config updates are required.
 
-Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release notes and the [Quick Start](../../002-quick-start-overview) guide.
+Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release Notes and the [Quick Start](../../002-quick-start-overview) guide.
 
 > 💡 To view and edit `dingo.yaml` file run:
 >
@@ -48,19 +48,19 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 
 ***
 
-## Step 5 - RECOMMENDED - Remove `.dingo` Database and Resync Mithril Snapshot
-Since Dingo is in heavy development it's recommended during upgrading to delete database and start fresh.
+## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
+Since Dingo is under active development it is recommended during upgrading to delete database and start fresh.
 
-### Step 5.1 - Delete `.dingo` Database
-> 💡 To view hidden files and double check path run:
+### Step 5.1 - Delete the `.dingo` Database
+> 💡 To view hidden files and double-check path run:
 > ```
 > cd ~/dingo
 > ls -a
 > ```
 >
-> You should see `.dingo`. If not check your dingo.yaml file for the database path you used.
+> You should see `.dingo`. If not, check your `dingo.yaml` file for the database path you configured.
 
-Delete the .dingo database file by running:
+Delete the `.dingo` database directory by running:
 ```
 cd ~/dingo
 rm -r .dingo
@@ -69,7 +69,7 @@ rm -r .dingo
 ### Step 5.2 - Mithril Sync
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-Run the following command from your dingo directory:
+Run the following command from your `~dingo` directory:
 ```
 dingo sync --mithril
 ```
@@ -91,14 +91,14 @@ sudo systemctl start dingo
 ***
 
 ## Step 6 - Verify the Update
-Check Version is updated:
+Verify that the new version is installed:
 ```
 dingo version
 ```
 
 ***
 
-## Step 7 - Check Status
+## Step 7 - Check the Service Status
 Verify the service is running:
 ```
 sudo systemctl status dingo.service
