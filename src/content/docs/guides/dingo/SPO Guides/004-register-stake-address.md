@@ -5,7 +5,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Address.
 
 # Dingo - Register Stake Address
 
-> The stake address must be registered on-chain. This costs transaction fees plus a deposit (currently 2 ADA on mainnet, returned when you deregister).
+> The stake address must be registered on-chain before it can be used. This costs transaction fees plus a deposit (currently 2 ADA, as defined by the network protocol parameters). The deposit is returned when the stake address is deregistered.
 
 ✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
 
@@ -24,17 +24,17 @@ cardano-cli conway stake-address registration-certificate \
 ***
 
 ## Step 2 - Build Transaction 
-Copy stake.cert to your hot environment to your dingo folder.
+Copy `stake.cert` to the `~dingo` directory on your hot environment.
 
 
-Query the current slot (used for --invalid-hereafter):
+Query the current slot (used for `--invalid-hereafter`):
 
 ```
 currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
 echo Current Slot: $currentSlot
 ```
 
-Build the transaction — transaction build calculates fees and change automatically:
+Next build the transaction. The `transaction build` calculates fees and change automatically:
 
 ```
 cd ~/dingo
@@ -53,9 +53,9 @@ cardano-cli conway transaction build \
 
 ## Step 3 - Sign Transaction
 
-Copy tx.raw to your air gapped dingo folder.
+Copy `tx.raw` to the `~dingo` directory on your air-gapped machine.
 
-Sign with both the payment and stake signing keys:
+Sign transaction using both the payment and stake signing keys:
 
 ⚠️ On an air-gapped machine
 
@@ -72,7 +72,7 @@ cardano-cli conway transaction sign \
 
 ## Step 4 - Submit Transaction
 
-Copy tx.signed to your hot environment in your dingo folder.
+Copy `tx.signed` to the `~dingo` directory on your hot environment.
 
 ```
 cd ~/dingo
