@@ -7,7 +7,7 @@ description: SPO Guide for Dingo Pools - Generate Payment and Stake Keys.
 
 ✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
 
-## Step 1 - Obtain the protocol-parameters
+## Step 1 - Obtain the protocol parameters
 
 ```
 cd ~/dingo
@@ -21,7 +21,7 @@ cardano-cli conway query protocol-parameters \
 ## Step 2 - Generate a new payment key pair
 Generate a new payment key pair: `payment.skey` and `payment.vkey`
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cd ~/dingo
@@ -35,7 +35,7 @@ cardano-cli conway address key-gen \
 ## Step 3 - Generate a new stake address key pair
 Generate a new stake address key pair: `stake.skey` and `stake.vkey`
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cardano-cli conway stake-address key-gen \
@@ -48,7 +48,7 @@ cardano-cli conway stake-address key-gen \
 ## Step 4 - Generate your stake address
 Generate your stake address from the stake address verification key and store it in `stake.addr`
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cardano-cli conway stake-address build \
