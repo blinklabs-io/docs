@@ -71,16 +71,16 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 <br>
 
 ## Step 3 - Run  Cardano CLI Command to Query Tip
-Let run our first Cardano CLI command to query the tip of the preview blockchain using Dingo node to provide the data.  
+Let's run our first Cardano CLI command to query the tip of the Preview network using the Dingo node.  
 
-We will run the following command to query the tip:
+Run the following command to query the tip:
 
 ```
 ./cardano-cli query tip \
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
-> ⚠️ Please note the socket-path above assumes you downloaded Cardano CLI to your dingo folder. If you put cardano-cli binary in a different location, please adjust the path. You can use `realpath dingo.socket` to find the absolute path to your dingo.socket.
+> ⚠️ Please note: The `--socket-path` shown above assumes you downloaded cardano-cli into your `~/dingo` directory. If you installed cardano-cli elsewhere, adjust the path accordingly. You can use `realpath dingo.socket` to determine the absolute path to `dingo.socket`.
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
@@ -89,13 +89,13 @@ We will run the following command to query the tip:
 <br>
 
 ## Step 4 - Using Environment Variables (Optional)
-Instead of specifying the Cardano Node Network and Cardano Node Socket each time we run a cardano-cli command we can use environment variables.
+Instead of specifying the Cardano network and node socket each time you run a cardano-cli command, you can use environment variables.
 
 <br>
 
 ### Setting Environment Variables for Current Session (Option 1)
 
-We can run the following commands to export the variable for our current session.
+Run the following commands to export the variable for our current session.
 
 Socket Path:
 
@@ -149,5 +149,5 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 
 <br>
 
-### Congratulations you are ready to start using Dingo node with the Cardano CLI!
+### Congratulations! You are now ready to use your Dingo node with the Cardano CLI!
 Learn more about the Cardano CLI at [https://developers.cardano.org](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/)
