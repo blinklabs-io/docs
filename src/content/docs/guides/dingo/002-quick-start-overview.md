@@ -5,19 +5,19 @@ description: Dingo Quick Start Overview.
 
 # Dingo
 
-A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
+A Cardano blockchain node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
-⚠️ This is a work in progress and is currently under heavy development
+⚠️ Dingo is a work in progress and is currently under heavy development
 
 <br>
 
 ***
 
-For this guide we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
+In this guide, we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
 
 <br>
 
-✅ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
+✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
 ***
 
@@ -108,7 +108,7 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non zero `blockfrostPort`.
+> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non-zero `blockfrostPort`.
 
 ```yaml
 blockfrostPort: 3000
@@ -122,9 +122,9 @@ utxorpcPort: 0
 
 <br>
 
-## Step 3 - Open Ports
+## Step 3 - Open Network Ports
 
-We will cover how to add UFW firewall rules for the ports Dingo needs.
+Configure UFW firewall rules to allow the ports required by Dingo.
 
 > 💡 Tip: UFW stands for Uncomplicated Firewall and is used for managing iptables (netfilter) firewall rules.
 
@@ -134,7 +134,7 @@ To see which ports are currently open:
 sudo ufw status numbered
 ```
 
-#### Add Port 3001 for Ouroboros Node to Node (NtN) Communication
+#### Add Port 3001 for Ouroboros Node-to-Node (NtN) Communication
 
 ```
 sudo ufw allow 3001/tcp
@@ -148,7 +148,7 @@ sudo ufw allow 3001/tcp
 
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-Run the following command from your dingo directory:
+Run the following command from your `~dingo` directory:
 
 ```
 cd ~/dingo
@@ -183,13 +183,15 @@ You should see log output showing the node connecting to peers and syncing the r
 
 <br>
 
-#### Interested in using a systemd service to run a Dingo Node to maximize the uptime by automatically restarting the Dingo node when the computer reboots?
+#### Interested in running Dingo as a systemd service?
+
+Using a systemd service automatically starts Dingo when your system boots and restarts it if it exits unexpectedly.
 [See our guide on how to create a startup service for Dingo](../003-create-start-up-service).
 
 ***
 
 <br>
 
-### Congratulations you are ready to start using the Dingo node!
+### Congratulations! Your Dingo node is now running.
 
 [Learn how to interact with Dingo using the Cardano CLI](../004-using-dingo-with-cardano-cli).
