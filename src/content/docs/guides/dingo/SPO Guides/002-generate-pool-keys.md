@@ -43,7 +43,7 @@ cardano-cli conway node key-gen-KES \
 
 ## Step 2 - Make a directory to store your cold keys
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 mkdir $HOME/dingo/cold-keys
@@ -54,7 +54,7 @@ pushd $HOME/dingo/cold-keys
 
 ## Step 3 - Generate a set of cold keys and create the cold counter file
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cardano-cli conway node key-gen \
@@ -109,7 +109,7 @@ echo startKesPeriod: ${startKesPeriod}
 
 ✅ Change the <startKesPeriod> value you wrote down in the previous step.
 
-⚠️ On Air Gapped once you have copied `kes.vkey` to your cold environment.
+⚠️ On an air-gapped machine once you have copied `kes.vkey` to your cold environment.
 
 ```
 cd ~/dingo
