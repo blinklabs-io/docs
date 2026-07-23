@@ -66,7 +66,7 @@ cat previewPoolMetaDataHash.txt
 To make updating your Pool certificate easier if you need to make changes in the future, we will create a `env` file with our pool information and a script to generate the `pool.cert` file.
 
 ### Step 5.1 - Create a pool-scripts folder
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cd ~/dingo
@@ -161,7 +161,7 @@ Copy `pool.cert` to your hot environment either your BP or Relay in your dingo f
 ***
 
 ## Step 6 - Pledge stake to your stake pool
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 
 ```
 cd ~/dingo
@@ -198,7 +198,7 @@ cardano-cli conway transaction build \
 ### Step 7.3 - Sign the transaction
 Copy tx.raw to your cold environment in your dingo folder
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 ```
 cd ~/dingo
 cardano-cli conway transaction sign \
@@ -223,7 +223,7 @@ cardano-cli conway transaction submit --tx-file tx.signed
 
 ### Step 8.1 - Create `stakepoolid.txt file:
 
-⚠️ On Air Gapped
+⚠️ On an air-gapped machine
 ```
 cardano-cli conway stake-pool id \
 --cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
