@@ -16,4 +16,4 @@ Adder se distribuye como un paquete macOS `.pkg` firmado y notarizado.
 ## Abrir Adder
 
 - Abre `Adder` desde `/Applications`.
-- O abre Terminal y ejecuta `open /Applications/Adder.app`.
+- O ejecuta `open /Applications/Adder.app` en Terminal.
