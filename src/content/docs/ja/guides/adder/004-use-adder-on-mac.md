@@ -16,4 +16,4 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 ## Adder を起動する
 
 - `/Applications` から `Adder` を開きます。
-- または、Terminal で `open /Applications/Adder.app` を実行します.
+- または、`ターミナル` で `open /Applications/Adder.app` を実行します.
