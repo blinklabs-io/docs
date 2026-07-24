@@ -71,7 +71,7 @@ cardano-cli conway transaction build \
     --change-address $(cat payment.addr) \
     --certificate-file pool.cert \
     --invalid-hereafter $(( ${currentSlot} + 1000 )) \
-    --witness-override 3 \
+    --witness-override 2 \
     --out-file tx.raw
 ```
 
@@ -91,7 +91,6 @@ cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
 --signing-key-file $HOME/dingo/cold-keys/node.skey \
---signing-key-file stake.skey \
 --out-file tx.signed
 ```
 
