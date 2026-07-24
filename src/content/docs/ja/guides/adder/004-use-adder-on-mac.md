@@ -3,8 +3,17 @@ title: Macでの使用
 description: MacでAdderを使用する方法。
 ---
 
-# Macでの使用
+# MacでAdderを使う
 
-1. Releases ページから、Mac のアーキテクチャに合う `Adder.pkg` をダウンロードします。
-2. パッケージを開いてインストールします。インストーラは `Adder.app` を `/Applications` に配置し、作成できる場合は `/usr/local/bin/adder` に `adder` のリンクも作成します。
-3. `/Applications` の `Adder.app` を開きます。`/usr/local/bin/adder` がある場合は、ターミナルから `adder` でも起動できます。
+Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケージとして配布されます。
+
+## Adder をインストールする
+
+1. Adder のリリースページを開き、macOS の `.pkg` パッケージをダウンロードします。
+2. `.pkg` ファイルをダブルクリックして、インストーラの案内に従います。
+3. インストーラは `Adder.app` を `/Applications` に配置します。
+
+## Adder を起動する
+
+- `/Applications` から `Adder` を開きます。
+- または、`ターミナル` で `open /Applications/Adder.app` を実行します.

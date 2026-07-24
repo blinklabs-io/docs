@@ -3,8 +3,17 @@ title: Uso en Mac
 description: Cómo usar Adder en Mac.
 ---
 
-# Instalación y uso en macOS
+# Usar en Mac
 
-1. Descarga el archivo `.pkg` desde la página de versiones y elige el paquete de tu arquitectura, `arm64` para Apple Silicon o `amd64` para Intel.
-2. Ejecuta el instalador y completa la instalación.
-3. El instalador coloca `Adder.app` en `/Applications` y, cuando crea el enlace, deja `adder` disponible en `/usr/local/bin/adder`; abre `Adder.app` desde `/Applications` o ejecuta `adder` en Terminal.
+Adder se distribuye como un paquete macOS `.pkg` firmado y notarizado.
+
+## Instalar Adder
+
+1. Abre la página de versiones de Adder y descarga el paquete macOS `.pkg`.
+2. Haz doble clic en el archivo `.pkg` y sigue las indicaciones del instalador.
+3. El instalador coloca `Adder.app` en `/Applications`.
+
+## Abrir Adder
+
+- Abre `Adder` desde `/Applications`.
+- O ejecuta `open /Applications/Adder.app` en Terminal.
