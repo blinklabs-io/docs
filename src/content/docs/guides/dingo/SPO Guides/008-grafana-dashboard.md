@@ -80,9 +80,9 @@ There are two ways to get the dashboards into Grafana.
 Provisioning automatically loads dashboards from files on disk. Grafana will pick them up on startup or within about 30 seconds if already running.
 
 ```bash
-sudo cp docs/dashboards/provisioning.yaml /etc/grafana/provisioning/dashboards/dingo.yaml
+sudo cp https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards/provisioning.yaml /etc/grafana/provisioning/dashboards/dingo.yaml
 sudo mkdir -p /var/lib/grafana/dashboards/dingo
-sudo cp docs/dashboards/*.json /var/lib/grafana/dashboards/dingo/
+sudo cp https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards/*.json /var/lib/grafana/dashboards/dingo/
 sudo chown -R grafana:grafana /var/lib/grafana/dashboards/dingo/
 sudo systemctl restart grafana-server
 ```
@@ -105,7 +105,7 @@ The alert rules file is ready to use as-is — no editing required.
 Copy the file to your Prometheus rules directory:
 
 ```bash
-sudo cp docs/dashboards/alerts.yaml /etc/prometheus/rules/dingo.yaml
+sudo cp https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards/alerts.yaml /etc/prometheus/rules/dingo.yaml
 ```
 
 Then add it to `prometheus.yml`:
