@@ -5,27 +5,27 @@ description: Create Startup Service for Dingo.
 
 # Dingo
 
-A Cardano blockchain data node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
+A Cardano blockchain node written in Go which actively participates in network communications on the Cardano blockchain using the Ouroboros Network Node-to-Node family of mini-protocols.
 
-⚠️ This is a work in progress and is currently under heavy development
+⚠️ Dingo is a work in progress and is currently under heavy development
 
 <br>
 
 ***
 
-For this guide we will walk you through setting up a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the Dingo node when the computer reboots. To get started follow the steps below.
+In this guide, we will walk you through setting up a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the Dingo node when the computer reboots. To get started follow the steps below.
 
 <br>
 
-✅ This guide assumes typical Linux setup. Please adjust commands and paths as needed.
+✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
-> ✅ For this guide we assume you have already completed the [Quick Start](../002-quick-start-overview) guide.
+> ⚠️ For this guide we assume you have already completed the [Quick Start](../002-quick-start-overview) guide.
 
 ***
 
 <br>
 
-## Step 1 - Move Dingo Binary and Configuration
+## Step 1 - Move the Dingo Binary and Configuration
 
 We will move the Dingo binary to `/usr/local/bin/` and the configuration to `/etc/dingo/` so they are accessible system-wide.
 
@@ -52,7 +52,7 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 
 <br>
 
-## Step 2 - Update Paths in dingo.yaml
+## Step 2 - Update Paths in `dingo.yaml`
 
 Since the service will run as your user but the config is now in `/etc/dingo/`, we need to make sure the database and socket paths use absolute paths. Run the following to regenerate the config with your `$HOME` expanded:
 
@@ -110,7 +110,7 @@ EOF"
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API capable storage and set `blockfrostPort` to a non zero value.
+> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API-capable storage and set `blockfrostPort` to a non-zero value.
 
 ```yaml
 storageMode: "api"
@@ -126,6 +126,13 @@ These ports match the refreshed local Blockfrost explorer example, and operators
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
 ***
+
+You can view and verify our `dingo.yaml` file by running:
+
+```
+cd /etc/dingo/
+sudo nano dingo.yaml
+```
 
 <br>
 
@@ -147,7 +154,7 @@ This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of t
 
 <br>
 
-## Step 4 - Create dingo.service Unit File
+## Step 4 - Create `dingo.service` Unit File
 
 Create the systemd service file. Replace `YOUR_USER` with your username (`echo $USER`):
 
@@ -172,6 +179,12 @@ ENDFILE
 ```
 
 ***
+
+We can view and verify our `dingo.service` file by running:
+
+```
+sudo nano /etc/systemd/system/dingo.service
+```
 
 <br>
 
@@ -212,4 +225,4 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-### Congratulations you have setup a startup service for Dingo!
+### Congratulations! You have successfully set up a `systemd` service for Dingo.
