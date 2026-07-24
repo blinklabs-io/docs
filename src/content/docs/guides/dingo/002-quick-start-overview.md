@@ -148,7 +148,7 @@ sudo ufw allow 3001/tcp
 
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-Run the following command from your `~dingo` directory:
+Run the following command from your `~/dingo` directory:
 
 ```
 cd ~/dingo
