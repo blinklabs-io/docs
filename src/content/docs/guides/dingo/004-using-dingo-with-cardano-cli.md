@@ -33,7 +33,7 @@ Copy the download URL for the latest Cardano CLI binary and run the following co
 
 <br>
 
-⚠️ For this example we place the `cardano-cli` binary in our `~dingo` directory. Adjust the link path to the correct path for the version you want to download. 
+⚠️ For this example we place the `cardano-cli` binary in our `~/dingo` directory. Adjust the link path to the correct path for the version you want to download. 
 
 ```
 cd ~/dingo
