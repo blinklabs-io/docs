@@ -15,7 +15,7 @@ In this guide, we will walk you through downloading and running the Cardano CLI 
 
 <br>
 
-> ✅ This guide we assume you have already downloaded Dingo and synced the blockchain. If not see our [Quick Start](../002-quick-start-overview) guide.
+> ✅ This guide we assumes you have already downloaded Dingo and synced the blockchain. If not, see our [Quick Start](../002-quick-start-overview) guide.
 
 ***
 
