@@ -24,7 +24,7 @@ cardano-cli conway stake-address registration-certificate \
 ***
 
 ## Step 2 - Build Transaction 
-Copy `stake.cert` to the `~dingo` directory on your hot environment.
+Copy `stake.cert` to the `~/dingo` directory on your hot environment.
 
 
 Query the current slot (used for `--invalid-hereafter`):
@@ -53,7 +53,7 @@ cardano-cli conway transaction build \
 
 ## Step 3 - Sign Transaction
 
-Copy `tx.raw` to the `~dingo` directory on your air-gapped machine.
+Copy `tx.raw` to the `~/dingo` directory on your air-gapped machine.
 
 Sign transaction using both the payment and stake signing keys:
 
@@ -72,7 +72,7 @@ cardano-cli conway transaction sign \
 
 ## Step 4 - Submit Transaction
 
-Copy `tx.signed` to the `~dingo` directory on your hot environment.
+Copy `tx.signed` to the `~/dingo` directory on your hot environment.
 
 ```
 cd ~/dingo
