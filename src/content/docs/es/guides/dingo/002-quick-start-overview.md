@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.35.1/dingo-v0.35.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.66.2/dingo-v0.66.2-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -72,7 +72,7 @@ databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
 # `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
-# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Leios.
+# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
 # Deja la clave comentada o omítela para usar el valor predeterminado del modo.
 # mempoolCapacity: 1048576
 
@@ -80,12 +80,14 @@ databasePath: "$HOME/dingo/.dingo"
 mithril:
   aggregatorUrl: ""
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -93,6 +95,8 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
+barkBaseUrl: ""
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
@@ -100,13 +104,22 @@ utxorpcPort: 0
 EOF
 ```
 
-> 💡 Para servir endpoints HTTP compatibles con Blockfrost, cambia `storageMode` a una configuración compatible con API y asigna un valor distinto de cero a `blockfrostPort`.
+> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
+
+> 💡 Para servir Dingo en modo API, cambia `storageMode` a una configuración compatible con API y asigna los puertos que deban exponerse.
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
+midnight:
+  authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
+
+Estos puertos son opcionales, pero los operadores que usen el ejemplo del explorador local o quieran una superficie de API más amplia deben habilitar `utxorpcPort` y `meshPort` de forma explícita.
+
+> 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
@@ -146,6 +159,8 @@ Ejecuta el siguiente comando desde tu directorio dingo:
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada

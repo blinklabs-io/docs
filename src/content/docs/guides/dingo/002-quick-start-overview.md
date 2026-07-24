@@ -72,7 +72,7 @@ databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
 # `mempoolCapacity` is an optional override, not a required setting.
-# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Leios mode.
+# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
 # mempoolCapacity: 1048576
 
@@ -80,6 +80,7 @@ databasePath: "$HOME/dingo/.dingo"
 mithril:
   aggregatorUrl: ""
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
@@ -94,13 +95,12 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
+barkBaseUrl: ""
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
 utxorpcPort: 0
-barkBaseUrl: ""
-barkPort: 0
-barkPrunerFrequency: 1h
 EOF
 ```
 
@@ -108,13 +108,20 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 To serve Blockfrost compatible HTTP endpoints, switch `storageMode` to an API capable setting and assign a non-zero `blockfrostPort`.
+> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
+midnight:
+  authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
+
+These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
+
+> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
@@ -154,6 +161,8 @@ Run the following command from your `~/dingo` directory:
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 Dingo will:
 1. Download the latest Mithril snapshot for your configured network

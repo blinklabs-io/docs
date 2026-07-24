@@ -76,7 +76,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 
 # Mempool
 # `mempoolCapacity` is an optional override, not a required setting.
-# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Leios mode.
+# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
 # mempoolCapacity: 1048576
 
@@ -84,6 +84,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 mithril:
   aggregatorUrl: \"\"
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
@@ -100,7 +101,6 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
-barkPrunerFrequency: 1h
 blockfrostPort: 0
 meshPort: 0
 storageMode: \"core\"
@@ -108,12 +108,22 @@ utxorpcPort: 0
 EOF"
 ```
 
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
+
 > 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API-capable storage and set `blockfrostPort` to a non-zero value.
 
 ```yaml
 storageMode: "api"
 blockfrostPort: 3000
+meshPort: 8080
+midnight:
+  authTokenPolicyId: ""
+utxorpcPort: 9090
 ```
+
+These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
+
+> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
 ***
 
@@ -133,6 +143,8 @@ Before starting the service for the first time, bootstrap the database from a Mi
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
@@ -165,8 +177,6 @@ TimeoutStopSec=5
 WantedBy=multi-user.target
 ENDFILE
 ```
-
-> ⚠️ `debugPort` controls a separate optional `pprof` listener, not the `metricsPort` endpoint. Leave it at `0` by default and enable it only for temporary profiling or debugging.
 
 ***
 

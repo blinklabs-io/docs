@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.35.1）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.66.2）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.35.1/dingo-v0.35.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.66.2/dingo-v0.66.2-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -72,7 +72,7 @@ databasePath: "$HOME/dingo/.dingo"
 
 # Mempool
 # `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
-# 既定値: Praos モードと通常の serve モードでは 1 MiB、Leios モードでは 25 MiB です。
+# 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
 # モードの既定値を使うには、このキーをコメントアウトするか省略します。
 # mempoolCapacity: 1048576
 
@@ -80,12 +80,14 @@ databasePath: "$HOME/dingo/.dingo"
 mithril:
   aggregatorUrl: ""
   cleanupAfterLoad: true
+  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -93,6 +95,8 @@ relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
+barkBaseUrl: ""
+barkPort: 0
 blockfrostPort: 0
 meshPort: 0
 storageMode: "core"
@@ -100,13 +104,22 @@ utxorpcPort: 0
 EOF
 ```
 
-> 💡 Blockfrost互換のHTTPエンドポイントを提供するには、`storageMode`をAPI対応の設定に切り替え、ゼロ以外の`blockfrostPort`を割り当てます。
+> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
+
+> 💡 Dingo を API モードで提供するには、`storageMode` を API 対応の設定に切り替え、必要なポートを割り当てます。
 
 ```yaml
 blockfrostPort: 3000
+meshPort: 8080
+midnight:
+  authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 0
+utxorpcPort: 9090
 ```
+
+これらのポートは任意ですが、ローカルエクスプローラーの例を使う場合や、より広い API を使う場合は `utxorpcPort` と `meshPort` を明示的に有効にしてください。
+
+> 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
@@ -146,6 +159,8 @@ dingoディレクトリから以下のコマンドを実行します：
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
 
 Dingoは次の処理を行います：
 1. 設定したネットワークの最新Mithrilスナップショットをダウンロード
