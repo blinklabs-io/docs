@@ -10,19 +10,21 @@
 	--sl-color-gray-5: #353841;
 	--sl-color-gray-6: #24272f;
 	--sl-color-black: #17181c;
-  --sl-color-orange: #D97706;
+	--sl-color-orange: #D97706;
+	--sl-color-bg-nav: #072252;
+	--sl-color-bg-sidebar: #072252;
 }
 
 body {
   background: #072252
 }
 
-header.astro-vrdttmbt {
+header.header {
   background: #072252;
   border-right: none;
 }
 
-.sl-link-button:where(.astro-xwgiixxa).primary {
+.sl-link-button.primary {
     background: var(--sl-color-orange) !important;
     border-color: var(--sl-color-orange) !important;
     color: var(--sl-color-white) !important;
@@ -32,23 +34,23 @@ header.astro-vrdttmbt {
     border-radius: 0.5em;
 }
 
-.sl-link-button:where(.astro-xwgiixxa).primary:hover {
+.sl-link-button.primary:hover {
     box-shadow: 0 0 2px 1px rgba(251, 191, 36, 0.3);
 }
 
-.sl-link-button:where(.astro-xwgiixxa) svg {
+.sl-link-button svg {
   width: 1.5em;
   height: 1.5em;
   color: var(--sl-color-white);
 }
 
-.tagline:where(.astro-jbfsktt5) {
+.hero .tagline {
     font-size: 2em;
     color: var(--sl-color-gray-2);
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-img:where(.astro-m46x6ez3) {
+.site-title img {
   height: calc(var(--sl-nav-height) - 2* var(--sl-nav-pad-y));
   width: auto;
   max-width: 75%;
@@ -57,14 +59,15 @@ img:where(.astro-m46x6ez3) {
 }
 
 
-a:where(.astro-wy4te6ga) {
+.sidebar-content a {
   color: white;
 }
 
-.sidebar-content:where(.astro-vrdttmbt) {
- background:  #072252
+.sidebar-pane,
+.sidebar-content {
+  background: #072252;
 }
 
-summary:where(.astro-doynk5tl) {
+.sidebar-content summary {
   background: #072252;
 }
