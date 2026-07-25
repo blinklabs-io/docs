@@ -125,6 +125,24 @@ These ports match the refreshed local Blockfrost explorer example, and operators
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
+<br>
+
+💡 Tip: The `network` setting supports the following values:
+
+```yaml
+# Musashi (Leios) testnet
+network: musashi
+
+# Preview testnet
+network: preview
+
+# Pre-production testnet
+network: preprod
+
+# Mainnet - NOT CURRENTLY RECOMMENDED
+network: mainnet
+```
+
 ***
 
 You can view and verify our `dingo.yaml` file by running:
