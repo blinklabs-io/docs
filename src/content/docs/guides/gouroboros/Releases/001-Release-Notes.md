@@ -9,7 +9,7 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
-- Version: v0.189.3 - *[View Release Notes](../v0-189-3)*
+- Release: v0.189.3 - *[View Release Notes](../v0-189-3)*
 - Version: v0.189.2 - *[View Release Notes](../v0-189-2)*
 - Version: v0.189.1 - *[View Release Notes](../v0-189-1)*
 - Version: v0.189.0 - *[View Release Notes](../v0-189-0)*
