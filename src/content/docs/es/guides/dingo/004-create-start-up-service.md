@@ -75,7 +75,7 @@ plugins:
   mempool:
     provider: \"default\"
     config:
-      # Capacidad del mempool en bytes. Déjala comentada para usar el valor predeterminado del modo.
+      # Capacidad del mempool en bytes. Mantén la línea comentada para usar el valor predeterminado del modo.
       # capacity: 1048576
   api:
     blockfrost:
