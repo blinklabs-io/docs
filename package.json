@@ -6,6 +6,8 @@
     "dev": "astro dev --host 0.0.0.0",
     "start": "astro dev",
     "build": "astro build",
+    "check": "npm run check:docs && npm run build",
+    "check:docs": "node scripts/check-docs.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
