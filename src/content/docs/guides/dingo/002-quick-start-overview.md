@@ -102,20 +102,6 @@ socketPath: "$HOME/dingo/dingo.socket"
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
-plugins:
-  api:
-    blockfrost:
-      provider: "builtin"
-      config:
-        port: 0
-    mesh:
-      provider: "builtin"
-      config:
-        port: 0
-    utxorpc:
-      provider: "builtin"
-      config:
-        port: 0
 EOF
 ```
 
