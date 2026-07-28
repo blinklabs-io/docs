@@ -9,6 +9,43 @@ description: Dingo Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+## v0.68.0 (July 28, 2026)
+
+**Title:** Expand Blockfrost coverage, harden recovery, and update dependencies
+
+**Date:** July 28, 2026
+
+**Version:** v0.68.0
+
+This release expands Blockfrost coverage, tightens UTxO and snapshot handling, improves recovery and startup safety, and updates core dependencies.
+
+### Recommended Network Compatibility ⚠️
+
+| Network             | Compatible |
+|---------------------|------------|
+| mainnet             | ⛔         |
+| preprod-testnet     | ✅         |
+| preview-testnet     | ✅         |
+| musashi             | ✅         |
+
+### ✨ Highlights
+
+* Recorded the v0.67.1 release entry so the release index stays complete.
+
+* Preserved the live stake index during API backfill so backfilled data keeps stake history available.
+
+* Aligned the DRep list and response with Blockfrost expectations so governance lookups return the same shape across endpoints.
+
+* Added Blockfrost support for `GET /addresses/{address}` so address lookups return Blockfrost compatible responses.
+
+* Bumped `bark` to keep the release dependency set current.
+
+* Fixed pointer snapshot UTxO handling so snapshots stay consistent during pointer based queries.
+
+* Enabled `stake-address-info` LSQ queries so stake address lookups can return the expected ledger state.
+
+* Updated the example `@blaze-cardano/sdk` dependency to keep the sample app current.
+
 - Version: v0.67.1 - *[View Release Notes](../v0-67-1)*
 
 - Version: v0.67.0 - *[View Release Notes](../v0-67-0)*
