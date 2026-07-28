@@ -59,26 +59,42 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 ```bash
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 # Database
-database:
-  blob:
-    plugin: \"badger\"
-    badger:
-      block-cache-size: 0
-      compression: false
-      data-dir: \"$HOME/dingo/.dingo/badger\"
-      gc: true
-      index-cache-size: 0
-  metadata:
-    plugin: \"sqlite\"
-    sqlite:
-      data-dir: \"$HOME/dingo/.dingo/metadata.db\"
 databasePath: \"$HOME/dingo/.dingo\"
 
-# Mempool
-# `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
-# 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
-# モードの既定値を使うには、このキーをコメントアウトするか省略します。
-# mempoolCapacity: 1048576
+# Plugins
+plugins:
+  storage:
+    blob:
+      provider: \"badger\"
+      config:
+        blockCacheSize: 0
+        compression: false
+        dataDir: \"$HOME/dingo/.dingo/badger\"
+        gc: true
+        indexCacheSize: 0
+    metadata:
+      provider: \"sqlite\"
+      config:
+        dataDir: \"$HOME/dingo/.dingo/metadata.db\"
+  mempool:
+    provider: \"default\"
+    config:
+      # `capacity` はモードの既定値を上書きする任意の設定です。既定値は Praos モードと通常の serve モードで 1 MiB、Musashi モードで 25 MiB です。
+      # 既定値を使うには、このキーをコメントアウトするか省略します。
+      # capacity: 1048576
+  api:
+    blockfrost:
+      provider: \"builtin\"
+      config:
+        port: 0
+    mesh:
+      provider: \"builtin\"
+      config:
+        port: 0
+    utxorpc:
+      provider: \"builtin\"
+      config:
+        port: 0
 
 # Mithril
 mithril:
@@ -101,24 +117,32 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
-blockfrostPort: 0
-meshPort: 0
 storageMode: \"core\"
-utxorpcPort: 0
 EOF"
 ```
 
-> 📝 Blockfrost互換のHTTPエンドポイントを必要とするオペレーターは、API対応のストレージに切り替え、`blockfrostPort`をゼロ以外の値に設定する必要があります。
+> 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
 
 ```yaml
 storageMode: "api"
-blockfrostPort: 3000
-meshPort: 8080
+plugins:
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
 midnight:
   authTokenPolicyId: ""
-utxorpcPort: 9090
 ```
 
 これらのポートは、更新後のローカル Blockfrost エクスプローラーの例に合わせた値です。これらのサービスが必要な場合にのみ有効にできます。

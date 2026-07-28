@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.67.1/dingo-v0.67.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.68.0/dingo-v0.68.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -54,27 +54,45 @@ Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will au
 
 ```
 cat <<EOF > ~/dingo/dingo.yaml
-# Database
-database:
-  blob:
-    plugin: "badger"
-    badger:
-      block-cache-size: 0
-      compression: false
-      data-dir: "$HOME/dingo/.dingo/badger"
-      gc: true
-      index-cache-size: 0
-  metadata:
-    plugin: "sqlite"
-    sqlite:
-      data-dir: "$HOME/dingo/.dingo/metadata.db"
+# Shared database path for the local blob and metadata stores.
 databasePath: "$HOME/dingo/.dingo"
 
+# Storage
+plugins:
+  storage:
+    blob:
+      provider: "badger"
+      config:
+        # Optional Badger data directory. When unset, `databasePath` applies.
+        # dataDir: "$HOME/dingo/.dingo/badger"
+    metadata:
+      provider: "sqlite"
+      config:
+        # Optional SQLite data directory. When unset, `databasePath` applies.
+        # dataDir: "$HOME/dingo/.dingo/metadata.db"
+
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 0
+    mesh:
+      provider: "builtin"
+      config:
+        port: 0
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 0
+
 # Mempool
-# `mempoolCapacity` is an optional override, not a required setting.
+# `plugins.mempool.config.capacity` is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
-# mempoolCapacity: 1048576
+# plugins:
+#   mempool:
+#     config:
+#       capacity: 1048576
 
 # Mithril
 mithril:
@@ -97,10 +115,7 @@ socketPath: "$HOME/dingo/dingo.socket"
 # Storage
 barkBaseUrl: ""
 barkPort: 0
-blockfrostPort: 0
-meshPort: 0
 storageMode: "core"
-utxorpcPort: 0
 EOF
 ```
 
@@ -108,18 +123,27 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 To serve Dingo in API mode, switch `storageMode` to an API capable setting and assign the ports that should be exposed.
+> 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
 ```yaml
-blockfrostPort: 3000
-meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 9090
+plugins:
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
 ```
-
-These ports are optional, but operators using the local explorer example or wanting the broader API surface should enable `utxorpcPort` and `meshPort` explicitly.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 

@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.67.1）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.68.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.67.1/dingo-v0.67.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.68.0/dingo-v0.68.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -54,27 +54,44 @@ dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`�
 
 ```
 cat <<EOF > ~/dingo/dingo.yaml
-# Database
-database:
-  blob:
-    plugin: "badger"
-    badger:
-      block-cache-size: 0
-      compression: false
-      data-dir: "$HOME/dingo/.dingo/badger"
-      gc: true
-      index-cache-size: 0
-  metadata:
-    plugin: "sqlite"
-    sqlite:
-      data-dir: "$HOME/dingo/.dingo/metadata.db"
+# Storage
 databasePath: "$HOME/dingo/.dingo"
 
-# Mempool
-# `mempoolCapacity` は必須ではなく、モードの既定値を上書きする任意の設定です。
-# 既定値: Praos モードと通常の serve モードでは 1 MiB、Musashi モードでは 25 MiB です。
-# モードの既定値を使うには、このキーをコメントアウトするか省略します。
-# mempoolCapacity: 1048576
+plugins:
+  storage:
+    blob:
+      provider: "badger"
+      config:
+        # `dataDir` は任意で、指定しなければ `databasePath` を使います。
+        # dataDir: "$HOME/dingo/.dingo"
+        blockCacheSize: 0
+        compression: false
+        gc: true
+        indexCacheSize: 0
+    metadata:
+      provider: "sqlite"
+      config:
+        # `dataDir` は任意で、指定しなければ `databasePath` を使います。
+        # dataDir: "$HOME/dingo/.dingo"
+  mempool:
+    provider: "default"
+    config:
+      # `capacity` は任意で、コメントアウトするとモードの既定値を使います。
+      # 既定値: 通常のモードでは 1048576 (1 MiB)、leios モードでは 26214400 (25 MiB) です。
+      # capacity: 1048576
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
 
 # Mithril
 mithril:
@@ -94,30 +111,18 @@ privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
-# Storage
+# API and Bark
 barkBaseUrl: ""
 barkPort: 0
-blockfrostPort: 0
-meshPort: 0
 storageMode: "core"
-utxorpcPort: 0
+midnight:
+  authTokenPolicyId: ""
 EOF
 ```
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
-> 💡 Dingo を API モードで提供するには、`storageMode` を API 対応の設定に切り替え、必要なポートを割り当てます。
-
-```yaml
-blockfrostPort: 3000
-meshPort: 8080
-midnight:
-  authTokenPolicyId: ""
-storageMode: "api"
-utxorpcPort: 9090
-```
-
-これらのポートは任意ですが、ローカルエクスプローラーの例を使う場合や、より広い API を使う場合は `utxorpcPort` と `meshPort` を明示的に有効にしてください。
+> 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
