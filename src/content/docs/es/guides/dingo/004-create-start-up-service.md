@@ -95,7 +95,6 @@ plugins:
 mithril:
   aggregatorUrl: \"\"
   cleanupAfterLoad: true
-  downloadMaxTransientRetries: 10
   enabled: true
   verifyCertificates: true
 
