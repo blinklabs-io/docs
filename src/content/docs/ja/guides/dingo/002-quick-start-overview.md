@@ -195,7 +195,7 @@ cd ~/dingo
 <br>
 
 #### コンピューターが再起動したときにDingoノードを自動的に再起動して稼働時間を最大化するためのsystemdサービスの使用に興味がありますか？
-[Dingoのスタートアップサービスを作成する方法についてのガイドを参照してください](../004-create-start-up-service)。
+[Dingoのスタートアップサービスを作成する方法についてのガイドを参照してください](../003-create-start-up-service)。
 
 ***
 
@@ -203,4 +203,4 @@ cd ~/dingo
 
 ### おめでとうございます。Dingoノードを使用する準備が整いました！
 
-[Cardano CLIを使用してDingoと対話する方法を学ぶ](../003-using-dingo-with-cardano-cli)。
+[Cardano CLIを使用してDingoと対話する方法を学ぶ](../004-using-dingo-with-cardano-cli)。
