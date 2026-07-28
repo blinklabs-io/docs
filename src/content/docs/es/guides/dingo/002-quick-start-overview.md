@@ -54,9 +54,10 @@ Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expa
 
 ```bash
 cat <<EOF > ~/dingo/dingo.yaml
+ # Ruta de datos compartida para los almacenes locales de blob y metadata.
 databasePath: "$HOME/dingo/.dingo"
 
-# Plugins de almacenamiento
+# Plugins de almacenamiento y API
 plugins:
   storage:
     blob:
@@ -101,7 +102,6 @@ socketPath: "$HOME/dingo/dingo.socket"
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
-plugins:
   api:
     blockfrost:
       provider: "builtin"
