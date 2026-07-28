@@ -71,6 +71,20 @@ plugins:
         # Optional SQLite data directory. When unset, `databasePath` applies.
         # dataDir: "$HOME/dingo/.dingo/metadata.db"
 
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 0
+    mesh:
+      provider: "builtin"
+      config:
+        port: 0
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 0
+
 # Mempool
 # `plugins.mempool.config.capacity` is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
