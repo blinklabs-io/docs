@@ -54,7 +54,7 @@ Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expa
 
 ```bash
 cat <<EOF > ~/dingo/dingo.yaml
- # Ruta de datos compartida para los almacenes locales de blob y metadata.
+# Ruta de datos compartida para los almacenes locales de blob y metadata.
 databasePath: "$HOME/dingo/.dingo"
 
 # Plugins de almacenamiento y API
@@ -70,6 +70,20 @@ plugins:
       config:
         # Directorio de datos opcional de SQLite. Cuando no se define, se usa databasePath.
         # dataDir: "$HOME/dingo/.dingo/metadata.db"
+
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 0
+    mesh:
+      provider: "builtin"
+      config:
+        port: 0
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 0
 
 # Mempool
 # `plugins.mempool.config.capacity` es una anulación opcional, no un ajuste requerido.
@@ -102,19 +116,6 @@ socketPath: "$HOME/dingo/dingo.socket"
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
-  api:
-    blockfrost:
-      provider: "builtin"
-      config:
-        port: 0
-    mesh:
-      provider: "builtin"
-      config:
-        port: 0
-    utxorpc:
-      provider: "builtin"
-      config:
-        port: 0
 EOF
 ```
 
