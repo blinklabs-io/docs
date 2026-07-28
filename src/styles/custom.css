@@ -1,9 +1,9 @@
 .card {
   position: relative;
-  background: rgb(15 63 138 / 8%);
+  background: var(--bl-card-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--bl-blue-12);
+  border: 1px solid var(--bl-card-border);
   border-radius: 0.75rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -22,7 +22,7 @@
 .sl-link-button.primary {
   background-color: var(--bl-blue);
   border: none;
-  color: var(--bl-white);
+  color: var(--bl-text-on-accent);
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
@@ -33,7 +33,7 @@
 }
 
 .sl-link-button.primary:hover {
-  color: var(--bl-white);
+  color: var(--bl-text-on-accent);
   filter: brightness(1.15);
   box-shadow: 0 3px 12px var(--bl-blue-25);
   transform: translateY(-1px);
@@ -84,8 +84,9 @@
 }
 
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--bl-blue);
-  outline-offset: 2px;
+  outline: 3px solid var(--bl-blue);
+  outline-offset: 3px;
+  border-radius: 0.2rem;
 }
 
 .site-title img {
