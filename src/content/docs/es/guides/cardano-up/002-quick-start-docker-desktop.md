@@ -39,7 +39,7 @@ Sigue las instrucciones en pantalla.
 
 En tu barra de busqueda escribe `powershell` y selecciona ejecutar como administrador.
 
-![cardano-up-open-powershell-admin](/cardano-up-open-powershell-admin.png)
+![cardano-up-open-powershell-admin](/cardano-up-open-powershell-admin.webp)
 
 > Consejo: puedes verificar que docker desktop esta ejecutandose con el siguiente comando en tu PowerShell
 >
@@ -110,7 +110,7 @@ Bajo WSL integration selecciona `Ubuntu` y haz clic en `Apply & restart`
 
 En tu barra de busqueda escribe `ubuntu`, selecciona la aplicacion ubuntu y haz clic en abrir.
 
-![cardano-up-launch-ubuntu-app](/cardano-up-launch-ubuntu-app.png)
+![cardano-up-launch-ubuntu-app](/cardano-up-launch-ubuntu-app.webp)
 
 > CONSEJO: Puedes verificar si docker esta disponible ejecutando `docker`. Mostrara una lista de todos los comandos de docker disponibles.
 >

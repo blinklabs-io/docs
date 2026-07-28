@@ -17,13 +17,13 @@ Now that you have the Adder exe file downloaded, we need to open a command line 
 
 To open a command prompt in Windows, go to your Windows start menu
 
-![adder-windows-start-menu](/adder-windows-start-menu.png)
+![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
 
 
 Next type `cmd` in the search box and then click `Open`
 
-![adder-windows-search-cmd](/adder-windows-search-cmd.png)
+![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
 
 ## Step 2 - Get path for Adder exe
 

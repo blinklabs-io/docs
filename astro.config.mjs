@@ -2,12 +2,16 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLlmsTxt from 'starlight-llms-txt';
+import optimizeDocImages from './src/plugins/optimize-doc-images.mjs';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://docs.blinklabs.io',
 	redirects: {
 		'/': '/home',
+	},
+	markdown: {
+		rehypePlugins: [optimizeDocImages],
 	},
 	integrations: [
 		starlight({
