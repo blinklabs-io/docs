@@ -57,7 +57,6 @@ cat <<EOF > ~/dingo/dingo.yaml
 # Storage
 databasePath: "$HOME/dingo/.dingo"
 
-# Plugins
 plugins:
   storage:
     blob:
