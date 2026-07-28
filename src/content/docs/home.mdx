@@ -1,29 +1,91 @@
 ---
-title: Documentation Home
-description: Guides for Blink Labs Cardano nodes, APIs, monitoring, automation, and developer tools.
+title: Blink Labs Documentation
+description: Explore guides for Blink Labs Cardano nodes, APIs, developer libraries, monitoring, and automation tools.
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import { LinkButton } from '@astrojs/starlight/components';
-import '../../styles/custom.css';
 
-Welcome to the Blink Labs documentation site.
+Build, operate, and observe Cardano infrastructure with Blink Labs' open-source tools.
+Choose a quick start below, browse by what you want to accomplish, or use search to
+jump directly to a command or concept.
 
-The navigation bar to the left can be used to browse the site.
+<LinkButton href="/guides/dingo/002-quick-start-overview/" icon="right-arrow">
+	Start with a Cardano node
+</LinkButton>
 
-## Discover
+## Run and monitor Cardano infrastructure
 
 <CardGrid>
-	<Card title="Check out our Blockchain Tools!" icon="open-book">
-		Try out our open source projects!
-		<LinkButton href="https://blinklabs.io/projects-open-source">
-			Open Source
-		</LinkButton>
+	<Card title="Dingo" icon="open-book">
+		Run a Cardano node written in Go.
+		[Overview](/guides/dingo/001-dingo/) · [Quick start](/guides/dingo/002-quick-start-overview/)
 	</Card>
-	<Card title="Find Out More" icon="information">
-		Learn More about Blink Labs at blinklabs.io
-		<LinkButton href="https://blinklabs.io">
-			blinklabs.io
-		</LinkButton>
+	<Card title="cardano-up" icon="open-book">
+		Install and manage Cardano node environments.
+		[Overview](/guides/cardano-up/001-cardano-up/) · [Quick start](/guides/cardano-up/002-quick-start-docker-desktop/)
+	</Card>
+	<Card title="nview" icon="open-book">
+		Monitor a local Cardano node from your terminal.
+		[Overview](/guides/nview/001-nview/) · [Quick start](/guides/nview/002-quick-start/)
+	</Card>
+	<Card title="TxTop" icon="open-book">
+		Inspect Cardano transactions from a terminal interface.
+		[Overview](/guides/txtop/001-tx-top/) · [Quick start](/guides/txtop/002-quick-start/)
 	</Card>
 </CardGrid>
+
+## Build Cardano applications
+
+<CardGrid>
+	<Card title="gOuroboros" icon="open-book">
+		Build Go applications that communicate with Cardano nodes.
+		[Overview](/guides/gouroboros/001-gouroboros/) · [Go package](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)
+	</Card>
+	<Card title="plutigo" icon="open-book">
+		Work with Plutus data and scripts in pure Go.
+		[Overview](/guides/plutigo/001-plutigo/)
+	</Card>
+	<Card title="Cardano Node API" icon="open-book">
+		Access node functionality through a documented API.
+		[Overview](/guides/cardano-node-api/001-cardano-node-api/) · [Quick start](/guides/cardano-node-api/002-quick-start/)
+	</Card>
+	<Card title="Bursa" icon="open-book">
+		Create and manage Cardano wallets and keys.
+		[Overview](/guides/bursa/001-bursa/) · [Quick start](/guides/bursa/002-quick-start/)
+	</Card>
+	<Card title="Tx Submit API" icon="open-book">
+		Submit Cardano transactions through an HTTP endpoint.
+		[Overview](/guides/txsubmit/001-tx-submit-api/) · [Quick start](/guides/txsubmit/002-quick-start/)
+	</Card>
+	<Card title="Tx Submit API Mirror" icon="open-book">
+		Run a compatible transaction-submit endpoint.
+		[Overview](/guides/txsubmit-api-mirror/001-tx-submit-api-mirror/) · [Quick start](/guides/txsubmit-api-mirror/002-quick-start/)
+	</Card>
+</CardGrid>
+
+## Automate and connect
+
+<CardGrid>
+	<Card title="Adder" icon="open-book">
+		Watch Cardano events and send notifications to the tools you use.
+		[Overview](/guides/adder/001-adder/) · [Quick start](/guides/adder/002-quick-start-overview/)
+	</Card>
+	<Card title="Bluefin" icon="open-book">
+		Connect applications to Cardano data services.
+		[Overview](/guides/bluefin/001-bluefin/) · [Quick start](/guides/bluefin/002-quick-start-overview/)
+	</Card>
+	<Card title="cDNSd" icon="open-book">
+		Discover Cardano network services through DNS.
+		[Read the guide](/guides/cdnsd/)
+	</Card>
+	<Card title="Docker images" icon="open-book">
+		Use Blink Labs projects in containerized environments.
+		[Browse images](/guides/docker-images/)
+	</Card>
+</CardGrid>
+
+## More from Blink Labs
+
+Explore every open-source project on [blinklabs.io](https://blinklabs.io/projects-open-source),
+or contribute to the documentation on [GitHub](https://github.com/blinklabs-io/docs).
