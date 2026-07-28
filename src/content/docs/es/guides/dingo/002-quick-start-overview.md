@@ -121,7 +121,7 @@ EOF
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
-> 💡 Las APIs no se inician fuera de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
+> 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
 ```yaml
 midnight:
