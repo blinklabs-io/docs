@@ -58,27 +58,47 @@ Since the service will run as your user but the config is now in `/etc/dingo/`, 
 
 ```
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
-# Database
-database:
-  blob:
-    plugin: \"badger\"
-    badger:
-      block-cache-size: 0
-      compression: false
-      data-dir: \"$HOME/dingo/.dingo/badger\"
-      gc: true
-      index-cache-size: 0
-  metadata:
-    plugin: \"sqlite\"
-    sqlite:
-      data-dir: \"$HOME/dingo/.dingo/metadata.db\"
+# Global data directory for both blob and metadata storage plugins.
+# Can be overridden with CARDANO_DATABASE_PATH or --data-dir.
 databasePath: \"$HOME/dingo/.dingo\"
 
-# Mempool
-# `mempoolCapacity` is an optional override, not a required setting.
-# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
-# Leave the key commented or omit it to use the mode default.
-# mempoolCapacity: 1048576
+# Plugins
+plugins:
+  storage:
+    blob:
+      provider: \"badger\"
+      config:
+        # Optional Badger data directory. When unset, databasePath applies.
+        dataDir: \"$HOME/dingo/.dingo/badger\"
+        blockCacheSize: 0
+        compression: false
+        gc: true
+        indexCacheSize: 0
+    metadata:
+      provider: \"sqlite\"
+      config:
+        # Optional SQLite data directory. When unset, databasePath applies.
+        dataDir: \"$HOME/dingo/.dingo/metadata.db\"
+  mempool:
+    provider: \"default\"
+    config:
+      # `capacity` is an optional override, not a required setting.
+      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
+      # Leave the key commented or omit it to use the mode default.
+      # capacity: 1048576
+  api:
+    blockfrost:
+      provider: \"builtin\"
+      config:
+        port: 3000
+    mesh:
+      provider: \"builtin\"
+      config:
+        port: 8080
+    utxorpc:
+      provider: \"builtin\"
+      config:
+        port: 9090
 
 # Mithril
 mithril:
@@ -101,10 +121,7 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
-blockfrostPort: 0
-meshPort: 0
 storageMode: \"core\"
-utxorpcPort: 0
 EOF"
 ```
 
