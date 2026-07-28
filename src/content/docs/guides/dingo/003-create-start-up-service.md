@@ -127,18 +127,27 @@ EOF"
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
-> 📝 Operators who want Blockfrost compatible HTTP endpoints must switch to API-capable storage and set `blockfrostPort` to a non-zero value.
-
 ```yaml
 storageMode: "api"
-blockfrostPort: 3000
-meshPort: 8080
+plugins:
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
 midnight:
   authTokenPolicyId: ""
-utxorpcPort: 9090
 ```
 
-These ports match the refreshed local Blockfrost explorer example, and operators can leave them disabled unless those services are needed.
+> 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Set any listener port to `0` to disable that API.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
