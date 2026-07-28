@@ -58,27 +58,38 @@ Como el servicio se ejecutará como tu usuario pero la configuración ahora est�
 
 ```bash
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
-# Database
-database:
-  blob:
-    plugin: \"badger\"
-    badger:
-      block-cache-size: 0
-      compression: false
-      data-dir: \"$HOME/dingo/.dingo/badger\"
-      gc: true
-      index-cache-size: 0
-  metadata:
-    plugin: \"sqlite\"
-    sqlite:
-      data-dir: \"$HOME/dingo/.dingo/metadata.db\"
 databasePath: \"$HOME/dingo/.dingo\"
 
-# Mempool
-# `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
-# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
-# Deja la clave comentada o omítela para usar el valor predeterminado del modo.
-# mempoolCapacity: 1048576
+plugins:
+  storage:
+    blob:
+      provider: \"badger\"
+      config:
+        # Directorio de datos opcional de Badger. Si no se establece, se usa `databasePath`.
+        # dataDir: \"$HOME/dingo/.dingo\"
+    metadata:
+      provider: \"sqlite\"
+      config:
+        # Directorio de datos opcional de SQLite. Si no se establece, se usa `databasePath`.
+        # dataDir: \"$HOME/dingo/.dingo\"
+  mempool:
+    provider: \"default\"
+    config:
+      # Capacidad del mempool en bytes. Déjala comentada para usar el valor predeterminado del modo.
+      # capacity: 1048576
+  api:
+    blockfrost:
+      provider: \"builtin\"
+      config:
+        port: 0
+    mesh:
+      provider: \"builtin\"
+      config:
+        port: 0
+    utxorpc:
+      provider: \"builtin\"
+      config:
+        port: 0
 
 # Mithril
 mithril:
@@ -110,15 +121,26 @@ EOF"
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
-> 📝 Los operadores que quieran endpoints HTTP compatibles con Blockfrost deben cambiar a almacenamiento compatible con API y establecer `blockfrostPort` a un valor distinto de cero.
+> 📝 Los puertos de API solo están activos en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 
 ```yaml
 storageMode: "api"
-blockfrostPort: 3000
-meshPort: 8080
+plugins:
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
 midnight:
   authTokenPolicyId: ""
-utxorpcPort: 9090
 ```
 
 Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
