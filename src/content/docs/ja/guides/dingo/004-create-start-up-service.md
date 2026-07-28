@@ -79,8 +79,8 @@ plugins:
   mempool:
     provider: \"default\"
     config:
-      # `capacity` はモードの既定値を上書きする任意の設定です。
-      # モードの既定値を使うには、このキーをコメントアウトするか省略します。
+      # `capacity` はモードの既定値を上書きする任意の設定です。既定値は Praos モードと通常の serve モードで 1 MiB、Musashi モードで 25 MiB です。
+      # 既定値を使うには、このキーをコメントアウトするか省略します。
       # capacity: 1048576
   api:
     blockfrost:
