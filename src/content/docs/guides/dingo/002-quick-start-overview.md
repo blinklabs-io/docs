@@ -54,25 +54,25 @@ Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will au
 
 ```
 cat <<EOF > ~/dingo/dingo.yaml
-# Database path shared by the local blob and metadata stores.
+# Shared database path for the local blob and metadata stores.
 databasePath: "$HOME/dingo/.dingo"
 
-# Storage plugins
+# Storage
 plugins:
   storage:
     blob:
       provider: "badger"
       config:
-        # Optional Badger data directory. When unset, databasePath applies.
+        # Optional Badger data directory. When unset, `databasePath` applies.
         # dataDir: "$HOME/dingo/.dingo/badger"
     metadata:
       provider: "sqlite"
       config:
-        # Optional SQLite data directory. When unset, databasePath applies.
+        # Optional SQLite data directory. When unset, `databasePath` applies.
         # dataDir: "$HOME/dingo/.dingo/metadata.db"
 
 # Mempool
-# `plugins.mempool.config.capacity` is an optional override, not a required setting.
+# `plugins.mempool.config.capacity` is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
 # plugins:
@@ -123,7 +123,7 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 API servers remain inactive outside API storage mode, and setting a port to `0` disables that API.
+> 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
 ```yaml
 midnight:
