@@ -65,12 +65,12 @@ plugins:
     blob:
       provider: \"badger\"
       config:
-        # Directorio de datos opcional de Badger. Si no se establece, se usa `databasePath`.
+        # Directorio de datos opcional de Badger. Si no lo defines, `databasePath` aporta la ruta.
         # dataDir: \"$HOME/dingo/.dingo\"
     metadata:
       provider: \"sqlite\"
       config:
-        # Directorio de datos opcional de SQLite. Si no se establece, se usa `databasePath`.
+        # Directorio de datos opcional de SQLite. Si no lo defines, `databasePath` aporta la ruta.
         # dataDir: \"$HOME/dingo/.dingo\"
   mempool:
     provider: \"default\"
@@ -121,7 +121,7 @@ EOF"
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
-> 📝 Los puertos de API solo están activos en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
+> 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 
 ```yaml
 storageMode: "api"
