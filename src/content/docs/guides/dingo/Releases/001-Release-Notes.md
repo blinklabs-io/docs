@@ -62,6 +62,20 @@ This release expands Blockfrost coverage, tightens UTxO and snapshot handling, i
 
 * Improved rollback ordering in Ouroboros so rollback observation happens before the apply gate advances.
 
+* Hardened genesis restart safety so restarts recover cleanly after genesis state changes.
+
+* Stabilized open database ownership safety so shared database access remains safe across ownership changes.
+
+* Protected reward_live_stake snapshot handling so mark snapshot processing uses the live stake view.
+
+* Recovered the replay path loop so failures can restart cleanly instead of stalling the node.
+
+* Parsed Leios pool reward accounts correctly so reward account data remains available during ledger processing.
+
+* Applied backpressure to event processing so the node preserves events instead of dropping them under load.
+
+* Welcomed @mmahut as a new contributor for this release.
+
 - Version: v0.67.1 - *[View Release Notes](../v0-67-1)*
 
 - Version: v0.67.0 - *[View Release Notes](../v0-67-0)*
