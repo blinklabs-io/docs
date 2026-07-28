@@ -46,6 +46,22 @@ This release expands Blockfrost coverage, tightens UTxO and snapshot handling, i
 
 * Updated the example `@blaze-cardano/sdk` dependency to keep the sample app current.
 
+* Refined the AWS SDK for Go v2 dependency to the newer release.
+
+* Upgraded `cloud.google.com/go/storage` to the newer release.
+
+* Renewed DRep activity from certificates so governance lookups stay current.
+
+* Corrected the AWS SDK for Go v2 credentials dependency to the newer release.
+
+* Matched exact-address UTxO lookups across Blockfrost and UTxO-RPC so both interfaces return the same outputs.
+
+* Refactored the plugin system and kept configuration migration compatible with existing setups.
+
+* Synced the AWS SDK for Go v2 config dependency to the newer release.
+
+* Improved rollback ordering in Ouroboros so rollback observation happens before the apply gate advances.
+
 - Version: v0.67.1 - *[View Release Notes](../v0-67-1)*
 
 - Version: v0.67.0 - *[View Release Notes](../v0-67-0)*
