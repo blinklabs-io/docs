@@ -1,6 +1,6 @@
 ---
 title: docker images
-description: A guide about docker images.
+description: Find and run container images for Blink Labs Cardano projects.
 ---
 
 This guide provides information about docker images.

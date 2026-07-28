@@ -1,6 +1,6 @@
 ---
 title: Cardano Node API
-description: A guide about Cardano Node API.
+description: Install and use the Blink Labs Cardano Node API to access node functionality over HTTP.
 ---
 
 ![cardano-node-api-logo](/cardano-node-api-logo.png)
@@ -19,5 +19,4 @@ Simply download the Cardano Node API binary file from blinklabs.io on to your no
 <br>
 
 ✅ Get started with our [Quick Start](../002-quick-start) guide to start using Cardano Node API.
-
 

@@ -1,6 +1,6 @@
 ---
 title: gOuroboros
-description: Introduction to gOuroboros.
+description: Build Go applications that communicate with Cardano nodes using the gOuroboros framework.
 ---
 
 ![gOuroboros-logo](/gOuroboros-logo.png)

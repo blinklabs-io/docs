@@ -1,6 +1,6 @@
 ---
 title: Bursa
-description: Introduction to Bursa.
+description: Create and manage Cardano wallets, addresses, keys, hashes, certificates, and scripts with Bursa.
 ---
 
 ![bursa-logo](/bursa-logo-with-text-horizontal.png)
@@ -11,4 +11,3 @@ A programmatic Cardano wallet, written in Go, which exposes an API, CLI, and lib
 It’s easy, just download the Bursa executable file from blinklabs.io and open a command prompt on your computer. 
 
 ✅ Get started with our [Quick Start](../002-quick-start) guide
-

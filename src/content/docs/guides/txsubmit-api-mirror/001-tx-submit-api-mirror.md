@@ -1,6 +1,6 @@
 ---
 title: Tx Submit API Mirror
-description: A guide about Tx Submit API Mirror.
+description: Run a compatible mirror of the Cardano transaction submit API.
 ---
 
 A simple Cardano transaction submission API service which mirrors all incoming requests asynchronously to configured backend submission API services.

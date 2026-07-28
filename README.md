@@ -1,54 +1,55 @@
-# Starlight Starter Kit: Basics
+# Blink Labs documentation
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Documentation for Blink Labs open-source Cardano infrastructure, APIs, and
+developer tools. The production site is available at
+[docs.blinklabs.io](https://docs.blinklabs.io).
 
-```
-npm create astro@latest -- --template starlight
-```
+## Local development
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/starlight/tree/main/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/starlight/tree/main/examples/basics)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/withastro/starlight&create_from_path=examples/basics)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwithastro%2Fstarlight%2Ftree%2Fmain%2Fexamples%2Fbasics&project-name=my-starlight-docs&repository-name=my-starlight-docs)
+Requirements:
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Node.js `^20.19.0` or `>=22.12.0`
+- npm
 
-## 🚀 Project Structure
+Install dependencies and start the Astro development server:
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
-
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   ├── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+```sh
+npm ci
+npm run dev
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+The site is available at `http://localhost:4321`.
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+## Validate a change
 
-Static assets, like favicons, can be placed in the `public/` directory.
+Create the production build before opening a pull request:
 
-## 🧞 Commands
+```sh
+npm run build
+```
 
-All commands are run from the root of the project, from a terminal:
+The build generates the static site, Pagefind search index, sitemap, and
+LLM-friendly text files in `dist/`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Content structure
 
-## 👀 Want to learn more?
+- `src/content/docs/` contains English documentation.
+- `src/content/docs/ja/` contains Japanese translations.
+- `src/content/docs/es/` contains Spanish translations.
+- `public/` contains screenshots and other static assets.
+- `astro.config.mjs` defines Starlight, locales, and sidebar navigation.
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+Add product documentation under `src/content/docs/guides/<product>/`. Keep
+translated filenames aligned with their English counterparts so Starlight can
+generate correct language alternatives.
+
+## Contributing
+
+Use focused pull requests and include:
+
+- A concise explanation of the user-facing change.
+- Updated translations when the same content exists in Japanese or Spanish.
+- A successful `npm run build`.
+
+Report documentation issues or propose improvements in the
+[Blink Labs docs repository](https://github.com/blinklabs-io/docs/issues).

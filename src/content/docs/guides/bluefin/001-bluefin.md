@@ -1,6 +1,6 @@
 ---
 title: Bluefin
-description: Introduction to Bluefin.
+description: Get started with Bluefin and connect applications to Cardano data services.
 ---
 
 ![bluefin-logo](/bluefin-logo.png)
