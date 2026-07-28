@@ -11,13 +11,13 @@ description: Dingo Release Notes
 
 ## v0.68.0 (July 28, 2026)
 
-**Title:** Expand Blockfrost coverage, harden recovery, and update dependencies
+**Title:** Expand Blockfrost coverage, strengthen recovery, and update dependencies
 
 **Date:** July 28, 2026
 
 **Version:** v0.68.0
 
-This release expands Blockfrost coverage, tightens UTxO and snapshot handling, improves recovery and startup safety, and updates core dependencies.
+This release expands Blockfrost coverage, tightens UTxO and snapshot handling, strengthens restart and replay recovery, and updates key dependencies.
 
 ### Recommended Network Compatibility ⚠️
 
