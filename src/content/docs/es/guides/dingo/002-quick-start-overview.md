@@ -54,27 +54,30 @@ Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expa
 
 ```bash
 cat <<EOF > ~/dingo/dingo.yaml
-# Database
-database:
-  blob:
-    plugin: "badger"
-    badger:
-      block-cache-size: 0
-      compression: false
-      data-dir: "$HOME/dingo/.dingo/badger"
-      gc: true
-      index-cache-size: 0
-  metadata:
-    plugin: "sqlite"
-    sqlite:
-      data-dir: "$HOME/dingo/.dingo/metadata.db"
 databasePath: "$HOME/dingo/.dingo"
 
+# Plugins de almacenamiento
+plugins:
+  storage:
+    blob:
+      provider: "badger"
+      config:
+        # Directorio de datos opcional de Badger. Cuando no se define, se usa databasePath.
+        # dataDir: "$HOME/dingo/.dingo/badger"
+    metadata:
+      provider: "sqlite"
+      config:
+        # Directorio de datos opcional de SQLite. Cuando no se define, se usa databasePath.
+        # dataDir: "$HOME/dingo/.dingo/metadata.db"
+
 # Mempool
-# `mempoolCapacity` es una anulación opcional, no un ajuste requerido.
+# `plugins.mempool.config.capacity` es una anulación opcional, no un ajuste requerido.
 # Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
 # Deja la clave comentada o omítela para usar el valor predeterminado del modo.
-# mempoolCapacity: 1048576
+# plugins:
+#   mempool:
+#     config:
+#       capacity: 1048576
 
 # Mithril
 mithril:
@@ -97,27 +100,47 @@ socketPath: "$HOME/dingo/dingo.socket"
 # Storage
 barkBaseUrl: ""
 barkPort: 0
-blockfrostPort: 0
-meshPort: 0
 storageMode: "core"
-utxorpcPort: 0
+plugins:
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 0
+    mesh:
+      provider: "builtin"
+      config:
+        port: 0
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 0
 EOF
 ```
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
-> 💡 Para servir Dingo en modo API, cambia `storageMode` a una configuración compatible con API y asigna los puertos que deban exponerse.
+> 💡 Las APIs no se inician fuera de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
 ```yaml
-blockfrostPort: 3000
-meshPort: 8080
 midnight:
   authTokenPolicyId: ""
 storageMode: "api"
-utxorpcPort: 9090
+plugins:
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
 ```
-
-Estos puertos son opcionales, pero los operadores que usen el ejemplo del explorador local o quieran una superficie de API más amplia deben habilitar `utxorpcPort` y `meshPort` de forma explícita.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
