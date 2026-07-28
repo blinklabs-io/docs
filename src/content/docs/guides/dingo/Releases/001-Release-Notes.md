@@ -38,27 +38,27 @@ This release expands Blockfrost coverage, tightens UTxO and snapshot handling, s
 
 * Added Blockfrost support for `GET /addresses/{address}` so address lookups return Blockfrost compatible responses.
 
-* Bumped `bark` to keep the release dependency set current.
+* Updated `bark` to keep the release dependency set current.
 
 * Fixed pointer snapshot UTxO handling so snapshots stay consistent during pointer based queries.
 
 * Enabled `stake-address-info` LSQ queries so stake address lookups can return the expected ledger state.
 
-* Updated the example `@blaze-cardano/sdk` dependency to keep the sample app current.
+* Refreshed the example `@blaze-cardano/sdk` dependency so the sample app stays current.
 
-* Refined the AWS SDK for Go v2 dependency to the newer release.
+* Refined the AWS SDK for Go v2 dependency set to the newer release.
 
 * Upgraded `cloud.google.com/go/storage` to the newer release.
 
-* Renewed DRep activity from certificates so governance lookups stay current.
+* Restored DRep activity from certificates so governance lookups stay current.
 
-* Corrected the AWS SDK for Go v2 credentials dependency to the newer release.
+* Adjusted the AWS SDK for Go v2 credentials dependency to the newer release.
 
 * Matched exact-address UTxO lookups across Blockfrost and UTxO-RPC so both interfaces return the same outputs.
 
 * Refactored the plugin system and kept configuration migration compatible with existing setups.
 
-* Synced the AWS SDK for Go v2 config dependency to the newer release.
+* Aligned the AWS SDK for Go v2 config dependency with the newer release.
 
 * Improved rollback ordering in Ouroboros so rollback observation happens before the apply gate advances.
 
