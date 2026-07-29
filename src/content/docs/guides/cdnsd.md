@@ -1,6 +1,6 @@
 ---
 title: cdnsd
-description: A guide about cdnsd.
+description: Discover and publish Cardano network services through DNS with cDNSd.
 ---
 
 This guide provides information about cdnsd.

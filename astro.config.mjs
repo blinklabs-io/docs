@@ -17,6 +17,10 @@ export default defineConfig({
 				'./src/styles/custom.css',
 			],
 			title: 'Blink Labs',
+			editLink: {
+				baseUrl: 'https://github.com/blinklabs-io/docs/edit/main/',
+			},
+			lastUpdated: true,
 			plugins: [starlightLlmsTxt()],
 			logo: {
 				src: './src/assets/blinklabs-white.svg',

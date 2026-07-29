@@ -1,6 +1,6 @@
 ---
 title: TxTop
-description: A guide about TxTop.
+description: Inspect live Cardano transaction activity from a terminal interface with TxTop.
 ---
 
 ![txtop-screen](/txtop-screen.png)

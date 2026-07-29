@@ -1,6 +1,6 @@
 ---
 title: Adder
-description: Introduction to Adder.
+description: Monitor Cardano blocks and transactions, filter events, and send notifications with Adder.
 ---
 
 ![adder-logo](/adder-logo-with-text-horizontal.png)

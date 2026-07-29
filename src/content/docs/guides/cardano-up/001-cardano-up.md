@@ -1,6 +1,6 @@
 ---
 title: cardano-up
-description: A guide about cardano-up.
+description: Install, configure, and manage Cardano node environments with cardano-up.
 ---
 
 Command line utility for managing Cardano services. cardano-up allows you to use a command line utility to install Cardano services by using docker images.

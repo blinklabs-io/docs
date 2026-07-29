@@ -1,6 +1,6 @@
 ---
 title: Dingo
-description: Introduction to Dingo.
+description: Run Dingo, a Cardano blockchain node written in Go, and connect it to Cardano tools.
 ---
 
 ![dingo-logo](/dingo-logo-250.png)
