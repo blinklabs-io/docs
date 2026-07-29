@@ -26,6 +26,7 @@
   --sl-color-bg-nav: rgb(10 18 40 / 85%);
   --sl-color-bg-sidebar: rgb(8 15 35 / 95%);
   --sl-color-bg-inline-code: var(--bl-blue-10);
+  /* Intentionally remove Starlight dividers for the flat, borderless design. */
   --sl-color-hairline-light: transparent;
   --sl-color-hairline: transparent;
   --sl-color-hairline-shade: transparent;

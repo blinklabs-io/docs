@@ -37,7 +37,13 @@ export default defineConfig({
 					attrs: {
 						rel: 'stylesheet',
 						href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap',
+						media: 'print',
+						onload: "this.media='all'",
 					},
+				},
+				{
+					tag: 'noscript',
+					content: '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">',
 				},
 			],
 			title: 'Blink Labs',
