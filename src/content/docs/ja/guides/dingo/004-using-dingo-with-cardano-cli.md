@@ -35,9 +35,9 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 ⚠️ この例では、Cardano-cliバイナリを`dingo`フォルダに配置します。ダウンロードしたいバージョンに応じてリンクパスを調整してください。
 
-```
+```bash
 cd ~/dingo
-wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
+wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.0.0.0/cardano-cli-11.0.0.0-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -116,13 +116,13 @@ export CARDANO_NODE_NETWORK_ID=2
 
 ソケットパス：
 
-```
-echo CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
+```bash
+echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
 ノードネットワーク：
 
-```
+```bash
 echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 ```
 

@@ -198,6 +198,7 @@ ENDFILE
 Habilita el servicio para que se inicie en el arranque e inícialo ahora:
 
 ```bash
+sudo systemctl daemon-reload
 sudo systemctl enable dingo.service
 sudo systemctl start dingo.service
 ```

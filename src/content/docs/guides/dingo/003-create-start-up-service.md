@@ -235,7 +235,8 @@ sudo nano /etc/systemd/system/dingo.service
 
 Enable the service to start on boot and start it now:
 
-```
+```bash
+sudo systemctl daemon-reload
 sudo systemctl enable dingo.service
 sudo systemctl start dingo.service
 ```
