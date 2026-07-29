@@ -1,31 +1,98 @@
 .card {
   position: relative;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(15 63 138 / 8%);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  transition: all 0.3s;
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--bl-blue-12);
+  border-radius: 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.link {
-  position: relative;
-  transition: all 0.3s;
+.card:hover {
+  border-color: var(--bl-blue-30);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 20%), 0 0 0 1px var(--bl-blue-10);
+  transform: translateY(-2px);
 }
 
-.link::before {
-  content: '';
-  position: absolute;
-  inset: -16px;
-  background: linear-gradient(to right, rgb(79, 70, 229), rgb(37, 99, 235));
-  border-radius: 16px;
-  filter: blur(16px);
-  opacity: 0;
-  transition: opacity 1s;
-  z-index: -1;
+.card .icon {
+  border-color: var(--bl-blue-20);
+  background-color: var(--bl-blue-8);
 }
 
-.link:hover::before {
-  opacity: 0.2;
-  transition-duration: 0.2s;
+.sl-link-button.primary {
+  background-color: var(--bl-blue);
+  border: none;
+  color: var(--bl-white);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  padding: 0.55em 1.5em;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.25s ease, transform 0.15s ease, filter 0.25s ease;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+}
+
+.sl-link-button.primary:hover {
+  color: var(--bl-white);
+  filter: brightness(1.15);
+  box-shadow: 0 3px 12px var(--bl-blue-25);
+  transform: translateY(-1px);
+}
+
+.sl-link-button.primary:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  filter: brightness(0.95);
+}
+
+.sl-link-button.secondary {
+  border-color: var(--bl-blue-30);
+  color: var(--bl-white);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.sl-link-button.secondary:hover {
+  border-color: var(--bl-blue);
+  background-color: var(--bl-blue-10);
+}
+
+.sl-link-button svg {
+  width: 1.25em;
+  height: 1.25em;
+  color: currentColor;
+}
+
+.hero h1 {
+  color: var(--bl-white);
+}
+
+.tagline {
+  font-size: clamp(1.1rem, calc(0.0625rem + 2.5vw), 1.35rem);
+  color: var(--sl-color-gray-2);
+  text-shadow: 0 0 30px rgb(0 0 0 / 30%);
+  line-height: 1.7;
+}
+
+.starlight-aside {
+  border-radius: 0.5rem;
+  border-inline-start-width: 3px;
+}
+
+::selection {
+  background-color: var(--bl-blue-30);
+  color: var(--bl-white);
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--bl-blue);
+  outline-offset: 2px;
+}
+
+.site-title img {
+  height: calc((var(--sl-nav-height) - 2 * var(--sl-nav-pad-y)) * 0.65);
+  transition: opacity 0.2s ease;
+}
+
+.site-title:hover img {
+  opacity: 0.85;
 }
