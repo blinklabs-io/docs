@@ -203,6 +203,7 @@ ENDFILE
 起動時にサービスが実行されるように有効化し、すぐに開始します：
 
 ```bash
+sudo systemctl daemon-reload
 sudo systemctl enable dingo.service
 sudo systemctl start dingo.service
 ```

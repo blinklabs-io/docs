@@ -35,9 +35,9 @@ Copia la ruta al ultimo archivo binario de Cardano CLI y ejecuta el siguiente co
 
 ⚠️ Para este ejemplo ponemos el binario de Cardano-cli en nuestra carpeta `dingo`. Ajusta la ruta del enlace a la ruta correcta para la version que deseas descargar.
 
-```
+```bash
 cd ~/dingo
-wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-10.11.1.0/cardano-cli-10.11.1.0-x86_64-linux.tar.gz -O - | tar -xz
+wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.0.0.0/cardano-cli-11.0.0.0-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -116,13 +116,13 @@ Para hacer una variable de entorno persistente entre sesiones, necesitas agregar
 
 Ruta del Socket:
 
-```
-echo CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
+```bash
+echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
 Red del Nodo:
 
-```
+```bash
 echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 ```
 

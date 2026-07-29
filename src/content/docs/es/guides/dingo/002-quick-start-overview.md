@@ -214,7 +214,7 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 <br>
 
 ### ¿Interesado en usar un servicio systemd para ejecutar un nodo Dingo y maximizar el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia?
-[Consulta nuestra guía sobre cómo crear un servicio de inicio para Dingo](../004-create-start-up-service).
+[Consulta nuestra guía sobre cómo crear un servicio de inicio para Dingo](../003-create-start-up-service).
 
 ***
 
@@ -222,4 +222,4 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 
 ### ¡Felicidades, estás listo para comenzar a usar el nodo Dingo!
 
-[Aprende cómo interactuar con Dingo usando la CLI de Cardano](../003-using-dingo-with-cardano-cli).
+[Aprende cómo interactuar con Dingo usando la CLI de Cardano](../004-using-dingo-with-cardano-cli).
