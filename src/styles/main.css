@@ -11,7 +11,7 @@
   --bl-blue-30: rgb(66 133 244 / 30%);
   --bl-blue-40: rgb(66 133 244 / 40%);
   --bl-orange: #D97706;
-  --bl-text-on-accent: #FFFFFF;
+  --bl-text-on-accent: #000A1B;
   --bl-card-bg: rgb(15 63 138 / 8%);
   --bl-card-border: var(--bl-blue-12);
   --bl-code-bg: rgb(0 10 27 / 60%);
@@ -53,6 +53,7 @@
 :root[data-theme='light'] {
   --bl-white: #172033;
   --bl-blue: #145cc7;
+  --bl-text-on-accent: #FFFFFF;
   --bl-card-bg: #f7f9fc;
   --bl-card-border: #d8e1ee;
   --bl-code-bg: #f3f7fd;
