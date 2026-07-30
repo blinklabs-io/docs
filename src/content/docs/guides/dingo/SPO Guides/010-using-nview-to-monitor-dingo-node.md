@@ -39,4 +39,23 @@ chmod +x ~/dingo/nview
 ***
 
 
-## Step 3 - 
+## Step 3 - Create Config yaml File
+
+Create a nview-config.yaml file in your dingo directory. The $HOME variable will automatically expand to your home directory path:
+
+```
+cat <<EOF > ~/dingo/nview-config.yaml
+app:
+  nodeName: Cardano Dingo Node
+  network:
+node:
+  network: preview
+  port: 3001
+prometheus:
+  host: 127.0.0.1
+  port: 12798
+  timeout: 3
+# Socket path for cardano-node
+  socketPath: "$HOME/dingo/dingo.socket"
+EOF
+```
