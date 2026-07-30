@@ -41,6 +41,16 @@ function checkFrontmatter(file, source) {
 			errors.push(`${file}: missing non-empty ${field}`);
 		}
 	}
+
+	const relativePath = path.relative(docsRoot, file).split(path.sep).join('/');
+	if (/(?:^|\/)guides\/[^/]+\/releases\/v[^/]+\.mdx?$/i.test(relativePath)) {
+		const sidebar = frontmatter[1].match(
+			/^sidebar:\s*\n((?:[ \t]+.*(?:\n|$))*)/m,
+		);
+		if (!sidebar || !/^[ \t]+hidden:\s*true\s*$/m.test(sidebar[1])) {
+			errors.push(`${file}: release detail must be hidden from the sidebar`);
+		}
+	}
 }
 
 function checkLink(file, href) {
