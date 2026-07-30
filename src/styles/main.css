@@ -390,3 +390,8 @@ mobile-starlight-toc .dropdown {
   scrollbar-width: thin;
   scrollbar-color: var(--bl-blue-20) transparent;
 }
+
+.sl-markdown-content img {
+	height: auto;
+	max-width: 100%;
+}

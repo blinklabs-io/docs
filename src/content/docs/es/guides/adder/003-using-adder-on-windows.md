@@ -17,13 +17,13 @@ Ahora que tienes el archivo exe de Adder descargado, necesitamos abrir una linea
 
 Para abrir una linea de comandos en Windows, ve a tu menu de inicio de Windows
 
-![adder-windows-start-menu](/adder-windows-start-menu.png)
+![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
 
 
 Luego escribe `cmd` en el cuadro de busqueda y haz clic en `Abrir`
 
-![adder-windows-search-cmd](/adder-windows-search-cmd.png)
+![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
 
 ## Paso 2 - Obtener la ruta del exe de Adder
 

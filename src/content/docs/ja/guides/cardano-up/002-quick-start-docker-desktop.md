@@ -39,7 +39,7 @@ cardano-upはCardanoサービスを管理するためのコマンドラインユ
 
 検索バーに`powershell`と入力し、「管理者として実行」を選択します。
 
-![cardano-up-open-powershell-admin](/cardano-up-open-powershell-admin.png)
+![cardano-up-open-powershell-admin](/cardano-up-open-powershell-admin.webp)
 
 > ヒント: PowerShellで以下のコマンドを実行して、Docker Desktopが実行されていることを確認できます。
 >
@@ -110,7 +110,7 @@ WSL integrationの下で`Ubuntu`を選択し、`Apply & restart`をクリック�
 
 検索バーに`ubuntu`と入力し、Ubuntuアプリを選択して開くをクリックします。
 
-![cardano-up-launch-ubuntu-app](/cardano-up-launch-ubuntu-app.png)
+![cardano-up-launch-ubuntu-app](/cardano-up-launch-ubuntu-app.webp)
 
 > ヒント: `docker`を実行することで、Dockerが利用可能かどうかを確認できます。利用可能なすべてのDockerコマンドのリストが表示されます。
 >

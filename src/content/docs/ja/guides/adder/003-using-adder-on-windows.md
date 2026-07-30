@@ -17,13 +17,13 @@ Adder exeファイルをダウンロードしたので、コマンドライン�
 
 コマンドプロンプトを開くには、Windowsのスタートメニューに移動します
 
-![adder-windows-start-menu](/adder-windows-start-menu.png)
+![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
 
 
 次に、検索ボックスに`cmd`と入力し、`開く`をクリックします
 
-![adder-windows-search-cmd](/adder-windows-search-cmd.png)
+![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
 
 ## ステップ2 - Adder exeのパスを取得
 
