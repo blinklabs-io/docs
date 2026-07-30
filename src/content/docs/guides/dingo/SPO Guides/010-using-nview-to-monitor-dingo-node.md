@@ -18,6 +18,7 @@ Copy the path from Blinklabs and run the following command to download the binar
 > 💡 Tip: You can download the latest nview release from the <a href="https://github.com/blinklabs-io/nview/releases" target="_blank">https://github.com/blinklabs-io/nview/releases</a> page.
 
 ```
+cd ~/dingo
 wget -O - https://github.com/blinklabs-io/nview/releases/download/v0.15.0/nview-v0.15.0-linux-amd64 > nview
 ```
 
@@ -31,7 +32,7 @@ For this example, we named the binary file `nview` and saved the file to our `$N
 ⚠️ Adjust the file path and file name if needed. 
 
 ```
-chmod +x $NODE_HOME/nview
+chmod +x ~/dingo/nview
 ```
 
 
