@@ -1,5 +1,5 @@
 ---
-title: cardano-db-sync container
+title: cardano-db-sync
 description: Run Cardano DB Sync with PostgreSQL from the Blink Labs container image.
 ---
 

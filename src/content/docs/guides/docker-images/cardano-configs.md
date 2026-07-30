@@ -1,5 +1,5 @@
 ---
-title: cardano-configs container
+title: cardano-configs
 description: Copy Cardano network configuration files from the Blink Labs cardano-configs image.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: mithril-signer container
+title: mithril-signer
 description: Run the Mithril signer service from the Blink Labs image.
 ---
 

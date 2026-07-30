@@ -1,5 +1,5 @@
 ---
-title: cardano-cli container
+title: cardano-cli
 description: Run Cardano CLI commands from the Blink Labs cardano-cli image.
 ---
 

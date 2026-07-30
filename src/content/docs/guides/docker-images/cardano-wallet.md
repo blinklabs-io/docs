@@ -1,5 +1,5 @@
 ---
-title: cardano-wallet container
+title: cardano-wallet
 description: Run the Cardano wallet HTTP service from the Blink Labs image.
 ---
 

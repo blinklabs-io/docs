@@ -1,5 +1,5 @@
 ---
-title: mithril-client container
+title: mithril-client
 description: Download and verify Mithril snapshots from the Blink Labs image.
 ---
 

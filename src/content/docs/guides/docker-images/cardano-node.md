@@ -1,5 +1,5 @@
 ---
-title: cardano-node container
+title: cardano-node
 description: Run and configure a Cardano full node from the Blink Labs cardano-node image.
 ---
 

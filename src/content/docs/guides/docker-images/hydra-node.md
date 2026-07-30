@@ -1,5 +1,5 @@
 ---
-title: hydra-node container
+title: hydra-node
 description: Run the upstream Hydra head node from the Blink Labs container image.
 ---
 
