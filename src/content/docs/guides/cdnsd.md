@@ -22,9 +22,10 @@ cdnsd -config /etc/cdnsd/config.yaml
 ```
 
 With no configuration file, cDNSd uses its built-in defaults, including DNS on port
-`8053`, DNS-over-TLS on port `8853`, metrics on port `8081`, and persistent state in
-`./.state`. Ports below `1024` generally require elevated privileges, so use a
-reverse proxy or a container port mapping when exposing standard port 53.
+`8053`, metrics on port `8081`, and persistent state in `./.state`. DNS-over-TLS
+uses port `8853` only when both TLS certificate and key paths are configured;
+otherwise it is disabled. Ports below `1024` generally require elevated privileges,
+so use a reverse proxy or a container port mapping when exposing standard port 53.
 
 ## Minimal configuration
 
@@ -35,6 +36,9 @@ database outside the working directory:
 dns:
   address: "0.0.0.0"
   port: 8053
+metrics:
+  address: "127.0.0.1"
+  port: 8081
 indexer:
   network: "preprod"
   address: "127.0.0.1:3001"
@@ -80,6 +84,11 @@ environment variable. Environment variables take precedence over the YAML file.
 | `debug.address` | `DEBUG_ADDRESS` | Debug and pprof HTTP listen address. | `localhost` |
 | `debug.port` | `DEBUG_PORT` | Debug and pprof HTTP port; `0` disables it. | `0` |
 
+An empty `METRICS_LISTEN_ADDRESS` binds metrics on all interfaces. The `/metrics`
+endpoint is unauthenticated, so set `METRICS_LISTEN_ADDRESS=127.0.0.1` for
+local-only monitoring, or put an intentionally exposed endpoint behind network
+controls and authentication.
+
 ### Indexing, state, and TLS
 
 | YAML key | Environment variable | Purpose | Default |
@@ -105,6 +114,7 @@ undesirable:
 ```sh
 export DNS_LISTEN_ADDRESS=127.0.0.1
 export DNS_LISTEN_PORT=8053
+export METRICS_LISTEN_ADDRESS=127.0.0.1
 export INDEXER_NETWORK=preprod
 export INDEXER_TCP_ADDRESS=127.0.0.1:3001
 export STATE_DIR=/var/lib/cdnsd
@@ -118,12 +128,14 @@ Query the DNS listener directly with `dig`:
 
 ```sh
 dig @127.0.0.1 -p 8053 example.com
-dig @127.0.0.1 -p 8053 example.ada
+dig @127.0.0.1 -p 8053 <indexed-domain>.ada
 ```
 
-The first query exercises ordinary DNS resolution. The second exercises a domain
-served by a configured Cardano/Handshake profile. If the daemon is listening on
-DNS-over-TLS, test it with a compatible client and the configured certificate.
+The first query exercises ordinary DNS resolution. Replace `<indexed-domain>` with
+a domain known to be present in your node's indexed Cardano/Handshake state; a
+configured profile alone does not guarantee that any particular name resolves. If
+the daemon is listening on DNS-over-TLS, test it with a compatible client and the
+configured certificate.
 
 ## Metrics and debugging
 
