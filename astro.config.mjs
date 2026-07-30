@@ -179,24 +179,43 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Documentation',
+					label: 'Start here',
 					items: [
-						// Each item here is one entry in the navigation menu.
 						{ label: 'Home', slug: 'home' },
-						{ label: 'Adder', collapsed: true, items: [{ autogenerate: { directory: 'guides/adder' } }] },
-						{ label: 'nview', collapsed: true, items: [{ autogenerate: { directory: 'guides/nview' } }] },
+					],
+				},
+				{
+					label: 'Nodes and operations',
+					items: [
 						{ label: 'Dingo', collapsed: true, items: [{ autogenerate: { directory: 'guides/dingo' } }] },
-						{ label: 'TxTop', collapsed: true, items: [{ autogenerate: { directory: 'guides/txtop' } }] },
 						{ label: 'cardano-up', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-up' } }] },
+						{ label: 'nview', collapsed: true, items: [{ autogenerate: { directory: 'guides/nview' } }] },
+						{ label: 'TxTop', collapsed: true, items: [{ autogenerate: { directory: 'guides/txtop' } }] },
+					],
+				},
+				{
+					label: 'Automation',
+					items: [
+						{ label: 'Adder', collapsed: true, items: [{ autogenerate: { directory: 'guides/adder' } }] },
 						{ label: 'Bluefin', collapsed: true, items: [{ autogenerate: { directory: 'guides/bluefin' } }] },
-						{ label: 'Bursa', collapsed: true, items: [{ autogenerate: { directory: 'guides/bursa' } }] },
+					],
+				},
+				{
+					label: 'APIs and services',
+					items: [
 						{ label: 'Tx Submit API', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit' } }] },
 						{ label: 'Cardano Node API', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-node-api' } }] },
 						{ label: 'Tx Submit API Mirror', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit-api-mirror' } }] },
 						{ label: 'cDNSd', collapsed: true, slug: 'guides/cdnsd' },
+						{ label: 'Docker Images', collapsed: true, slug: 'guides/docker-images' },
+					],
+				},
+				{
+					label: 'Developer libraries',
+					items: [
+						{ label: 'Bursa', collapsed: true, items: [{ autogenerate: { directory: 'guides/bursa' } }] },
 						{ label: 'gOuroboros', collapsed: true, items: [{ autogenerate: { directory: 'guides/gouroboros' } }] },
 						{ label: 'plutigo', collapsed: true, items: [{ autogenerate: { directory: 'guides/plutigo' } }] },
-						{ label: 'Docker Images', collapsed: true, slug: 'guides/docker-images' },
 					],
 				},
 			],
