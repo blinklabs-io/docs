@@ -15,12 +15,13 @@ function walk(directory) {
 }
 
 function existingContentPath(basePath) {
+	const normalizedBasePath = basePath.replace(/[\\/]+$/, '');
 	const candidates = [
-		basePath,
-		`${basePath}.md`,
-		`${basePath}.mdx`,
-		path.join(basePath, 'index.md'),
-		path.join(basePath, 'index.mdx'),
+		normalizedBasePath,
+		`${normalizedBasePath}.md`,
+		`${normalizedBasePath}.mdx`,
+		path.join(normalizedBasePath, 'index.md'),
+		path.join(normalizedBasePath, 'index.mdx'),
 	];
 	return candidates.some(
 		(candidate) =>
