@@ -11,7 +11,7 @@ description: SPO Guide for Dingo Pools - Operational Tips and Maintenance.
 
 [Updating Your Pool Pledge, Fee or Other Data on Your pool.cert](../009-update-pool-cert) 
 
-Using nview to Monitor Your Dingo Nodes - (Coming Soon)
+[Using nview to Monitor Your Dingo Nodes](../010-using-nview-to-monitor-dingo-node)
 
 More Coming Soon!
 
