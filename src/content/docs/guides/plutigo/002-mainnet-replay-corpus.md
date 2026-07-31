@@ -3,7 +3,7 @@ title: Mainnet replay corpus
 description: Use `plutigo-replay` to run the mainnet replay corpus and compare results with cardano-node reference data.
 ---
 
-`plutigo-replay` evaluates normalized Plutus validation cases from a corpus file and compares the observed outcome and execution units with cardano-node reference data.
+`plutigo-replay` evaluates normalized Plutus validation cases from a corpus file and compares each case's outcome and execution units with cardano-node reference data.
 
 ## Run the replay corpus
 
@@ -29,9 +29,9 @@ The corpus uses schema version `1` and includes these root fields:
 - `reference`
 - `cases`
 
-The `reference` object records the reference implementation name and version. Each case carries the data needed to reproduce a single evaluation:
+The `reference` object records the reference implementation name and version. Each case includes the data needed to reproduce one evaluation:
 
-- `transaction`: transaction ID and supporting metadata such as slot, block, and redeemer
+- `transaction`: transaction ID, slot, block, and redeemer metadata
 - `language`: the ledger Plutus language
 - `protocol_version`: the protocol major and minor version
 - `flat_program_hex`: the raw FLAT-encoded program
@@ -44,6 +44,6 @@ The corpus loader rejects malformed input before execution starts. It also rejec
 
 ## Report output
 
-The CLI writes a JSON report with a result for each case and summary timing statistics. The summary includes total duration, median duration, p95 duration, and throughput.
+The CLI writes a JSON report with case results and summary timing statistics, including total duration, median duration, p95 duration, and throughput.
 
 `-pretty` only changes the JSON formatting; it does not change the report content.
