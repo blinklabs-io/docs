@@ -3,7 +3,6 @@ title: Using nview to Monitor Your Dingo Nodes
 description: SPO Guide for Dingo Pools - How to Use nview to Monitor Your Dingo Nodes.
 ---
 
-## How to Use nview to Monitor Your Dingo Nodes 
 nview is a local monitoring tool for a Cardano Node meant to complement remote monitoring tools by providing a local view of a running node from the command line. It is a TUI (terminal user interface) designed to fit most screens.
 
 Simply download the `nview` binary file from blinklabs.io on to your node server. Then run nview in the server command line. It's that simple to use and you will get monitoring right out of the box!
