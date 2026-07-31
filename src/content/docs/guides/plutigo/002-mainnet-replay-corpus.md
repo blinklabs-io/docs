@@ -15,7 +15,7 @@ go run ./cmd/plutigo-replay -corpus ./mainnet-corpus.json -pretty
 
 - `-corpus` is required and points to the corpus JSON file.
 - `-pretty` only formats the JSON report.
-- The command exits with:
+- The command exits with these codes:
   - `0` when every case matches the reference data
   - `1` when one or more cases differ
   - `2` when the corpus cannot load, the runner fails, or JSON encoding fails
@@ -44,6 +44,6 @@ The corpus loader rejects malformed input before execution starts. It also rejec
 
 ## Report output
 
-The CLI writes a JSON report with case results and summary timing statistics, including total duration, median duration, p95 duration, and throughput.
+The CLI writes a JSON report with one result per case and summary timing statistics, including total duration, median duration, p95 duration, and throughput.
 
 `-pretty` only changes the JSON formatting; it does not change the report content.
