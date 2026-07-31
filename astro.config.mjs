@@ -207,7 +207,14 @@ export default defineConfig({
 						{ label: 'Cardano Node API', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-node-api' } }] },
 						{ label: 'Tx Submit API Mirror', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit-api-mirror' } }] },
 						{ label: 'cDNSd', collapsed: true, items: [{ autogenerate: { directory: 'guides/cdnsd' } }] },
-						{ label: 'Docker Images', collapsed: true, slug: 'guides/docker-images' },
+						{
+							label: 'Docker Images',
+							collapsed: true,
+							items: [
+								{ label: 'Overview', slug: 'guides/docker-images' },
+								{ autogenerate: { directory: 'guides/docker-images' } },
+							],
+						},
 					],
 				},
 				{
