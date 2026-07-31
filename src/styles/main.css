@@ -158,15 +158,6 @@ body {
   color: var(--bl-blue);
 }
 
-.sidebar-content ul ul li {
-  border-inline-start: 2px solid var(--bl-blue-10);
-  transition: border-color 0.2s ease;
-}
-
-.sidebar-content ul ul li:hover {
-  border-inline-start-color: var(--bl-blue-30);
-}
-
 .right-sidebar {
   box-shadow: -1px 0 0 var(--bl-blue-6);
 }
