@@ -9,5 +9,5 @@ This package aims to only support Untyped Plutus Core because that is all that i
 
 ## Replay
 
-Use `plutigo-replay` to run normalized mainnet parity corpora and replay cases. The [mainnet replay corpus guide](/guides/plutigo/002-mainnet-replay-corpus/) describes the corpus format and execution steps.
+Use `plutigo-replay` to run normalized mainnet parity corpora and replay cases. The [mainnet replay corpus guide](/guides/plutigo/002-mainnet-replay-corpus/) describes the corpus format and replay workflow.
 
