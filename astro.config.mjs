@@ -159,7 +159,13 @@ export default defineConfig({
 				src: './src/assets/blinklabs-white.svg',
 				replacesTitle: true,
 			},
+			components: {
+				Footer: './src/components/docs-page-meta.astro',
+				PageFrame: './src/components/page-frame.astro',
+				SiteTitle: './src/components/site-title.astro',
+			},
 			social: [
+				{ icon: 'external', label: 'Blink Labs home', href: 'https://blinklabs.io' },
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/blinklabs-io/docs' },
 			],
 			defaultLocale: 'root',
