@@ -27,6 +27,16 @@ Adder Tray is a packaged desktop application that runs in the system tray and pr
 
 The Adder command‑line binary provides full access to Adder’s event‑processing pipeline. This mode is designed for operators, developers, and integrators who want more control over how events are filtered and emitted.
 
-### Congratulations you are ready to start using Adder!
+### Key Characteristics:
+- 
 
-Now you are ready to explore the how to use Adder and its amazing features. See our how to use Adder guides and examples to explore Adder.
+## Adder Tray Guides (Windows & macOS)
+
+- [Windows Install Guide](../003-using-adder-on-windows)
+- [Mac Install Guide](../004-use-adder-on-mac)
+
+
+## Adder CLI / Event Monitor Guides (Linux)
+
+- [Linux Guide](../005-use-adder-on-linux)
+
