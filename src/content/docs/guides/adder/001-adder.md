@@ -13,4 +13,4 @@ Basically, Adder lets you track events you care about, and you can get notified 
 Adder offers two distinct operating modes, each optimized for a different types of users and deployment environments. Choosing the right mode ensures you get the correct balance of usability, configurability, and operational control. 
 
 
-✅ Adder supports two primary operating modes: Adder Tray and Adder CLI. See which [operating mode](../002-operating-mode-overview) is right for your use case.
+✅ Adder Tray and Adder CLI, see which operating mode is right for your use case [learn more](../002-operating-mode-overview)
