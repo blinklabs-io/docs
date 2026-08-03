@@ -14,3 +14,13 @@ Adder offers two distinct operating modes, each optimized for a different types 
 
 
 ✅ Adder Tray and Adder CLI, see which operating mode is right for your use case [learn more](../002-operating-mode-overview)
+
+### Adder Tray Guides (Windows & macOS)
+
+- [Windows Install Guide](../003-using-adder-on-windows)
+- [Mac Install Guide](../004-use-adder-on-mac)
+
+
+### Adder CLI / Event Monitor Guides (Linux)
+
+- [Linux Guide](../005-use-adder-on-linux)
