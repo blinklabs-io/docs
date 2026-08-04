@@ -26,7 +26,7 @@ Adder Tray is a packaged desktop application that runs in the system tray and pr
 - Governance participants monitoring votes or proposals.
 - Users who prefer GUI‑based configuration over command‑line tools.
 
-## 2. Adder CLI / Event Monitor (Linux, macOS, Windows Binary)
+## 2. Adder CLI / Event Monitor (Linux Binary)
 
 The Adder command‑line binary provides full access to Adder’s event‑processing pipeline. This mode is designed for operators, developers, and integrators who want more control over how events are filtered and emitted.
 
