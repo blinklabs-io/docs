@@ -1,29 +1,99 @@
 ---
-title: Inicio de Documentación
-description: Guías en español para las herramientas de Cardano de código abierto de Blink Labs.
+title: Inicio de la documentación de Blink Labs
+description: Explora las guías de Blink Labs para nodos de Cardano, APIs, bibliotecas de desarrollo, monitorización y automatización.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
-import { LinkButton } from '@astrojs/starlight/components';
-import '../../../styles/custom.css';
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
-Bienvenido al sitio de documentación de Blink Labs.
+Construye, opera y monitoriza infraestructura de Cardano con las herramientas de código abierto de Blink Labs.
+Empieza con una guía rápida, explora por objetivo o usa la búsqueda para encontrar directamente un comando o concepto.
 
-La barra de navegación a la izquierda se puede usar para explorar el sitio.
+<LinkButton href="/es/guides/dingo/002-quick-start-overview/" icon="right-arrow">
+	Empieza con un nodo de Cardano
+</LinkButton>
 
-## Descubrir
+[Visita Blink Labs](https://blinklabs.io)
+
+## Ejecuta y monitoriza infraestructura de Cardano
 
 <CardGrid>
-	<Card title="¡Descubre nuestras herramientas Blockchain!" icon="open-book">
-		¡Prueba nuestros proyectos de código abierto!
-		<LinkButton href="https://blinklabs.io/projects-open-source">
-			Código Abierto
-		</LinkButton>
+	<Card title="Dingo" icon="open-book">
+		Ejecuta un nodo de Cardano escrito en Go.
+		[Descripción general](/es/guides/dingo/001-dingo/) · [Inicio rápido](/es/guides/dingo/002-quick-start-overview/)
 	</Card>
-	<Card title="Más Información" icon="information">
-		Aprende más sobre Blink Labs en blinklabs.io
-		<LinkButton href="https://blinklabs.io">
-			blinklabs.io
-		</LinkButton>
+	<Card title="cardano-up" icon="open-book">
+		Instala y gestiona entornos de nodos de Cardano.
+		[Descripción general](/es/guides/cardano-up/001-cardano-up/) · [Inicio rápido](/es/guides/cardano-up/002-quick-start-docker-desktop/)
+	</Card>
+	<Card title="nview" icon="open-book">
+		Monitoriza un nodo de Cardano local desde tu terminal.
+		[Descripción general](/es/guides/nview/001-nview/) · [Inicio rápido](/es/guides/nview/002-quick-start/)
+	</Card>
+	<Card title="TxTop" icon="open-book">
+		Inspecciona transacciones de Cardano desde una interfaz de terminal.
+		[Descripción general](/es/guides/txtop/001-tx-top/) · [Inicio rápido](/es/guides/txtop/002-quick-start/)
 	</Card>
 </CardGrid>
+
+## Mina tokens de prueba de trabajo
+
+<CardGrid>
+	<Card title="Bluefin" icon="open-book">
+		Mina el token TUNA de Fortuna en Cardano con un minero autónomo escrito en Go.
+		[Descripción general](/es/guides/bluefin/001-bluefin/) · [Inicio rápido](/es/guides/bluefin/002-quick-start-overview/)
+	</Card>
+	<Card title="Handshake Node" icon="open-book">
+		Ejecuta un nodo de Handshake y mina HNS con soporte integrado para minería por CPU y Stratum.
+		[GitHub](https://github.com/blinklabs-io/handshake-node)
+	</Card>
+</CardGrid>
+
+## Construye aplicaciones de Cardano
+
+<CardGrid>
+	<Card title="gOuroboros" icon="open-book">
+		Construye aplicaciones Go que se comunican con nodos de Cardano.
+		[Descripción general](/es/guides/gouroboros/001-gouroboros/) · [Paquete Go](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)
+	</Card>
+	<Card title="plutigo" icon="open-book">
+		Trabaja con datos y scripts de Plutus en Go puro.
+		[Descripción general](/guides/plutigo/001-plutigo/)
+	</Card>
+	<Card title="Cardano Node API" icon="open-book">
+		Accede a la funcionalidad del nodo mediante una API documentada.
+		[Descripción general](/es/guides/cardano-node-api/001-cardano-node-api/) · [Inicio rápido](/es/guides/cardano-node-api/002-quick-start/)
+	</Card>
+	<Card title="Bursa" icon="open-book">
+		Crea y gestiona wallets y claves de Cardano.
+		[Descripción general](/es/guides/bursa/001-bursa/) · [Inicio rápido](/es/guides/bursa/002-quick-start/)
+	</Card>
+	<Card title="Tx Submit API" icon="open-book">
+		Envía transacciones de Cardano mediante un endpoint HTTP.
+		[Descripción general](/es/guides/txsubmit/001-tx-submit-api/) · [Inicio rápido](/es/guides/txsubmit/002-quick-start/)
+	</Card>
+	<Card title="Tx Submit API Mirror" icon="open-book">
+		Ejecuta un endpoint compatible para enviar transacciones.
+		[Descripción general](/es/guides/txsubmit-api-mirror/001-tx-submit-api-mirror/) · [Inicio rápido](/es/guides/txsubmit-api-mirror/002-quick-start/)
+	</Card>
+</CardGrid>
+
+## Automatiza y conecta
+
+<CardGrid>
+	<Card title="Adder" icon="open-book">
+		Observa eventos de Cardano y envía notificaciones a las herramientas que utilizas.
+		[Descripción general](/es/guides/adder/001-adder/) · [Inicio rápido](/es/guides/adder/002-quick-start-overview/)
+	</Card>
+	<Card title="cDNSd" icon="open-book">
+		Descubre servicios de la red de Cardano mediante DNS.
+		[Descripción general](/es/guides/cdnsd/)
+	</Card>
+	<Card title="Imágenes Docker" icon="open-book">
+		Usa proyectos de Blink Labs en entornos con contenedores.
+		[Explorar imágenes](/es/guides/docker-images/)
+	</Card>
+</CardGrid>
+
+## Más de Blink Labs
+
+Explora los proyectos de código abierto de Blink Labs en [GitHub](https://github.com/blinklabs-io) o contribuye a esta documentación en [GitHub](https://github.com/blinklabs-io/docs).

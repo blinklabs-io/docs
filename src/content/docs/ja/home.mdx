@@ -1,29 +1,99 @@
 ---
-title: ドキュメントホーム
-description: Blink Labs のオープンソース Cardano ツールに関する日本語ガイド。
+title: Blink Labs ドキュメントホーム
+description: Blink Labs の Cardano ノード、API、開発ライブラリ、監視、自動化ツールに関するガイドをご覧ください。
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
-import { LinkButton } from '@astrojs/starlight/components';
-import '../../../styles/custom.css';
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
-Blink Labsドキュメントサイトへようこそ。
+Blink Labs のオープンソースツールで Cardano インフラを構築、運用、監視できます。
+クイックスタートから始めるか、目的から探すか、検索でコマンドや概念を直接見つけてください。
 
-左側のナビゲーションバーを使用してサイトを閲覧できます。
+<LinkButton href="/ja/guides/dingo/002-quick-start-overview/" icon="right-arrow">
+	Cardano ノードから始める
+</LinkButton>
 
-## 発見
+[Blink Labs を訪問](https://blinklabs.io)
+
+## Cardano インフラを実行・監視する
 
 <CardGrid>
-	<Card title="ブロックチェーンツールをチェック！" icon="open-book">
-		オープンソースプロジェクトを試してみてください！
-		<LinkButton href="https://blinklabs.io/projects-open-source">
-			オープンソース
-		</LinkButton>
+	<Card title="Dingo" icon="open-book">
+		Go で書かれた Cardano ノードを実行します。
+		[概要](/ja/guides/dingo/001-dingo/) · [クイックスタート](/ja/guides/dingo/002-quick-start-overview/)
 	</Card>
-	<Card title="詳細情報" icon="information">
-		blinklabs.ioでBlink Labsについてもっと学ぶ
-		<LinkButton href="https://blinklabs.io">
-			blinklabs.io
-		</LinkButton>
+	<Card title="cardano-up" icon="open-book">
+		Cardano ノード環境をインストールして管理します。
+		[概要](/ja/guides/cardano-up/001-cardano-up/) · [クイックスタート](/ja/guides/cardano-up/002-quick-start-docker-desktop/)
+	</Card>
+	<Card title="nview" icon="open-book">
+		ローカルの Cardano ノードをターミナルから監視します。
+		[概要](/ja/guides/nview/001-nview/) · [クイックスタート](/ja/guides/nview/002-quick-start/)
+	</Card>
+	<Card title="TxTop" icon="open-book">
+		ターミナルインターフェースから Cardano トランザクションを確認します。
+		[概要](/ja/guides/txtop/001-tx-top/) · [クイックスタート](/ja/guides/txtop/002-quick-start/)
 	</Card>
 </CardGrid>
+
+## プルーフ・オブ・ワークトークンを採掘する
+
+<CardGrid>
+	<Card title="Bluefin" icon="open-book">
+		Go で書かれた自己完結型マイナーで Cardano 上の Fortuna の TUNA トークンを採掘します。
+		[概要](/ja/guides/bluefin/001-bluefin/) · [クイックスタート](/ja/guides/bluefin/002-quick-start-overview/)
+	</Card>
+	<Card title="Handshake Node" icon="open-book">
+		Handshake ノードを実行し、CPU と Stratum マイニング対応で HNS を採掘します。
+		[GitHub](https://github.com/blinklabs-io/handshake-node)
+	</Card>
+</CardGrid>
+
+## Cardano アプリケーションを構築する
+
+<CardGrid>
+	<Card title="gOuroboros" icon="open-book">
+		Cardano ノードと通信する Go アプリケーションを構築します。
+		[概要](/ja/guides/gouroboros/001-gouroboros/) · [Go パッケージ](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)
+	</Card>
+	<Card title="plutigo" icon="open-book">
+		純粋な Go で Plutus のデータとスクリプトを扱います。
+		[概要](/guides/plutigo/001-plutigo/)
+	</Card>
+	<Card title="Cardano Node API" icon="open-book">
+		ドキュメント化された API からノード機能にアクセスします。
+		[概要](/ja/guides/cardano-node-api/001-cardano-node-api/) · [クイックスタート](/ja/guides/cardano-node-api/002-quick-start/)
+	</Card>
+	<Card title="Bursa" icon="open-book">
+		Cardano のウォレットとキーを作成・管理します。
+		[概要](/ja/guides/bursa/001-bursa/) · [クイックスタート](/ja/guides/bursa/002-quick-start/)
+	</Card>
+	<Card title="Tx Submit API" icon="open-book">
+		HTTP エンドポイント経由で Cardano トランザクションを送信します。
+		[概要](/ja/guides/txsubmit/001-tx-submit-api/) · [クイックスタート](/ja/guides/txsubmit/002-quick-start/)
+	</Card>
+	<Card title="Tx Submit API Mirror" icon="open-book">
+		互換性のあるトランザクション送信用エンドポイントを実行します。
+		[概要](/ja/guides/txsubmit-api-mirror/001-tx-submit-api-mirror/) · [クイックスタート](/ja/guides/txsubmit-api-mirror/002-quick-start/)
+	</Card>
+</CardGrid>
+
+## 自動化して接続する
+
+<CardGrid>
+	<Card title="Adder" icon="open-book">
+		Cardano のイベントを監視し、利用するツールへ通知を送ります。
+		[概要](/ja/guides/adder/001-adder/) · [クイックスタート](/ja/guides/adder/002-quick-start-overview/)
+	</Card>
+	<Card title="cDNSd" icon="open-book">
+		DNS を通じて Cardano ネットワークサービスを発見します。
+		[概要](/ja/guides/cdnsd/)
+	</Card>
+	<Card title="Docker イメージ" icon="open-book">
+		Blink Labs のプロジェクトをコンテナ環境で利用します。
+		[イメージを見る](/ja/guides/docker-images/)
+	</Card>
+</CardGrid>
+
+## Blink Labs のその他の情報
+
+Blink Labs のオープンソースプロジェクトを [GitHub](https://github.com/blinklabs-io) で確認するか、このドキュメントに [GitHub](https://github.com/blinklabs-io/docs) から貢献してください。
