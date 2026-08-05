@@ -5,7 +5,7 @@ import config from 'virtual:starlight/user-config';
 const { siteTitle } = Astro.locals.starlightRoute;
 ---
 
-<a href="https://blinklabs.io" class="site-title sl-flex" aria-label="Blink Labs home">
+<a href="https://blinklabs.io" class="site-title sl-flex" aria-label={siteTitle}>
 	{config.logo && logos.dark && (
 		<img alt={config.logo.alt} src={logos.dark.src} width={logos.dark.width} height={logos.dark.height} />
 	)}

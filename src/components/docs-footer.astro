@@ -1,35 +1,93 @@
 ---
+const locale = Astro.currentLocale ?? 'root';
+const docsHref = locale === 'root' ? '/home/' : `/${locale}/home/`;
+const labels = {
+	root: {
+		navigation: 'Footer navigation',
+		home: 'Home',
+		openSource: 'Open Source',
+		services: 'Services',
+		documentation: 'Documentation',
+		company: 'Company',
+		about: 'About Us',
+		mediaKit: 'Media Kit',
+		contact: 'Contact Us',
+		contactHeading: 'Contact',
+		discord: 'Discuss on Discord',
+		github: 'Code with Us on GitHub',
+		linkedin: 'Follow Us on LinkedIn',
+		medium: 'Follow Us on Medium',
+		twitter: 'Follow Us on Twitter',
+		youtube: 'Follow Us on YouTube',
+	},
+	es: {
+		navigation: 'Navegación del pie de página',
+		home: 'Inicio',
+		openSource: 'Código abierto',
+		services: 'Servicios',
+		documentation: 'Documentación',
+		company: 'Empresa',
+		about: 'Sobre nosotros',
+		mediaKit: 'Kit de prensa',
+		contact: 'Contacto',
+		contactHeading: 'Contacto',
+		discord: 'Habla en Discord',
+		github: 'Colabora en GitHub',
+		linkedin: 'Síguenos en LinkedIn',
+		medium: 'Síguenos en Medium',
+		twitter: 'Síguenos en Twitter',
+		youtube: 'Síguenos en YouTube',
+	},
+	ja: {
+		navigation: 'フッターナビゲーション',
+		home: 'ホーム',
+		openSource: 'オープンソース',
+		services: 'サービス',
+		documentation: 'ドキュメント',
+		company: '会社情報',
+		about: '私たちについて',
+		mediaKit: 'メディアキット',
+		contact: 'お問い合わせ',
+		contactHeading: '連絡先',
+		discord: 'Discord で話す',
+		github: 'GitHub でコードを書く',
+		linkedin: 'LinkedIn をフォロー',
+		medium: 'Medium をフォロー',
+		twitter: 'Twitter をフォロー',
+		youtube: 'YouTube をフォロー',
+	},
+}[locale === 'es' || locale === 'ja' ? locale : 'root'];
 ---
 
 
 <footer id="blink-site-footer" class="blink-docs-footer" role="contentinfo">
 	<div class="blink-docs-footer__content">
-		<nav class="blink-docs-footer__columns" aria-label="Footer navigation">
+		<nav class="blink-docs-footer__columns" aria-label={labels.navigation}>
 			<div class="blink-docs-footer__column">
 				<ul>
-					<li><a href="https://blinklabs.io">Home</a></li>
-					<li><a href="https://blinklabs.io/projects-open-source">Open Source</a></li>
-					<li><a href="https://blinklabs.io/services">Services</a></li>
-					<li><a href="/home/">Documentation</a></li>
+					<li><a href="https://blinklabs.io">{labels.home}</a></li>
+					<li><a href="https://blinklabs.io/projects-open-source">{labels.openSource}</a></li>
+					<li><a href="https://blinklabs.io/services">{labels.services}</a></li>
+					<li><a href={docsHref}>{labels.documentation}</a></li>
 				</ul>
 			</div>
 			<div class="blink-docs-footer__column">
 				<ul>
-					<li class="blink-docs-footer__heading">Company</li>
-					<li><a href="https://blinklabs.io/about">About Us</a></li>
-					<li><a href="https://blinklabs.io/mediakit">Media Kit</a></li>
-					<li><a href="https://blinklabs.io/contact">Contact Us</a></li>
+					<li class="blink-docs-footer__heading">{labels.company}</li>
+					<li><a href="https://blinklabs.io/about">{labels.about}</a></li>
+					<li><a href="https://blinklabs.io/mediakit">{labels.mediaKit}</a></li>
+					<li><a href="https://blinklabs.io/contact">{labels.contact}</a></li>
 				</ul>
 			</div>
 			<div class="blink-docs-footer__column">
 				<ul>
-					<li class="blink-docs-footer__heading">Contact</li>
-					<li><a href="https://discord.gg/5fPRZnX4qW">Discuss on Discord</a></li>
-					<li><a href="https://github.com/blinklabs-io">Code with Us on GitHub</a></li>
-					<li><a href="https://www.linkedin.com/company/blink-labs-io/">Follow Us on LinkedIn</a></li>
-					<li><a href="https://medium.com/@blinklabs_io">Follow Us on Medium</a></li>
-					<li><a href="https://twitter.com/blinklabs_io">Follow Us on Twitter</a></li>
-					<li><a href="https://www.youtube.com/@blinklabs_io">Follow Us on YouTube</a></li>
+					<li class="blink-docs-footer__heading">{labels.contactHeading}</li>
+					<li><a href="https://discord.gg/5fPRZnX4qW">{labels.discord}</a></li>
+					<li><a href="https://github.com/blinklabs-io">{labels.github}</a></li>
+					<li><a href="https://www.linkedin.com/company/blink-labs-io/">{labels.linkedin}</a></li>
+					<li><a href="https://medium.com/@blinklabs_io">{labels.medium}</a></li>
+					<li><a href="https://twitter.com/blinklabs_io">{labels.twitter}</a></li>
+					<li><a href="https://www.youtube.com/@blinklabs_io">{labels.youtube}</a></li>
 				</ul>
 			</div>
 		</nav>
