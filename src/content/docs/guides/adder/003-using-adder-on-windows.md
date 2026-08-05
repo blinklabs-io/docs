@@ -20,8 +20,12 @@ Then click `run` to start the installation. <br>
 ![adder-windows-run-msi](/adder-windows-run-msi.webp)
 
 ## Step 2 - Launch Adder
-
+Open Windows Start Menu
 ![adder-windows-start-menu](/adder-windows-start-menu.webp)
+
+Search `adder` to open app
+![adder-windows-search-adder-app](/adder-windows-search-adder-app.webp)
+
 
 ## Step 3 - Configure Adder
 
