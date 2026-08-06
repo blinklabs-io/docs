@@ -25,20 +25,26 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 
 ## Step 2 - Launch Adder
 **Open Windows Start Menu** <br>
-![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
-<img src="/adder-windows-start-menu.webp" alt="adder-windows-start-menu" style="width:50%; height:auto;" />
+<img src="/adder-windows-start-menu.webp" alt="adder-windows-start-menu" style="height:20vw; width:auto; object-fit:contain;" />
+
+<img src="/adder-windows-start-menu.webp" alt="adder-windows-start-menu" style="height:50%; width:auto;" />
 
 
 ***
 
 **Search `adder` to open app** <br>
+Search for Adder app and open. 
+
+>If you don't the configuration Welcome screen, open your tray and right-click on the Adder app.
+
 ![adder-windows-search-adder-app](/adder-windows-search-adder-app.webp)
 
 
 ## Step 3 - Configure Adder
+Once you open the Adder Tray App you will see the Welcome screen which will guide you through the steps to configure Adder to get the alerts you want.
 
-<!-- ![adder-cmd-paste-path](/adder-cmd-paste-path.png) -->
+<img src="/adder-windows-config-welcome.webp" alt="adder-windows-config-welcome" style="height:20vw; width:auto; object-fit:contain;" />
 
 ### Congratulations!
 
