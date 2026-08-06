@@ -26,10 +26,9 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 ## Step 2 - Launch Adder
 **Open Windows Start Menu** <br>
 
-<img src="/adder-windows-start-menu.webp" alt="adder-windows-start-menu" style="height:20vw; width:auto; object-fit:contain;" />
-
-<img src="/adder-windows-start-menu.webp" alt="adder-windows-start-menu" style="height:50%; width:auto;" />
-
+<img src="/adder-windows-start-menu.webp"
+     alt="adder-windows-start-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain;" />
 
 ***
 
@@ -44,7 +43,17 @@ Search for Adder app and open.
 ## Step 3 - Configure Adder
 Once you open the Adder Tray App you will see the Welcome screen which will guide you through the steps to configure Adder to get the alerts you want.
 
-<img src="/adder-windows-config-welcome.webp" alt="adder-windows-config-welcome" style="height:20vw; width:auto; object-fit:contain;" />
+<img src="/adder-windows-config-welcome.webp"
+     alt="adder-windows-config-welcome"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain;" />
+
+***
+
+**Select Cardano network which you want to monitor to get alerts**
+<img src="/adder-windows-config-network.webp"
+     alt="adder-windows-config-network"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain;" />
+
 
 ### Congratulations!
 
