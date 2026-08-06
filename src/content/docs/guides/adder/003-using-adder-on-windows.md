@@ -25,7 +25,7 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 
 ## Step 2 - Launch Adder
 **Open Windows Start Menu** <br>
-![adder-windows-start-menu](/adder-windows-start-menu.webp)
+![adder-windows-start-menu](/adder-windows-start-menu.webp){style="width:50%;"}
 
 ***
 
