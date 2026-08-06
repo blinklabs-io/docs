@@ -3,8 +3,6 @@ title: Using on Windows
 description: How to use Adder on Windows.
 ---
 
-# Using Adder on Windows
-
 Adder is a packaged desktop application that runs in the system tray and provides a streamlined, user‑friendly experience for monitoring Cardano blockchain activity.
 
 ## Step 1 - Download the Adder installer
@@ -39,17 +37,18 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 
 ***
 
-### Step 2.2 - Search `adder` to open app
+### Step 2.2 - Search for `adder`
 Search for Adder app and open. 
 
->If you don't the configuration Welcome screen, open your tray and right-click on the Adder app.
 
 <img src="/adder-windows-search-adder-app.webp"
      alt="adder-windows-search-adder-app"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+>If you don't see the configuration Welcome screen, open your tray and right-click on the Adder app.
+
 ## Step 3 - Configure Adder
-Once you open the Adder Tray App you will see the Welcome screen which will guide you through the steps to configure Adder to get the alerts you want.
+Once you open the *Adder Tray App* you will see the **Welcome** screen which will guide you through the steps to configure Adder to get the alerts you want.
 
 <img src="/adder-windows-config-welcome.webp"
      alt="adder-windows-config-welcome"
@@ -62,8 +61,8 @@ Once you open the Adder Tray App you will see the Welcome screen which will guid
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-### Step 3.3 - Add your event information
-Enter the information that you would like to receive alerts when an event occurs on-chain.
+### Step 3.3 - Add your Monitoring Targets
+Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID and / or DRep ID
 
 For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
 
@@ -77,10 +76,21 @@ We select the `OR` so we will get alert if either the Pool or DRep perform and e
      alt="adder-windows-config-or"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+### Step 3.4 - Notification Output (Optional)
+Adder is already configured to provide desktop notifications. You can select other method if you so choose. 
+<img src="/adder-windows-config-output.webp"
+     alt="adder-windows-config-output"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+**Then click `Next Step`**
 
+### Step 3.5 - Event Alerts
 
-### Congratulations!
+<img src="/adder-windows-config-events.webp"
+     alt="adder-windows-config-events"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+### Congratulations! Adder will now alert you when an event that you requested to track occurs.
 
 
 
