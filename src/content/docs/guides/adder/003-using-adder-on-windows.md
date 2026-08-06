@@ -18,14 +18,14 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 
 ***
 
-**Once the download is complete, click `open` to open the .msi file.** <br>
+### Step 1.2 - Once the download is complete, click `open` to open the .msi file.
 <img src="/adder-windows-open-msi.webp"
      alt="adder-windows-open-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
-**Then click `run` to start the installation.** <br>
+### Step 1.3 - Then click `run` to start the installation.
 <img src="/adder-windows-run-msi.webp"
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -39,10 +39,11 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 
 ***
 
-**Search `adder` to open app** <br>
+### Step 2.2 - Search `adder` to open app
 Search for Adder app and open. 
 
 >If you don't the configuration Welcome screen, open your tray and right-click on the Adder app.
+
 <img src="/adder-windows-search-adder-app.webp"
      alt="adder-windows-search-adder-app"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -56,10 +57,27 @@ Once you open the Adder Tray App you will see the Welcome screen which will guid
 
 ***
 
-**Select Cardano network which you want to monitor to get alerts**
+### Step 3.2 - Select Cardano network which you want to monitor
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+### Step 3.3 - Add your event information
+Enter the information that you would like to receive alerts when an event occurs on-chain.
+
+For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
+
+<img src="/adder-windows-config-pool-id-drep-id.webp"
+     alt="adder-windows-config-pool-id-drep-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+We select the `OR` so we will get alert if either the Pool or DRep perform and event that we are tracking.
+
+<img src="/adder-windows-config-or.webp"
+     alt="adder-windows-config-or"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+
 
 
 ### Congratulations!
