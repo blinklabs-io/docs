@@ -71,13 +71,15 @@ rm -r .dingo
 ### Step 5.2 - Mithril Sync
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
+When certificate verification is enabled, verified bootstrap checks the certificate chain, the ancillary ledger state, and the configured network match before it imports the snapshot.
+
 Run the following command from your `~/dingo` directory:
 ```
 dingo sync --mithril
 ```
 Dingo will:
 1. Download the latest Mithril snapshot for your configured network
-2. Verify the certificate chain
+2. Verify the certificate chain, ancillary ledger state, and configured network match
 3. Load the snapshot into the database
 
 This takes approximately 20-30 minutes depending on your system and network speed.
