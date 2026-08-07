@@ -165,8 +165,6 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 `databaseLifecycle.snapshotDir` を設定すると、エポック境界の自動スナップショットを保存できます。`snapshotRetention` は古い自動スナップショットの保持数を制御し、`snapshotCloudDestination` を `s3://bucket/prefix` または `gcs://bucket/prefix` に設定すると、ローカル保存を残したままクラウドにもミラーできます。クラウドミラーには `dingo_extra_plugins` ビルドタグが必要です。
-
 > 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
