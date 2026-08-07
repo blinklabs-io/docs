@@ -82,6 +82,8 @@ plugins:
       # `capacity` はモードの既定値を上書きする任意の設定です。既定値は Praos モードと通常の serve モードで 1 MiB、Musashi モードで 25 MiB です。
       # 既定値を使うには、このキーをコメントアウトするか省略します。
       # capacity: 1048576
+      # `revalidationDeltaCap` は FIFO 再検証中に追随する変更量の上限です。既定値は 64 で、正の値でなければなりません。
+      # revalidationDeltaCap: 64
   api:
     blockfrost:
       provider: \"builtin\"
