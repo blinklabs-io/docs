@@ -89,7 +89,7 @@ plugins:
 # `plugins.mempool.config.capacity` is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
-# `plugins.mempool.config.revalidationDeltaCap` is optional, defaults to 64, and must be positive.
+# `plugins.mempool.config.revalidationDeltaCap` is optional, defaults to 64, and accepts only positive values.
 # plugins:
 #   mempool:
 #     config:
@@ -123,7 +123,7 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API. In API mode, the Blockfrost-compatible service also serves pool detail, retiring pools, pool metadata, and reward-history responses.
+> 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API. In API mode, Dingo's Blockfrost-compatible API also serves pool detail, retiring pools, pool metadata, and reward-history responses.
 
 ```yaml
 midnight:
