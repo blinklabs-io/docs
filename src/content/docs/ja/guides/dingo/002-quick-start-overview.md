@@ -121,7 +121,7 @@ EOF
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
-> 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
+> 💡 API サーバーは `storageMode: "api"` のときだけ有効です。Blockfrost互換の `pools` 系エンドポイントも利用できます。各 API の `port` を `0` にすると、その API は無効になります。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
