@@ -186,11 +186,11 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`. With `mithril.verifyCertificates: true`, verified bootstrap also checks the snapshot certificate chain, the ancillary ledger state, and the configured network match before it downloads and imports the snapshot.
+> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`. With `mithril.verifyCertificates: true`, verified bootstrap also checks the ancillary ledger state and confirms that the configured network matches the snapshot before it downloads and imports the snapshot.
 
 Dingo will:
 1. Download the latest Mithril snapshot for your configured network
-2. Verify the snapshot certificate chain, the ancillary ledger state, and the configured network match
+2. Verify the snapshot certificate chain
 3. Load the snapshot into the database
 
 This takes approximately 20-30 minutes depending on your system and network speed.
