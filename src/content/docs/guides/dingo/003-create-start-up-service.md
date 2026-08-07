@@ -121,6 +121,20 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
+# Database lifecycle
+databaseLifecycle:
+  # Dingo captures automatic database snapshots at epoch boundaries.
+  # Default: false.
+  snapshotEnabled: false
+  # Dingo writes automatic snapshots to this local filesystem directory.
+  # Set this when snapshotEnabled is true and when Bark mounts the live service.
+  snapshotDir: "$HOME/dingo/snapshots"
+  # Keep only the most recent automatic snapshots.
+  # Default: 0.
+  snapshotRetention: 0
+  # Optional cloud mirror for snapshots.
+  # snapshotCloudDestination: ""
+  # snapshotCloudDestinationPrefix: ""
 EOF"
 ```
 
