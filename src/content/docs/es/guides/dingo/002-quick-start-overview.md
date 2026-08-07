@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.68.0/dingo-v0.68.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -93,6 +93,9 @@ plugins:
 #   mempool:
 #     config:
 #       capacity: 1048576
+
+# `plugins.mempool.config.revalidationDeltaCap` es una anulación opcional.
+# El valor predeterminado es `64` y debe ser positivo.
 
 # Mithril
 mithril:
