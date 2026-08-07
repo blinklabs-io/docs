@@ -84,6 +84,8 @@ Dingoノードを使用してデータを提供し、previewブロックチェ�
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
+> ℹ️ Dingo は、このコマンドに必要な Local State Query に応答するため、`cardano-cli query leadership-schedule` を実行できます。
+
 ***
 
 <br>
