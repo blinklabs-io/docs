@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.68.0/dingo-v0.68.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -89,6 +89,7 @@ plugins:
 # `plugins.mempool.config.capacity` is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
+# `plugins.mempool.config.revalidationDeltaCap` is optional, defaults to 64, and must be positive.
 # plugins:
 #   mempool:
 #     config:
@@ -122,7 +123,7 @@ EOF
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
-> 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
+> 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API. In API mode, the Blockfrost-compatible service also serves pool detail, retiring pools, pool metadata, and reward-history responses.
 
 ```yaml
 midnight:
@@ -185,11 +186,11 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
+> 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`. With `mithril.verifyCertificates: true`, verified bootstrap also checks the snapshot certificate chain, the ancillary ledger state, and the configured network match before it downloads and imports the snapshot.
 
 Dingo will:
 1. Download the latest Mithril snapshot for your configured network
-2. Verify the certificate chain
+2. Verify the snapshot certificate chain, the ancillary ledger state, and the configured network match
 3. Load the snapshot into the database
 
 This takes approximately 20-30 minutes depending on your system and network speed.
