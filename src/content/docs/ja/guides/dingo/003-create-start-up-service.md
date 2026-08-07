@@ -183,6 +183,8 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 > 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
 
+> 📝 `verifyCertificates` を有効にすると、Dingo は証明書チェーンの確認に加えて、補助台帳状態と設定した `network` の一致も確認してからスナップショットを取り込みます。
+
 これによりスナップショットがダウンロードおよびロードされ、数時間の同期時間を節約できます。詳細は[クイックスタートガイドのステップ4](../002-quick-start-overview#ステップ4---mithrilスナップショットからのブートストラップ)を参照してください。
 
 > 📝 これは一度だけ行う必要があります。初回ブートストラップ後は、systemdサービスがノードの同期を維持します。
