@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -123,7 +123,7 @@ EOF
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
-> 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
+> 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API. En ese modo también están disponibles las nuevas familias de endpoints de pools compatibles con Blockfrost.
 
 ```yaml
 midnight:
@@ -190,7 +190,7 @@ cd ~/dingo
 
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada
-2. Verificará la cadena de certificados
+2. Verificará la cadena de certificados, el estado auxiliar del ledger y la coincidencia con la red configurada
 3. Cargará la instantánea en la base de datos
 
 Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de red.
