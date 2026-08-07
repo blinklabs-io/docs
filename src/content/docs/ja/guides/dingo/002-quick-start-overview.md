@@ -168,9 +168,11 @@ cd ~/dingo
 
 > 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
 
+> 📝 `mithril.verifyCertificates: true` を有効にすると、証明書チェーンに加えて ancillary ledger state と設定ネットワークの一致も確認されます。
+
 Dingoは次の処理を行います：
 1. 設定したネットワークの最新Mithrilスナップショットをダウンロード
-2. 証明書チェーンを検証
+2. 証明書チェーン、ancillary ledger state、設定ネットワークの一致を検証
 3. スナップショットをデータベースにロード
 
 これにはシステムとネットワーク速度によって、約10〜15分かかります。
