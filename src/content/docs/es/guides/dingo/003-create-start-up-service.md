@@ -146,9 +146,9 @@ EOF"
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
-> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes, y `databaseLifecycle.snapshotCloudDestination` puede reflejar cada snapshot en S3 o GCS cuando se compila con `dingo_extra_plugins`.
+> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`.
 
-> 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la restaura primero en un directorio temporal.
+> 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
 
 > 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
@@ -192,7 +192,7 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
-> 📝 Con `mithril.verifyCertificates` activado, Dingo verifica la cadena de certificados, el estado auxiliar del libro mayor y la coincidencia con la red configurada antes de importar la instantánea.
+> 📝 Con `mithril.verifyCertificates` activado, Dingo verifica que la cadena de certificados, el estado auxiliar del libro mayor y la red configurada coincidan antes de importar la instantánea.
 
 Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
 
