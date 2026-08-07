@@ -86,6 +86,8 @@ plugins:
       # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
       # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
+      # `revalidationDeltaCap` is optional. Default: 64. The value must be positive.
+      # revalidationDeltaCap: 64
   api:
     blockfrost:
       provider: \"builtin\"
