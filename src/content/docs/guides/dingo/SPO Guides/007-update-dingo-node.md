@@ -37,6 +37,8 @@ Verify it has been copied by `which dingo`
 ## Step 4 - Check for Configuration File Updates
 Check to make sure no config updates are required.
 
+> Note: `validateHistorical` and `strictUtxoValidation` now default to `true`. Review these settings before upgrading from a non-genesis intersection or any source that does not provide the complete pre-intersect state.
+
 Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release Notes</a> and the [Quick Start](../../002-quick-start-overview) guide.
 
 > 💡 To view and edit `dingo.yaml` file run:
