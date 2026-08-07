@@ -84,7 +84,7 @@ Ejecutaremos el siguiente comando para consultar el tip:
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
-> ℹ️ Dingo ahora admite `cardano-cli query leadership-schedule` y sirve las respuestas de Local State Query que necesita ese comando.
+> ℹ️ Dingo ahora admite `cardano-cli query leadership-schedule` y devuelve los datos de Local State Query que necesita ese comando.
 
 ***
 
