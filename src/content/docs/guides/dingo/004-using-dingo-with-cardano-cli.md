@@ -84,7 +84,6 @@ Run the following command to query the tip:
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
-> ℹ️ Dingo now supports `cardano-cli query leadership-schedule` and serves the Local State Query responses that command needs.
 
 ***
 
