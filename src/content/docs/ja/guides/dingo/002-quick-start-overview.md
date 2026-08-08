@@ -127,7 +127,6 @@ EOF
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
-> 📝 `plugins.mempool.config.revalidationDeltaCap` は、メモプール再検証で一度に処理する変更量の上限を制御します。既定値は `64` で、`0` 以下は指定できません。
 
 ***
 
