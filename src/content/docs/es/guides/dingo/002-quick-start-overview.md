@@ -94,9 +94,6 @@ plugins:
 #     config:
 #       capacity: 1048576
 
-# `plugins.mempool.config.revalidationDeltaCap` es una anulación opcional.
-# El valor predeterminado es `64` y debe ser positivo.
-
 # Mithril
 mithril:
   aggregatorUrl: ""
