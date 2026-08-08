@@ -190,7 +190,7 @@ cd ~/dingo
 
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada
-2. Verificará la cadena de certificados, el estado auxiliar del ledger y la coincidencia con la red configurada
+2. Verificará la cadena de certificados
 3. Cargará la instantánea en la base de datos
 
 Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de red.
