@@ -190,7 +190,7 @@ cd ~/dingo
 
 Dingo will:
 1. Download the latest Mithril snapshot for your configured network
-2. Verify the snapshot certificate chain, the ancillary ledger state, and the configured network match
+2. Verify the certificate chain
 3. Load the snapshot into the database
 
 This takes approximately 20-30 minutes depending on your system and network speed.
