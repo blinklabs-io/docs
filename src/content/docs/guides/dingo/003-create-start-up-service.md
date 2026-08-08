@@ -86,6 +86,8 @@ plugins:
       # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
       # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
+      # `revalidationDeltaCap` is optional. Default: 64. The value must be positive.
+      # revalidationDeltaCap: 64
   api:
     blockfrost:
       provider: \"builtin\"
@@ -121,10 +123,26 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
+# Database lifecycle
+databaseLifecycle:
+  # Dingo captures automatic database snapshots at epoch boundaries.
+  # Default: false.
+  snapshotEnabled: false
+  # Dingo writes automatic snapshots to this local filesystem directory.
+  # Set this when snapshotEnabled is true and when Bark mounts the live service.
+  snapshotDir: \"$HOME/dingo/snapshots\"
+  # Keep only the most recent automatic snapshots.
+  # Default: 0.
+  snapshotRetention: 0
+  # Optional cloud mirror for snapshots.
+  # snapshotCloudDestination: \"\"
+  # snapshotCloudDestinationPrefix: \"\"
 EOF"
 ```
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
+
+> 📝 `databaseLifecycle.snapshotEnabled` controls automatic snapshots, and `dingo database snapshot|restore|truncate` handles offline maintenance. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
 ```yaml
 storageMode: "api"

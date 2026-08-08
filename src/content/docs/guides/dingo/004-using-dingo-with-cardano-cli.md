@@ -84,6 +84,7 @@ Run the following command to query the tip:
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
+
 ***
 
 <br>
