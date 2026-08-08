@@ -3,54 +3,137 @@ title: Using on Windows
 description: How to use Adder on Windows.
 ---
 
-# Using Adder on Windows
+Adder is a packaged desktop application that runs in the system tray and provides a streamlined, user‑friendly experience for monitoring Cardano blockchain activity.
 
-This guide will walk you through how to use Adder on Windows. In the following sections we will show you examples of how to use Adder. Remember these are sample to get you familiar to the type of things Adder is capable of. The real power in Adder can be unlocked by your imagination.
+## Install and Configure
 
-> ✅ Note this guide assume you have downloaded the Adder exe from <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. If you have not downloaded the exe please see our [Quick Start](../002-quick-start-overview)
+### Step 1.1 - Download the Adder Installer
+The easiest way to install Adder on Windows is by using the MSI installer available at <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a>. <br>
 
-## Step 1 - Open a Command Prompt on Windows
+<img src="/adder-windows-release-download.webp"
+     alt="adder-windows-release-download"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+ 
+> Select the appropriate version for your system (Windows x64 or Windows arm64).
 
-Now that you have the Adder exe file downloaded, we need to open a command line prompt. This is where we will later feed Adder filters and commands for Adder to notify us of the event(s) we want to track.
+***
 
+### Step 1.2 - Once the download is complete, click `Open` to open the `.msi` file.
+<img src="/adder-windows-open-msi.webp"
+     alt="adder-windows-open-msi"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+***
 
-To open a command prompt in Windows, go to your Windows start menu
+### Step 1.3 - Then click `Run` to start the installation.
+<img src="/adder-windows-run-msi.webp"
+     alt="adder-windows-run-msi"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-![adder-windows-start-menu](/adder-windows-start-menu.webp)
+***
 
+### Step 2 - Launch Adder
 
+### Step 2.1 - Open the Windows Start Menu.
 
-Next type `cmd` in the search box and then click `Open`
+<img src="/adder-windows-start-menu.webp"
+     alt="adder-windows-start-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
+***
 
-## Step 2 - Get path for Adder exe
-
-Next, we will need to get the path of the Adder exe file that we downloaded so we can run it in the command line.
-
-In this example we downloaded the Adder exe to our desktop, so we can right click on the Adder exe and copy path.
-
-📝 Take note of the path we will need it moving forward ✅
-
-![adder-exe-path](/adder-exe-path.png)
-
-## Step 3 - Run Adder in Command Prompt
-
-Now that we have the path for the Adder exe, type the path in or paste it if you copied the path in the previous step.
-
-![adder-cmd-paste-path](/adder-cmd-paste-path.png)
-
-### Congratulations!
-
-Now we are ready to run Adder with filters and commands so we can track certain information and pick the way we are notified.
-
-<br />
+### Step 2.2 - Search for `Adder`
+Search for the Adder app and open it. 
 
 
-> 💡 TIP: You can get a list of all available commands by using the `-h` or `--help` flag.
+<img src="/adder-windows-search-adder-app.webp"
+     alt="adder-windows-search-adder-app"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-<br />
+>If you don't see the configuration **Welcome** screen, open your system tray and right-click the Adder app.
+
+***
+
+### Step 3 - Configure Adder
+Once you open the *Adder Tray App*, you will see the **Welcome** screen, which will guide you through the steps to configure Adder and set up the alerts you want to receive.
+
+<img src="/adder-windows-config-welcome.webp"
+     alt="adder-windows-config-welcome"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+### Step 3.1 - Select a Cardano network that you want to monitor.
+<img src="/adder-windows-config-network.webp"
+     alt="adder-windows-config-network"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+***
+
+### Step 3.2 - Add Your Monitoring Targets
+Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
+
+For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
+
+<img src="/adder-windows-config-pool-id-drep-id.webp"
+     alt="adder-windows-config-pool-id-drep-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
+
+<img src="/adder-windows-config-or.webp"
+     alt="adder-windows-config-or"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+### Step 3.3 - Notification Output (Optional)
+Adder is already configured to provide desktop notifications. You can select other notification methods if you choose. 
+<img src="/adder-windows-config-output.webp"
+     alt="adder-windows-config-output"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+**Then click `Next Step`**
+
+***
+
+### Step 3.4 - Event Alerts
+Select the checkboxes for the events for which you would like to receive a desktop alert.
+<img src="/adder-windows-config-events.webp"
+     alt="adder-windows-config-events"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+### Step 3.5 - Send a Test Notification
+
+Click `Test Notification` to confirm that you are receiving desktop alerts.
+<img src="/adder-windows-config-send-test.webp"
+     alt="adder-windows-config-send-test"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+If you see the notification, click `Yes, I saw it`.
+
+***
+
+### Step 3.6 - Finish Setup
+Click `Finish Setup`.
+
+***
+
+### Congratulations! Adder will now alert you when an event that you have selected to track occurs.
+
+***
+
+## Using the Tray Menu
+If you want to view recent events, adjust the configuration, or start, stop, or restart the app, you can right-click the Adder app in your system tray to adjust the settings as needed.
+
+<img src="/adder-windows-tray-app-menu.webp"
+     alt="adder-windows-tray-app-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 
-We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power 💪 of Adder!
+
+
+

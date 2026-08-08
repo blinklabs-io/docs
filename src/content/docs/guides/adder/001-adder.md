@@ -9,7 +9,18 @@ Adder is a tool for tailing the Cardano blockchain and emitting events for each 
 
 Basically, Adder lets you track events you care about, and you can get notified in the way you prefer. For example, Adder can send you a desktop notification when a payment is sent to any wallet address that you want to track. Or maybe you want to be notified in Discord when your Stake Pool Operator (SPO) mints a block. Adder can track the different Cardano blockchain events that you care about and notify you when they occur.
 
-## How do I actually use Adder?
-It’s easy, just download the Adder executable file from blinklabs.io and open a command prompt on your computer. In the command prompt call the executable file and tell it what Cardano blockchain events you want to be notified of and how you want to be notified. It’s that simple!
+## Adder Deployment Options:
+Adder offers two distinct operating modes, each optimized for a different types of users and deployment environments. Choosing the right mode ensures you get the correct balance of usability, configurability, and operational control. 
 
-✅ Get started with our [Quick Start](../002-quick-start-overview) guide and learn what Adder can do in our how to guides and examples
+
+✅ Adder Tray or Adder CLI, see which operating mode is right for your use case [learn more](../002-operating-mode-overview)
+
+### Adder Tray Guides (Windows & macOS)
+
+- [Windows Install Guide](../003-using-adder-on-windows)
+- [Mac Install Guide](../004-use-adder-on-mac)
+
+
+### Adder CLI / Event Monitor Guides (Linux)
+
+- [Linux Guide](../005-use-adder-on-linux)
