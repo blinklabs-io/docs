@@ -70,7 +70,6 @@ rm -r .dingo
 ### Step 5.2 - Mithril Sync
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-
 Run the following command from your `~/dingo` directory:
 ```
 dingo sync --mithril
