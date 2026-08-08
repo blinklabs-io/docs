@@ -89,7 +89,6 @@ plugins:
 # `plugins.mempool.config.capacity` is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
-# `plugins.mempool.config.revalidationDeltaCap` is optional, defaults to 64, and accepts only positive values.
 # plugins:
 #   mempool:
 #     config:
