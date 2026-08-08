@@ -123,7 +123,7 @@ EOF
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
-> 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API. En ese modo también están disponibles las nuevas familias de endpoints de pools compatibles con Blockfrost.
+> 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
 ```yaml
 midnight:
