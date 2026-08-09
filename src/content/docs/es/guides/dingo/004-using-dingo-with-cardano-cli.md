@@ -84,6 +84,7 @@ Ejecutaremos el siguiente comando para consultar el tip:
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
+
 ***
 
 <br>

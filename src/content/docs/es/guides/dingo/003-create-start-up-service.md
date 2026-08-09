@@ -77,6 +77,9 @@ plugins:
     config:
       # Capacidad del mempool en bytes. Mantén la línea comentada para usar el valor predeterminado del modo.
       # capacity: 1048576
+      # `revalidationDeltaCap` es opcional.
+      # Su valor predeterminado es 64 y debe ser mayor que 0.
+      # revalidationDeltaCap: 64
   api:
     blockfrost:
       provider: \"builtin\"
@@ -98,6 +101,32 @@ mithril:
   enabled: true
   verifyCertificates: true
 
+# Lifecycle de base de datos
+databaseLifecycle:
+  # Captura snapshots automáticos al cierre de cada epoch.
+  # Default: false
+  # CLI: --db-snapshot-enabled
+  snapshotEnabled: false
+  # Directorio local donde Dingo escribe cada snapshot.
+  # Requerido cuando `snapshotEnabled` vale true.
+  # CLI: --db-snapshot-dir
+  snapshotDir: \"$HOME/dingo/.dingo/snapshots\"
+  # Destino opcional en la nube para reflejar cada snapshot.
+  # Usa `s3://bucket/prefix` o `gcs://bucket/prefix`.
+  # Requiere el build tag `dingo_extra_plugins`.
+  # CLI: --db-snapshot-cloud-destination
+  snapshotCloudDestination: \"\"
+  # Segmento adicional que Dingo agrega antes de cada ID de snapshot.
+  # CLI: --db-snapshot-cloud-destination-prefix
+  snapshotCloudDestinationPrefix: \"\"
+  # Número de snapshots automáticos recientes que Dingo conserva.
+  # 0 conserva todos.
+  # CLI: --db-snapshot-retention
+  snapshotRetention: 0
+  # Captura un snapshot automático cada N cierres de epoch.
+  # CLI: --db-snapshot-every-n-epochs
+  snapshotEveryNEpochs: 1
+
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
@@ -116,6 +145,12 @@ EOF"
 ```
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
+
+> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`.
+
+> 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
+
+> 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
 > 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 

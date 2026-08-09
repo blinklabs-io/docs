@@ -82,6 +82,8 @@ plugins:
       # `capacity` はモードの既定値を上書きする任意の設定です。既定値は Praos モードと通常の serve モードで 1 MiB、Musashi モードで 25 MiB です。
       # 既定値を使うには、このキーをコメントアウトするか省略します。
       # capacity: 1048576
+      # `revalidationDeltaCap` は FIFO 再検証中に追随する変更量の上限です。既定値は 64 で、正の値でなければなりません。
+      # revalidationDeltaCap: 64
   api:
     blockfrost:
       provider: \"builtin\"
@@ -116,6 +118,21 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 # Storage
 barkBaseUrl: \"\"
 barkPort: 0
+# `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
+databaseLifecycle:
+  # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
+  snapshotEnabled: false
+  # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
+  snapshotDir: \"$HOME/dingo/snapshots\"
+  # ローカル保存に加えて、スナップショットをクラウドにもミラーします。`s3://bucket/prefix` または `gcs://bucket/prefix` を指定します。
+  # `dingo_extra_plugins` ビルドタグが必要です。
+  snapshotCloudDestination: \"\"
+  # 複数ノードで同じクラウド保存先を共有する場合の追加パスです。
+  snapshotCloudDestinationPrefix: \"\"
+  # 古い自動スナップショットの保持数です。`0` はすべて保持します。
+  snapshotRetention: 0
+  # N epoch ごとに自動スナップショットを作成します。`1` は毎回です。
+  snapshotEveryNEpochs: 1
 storageMode: \"core\"
 EOF"
 ```
@@ -147,6 +164,8 @@ midnight:
 これらのポートは、更新後のローカル Blockfrost エクスプローラーの例に合わせた値です。これらのサービスが必要な場合にのみ有効にできます。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
+
+> 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
 
