@@ -15,7 +15,9 @@ Let us start by picking an asset that we want to follow.
 
 In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search by a token name so we can get the asset id / asset fingerprint.
 
-![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
+<img src="/adder-cTOSI-cexploer.png"
+     alt="adder-cTOSI-cexploer"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 📝 Make note of the asset fingerprint, we will need it later. For this example, we used the following asset id / asset fingerprint:
 
@@ -74,8 +76,9 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI you will get a desktop alert.
 
-
-![adder-desktop-alert](/adder-desktop-alert.png)
+<img src="/adder-desktop-alert.png"
+     alt="adder-desktop-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
