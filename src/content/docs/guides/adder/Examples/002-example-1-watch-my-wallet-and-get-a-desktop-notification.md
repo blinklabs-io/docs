@@ -97,7 +97,7 @@ Minimize:
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 Desktop Alert:
-<img src="/adder-desktop-alert"
+<img src="/adder-desktop-alert.png"
      alt="adder-desktop-alert"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
