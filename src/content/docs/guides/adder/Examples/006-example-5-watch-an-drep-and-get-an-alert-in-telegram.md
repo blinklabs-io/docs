@@ -29,7 +29,9 @@ In order to filter by a DRep that we want to watch we need the DRep id. We can u
 
 In this example we searched  `Earn Coin Pool` on <a href="https://adastat.net/dreps" target="_blank">https://adastat.net/dreps</a>
 
-![adder-drep-id](/adder-drep-id.png)
+<img src="/adder-drep-id.png"
+     alt="adder-drep-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
@@ -49,25 +51,33 @@ In order to get alerts in Telegram we will need a bot token from BotFather and t
 
 **2-1.** Open BotFather in Telegram by searching for `BotFather`
 
-![adder-search-botfather](/adder-search-botfather.png)
+<img src="/adder-search-botfather.png"
+     alt="adder-search-botfather"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
 **2-2.** Create a New Bot
 
-![adder-botfather-create-new-bot](/adder-botfather-create-new-bot.png)
+<img src="/adder-botfather-create-new-bot.png"
+     alt="adder-botfather-create-new-bot"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
 **2-3.** Name your bot and give it a unique username
 
-![adder-botfather-new-bot-details](/adder-botfather-new-bot-details.png)
+<img src="/adder-botfather-new-bot-details.png"
+     alt="adder-botfather-new-bot-details"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
 **2-4.** Then click `Create Bot`
 
-![adder-botfather-click-create-bot](/adder-botfather-click-create-bot.png)
+<img src="/adder-botfather-click-create-bot.png"
+     alt="adder-botfather-click-create-bot"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
@@ -77,23 +87,31 @@ In order to get alerts in Telegram we will need a bot token from BotFather and t
 
 📝 Make note of the Bot Token, we will need it later. 
 
-![adder-botfather-copy-bot-token](/adder-botfather-copy-bot-token.png)
+<img src="/adder-botfather-copy-bot-token.png"
+     alt="adder-botfather-copy-bot-token"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
 **2-6.** Click `Username`
 
-![adder-botfather-click-username](/adder-botfather-click-username.png)
+<img src="/adder-botfather-click-username.png"
+     alt="adder-botfather-click-username"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
 **2-7.** Click `Message` to start chat with Bot
 
-![adder-botfather-click-message-bot](/adder-botfather-click-message-bot.png)
+<img src="/adder-botfather-click-message-bot.png"
+     alt="adder-botfather-click-message-bot"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 **2-8.** Click `Start`
 
-![adder-bot-chat-click-start](/adder-bot-chat-click-start.png)
+<img src="/adder-bot-chat-click-start.png"
+     alt="adder-bot-chat-click-start"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <a name="step-2-9"></a>
 
