@@ -216,7 +216,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
-> 📝 Leave `mithril.verifyCertificates` enabled so Dingo verifies Mithril certificates before it loads the snapshot.
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
