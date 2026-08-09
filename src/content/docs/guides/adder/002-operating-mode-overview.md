@@ -9,6 +9,9 @@ Adder offers two distinct operating modes, each optimized for different types of
 
 Adder Tray is a packaged desktop application that runs in the system tray and provides a streamlined, user‑friendly experience for monitoring Cardano blockchain activity.
 
+- [Windows Install Guide](../003-using-adder-on-windows)
+- [Mac Install Guide](../004-use-adder-on-mac)
+
 ### Key Characteristics:
 - Delivered as signed installers (`.msi` for Windows, `.pkg` for macOS).
 - Automatic OS integration, including:
@@ -29,6 +32,8 @@ Adder Tray is a packaged desktop application that runs in the system tray and pr
 ## 2. Adder CLI / Event Monitor (Linux Binary)
 
 The Adder command‑line binary provides full access to Adder’s event‑processing pipeline. This mode is designed for operators, developers, and integrators who want more control over how events are filtered and emitted.
+
+- [Linux Guide](../005-use-adder-on-linux)
 
 ### Key Characteristics:
 - Install via binary download
