@@ -60,6 +60,7 @@ The Adder command‑line binary provides full access to Adder’s event‑proces
 - Developers embedding Adder as a Go library
 
 ## Quick Decision Matrix
+
 | Requirement | Recommended Mode |
 | --- | --- |
 | Simple notifications | **Adder Tray** |
