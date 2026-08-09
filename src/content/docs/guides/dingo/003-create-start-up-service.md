@@ -151,7 +151,7 @@ EOF"
 
 > 📝 Use `dingo database snapshot`, `dingo database restore <snapshot-dir>`, and `dingo database truncate --slot <slot>`, `--hash <hash>`, or `--block-number <n>` on an offline data directory. `restore` also accepts the same cloud URI that `snapshotCloudDestination` uses and downloads it to a temporary directory before restoration.
 
-> 📝 When `barkPort` runs together with `databaseLifecycle.snapshotDir`, Bark also exposes live `Restore` and `Truncate` access. Dingo requires `barkClientCaFilePath` plus `tlsCertFilePath` and `tlsKeyFilePath` to enable those destructive RPCs with authentication.
+> 📝 When `barkPort` runs together with `databaseLifecycle.snapshotDir`, Bark also exposes live `Restore` and `Truncate` access.
 
 ```yaml
 storageMode: "api"
