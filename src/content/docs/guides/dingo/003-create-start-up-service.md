@@ -137,6 +137,9 @@ databaseLifecycle:
   # Optional cloud mirror for snapshots.
   # snapshotCloudDestination: \"\"
   # snapshotCloudDestinationPrefix: \"\"
+  # Capture an automatic snapshot every N epoch closes.
+  # CLI: --db-snapshot-every-n-epochs
+  snapshotEveryNEpochs: 1
 EOF"
 ```
 
