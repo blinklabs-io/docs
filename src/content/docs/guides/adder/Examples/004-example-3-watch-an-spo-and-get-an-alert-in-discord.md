@@ -31,7 +31,9 @@ In order to filter by a Stake Pool (SPO) that we want to watch we need the pool 
 
 In this example we searched the ticker `ECP` on <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>
 
-![adder-pool-id](/adder-pool-id.png)
+<img src="/adder-pool-id.png"
+     alt="adder-pool-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
@@ -54,37 +56,49 @@ In order to get alerts in our Discord server we will need a webhook URL. The fol
 
 1 ) Click `Edit Channel` in the channel that you would like to receive alerts in
 
-![adder-discord-edit-channel](/adder-discord-edit-channel.png)
+<img src="/adder-discord-edit-channel.png"
+     alt="adder-discord-edit-channel"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
 2 ) Click `Integrations`
 
-![adder-discord-integrations](/adder-discord-integrations.png)
+<img src="/adder-discord-integrations.png"
+     alt="adder-discord-integrations"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
 3 ) Click `Create Webhook`
 
-![adder-discord-create-webhook](/adder-discord-create-webhook.png)
+<img src="/adder-discord-create-webhook.png"
+     alt="adder-discord-create-webhook"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
 4 ) Click `New Webhook`
 
-![adder-discord-new-webhook](/adder-discord-new-webhook.png)
+<img src="/adder-discord-new-webhook.png"
+     alt="adder-discord-new-webhook"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
 5 ) Name your Webhook 
 
-![adder-discord-rename-webhook](/adder-discord-rename-webhook.png)
+<img src="/adder-discord-rename-webhook.png"
+     alt="adder-discord-rename-webhook"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
 6 ) Click `Copy Webhook URL`
 
-![adder-discord-copy-webhook-url](/adder-discord-copy-webhook-url.png)
+<img src="/adder-discord-copy-webhook-url.png"
+     alt="adder-discord-copy-webhook-url"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
@@ -162,7 +176,9 @@ To get Discord notifications when a change occurs to a SPO, we will run the foll
 "C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
-![adder-SPO-block-alert](/adder-SPO-block-alert.png)
+<img src="/adder-SPO-block-alert.png"
+     alt="adder-SPO-block-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ### Congratulations!
 
