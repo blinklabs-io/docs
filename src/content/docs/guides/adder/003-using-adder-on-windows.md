@@ -50,7 +50,7 @@ Search for the Adder app and open it.
      alt="adder-windows-search-adder-app"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
->If you don't see the configuration **Welcome** screen, open your system tray and right-click the Adder app.
+>If you don't see the configuration **Welcome** screen, open your system tray, right-click the Adder app, and select **Configure** to open the setup wizard.
 
 ***
 
