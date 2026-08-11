@@ -8,7 +8,9 @@ This example is a bit more advanced, where we use Adder to watch a smart contrac
 > ⚠️ Before we breakdown the filters and commands we will use for this example we assume you already have a smart contract policy in mind that you want to watch.
 
 
-![adder-policy-id](/adder-policy-id.png)
+<img src="/adder-policy-id.png"
+     alt="adder-policy-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
@@ -20,7 +22,7 @@ c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
 
 <br />
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../002-quick-start-overview) guide.
+> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
 
 
 
@@ -32,7 +34,9 @@ Let's start by picking an asset that we want to follow. If this asset is used in
 
 In order to filter by a Token that we want to watch we need the asset id also known as the asset fingerprint. We can use tools like <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> to search by a token name so we can get the asset id / asset fingerprint.
 
-![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
+<img src="/adder-cTOSI-cexploer.png"
+     alt="adder-cTOSI-cexploer"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
@@ -104,7 +108,9 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI in our smart contract you will get a desktop alert.
 
-![adder-desktop-alert](/adder-desktop-alert.png)
+<img src="/adder-desktop-alert.png"
+     alt="adder-desktop-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
