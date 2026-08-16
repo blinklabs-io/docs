@@ -3,11 +3,11 @@ title: Últimas versiones
 description: Notas de la versión de gOuroboros
 ---
 
-## Mantén tus versiones de gOuroboros actualizadas para asegurarte de usar siempre las últimas mejoras de rendimiento💪, las nuevas funciones✨ y las correcciones críticas🔧.
+## Las notas de versión de gOuroboros reúnen las últimas mejoras de rendimiento💪, nuevas funciones✨ y correcciones críticas🔧.
 
 <br>
 
-☑️ Selecciona una versión a continuación para ver las notas de la versión completas.
+☑️ La lista siguiente permite ver las notas de la versión completas.
 
 - Versión: v0.193.1 - *[Ver notas de la versión](../v0-193-1)*
 - Versión: v0.193.0 - *[Ver notas de la versión](../v0-193-0)*
