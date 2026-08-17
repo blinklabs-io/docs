@@ -1,17 +1,17 @@
 ---
 title: Byron ssc_proof hash validation
-description: Configure `common.VerifyConfig.EnableByronSscProofHashValidation` to compare Byron `ssc_proof` hashes instead of using structural validation only.
+description: Configure `common.VerifyConfig.EnableByronSscProofHashValidation` to keep Byron `ssc_proof` validation structural by default and enable full hash comparison when needed.
 ---
 
 ## Overview
 
-This page covers the Byron `ssc_proof` validation option in gOuroboros.
+Byron `ssc_proof` validation stays structural unless `common.VerifyConfig.EnableByronSscProofHashValidation` is `true`.
 
 ## Default behavior
 
-By default, Byron `ssc_proof` values receive structural validation only.
+When the flag is absent or `false`, gOuroboros validates the `ssc_proof` structure only.
 
-## Enable hash validation
+## Opt in to hash validation
 
 Set `common.VerifyConfig.EnableByronSscProofHashValidation` to `true` to recompute the Byron `ssc_proof` hash and compare it with the block data.
 
