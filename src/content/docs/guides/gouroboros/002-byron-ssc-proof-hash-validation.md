@@ -5,7 +5,7 @@ description: Configure `common.VerifyConfig.EnableByronSscProofHashValidation` t
 
 ## Overview
 
-Byron `ssc_proof` validation stays structural unless `common.VerifyConfig.EnableByronSscProofHashValidation` is `true`.
+This page documents `common.VerifyConfig.EnableByronSscProofHashValidation` in gOuroboros.
 
 ## Default behavior
 
