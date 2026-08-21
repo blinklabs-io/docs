@@ -169,8 +169,7 @@ For us to get a notification in our preferred Discord channel, we need to tell A
 
 To get Discord notifications when a change occurs to a SPO, we will run the following command in our command prompt:
 
-> ⚠️ Please adjust the path to your Adder binary if needed. <br>
-> Also adjust the pool id and webhook URL.
+> ⚠️ Please adjust the pool id and webhook URL.
 
 ```
 ./adder --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
