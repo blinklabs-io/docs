@@ -74,7 +74,7 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 ### Congratulations!
 
-Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI you will get a desktop alert.
+Anytime a transaction occurs containing cTOSI you will get a desktop alert.
 
 <img src="/adder-desktop-alert.png"
      alt="adder-desktop-alert"
