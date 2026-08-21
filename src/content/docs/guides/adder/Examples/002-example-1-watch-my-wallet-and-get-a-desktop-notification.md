@@ -72,16 +72,15 @@ We want the output to be a desktop notification, so that when a transaction occu
 Now that we understand the filters and commands that we want to input into Adder in order to get desktop alerts when we send or receive an asset, we will run the following command in our command prompt:
 
 
-> ⚠️ Please adjust the path to your Adder binary. In this example it's in our ~/dingo directory.
+> ⚠️ Please adjust the path to your Adder binary.
 
 Also make sure you replace the below stake address with your receive or stake address from [Step 1](#step-1)
 
 
-Command to run once you adjust Adder exe path and your wallet address:
+Command to run once you adjust Adder binary path and your wallet address:
 
 
 ```
-cd ~/dingo
 ./adder --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
 ```
 
@@ -97,7 +96,7 @@ Desktop Alert:
      alt="adder-desktop-alert"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-### Congratulations!&#x20;
+### Congratulations!
 
 ***
 
