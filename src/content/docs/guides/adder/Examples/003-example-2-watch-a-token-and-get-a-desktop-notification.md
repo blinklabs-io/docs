@@ -65,9 +65,6 @@ We want the output to be a desktop notification. So that when a transaction that
 
 To get desktop notifications when a transaction includes the Tosidrop token cTOSI, we will run the following command in our command prompt:
 
-> ⚠️ Please adjust the path to your Adder binary if needed.
-
-
 ```
 ./adder --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output notify
 ```
