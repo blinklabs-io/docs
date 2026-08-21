@@ -13,3 +13,14 @@ description: gOuroboros リリースノート
 - Version: v0.193.3 - *[リリースノートを見る](../v0-193-3)*
 - Version: v0.193.2 - *[リリースノートを見る](../v0-193-2)*
 - Version: v0.193.1 - *[リリースノートを見る](../v0-193-1)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

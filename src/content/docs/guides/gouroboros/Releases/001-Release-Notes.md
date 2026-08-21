@@ -44,3 +44,14 @@ description: gOuroboros Release Notes
 - Version: v0.178.0 - *[View Release Notes](../v0-178-0)*
 - Version: v0.171.0 - *[View Release Notes](../v0-171-0)*
 - Version: v0.170.1 - *[View Release Notes](../v0-170-1)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
