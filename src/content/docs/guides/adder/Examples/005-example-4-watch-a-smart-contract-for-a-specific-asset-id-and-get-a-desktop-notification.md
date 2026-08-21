@@ -95,7 +95,7 @@ We want the output to be a desktop notification. So when a transaction that cont
 
 To get desktop notifications when a transaction includes the Tosidrop token cTOSI, within the smart contract we will run the following command in our command prompt:
 
-> ⚠️ Please adjust the path to your Adder binary if needed.
+> ⚠️ Please adjust the path to your Adder binary if needed. <br>
 > Also adjust to the asset id and policy id that you want to track.
 
 
