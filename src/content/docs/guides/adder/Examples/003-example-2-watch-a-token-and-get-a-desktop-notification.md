@@ -73,7 +73,7 @@ To get desktop notifications when a transaction includes the Tosidrop token cTOS
 
 Anytime a transaction occurs containing cTOSI you will get a desktop alert.
 
-<img src="/adder-desktop-alert.png"
+<img src="/adder-desktop-alert-v2.png"
      alt="adder-desktop-alert"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
