@@ -72,7 +72,7 @@ We want the output to be a desktop notification, so that when a transaction occu
 Now that we understand the filters and commands that we want to input into Adder in order to get desktop alerts when we send or receive an asset, we will run the following command in our command prompt:
 
 
-> ⚠️ Please adjust the path to your Adder binary.
+> ⚠️ Please adjust the path to your Adder binary if needed.
 
 Also make sure you replace the below stake address with your receive or stake address from [Step 1](#step-1)
 
