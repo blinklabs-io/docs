@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.69.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.0/dingo-v0.70.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -104,7 +104,9 @@ mithril:
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
+debugBindAddr: "127.0.0.1"
 network: "preview"
+targetNumberOfRootPeers: 0
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
@@ -119,11 +121,30 @@ midnight:
 EOF
 ```
 
-> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
+> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。`pprof` には認証とTLSがなく、`debugBindAddr` は `bindAddr` や `privateBindAddr` とは独立して既定値 `127.0.0.1` を使用します。外部アクセスを許可する場合は、YAMLの `debugBindAddr`、`DINGO_DEBUG_BIND_ADDR`、または `--debug-bind-addr` で明示的にアドレスを指定し、ファイアウォールなどのネットワーク制御も設定します。`serve` と Mithril同期は同じ設定を使用します。
+
+> 📝 `targetNumberOfRootPeers` はルートピアの目標数を指定します。`0` はDingo側の指定なしを表し、Cardanoの `TargetNumberOfRootPeers` をフォールバックとして使用します。Dingo側で0以外を指定するとCardano側の値より優先します。Cardano側にも0または指定がない場合の実効既定値は `60` です。正の値は選択するパブリックルートの数を制限しますが、ローカルルートは維持します。`-1` は無制限です。YAMLキーは `targetNumberOfRootPeers`、環境変数は `DINGO_TARGET_ROOT_PEERS`、CLIフラグは `--target-root-peers` です。
 
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
+
+APIのTLSと認証を選択したAPIプロバイダーに共通で設定する場合は、トップレベルの `api.tls` と `api.auth` を使用します。次の例では、Blockfrost、Mesh、UTxO RPCにサーバーTLSとトークン認証を適用します。
+
+```yaml
+api:
+  tls:
+    mode: server
+    certFilePath: "/run/secrets/api.crt"
+    keyFilePath: "/run/secrets/api.key"
+  auth:
+    mode: token
+    tokenFilePath: "/run/secrets/api-token"
+```
+
+TLSの有効なモードは `disabled` と `server`、認証の有効なモードは `disabled` と `token` です。`server` には `certFilePath` と `keyFilePath` の両方が必要です。`token` には `token` または `tokenFilePath` のどちらか一方が必要で、両方は指定できません。`plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` にプロバイダー単位の項目を指定すると、共通設定の各項目を上書きできます。プロバイダーで `mode: disabled` を明示すると、継承した設定も無効になります。未設定時の既定モードはどちらも `disabled` です。
+
+認証済みAPIリクエストは `Authorization: Bearer <token>` を使用します。Blockfrostは同じトークンに対して `project_id` も受け付けます。ブラウザーのCORS preflightである `OPTIONS` は認証なしで処理しますが、それ以外のリクエストは認証が必要です。トップレベルの設定には、CLIフラグ `--api-tls-mode`、`--api-tls-cert-file-path`、`--api-tls-key-file-path`、`--api-auth-mode`、`--api-auth-token-file-path` と、環境変数 `DINGO_API_TLS_MODE`、`DINGO_API_TLS_CERT_FILE_PATH`、`DINGO_API_TLS_KEY_FILE_PATH`、`DINGO_API_AUTH_MODE`、`DINGO_API_AUTH_TOKEN_FILE_PATH` も使用できます。既存のルート設定 `tlsCertFilePath` と `tlsKeyFilePath` は UTxO RPCだけで使用する互換設定であり、BlockfrostやMeshの共通TLS既定値にはなりません。
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
