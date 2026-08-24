@@ -80,6 +80,13 @@ plugins:
       # `revalidationDeltaCap` es opcional.
       # Su valor predeterminado es 64 y debe ser mayor que 0.
       # revalidationDeltaCap: 64
+      # `evictionWatermark` acepta 0 o un valor de (0,1). El valor 0 rechaza nuevas transacciones al alcanzar la capacidad en lugar de expulsar transacciones FIFO anteriores.
+      # `rejectionWatermark` acepta valores de (0,1]. Cuando la expulsión está activa, debe ser mayor que `evictionWatermark`.
+      # Valores predeterminados: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
+      # CLI: `--eviction-watermark`, `--rejection-watermark`
+      # Entorno: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
+      # evictionWatermark: 0
+      # rejectionWatermark: 1.0
   api:
     blockfrost:
       provider: \"builtin\"
@@ -164,6 +171,8 @@ EOF"
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
 
 > 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
+
+> 📝 La imagen de contenedor se ejecuta con UID:GID `1000:1000` e incluye herramientas cliente de base de datos. Haz que `databaseLifecycle.snapshotDir` sea escribible para `1000:1000`; de lo contrario, la validación del directorio de instantáneas falla. Los backends remotos S3 y GCS requieren el build tag `dingo_extra_plugins`.
 
 > 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 
