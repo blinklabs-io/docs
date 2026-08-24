@@ -147,10 +147,13 @@ databaseLifecycle:
   # `dingo_extra_plugins` ビルドタグが必要です。
   snapshotCloudDestination: \"\"
   # 複数ノードで同じクラウド保存先を共有する場合の追加パスです。
+  # CLI: --db-snapshot-cloud-destination-prefix
   snapshotCloudDestinationPrefix: \"\"
   # 古い自動スナップショットの保持数です。`0` はすべて保持します。
+  # CLI: --db-snapshot-retention
   snapshotRetention: 0
   # N epoch ごとに自動スナップショットを作成します。`1` は毎回です。
+  # CLI: --db-snapshot-every-n-epochs
   snapshotEveryNEpochs: 1
 storageMode: \"core\"
 EOF"
