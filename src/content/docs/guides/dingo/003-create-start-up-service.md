@@ -148,7 +148,6 @@ databaseLifecycle:
   snapshotRetention: 0
   # Optional cloud mirror for snapshots.
   # Use an `s3://bucket/prefix` or `gcs://bucket/prefix` URI.
-  # Requires the `dingo_extra_plugins` build tag.
   # CLI: `--db-snapshot-cloud-destination`
   snapshotCloudDestination: \"\"
   # Optional path prefix for shared cloud destinations.
