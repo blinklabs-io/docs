@@ -249,3 +249,14 @@ Using a systemd service automatically starts Dingo when your system boots and re
 ### Congratulations! Your Dingo node is now running.
 
 [Learn how to interact with Dingo using the Cardano CLI](../004-using-dingo-with-cardano-cli).
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
