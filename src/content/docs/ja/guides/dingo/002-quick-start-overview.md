@@ -134,7 +134,7 @@ tokenRegistry:
   enabled: false
 ```
 
-Dingoは `tokenRegistry.enabled` を既定で `false` に設定し、`storageMode: "api"` の場合にだけ適用します。`true` に設定する前に、データベースのマイグレーション v3（`token-registry-metadata`）を適用します。メインネットでの初回同期では約240 MBをダウンロードし、それ以降の確認では条件付きリクエストを使用します。
+Dingoは `tokenRegistry.enabled` を既定で `false` に設定し、トークンレジストリを `storageMode: "api"` の場合にだけ使用します。`true` に設定する前に、データベースのマイグレーション v3（`token-registry-metadata`）を適用します。メインネットでの初回同期では約240 MBをダウンロードし、それ以降の確認では条件付きリクエストを使用します。
 
 その他の `tokenRegistry` フィールドは次のように設定します：
 
