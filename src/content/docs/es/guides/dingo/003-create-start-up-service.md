@@ -131,6 +131,19 @@ databaseLifecycle:
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
+ # Dirección del listener pprof no autenticado. Permanece independiente de
+ # bindAddr y privateBindAddr y usa loopback por defecto.
+ # CLI: --debug-bind-addr
+ # Env: DINGO_DEBUG_BIND_ADDR
+ debugBindAddr: \"127.0.0.1\"
+ # Objetivo de pares raíz seleccionados desde la topología.
+ # Un valor distinto de 0 en Dingo tiene prioridad sobre Cardano. Con 0,
+ # Dingo usa el valor de respaldo de Cardano; si Cardano tampoco define un
+ # valor distinto de 0, el valor efectivo es 60. Un valor positivo limita los
+ # pares raíz públicos y conserva los pares raíz locales. -1 elimina el límite.
+ # CLI: --target-root-peers
+ # Env: DINGO_TARGET_ROOT_PEERS
+ targetNumberOfRootPeers: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
@@ -144,7 +157,7 @@ storageMode: \"core\"
 EOF"
 ```
 
-> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
+> 📝 Mantén `debugPort` en `0` para deshabilitar pprof. Cuando lo habilitas, el listener pprof no usa autenticación ni TLS. `debugBindAddr` controla su propia dirección y, por defecto, vale `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr`, `--debug-bind-addr` o `DINGO_DEBUG_BIND_ADDR` y protege la red con un firewall o una política equivalente. Esta regla se aplica tanto a `dingo mithril sync` como al proceso `dingo serve` del servicio `systemd`.
 
 > 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`.
 
