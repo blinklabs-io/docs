@@ -138,7 +138,7 @@ EOF
 
 ### Koios報酬パリティのアカウントチェック（任意）
 
-Dingoのノード内で動作する既存のKoios監視機能で `koiosParity.enabled` を有効にすると、`koiosParity.accounts` は既定で `true` になり、アカウント単位のチェックも実行します。アカウント単位のチェックを無効にして、プール単位だけをチェックする場合は `false` に設定します。
+Dingoのノード内で動作する既存のKoios監視機能を `koiosParity.enabled` で有効にすると、`koiosParity.accounts` は既定で `true` になり、アカウント単位のチェックを実行します。アカウント単位のチェックを無効にして、プール単位だけをチェックする場合は `false` に設定します。
 
 ```yaml
 koiosParity:
@@ -146,9 +146,9 @@ koiosParity:
   accounts: false
 ```
 
-Dingoでは、同じ設定に対して `--koios-parity-accounts` と `DINGO_KOIOS_PARITY_ACCOUNTS` も使用できます。Dingoのノード内で動作する監視機能は、有効にした後のアカウントチェックが既定で有効ですが、スタンドアロンの `koios-parity` はアカウントチェックが既定で無効です。スタンドアロンで有効にするには `koios-parity --accounts` または `KOIOS_PARITY_ACCOUNTS` に `true` か `1` を指定します。このチェックはKoiosへのリクエスト数が大幅に増加します。`--accounts` を明示すると、`--accounts=false` を含めて、環境変数 `KOIOS_PARITY_ACCOUNTS` より優先されます。
+Dingoでは、この設定に `--koios-parity-accounts` と `DINGO_KOIOS_PARITY_ACCOUNTS` も使用できます。これに対し、スタンドアロンの `koios-parity` はアカウントチェックが既定で無効です。スタンドアロンで有効にするには `koios-parity --accounts` または `KOIOS_PARITY_ACCOUNTS` に `true` か `1` を指定します。このチェックを有効にすると、Koiosへのリクエスト数が大幅に増加します。`--accounts` を明示すると、`--accounts=false` を含めて、環境変数 `KOIOS_PARITY_ACCOUNTS` より優先されます。
 
-スタンドアロンの `--grace-hours` は、エポック終了後の猶予または参照データの遅延時間を指定します。既定値は24時間で、`0` は猶予または参照遅延の期間を明示的に無効にします。0以上の値を指定でき、Dingoは負の値を受け付けません。アカウント取得範囲が不完全な場合、Dingoは結果を `ERROR` として報告します。
+スタンドアロンの `koios-parity` で使う `--grace-hours` は、エポック終了後の猶予または参照データの遅延時間を指定します。既定値は24時間で、`0` は猶予または参照遅延の期間を明示的に無効にします。`koios-parity` は0以上の値を受け付け、負の値を拒否します。アカウント取得範囲が不完全な場合、Dingoは結果を `ERROR` として報告します。
 
 > 📝 MithrilのアグリゲーターURLとアーティファクトURLは、既定でHTTPSを使用する必要があります。本番環境では `mithril.allowInsecureHttp: false` を維持します。ローカル開発またはテストに限り `true` を設定できます。対応するオプションは `--mithril-allow-insecure-http` と `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` です。本番環境ではこの設定を有効にしないでください。
 
