@@ -125,6 +125,34 @@ EOF
 
 > 📝 `targetNumberOfRootPeers` はルートピアの目標数を指定します。`0` はDingo側の指定なしを表し、Cardanoの `TargetNumberOfRootPeers` をフォールバックとして使います。Dingo側で0以外の値を指定すると、Cardano側の値より優先します。Cardano側に非0の目標値がない場合の実効既定値は `60` です。正の値は選択するパブリックルートの数を制限しますが、ローカルルートは維持します。`-1` は無制限です。YAMLキーは `targetNumberOfRootPeers`、環境変数は `DINGO_TARGET_ROOT_PEERS`、CLIフラグは `--target-root-peers` です。
 
+### APIのトークンレジストリ設定（任意）
+
+APIストレージでBlockfrostのアセットレスポンスにローカルのCIP-26メタデータを使用する場合は、トップレベルに次のブロックを追加します：
+
+```yaml
+tokenRegistry:
+  enabled: false
+```
+
+`tokenRegistry.enabled` は既定値が `false` で、`storageMode: "api"` の場合にだけ有効です。`true` に設定する前に、データベースのマイグレーション v3（`token-registry-metadata`）を適用します。メインネットでの初回同期では約240 MBをダウンロードし、それ以降の確認では条件付きリクエストを使用します。
+
+その他の `tokenRegistry` フィールドは次のように設定します：
+
+- `sourceUrl`：空の場合は設定したネットワーク用のレジストリを選択します。ミラーを使用する場合はURLを設定します。
+- `interval`：再確認の間隔です。既定値は `6h` で、`1m` 未満の値は最小値の `1m` として扱います。確認には条件付きリクエストを使用します。
+- `requestTimeout`：ダウンロード全体のタイムアウトです。既定値は `15m` です。
+- `userAgent`：HTTPユーザーエージェントです。空の場合は `dingo-token-registry/1` を使用します。
+- `maxBytes`：圧縮されたダウンロードの上限です。既定値は `768 MiB` です。
+- `maxEntryBytes`：1つのマッピングエントリの上限です。既定値は `4 MiB` です。
+- `storeLogos`：`true` にするとレジストリのロゴを保存します。既定値は `false` です。ロゴはレジストリのバイト数の約90%を占めます。
+- `allowPrivateAddresses`：`true` にするとプライベート、ループバック、リンクローカルアドレスへのレジストリリクエストを許可します。SSRF保護のため既定値は `false` です。プライベートなレジストリソースが必要な場合にだけ有効にします。
+
+次の環境変数も使用できます：
+
+`DINGO_TOKEN_REGISTRY_ENABLED`、`DINGO_TOKEN_REGISTRY_SOURCE_URL`、`DINGO_TOKEN_REGISTRY_INTERVAL`、`DINGO_TOKEN_REGISTRY_REQUEST_TIMEOUT`、`DINGO_TOKEN_REGISTRY_USER_AGENT`、`DINGO_TOKEN_REGISTRY_MAX_BYTES`、`DINGO_TOKEN_REGISTRY_MAX_ENTRY_BYTES`、`DINGO_TOKEN_REGISTRY_STORE_LOGOS`、`DINGO_TOKEN_REGISTRY_ALLOW_PRIVATE_ADDRESSES`。
+
+対応するCLIフラグは `--token-registry-enabled`、`--token-registry-source-url`、`--token-registry-interval`、`--token-registry-request-timeout`、`--token-registry-user-agent`、`--token-registry-max-bytes`、`--token-registry-max-entry-bytes`、`--token-registry-store-logos`、`--token-registry-allow-private-addresses` です。
+
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
