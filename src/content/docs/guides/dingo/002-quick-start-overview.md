@@ -122,6 +122,10 @@ EOF
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
+> 📝 When switching `plugins.storage.metadata.provider` to `postgres`, `statementTimeout` limits each statement and `lockTimeout` limits lock acquisition waits; both use nonnegative millisecond values. For `mysql`, `statementTimeout` limits top-level read-only `SELECT` statements through `max_execution_time` in milliseconds, `lockTimeout` sets `innodb_lock_wait_timeout` in whole seconds and rounds subsecond values up, and `readTimeout` and `writeTimeout` set transport socket I/O deadlines. Each field defaults to `0`; negative values are rejected, and all these fields are ignored when an explicit `dsn` is set.
+
+> 📝 Before startup, Dingo preserves an existing `socketPath` unless it confirms a stale Unix socket and removes it. A regular file, symlink, directory, live socket, ambiguous probe, or removal error causes startup to fail. Keep the configured path absent or ensure that it contains only a removable confirmed stale Unix socket.
+
 > 📝 A nonzero `targetNumberOfRootPeers` value overrides Cardano's root peer target. A value of `0` leaves the Dingo target unset, so Dingo uses Cardano's nonzero target as a fallback; when Cardano supplies no nonzero target, Dingo uses the effective default of `60`. A positive value limits newly selected public roots while retaining configured local roots. Set `-1` for unlimited roots. Configure this value with `targetNumberOfRootPeers`, `DINGO_TARGET_ROOT_PEERS`, or `--target-root-peers`.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
