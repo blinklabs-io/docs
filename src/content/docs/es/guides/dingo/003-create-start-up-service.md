@@ -183,6 +183,34 @@ midnight:
   authTokenPolicyId: ""
 ```
 
+### Configuración opcional del registro de tokens de la API
+
+En el modo de almacenamiento API, añade este bloque de nivel superior cuando se necesiten metadatos CIP-26 locales en las respuestas de activos de Blockfrost:
+
+```yaml
+tokenRegistry:
+  enabled: false
+```
+
+`tokenRegistry.enabled` está deshabilitado (`false`) de forma predeterminada y solo tiene efecto con `storageMode: "api"`. Aplica la migración de base de datos v3, `token-registry-metadata`, antes de establecerlo en `true`. La primera sincronización de mainnet descarga aproximadamente 240 MB; las comprobaciones posteriores usan solicitudes condicionales.
+
+Configura los demás campos de `tokenRegistry` de la siguiente manera:
+
+- `sourceUrl`: Un valor vacío selecciona el registro de la red configurada. Establece una URL para usar un espejo.
+- `interval`: El intervalo de comprobación. El valor predeterminado es `6h`; los valores inferiores a `1m` usan el mínimo de `1m`. Las comprobaciones usan solicitudes condicionales.
+- `requestTimeout`: El tiempo de espera para la descarga completa. El valor predeterminado es `15m`.
+- `userAgent`: El agente de usuario HTTP. Un valor vacío usa `dingo-token-registry/1`.
+- `maxBytes`: El límite de la descarga comprimida. El valor predeterminado es `768 MiB`.
+- `maxEntryBytes`: El límite para una entrada de mapeo. El valor predeterminado es `4 MiB`.
+- `storeLogos`: Guarda los logotipos del registro cuando vale `true`; el valor predeterminado es `false` porque los logotipos representan aproximadamente el 90 % de los bytes del registro.
+- `allowPrivateAddresses`: Permite solicitudes del registro a direcciones privadas, de bucle local y de enlace local cuando vale `true`; el valor predeterminado es `false` para la protección contra SSRF. Actívalo solo cuando se necesite una fuente privada del registro.
+
+La configuración también acepta estas variables de entorno:
+
+`DINGO_TOKEN_REGISTRY_ENABLED`, `DINGO_TOKEN_REGISTRY_SOURCE_URL`, `DINGO_TOKEN_REGISTRY_INTERVAL`, `DINGO_TOKEN_REGISTRY_REQUEST_TIMEOUT`, `DINGO_TOKEN_REGISTRY_USER_AGENT`, `DINGO_TOKEN_REGISTRY_MAX_BYTES`, `DINGO_TOKEN_REGISTRY_MAX_ENTRY_BYTES`, `DINGO_TOKEN_REGISTRY_STORE_LOGOS` y `DINGO_TOKEN_REGISTRY_ALLOW_PRIVATE_ADDRESSES`.
+
+Los indicadores CLI equivalentes son `--token-registry-enabled`, `--token-registry-source-url`, `--token-registry-interval`, `--token-registry-request-timeout`, `--token-registry-user-agent`, `--token-registry-max-bytes`, `--token-registry-max-entry-bytes`, `--token-registry-store-logos` y `--token-registry-allow-private-addresses`.
+
 Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
