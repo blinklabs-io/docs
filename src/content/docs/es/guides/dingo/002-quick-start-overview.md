@@ -122,7 +122,7 @@ EOF
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`. `pprof` no tiene autenticación ni TLS y usa la dirección de bucle local `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr` en YAML, `DINGO_DEBUG_BIND_ADDR` o `--debug-bind-addr` y aplica controles de red. La sincronización de Mithril usa la misma configuración.
 
-> 📝 `targetNumberOfRootPeers` define el objetivo de nodos raíz de Dingo. Cuando el operador establece un valor distinto de `0`, Dingo tiene prioridad sobre el objetivo de Cardano; con `0`, Dingo usa el objetivo de Cardano como alternativa. Sin un objetivo de Cardano distinto de cero, el valor efectivo predeterminado es `60`. Un valor positivo limita los nodos raíz públicos seleccionados y conserva los nodos raíz locales; `-1` no aplica ningún límite. Dingo también acepta `DINGO_TARGET_ROOT_PEERS` y `--target-root-peers` para establecer este valor.
+> 📝 `targetNumberOfRootPeers` define el objetivo de nodos raíz de Dingo. Cuando el operador establece un valor distinto de `0`, Dingo sustituye el objetivo de Cardano; con `0`, Dingo usa el objetivo de Cardano como alternativa. Sin un objetivo de Cardano distinto de cero, Dingo usa `60` como valor efectivo predeterminado. Un valor positivo limita los nodos raíz públicos seleccionados y conserva los nodos raíz locales; `-1` no aplica ningún límite. Dingo también acepta `DINGO_TARGET_ROOT_PEERS` y `--target-root-peers` para establecer este valor.
 
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
