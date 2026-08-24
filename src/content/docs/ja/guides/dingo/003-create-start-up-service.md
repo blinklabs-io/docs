@@ -149,6 +149,10 @@ storageMode: \"core\"
 EOF"
 ```
 
+> 📝 `plugins.storage.metadata.provider` を `postgres` に切り替える場合、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。どちらも負でないミリ秒単位の値を使用します。`mysql` では、`statementTimeout` が `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` が `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の値を切り上げ、`readTimeout` と `writeTimeout` が転送ソケットの読み書き期限を設定します。各フィールドの既定値は `0` です。負の値は拒否され、明示的な `dsn` を設定するとこれらのフィールドはすべて無視されます。
+
+> 📝 起動時、既存の `socketPath` は、確認済みの古いUnixソケットであり削除できる場合を除き保持されます。通常ファイル、シンボリックリンク、ディレクトリ、稼働中のソケット、判定があいまいなプローブ、または削除エラーがあると起動に失敗します。設定したパスは存在しない状態にするか、削除可能な確認済みの古いUnixソケットだけを置いてください。
+
 ### APIのトークンレジストリ設定（任意）
 
 APIストレージでは、BlockfrostのアセットレスポンスにローカルのCIP-26メタデータを使用するため、トップレベルに次のブロックを追加します：
