@@ -136,7 +136,7 @@ debugBindAddr: \"127.0.0.1\"
 # Un valor distinto de 0 en Dingo tiene prioridad sobre Cardano. Con 0,
 # Dingo usa el valor de respaldo de Cardano; si Cardano tampoco define un
 # valor distinto de 0, el valor efectivo es 60. Un valor positivo limita los
-# pares raíz públicos y conserva los pares raíz locales. -1 elimina el límite.
+# pares raíz públicos y conserva los pares raíz locales. El valor -1 no impone límite.
 # CLI: --target-root-peers
 # Env: DINGO_TARGET_ROOT_PEERS
 targetNumberOfRootPeers: 0
