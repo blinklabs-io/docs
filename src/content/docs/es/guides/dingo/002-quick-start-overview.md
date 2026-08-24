@@ -155,7 +155,7 @@ tokenRegistry:
   enabled: false
 ```
 
-Dingo establece `tokenRegistry.enabled` en `false` de forma predeterminada y solo lo aplica con `storageMode: "api"`. Aplica la migración de base de datos v3, `token-registry-metadata`, antes de establecerlo en `true`. La primera sincronización de mainnet descarga aproximadamente 240 MB; las comprobaciones posteriores usan solicitudes condicionales.
+Dingo establece `tokenRegistry.enabled` en `false` de forma predeterminada y solo usa el registro de tokens con `storageMode: "api"`. Aplica la migración de base de datos v3, `token-registry-metadata`, antes de establecerlo en `true`. La primera sincronización de mainnet descarga aproximadamente 240 MB; las comprobaciones posteriores usan solicitudes condicionales.
 
 Configura los demás campos de `tokenRegistry` de la siguiente manera:
 
