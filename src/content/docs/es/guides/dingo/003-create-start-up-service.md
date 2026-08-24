@@ -84,7 +84,7 @@ plugins:
       # `rejectionWatermark` acepta valores de (0,1]. Cuando la expulsión está activa, debe ser mayor que `evictionWatermark`.
       # Valores predeterminados: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
       # CLI: `--eviction-watermark`, `--rejection-watermark`
-      # Entorno: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
+      # Variables de entorno: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
       # evictionWatermark: 0
       # rejectionWatermark: 1.0
   api:
