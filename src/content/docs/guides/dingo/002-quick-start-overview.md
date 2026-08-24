@@ -150,6 +150,21 @@ EOF
 > 📝 A nonzero `targetNumberOfRootPeers` value overrides Cardano's root peer target. A value of `0` leaves the Dingo target unset, so Dingo uses Cardano's nonzero target as a fallback; when Cardano supplies no nonzero target, Dingo uses the effective default of `60`. A positive value limits newly selected public roots while retaining configured local roots. Set `-1` for unlimited roots. Configure this value with `targetNumberOfRootPeers`, `DINGO_TARGET_ROOT_PEERS`, or `--target-root-peers`.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
+### Optional Koios reward parity account checks
+
+The optional in-process Koios parity observer reads `koiosParity.accounts` only when `koiosParity.enabled` is enabled. Account checks default to `true` for this observer; set the parameter to `false` to keep pool-level checking only:
+
+```yaml
+koiosParity:
+  accounts: false
+```
+
+The Dingo equivalents are `--koios-parity-accounts` and `DINGO_KOIOS_PARITY_ACCOUNTS`. Use `--koios-parity-accounts=false` or `DINGO_KOIOS_PARITY_ACCOUNTS=false` to disable account checks explicitly.
+
+The standalone `koios-parity` utility keeps account checks disabled by default. Add `--accounts` or set `KOIOS_PARITY_ACCOUNTS=true` (also `1`) to enable them. Account checks make substantially more Koios requests than pool-level checks, and an explicit CLI value takes precedence over the environment, including `--accounts=false`.
+
+For standalone `koios-parity`, `--grace-hours` accepts non-negative values only. The default is `24` hours; set `--grace-hours=0` to explicitly disable the grace/reference-lag window. Dingo reports incomplete account-fetch coverage as `ERROR`, not as a successful account comparison.
+
 
 > 📝 Optional API security: add the following shared policy to the API configuration shown below:
 
