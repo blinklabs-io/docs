@@ -174,7 +174,7 @@ EOF"
 
 > 📝 Use `dingo database snapshot`, `dingo database restore <snapshot-dir>`, and `dingo database truncate --slot <slot>`, `--hash <hash>`, or `--block-number <n>` on an offline data directory. `restore` also accepts the same cloud URI that `snapshotCloudDestination` uses and downloads it to a temporary directory before restoration.
 
-> 📝 The container image runs as UID:GID `1000:1000` and includes database client tools. Make `databaseLifecycle.snapshotDir` writable by `1000:1000`; otherwise snapshot validation fails. Remote S3 and GCS backends require the `dingo_extra_plugins` build tag.
+> 📝 The container image runs as UID:GID `1000:1000` and includes database client tools. Make `databaseLifecycle.snapshotDir` writable by `1000:1000`; otherwise snapshot validation fails.
 
 > 📝 When `barkPort` runs together with `databaseLifecycle.snapshotDir`, Bark also exposes live `Restore` and `Truncate` access.
 
