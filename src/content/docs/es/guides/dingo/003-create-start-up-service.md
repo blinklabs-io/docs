@@ -221,7 +221,7 @@ plugins:
           keyFilePath: "/run/secrets/blockfrost.key"
 ```
 
-> 📝 `api.tls` y `api.auth` establecen la política compartida para cada proveedor seleccionado en `plugins.api.*`. Cada campo se resuelve de forma independiente: `plugins.api.<name>.config.tls` y `plugins.api.<name>.config.auth` pueden anular campos individuales del proveedor. Un `mode: "disabled"` explícito en el proveedor desactiva la política heredada solo para ese proveedor. Los modos válidos son `disabled` y `server` para TLS, y `disabled` y `token` para autenticación; el valor predeterminado de ambas políticas es `disabled`.
+> 📝 `api.tls` y `api.auth` establecen la política compartida para cada proveedor seleccionado en `plugins.api.*`. Dingo resuelve cada campo de forma independiente: `plugins.api.<name>.config.tls` y `plugins.api.<name>.config.auth` pueden anular campos individuales del proveedor. Un `mode: "disabled"` explícito en el proveedor desactiva la política heredada solo para ese proveedor. Los modos válidos son `disabled` y `server` para TLS, y `disabled` y `token` para autenticación; el valor predeterminado de ambas políticas es `disabled`.
 
 > 📝 El modo TLS `server` requiere `certFilePath` y `keyFilePath`. El modo de autenticación `token` requiere exactamente uno de `token` o `tokenFilePath`; ambos campos son mutuamente excluyentes. Se recomienda `tokenFilePath`, que Dingo lee al iniciar el listener. Dingo valida estas combinaciones durante el inicio y rechaza una pareja de certificados incompleta o una configuración de token ausente o duplicada antes de enlazar el listener.
 
