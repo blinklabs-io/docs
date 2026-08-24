@@ -145,9 +145,9 @@ koiosParity:
   accounts: false
 ```
 
-Los equivalentes de Dingo son `--koios-parity-accounts` y `DINGO_KOIOS_PARITY_ACCOUNTS`. La precedencia de configuración es CLI, variable de entorno, YAML y valor predeterminado. El ejecutable independiente `koios-parity` aplica una regla distinta y no activa la comprobación de cuentas de forma predeterminada.
+Los equivalentes de Dingo son `--koios-parity-accounts` y `DINGO_KOIOS_PARITY_ACCOUNTS`. La precedencia de configuración es CLI, variable de entorno, YAML y valor predeterminado. A diferencia del observador integrado, el ejecutable independiente `koios-parity` no comprueba cuentas de forma predeterminada.
 
-La comprobación de cuentas del ejecutable independiente es opcional. Actívala con `koios-parity --accounts` o establece `KOIOS_PARITY_ACCOUNTS` en `true` o `1`. Esta fase genera un volumen de solicitudes a Koios considerablemente mayor. Cuando se especifica explícitamente `--accounts`, su valor, incluido `--accounts=false`, tiene prioridad sobre `KOIOS_PARITY_ACCOUNTS`.
+En `koios-parity`, activa la comprobación de cuentas con `koios-parity --accounts` o establece `KOIOS_PARITY_ACCOUNTS` en `true` o `1`. Esta fase genera un volumen de solicitudes a Koios considerablemente mayor. Si el operador especifica explícitamente `--accounts`, su valor, incluido `--accounts=false`, tiene prioridad sobre `KOIOS_PARITY_ACCOUNTS`.
 
 El indicador independiente `--grace-hours` acepta valores no negativos. Su valor predeterminado normal es `24` horas; establece `--grace-hours=0` para desactivar explícitamente la ventana de gracia o retraso de referencia. La cobertura incompleta de cuentas produce un resultado `ERROR`.
 
