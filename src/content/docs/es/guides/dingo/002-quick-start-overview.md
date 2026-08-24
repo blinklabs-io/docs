@@ -98,7 +98,7 @@ plugins:
 # Valores predeterminados: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
 # CLI: `--eviction-watermark`, `--rejection-watermark`
 # Entorno: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
-# Valores de ejemplo: `evictionWatermark: 0`, `rejectionWatermark: 1.0`
+# Valores YAML de ejemplo: `evictionWatermark: 0`, `rejectionWatermark: 1.0`
 
 # Mithril
 mithril:
