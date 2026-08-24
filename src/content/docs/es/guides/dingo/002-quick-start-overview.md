@@ -34,6 +34,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 mkdir -p ~/dingo
 cd ~/dingo
 wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.0/dingo-v0.70.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -105,6 +106,8 @@ mithril:
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
+debugBindAddr: "127.0.0.1"
+targetNumberOfRootPeers: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -118,7 +121,9 @@ storageMode: "core"
 EOF
 ```
 
-> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
+> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`. `pprof` no tiene autenticación ni TLS y usa la dirección de bucle local `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr` en YAML, `DINGO_DEBUG_BIND_ADDR` o `--debug-bind-addr` y aplica controles de red. La sincronización de Mithril usa la misma configuración.
+
+> 📝 `targetNumberOfRootPeers` define el objetivo de nodos raíz de Dingo. Cuando se establece un valor distinto de `0`, Dingo tiene prioridad sobre el objetivo de Cardano; con `0`, usa el objetivo de Cardano como alternativa. Sin un objetivo de Cardano distinto de cero, el valor efectivo predeterminado es `60`. Un valor positivo limita los nodos raíz públicos seleccionados y conserva los nodos raíz locales; `-1` no aplica ningún límite. También puedes establecerlo mediante `DINGO_TARGET_ROOT_PEERS` o `--target-root-peers`.
 
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
@@ -143,6 +148,27 @@ plugins:
 ```
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+
+### Seguridad opcional de la API
+
+Puedes aplicar valores predeterminados compartidos de TLS y autenticación a cada proveedor seleccionado en `plugins.api.*` mediante `api.tls` y `api.auth`:
+
+```yaml
+api:
+  tls:
+    mode: server
+    certFilePath: "/run/secrets/api.crt"
+    keyFilePath: "/run/secrets/api.key"
+  auth:
+    mode: token
+    tokenFilePath: "/run/secrets/api-token"
+```
+
+Los campos de `plugins.api.<name>.config.tls` y `plugins.api.<name>.config.auth` permiten anular cada campo por proveedor. Un proveedor puede establecer explícitamente `mode: disabled` para desactivar una política heredada. Los modos TLS válidos son `disabled` y `server`; `server` requiere `certFilePath` y `keyFilePath` completos. Los modos de autenticación válidos son `disabled` y `token`; `token` requiere exactamente una fuente, `token` o `tokenFilePath`. El ejemplo usa `tokenFilePath` para evitar incluir el secreto en la configuración.
+
+Las solicitudes autenticadas deben incluir `Authorization: Bearer <token>`. Blockfrost también acepta `project_id`. La solicitud previa CORS `OPTIONS` no requiere autenticación, pero cualquier otra solicitud sí. Los enlaces de configuración de nivel superior también están disponibles mediante `--api-tls-mode`, `--api-tls-cert-file-path`, `--api-tls-key-file-path`, `--api-auth-mode` y `--api-auth-token-file-path`, o mediante `DINGO_API_TLS_MODE`, `DINGO_API_TLS_CERT_FILE_PATH`, `DINGO_API_TLS_KEY_FILE_PATH`, `DINGO_API_AUTH_MODE` y `DINGO_API_AUTH_TOKEN_FILE_PATH`.
+
+Los campos raíz heredados `tlsCertFilePath` y `tlsKeyFilePath` solo proporcionan compatibilidad para UTxO RPC. No establecen valores predeterminados compartidos para Blockfrost ni Mesh.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
