@@ -144,8 +144,13 @@ databaseLifecycle:
   # Default: 0.
   snapshotRetention: 0
   # Optional cloud mirror for snapshots.
-  # snapshotCloudDestination: \"\"
-  # snapshotCloudDestinationPrefix: \"\"
+  # Use an `s3://bucket/prefix` or `gcs://bucket/prefix` URI.
+  # Requires the `dingo_extra_plugins` build tag.
+  # CLI: --db-snapshot-cloud-destination
+  snapshotCloudDestination: \"\"
+  # Optional path prefix for shared cloud destinations.
+  # CLI: --db-snapshot-cloud-destination-prefix
+  snapshotCloudDestinationPrefix: \"\"
   # Capture an automatic snapshot every N epoch closes.
   # CLI: --db-snapshot-every-n-epochs
   snapshotEveryNEpochs: 1
