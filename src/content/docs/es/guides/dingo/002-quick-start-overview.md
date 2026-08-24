@@ -137,7 +137,7 @@ EOF
 
 ### Configuración de la comprobación de cuentas de paridad de Koios
 
-Cuando `koiosParity.enabled` está habilitado, el observador integrado de Dingo comprueba las recompensas por cuenta mediante `koiosParity.accounts`. Esta opción está habilitada de forma predeterminada para el observador; establece el valor en `false` para conservar únicamente la comprobación a nivel de grupo de participación:
+Cuando el operador activa `koiosParity.enabled`, el observador integrado de Dingo comprueba las recompensas por cuenta mediante `koiosParity.accounts`. Dingo establece esta opción en `true` de forma predeterminada; establece el valor en `false` para conservar únicamente la comprobación por grupo:
 
 ```yaml
 koiosParity:
@@ -145,11 +145,11 @@ koiosParity:
   accounts: false
 ```
 
-Los equivalentes de Dingo son `--koios-parity-accounts` y `DINGO_KOIOS_PARITY_ACCOUNTS`. La precedencia de configuración es CLI, variable de entorno, YAML y valor predeterminado. El observador integrado habilita la comprobación de cuentas por defecto después de activar el observador, a diferencia del ejecutable independiente `koios-parity`.
+Los equivalentes de Dingo son `--koios-parity-accounts` y `DINGO_KOIOS_PARITY_ACCOUNTS`. La precedencia de configuración es CLI, variable de entorno, YAML y valor predeterminado. El ejecutable independiente `koios-parity` aplica una regla distinta y no activa la comprobación de cuentas de forma predeterminada.
 
 La comprobación de cuentas del ejecutable independiente es opcional. Actívala con `koios-parity --accounts` o establece `KOIOS_PARITY_ACCOUNTS` en `true` o `1`. Esta fase genera un volumen de solicitudes a Koios considerablemente mayor. Cuando se especifica explícitamente `--accounts`, su valor, incluido `--accounts=false`, tiene prioridad sobre `KOIOS_PARITY_ACCOUNTS`.
 
-El indicador independiente `--grace-hours` acepta valores no negativos. Su valor predeterminado normal es `24`; establece `--grace-hours=0` para desactivar explícitamente la ventana de gracia o retraso de referencia. La cobertura incompleta de cuentas produce un resultado `ERROR`.
+El indicador independiente `--grace-hours` acepta valores no negativos. Su valor predeterminado normal es `24` horas; establece `--grace-hours=0` para desactivar explícitamente la ventana de gracia o retraso de referencia. La cobertura incompleta de cuentas produce un resultado `ERROR`.
 
 > 📝 Las URL del agregador y de los artefactos de Mithril deben usar HTTPS de forma predeterminada. Mantén `mithril.allowInsecureHttp: false` en producción. Solo para desarrollo local o pruebas, establece este valor en `true`; las opciones equivalentes son `--mithril-allow-insecure-http` y `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. No habilites esta opción en producción.
 
