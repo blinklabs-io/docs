@@ -136,26 +136,26 @@ storageMode: \"core\"
 databaseLifecycle:
   # Dingo captures automatic database snapshots at epoch boundaries.
   # Default: false.
-  # CLI: --db-snapshot-enabled
+  # CLI: `--db-snapshot-enabled`
   snapshotEnabled: false
   # Dingo writes automatic snapshots to this local filesystem directory.
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
-  # CLI: --db-snapshot-dir
+  # CLI: `--db-snapshot-dir`
   snapshotDir: \"$HOME/dingo/snapshots\"
   # Keep only the most recent automatic snapshots.
   # Default: 0.
-  # CLI: --db-snapshot-retention
+  # CLI: `--db-snapshot-retention`
   snapshotRetention: 0
   # Optional cloud mirror for snapshots.
   # Use an `s3://bucket/prefix` or `gcs://bucket/prefix` URI.
   # Requires the `dingo_extra_plugins` build tag.
-  # CLI: --db-snapshot-cloud-destination
+  # CLI: `--db-snapshot-cloud-destination`
   snapshotCloudDestination: \"\"
   # Optional path prefix for shared cloud destinations.
-  # CLI: --db-snapshot-cloud-destination-prefix
+  # CLI: `--db-snapshot-cloud-destination-prefix`
   snapshotCloudDestinationPrefix: \"\"
   # Capture an automatic snapshot every N epoch closes.
-  # CLI: --db-snapshot-every-n-epochs
+  # CLI: `--db-snapshot-every-n-epochs`
   snapshotEveryNEpochs: 1
 EOF"
 ```
