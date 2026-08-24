@@ -185,19 +185,19 @@ midnight:
 
 ### Configuración opcional del registro de tokens de la API
 
-En el modo de almacenamiento API, añade este bloque de nivel superior cuando se necesiten metadatos CIP-26 locales en las respuestas de activos de Blockfrost:
+En el modo de almacenamiento API, añade este bloque de nivel superior para usar metadatos CIP-26 locales en las respuestas de activos de Blockfrost:
 
 ```yaml
 tokenRegistry:
   enabled: false
 ```
 
-`tokenRegistry.enabled` está deshabilitado (`false`) de forma predeterminada y solo tiene efecto con `storageMode: "api"`. Aplica la migración de base de datos v3, `token-registry-metadata`, antes de establecerlo en `true`. La primera sincronización de mainnet descarga aproximadamente 240 MB; las comprobaciones posteriores usan solicitudes condicionales.
+Dingo establece `tokenRegistry.enabled` en `false` de forma predeterminada y solo lo aplica con `storageMode: "api"`. Aplica la migración de base de datos v3, `token-registry-metadata`, antes de establecerlo en `true`. La primera sincronización de mainnet descarga aproximadamente 240 MB; las comprobaciones posteriores usan solicitudes condicionales.
 
 Configura los demás campos de `tokenRegistry` de la siguiente manera:
 
 - `sourceUrl`: Un valor vacío selecciona el registro de la red configurada. Establece una URL para usar un espejo.
-- `interval`: El intervalo de comprobación. El valor predeterminado es `6h`; los valores inferiores a `1m` usan el mínimo de `1m`. Las comprobaciones usan solicitudes condicionales.
+- `interval`: El intervalo de comprobación. El valor predeterminado es `6h`; los valores inferiores a `1m` usan el mínimo de `1m`.
 - `requestTimeout`: El tiempo de espera para la descarga completa. El valor predeterminado es `15m`.
 - `userAgent`: El agente de usuario HTTP. Un valor vacío usa `dingo-token-registry/1`.
 - `maxBytes`: El límite de la descarga comprimida. El valor predeterminado es `768 MiB`.
