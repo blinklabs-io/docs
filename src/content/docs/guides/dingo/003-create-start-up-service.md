@@ -145,7 +145,7 @@ databaseLifecycle:
 EOF"
 ```
 
-> 📝 `debugPort: 0` disables pprof. When pprof runs, it has no authentication or TLS. `debugBindAddr` defaults to `127.0.0.1` on its dedicated listener rather than inheriting `bindAddr` or `privateBindAddr`. External access requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. This policy applies to the one-time `dingo mithril sync` and the long-running `dingo serve` systemd service.
+> 📝 `debugPort: 0` disables pprof. Dingo exposes pprof without authentication or TLS. `debugBindAddr` defaults to `127.0.0.1` on its dedicated listener rather than inheriting `bindAddr` or `privateBindAddr`. External access requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. This policy applies to the one-time `dingo mithril sync` and the long-running `dingo serve` systemd service.
 
 > 📝 `targetNumberOfRootPeers` controls public root selection. A nonzero Dingo value takes precedence over Cardano's target; `0` uses Cardano's target fallback, and Dingo uses an effective default of `60` when Cardano supplies no nonzero target. A positive value limits newly selected public roots while retaining configured local roots. Set `targetNumberOfRootPeers` to `-1` for unlimited selection. The setting maps to `DINGO_TARGET_ROOT_PEERS` and `--target-root-peers`.
 
@@ -194,7 +194,7 @@ api:
 
 > 📝 `api.tls` accepts `disabled` or `server`; `server` requires both `certFilePath` and `keyFilePath`. `api.auth` accepts `disabled` or `token`; `token` requires exactly one of `token` or `tokenFilePath`, with `tokenFilePath` preferred for operators. Provider settings under `plugins.api.<name>.config.tls` and `plugins.api.<name>.config.auth` override shared fields independently. Set a provider's `mode: disabled` to turn off an inherited policy for that provider.
 
-> 📝 Authenticated clients send `Authorization: Bearer <token>`. Blockfrost also accepts `project_id: <token>`. CORS preflight `OPTIONS` requests do not require credentials; all other requests, including non-preflight `OPTIONS`, remain authenticated.
+> 📝 Authenticated clients send `Authorization: Bearer <token>`. Blockfrost also accepts `project_id: <token>`. Dingo exempts CORS preflight `OPTIONS` requests from authentication; all other requests, including non-preflight `OPTIONS`, remain authenticated.
 
 > 📝 Configure shared API security with `--api-tls-mode`, `--api-tls-cert-file-path`, `--api-tls-key-file-path`, `--api-auth-mode`, and `--api-auth-token-file-path`, or with `DINGO_API_TLS_MODE`, `DINGO_API_TLS_CERT_FILE_PATH`, `DINGO_API_TLS_KEY_FILE_PATH`, `DINGO_API_AUTH_MODE`, and `DINGO_API_AUTH_TOKEN_FILE_PATH`. The root `tlsCertFilePath` and `tlsKeyFilePath` fields remain UTxO RPC compatibility fields only; they do not provide shared defaults for Blockfrost or Mesh.
 
