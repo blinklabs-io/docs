@@ -144,7 +144,9 @@ databaseLifecycle:
 EOF"
 ```
 
-> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
+> 📝 `debugPort: 0` disables pprof. When pprof runs, it has no authentication or TLS. `debugBindAddr` defaults to `127.0.0.1` on its dedicated listener rather than inheriting `bindAddr` or `privateBindAddr`. External access requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. This policy applies to the one-time `dingo mithril sync` and the long-running `dingo serve` systemd service.
+
+> 📝 `targetNumberOfRootPeers` controls public root selection. A nonzero Dingo value takes precedence over Cardano's target; `0` uses Cardano's target fallback, and Dingo uses an effective default of `60` when Cardano supplies no nonzero target. A positive value limits newly selected public roots while retaining configured local roots. Set `targetNumberOfRootPeers` to `-1` for unlimited selection. The setting maps to `DINGO_TARGET_ROOT_PEERS` and `--target-root-peers`.
 
 > 📝 `databaseLifecycle.snapshotEnabled` controls automatic snapshots, and `dingo database snapshot|restore|truncate` handles offline maintenance. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
