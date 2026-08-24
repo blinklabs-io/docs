@@ -138,7 +138,7 @@ EOF
 
 > 📝 MithrilのアグリゲーターURLとアーティファクトURLは、既定でHTTPSを使用する必要があります。本番環境では `mithril.allowInsecureHttp: false` を維持します。ローカル開発またはテストに限り `true` を設定できます。対応するオプションは `--mithril-allow-insecure-http` と `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` です。本番環境ではこの設定を有効にしないでください。
 
-> ⚠️ `delegatorInactivityEnabled` は、CIP-0163 の `account_withdrawal_witness` 書き込みに適用するコンセンサスに影響する非アクティブ期間の制御で、既定値は `false` です。有効にする場合は、`delegatorInactivity` に `1` から `10000` までの整数のエポック範囲を設定します。既定値と例では `90` を使用します。ネットワーク上のすべてのノードで同じ値にする必要があります。Mithrilブートストラップは、インポートした報酬アカウントの有効期限状態を再構築できないため、この制御と互換性がありません。有効な設定ではgenesisから同期します。
+> ⚠️ `delegatorInactivityEnabled` は、CIP-0163 の `account_withdrawal_witness` 書き込みに適用するコンセンサスに影響する非アクティブ期間の制御で、既定値は `false` です。有効にする場合は、`delegatorInactivity` に `1` から `10000` までの整数のエポック範囲を設定します。例では既定値の `90` を使用します。ネットワーク上のすべてのノードで同じ値にする必要があります。Mithrilブートストラップは、インポートした報酬アカウントの有効期限状態を再構築できないため、この制御と互換性がありません。有効な設定ではgenesisから同期します。
 
 > 📝 この例では、両方の最上位フィールドに対応するCLIフラグと環境変数を示します。
 
