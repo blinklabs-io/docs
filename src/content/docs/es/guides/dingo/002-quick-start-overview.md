@@ -93,6 +93,13 @@ plugins:
 #   mempool:
 #     config:
 #       capacity: 1048576
+#       # `evictionWatermark` acepta 0 o un valor de (0,1). El valor 0 rechaza nuevas transacciones al alcanzar la capacidad en lugar de expulsar transacciones FIFO anteriores.
+#       # `rejectionWatermark` acepta valores de (0,1]. Cuando la expulsión está activa, debe ser mayor que `evictionWatermark`.
+#       # Valores predeterminados: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
+#       # CLI: `--eviction-watermark`, `--rejection-watermark`
+#       # Entorno: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
+#       # evictionWatermark: 0
+#       # rejectionWatermark: 1.0
 
 # Mithril
 mithril:
