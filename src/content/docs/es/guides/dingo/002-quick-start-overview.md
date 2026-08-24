@@ -106,6 +106,15 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # CLI: `--mithril-allow-insecure-http`
+  # Entorno: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
+  allowInsecureHttp: false
+
+# Consenso
+# CLI: `--delegator-inactivity-enabled`, `--delegator-inactivity`
+# Entorno: `DINGO_DELEGATOR_INACTIVITY_ENABLED`, `DINGO_DELEGATOR_INACTIVITY`
+delegatorInactivityEnabled: false
+delegatorInactivity: 90
 
 # Network
 bindAddr: "0.0.0.0"
@@ -125,6 +134,12 @@ barkPort: 0
 storageMode: "core"
 EOF
 ```
+
+> 📝 Las URL del agregador y de los artefactos de Mithril deben usar HTTPS de forma predeterminada. Mantén `mithril.allowInsecureHttp: false` en producción. Solo para desarrollo local o pruebas, establece este valor en `true`; las opciones equivalentes son `--mithril-allow-insecure-http` y `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. No habilites esta opción en producción.
+
+> ⚠️ `delegatorInactivityEnabled` controla el mecanismo de inactividad que afecta al consenso para las escrituras `account_withdrawal_witness` de CIP-0163 y su valor predeterminado es `false`. Cuando esté habilitado, establece `delegatorInactivity` como un número entero de épocas entre `1` y `10000`; el ejemplo usa `90`. Todos los nodos de la red deben usar los mismos valores. El arranque desde una instantánea de Mithril es incompatible con este mecanismo porque Mithril no puede reconstruir el estado de expiración de las cuentas de recompensas importado; las configuraciones habilitadas deben sincronizarse desde el génesis.
+
+> 📝 Los campos de nivel superior `delegatorInactivityEnabled` y `delegatorInactivity` corresponden a `--delegator-inactivity-enabled` / `DINGO_DELEGATOR_INACTIVITY_ENABLED` y `--delegator-inactivity` / `DINGO_DELEGATOR_INACTIVITY`, respectivamente.
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`. `pprof` no tiene autenticación ni TLS y usa la dirección de bucle local `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr` en YAML, `DINGO_DEBUG_BIND_ADDR` o `--debug-bind-addr` y aplica controles de red. La sincronización de Mithril usa la misma configuración.
 
