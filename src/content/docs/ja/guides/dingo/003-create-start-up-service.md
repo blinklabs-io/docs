@@ -149,9 +149,9 @@ storageMode: \"core\"
 EOF"
 ```
 
-> 📝 `plugins.storage.metadata.provider` を `postgres` に切り替える場合、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。どちらも負でないミリ秒単位の値を使用します。`mysql` では、`statementTimeout` が `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` が `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の値を切り上げ、`readTimeout` と `writeTimeout` が転送ソケットの読み書き期限を設定します。各フィールドの既定値は `0` です。Dingoは負の値を拒否し、設定に明示的な `dsn` がある場合はこれらのフィールドをすべて無視します。
+> 📝 `plugins.storage.metadata.provider` に `postgres` を指定すると、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。どちらも負でないミリ秒単位の値を使用します。プロバイダーに `mysql` を指定すると、`statementTimeout` は `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` は `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の値を切り上げ、`readTimeout` と `writeTimeout` は転送ソケットの読み書き期限を設定します。Dingoは各フィールドの既定値を `0` とし、負の値を拒否し、設定に明示的な `dsn` がある場合はこれらのフィールドをすべて無視します。
 
-> 📝 起動時、Dingoは既存の `socketPath` を、Dingoが確認して削除できる古いUnixソケットの場合を除き保持します。通常ファイル、シンボリックリンク、ディレクトリ、稼働中のソケット、判定があいまいなプローブ、または削除エラーがあると起動に失敗します。設定したパスは存在しない状態にするか、Dingoが削除できる確認済みの古いUnixソケットだけを置いてください。
+> 📝 起動前、Dingoは既存の `socketPath` を保持します。Dingoは確認済みの古いUnixソケットだけを削除します。通常ファイル、シンボリックリンク、ディレクトリ、稼働中のソケット、判定があいまいなプローブ、または削除エラーがあると起動に失敗します。設定したパスは存在しない状態にするか、Dingoが削除できる確認済みの古いUnixソケットだけを置いてください。
 
 ### APIのトークンレジストリ設定（任意）
 
