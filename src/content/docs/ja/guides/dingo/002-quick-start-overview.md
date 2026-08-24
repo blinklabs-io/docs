@@ -127,19 +127,19 @@ EOF
 
 ### APIのトークンレジストリ設定（任意）
 
-APIストレージでBlockfrostのアセットレスポンスにローカルのCIP-26メタデータを使用する場合は、トップレベルに次のブロックを追加します：
+APIストレージでは、BlockfrostのアセットレスポンスにローカルのCIP-26メタデータを使用するため、トップレベルに次のブロックを追加します：
 
 ```yaml
 tokenRegistry:
   enabled: false
 ```
 
-`tokenRegistry.enabled` は既定値が `false` で、`storageMode: "api"` の場合にだけ有効です。`true` に設定する前に、データベースのマイグレーション v3（`token-registry-metadata`）を適用します。メインネットでの初回同期では約240 MBをダウンロードし、それ以降の確認では条件付きリクエストを使用します。
+Dingoは `tokenRegistry.enabled` を既定で `false` に設定し、`storageMode: "api"` の場合にだけ適用します。`true` に設定する前に、データベースのマイグレーション v3（`token-registry-metadata`）を適用します。メインネットでの初回同期では約240 MBをダウンロードし、それ以降の確認では条件付きリクエストを使用します。
 
 その他の `tokenRegistry` フィールドは次のように設定します：
 
 - `sourceUrl`：空の場合は設定したネットワーク用のレジストリを選択します。ミラーを使用する場合はURLを設定します。
-- `interval`：再確認の間隔です。既定値は `6h` で、`1m` 未満の値は最小値の `1m` として扱います。確認には条件付きリクエストを使用します。
+- `interval`：再確認の間隔です。既定値は `6h` で、`1m` 未満の値は最小値の `1m` として扱います。
 - `requestTimeout`：ダウンロード全体のタイムアウトです。既定値は `15m` です。
 - `userAgent`：HTTPユーザーエージェントです。空の場合は `dingo-token-registry/1` を使用します。
 - `maxBytes`：圧縮されたダウンロードの上限です。既定値は `768 MiB` です。
