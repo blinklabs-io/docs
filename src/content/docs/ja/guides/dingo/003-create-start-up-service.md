@@ -181,7 +181,7 @@ midnight:
 
 > 📝 `api.tls` と `api.auth` は、選択した Blockfrost、Mesh、UTxO RPC の `plugins.api.*` に共通して適用する既定の設定です。`plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` は、各APIで対応するフィールドを個別に上書きできます。各API側で `mode: \"disabled\"` を明示すると、共通設定をそのAPIだけ無効にできます。
 >
-> TLS の有効なモードは `disabled` と `server` です。`server` を指定する場合は、`certFilePath` と `keyFilePath` の両方に証明書とキーのパスを設定します。認証の有効なモードは `disabled` と `token` です。`token` では `token` と `tokenFilePath` のどちらか一方だけを指定し、推奨される `tokenFilePath` を使用します。`server` でTLSパスを片方だけ指定する場合、または `token` で認証トークンフィールドをどちらも指定しないか両方指定する場合、Dingoは待受の開始前に起動時検証でエラーにします。
+> TLS の有効なモードは `disabled` と `server` です。`server` を指定する場合は、`certFilePath` と `keyFilePath` の両方に証明書とキーのパスを設定します。認証の有効なモードは `disabled` と `token` です。`token` では `token` と `tokenFilePath` のどちらか一方だけを指定し、推奨される `tokenFilePath` を使用します。`server` でTLSパスを片方だけ指定した場合、または `token` で認証トークンフィールドをどちらも指定しないか両方を指定した場合、Dingoは待受を開始する前の起動時検証でエラーを返します。
 >
 > 認証トークンは `Authorization: Bearer <token>` で送信します。Blockfrost は互換性のため `project_id: <token>` も受け付けます。認証を有効にした場合、認証を省略できるのはブラウザーの CORS preflight にあたる `OPTIONS` だけです。preflight ではない `OPTIONS` を含むその他のすべてのリクエストには認証が必要です。
 >
