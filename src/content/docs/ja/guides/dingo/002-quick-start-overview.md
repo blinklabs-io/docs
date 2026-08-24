@@ -123,7 +123,7 @@ EOF
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。`pprof` には認証機能とTLSがなく、`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立して既定値 `127.0.0.1` を使います。外部アクセスを許可する場合は、YAMLの `debugBindAddr`、`DINGO_DEBUG_BIND_ADDR`、または `--debug-bind-addr` でアドレスを明示的に指定し、ファイアウォールなどのネットワーク制御も設定します。`serve` モードとMithril同期の両方で同じ設定を使います。
 
-> 📝 `plugins.storage.metadata.provider` に `postgres` を指定すると、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。これらのフィールドは `30s` のような期間値を受け取ります。PostgreSQLは正の期間値を、ミリ秒単位の `statement_timeout` と `lock_timeout` のセッション設定に変換します。プロバイダーに `mysql` を指定すると、`statementTimeout` は `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` は `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の期間を切り上げ、`readTimeout` と `writeTimeout` は期間値を受け取り、転送ソケットの読み書き期限を設定します。Dingoは各フィールドの既定値を `0` とし、負の値を拒否し、設定に明示的な `dsn` がある場合はこれらのフィールドをすべて無視します。
+> 📝 `plugins.storage.metadata.provider` に `postgres` を指定すると、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。これらのフィールドは `30s` のような期間値を受け取ります。PostgreSQLは正の期間値を、ミリ秒単位の `statement_timeout` と `lock_timeout` のセッション設定に変換します。プロバイダーに `mysql` を指定すると、`statementTimeout` は `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` は `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の期間を切り上げ、`readTimeout` と `writeTimeout` は指定した期間値を使用して転送ソケットの読み書き期限を設定します。Dingoは各フィールドの既定値を `0` とし、負の値を拒否し、設定に明示的な `dsn` がある場合はこれらのフィールドをすべて無視します。
 
 > 📝 起動前、Dingoは既存の `socketPath` を保持します。Dingoは確認済みの古いUnixソケットだけを削除します。通常ファイル、シンボリックリンク、ディレクトリ、稼働中のソケット、判定があいまいなプローブ、または削除エラーがあると起動に失敗します。設定したパスは存在しない状態にするか、Dingoが削除できる確認済みの古いUnixソケットだけを置いてください。
 
