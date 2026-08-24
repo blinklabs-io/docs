@@ -234,7 +234,6 @@ plugins:
 > 📝 Las políticas compartidas admiten los enlaces de nivel superior `--api-tls-mode`, `--api-tls-cert-file-path`, `--api-tls-key-file-path`, `--api-auth-mode` y `--api-auth-token-file-path`, junto con `DINGO_API_TLS_MODE`, `DINGO_API_TLS_CERT_FILE_PATH`, `DINGO_API_TLS_KEY_FILE_PATH`, `DINGO_API_AUTH_MODE` y `DINGO_API_AUTH_TOKEN_FILE_PATH`.
 
 > 📝 `tlsCertFilePath` y `tlsKeyFilePath` en la raíz siguen siendo campos de compatibilidad exclusivos de UTxO RPC. No habilitan TLS para Blockfrost ni Mesh; usa `api.tls` o la sección `plugins.api.<name>.config.tls` del proveedor correspondiente.
-> 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
 ***
 
