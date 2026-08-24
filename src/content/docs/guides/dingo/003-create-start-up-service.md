@@ -168,6 +168,12 @@ databaseLifecycle:
 EOF"
 ```
 
+> 📝 Mithril aggregator and artifact URLs require HTTPS by default. Keep `mithril.allowInsecureHttp: false` in production. For local development or testing only, set it to `true`; the equivalent options are `--mithril-allow-insecure-http` and `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. Do not enable this option in production.
+
+> ⚠️ `delegatorInactivityEnabled` controls the consensus affecting inactivity gate for CIP-0163 `account_withdrawal_witness` writes and defaults to `false`. When enabled, set `delegatorInactivity` to an integer epoch window from `1` through `10000`; the example uses `90`. Every node on the network must use the same values. Mithril bootstrap is incompatible with this gate because it cannot reconstruct imported reward account expiration state; enabled configurations must sync from genesis.
+
+> 📝 The top-level `delegatorInactivityEnabled` and `delegatorInactivity` fields map to `--delegator-inactivity-enabled` / `DINGO_DELEGATOR_INACTIVITY_ENABLED` and `--delegator-inactivity` / `DINGO_DELEGATOR_INACTIVITY`, respectively.
+
 > 📝 `debugPort: 0` disables pprof. Dingo exposes pprof without authentication or TLS. `debugBindAddr` defaults to `127.0.0.1` on its dedicated listener rather than inheriting `bindAddr` or `privateBindAddr`. External access requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. This policy applies to the one-time `dingo mithril sync` and the long-running `dingo serve` systemd service.
 
 > 📝 When `plugins.storage.metadata.provider` is `postgres`, `statementTimeout` limits each statement and `lockTimeout` limits lock acquisition waits; these fields accept duration values such as `30s`. PostgreSQL converts positive duration values to the `statement_timeout` and `lock_timeout` session settings in milliseconds. When the provider is `mysql`, `statementTimeout` limits top-level read-only `SELECT` statements through `max_execution_time` in milliseconds, `lockTimeout` sets `innodb_lock_wait_timeout` in whole seconds and rounds subsecond durations up, and `readTimeout` and `writeTimeout` set transport socket I/O deadlines using the supplied duration values. Dingo defaults each field to `0`, rejects negative values, and ignores all these fields when an explicit `dsn` is set.
