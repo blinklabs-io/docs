@@ -179,19 +179,19 @@ midnight:
 
 ### Optional API token registry configuration
 
-For API storage, add this top-level block when local CIP-26 metadata for Blockfrost asset responses is required:
+For API storage, add this top-level block to use local CIP-26 metadata in Blockfrost asset responses:
 
 ```yaml
 tokenRegistry:
   enabled: false
 ```
 
-`tokenRegistry.enabled` defaults to `false` and takes effect only with `storageMode: "api"`. Apply database migration v3, `token-registry-metadata`, before setting it to `true`. The first mainnet sync downloads roughly 240 MB; later checks use conditional requests.
+Dingo sets `tokenRegistry.enabled` to `false` by default and applies it only with `storageMode: "api"`. Apply database migration v3, `token-registry-metadata`, before setting it to `true`. The first mainnet sync downloads roughly 240 MB; later checks use conditional requests.
 
 Configure the remaining `tokenRegistry` fields as follows:
 
 - `sourceUrl`: An empty value selects the registry for the configured network. Set a URL to use a mirror.
-- `interval`: The recheck interval. The default is `6h`, and values below `1m` use the `1m` minimum. Checks use conditional requests.
+- `interval`: The recheck interval. The default is `6h`, and values below `1m` use the `1m` minimum.
 - `requestTimeout`: The whole download timeout. The default is `15m`.
 - `userAgent`: The HTTP user agent. An empty value uses `dingo-token-registry/1`.
 - `maxBytes`: The compressed download limit. The default is `768 MiB`.
