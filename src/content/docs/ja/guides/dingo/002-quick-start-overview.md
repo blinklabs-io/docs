@@ -142,9 +142,14 @@ api:
     tokenFilePath: "/run/secrets/api-token"
 ```
 
-TLSで指定できるモードは `disabled` と `server`、認証で指定できるモードは `disabled` と `token` です。TLSの `server` モードには `certFilePath` と `keyFilePath` の両方が必要です。認証の `token` モードには `token` または `tokenFilePath` のどちらか一方が必要で、両方は指定できません。`plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` にプロバイダー単位の項目を指定すると、共通設定の各項目を上書きできます。プロバイダーで `mode: disabled` を明示すると、継承した設定も無効になります。未設定時の既定モードはどちらも `disabled` です。
+- TLSで指定できるモードは `disabled` と `server` です。TLSの `server` モードには `certFilePath` と `keyFilePath` の両方が必要です。
+- 認証で指定できるモードは `disabled` と `token` です。`token` モードには `token` または `tokenFilePath` のどちらか一方が必要で、両方は指定できません。
+- `plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` にプロバイダー単位の項目を指定すると、共通設定の各項目を上書きできます。プロバイダーで `mode: disabled` を明示すると、継承した設定も無効になります。未設定時の既定モードはどちらも `disabled` です。
 
-認証済みAPIリクエストは `Authorization: Bearer <token>` を使用します。Blockfrostは同じトークンに対して `project_id` も受け付けます。ブラウザーのCORS preflightである `OPTIONS` リクエストは認証なしで処理しますが、それ以外のリクエストには認証が必要です。トップレベルの設定には、CLIフラグ `--api-tls-mode`、`--api-tls-cert-file-path`、`--api-tls-key-file-path`、`--api-auth-mode`、`--api-auth-token-file-path` と、環境変数 `DINGO_API_TLS_MODE`、`DINGO_API_TLS_CERT_FILE_PATH`、`DINGO_API_TLS_KEY_FILE_PATH`、`DINGO_API_AUTH_MODE`、`DINGO_API_AUTH_TOKEN_FILE_PATH` も使用できます。既存のルート設定 `tlsCertFilePath` と `tlsKeyFilePath` は UTxO RPCだけで使う互換設定であり、BlockfrostやMeshの共通TLS既定値にはなりません。
+- 認証済みAPIリクエストは `Authorization: Bearer <token>` を使用します。Blockfrostは同じトークンに対して `project_id` も受け付けます。
+- ブラウザーのCORS preflightである `OPTIONS` リクエストは認証なしで処理しますが、それ以外のリクエストには認証が必要です。
+- トップレベルの設定には、CLIフラグ `--api-tls-mode`、`--api-tls-cert-file-path`、`--api-tls-key-file-path`、`--api-auth-mode`、`--api-auth-token-file-path` と、環境変数 `DINGO_API_TLS_MODE`、`DINGO_API_TLS_CERT_FILE_PATH`、`DINGO_API_TLS_KEY_FILE_PATH`、`DINGO_API_AUTH_MODE`、`DINGO_API_AUTH_TOKEN_FILE_PATH` も使用できます。
+- 既存のルート設定 `tlsCertFilePath` と `tlsKeyFilePath` は UTxO RPCだけで使う互換設定であり、BlockfrostやMeshの共通TLS既定値にはなりません。
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
