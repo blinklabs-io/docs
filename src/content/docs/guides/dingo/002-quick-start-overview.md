@@ -94,7 +94,7 @@ plugins:
 #     config:
 #       capacity: 1048576
 # `plugins.mempool.config.evictionWatermark` accepts 0 or a value in (0,1). Set 0 to reject new transactions at capacity instead of evicting older FIFO transactions.
-# `plugins.mempool.config.rejectionWatermark` accepts values in (0,1]. When eviction is enabled, it must be greater than `evictionWatermark`.
+# `plugins.mempool.config.rejectionWatermark` accepts values in (0,1]. Set it above `evictionWatermark` when enabling eviction.
 # Defaults: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
 # CLI: `--eviction-watermark`, `--rejection-watermark`
 # Env: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
