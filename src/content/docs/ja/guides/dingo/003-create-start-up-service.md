@@ -149,6 +149,34 @@ storageMode: \"core\"
 EOF"
 ```
 
+### APIのトークンレジストリ設定（任意）
+
+APIストレージでBlockfrostのアセットレスポンスにローカルのCIP-26メタデータを使用する場合は、トップレベルに次のブロックを追加します：
+
+```yaml
+tokenRegistry:
+  enabled: false
+```
+
+`tokenRegistry.enabled` は既定値が `false` で、`storageMode: "api"` の場合にだけ有効です。`true` に設定する前に、データベースのマイグレーション v3（`token-registry-metadata`）を適用します。メインネットでの初回同期では約240 MBをダウンロードし、それ以降の確認では条件付きリクエストを使用します。
+
+その他の `tokenRegistry` フィールドは次のように設定します：
+
+- `sourceUrl`：空の場合は設定したネットワーク用のレジストリを選択します。ミラーを使用する場合はURLを設定します。
+- `interval`：再確認の間隔です。既定値は `6h` で、`1m` 未満の値は最小値の `1m` として扱います。確認には条件付きリクエストを使用します。
+- `requestTimeout`：ダウンロード全体のタイムアウトです。既定値は `15m` です。
+- `userAgent`：HTTPユーザーエージェントです。空の場合は `dingo-token-registry/1` を使用します。
+- `maxBytes`：圧縮されたダウンロードの上限です。既定値は `768 MiB` です。
+- `maxEntryBytes`：1つのマッピングエントリの上限です。既定値は `4 MiB` です。
+- `storeLogos`：`true` にするとレジストリのロゴを保存します。既定値は `false` です。ロゴはレジストリのバイト数の約90%を占めます。
+- `allowPrivateAddresses`：`true` にするとプライベート、ループバック、リンクローカルアドレスへのレジストリリクエストを許可します。SSRF保護のため既定値は `false` です。プライベートなレジストリソースが必要な場合にだけ有効にします。
+
+次の環境変数も使用できます：
+
+`DINGO_TOKEN_REGISTRY_ENABLED`、`DINGO_TOKEN_REGISTRY_SOURCE_URL`、`DINGO_TOKEN_REGISTRY_INTERVAL`、`DINGO_TOKEN_REGISTRY_REQUEST_TIMEOUT`、`DINGO_TOKEN_REGISTRY_USER_AGENT`、`DINGO_TOKEN_REGISTRY_MAX_BYTES`、`DINGO_TOKEN_REGISTRY_MAX_ENTRY_BYTES`、`DINGO_TOKEN_REGISTRY_STORE_LOGOS`、`DINGO_TOKEN_REGISTRY_ALLOW_PRIVATE_ADDRESSES`。
+
+対応するCLIフラグは `--token-registry-enabled`、`--token-registry-source-url`、`--token-registry-interval`、`--token-registry-request-timeout`、`--token-registry-user-agent`、`--token-registry-max-bytes`、`--token-registry-max-entry-bytes`、`--token-registry-store-logos`、`--token-registry-allow-private-addresses` です。
+
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
 > 📝 `debugPort` は `0` で無効になります。`pprof` の待受は認証も TLS も使用せず、既定の `debugBindAddr: \"127.0.0.1\"` でループバックにバインドします。`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立しています。外部公開には `debugBindAddr`、`--debug-bind-addr`、または `DINGO_DEBUG_BIND_ADDR` の明示的な上書きが必要で、ファイアウォールなどのネットワーク保護も設定してください。この注意事項は Mithril の同期処理と systemd の `dingo serve` の両方に適用されます。
