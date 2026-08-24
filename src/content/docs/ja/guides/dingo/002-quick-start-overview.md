@@ -136,6 +136,20 @@ midnight:
 EOF
 ```
 
+### Koios報酬パリティのアカウントチェック（任意）
+
+Dingoの既存のインプロセスobserverで `koiosParity.enabled` を有効にすると、`koiosParity.accounts` は既定で `true` になり、アカウント単位のチェックも実行します。アカウント単位のチェックを無効にして、プール単位だけをチェックする場合は `false` に設定します。
+
+```yaml
+koiosParity:
+  enabled: true
+  accounts: false
+```
+
+Dingoでは、同じ設定に対して `--koios-parity-accounts` と `DINGO_KOIOS_PARITY_ACCOUNTS` も使用できます。インプロセスobserverはオプトイン後のアカウントチェックが既定で有効ですが、スタンドアロンの `koios-parity` はアカウントチェックが既定で無効です。スタンドアロンで有効にするには `koios-parity --accounts` または `KOIOS_PARITY_ACCOUNTS` に `true` か `1` を指定します。このチェックはKoiosへのリクエスト数が大幅に増加します。`--accounts` を明示すると、`--accounts=false` を含めて、環境変数 `KOIOS_PARITY_ACCOUNTS` より優先されます。
+
+スタンドアロンの `--grace-hours` は、エポック終了後の猶予または参照データの遅延時間を指定します。既定値は24時間で、`0` は猶予または参照遅延の期間を明示的に無効にします。0以上の値を指定でき、負の値は拒否されます。アカウント取得範囲が不完全な場合、結果は `ERROR` として報告されます。
+
 > 📝 MithrilのアグリゲーターURLとアーティファクトURLは、既定でHTTPSを使用する必要があります。本番環境では `mithril.allowInsecureHttp: false` を維持します。ローカル開発またはテストに限り `true` を設定できます。対応するオプションは `--mithril-allow-insecure-http` と `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` です。本番環境ではこの設定を有効にしないでください。
 
 > ⚠️ `delegatorInactivityEnabled` は、CIP-0163 の `account_withdrawal_witness` 書き込みに適用するコンセンサスに影響する非アクティブ期間の制御で、既定値は `false` です。有効にする場合は、`delegatorInactivity` に `1` から `10000` までの整数のエポック範囲を設定します。例では既定値の `90` を使用します。ネットワーク上のすべてのノードで同じ値にする必要があります。Mithrilブートストラップは、インポートした報酬アカウントの有効期限状態を再構築できないため、この制御と互換性がありません。有効な設定ではgenesisから同期します。
