@@ -200,21 +200,14 @@ api:
 
 plugins:
   api:
-    utxorpc:
-      provider: "builtin"
-      config:
-        port: 9090
+    # Añade estos campos a las entradas existentes de cada proveedor.
     mesh:
-      provider: "builtin"
       config:
-        port: 8080
         # Desactiva la autenticación heredada solo para este proveedor.
         auth:
           mode: "disabled"
     blockfrost:
-      provider: "builtin"
       config:
-        port: 3000
         # Anula solo los certificados; hereda api.tls.mode: "server".
         tls:
           certFilePath: "/run/secrets/blockfrost.crt"
