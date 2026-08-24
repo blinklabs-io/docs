@@ -105,6 +105,15 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # CLI: `--mithril-allow-insecure-http`
+  # 環境変数: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
+  allowInsecureHttp: false
+
+# コンセンサス
+# CLI: `--delegator-inactivity-enabled`、`--delegator-inactivity`
+# 環境変数: `DINGO_DELEGATOR_INACTIVITY_ENABLED`、`DINGO_DELEGATOR_INACTIVITY`
+delegatorInactivityEnabled: false
+delegatorInactivity: 90
 
 # Network
 bindAddr: "0.0.0.0"
@@ -126,6 +135,12 @@ midnight:
   authTokenPolicyId: ""
 EOF
 ```
+
+> 📝 MithrilのアグリゲーターURLとアーティファクトURLは、既定でHTTPSを使用する必要があります。本番環境では `mithril.allowInsecureHttp: false` を維持します。ローカル開発またはテストに限り `true` を設定できます。対応するオプションは `--mithril-allow-insecure-http` と `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` です。本番環境ではこの設定を有効にしないでください。
+
+> ⚠️ `delegatorInactivityEnabled` は、CIP-0163 の `account_withdrawal_witness` 書き込みに適用するコンセンサスに影響する非アクティブ期間の制御で、既定値は `false` です。有効にする場合は、`delegatorInactivity` に `1` から `10000` までの整数のエポック範囲を設定します。例では `90` を使用します。ネットワーク上のすべてのノードで同じ値にする必要があります。Mithrilブートストラップは、インポートした報酬アカウントの有効期限状態を再構築できないため、この制御と互換性がありません。有効な設定ではgenesisから同期します。
+
+> 📝 最上位の `delegatorInactivityEnabled` と `delegatorInactivity` は、それぞれ `--delegator-inactivity-enabled` / `DINGO_DELEGATOR_INACTIVITY_ENABLED` と `--delegator-inactivity` / `DINGO_DELEGATOR_INACTIVITY` で指定できます。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。`pprof` には認証機能とTLSがなく、`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立して既定値 `127.0.0.1` を使います。外部アクセスを許可する場合は、YAMLの `debugBindAddr`、`DINGO_DEBUG_BIND_ADDR`、または `--debug-bind-addr` でアドレスを明示的に指定し、ファイアウォールなどのネットワーク制御も設定します。`serve` モードとMithril同期の両方で同じ設定を使います。
 
