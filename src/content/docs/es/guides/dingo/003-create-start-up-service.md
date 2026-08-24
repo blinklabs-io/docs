@@ -172,7 +172,7 @@ EOF"
 
 > 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
-> 📝 La imagen de contenedor se ejecuta con UID:GID `1000:1000` e incluye herramientas cliente de base de datos. Haz que `databaseLifecycle.snapshotDir` sea escribible para `1000:1000`; de lo contrario, la validación del directorio de instantáneas falla. Los backends remotos S3 y GCS requieren el build tag `dingo_extra_plugins`.
+> 📝 La imagen de contenedor se ejecuta con UID:GID `1000:1000` e incluye herramientas cliente de base de datos. Haz que `databaseLifecycle.snapshotDir` sea escribible para `1000:1000`; de lo contrario, la validación del directorio de instantáneas falla.
 
 > 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 
