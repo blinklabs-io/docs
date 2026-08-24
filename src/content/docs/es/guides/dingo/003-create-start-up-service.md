@@ -190,6 +190,51 @@ midnight:
 Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+Ejemplo opcional de una política compartida para las APIs seleccionadas de Blockfrost, Mesh y UTxO RPC:
+
+```yaml
+api:
+  tls:
+    mode: "server"
+    certFilePath: "/run/secrets/api.crt"
+    keyFilePath: "/run/secrets/api.key"
+  auth:
+    mode: "token"
+    tokenFilePath: "/run/secrets/api-token"
+
+plugins:
+  api:
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 9090
+    mesh:
+      provider: "builtin"
+      config:
+        port: 8080
+        # Desactiva la autenticación heredada solo para este proveedor.
+        auth:
+          mode: "disabled"
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 3000
+        # Anula solo los certificados; hereda api.tls.mode: "server".
+        tls:
+          certFilePath: "/run/secrets/blockfrost.crt"
+          keyFilePath: "/run/secrets/blockfrost.key"
+```
+
+> 📝 `api.tls` y `api.auth` establecen la política compartida para cada proveedor seleccionado en `plugins.api.*`. Cada campo se resuelve de forma independiente: `plugins.api.<name>.config.tls` y `plugins.api.<name>.config.auth` pueden anular campos individuales del proveedor. Un `mode: "disabled"` explícito en el proveedor desactiva la política heredada solo para ese proveedor. Los modos válidos son `disabled` y `server` para TLS, y `disabled` y `token` para autenticación; el valor predeterminado de ambas políticas es `disabled`.
+
+> 📝 El modo TLS `server` requiere `certFilePath` y `keyFilePath`. El modo de autenticación `token` requiere exactamente uno de `token` o `tokenFilePath`; ambos campos son mutuamente excluyentes. Se recomienda `tokenFilePath`, que Dingo lee al iniciar el listener. Dingo valida estas combinaciones durante el inicio y rechaza una pareja de certificados incompleta o una configuración de token ausente o duplicada antes de enlazar el listener.
+
+> 📝 Las solicitudes autenticadas deben incluir `Authorization: Bearer <token>`. Blockfrost también acepta `project_id: <token>` para mantener la compatibilidad con sus clientes. Solo el `OPTIONS` de preflight de un navegador omite la autenticación; cualquier otra solicitud, incluido un `OPTIONS` que no sea preflight, requiere la credencial.
+
+> 📝 Las políticas compartidas admiten los enlaces de nivel superior `--api-tls-mode`, `--api-tls-cert-file-path`, `--api-tls-key-file-path`, `--api-auth-mode` y `--api-auth-token-file-path`, junto con `DINGO_API_TLS_MODE`, `DINGO_API_TLS_CERT_FILE_PATH`, `DINGO_API_TLS_KEY_FILE_PATH`, `DINGO_API_AUTH_MODE` y `DINGO_API_AUTH_TOKEN_FILE_PATH`.
+
+> 📝 `tlsCertFilePath` y `tlsKeyFilePath` en la raíz siguen siendo campos de compatibilidad exclusivos de UTxO RPC. No habilitan TLS para Blockfrost ni Mesh; usa `api.tls` o la sección `plugins.api.<name>.config.tls` del proveedor correspondiente.
+> 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
 ***
 
