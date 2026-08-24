@@ -122,11 +122,13 @@ EOF
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
+> 📝 A nonzero `targetNumberOfRootPeers` value overrides Cardano's root peer target. A value of `0` leaves the Dingo target unset, so Dingo uses Cardano's nonzero target as a fallback; when Cardano supplies no nonzero target, Dingo uses the effective default of `60`. A positive value limits newly selected public roots while retaining configured local roots. Set `-1` for unlimited roots. Configure this value with `targetNumberOfRootPeers`, `DINGO_TARGET_ROOT_PEERS`, or `--target-root-peers`.
+
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
-> 📝 Optional API security: keep `storageMode: "api"` enabled when running the built-in APIs, then configure the shared policy as follows:
+> 📝 Optional API security: add the following shared policy to the API configuration shown below:
 
 ```yaml
 storageMode: "api"
