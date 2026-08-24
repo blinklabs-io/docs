@@ -152,7 +152,7 @@ EOF
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 ### Optional Koios reward parity account checks
 
-The optional in-process Koios parity observer reads `koiosParity.accounts` only when `koiosParity.enabled` is enabled. Account checks default to `true` for this observer; set the parameter to `false` to keep pool-level checking only:
+The optional in-process Koios parity observer uses `koiosParity.accounts` only when the existing observer has `koiosParity.enabled: true`. Account checks default to `true` for this observer; set the parameter to `false` to keep pool-level checking only:
 
 ```yaml
 koiosParity:
