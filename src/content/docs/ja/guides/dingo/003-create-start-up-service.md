@@ -140,23 +140,23 @@ barkPort: 0
 # `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
 databaseLifecycle:
   # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
-  # CLI: --db-snapshot-enabled
+  # CLI: `--db-snapshot-enabled`
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
-  # CLI: --db-snapshot-dir
+  # CLI: `--db-snapshot-dir`
   snapshotDir: \"$HOME/dingo/snapshots\"
   # ローカル保存に加えて、スナップショットをクラウドにもミラーします。`s3://bucket/prefix` または `gcs://bucket/prefix` を指定します。
   # `dingo_extra_plugins` ビルドタグが必要です。
-  # CLI: --db-snapshot-cloud-destination
+  # CLI: `--db-snapshot-cloud-destination`
   snapshotCloudDestination: \"\"
   # 複数ノードで同じクラウド保存先を共有する場合の追加パスです。
-  # CLI: --db-snapshot-cloud-destination-prefix
+  # CLI: `--db-snapshot-cloud-destination-prefix`
   snapshotCloudDestinationPrefix: \"\"
   # 古い自動スナップショットの保持数です。`0` はすべて保持します。
-  # CLI: --db-snapshot-retention
+  # CLI: `--db-snapshot-retention`
   snapshotRetention: 0
   # N epoch ごとに自動スナップショットを作成します。`1` は毎回です。
-  # CLI: --db-snapshot-every-n-epochs
+  # CLI: `--db-snapshot-every-n-epochs`
   snapshotEveryNEpochs: 1
 storageMode: \"core\"
 EOF"
