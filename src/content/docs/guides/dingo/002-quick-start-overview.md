@@ -28,12 +28,12 @@ In this guide, we will walk you through downloading the Dingo binary and all the
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
-⚠️ Adjust the version and architecture to match your system.
+⚠️ This example uses v0.70.0. Adjust the version and architecture to match your system.
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.0/dingo-v0.70.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -105,10 +105,12 @@ mithril:
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
+debugBindAddr: "127.0.0.1"
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
+targetNumberOfRootPeers: 0
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
@@ -118,11 +120,31 @@ storageMode: "core"
 EOF
 ```
 
-> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
+
+> 📝 Optional API security: keep `storageMode: "api"` enabled when running the built-in APIs, then configure the shared policy as follows:
+
+```yaml
+storageMode: "api"
+api:
+  tls:
+    mode: server
+    certFilePath: "/run/secrets/api.crt"
+    keyFilePath: "/run/secrets/api.key"
+  auth:
+    mode: token
+    tokenFilePath: "/run/secrets/api-token"
+```
+
+The shared policy applies to selected built-in Blockfrost, Mesh, and UTxO RPC APIs. TLS accepts `disabled` or `server`, and authentication accepts `disabled` or `token`. Provider-level `plugins.api.<name>.config.tls` and `plugins.api.<name>.config.auth` fields override the corresponding shared fields independently; a provider-level `mode: disabled` explicitly opts that provider out of the inherited policy.
+
+With token authentication, ordinary API requests require `Authorization: Bearer <token>`. Blockfrost also accepts the same token in its `project_id` header. Browser CORS preflight `OPTIONS` requests do not require a credential, but other requests still authenticate. Dingo reports invalid modes, incomplete certificate and key pairs, and token authentication without a `token` or `tokenFilePath` as startup configuration errors. The token file is the preferred credential source.
+
+Top-level shared policy bindings are `--api-tls-mode` / `DINGO_API_TLS_MODE`, `--api-tls-cert-file-path` / `DINGO_API_TLS_CERT_FILE_PATH`, `--api-tls-key-file-path` / `DINGO_API_TLS_KEY_FILE_PATH`, `--api-auth-mode` / `DINGO_API_AUTH_MODE`, and `--api-auth-token-file-path` / `DINGO_API_AUTH_TOKEN_FILE_PATH`. The legacy root `tlsCertFilePath` and `tlsKeyFilePath` fields remain UTxO RPC compatibility settings only; they do not provide shared Blockfrost or Mesh TLS defaults.
 
 ```yaml
 midnight:
