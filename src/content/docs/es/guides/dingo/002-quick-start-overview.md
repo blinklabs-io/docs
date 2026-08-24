@@ -135,6 +135,22 @@ storageMode: "core"
 EOF
 ```
 
+### Configuración de la comprobación de cuentas de paridad de Koios
+
+Cuando `koiosParity.enabled` está habilitado, el observador integrado de Dingo comprueba las recompensas por cuenta mediante `koiosParity.accounts`. Esta opción está habilitada de forma predeterminada para el observador; establece el valor en `false` para conservar únicamente la comprobación a nivel de grupo de participación:
+
+```yaml
+koiosParity:
+  enabled: true
+  accounts: false
+```
+
+Los equivalentes de Dingo son `--koios-parity-accounts` y `DINGO_KOIOS_PARITY_ACCOUNTS`. La precedencia de configuración es CLI, variable de entorno, YAML y valor predeterminado. El observador integrado habilita la comprobación de cuentas por defecto después de activar el observador, a diferencia del ejecutable independiente `koios-parity`.
+
+La comprobación de cuentas del ejecutable independiente es opcional. Actívala con `koios-parity --accounts` o establece `KOIOS_PARITY_ACCOUNTS` en `true` o `1`. Esta fase genera un volumen de solicitudes a Koios considerablemente mayor. Cuando se especifica explícitamente `--accounts`, su valor, incluido `--accounts=false`, tiene prioridad sobre `KOIOS_PARITY_ACCOUNTS`.
+
+El indicador independiente `--grace-hours` acepta valores no negativos. Su valor predeterminado normal es `24`; establece `--grace-hours=0` para desactivar explícitamente la ventana de gracia o retraso de referencia. La cobertura incompleta de cuentas produce un resultado `ERROR`.
+
 > 📝 Las URL del agregador y de los artefactos de Mithril deben usar HTTPS de forma predeterminada. Mantén `mithril.allowInsecureHttp: false` en producción. Solo para desarrollo local o pruebas, establece este valor en `true`; las opciones equivalentes son `--mithril-allow-insecure-http` y `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. No habilites esta opción en producción.
 
 > ⚠️ `delegatorInactivityEnabled` controla el mecanismo de inactividad que afecta al consenso para las escrituras `account_withdrawal_witness` de CIP-0163 y su valor predeterminado es `false`. Cuando esté habilitado, establece `delegatorInactivity` como un número entero de épocas entre `1` y `10000`; el ejemplo usa el valor predeterminado de `90`. Todos los nodos de la red deben usar los mismos valores. El arranque desde una instantánea de Mithril es incompatible con este mecanismo porque Mithril no puede reconstruir el estado de expiración de las cuentas de recompensas importado; las configuraciones habilitadas deben sincronizarse desde el génesis.
