@@ -124,8 +124,6 @@ EOF
 
 > 📝 A nonzero `targetNumberOfRootPeers` value overrides Cardano's root peer target. A value of `0` leaves the Dingo target unset, so Dingo uses Cardano's nonzero target as a fallback; when Cardano supplies no nonzero target, Dingo uses the effective default of `60`. A positive value limits newly selected public roots while retaining configured local roots. Set `-1` for unlimited roots. Configure this value with `targetNumberOfRootPeers`, `DINGO_TARGET_ROOT_PEERS`, or `--target-root-peers`.
 
-> 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
-
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
 > 📝 Optional API security: add the following shared policy to the API configuration shown below:
