@@ -98,6 +98,16 @@ plugins:
       config:
         port: 0
 
+# API の共有 TLS / 認証設定（任意）
+# api:
+#   tls:
+#     mode: \"server\"
+#     certFilePath: \"/run/secrets/api.crt\"
+#     keyFilePath: \"/run/secrets/api.key\"
+#   auth:
+#     mode: \"token\"
+#     tokenFilePath: \"/run/secrets/api-token\"
+
 # Mithril
 mithril:
   aggregatorUrl: \"\"
@@ -110,6 +120,7 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+targetNumberOfRootPeers: 0
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
@@ -139,7 +150,9 @@ EOF"
 
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
-> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
+> 📝 `debugPort` は `0` で無効になります。`pprof` リスナーは認証も TLS も使用せず、既定の `debugBindAddr: \"127.0.0.1\"` でループバックにバインドします。`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立しています。外部公開には `debugBindAddr`、`--debug-bind-addr`、または `DINGO_DEBUG_BIND_ADDR` の明示的な上書きが必要で、ファイアウォールなどのネットワーク保護も設定してください。この注意事項は Mithril の同期処理と systemd の `dingo serve` の両方に適用されます。
+
+> 📝 `targetNumberOfRootPeers` の `0` 以外の値は、Cardano側の値より優先されます。`0` ではCardanoの設定にフォールバックし、Cardano側にも0以外の値がない場合の実効値は `60` です。正の値は選択するパブリックrootの数を制限しますが、local rootは維持します。`-1` は無制限です。CLIでは `--target-root-peers`、環境変数では `DINGO_TARGET_ROOT_PEERS` で設定できます。
 
 ```yaml
 storageMode: "api"
@@ -164,6 +177,14 @@ midnight:
 これらのポートは、更新後のローカル Blockfrost エクスプローラーの例に合わせた値です。これらのサービスが必要な場合にのみ有効にできます。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
+
+> 📝 `api.tls` と `api.auth` は、選択した Blockfrost、Mesh、UTxO RPC の `plugins.api.*` プロバイダーに適用する共有既定値です。`plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` は、それぞれのプロバイダーで対応するフィールドを個別に上書きできます。プロバイダー側で `mode: \"disabled\"` を明示すると、共有ポリシーをそのプロバイダーだけ無効にできます。
+>
+> TLS の有効なモードは `disabled` と `server` です。`server` を指定する場合は、`certFilePath` と `keyFilePath` の両方に証明書とキーのパスを設定します。認証の有効なモードは `disabled` と `token` です。`token` では `token` または `tokenFilePath` のどちらか一方だけを指定し、推奨される `tokenFilePath` を使用します。片方だけの TLS パス、または両方の認証トークンフィールドを指定すると、Dingoはリスナーの開始前の起動時検証でエラーにします。
+>
+> 認証トークンは `Authorization: Bearer <token>` で送信します。Blockfrost は互換性のため `project_id: <token>` も受け付けます。認証を有効にした場合、認証を省略できるのはブラウザーの CORS preflight にあたる `OPTIONS` だけです。preflight ではない `OPTIONS` を含むその他のすべてのリクエストには認証が必要です。
+>
+> トップレベルの共有設定は、`--api-tls-mode` / `DINGO_API_TLS_MODE`、`--api-tls-cert-file-path` / `DINGO_API_TLS_CERT_FILE_PATH`、`--api-tls-key-file-path` / `DINGO_API_TLS_KEY_FILE_PATH`、`--api-auth-mode` / `DINGO_API_AUTH_MODE`、`--api-auth-token-file-path` / `DINGO_API_AUTH_TOKEN_FILE_PATH` からも設定できます。既存のルート設定 `tlsCertFilePath` / `tlsKeyFilePath` は UTxO RPC だけで使う互換性フィールドであり、Blockfrost や Mesh には適用されません。
 
 > 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
