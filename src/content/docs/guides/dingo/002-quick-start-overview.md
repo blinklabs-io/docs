@@ -106,6 +106,15 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # CLI: `--mithril-allow-insecure-http`
+  # Env: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
+  allowInsecureHttp: false
+
+# Consensus
+# CLI: `--delegator-inactivity-enabled`, `--delegator-inactivity`
+# Env: `DINGO_DELEGATOR_INACTIVITY_ENABLED`, `DINGO_DELEGATOR_INACTIVITY`
+delegatorInactivityEnabled: false
+delegatorInactivity: 90
 
 # Network
 bindAddr: "0.0.0.0"
@@ -125,6 +134,12 @@ barkPort: 0
 storageMode: "core"
 EOF
 ```
+
+> 📝 Mithril aggregator and artifact URLs require HTTPS by default. Keep `mithril.allowInsecureHttp: false` in production. For local development or testing only, set it to `true`; the equivalent options are `--mithril-allow-insecure-http` and `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. Do not enable this option in production.
+
+> ⚠️ `delegatorInactivityEnabled` controls the consensus affecting inactivity gate for CIP-0163 `account_withdrawal_witness` writes and defaults to `false`. When enabled, set `delegatorInactivity` to an integer epoch window from `1` through `10000`; the example uses `90`. Every node on the network must use the same values. Mithril bootstrap is incompatible with this gate because it cannot reconstruct imported reward account expiration state; enabled configurations must sync from genesis.
+
+> 📝 The top-level `delegatorInactivityEnabled` and `delegatorInactivity` fields map to `--delegator-inactivity-enabled` / `DINGO_DELEGATOR_INACTIVITY_ENABLED` and `--delegator-inactivity` / `DINGO_DELEGATOR_INACTIVITY`, respectively.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
