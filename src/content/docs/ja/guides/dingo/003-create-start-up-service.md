@@ -229,7 +229,9 @@ midnight:
 >
 > トップレベルの共有設定は、`--api-tls-mode` / `DINGO_API_TLS_MODE`、`--api-tls-cert-file-path` / `DINGO_API_TLS_CERT_FILE_PATH`、`--api-tls-key-file-path` / `DINGO_API_TLS_KEY_FILE_PATH`、`--api-auth-mode` / `DINGO_API_AUTH_MODE`、`--api-auth-token-file-path` / `DINGO_API_AUTH_TOKEN_FILE_PATH` からも設定できます。既存のルート設定 `tlsCertFilePath` / `tlsKeyFilePath` は UTxO RPC だけで使う互換性フィールドであり、Blockfrost や Mesh には適用されません。
 
-> 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 停止中のデータディレクトリには `dingo database snapshot`、`dingo database restore <snapshot-dir>`、`dingo database truncate --slot <slot>`、`--hash <hash>`、`--block-number <n>` を使えます。`restore` は `snapshotCloudDestination` と同じクラウドURIも受け付け、一時ディレクトリにダウンロードしてから復元します。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+
+> 📝 コンテナイメージは UID:GID `1000:1000` で実行され、データベースクライアントツールを含みます。スナップショットの検証に失敗しないよう、`databaseLifecycle.snapshotDir` を `1000:1000` が書き込めるようにします。S3 と GCS のリモートバックエンドには `dingo_extra_plugins` ビルドタグが必要です。
 
 ***
 
