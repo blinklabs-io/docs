@@ -9,6 +9,7 @@ description: Notas de la versión de gOuroboros
 
 ☑️ La lista siguiente permite ver las notas de la versión completas.
 
+- Versión: v0.195.0 - *[Ver notas de la versión](../v0-195-0)*
 - Versión: v0.194.0 - *[Ver notas de la versión](../v0-194-0)*
 - Versión: v0.193.3 - *[Ver notas de la versión](../v0-193-3)*
 - Versión: v0.193.2 - *[Ver notas de la versión](../v0-193-2)*
