@@ -166,26 +166,6 @@ The standalone `koios-parity` utility keeps account checks disabled by default. 
 
 For standalone `koios-parity`, `--grace-hours` rejects negative values and accepts non-negative values. The normal default is `24` hours; set `--grace-hours=0` to explicitly disable the grace/reference-lag window. `koios-parity` reports incomplete account-fetch coverage as `ERROR`, not as a successful account comparison.
 
-> 📝 Optional API security: add the following shared policy to the API configuration shown below:
-
-```yaml
-storageMode: "api"
-api:
-  tls:
-    mode: server
-    certFilePath: "/run/secrets/api.crt"
-    keyFilePath: "/run/secrets/api.key"
-  auth:
-    mode: token
-    tokenFilePath: "/run/secrets/api-token"
-```
-
-The shared policy applies to selected built-in Blockfrost, Mesh, and UTxO RPC APIs. TLS accepts `disabled` or `server`, and authentication accepts `disabled` or `token`. Provider-level `plugins.api.<name>.config.tls` and `plugins.api.<name>.config.auth` fields override the corresponding shared fields independently; a provider-level `mode: disabled` explicitly opts that provider out of the inherited policy.
-
-With token authentication, ordinary API requests require `Authorization: Bearer <token>`. Blockfrost also accepts the same token in its `project_id` header. Browser CORS preflight `OPTIONS` requests do not require a credential, but other requests still authenticate. Set both certificate and key paths for TLS `server` mode, and set exactly one of `token` or `tokenFilePath` for auth `token` mode. Dingo reports invalid modes, missing or invalid certificate and key pairs, and mutually exclusive or missing token credentials as startup configuration errors. The token file is the preferred credential source.
-
-Top-level shared policy bindings are `--api-tls-mode` / `DINGO_API_TLS_MODE`, `--api-tls-cert-file-path` / `DINGO_API_TLS_CERT_FILE_PATH`, `--api-tls-key-file-path` / `DINGO_API_TLS_KEY_FILE_PATH`, `--api-auth-mode` / `DINGO_API_AUTH_MODE`, and `--api-auth-token-file-path` / `DINGO_API_AUTH_TOKEN_FILE_PATH`. The legacy root `tlsCertFilePath` and `tlsKeyFilePath` fields remain UTxO RPC compatibility settings only; they do not provide shared Blockfrost or Mesh TLS defaults.
-
 ```yaml
 midnight:
   authTokenPolicyId: ""
