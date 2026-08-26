@@ -79,12 +79,6 @@ plugins:
       # `capacity` は任意で、コメントアウトするとモードの既定値を使います。
       # 既定値: 通常のモードでは 1048576 (1 MiB)、leios モードでは 26214400 (25 MiB) です。
       # capacity: 1048576
-      # `evictionWatermark` は 0 または (0,1) の値を受け付けます。0 にすると FIFO の古いトランザクションを削除せず、容量到達時に新しいトランザクションを拒否します。
-      # `rejectionWatermark` は (0,1] の値を受け付けます。削除を有効にする場合は `evictionWatermark` より大きくします。
-      # 既定値: `evictionWatermark: 0`、`rejectionWatermark: 1.0`。
-      # CLI: `--eviction-watermark`、`--rejection-watermark`
-      # 環境変数: `DINGO_MEMPOOL_EVICTION_WATERMARK`、`DINGO_MEMPOOL_REJECTION_WATERMARK`
-      # 例: `evictionWatermark: 0`、`rejectionWatermark: 1.0`
   api:
     blockfrost:
       provider: "builtin"
