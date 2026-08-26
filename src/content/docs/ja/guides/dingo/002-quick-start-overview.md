@@ -115,15 +115,10 @@ barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
 midnight:
-  # gRPCサーバーを有効にするには、storageModeを"api"に設定し、serverEnabledをtrueにして、portに0以外の値を指定します。
   serverEnabled: false
-  # サービスディスカバリを公開します。serverEnabledが必要です。
   reflectionEnabled: false
-  # 非ループバックアドレスで平文接続を許可します。既定では無効です。
   allowInsecureRemote: false
-  # gRPCリッスンポート。serverEnabledがtrueの場合は0以外にします。
   port: 50051
-  # gRPCリッスンアドレス。既定値はループバックです。
   host: "127.0.0.1"
   authTokenPolicyId: ""
 EOF
