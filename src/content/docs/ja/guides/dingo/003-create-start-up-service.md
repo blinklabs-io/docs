@@ -155,7 +155,6 @@ EOF"
 
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
-
 ```yaml
 storageMode: "api"
 plugins:
@@ -187,7 +186,6 @@ midnight:
 > 認証トークンは `Authorization: Bearer <token>` で送信します。Blockfrost は互換性のため `project_id: <token>` も受け付けます。認証を有効にした場合、認証を省略できるのはブラウザーの CORS preflight にあたる `OPTIONS` だけです。preflight ではない `OPTIONS` を含むその他のすべてのリクエストには認証が必要です。
 >
 > トップレベルの共有設定は、`--api-tls-mode` / `DINGO_API_TLS_MODE`、`--api-tls-cert-file-path` / `DINGO_API_TLS_CERT_FILE_PATH`、`--api-tls-key-file-path` / `DINGO_API_TLS_KEY_FILE_PATH`、`--api-auth-mode` / `DINGO_API_AUTH_MODE`、`--api-auth-token-file-path` / `DINGO_API_AUTH_TOKEN_FILE_PATH` からも設定できます。既存のルート設定 `tlsCertFilePath` / `tlsKeyFilePath` は UTxO RPC だけで使う互換性フィールドであり、Blockfrost や Mesh には適用されません。
-
 
 ***
 
