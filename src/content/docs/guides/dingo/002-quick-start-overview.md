@@ -125,7 +125,6 @@ network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
-targetNumberOfRootPeers: 0
 socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
