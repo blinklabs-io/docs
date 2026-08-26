@@ -143,7 +143,6 @@ El indicador independiente `--grace-hours` acepta valores no negativos. Su valor
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`. `pprof` no tiene autenticación ni TLS y usa la dirección de bucle local `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr` en YAML, `DINGO_DEBUG_BIND_ADDR` o `--debug-bind-addr` y aplica controles de red. La sincronización de Mithril usa la misma configuración.
 
-
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
 ```yaml
