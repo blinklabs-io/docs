@@ -126,6 +126,8 @@ storageMode: \"core\"
 # Database lifecycle
 databaseLifecycle:
   # Dingo captures automatic database snapshots at epoch boundaries.
+  # Cannot be true when the primary blob provider is "s3" or "gcs".
+  # Disable this setting or select a local primary blob provider.
   # Default: false.
   snapshotEnabled: false
   # Dingo writes automatic snapshots to this local filesystem directory.
@@ -145,9 +147,9 @@ EOF"
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
-> 📝 `databaseLifecycle.snapshotEnabled` controls automatic snapshots, and `dingo database snapshot|restore|truncate` handles offline maintenance. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
+> 📝 `databaseLifecycle.snapshotEnabled` controls automatic epoch boundary snapshots. It cannot be true when the primary blob provider is `s3` or `gcs`; disable it or select a local primary blob provider. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
-> 📝 Set `databaseLifecycle.snapshotRetention` to keep only the most recent automatic snapshots. Set `databaseLifecycle.snapshotCloudDestination` to mirror each snapshot to S3 or GCS when Dingo runs with `dingo_extra_plugins`.
+> 📝 Set `databaseLifecycle.snapshotRetention` to keep only the most recent automatic snapshots. Set `databaseLifecycle.snapshotCloudDestination` to mirror each snapshot to S3 or GCS when Dingo runs with `dingo_extra_plugins`. This mirror destination is separate from the primary blob provider.
 
 > 📝 Use `dingo database snapshot`, `dingo database restore <snapshot-dir>`, and `dingo database truncate --slot <slot>`, `--hash <hash>`, or `--block-number <n>` on an offline data directory. `restore` also accepts the same cloud URI that `snapshotCloudDestination` uses and downloads it to a temporary directory before restoration.
 
@@ -170,10 +172,24 @@ plugins:
       config:
         port: 9090
 midnight:
+  # Enable the Midnight gRPC server. Requires storageMode: "api". Default: false.
+  serverEnabled: false
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
+  reflectionEnabled: false
+  # Allow plaintext on a non-loopback listener. Default: false.
+  allowInsecureRemote: false
+  # gRPC listen port. Must be nonzero when serverEnabled is true.
+  port: 50051
+  # gRPC listen host. An empty host defaults to 127.0.0.1.
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
 
-> 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Set any listener port to `0` to disable that API.
+> 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Midnight gRPC serving also requires API storage mode, `midnight.serverEnabled: true`, and a nonzero `midnight.port`. Set any listener port to `0` to disable that API.
+
+> 📝 `midnight.serverEnabled` explicitly controls the Midnight gRPC server and keeps it off when false. `midnight.enabled` controls indexing separately; the server can serve persisted Midnight rows without running the indexer. `midnight.reflectionEnabled` requires `midnight.serverEnabled`.
+
+> 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. Non-loopback plaintext requires `midnight.allowInsecureRemote: true`; configure `tlsCertFilePath` and `tlsKeyFilePath` for remote TLS exposure.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
