@@ -145,7 +145,6 @@ storageMode: \"core\"
 databaseLifecycle:
   # Dingo captures automatic database snapshots at epoch boundaries.
   # Default: false.
-  # CLI: `--db-snapshot-enabled`
   snapshotEnabled: false
   # Dingo writes automatic snapshots to this local filesystem directory.
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
