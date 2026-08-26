@@ -179,7 +179,6 @@ EOF"
 
 > 📝 `debugPort` は `0` で無効になります。`pprof` の待受は認証も TLS も使用せず、既定の `debugBindAddr: \"127.0.0.1\"` でループバックにバインドします。`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立しています。外部公開には `debugBindAddr`、`--debug-bind-addr`、または `DINGO_DEBUG_BIND_ADDR` の明示的な上書きが必要で、ファイアウォールなどのネットワーク保護も設定してください。この注意事項は Mithril の同期処理と systemd の `dingo serve` の両方に適用されます。
 
-> 📝 `targetNumberOfRootPeers` の `0` 以外の値は、Cardano側の値より優先されます。`0` ではCardanoの設定にフォールバックし、Cardano側にも0以外の値がない場合の実効値は `60` です。正の値は選択するパブリックrootの数を制限しますが、local rootは維持します。`-1` は無制限です。CLIでは `--target-root-peers`、環境変数では `DINGO_TARGET_ROOT_PEERS` で設定できます。
 
 ```yaml
 storageMode: "api"
