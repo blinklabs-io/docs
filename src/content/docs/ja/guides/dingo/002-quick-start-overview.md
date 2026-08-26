@@ -145,7 +145,6 @@ Dingoでは、この設定に `--koios-parity-accounts` と `DINGO_KOIOS_PARITY_
 
 > 📝 起動前、Dingoは既存の `socketPath` を保持します。Dingoは確認済みの古いUnixソケットだけを削除します。通常ファイル、シンボリックリンク、ディレクトリ、稼働中のソケット、判定があいまいなプローブ、または削除エラーがあると起動に失敗します。設定したパスは存在しない状態にするか、Dingoが削除できる確認済みの古いUnixソケットだけを置いてください。
 
-
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
