@@ -119,31 +119,13 @@ EOF
 ```
 
 > 📝 Mithril aggregator and artifact URLs require HTTPS by default. Keep `mithril.allowInsecureHttp: false` in production. For local development or testing only, set it to `true`; the equivalent options are `--mithril-allow-insecure-http` and `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. Do not enable this option in production.
-
 > ⚠️ `delegatorInactivityEnabled` controls the consensus-affecting inactivity gate for CIP-0163 `account_withdrawal_witness` writes and defaults to `false`. When enabled, set `delegatorInactivity` to an integer epoch window from `1` through `10000`; the example uses the default window of `90`. Every node on the network must use the same values. Mithril bootstrap is incompatible with this gate because it cannot reconstruct imported reward account expiration state; enabled configurations must sync from genesis.
 
 > 📝 The example shows the CLI flags and environment variables for both top-level fields.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
-> 📝 Before startup, Dingo preserves an existing `socketPath`. Dingo removes only a confirmed stale Unix socket. A regular file, symlink, directory, live socket, ambiguous probe, or removal error causes startup to fail. Keep the configured path absent or ensure that it contains only a removable confirmed stale Unix socket.
-
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
-
-### Optional Koios reward parity account checks
-
-The optional in-process Koios parity observer uses `koiosParity.accounts` only when the existing observer has `koiosParity.enabled: true`. Account checks default to `true` for this observer; set the parameter to `false` to keep pool-level checking only:
-
-```yaml
-koiosParity:
-  accounts: false
-```
-
-The Dingo equivalents are `--koios-parity-accounts` and `DINGO_KOIOS_PARITY_ACCOUNTS`. Use `--koios-parity-accounts=false` or `DINGO_KOIOS_PARITY_ACCOUNTS=false` to disable account checks explicitly.
-
-The standalone `koios-parity` utility keeps account checks disabled by default. Add `--accounts` or set `KOIOS_PARITY_ACCOUNTS=true` (also `1`) to enable them. Account checks make substantially more Koios requests than pool-level checks, and an explicit CLI value takes precedence over the environment, including `--accounts=false`.
-
-For standalone `koios-parity`, `--grace-hours` rejects negative values and accepts non-negative values. The normal default is `24` hours; set `--grace-hours=0` to explicitly disable the grace/reference-lag window. `koios-parity` reports incomplete account-fetch coverage as `ERROR`, not as a successful account comparison.
 
 ```yaml
 midnight:
