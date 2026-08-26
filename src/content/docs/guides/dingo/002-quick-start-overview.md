@@ -131,8 +131,9 @@ midnight:
   serverEnabled: false
   # Expose gRPC reflection. Requires serverEnabled. Default: false.
   reflectionEnabled: false
-  # Permit plaintext listening on a non-loopback host. TLS can provide remote
-  # exposure without this setting. Default: false.
+  # Permit plaintext listening on a non-loopback host. A configured TLS
+  # certificate and key allow remote TLS exposure without this setting.
+  # Default: false.
   allowInsecureRemote: false
   # Must be nonzero when serverEnabled is true. Default: 50051.
   port: 50051
@@ -156,7 +157,7 @@ plugins:
         port: 9090
 ```
 
-> 💡 Midnight gRPC serving requires `storageMode: "api"`, `midnight.serverEnabled: true`, and a nonzero `midnight.port`. Leaving `serverEnabled: false` keeps the listener disabled even when a port is configured.
+> 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
