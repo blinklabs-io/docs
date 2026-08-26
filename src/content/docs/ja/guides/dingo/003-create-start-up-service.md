@@ -249,7 +249,6 @@ midnight:
 
 > 📝 停止中のデータディレクトリには `dingo database snapshot`、`dingo database restore <snapshot-dir>`、`dingo database truncate --slot <slot>`、`--hash <hash>`、`--block-number <n>` を使えます。`restore` は `snapshotCloudDestination` と同じクラウドURIも受け付け、一時ディレクトリにダウンロードしてから復元します。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
-> 📝 コンテナイメージは UID:GID `1000:1000` で実行され、データベースクライアントツールを含みます。スナップショットの検証に失敗しないよう、`databaseLifecycle.snapshotDir` を `1000:1000` が書き込めるようにします。
 
 ***
 
