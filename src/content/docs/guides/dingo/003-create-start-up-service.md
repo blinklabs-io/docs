@@ -149,7 +149,6 @@ databaseLifecycle:
   snapshotEnabled: false
   # Dingo writes automatic snapshots to this local filesystem directory.
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
-  # CLI: `--db-snapshot-dir`
   snapshotDir: \"$HOME/dingo/snapshots\"
   # Keep only the most recent automatic snapshots.
   # Default: 0.
