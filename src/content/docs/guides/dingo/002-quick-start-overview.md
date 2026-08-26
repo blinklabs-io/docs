@@ -147,8 +147,6 @@ EOF
 
 > 📝 Before startup, Dingo preserves an existing `socketPath`. Dingo removes only a confirmed stale Unix socket. A regular file, symlink, directory, live socket, ambiguous probe, or removal error causes startup to fail. Keep the configured path absent or ensure that it contains only a removable confirmed stale Unix socket.
 
-> 📝 A nonzero `targetNumberOfRootPeers` value overrides Cardano's root peer target. A value of `0` leaves the Dingo target unset, so Dingo uses Cardano's nonzero target as a fallback; when Cardano supplies no nonzero target, Dingo uses the effective default of `60`. A positive value limits newly selected public roots while retaining configured local roots. Set `-1` for unlimited roots. Configure this value with `targetNumberOfRootPeers`, `DINGO_TARGET_ROOT_PEERS`, or `--target-root-peers`.
-
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
 ### Optional Koios reward parity account checks
