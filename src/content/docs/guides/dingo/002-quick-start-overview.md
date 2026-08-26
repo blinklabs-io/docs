@@ -118,7 +118,6 @@ storageMode: "core"
 EOF
 ```
 
-> ⚠️ `delegatorInactivityEnabled` controls the consensus-affecting inactivity gate for CIP-0163 `account_withdrawal_witness` writes and defaults to `false`. When enabled, set `delegatorInactivity` to an integer epoch window from `1` through `10000`; the example uses the default window of `90`. Every node on the network must use the same values. Mithril bootstrap is incompatible with this gate because it cannot reconstruct imported reward account expiration state; enabled configurations must sync from genesis.
 
 > 📝 The example shows the CLI flags and environment variables for both top-level fields.
 
