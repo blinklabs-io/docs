@@ -88,13 +88,6 @@ plugins:
       # capacity: 1048576
       # `revalidationDeltaCap` is optional. Default: 64. The value must be positive.
       # revalidationDeltaCap: 64
-      # `evictionWatermark` accepts 0 or a value in (0,1). Set 0 to reject new transactions at capacity instead of evicting older FIFO transactions.
-      # `rejectionWatermark` accepts values in (0,1]. Set it above `evictionWatermark` when enabling eviction.
-      # Defaults: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
-      # CLI: `--eviction-watermark`, `--rejection-watermark`
-      # Env: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
-      # evictionWatermark: 0
-      # rejectionWatermark: 1.0
   api:
     blockfrost:
       provider: \"builtin\"
