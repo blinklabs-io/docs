@@ -121,9 +121,6 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # CLI: `--mithril-allow-insecure-http`
-  # 環境変数: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
-  allowInsecureHttp: false
 
 # コンセンサス
 # CLI: `--delegator-inactivity-enabled`、`--delegator-inactivity`
