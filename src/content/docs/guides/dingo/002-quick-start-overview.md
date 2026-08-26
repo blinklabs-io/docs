@@ -121,7 +121,6 @@ EOF
 
 > 📝 The example shows the CLI flags and environment variables for both top-level fields.
 
-> 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
