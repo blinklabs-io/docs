@@ -147,7 +147,6 @@ EOF"
 
 > ⚠️ `delegatorInactivityEnabled` controla el mecanismo de inactividad que afecta al consenso para las escrituras `account_withdrawal_witness` de CIP-0163 y su valor predeterminado es `false`. Cuando esté habilitado, establece `delegatorInactivity` como un número entero de épocas entre `1` y `10000`; el ejemplo usa el valor predeterminado de `90`. Todos los nodos de la red deben usar los mismos valores. El arranque desde una instantánea de Mithril es incompatible con este mecanismo porque Mithril no puede reconstruir el estado de expiración de las cuentas de recompensas importado; las configuraciones habilitadas deben sincronizarse desde el génesis.
 
-
 > 📝 El ejemplo muestra los indicadores CLI y las variables de entorno correspondientes a ambos campos de nivel superior.
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
