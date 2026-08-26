@@ -118,9 +118,7 @@ storageMode: "core"
 EOF
 ```
 
-
 > 📝 The example shows the CLI flags and environment variables for both top-level fields.
-
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
