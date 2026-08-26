@@ -122,7 +122,6 @@ mithril:
   enabled: true
   verifyCertificates: true
 
-
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
