@@ -126,7 +126,11 @@ EOF
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
-> 💡 Midnight gRPC サーバーを使用するには `storageMode: "api"`、`midnight.serverEnabled: true`、および `midnight.port` の `0` 以外の値が必要です。インデックス作成とサーバー公開は別々に制御され、`midnight.reflectionEnabled` は `midnight.serverEnabled` が `true` の場合にのみ有効です。`midnight.host` の既定値は `"127.0.0.1"` で、空文字列でも同じループバックの既定値を使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。`midnight.serverEnabled` が `false` の場合、リスナーは無効です。各 API の `port` を `0` にすると、その API は無効になります。
+> 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
+
+> 💡 Midnight gRPC サーバーには `storageMode: "api"`、`midnight.serverEnabled: true`、および `midnight.port` の `0` 以外の値が必要です。インデックス作成とサーバー公開は別々に制御されます。`midnight.reflectionEnabled` は `midnight.serverEnabled` が `true` の場合にのみ有効で、`midnight.serverEnabled` が `false` の場合はリスナーも無効です。
+
+> 📝 `midnight.host` の既定値は `"127.0.0.1"` です。`midnight.host: ""` もループバックを使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
