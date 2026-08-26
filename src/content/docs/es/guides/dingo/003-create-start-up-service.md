@@ -107,15 +107,6 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # CLI: `--mithril-allow-insecure-http`
-  # Entorno: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
-  allowInsecureHttp: false
-
-# Consenso
-# CLI: `--delegator-inactivity-enabled`, `--delegator-inactivity`
-# Entorno: `DINGO_DELEGATOR_INACTIVITY_ENABLED`, `DINGO_DELEGATOR_INACTIVITY`
-delegatorInactivityEnabled: false
-delegatorInactivity: 90
 
 # Lifecycle de base de datos
 databaseLifecycle:
