@@ -141,6 +141,7 @@ databaseLifecycle:
   # Optional path prefix for shared cloud destinations.
   snapshotCloudDestinationPrefix: \"\"
   # Capture an automatic snapshot every N epoch closes.
+  # CLI: --db-snapshot-every-n-epochs
   snapshotEveryNEpochs: 1
 EOF"
 ```
