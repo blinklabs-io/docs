@@ -4,10 +4,12 @@ description: SPO Guide for Dingo Pools - How to run slot leader check to see you
 ---
 
 You can check if you are scheduled to mint block by running the slot leader check in the cardano-cli. This can be done for the current Epoch or the next Epoch. The next epoch schedule can be checked before the start of the next epoch at the 70% of the current epoch's completion.
+***
 <img src="/dingo-epoch-70-percent-over.png"
      alt="dingo-epoch-70-percent-over"
-     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-     
+     style="max-width:100%; height:auto; max-height:350px; object-fit:contain; border:1px solid #ccc;" />
+
+***
 ## Run Slot Leader Check for Current Epoch
 Run the following command to see if your pool is scheduled to mint a block in the current epoch. 
 
@@ -24,6 +26,7 @@ cardano-cli query leadership-schedule \
    --current
 ```
 
+***
 
 ## Run Slot Leader Check for Next Epoch
 Run the following command to see if your pool is scheduled to mint a block in the next epoch. (only run when current Epoch is over 70% completed)
@@ -40,5 +43,7 @@ cardano-cli query leadership-schedule \
    --vrf-signing-key-file vrf.skey \
    --next
 ```
+
+***
 
 ### Congratulations, hopefully you are scheduled to mint Cardano blocks using Dingo!
