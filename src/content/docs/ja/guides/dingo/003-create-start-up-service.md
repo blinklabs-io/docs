@@ -120,7 +120,8 @@ barkBaseUrl: \"\"
 barkPort: 0
 # `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
 databaseLifecycle:
-  # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。プライマリの blob provider が `s3` または `gcs` の場合は使用できないため、自動スナップショットを無効にするか、ローカルのプライマリ blob provider を使用してください。
+  # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
+  # プライマリの blob provider が `s3` または `gcs` の場合は使用できないため、自動スナップショットを無効にするか、ローカルのプライマリ blob provider を使用してください。
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
   snapshotDir: \"$HOME/dingo/snapshots\"
@@ -158,15 +159,16 @@ plugins:
       config:
         port: 9090
 midnight:
-  # Midnight の gRPC サーバーを有効にします。提供には API ストレージモード、明示的な有効化、0 以外の `port` が必要です。`false` の場合はリスナーを起動しません。
+  # Midnight のインデックス作成と gRPC 提供は別々に制御します。gRPC 提供には API ストレージモード、`serverEnabled: true`、0 以外の `port` が必要です。
+  # `serverEnabled` が `false` の場合はリスナーを起動しません。
   serverEnabled: false
   # gRPC のサービス検出を有効にします。`serverEnabled` が必要です。
   reflectionEnabled: false
-  # ループバック以外で TLS なしの接続を許可します。リモートの平文接続にはこの設定または TLS が必要です。
+  # ループバック以外で TLS なしの接続を許可します。リモートの平文接続には `allowInsecureRemote: true` または TLS が必要です。
   allowInsecureRemote: false
   # gRPC の待ち受けポートです。`serverEnabled` が `true` の場合は 0 以外にします。
   port: 50051
-  # gRPC の待ち受けアドレスです。既定値はループバック（`127.0.0.1`）です。
+  # gRPC の待ち受けアドレスです。省略または空欄の場合の既定値はループバック（`127.0.0.1`）です。
   host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
@@ -175,7 +177,7 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 `databaseLifecycle.snapshotEnabled` はエポック境界での自動スナップショット用です。手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 上記の制限は自動スナップショットだけに適用され、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
 
