@@ -162,7 +162,7 @@ midnight:
   # Midnight のインデックス作成と gRPC 提供は別々に制御します。gRPC 提供には API ストレージモード、`serverEnabled: true`、0 以外の `port` が必要です。
   # `serverEnabled` が `false` の場合はリスナーを起動しません。
   serverEnabled: false
-  # gRPC のサービス検出を有効にします。`serverEnabled` が必要です。
+  # `reflectionEnabled` は gRPC のサービス検出を個別に有効化する設定です。`serverEnabled: true` が必要です。
   reflectionEnabled: false
   # ループバック以外で TLS なしの接続を許可します。リモートの平文接続には `allowInsecureRemote: true` または TLS が必要です。
   allowInsecureRemote: false
@@ -177,7 +177,7 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 上記の制限は自動スナップショットだけに適用され、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 `snapshotEnabled` の制限は自動スナップショットだけに適用され、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
 
