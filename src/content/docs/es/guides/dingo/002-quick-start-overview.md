@@ -93,12 +93,6 @@ plugins:
 #   mempool:
 #     config:
 #       capacity: 1048576
-# `plugins.mempool.config.evictionWatermark` acepta 0 o un valor de (0,1). El valor 0 rechaza nuevas transacciones al alcanzar la capacidad en lugar de expulsar transacciones FIFO anteriores.
-# `plugins.mempool.config.rejectionWatermark` acepta valores de (0,1]. Cuando la expulsión está activa, debe ser mayor que `evictionWatermark`.
-# Valores predeterminados: `evictionWatermark: 0`, `rejectionWatermark: 1.0`.
-# CLI: `--eviction-watermark`, `--rejection-watermark`
-# Entorno: `DINGO_MEMPOOL_EVICTION_WATERMARK`, `DINGO_MEMPOOL_REJECTION_WATERMARK`
-# Valores YAML de ejemplo: `evictionWatermark: 0`, `rejectionWatermark: 1.0`
 
 # Mithril
 mithril:
@@ -106,22 +100,12 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # CLI: `--mithril-allow-insecure-http`
-  # Entorno: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
-  allowInsecureHttp: false
-
-# Consenso
-# CLI: `--delegator-inactivity-enabled`, `--delegator-inactivity`
-# Entorno: `DINGO_DELEGATOR_INACTIVITY_ENABLED`, `DINGO_DELEGATOR_INACTIVITY`
-delegatorInactivityEnabled: false
-delegatorInactivity: 90
 
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
 debugBindAddr: "127.0.0.1"
-targetNumberOfRootPeers: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -163,7 +147,6 @@ El indicador independiente `--grace-hours` acepta valores no negativos. Su valor
 
 > 📝 Antes del inicio, Dingo conserva un `socketPath` existente. Dingo solo elimina un socket Unix obsoleto confirmado. Un archivo normal, enlace simbólico, directorio, socket activo, comprobación ambigua o error de eliminación hace que el inicio falle. La configuración debe mantener la ruta ausente o incluir únicamente un socket Unix obsoleto confirmado que Dingo pueda eliminar.
 
-> 📝 `targetNumberOfRootPeers` define el objetivo de nodos raíz de Dingo. Cuando el operador establece un valor distinto de `0`, Dingo sustituye el objetivo de Cardano; con `0`, Dingo usa el objetivo de Cardano como alternativa. Sin un objetivo de Cardano distinto de cero, Dingo usa `60` como valor efectivo predeterminado. Un valor positivo limita los nodos raíz públicos seleccionados y conserva los nodos raíz locales; `-1` no aplica ningún límite. Dingo también acepta `DINGO_TARGET_ROOT_PEERS` y `--target-root-peers` para establecer este valor.
 
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
@@ -186,34 +169,6 @@ plugins:
       config:
         port: 9090
 ```
-
-### Configuración opcional del registro de tokens de la API
-
-En el modo de almacenamiento API, añade este bloque de nivel superior para usar metadatos CIP-26 locales en las respuestas de activos de Blockfrost:
-
-```yaml
-tokenRegistry:
-  enabled: false
-```
-
-Dingo establece `tokenRegistry.enabled` en `false` de forma predeterminada y solo usa el registro de tokens con `storageMode: "api"`. Aplica la migración de base de datos v3, `token-registry-metadata`, antes de establecerlo en `true`. La primera sincronización de mainnet descarga aproximadamente 240 MB; las comprobaciones posteriores usan solicitudes condicionales.
-
-Configura los demás campos de `tokenRegistry` de la siguiente manera:
-
-- `sourceUrl`: Un valor vacío selecciona el registro de la red configurada. Establece una URL para usar un espejo.
-- `interval`: El intervalo de comprobación. El valor predeterminado es `6h`; los valores inferiores a `1m` usan el mínimo de `1m`.
-- `requestTimeout`: El tiempo de espera para la descarga completa. El valor predeterminado es `15m`.
-- `userAgent`: El agente de usuario HTTP. Un valor vacío usa `dingo-token-registry/1`.
-- `maxBytes`: El límite de la descarga comprimida. El valor predeterminado es `768 MiB`.
-- `maxEntryBytes`: El límite para una entrada de mapeo. El valor predeterminado es `4 MiB`.
-- `storeLogos`: Guarda los logotipos del registro cuando vale `true`; el valor predeterminado es `false` porque los logotipos representan aproximadamente el 90 % de los bytes del registro.
-- `allowPrivateAddresses`: Permite solicitudes del registro a direcciones privadas, de bucle local y de enlace local cuando vale `true`; el valor predeterminado es `false` para la protección contra SSRF. Actívalo solo cuando se necesite una fuente privada del registro.
-
-La configuración también acepta estas variables de entorno:
-
-`DINGO_TOKEN_REGISTRY_ENABLED`, `DINGO_TOKEN_REGISTRY_SOURCE_URL`, `DINGO_TOKEN_REGISTRY_INTERVAL`, `DINGO_TOKEN_REGISTRY_REQUEST_TIMEOUT`, `DINGO_TOKEN_REGISTRY_USER_AGENT`, `DINGO_TOKEN_REGISTRY_MAX_BYTES`, `DINGO_TOKEN_REGISTRY_MAX_ENTRY_BYTES`, `DINGO_TOKEN_REGISTRY_STORE_LOGOS` y `DINGO_TOKEN_REGISTRY_ALLOW_PRIVATE_ADDRESSES`.
-
-Los indicadores CLI equivalentes son `--token-registry-enabled`, `--token-registry-source-url`, `--token-registry-interval`, `--token-registry-request-timeout`, `--token-registry-user-agent`, `--token-registry-max-bytes`, `--token-registry-max-entry-bytes`, `--token-registry-store-logos` y `--token-registry-allow-private-addresses`.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
