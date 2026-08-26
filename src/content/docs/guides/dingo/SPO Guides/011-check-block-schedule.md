@@ -13,7 +13,7 @@ You can check if you are scheduled to mint block by running the slot leader chec
 ## Run Slot Leader Check for Current Epoch
 Run the following command to see if your pool is scheduled to mint a block in the current epoch. 
 
-> ✅ This assumes you have stakepoodit.txt file on your BP or Relay. If not follow steps [here](/..005-register-pool/#step-81---create-stakepoolidtxt-file)
+> ✅ This assumes you have stakepoodit.txt file on your BP or Relay. If not follow steps [here](../005-register-pool/#step-81---create-stakepoolidtxt-file)
 >
 > ⚠️ Adjusts paths if needed
 
@@ -31,7 +31,7 @@ cardano-cli query leadership-schedule \
 ## Run Slot Leader Check for Next Epoch
 Run the following command to see if your pool is scheduled to mint a block in the next epoch. (only run when current Epoch is over 70% completed)
 
-> ✅ This assumes you have stakepoodit.txt file on your BP or Relay. If not follow steps [here](/..005-register-pool/#step-81---create-stakepoolidtxt-file)
+> ✅ This assumes you have stakepoodit.txt file on your BP or Relay. If not follow steps [here](../005-register-pool/#step-81---create-stakepoolidtxt-file)
 >
 > ⚠️ Adjusts paths if needed
 
@@ -46,4 +46,5 @@ cardano-cli query leadership-schedule \
 
 ***
 
-### Congratulations, hopefully you are scheduled to mint Cardano blocks using Dingo!
+### Congratulations! 
+Hopefully you are scheduled to mint **Cardano** blocks using Dingo!
