@@ -173,15 +173,15 @@ plugins:
       config:
         port: 9090
 midnight:
-  # Habilita el servidor gRPC de Midnight. Default: false.
+  # Habilita el servidor gRPC de Midnight. Predeterminado: false.
   serverEnabled: false
-  # Expone el descubrimiento del servicio gRPC. Requiere `serverEnabled`. Default: false.
+  # Expone el descubrimiento del servicio gRPC. Requiere `serverEnabled`. Predeterminado: false.
   reflectionEnabled: false
-  # Permite texto sin cifrar en una dirección remota. Default: false.
+  # Permite conexiones sin cifrar en una dirección remota. Predeterminado: false.
   allowInsecureRemote: false
-  # Puerto de escucha gRPC. Debe ser distinto de `0` cuando `serverEnabled` vale true.
+  # Puerto de escucha gRPC. Debe ser distinto de `0` cuando `serverEnabled` es `true`.
   port: 50051
-  # Dirección de escucha gRPC. Por defecto, el texto sin cifrar solo usa loopback.
+  # Dirección de escucha gRPC. Por defecto, las conexiones sin cifrar solo usan loopback.
   host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
@@ -190,7 +190,7 @@ Estos puertos coinciden con el ejemplo actualizado del explorador local de Block
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
 
-> 📝 La indexación y el servicio de Midnight son controles independientes. El servidor gRPC requiere `storageMode: "api"`, `serverEnabled: true` y un `port` distinto de `0`; con `serverEnabled: false`, el listener permanece desactivado. `reflectionEnabled` requiere el servidor. Dingo usa `127.0.0.1` por defecto y convierte un valor vacío de `host` en loopback. El texto sin cifrar en un host no local requiere `allowInsecureRemote: true`, salvo que TLS proteja el listener.
+> 📝 La indexación de Midnight requiere `enabled: true` y el modo de almacenamiento `api`; el servidor gRPC es un control independiente y requiere `serverEnabled: true` y un `port` distinto de `0`. Con `serverEnabled: false`, Dingo mantiene desactivada la escucha. `reflectionEnabled` requiere el servidor. Dingo usa `127.0.0.1` por defecto y convierte un valor vacío de `host` en loopback. Una conexión sin cifrar a un host no local requiere `allowInsecureRemote: true`, salvo que TLS proteja la escucha.
 
 ***
 
