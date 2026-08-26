@@ -125,9 +125,9 @@ barkPort: 0
 storageMode: \"core\"
 # Database lifecycle
 databaseLifecycle:
-  # Dingo captures automatic database snapshots at epoch boundaries.
-  # Cannot be true when the primary blob provider is "s3" or "gcs".
-  # Disable this setting or select a local primary blob provider.
+  # Automatic database snapshots run at epoch boundaries.
+  # Do not enable this setting when the primary blob provider is "s3" or "gcs".
+  # Select a local primary blob provider instead.
   # Default: false.
   snapshotEnabled: false
   # Dingo writes automatic snapshots to this local filesystem directory.
@@ -147,7 +147,7 @@ EOF"
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
-> 📝 `databaseLifecycle.snapshotEnabled` controls automatic epoch boundary snapshots. It cannot be true when the primary blob provider is `s3` or `gcs`; disable it or select a local primary blob provider. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
+> 📝 `databaseLifecycle.snapshotEnabled` controls automatic epoch boundary snapshots. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available even when `s3` or `gcs` is the primary blob provider. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
 > 📝 Set `databaseLifecycle.snapshotRetention` to keep only the most recent automatic snapshots. Set `databaseLifecycle.snapshotCloudDestination` to mirror each snapshot to S3 or GCS when Dingo runs with `dingo_extra_plugins`. This mirror destination is separate from the primary blob provider.
 
@@ -172,13 +172,13 @@ plugins:
       config:
         port: 9090
 midnight:
-  # Enable the Midnight gRPC server. Requires storageMode: "api". Default: false.
+  # Enable the Midnight gRPC server. Default: false.
   serverEnabled: false
   # Expose gRPC reflection. Requires serverEnabled. Default: false.
   reflectionEnabled: false
-  # Allow plaintext on a non-loopback listener. Default: false.
+  # Allow plaintext on a wildcard, hostname, or non-loopback listener. Default: false.
   allowInsecureRemote: false
-  # gRPC listen port. Must be nonzero when serverEnabled is true.
+  # gRPC listen port. Required and nonzero when serverEnabled is true.
   port: 50051
   # gRPC listen host. An empty host defaults to 127.0.0.1.
   host: "127.0.0.1"
@@ -189,7 +189,7 @@ midnight:
 
 > 📝 `midnight.serverEnabled` explicitly controls the Midnight gRPC server and keeps it off when false. `midnight.enabled` controls indexing separately; the server can serve persisted Midnight rows without running the indexer. `midnight.reflectionEnabled` requires `midnight.serverEnabled`.
 
-> 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. Non-loopback plaintext requires `midnight.allowInsecureRemote: true`; configure `tlsCertFilePath` and `tlsKeyFilePath` for remote TLS exposure.
+> 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. For non-loopback plaintext, set `midnight.allowInsecureRemote: true`; for remote TLS exposure, configure `tlsCertFilePath` and `tlsKeyFilePath` instead.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
