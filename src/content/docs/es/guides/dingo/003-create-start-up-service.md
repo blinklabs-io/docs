@@ -148,14 +148,6 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 debugBindAddr: \"127.0.0.1\"
-# Objetivo de pares raíz seleccionados desde la topología.
-# Un valor distinto de 0 en Dingo tiene prioridad sobre Cardano. Con 0,
-# Dingo usa el valor de respaldo de Cardano; si Cardano tampoco define un
-# valor distinto de 0, el valor efectivo es 60. Un valor positivo limita los
-# pares raíz públicos y conserva los pares raíz locales. El valor -1 no impone límite.
-# CLI: --target-root-peers
-# Env: DINGO_TARGET_ROOT_PEERS
-targetNumberOfRootPeers: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
