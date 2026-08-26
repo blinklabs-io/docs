@@ -105,15 +105,6 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # CLI: `--mithril-allow-insecure-http`
-  # 環境変数: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
-  allowInsecureHttp: false
-
-# コンセンサス
-# CLI: `--delegator-inactivity-enabled`、`--delegator-inactivity`
-# 環境変数: `DINGO_DELEGATOR_INACTIVITY_ENABLED`、`DINGO_DELEGATOR_INACTIVITY`
-delegatorInactivityEnabled: false
-delegatorInactivity: 90
 
 # Network
 bindAddr: "0.0.0.0"
