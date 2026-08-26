@@ -119,7 +119,6 @@ delegatorInactivity: 90
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
-debugBindAddr: "127.0.0.1"
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
