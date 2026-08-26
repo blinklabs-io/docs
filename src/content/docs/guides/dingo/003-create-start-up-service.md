@@ -153,7 +153,6 @@ databaseLifecycle:
   snapshotDir: \"$HOME/dingo/snapshots\"
   # Keep only the most recent automatic snapshots.
   # Default: 0.
-  # CLI: `--db-snapshot-retention`
   snapshotRetention: 0
   # Optional cloud mirror for snapshots.
   # Use an `s3://bucket/prefix` or `gcs://bucket/prefix` URI.
