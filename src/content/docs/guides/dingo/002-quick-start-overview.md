@@ -205,35 +205,6 @@ plugins:
       config:
         port: 9090
 ```
-
-### Optional API token registry configuration
-
-For API storage, add this top-level block to use local CIP-26 metadata in Blockfrost asset responses:
-
-```yaml
-tokenRegistry:
-  enabled: false
-```
-
-Dingo sets `tokenRegistry.enabled` to `false` by default and uses the token registry only with `storageMode: "api"`. Apply database migration v3, `token-registry-metadata`, before setting it to `true`. The first mainnet sync downloads roughly 240 MB; later checks use conditional requests.
-
-Configure the remaining `tokenRegistry` fields as follows:
-
-- `sourceUrl`: An empty value selects the registry for the configured network. Set a URL to use a mirror.
-- `interval`: The recheck interval. The default is `6h`, and values below `1m` use the `1m` minimum.
-- `requestTimeout`: The whole download timeout. The default is `15m`.
-- `userAgent`: The HTTP user agent. An empty value uses `dingo-token-registry/1`.
-- `maxBytes`: The compressed download limit. The default is `768 MiB`.
-- `maxEntryBytes`: The limit for one mapping entry. The default is `4 MiB`.
-- `storeLogos`: Stores registry logos when `true`; the default is `false` because logos account for roughly 90% of registry bytes.
-- `allowPrivateAddresses`: Allows registry requests to private, loopback, and link-local addresses when `true`; the default is `false` for SSRF protection. Enable it only when a private registry source is required.
-
-The configuration also accepts these environment variables:
-
-`DINGO_TOKEN_REGISTRY_ENABLED`, `DINGO_TOKEN_REGISTRY_SOURCE_URL`, `DINGO_TOKEN_REGISTRY_INTERVAL`, `DINGO_TOKEN_REGISTRY_REQUEST_TIMEOUT`, `DINGO_TOKEN_REGISTRY_USER_AGENT`, `DINGO_TOKEN_REGISTRY_MAX_BYTES`, `DINGO_TOKEN_REGISTRY_MAX_ENTRY_BYTES`, `DINGO_TOKEN_REGISTRY_STORE_LOGOS`, and `DINGO_TOKEN_REGISTRY_ALLOW_PRIVATE_ADDRESSES`.
-
-The equivalent CLI flags are `--token-registry-enabled`, `--token-registry-source-url`, `--token-registry-interval`, `--token-registry-request-timeout`, `--token-registry-user-agent`, `--token-registry-max-bytes`, `--token-registry-max-entry-bytes`, `--token-registry-store-logos`, and `--token-registry-allow-private-addresses`.
-
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
