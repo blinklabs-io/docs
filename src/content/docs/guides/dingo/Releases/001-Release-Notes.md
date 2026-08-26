@@ -90,3 +90,14 @@ description: Dingo Release Notes
 - Version: v0.46.2 - *[View Release Notes](../v0-46-2)*
 - Version: v0.46.1 - *[View Release Notes](../v0-46-1)*
 - Version: v0.39.1 - *[View Release Notes](../v0-39-1)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

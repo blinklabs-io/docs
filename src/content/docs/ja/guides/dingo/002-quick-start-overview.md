@@ -215,3 +215,14 @@ cd ~/dingo
 ### おめでとうございます。Dingoノードを使用する準備が整いました！
 
 [Cardano CLIを使用してDingoと対話する方法を学ぶ](../004-using-dingo-with-cardano-cli)。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
