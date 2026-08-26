@@ -106,16 +106,6 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # CLI: `--mithril-allow-insecure-http`
-  # Env: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`
-  allowInsecureHttp: false
-
-# Consensus
-# CLI: `--delegator-inactivity-enabled`, `--delegator-inactivity`
-# Env: `DINGO_DELEGATOR_INACTIVITY_ENABLED`, `DINGO_DELEGATOR_INACTIVITY`
-delegatorInactivityEnabled: false
-delegatorInactivity: 90
-
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
