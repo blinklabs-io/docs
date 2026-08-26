@@ -145,7 +145,6 @@ El indicador independiente `--grace-hours` acepta valores no negativos. Su valor
 
 > 📝 Con `plugins.storage.metadata.provider` en `postgres`, `statementTimeout` limita cada sentencia y `lockTimeout` limita la espera para adquirir bloqueos; estos campos aceptan valores de duración como `30s`. PostgreSQL convierte las duraciones positivas en los ajustes de sesión `statement_timeout` y `lock_timeout`, expresados en milisegundos. Con el proveedor `mysql`, `statementTimeout` limita las sentencias `SELECT` de solo lectura de nivel superior mediante `max_execution_time` en milisegundos, `lockTimeout` configura `innodb_lock_wait_timeout` en segundos enteros y redondea hacia arriba las duraciones inferiores a un segundo, y `readTimeout` y `writeTimeout` establecen límites de tiempo de E/S de transporte usando los valores de duración indicados. Dingo asigna `0` como valor predeterminado a todos los campos, rechaza los valores negativos e ignora todos estos campos cuando la configuración incluye un `dsn` explícito.
 
-> 📝 Antes del inicio, Dingo conserva un `socketPath` existente. Dingo solo elimina un socket Unix obsoleto confirmado. Un archivo normal, enlace simbólico, directorio, socket activo, comprobación ambigua o error de eliminación hace que el inicio falle. La configuración debe mantener la ruta ausente o incluir únicamente un socket Unix obsoleto confirmado que Dingo pueda eliminar.
 
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
