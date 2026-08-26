@@ -127,7 +127,7 @@ EOF
 ```yaml
 midnight:
   # Enable the Midnight gRPC server independently of Midnight indexing.
-  # Requires storageMode: "api". Default: false.
+  # Default: false.
   serverEnabled: false
   # Expose gRPC reflection. Requires serverEnabled. Default: false.
   reflectionEnabled: false
