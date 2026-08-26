@@ -154,7 +154,7 @@ EOF"
 > 📝 この例では、両方の最上位フィールドに対応するCLIフラグと環境変数を示します。
 
 > 📝 `plugins.storage.metadata.provider` に `postgres` を指定すると、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。これらのフィールドは `30s` のような期間値を受け取ります。PostgreSQLは正の期間値を、ミリ秒単位の `statement_timeout` と `lock_timeout` のセッション設定に変換します。プロバイダーに `mysql` を指定すると、`statementTimeout` は `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` は `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の期間を切り上げ、`readTimeout` と `writeTimeout` は指定した期間値を使用して転送ソケットの読み書き期限を設定します。Dingoは各フィールドの既定値を `0` とし、負の値を拒否し、設定に明示的な `dsn` がある場合はこれらのフィールドをすべて無視します。
- 
+
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
 > 📝 `debugPort` は `0` で無効になります。`pprof` の待受は認証も TLS も使用せず、既定の `debugBindAddr: \"127.0.0.1\"` でループバックにバインドします。`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立しています。外部公開には `debugBindAddr`、`--debug-bind-addr`、または `DINGO_DEBUG_BIND_ADDR` の明示的な上書きが必要で、ファイアウォールなどのネットワーク保護も設定してください。この注意事項は Mithril の同期処理と systemd の `dingo serve` の両方に適用されます。
