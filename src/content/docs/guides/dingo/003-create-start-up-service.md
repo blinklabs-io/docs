@@ -160,7 +160,6 @@ databaseLifecycle:
   # CLI: `--db-snapshot-cloud-destination`
   snapshotCloudDestination: \"\"
   # Optional path prefix for shared cloud destinations.
-  # CLI: `--db-snapshot-cloud-destination-prefix`
   snapshotCloudDestinationPrefix: \"\"
   # Capture an automatic snapshot every N epoch closes.
   snapshotEveryNEpochs: 1
