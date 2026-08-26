@@ -153,7 +153,6 @@ EOF"
 
 > 📝 この例では、両方の最上位フィールドに対応するCLIフラグと環境変数を示します。
 
-
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
 > 📝 `debugPort` は `0` で無効になります。`pprof` の待受は認証も TLS も使用せず、既定の `debugBindAddr: \"127.0.0.1\"` でループバックにバインドします。`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立しています。外部公開には `debugBindAddr`、`--debug-bind-addr`、または `DINGO_DEBUG_BIND_ADDR` の明示的な上書きが必要で、ファイアウォールなどのネットワーク保護も設定してください。この注意事項は Mithril の同期処理と systemd の `dingo serve` の両方に適用されます。
