@@ -147,7 +147,6 @@ El indicador independiente `--grace-hours` acepta valores no negativos. Su valor
 
 > 📝 Antes del inicio, Dingo conserva un `socketPath` existente. Dingo solo elimina un socket Unix obsoleto confirmado. Un archivo normal, enlace simbólico, directorio, socket activo, comprobación ambigua o error de eliminación hace que el inicio falle. La configuración debe mantener la ruta ausente o incluir únicamente un socket Unix obsoleto confirmado que Dingo pueda eliminar.
 
-
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
 ```yaml
