@@ -104,7 +104,7 @@ mithril:
 # Lifecycle de base de datos
 databaseLifecycle:
   # Captura snapshots automáticos al cierre de cada epoch.
-  # No compatible cuando el proveedor principal de blobs es `s3` o `gcs`.
+  # Dingo no admite capturas automáticas cuando el proveedor principal de blobs es `s3` o `gcs`.
   # Desactiva las capturas automáticas o usa un proveedor principal local.
   # Default: false
   # CLI: --db-snapshot-enabled
@@ -148,7 +148,7 @@ EOF"
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
-> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`. La captura automática no es compatible cuando el proveedor principal de blobs es `s3` o `gcs`, pero `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles.
+> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`. Esta restricción afecta las capturas automáticas, pero `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles.
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
 
