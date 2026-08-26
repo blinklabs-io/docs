@@ -153,7 +153,6 @@ EOF"
 
 > 📝 Mantén `debugPort` en `0` para deshabilitar pprof. Cuando lo habilitas, el listener pprof no usa autenticación ni TLS. `debugBindAddr` controla su propia dirección y, por defecto, vale `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr`, `--debug-bind-addr` o `DINGO_DEBUG_BIND_ADDR` y protege la red con un firewall o una política equivalente. Esta regla se aplica tanto a `dingo mithril sync` como al proceso `dingo serve` del servicio `systemd`.
 
-
 > 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`.
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
