@@ -124,6 +124,11 @@ EOF
 
 ```yaml
 midnight:
+  serverEnabled: false
+  reflectionEnabled: false
+  allowInsecureRemote: false
+  port: 50051
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 storageMode: "api"
 plugins:
@@ -143,6 +148,8 @@ plugins:
 ```
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+
+> 📝 El servicio gRPC de Midnight requiere `storageMode: "api"`, `midnight.serverEnabled: true` y un puerto distinto de `0`. La indexación y el servicio son controles independientes; `midnight.reflectionEnabled: true` requiere `midnight.serverEnabled: true`, y el listener permanece deshabilitado cuando `midnight.serverEnabled` es `false`. El host predeterminado es `127.0.0.1` (también cuando `midnight.host` está vacío). Para una dirección que no sea de loopback, `midnight.allowInsecureRemote: true` habilita texto plano; como alternativa, configure el par de certificado y clave TLS mediante `tlsCertFilePath` y `tlsKeyFilePath`.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
