@@ -143,8 +143,6 @@ EOF
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. A port value of `0` disables pprof. When enabled, pprof has no authentication or TLS and listens on the dedicated `debugBindAddr`, which defaults to `127.0.0.1` even when `bindAddr` or `privateBindAddr` uses a wildcard or another address. External exposure requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. The same setting governs pprof during `mithril sync`.
 
-> 📝 When `plugins.storage.metadata.provider` is `postgres`, `statementTimeout` limits each statement and `lockTimeout` limits lock acquisition waits; these fields accept duration values such as `30s`. PostgreSQL converts positive duration values to the `statement_timeout` and `lock_timeout` session settings in milliseconds. When the provider is `mysql`, `statementTimeout` limits top-level read-only `SELECT` statements through `max_execution_time` in milliseconds, `lockTimeout` sets `innodb_lock_wait_timeout` in whole seconds and rounds subsecond durations up, and `readTimeout` and `writeTimeout` set transport socket I/O deadlines using the supplied duration values. Dingo defaults each field to `0`, rejects negative values, and ignores all these fields when an explicit `dsn` is set.
-
 > 📝 Before startup, Dingo preserves an existing `socketPath`. Dingo removes only a confirmed stale Unix socket. A regular file, symlink, directory, live socket, ambiguous probe, or removal error causes startup to fail. Keep the configured path absent or ensure that it contains only a removable confirmed stale Unix socket.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
