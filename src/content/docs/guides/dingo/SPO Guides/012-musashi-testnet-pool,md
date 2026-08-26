@@ -3,9 +3,16 @@ title: Set Up Musashi Testnet Pool
 description: SPO Guide for Dingo Pools - How to set up a Musashi Testnet Pool.
 ---
 
-In this guide, we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
+In this guide, we will walk you through how to set up a Mushashi testnet pool using the Dingo node.
+
+
+This guide spilts the set up into two sections
+1. Dingo Node Set Up.
+2. Musashi Testnet Pool Registration.
 
 <br>
+
+# Section 1 Dingo Node Set Up
 
 ✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
@@ -13,7 +20,25 @@ In this guide, we will walk you through downloading the Dingo binary and all the
 
 <br>
 
-## Step 1 - Download Dingo Binary
+## Step 1 - Create Working Directory
+Will we create a directory for all our files releated to the pool setup.
+
+First export directory path to `.bashrc` by running:
+
+```
+echo 'export DINGO_HOME=~/dingo-leios-testnet' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Next create directory:
+
+```
+mkdir -p "$DINGO_HOME"
+```
+
+***
+
+## Step 2 - Download Dingo Binary
 <br>
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
@@ -21,8 +46,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 
 ```
-mkdir -p ~/dingo
-cd ~/dingo
+cd $DINGO_HOME
 wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.1/dingo-v0.70.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
@@ -34,9 +58,60 @@ You can verify the binary works by running:
 
 ***
 
+Move the Dingo binary to `/usr/local/bin/`
+Move the Dingo binary to `/usr/local/bin/` so they are accessible system-wide.
+
 <br>
 
-## Step 2 - Create dingo.yaml Configuration File
+Copy the binary:
+
+```
+sudo cp $DINGO_HOME/dingo /usr/local/bin/
+```
+
+> ✅ You can verify the binary was copied by running `which dingo`
+
+***
+
+## Step 3 -Download the latest Cardano CLI binary 
+
+First, go to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
+
+Download the Cardano CLI binary and run the following command:
+
+
+⚠️ Adjust the link path to the correct path for the version you want to download. 
+
+```
+cd $DINGO_HOME
+wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.2.2.0/cardano-cli-11.2.2.0-x86_64-linux.tar.gz -O - | tar -xz
+```
+
+***
+
+Rename the Cardano CLI Binary and Set Execute Permissions 
+
+To make the file executable run the following command:
+
+```
+chmod +x cardano-cli-x86_64-linux
+```
+
+<br>
+
+For this example, we will rename the binary to `cardano-cli` and move it to `/usr/local/bin/`:
+
+⚠️ Adjust the file path and file name if needed. 
+
+```
+sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
+```
+
+***
+
+<br>
+
+## Step 4 - Create dingo.yaml Configuration File
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 
