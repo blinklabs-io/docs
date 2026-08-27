@@ -438,13 +438,13 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.js
 
 ***
 
-Now we can find the starting KES period by running:
-
-First go back to `keys` directory
+Return back to `keys` directory
 
 ```
 cd "$DINGO_HOME/keys
 ```
+
+Now we can find the starting KES period by running:
 
 ```
 slotsPerKESPeriod=$(jq -r '.slotsPerKESPeriod' "$DINGO_HOME/config/leios/shelley-genesis.json")
@@ -461,5 +461,108 @@ cardano-cli dijkstra node issue-op-cert \
   --out-file opcert.cert
 ```
 
+## Step 9 - Register Stake Address and Pool
+Build both Stake and Pool certificates, then submit them in a single transaction.
 
-> Additional resource here https://leios.cardano-scaling.org/docs/testnet/getting-started
+Stake-address registration certificate:
+```
+cardano-cli dijkstra stake-address registration-certificate \
+  --stake-verification-key-file stake.vkey \
+  --key-reg-deposit-amt "$(cardano-cli dijkstra query gov-state | jq .currentPParams.stakeAddressDeposit)" \
+  --out-file stake-reg.cert
+```
+
+Pool registration certificate — replace <YOUR_PUBLIC_IP> with your node's public IP (the address other nodes will use to reach it):
+
+```
+cardano-cli dijkstra stake-pool registration-certificate \
+  --cold-verification-key-file cold.vkey \
+  --vrf-verification-key-file vrf.vkey \
+  --bls-signing-key-file bls.skey \
+  --pool-pledge 1000000000 \
+  --pool-cost 170000000 \
+  --pool-margin 0.05 \
+  --pool-reward-account-verification-key-file stake.vkey \
+  --pool-owner-stake-verification-key-file stake.vkey \
+  --pool-relay-ipv4 <YOUR_PUBLIC_IP> \
+  --pool-relay-port 3010 \
+  --out-file pool-reg.cert
+```
+
+Submit both certificates in one transaction.
+
+Get UTxO for `tx-in` by running:
+```
+TXIN=$(cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -r 'keys[0]')
+```
+
+Build raw transaction by running:
+```
+cardano-cli dijkstra transaction build \
+  --tx-in "$TXIN" \
+  --change-address "$(cat payment.addr)" \
+  --certificate-file stake-reg.cert \
+  --certificate-file pool-reg.cert \
+  --out-file pool-reg-tx.raw
+```
+
+Sign Transaction by running:
+```
+cardano-cli dijkstra transaction sign \
+  --tx-body-file pool-reg-tx.raw \
+  --signing-key-file payment.skey \
+  --signing-key-file stake.skey \
+  --signing-key-file cold.skey \
+  --out-file pool-reg-tx.signed
+```
+
+Submit Transaction by running: 
+```
+cardano-cli dijkstra transaction submit \
+  --tx-file pool-reg-tx.signed
+```
+
+## Step 10 - Delegate Stake to Your Pool
+Build a delegation certificate and submit it in its own transaction.
+
+Create delegation cert by running:
+```
+cardano-cli dijkstra stake-address stake-delegation-certificate \
+  --stake-verification-key-file stake.vkey \
+  --cold-verification-key-file cold.vkey \
+  --out-file delegation.cert
+```
+
+Get UTxO for `tx-in` by running:
+```
+TXIN=$(cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -r 'keys[0]')
+```
+
+Build raw transaction by running:
+```
+cardano-cli dijkstra transaction build \
+  --tx-in "$TXIN" \
+  --change-address "$(cat payment.addr)" \
+  --certificate-file delegation.cert \
+  --out-file delegation-tx.raw
+```
+
+Sign Transaction by running:
+```
+cardano-cli dijkstra transaction sign \
+  --tx-body-file delegation-tx.raw \
+  --signing-key-file payment.skey \
+  --signing-key-file stake.skey \
+  --out-file delegation-tx.signed
+```
+
+Submit Transaction by running: 
+```
+cardano-cli dijkstra transaction submit \
+  --tx-file delegation-tx.signed
+```
+
+## Step 11 - 
+
+
+> Credit to original guides and additional resource here <a href="https://leios.cardano-scaling.org/docs/testnet/getting-started" target="_blank">https://leios.cardano-scaling.org/docs/testnet/getting-started</a>
