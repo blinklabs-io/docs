@@ -194,7 +194,57 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 
 Go to <a href="https://kleioscan.com/#/musashi/pools" target=_blank">https://kleioscan.com/#/musashi/pools</a>
 
+<img src="/dingo-kleio-explorer-pools.png"
+     alt="dingo-kleio-explorer-pools"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+     
+Click on some of your SPO friends and copy their public IPs and Ports
 
+```
+sudo nano topology.json
+```
+
+Edit Local roots adding your friends' pools. For this example we just added 3 pools.
+```{
+  "bootstrapPeers": [
+    {
+      "address": "leios-node.play.dev.cardano.org",
+      "port": 3001
+    }
+  ],
+  "localRoots": [
+    {
+      "accessPoints": [
+      {
+        "address": "74.208.206.133",
+        "port": 3010
+      },
+      {
+        "address": "cerk-musashi.ddns.net",
+        "port": 3001
+      },
+      {
+          "address": "74.122.122.121",
+          "port": 6400
+        }
+      ],
+      "advertise": false,
+      "trustable": false,
+      "valency": 3
+    }
+  ],
+  "peerSnapshotFile": "peer-snapshot.json",
+  "publicRoots": [
+    {
+      "accessPoints": [],
+      "advertise": false
+    }
+  ],
+  "useLedgerAfterSlot": 64800
+}
+```
+
+Save and exit
 
 ## Step 6 - Create `dingo.service` Unit File
 
