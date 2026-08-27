@@ -725,9 +725,14 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 ### Congratulations! You have a Leios Dingo Node running on the Musashi Testnet.
 
-If you want to participate in the Musashi Testnet Rewards Program for SPO go here and fill out the form <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">https://leios.cardano-scaling.org/docs/testnet/rewards-program</a>
+***
 
 <br>
+
+If you want to participate in the Musashi Testnet Rewards Program for SPO go here and fill out the form <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">https://leios.cardano-scaling.org/docs/testnet/rewards-program</a>
+
 ***
+
+<br>
 
 > Credit to original guides and additional resource here <a href="https://leios.cardano-scaling.org/docs/testnet/getting-started" target="_blank">https://leios.cardano-scaling.org/docs/testnet/getting-started</a>
