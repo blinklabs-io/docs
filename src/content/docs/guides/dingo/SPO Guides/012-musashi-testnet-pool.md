@@ -114,6 +114,33 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 <br>
 
+We need the Shelley Genesis json file to run some of our CLI commands
+
+We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/leios/` by running the following command in our `$DINGO_HOME` directory:
+
+```
+cd $DINGO_HOME
+mkdir -p config/leios
+```
+
+Next, navigate to the `config/leios` folder and download the Cardano Shelley Genesis file.
+
+```
+cd config/leios
+```
+
+To download the Shelley Genesis file, run:
+
+```
+wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.json
+```
+
+> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
+
+***
+
+<br>
+
 ## Step 4 - Create dingo.yaml Configuration File
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
@@ -131,7 +158,7 @@ network: \"musashi\"
 relayPort: 3010
 socketPath: \"$DINGO_HOME/dingo.socket\"
 
-# Topology
+# Path to the topology configuration file for Cardano node
 topology: \"$DINGO_HOME/config/leios/topology.json\"
 
 EOF"
@@ -152,7 +179,24 @@ sudo nano /etc/dingo/dingo.yaml
 
 <br>
 
-## Step 5 - Create `dingo.service` Unit File
+## Step 5 - Setup Topology File
+***If you plan a standard setup of a BP behind relays you can skip this step***
+
+```
+cd $DINGO_HOME/config/leios
+wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
+```
+
+> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
+
+
+**To help initial sync we will use the Kleios Scan explorer to find peer to connect to.**
+
+Go to <a href="https://kleioscan.com/#/musashi/pools" target=_blank">https://kleioscan.com/#/musashi/pools</a>
+
+
+
+## Step 6 - Create `dingo.service` Unit File
 
 Create the systemd service file. Replace `YOUR_USER` with your username (`echo $USER`):
 
@@ -188,7 +232,7 @@ sudo nano /etc/systemd/system/dingo.service
 
 <br>
 
-## Step 6 - Enable and Start the Service
+## Step 7 - Enable and Start the Service
 
 Enable the service to start on boot and start it now:
 
@@ -202,7 +246,7 @@ sudo systemctl start dingo.service
 
 <br>
 
-## Step 7 - Check Status
+## Step 8 - Check Status
 
 Verify the service is running:
 
@@ -394,38 +438,7 @@ cardano-cli dijkstra node key-gen-BLS \
 <br>
 
 ## Step 8 - Create Operational Certificate
-We need the Shelley Genesis json file to run our CLI command
-
-We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/leios/` by running the following command in our `dingo` directory:
-
-```
-cd $DINGO_HOME
-mkdir -p config/leios
-```
-
-Next, navigate to the `config/leios` folder and download the Cardano Shelley Genesis file.
-
-```
-cd config/leios
-```
-
-To download the Shelley Genesis file, run:
-
-```
-wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.json
-```
-
-> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
-
-***
-
-Return back to `keys` directory
-
-```
-cd "$DINGO_HOME/keys
-```
-
-Now we can find the starting KES period by running:
+We can find the starting KES period by running:
 
 ```
 slotsPerKESPeriod=$(jq -r '.slotsPerKESPeriod' "$DINGO_HOME/config/leios/shelley-genesis.json")
@@ -509,7 +522,9 @@ cardano-cli dijkstra stake-address registration-certificate \
   --out-file stake-reg.cert
 ```
 
-Pool registration certificate — replace <YOUR_PUBLIC_IP> with your node's public IP (the address other nodes will use to reach it):
+Pool registration certificate — replace <YOUR_PUBLIC_IP> with your node's public IP (the address other nodes will use to reach it) Also replace <https://website.com/leios-pool-metadata.json> with your URL from above.
+
+After replacing `<YOUR_PUBLIC_IP>` and `<https://website.com/leios-pool-metadata.json>` run:
 
 ```
 cardano-cli dijkstra stake-pool registration-certificate \
