@@ -562,7 +562,24 @@ cardano-cli dijkstra transaction submit \
   --tx-file delegation-tx.signed
 ```
 
-## Step 11 - 
+## Step 11 - Get bech32 Id
 
+```
+cardano-cli dijkstra stake-pool id --output-bech32 --cold-verification-key-file cold.vkey
+```
+example: `pool1…`
+
+go to faucet and request delegation for your pool. Paste your pool id from above
+<a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
+
+**Verify Registration**
+Capture your pool id (from the cold key) and your stake address by running:
+
+```
+POOL_ID=$(cardano-cli dijkstra stake-pool id --cold-verification-key-file cold.vkey --output-format hex)
+STAKE_ADDR=$(cardano-cli dijkstra stake-address build --stake-verification-key-file stake.vkey)
+echo "pool id: $POOL_ID"
+echo "stake address: $STAKE_ADDR"
+```
 
 > Credit to original guides and additional resource here <a href="https://leios.cardano-scaling.org/docs/testnet/getting-started" target="_blank">https://leios.cardano-scaling.org/docs/testnet/getting-started</a>
