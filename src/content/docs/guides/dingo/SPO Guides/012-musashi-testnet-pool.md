@@ -176,7 +176,7 @@ debugPort: 0
 network: \"musashi\"
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
-relayPort: 3001
+relayPort: 3010
 socketPath: \"$DINGO_HOME/dingo.socket\"
 
 # Storage
@@ -208,6 +208,11 @@ You can view and verify `dingo.yaml` file by running:
 ```
 sudo nano /etc/dingo/dingo.yaml
 ```
+
+> 💡 Tip: Make sure port 3010 is open.
+> ```
+> sudo ufw allow 3010/tcp
+> ```
 
 <br>
 ***
