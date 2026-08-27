@@ -298,6 +298,10 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 ### Congratulations! You can now move to the **Musashi Testnet Pool Registration** section
 
+***
+
+<br>
+
 # Section 2 - Musashi Testnet Pool Registration
 
 > Make sure the node if fully synced before proceeding. Run the command to see if the node is 100% synced.
