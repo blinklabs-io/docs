@@ -502,14 +502,14 @@ slotsPerKESPeriod=$(jq -r '.slotsPerKESPeriod' "$DINGO_HOME/config/leios/shelley
 slotNo=$(cardano-cli query tip | jq -r '.slot')
 kesPeriod=$(( slotNo / slotsPerKESPeriod ))
 ```
-Now run the following command to create `opcert`:
+Now run the following command to create `node.cert`:
 ```
 cardano-cli dijkstra node issue-op-cert \
   --kes-verification-key-file kes.vkey \
   --cold-signing-key-file cold.skey \
   --operational-certificate-issue-counter-file opcert.counter \
   --kes-period "$kesPeriod" \
-  --out-file opcert.cert
+  --out-file node.cert
 ```
 
 ***
