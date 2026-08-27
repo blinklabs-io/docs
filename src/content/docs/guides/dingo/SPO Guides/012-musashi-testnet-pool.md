@@ -6,7 +6,7 @@ description: SPO Guide for Dingo Pools - How to set up a Musashi Testnet Pool.
 In this guide, we will walk you through how to set up a Mushashi testnet pool using the Dingo node.
 
 
-This guide spilts the set up into two sections
+This guide spilts the set up into two sections:
 1. Dingo Node Set Up.
 2. Musashi Testnet Pool Registration.
 
@@ -290,5 +290,91 @@ sudo journalctl -u dingo -n 50 --no-pager
 > 
 > ```
 > cardano-cli query tip
+> ```
+
+## Step 1 - Add Environment Variables
+
+Open your bashrc:
+
+```
+nano ~/.bashrc
+```
+
+Add the environment variables:
+
+```
+export CARDANO_NODE_NETWORK_ID=164
+export CARDANO_NODE_SOCKET_PATH="$DINGO_HOME/dingo.socket"
+```
+
+**Save and exit**
+
+Reload your bashrc:
+
+```
+source ~/.bashrc
+```
+
+> You can verify your environment variables by running:
+> ```
+> echo $DINGO_HOME
+> ```
+>
+> ```
+> echo $CARDANO_NODE_NETWORK_ID
+> ```
+>
+> ```
+> echo $CARDANO_NODE_SOCKET_PATH
+> ```
+
+## Step 2 - Create `keys` Folder
+We will create a key folder for all our pool keys and `cert` files. The following command will create directory and move into that directory.
+
+```
+mkdir -p "$DINGO_HOME/keys" && cd "$DINGO_HOME/keys"
+```
+
+## Step 3 - Create Payment and Stake Keys
+
+Create payment keys:
+```
+cardano-cli dijkstra address key-gen \
+  --verification-key-file payment.vkey \
+  --signing-key-file payment.skey
+```
+
+Create stake keys:
+```
+cardano-cli dijkstra stake-address key-gen \
+  --verification-key-file stake.vkey \
+  --signing-key-file stake.skey
+```
+
+## Step 4 - Create Payment Address
+Create payment address and `payment.addr` file
+```
+cardano-cli dijkstra address build \
+  --payment-verification-key-file payment.vkey \
+  --stake-verification-key-file stake.vkey \
+  --out-file payment.addr
+```
+
+See your payment address and copy it by running:
+
+```
+cat payment.addr
+```
+
+## Step 5 - Fund Address
+go to faucet and paste your address from above.
+
+<a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
+
+
+> You can confirm Tada was received by running:
+> 
+> ```
+> cardano-cli dijkstra query utxo --address "$(cat payment.addr)"
 > ```
 
