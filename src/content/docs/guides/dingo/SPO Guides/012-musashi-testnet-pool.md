@@ -523,8 +523,8 @@ cardano-cli dijkstra stake-pool registration-certificate \
   --pool-owner-stake-verification-key-file stake.vkey \
   --pool-relay-ipv4 <YOUR_PUBLIC_IP> \
   --pool-relay-port 3010 \
-  --metadata-url=<https://website.com/leios-pool-metadata.json>
-  --metadata-hash=$(cat $DINGO_HOME/keys/leiosPoolMetaDataHash.txt)
+  --metadata-url <https://website.com/leios-pool-metadata.json> \
+  --metadata-hash $(cat leiosPoolMetaDataHash.txt) \
   --out-file pool-reg.cert
 ```
 
