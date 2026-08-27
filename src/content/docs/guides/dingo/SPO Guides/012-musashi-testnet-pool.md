@@ -3,9 +3,9 @@ title: Set Up Musashi Testnet Pool
 description: SPO Guide for Dingo Pools - How to set up a Musashi Testnet Pool.
 ---
 
-In this guide, we will walk you through how to set up a Mushashi testnet pool using the Dingo node.
+In this guide, we will walk you through how to set up a Musashi testnet pool using the Dingo node.
 
-This guide spilts the set up into two sections:
+This guide splits the set up into two sections:
 1. Dingo Node Set Up.
 2. Musashi Testnet Pool Registration.
 
@@ -20,7 +20,7 @@ This guide spilts the set up into two sections:
 <br>
 
 ## Step 1 - Create Working Directory
-Will we create a directory for all our files releated to the pool setup.
+We will create a directory for all our files related to the pool setup.
 
 First export directory path to `.bashrc` by running:
 
@@ -59,7 +59,6 @@ You can verify the binary works by running:
 
 ***
 
-Move the Dingo binary to `/usr/local/bin/`
 Move the Dingo binary to `/usr/local/bin/` so they are accessible system-wide.
 
 <br>
@@ -92,9 +91,9 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 ***
 
-Rename the Cardano CLI Binary and Set Execute Permissions 
+Rename the Cardano CLI binary and set execute permissions.
 
-To make the file executable run the following command:
+To make the file executable, run:
 
 ```
 chmod +x cardano-cli-x86_64-linux
@@ -143,7 +142,7 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.js
 
 ## Step 4 - Create dingo.yaml Configuration File
 
-Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
+Dingo ships with embedded Cardano network configurations (genesis files and config.json) for Musashi, so you do not need to download them separately.
 
 The `$DINGO_HOME` variable will automatically expand to your home directory path:
 
@@ -182,6 +181,7 @@ sudo nano /etc/dingo/dingo.yaml
 ## Step 5 - Setup Topology File
 ***If you plan a standard setup of a BP behind relays you can skip this step***
 
+First download the topology file to your `$DINGO_HOME/config/leios` directory by running:
 ```
 cd $DINGO_HOME/config/leios
 wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
@@ -190,7 +190,7 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 > 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
 
 
-**To help initial sync we will use the Kleios Scan explorer to find peer to connect to.**
+**To help with initial sync, we will use the Kleioscan explorer to find peers to connect to.**
 
 Go to <a href="https://kleioscan.com/#/musashi/pools" target=_blank">https://kleioscan.com/#/musashi/pools</a>
 
@@ -253,7 +253,7 @@ Save and exit
 
 ## Step 6 - Create `dingo.service` Unit File
 
-Create the systemd service file. Replace `YOUR_USER` with your username (`echo $USER`):
+Create the systemd service file. Replace `YOUR_USER` with your Linux username (`echo $USER`):
 
 ```
 cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
@@ -333,7 +333,7 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 # Section 2 - Musashi Testnet Pool Registration
 
-> Make sure the node if fully synced before proceeding. Run the command to see if the node is 100% synced.
+> Make sure the node is fully synced before proceeding. Run the command to see if the node is 100% synced.
 > 
 > ```
 > cardano-cli query tip
@@ -434,7 +434,7 @@ cat payment.addr
 <br>
 
 ## Step 5 - Fund Address
-go to faucet and paste your address from above.
+Go to faucet and paste your address from above.
 
 <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
 
@@ -451,6 +451,8 @@ go to faucet and paste your address from above.
 
 ## Step 6 - Create Node Operational Keys
 Create Cold keys, KES keys and VRF keys
+
+***
 
 **Cold keys (your pool's identity — keep offline / backed up)**
 ```
@@ -553,7 +555,7 @@ Upload your `leios-pool-metadata.json` file to a website that you administer or 
 Verify the metadata hashes
 First retrieve the metadata hash from your metadata JSON URL.  
 
-Replace <https://www.METADATA-URL.com> with your actual URL from above.
+- Replace <https://www.METADATA-URL.com> with your actual URL from above.
 ```
 cardano-cli dijkstra stake-pool metadata-hash --pool-metadata-file <(curl -s -L <https://www.METADATA-URL.com>)
 ```
@@ -569,7 +571,7 @@ cat leiosPoolMetaDataHash.txt
 ## Step 10 - Register Stake Address and Pool
 Build both Stake and Pool certificates, then submit them in a single transaction.
 
-Stake-address registration certificate:
+**Stake-address registration certificate:**
 ```
 cardano-cli dijkstra stake-address registration-certificate \
   --stake-verification-key-file stake.vkey \
@@ -577,10 +579,13 @@ cardano-cli dijkstra stake-address registration-certificate \
   --out-file stake-reg.cert
 ```
 
-Pool registration certificate — replace <YOUR_PUBLIC_IP> with your node's public IP (the address other nodes will use to reach it) Also replace <https://website.com/leios-pool-metadata.json> with your URL from above.
+***
+
+**Pool registration certificate:**
+- Replace `<YOUR_PUBLIC_IP>` with your node's public IP (the address other nodes will use to reach it) 
+- Also replace <https://website.com/leios-pool-metadata.json> with your URL from above.
 
 After replacing `<YOUR_PUBLIC_IP>` and `<https://website.com/leios-pool-metadata.json>` run:
-
 ```
 cardano-cli dijkstra stake-pool registration-certificate \
   --cold-verification-key-file cold.vkey \
