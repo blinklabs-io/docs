@@ -5,7 +5,7 @@ description: Adder Example 2 - Watch a Token and get a Desktop Notification.
 
 In this example we will use Adder to send us a desktop notification when there is a transaction that includes a certain token or asset that we want to track.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
+> ✅ For this guide we assume you have already downloaded the Adder binary. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
 
 ***
 
@@ -65,18 +65,15 @@ We want the output to be a desktop notification. So that when a transaction that
 
 To get desktop notifications when a transaction includes the Tosidrop token cTOSI, we will run the following command in our command prompt:
 
-> ⚠️ Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.
-
-
 ```
-"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output notify
+./adder --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output notify
 ```
 
 ### Congratulations!
 
-Now you can minimize the window and let Adder run in the background. Anytime a transaction occurs containing cTOSI you will get a desktop alert.
+Anytime a transaction occurs containing cTOSI you will get a desktop alert.
 
-<img src="/adder-desktop-alert.png"
+<img src="/adder-desktop-alert-v2.png"
      alt="adder-desktop-alert"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 

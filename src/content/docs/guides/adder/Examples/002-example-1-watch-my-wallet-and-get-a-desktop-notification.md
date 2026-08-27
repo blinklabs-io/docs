@@ -5,7 +5,7 @@ description: Adder Example 1 - Watch My Wallet and get a Desktop Notification.
 
 Let's walk through how to open Adder, input filters and commands so that it tracks your wallet and gives you a desktop notification when there is a change to your wallet.
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
+> ✅ For this guide we assume you have already downloaded the Adder binary. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
 
 ***
 <a name="step-1"></a>
@@ -71,17 +71,12 @@ We want the output to be a desktop notification, so that when a transaction occu
 
 Now that we understand the filters and commands that we want to input into Adder in order to get desktop alerts when we send or receive an asset, we will run the following command in our command prompt:
 
+> ⚠️ Please make sure you replace the below stake address with your receive or stake address from [Step 1](#step-1)
 
-> ⚠️ Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.\
-\
-Also make sure you replace the below stake address with your receive or stake address from [Step 1](#step-1)
-
-
-Command to run once you adjust Adder exe path and your wallet address:
-
+Command to run once you adjust Adder binary path and your wallet address:
 
 ```
-"C:\Users\richm\Desktop\adder.exe" --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
+./adder --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
 ```
 
 Final command to run:
@@ -89,19 +84,14 @@ Final command to run:
      alt="adder-final-ex-1-command"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-After you hit enter to run the command you can minimize the cmd window and let it run in the background. Now when your wallet sends or receives an asset you will get a desktop notification.
-
-Minimize:
-<img src="/adder-minimize-final-ex-1-command.png"
-     alt="adder-minimize-final-ex-1-command"
-     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+Now when your wallet sends or receives an asset you will get a desktop notification.
 
 Desktop Alert:
-<img src="/adder-desktop-alert.png"
+<img src="/adder-desktop-alert-v2.png"
      alt="adder-desktop-alert"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-### Congratulations!&#x20;
+### Congratulations!
 
 ***
 
