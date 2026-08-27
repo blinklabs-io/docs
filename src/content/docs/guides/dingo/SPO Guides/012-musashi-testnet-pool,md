@@ -12,7 +12,7 @@ This guide spilts the set up into two sections
 
 <br>
 
-# Section 1 Dingo Node Set Up
+# Section 1 - Dingo Node Set Up
 
 ✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
@@ -203,3 +203,92 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF"
 ```
+
+You can view and verify `dingo.yaml` file by running:
+
+```
+sudo nano /etc/dingo/dingo.yaml
+```
+
+## Step 5 - Create `dingo.service` Unit File
+
+Create the systemd service file. Replace `YOUR_USER` with your username (`echo $USER`):
+
+```
+cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
+[Unit]
+Description=Dingo Node
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=10
+User=YOUR_USER
+ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
+SyslogIdentifier=dingo
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target
+ENDFILE
+```
+
+***
+
+We can view and verify our `dingo.service` file by running:
+
+```
+sudo nano /etc/systemd/system/dingo.service
+```
+
+<br>
+
+## Step 6 - Enable and Start the Service
+
+Enable the service to start on boot and start it now:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable dingo.service
+sudo systemctl start dingo.service
+```
+
+***
+
+<br>
+
+## Step 7 - Check Status
+
+Verify the service is running:
+
+```
+sudo systemctl status dingo.service
+```
+
+To follow the logs in real time:
+
+```
+sudo journalctl -u dingo -f
+```
+
+To see recent logs if there is an error:
+
+```
+sudo journalctl -u dingo -n 50 --no-pager
+```
+
+***
+
+<br>
+
+### Congratulations! You can now move to the **Musashi Testnet Pool Registration** section
+
+# Section 2 - Musashi Testnet Pool Registration
+
+> Make sure the node if fully synced before proceeding. Run the command to see if the node is 100% synced.
+> 
+> ```
+> cardano-cli query tip
+> ```
+
