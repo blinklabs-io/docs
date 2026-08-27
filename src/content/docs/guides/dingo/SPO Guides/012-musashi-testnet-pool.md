@@ -5,7 +5,6 @@ description: SPO Guide for Dingo Pools - How to set up a Musashi Testnet Pool.
 
 In this guide, we will walk you through how to set up a Mushashi testnet pool using the Dingo node.
 
-
 This guide spilts the set up into two sections:
 1. Dingo Node Set Up.
 2. Musashi Testnet Pool Registration.
@@ -378,3 +377,89 @@ go to faucet and paste your address from above.
 > cardano-cli dijkstra query utxo --address "$(cat payment.addr)"
 > ```
 
+## Step 6 - Create Node Operational Keys
+Create Cold keys, KES keys and VRF keys
+
+**Cold keys (your pool's identity — keep offline / backed up)**
+```
+cardano-cli dijkstra node key-gen \
+  --cold-verification-key-file cold.vkey \
+  --cold-signing-key-file cold.skey \
+  --operational-certificate-issue-counter-file opcert.counter
+```
+
+**KES keys (hot keys, rotated periodically)**
+```
+cardano-cli dijkstra node key-gen-KES \
+  --verification-key-file kes.vkey \
+  --signing-key-file kes.skey
+```
+
+**VRF keys (used to win block-production slots)**
+```
+cardano-cli dijkstra node key-gen-VRF \
+  --verification-key-file vrf.vkey \
+  --signing-key-file vrf.skey
+```
+
+## Step 7 - Create BLS Keys
+BLS keys are keys that pools use to vote on and certify endorser blocks. You need them to register a Leios-enabled stake pool.
+
+**BLS key pair (Leios voting/certification key)**
+```
+cardano-cli dijkstra node key-gen-BLS \
+  --verification-key-file bls.vkey \
+  --signing-key-file bls.skey
+```
+
+## Step 8 - Create Operational Certificate
+We need the Shelley Genesis json file to run our CLI command
+
+We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/leios/` by running the following command in our `dingo` directory:
+
+```
+cd $DINGO_HOME
+mkdir -p config/leios
+```
+
+Next, navigate to the `config/leios` folder and download the Cardano Shelley Genesis file.
+
+```
+cd config/leios
+```
+
+To download the Shelley Genesis file, run:
+
+```
+wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.json
+```
+
+> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
+
+***
+
+Now we can find the starting KES period by running:
+
+First go back to `keys` directory
+
+```
+cd "$DINGO_HOME/keys
+```
+
+```
+slotsPerKESPeriod=$(jq -r '.slotsPerKESPeriod' "$DINGO_HOME/config/leios/shelley-genesis.json")
+slotNo=$(cardano-cli query tip | jq -r '.slot')
+kesPeriod=$(( slotNo / slotsPerKESPeriod ))
+```
+Now run the following command to create `opcert`:
+```
+cardano-cli dijkstra node issue-op-cert \
+  --kes-verification-key-file kes.vkey \
+  --cold-signing-key-file cold.skey \
+  --operational-certificate-issue-counter-file opcert.counter \
+  --kes-period "$kesPeriod" \
+  --out-file opcert.cert
+```
+
+
+> Additional resource here https://leios.cardano-scaling.org/docs/testnet/getting-started
