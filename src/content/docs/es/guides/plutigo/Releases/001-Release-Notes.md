@@ -10,13 +10,6 @@ description: Notas de la versión de Plutigo
 ☑️ Selecciona una versión para ver las notas de la versión completas.
 
 - Versión: v0.5.0 - *[Ver notas de la versión](../v0-5-0)*
-- Versión: v0.4.0 - *[Ver notas de la versión](../v0-4-0)*
-- Versión: v0.3.0 - *[Ver notas de la versión](../v0-3-0)*
-- Versión: v0.2.0 - *[Ver notas de la versión](../v0-2-0)*
-- Versión: v0.1.17 - *[Ver notas de la versión](../v0-1-17)*
-- Versión: v0.1.15 - *[Ver notas de la versión](../v0-1-15)*
-- Versión: v0.1.14 - *[Ver notas de la versión](../v0-1-14)*
-- Versión: v0.1.13 - *[Ver notas de la versión](../v0-1-13)*
 
 
 ---
