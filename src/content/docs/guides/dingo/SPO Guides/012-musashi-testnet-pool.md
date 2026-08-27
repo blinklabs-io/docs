@@ -5,13 +5,15 @@ description: SPO Guide for Dingo Pools - How to set up a Musashi Testnet Pool.
 
 In this guide, we will walk you through how to set up a Musashi testnet pool using the Dingo node.
 
-This guide splits the set up into two sections:
-1. Dingo Node Set Up.
-2. Musashi Testnet Pool Registration.
+This guide splits the setup into two sections:
+1. **Dingo Node Setup.**
+2. **Musashi Testnet Pool Registration.**
+
+***
 
 <br>
 
-# Section 1 - Dingo Node Set Up
+# Section 1 - Dingo Node Setup
 
 ✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
@@ -59,7 +61,7 @@ You can verify the binary works by running:
 
 ***
 
-Move the Dingo binary to `/usr/local/bin/` so they are accessible system-wide.
+Move the Dingo binary to `/usr/local/bin/` so it is accessible system-wide.
 
 <br>
 
@@ -113,7 +115,7 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 <br>
 
-We need the Shelley Genesis json file to run some of our CLI commands
+We need the Shelley Genesis json file to run some of our CLI commands.
 
 We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/leios/` by running the following command in our `$DINGO_HOME` directory:
 
@@ -210,7 +212,8 @@ sudo nano topology.json
 ```
 
 Edit Local roots adding your friends' pools. For this example, we just added 3 pools.
-```{
+```
+{
   "bootstrapPeers": [
     {
       "address": "leios-node.play.dev.cardano.org",
@@ -229,9 +232,9 @@ Edit Local roots adding your friends' pools. For this example, we just added 3 p
         "port": 3001
       },
       {
-          "address": "74.122.122.121",
-          "port": 6400
-        }
+        "address": "74.122.122.121",
+        "port": 6400
+      }
       ],
       "advertise": false,
       "trustable": false,
@@ -249,7 +252,7 @@ Edit Local roots adding your friends' pools. For this example, we just added 3 p
 }
 ```
 
-Save and exit
+Save and exit.
 
 ## Step 6 - Create `dingo.service` Unit File
 
@@ -291,7 +294,7 @@ sudo nano /etc/systemd/system/dingo.service
 
 Enable the service to start on boot and start it now:
 
-```bash
+```
 sudo systemctl daemon-reload
 sudo systemctl enable dingo.service
 sudo systemctl start dingo.service
@@ -358,7 +361,7 @@ export CARDANO_NODE_NETWORK_ID=164
 export CARDANO_NODE_SOCKET_PATH="$DINGO_HOME/dingo.socket"
 ```
 
-**Save and exit**
+**Save and exit.**
 
 Reload your bashrc:
 
@@ -384,7 +387,7 @@ source ~/.bashrc
 <br>
 
 ## Step 2 - Create `keys` Folder
-We will create a key folder for all our pool keys and `cert` files. The following command will create directory and move into that directory.
+We will create a `keys` folder for all our pool keys and `cert` files. The following command will create directory and move into that directory.
 
 ```
 mkdir -p "$DINGO_HOME/keys" && cd "$DINGO_HOME/keys"
@@ -434,7 +437,7 @@ cat payment.addr
 <br>
 
 ## Step 5 - Fund Address
-Go to faucet and paste your address from above.
+Go to the faucet and paste your address from above.
 
 <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
 
@@ -582,7 +585,7 @@ cardano-cli dijkstra stake-address registration-certificate \
 ***
 
 **Pool registration certificate:**
-- Replace `<YOUR_PUBLIC_IP>` with your node's public IP (the address other nodes will use to reach it) 
+- Replace `<YOUR_PUBLIC_IP>` with your node's public IP (the address other nodes will use to reach it). 
 - Also replace <https://website.com/leios-pool-metadata.json> with your URL from above.
 
 After replacing `<YOUR_PUBLIC_IP>` and `<https://website.com/leios-pool-metadata.json>` run:
@@ -691,7 +694,9 @@ cardano-cli dijkstra stake-pool id --output-bech32 --cold-verification-key-file 
 ```
 example: `pool1…`
 
-go to faucet and request delegation for your pool. Paste your pool id from above
+**Go to faucet and request delegation for your pool.** 
+
+Paste your pool id from above
 <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
 
 **Verify Registration**
