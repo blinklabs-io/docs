@@ -98,16 +98,6 @@ plugins:
       config:
         port: 0
 
-# API の共有 TLS / 認証設定（任意）
-# api:
-#   tls:
-#     mode: \"server\"
-#     certFilePath: \"/run/secrets/api.crt\"
-#     keyFilePath: \"/run/secrets/api.key\"
-#   auth:
-#     mode: \"token\"
-#     tokenFilePath: \"/run/secrets/api-token\"
-
 # Mithril
 mithril:
   aggregatorUrl: \"\"
@@ -147,13 +137,9 @@ storageMode: \"core\"
 EOF"
 ```
 
-> 📝 MithrilのアグリゲーターURLとアーティファクトURLは、既定でHTTPSを使用する必要があります。本番環境では `mithril.allowInsecureHttp: false` を維持します。ローカル開発またはテストに限り `true` を設定できます。対応するオプションは `--mithril-allow-insecure-http` と `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` です。本番環境ではこの設定を有効にしないでください。
-
-> ⚠️ `delegatorInactivityEnabled` は、CIP-0163 の `account_withdrawal_witness` 書き込みに適用するコンセンサスに影響する非アクティブ期間の制御で、既定値は `false` です。有効にする場合は、`delegatorInactivity` に `1` から `10000` までの整数のエポック範囲を設定します。例では既定値の `90` を使用します。ネットワーク上のすべてのノードで同じ値にする必要があります。Mithrilブートストラップは、インポートした報酬アカウントの有効期限状態を再構築できないため、この制御と互換性がありません。有効な設定ではgenesisから同期します。
-
-> 📝 この例では、両方の最上位フィールドに対応するCLIフラグと環境変数を示します。
-
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
+
+> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
 
 ```yaml
 storageMode: "api"
@@ -179,13 +165,7 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 `api.tls` と `api.auth` は、選択した Blockfrost、Mesh、UTxO RPC の `plugins.api.*` に共通して適用する既定の設定です。`plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` は、各APIで対応するフィールドを個別に上書きできます。各API側で `mode: \"disabled\"` を明示すると、共通設定をそのAPIだけ無効にできます。
->
-> TLS の有効なモードは `disabled` と `server` です。`server` を指定する場合は、`certFilePath` と `keyFilePath` の両方に証明書とキーのパスを設定します。認証の有効なモードは `disabled` と `token` です。`token` では `token` と `tokenFilePath` のどちらか一方だけを指定し、推奨される `tokenFilePath` を使用します。`server` でTLSパスを片方だけ指定した場合、または `token` で認証トークンフィールドをどちらも指定しないか両方を指定した場合、Dingoは待受を開始する前の起動時検証でエラーを返します。
->
-> 認証トークンは `Authorization: Bearer <token>` で送信します。Blockfrost は互換性のため `project_id: <token>` も受け付けます。認証を有効にした場合、認証を省略できるのはブラウザーの CORS preflight にあたる `OPTIONS` だけです。preflight ではない `OPTIONS` を含むその他のすべてのリクエストには認証が必要です。
->
-> トップレベルの共有設定は、`--api-tls-mode` / `DINGO_API_TLS_MODE`、`--api-tls-cert-file-path` / `DINGO_API_TLS_CERT_FILE_PATH`、`--api-tls-key-file-path` / `DINGO_API_TLS_KEY_FILE_PATH`、`--api-auth-mode` / `DINGO_API_AUTH_MODE`、`--api-auth-token-file-path` / `DINGO_API_AUTH_TOKEN_FILE_PATH` からも設定できます。既存のルート設定 `tlsCertFilePath` / `tlsKeyFilePath` は UTxO RPC だけで使う互換性フィールドであり、Blockfrost や Mesh には適用されません。
+> 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
 
@@ -276,14 +256,3 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 ### おめでとうございます。Dingoのスタートアップサービスを設定しました！
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

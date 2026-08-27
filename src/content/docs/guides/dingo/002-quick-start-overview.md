@@ -28,12 +28,12 @@ In this guide, we will walk you through downloading the Dingo binary and all the
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
-⚠️ This example uses v0.70.0. Adjust the version and architecture to match your system.
+⚠️ Adjust the version and architecture to match your system.
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.0/dingo-v0.70.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -118,7 +118,9 @@ storageMode: "core"
 EOF
 ```
 
-> 📝 The example shows the CLI flags and environment variables for both top-level fields.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+
+> 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
@@ -225,14 +227,3 @@ Using a systemd service automatically starts Dingo when your system boots and re
 ### Congratulations! Your Dingo node is now running.
 
 [Learn how to interact with Dingo using the Cardano CLI](../004-using-dingo-with-cardano-cli).
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

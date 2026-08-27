@@ -135,28 +135,15 @@ databaseLifecycle:
   # Default: 0.
   snapshotRetention: 0
   # Optional cloud mirror for snapshots.
-  # Use an `s3://bucket/prefix` or `gcs://bucket/prefix` URI.
-  # CLI: `--db-snapshot-cloud-destination`
-  snapshotCloudDestination: \"\"
-  # Optional path prefix for shared cloud destinations.
-  snapshotCloudDestinationPrefix: \"\"
+  # snapshotCloudDestination: \"\"
+  # snapshotCloudDestinationPrefix: \"\"
   # Capture an automatic snapshot every N epoch closes.
   # CLI: --db-snapshot-every-n-epochs
   snapshotEveryNEpochs: 1
 EOF"
 ```
 
-> 📝 Mithril aggregator and artifact URLs require HTTPS by default. Keep `mithril.allowInsecureHttp: false` in production. For local development or testing only, set it to `true`; the equivalent options are `--mithril-allow-insecure-http` and `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. Do not enable this option in production.
-
-> ⚠️ `delegatorInactivityEnabled` controls the consensus-affecting inactivity gate for CIP-0163 `account_withdrawal_witness` writes and defaults to `false`. When enabled, set `delegatorInactivity` to an integer epoch window from `1` through `10000`; the example uses the default window of `90`. Every node on the network must use the same values. Mithril bootstrap is incompatible with this gate because it cannot reconstruct imported reward account expiration state; enabled configurations must sync from genesis.
-
-> 📝 The example shows the CLI flags and environment variables for both top-level fields.
-
-> 📝 `debugPort: 0` disables pprof. Dingo exposes pprof without authentication or TLS. `debugBindAddr` defaults to `127.0.0.1` on its dedicated listener rather than inheriting `bindAddr` or `privateBindAddr`. External access requires an explicit `debugBindAddr`, `DINGO_DEBUG_BIND_ADDR`, or `--debug-bind-addr` override and firewall or equivalent network controls. This policy applies to the one-time `dingo mithril sync` and the long-running `dingo serve` systemd service.
-
-> 📝 When `plugins.storage.metadata.provider` is `postgres`, `statementTimeout` limits each statement and `lockTimeout` limits lock acquisition waits; these fields accept duration values such as `30s`. PostgreSQL converts positive duration values to the `statement_timeout` and `lock_timeout` session settings in milliseconds. When the provider is `mysql`, `statementTimeout` limits top-level read-only `SELECT` statements through `max_execution_time` in milliseconds, `lockTimeout` sets `innodb_lock_wait_timeout` in whole seconds and rounds subsecond durations up, and `readTimeout` and `writeTimeout` set transport socket I/O deadlines using the supplied duration values. Dingo defaults each field to `0`, rejects negative values, and ignores all these fields when an explicit `dsn` is set.
-
-> 📝 Before startup, Dingo preserves an existing `socketPath`. Dingo removes only a confirmed stale Unix socket. A regular file, symlink, directory, live socket, ambiguous probe, or removal error causes startup to fail. Keep the configured path absent or ensure that it contains only a removable confirmed stale Unix socket.
+> 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
 > 📝 `databaseLifecycle.snapshotEnabled` controls automatic snapshots, and `dingo database snapshot|restore|truncate` handles offline maintenance. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
@@ -187,25 +174,6 @@ midnight:
 ```
 
 > 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Set any listener port to `0` to disable that API.
-
-For optional shared API TLS and token authentication, add the following to the configuration:
-
-```yaml
-api:
-  tls:
-    mode: server
-    certFilePath: "/run/secrets/api.crt"
-    keyFilePath: "/run/secrets/api.key"
-  auth:
-    mode: token
-    tokenFilePath: "/run/secrets/api-token"
-```
-
-> 📝 `api.tls` accepts `disabled` or `server`; `server` requires both `certFilePath` and `keyFilePath`. `api.auth` accepts `disabled` or `token`; `token` requires exactly one of `token` or `tokenFilePath`, with `tokenFilePath` preferred for operators. Provider settings under `plugins.api.<name>.config.tls` and `plugins.api.<name>.config.auth` override shared fields independently. Set a provider's `mode: disabled` to turn off an inherited policy for that provider.
-
-> 📝 Authenticated clients send `Authorization: Bearer <token>`. Blockfrost also accepts `project_id: <token>`. Dingo exempts CORS preflight `OPTIONS` requests from authentication; all other requests, including non-preflight `OPTIONS`, remain authenticated.
-
-> 📝 Configure shared API security with `--api-tls-mode`, `--api-tls-cert-file-path`, `--api-tls-key-file-path`, `--api-auth-mode`, and `--api-auth-token-file-path`, or with `DINGO_API_TLS_MODE`, `DINGO_API_TLS_CERT_FILE_PATH`, `DINGO_API_TLS_KEY_FILE_PATH`, `DINGO_API_AUTH_MODE`, and `DINGO_API_AUTH_TOKEN_FILE_PATH`. The root `tlsCertFilePath` and `tlsKeyFilePath` fields remain UTxO RPC compatibility fields only; they do not provide shared defaults for Blockfrost or Mesh.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
@@ -329,14 +297,3 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 ### Congratulations! You have successfully set up a `systemd` service for Dingo.
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

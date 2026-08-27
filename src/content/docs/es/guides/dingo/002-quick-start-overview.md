@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.0/dingo-v0.70.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -105,7 +105,6 @@ mithril:
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
-debugBindAddr: "127.0.0.1"
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
@@ -119,29 +118,7 @@ storageMode: "core"
 EOF
 ```
 
-### Configuración de la comprobación de cuentas de paridad de Koios
-
-Cuando el operador activa `koiosParity.enabled`, el observador integrado de Dingo comprueba las recompensas por cuenta mediante `koiosParity.accounts`. Dingo establece esta opción en `true` de forma predeterminada; establece el valor en `false` para conservar únicamente la comprobación por grupo:
-
-```yaml
-koiosParity:
-  enabled: true
-  accounts: false
-```
-
-Los equivalentes de Dingo son `--koios-parity-accounts` y `DINGO_KOIOS_PARITY_ACCOUNTS`. La precedencia de configuración es CLI, variable de entorno, YAML y valor predeterminado. A diferencia del observador integrado, el ejecutable independiente `koios-parity` no comprueba cuentas de forma predeterminada.
-
-En `koios-parity`, activa la comprobación de cuentas con `koios-parity --accounts` o establece `KOIOS_PARITY_ACCOUNTS` en `true` o `1`. Esta fase genera un volumen de solicitudes a Koios considerablemente mayor. Si el operador especifica explícitamente `--accounts`, su valor, incluido `--accounts=false`, tiene prioridad sobre `KOIOS_PARITY_ACCOUNTS`.
-
-El indicador independiente `--grace-hours` acepta valores no negativos. Su valor predeterminado normal es `24` horas; establece `--grace-hours=0` para desactivar explícitamente la ventana de gracia o retraso de referencia. La cobertura incompleta de cuentas produce un resultado `ERROR`.
-
-> 📝 Las URL del agregador y de los artefactos de Mithril deben usar HTTPS de forma predeterminada. Mantén `mithril.allowInsecureHttp: false` en producción. Solo para desarrollo local o pruebas, establece este valor en `true`; las opciones equivalentes son `--mithril-allow-insecure-http` y `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`. No habilites esta opción en producción.
-
-> ⚠️ `delegatorInactivityEnabled` controla el mecanismo de inactividad que afecta al consenso para las escrituras `account_withdrawal_witness` de CIP-0163 y su valor predeterminado es `false`. Cuando esté habilitado, establece `delegatorInactivity` como un número entero de épocas entre `1` y `10000`; el ejemplo usa el valor predeterminado de `90`. Todos los nodos de la red deben usar los mismos valores. El arranque desde una instantánea de Mithril es incompatible con este mecanismo porque Mithril no puede reconstruir el estado de expiración de las cuentas de recompensas importado; las configuraciones habilitadas deben sincronizarse desde el génesis.
-
-> 📝 El ejemplo muestra los indicadores CLI y las variables de entorno correspondientes a ambos campos de nivel superior.
-
-> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`. `pprof` no tiene autenticación ni TLS y usa la dirección de bucle local `127.0.0.1`, independientemente de `bindAddr` y `privateBindAddr`. Para exponerlo externamente, establece explícitamente `debugBindAddr` en YAML, `DINGO_DEBUG_BIND_ADDR` o `--debug-bind-addr` y aplica controles de red. La sincronización de Mithril usa la misma configuración.
+> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
 > 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
 
@@ -166,27 +143,6 @@ plugins:
 ```
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
-
-### Seguridad opcional de la API
-
-La configuración permite aplicar valores predeterminados compartidos de TLS y autenticación a cada proveedor seleccionado en `plugins.api.*` mediante `api.tls` y `api.auth`:
-
-```yaml
-api:
-  tls:
-    mode: server
-    certFilePath: "/run/secrets/api.crt"
-    keyFilePath: "/run/secrets/api.key"
-  auth:
-    mode: token
-    tokenFilePath: "/run/secrets/api-token"
-```
-
-Dingo combina los campos de `plugins.api.<name>.config.tls` y `plugins.api.<name>.config.auth` por proveedor, de modo que cada campo puede anular el valor compartido. Un proveedor puede establecer explícitamente `mode: disabled` para desactivar una política heredada. Los modos TLS válidos son `disabled` y `server`; `server` requiere `certFilePath` y `keyFilePath` completos. Los modos de autenticación válidos son `disabled` y `token`; `token` requiere exactamente una fuente, `token` o `tokenFilePath`. El ejemplo usa `tokenFilePath` para evitar incluir el secreto en la configuración.
-
-Las solicitudes autenticadas deben incluir `Authorization: Bearer <token>`. Blockfrost también acepta `project_id`. La solicitud previa CORS `OPTIONS` no requiere autenticación, pero todas las demás solicitudes requieren autenticación. Dingo acepta estos enlaces de configuración de nivel superior mediante `--api-tls-mode`, `--api-tls-cert-file-path`, `--api-tls-key-file-path`, `--api-auth-mode` y `--api-auth-token-file-path`, o mediante `DINGO_API_TLS_MODE`, `DINGO_API_TLS_CERT_FILE_PATH`, `DINGO_API_TLS_KEY_FILE_PATH`, `DINGO_API_AUTH_MODE` y `DINGO_API_AUTH_TOKEN_FILE_PATH`.
-
-Los campos raíz heredados `tlsCertFilePath` y `tlsKeyFilePath` solo proporcionan compatibilidad para UTxO RPC. No establecen valores predeterminados compartidos para Blockfrost ni Mesh.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
@@ -267,14 +223,3 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 ### ¡Felicidades, estás listo para comenzar a usar el nodo Dingo!
 
 [Aprende cómo interactuar con Dingo usando la CLI de Cardano](../004-using-dingo-with-cardano-cli).
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

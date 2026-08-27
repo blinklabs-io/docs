@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.69.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.0/dingo-v0.70.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -119,55 +119,11 @@ midnight:
 EOF
 ```
 
-### Koios報酬パリティのアカウントチェック（任意）
-
-Dingoのノード内で動作する既存のKoios監視機能を `koiosParity.enabled` で有効にすると、`koiosParity.accounts` は既定で `true` になり、アカウント単位のチェックを実行します。アカウント単位のチェックを無効にして、プール単位だけをチェックする場合は `false` に設定します。
-
-```yaml
-koiosParity:
-  enabled: true
-  accounts: false
-```
-
-Dingoでは、この設定に `--koios-parity-accounts` と `DINGO_KOIOS_PARITY_ACCOUNTS` も使用できます。これに対し、スタンドアロンの `koios-parity` はアカウントチェックが既定で無効です。スタンドアロンで有効にするには `koios-parity --accounts` または `KOIOS_PARITY_ACCOUNTS` に `true` か `1` を指定します。このチェックを有効にすると、Koiosへのリクエスト数が大幅に増加します。`--accounts` を明示すると、`--accounts=false` を含めて、環境変数 `KOIOS_PARITY_ACCOUNTS` より優先されます。
-
-スタンドアロンの `koios-parity` で使う `--grace-hours` は、エポック終了後の猶予または参照データの遅延時間を指定します。既定値は24時間で、`0` は猶予または参照遅延の期間を明示的に無効にします。`koios-parity` は0以上の値を受け付け、負の値を拒否します。アカウント取得範囲が不完全な場合、Dingoは結果を `ERROR` として報告します。
-
-> 📝 MithrilのアグリゲーターURLとアーティファクトURLは、既定でHTTPSを使用する必要があります。本番環境では `mithril.allowInsecureHttp: false` を維持します。ローカル開発またはテストに限り `true` を設定できます。対応するオプションは `--mithril-allow-insecure-http` と `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` です。本番環境ではこの設定を有効にしないでください。
-
-> ⚠️ `delegatorInactivityEnabled` は、CIP-0163 の `account_withdrawal_witness` 書き込みに適用するコンセンサスに影響する非アクティブ期間の制御で、既定値は `false` です。有効にする場合は、`delegatorInactivity` に `1` から `10000` までの整数のエポック範囲を設定します。例では既定値の `90` を使用します。ネットワーク上のすべてのノードで同じ値にする必要があります。Mithrilブートストラップは、インポートした報酬アカウントの有効期限状態を再構築できないため、この制御と互換性がありません。有効な設定ではgenesisから同期します。
-
-> 📝 この例では、両方の最上位フィールドに対応するCLIフラグと環境変数を示します。
-
-> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。`pprof` には認証機能とTLSがなく、`debugBindAddr` は `bindAddr` や `privateBindAddr` から独立して既定値 `127.0.0.1` を使います。外部アクセスを許可する場合は、YAMLの `debugBindAddr`、`DINGO_DEBUG_BIND_ADDR`、または `--debug-bind-addr` でアドレスを明示的に指定し、ファイアウォールなどのネットワーク制御も設定します。`serve` モードとMithril同期の両方で同じ設定を使います。
-
-> 📝 `plugins.storage.metadata.provider` に `postgres` を指定すると、`statementTimeout` は各ステートメントを、`lockTimeout` はロック取得待機を制限します。これらのフィールドは `30s` のような期間値を受け取ります。PostgreSQLは正の期間値を、ミリ秒単位の `statement_timeout` と `lock_timeout` のセッション設定に変換します。プロバイダーに `mysql` を指定すると、`statementTimeout` は `max_execution_time` によりトップレベルの読み取り専用 `SELECT` をミリ秒単位で制限し、`lockTimeout` は `innodb_lock_wait_timeout` を整数秒で設定して1秒未満の期間を切り上げ、`readTimeout` と `writeTimeout` は指定した期間値を使用して転送ソケットの読み書き期限を設定します。Dingoは各フィールドの既定値を `0` とし、負の値を拒否し、設定に明示的な `dsn` がある場合はこれらのフィールドをすべて無視します。
+> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
-
-選択したAPIプロバイダーすべてにTLSと認証を共通で適用する場合は、トップレベルの `api.tls` と `api.auth` を使用します。次の例では、Blockfrost、Mesh、UTxO RPCにサーバーTLSとトークン認証を適用します。
-
-```yaml
-api:
-  tls:
-    mode: server
-    certFilePath: "/run/secrets/api.crt"
-    keyFilePath: "/run/secrets/api.key"
-  auth:
-    mode: token
-    tokenFilePath: "/run/secrets/api-token"
-```
-
-- TLSで指定できるモードは `disabled` と `server` です。TLSの `server` モードには `certFilePath` と `keyFilePath` の両方が必要です。
-- 認証で指定できるモードは `disabled` と `token` です。`token` モードには `token` または `tokenFilePath` のどちらか一方が必要で、両方は指定できません。
-- `plugins.api.<name>.config.tls` と `plugins.api.<name>.config.auth` にプロバイダー単位の項目を指定すると、共通設定の各項目を上書きできます。プロバイダーで `mode: disabled` を明示すると、継承した設定も無効になります。未設定時の既定モードはどちらも `disabled` です。
-
-- 認証済みAPIリクエストは `Authorization: Bearer <token>` を使用します。Blockfrostは同じトークンに対して `project_id` も受け付けます。
-- ブラウザーのCORS preflightである `OPTIONS` リクエストは認証なしで処理しますが、それ以外のリクエストには認証が必要です。
-- トップレベルの設定には、CLIフラグ `--api-tls-mode`、`--api-tls-cert-file-path`、`--api-tls-key-file-path`、`--api-auth-mode`、`--api-auth-token-file-path` と、環境変数 `DINGO_API_TLS_MODE`、`DINGO_API_TLS_CERT_FILE_PATH`、`DINGO_API_TLS_KEY_FILE_PATH`、`DINGO_API_AUTH_MODE`、`DINGO_API_AUTH_TOKEN_FILE_PATH` も使用できます。
-- 既存のルート設定 `tlsCertFilePath` と `tlsKeyFilePath` は UTxO RPCだけで使う互換設定であり、BlockfrostやMeshの共通TLS既定値にはなりません。
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
@@ -250,14 +206,3 @@ cd ~/dingo
 ### おめでとうございます。Dingoノードを使用する準備が整いました！
 
 [Cardano CLIを使用してDingoと対話する方法を学ぶ](../004-using-dingo-with-cardano-cli)。
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
