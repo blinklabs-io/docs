@@ -104,6 +104,8 @@ mithril:
 # Lifecycle de base de datos
 databaseLifecycle:
   # Captura snapshots automáticos al cierre de cada epoch.
+  # Dingo no admite capturas automáticas cuando el proveedor principal de blobs es `s3` o `gcs`.
+  # Desactiva las capturas automáticas o usa un proveedor principal local.
   # Default: false
   # CLI: --db-snapshot-enabled
   snapshotEnabled: false
@@ -146,11 +148,11 @@ EOF"
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
-> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`.
+> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`. Esta restricción afecta las capturas automáticas, pero `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles.
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
 
-> 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
+> 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `CreateSnapshot`, `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
 > 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 
@@ -171,12 +173,24 @@ plugins:
       config:
         port: 9090
 midnight:
+  # Habilita el servidor gRPC de Midnight. Predeterminado: false.
+  serverEnabled: false
+  # Expone el descubrimiento del servicio gRPC. Requiere `serverEnabled`. Predeterminado: false.
+  reflectionEnabled: false
+  # Permite conexiones sin cifrar en una dirección remota. Predeterminado: false.
+  allowInsecureRemote: false
+  # Puerto de escucha gRPC. Debe ser distinto de `0` cuando `serverEnabled` es `true`.
+  port: 50051
+  # Dirección de escucha gRPC. Por defecto, las conexiones sin cifrar solo usan loopback.
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
 
 Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+
+> 📝 La indexación de Midnight requiere `enabled: true` y el modo de almacenamiento `api`; el servidor gRPC es un control independiente y requiere `serverEnabled: true` y un `port` distinto de `0`. Con `serverEnabled: false`, Dingo mantiene desactivada la escucha. `reflectionEnabled` requiere el servidor. Dingo usa `127.0.0.1` por defecto y convierte un valor vacío de `host` en loopback. Una conexión sin cifrar a un host no local requiere `allowInsecureRemote: true`, salvo que TLS proteja la escucha.
 
 ***
 
@@ -267,3 +281,14 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 ### ¡Felicidades, has configurado un servicio de inicio para Dingo!
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

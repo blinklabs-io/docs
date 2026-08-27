@@ -115,6 +115,11 @@ barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
 midnight:
+  serverEnabled: false
+  reflectionEnabled: false
+  allowInsecureRemote: false
+  port: 50051
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 EOF
 ```
@@ -122,6 +127,10 @@ EOF
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
+
+> 💡 Midnight gRPC サーバーには `storageMode: "api"`、`midnight.serverEnabled: true`、および `midnight.port` の `0` 以外の値が必要です。インデックス作成とサーバー公開は別々に制御されます。`midnight.reflectionEnabled` は `midnight.serverEnabled` が `true` の場合にのみ有効で、`midnight.serverEnabled` が `false` の場合はリスナーも無効です。
+
+> 📝 `midnight.host` の既定値は `"127.0.0.1"` です。`midnight.host: ""` もループバックを使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
@@ -206,3 +215,14 @@ cd ~/dingo
 ### おめでとうございます。Dingoノードを使用する準備が整いました！
 
 [Cardano CLIを使用してDingoと対話する方法を学ぶ](../004-using-dingo-with-cardano-cli)。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

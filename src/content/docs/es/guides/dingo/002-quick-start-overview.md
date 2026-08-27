@@ -124,6 +124,11 @@ EOF
 
 ```yaml
 midnight:
+  serverEnabled: false
+  reflectionEnabled: false
+  allowInsecureRemote: false
+  port: 50051
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 storageMode: "api"
 plugins:
@@ -143,6 +148,8 @@ plugins:
 ```
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+
+> 📝 Para que Midnight sirva por gRPC, configure `storageMode: "api"`, `midnight.serverEnabled: true` y un valor distinto de `0` en `midnight.port`. La indexación y el servicio son controles independientes. `midnight.reflectionEnabled` está deshabilitado de forma predeterminada; `midnight.reflectionEnabled: true` activa la reflexión y requiere `midnight.serverEnabled: true`. Dingo mantiene el servidor gRPC deshabilitado cuando `midnight.serverEnabled` es `false`. `127.0.0.1` es el host predeterminado, incluso cuando `midnight.host` está vacío. Dingo limita el texto plano a direcciones de loopback; para exponer el servicio en una dirección que no sea de loopback, active `midnight.allowInsecureRemote: true` para texto plano o configure `tlsCertFilePath` y `tlsKeyFilePath` para TLS.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
@@ -223,3 +230,14 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 ### ¡Felicidades, estás listo para comenzar a usar el nodo Dingo!
 
 [Aprende cómo interactuar con Dingo usando la CLI de Cardano](../004-using-dingo-with-cardano-cli).
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
