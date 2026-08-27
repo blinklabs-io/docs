@@ -121,6 +121,7 @@ barkPort: 0
 # `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
 databaseLifecycle:
   # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
+  # プライマリの blob provider が `s3` または `gcs` の場合は使用できないため、自動スナップショットを無効にするか、ローカルのプライマリ blob provider を使用してください。
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
   snapshotDir: \"$HOME/dingo/snapshots\"
@@ -158,6 +159,17 @@ plugins:
       config:
         port: 9090
 midnight:
+  # Midnight のインデックス作成と gRPC 提供は別々に制御します。gRPC 提供には API ストレージモード、`serverEnabled: true`、0 以外の `port` が必要です。
+  # `serverEnabled` が `false` の場合はリスナーを起動しません。
+  serverEnabled: false
+  # `reflectionEnabled` は gRPC のサービス検出を個別に有効化する設定です。`serverEnabled: true` が必要です。
+  reflectionEnabled: false
+  # ループバック以外で TLS なしの接続を許可します。リモートの平文接続には `allowInsecureRemote: true` または TLS が必要です。
+  allowInsecureRemote: false
+  # gRPC の待ち受けポートです。`serverEnabled` が `true` の場合は 0 以外にします。
+  port: 50051
+  # gRPC の待ち受けアドレスです。省略または空欄の場合の既定値はループバック（`127.0.0.1`）です。
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
 
@@ -165,7 +177,7 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 `snapshotEnabled` の制限は自動スナップショットだけに適用され、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
 
@@ -256,3 +268,14 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 ### おめでとうございます。Dingoのスタートアップサービスを設定しました！
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

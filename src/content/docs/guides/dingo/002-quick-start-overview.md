@@ -126,6 +126,19 @@ EOF
 
 ```yaml
 midnight:
+  # Enable the Midnight gRPC server independently of Midnight indexing.
+  # Default: false.
+  serverEnabled: false
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
+  reflectionEnabled: false
+  # Permit plaintext listening on a non-loopback host. A configured TLS
+  # certificate and key allow remote TLS exposure without this setting.
+  # Default: false.
+  allowInsecureRemote: false
+  # Must be nonzero when serverEnabled is true. Default: 50051.
+  port: 50051
+  # Defaults to loopback; an empty value also uses 127.0.0.1.
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 storageMode: "api"
 plugins:
@@ -143,6 +156,8 @@ plugins:
       config:
         port: 9090
 ```
+
+> 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
@@ -227,3 +242,14 @@ Using a systemd service automatically starts Dingo when your system boots and re
 ### Congratulations! Your Dingo node is now running.
 
 [Learn how to interact with Dingo using the Cardano CLI](../004-using-dingo-with-cardano-cli).
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
