@@ -126,84 +126,14 @@ sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 # Can be overridden with CARDANO_DATABASE_PATH or --data-dir.
 databasePath: \"$DINGO_HOME/.dingo\"
 
-# Plugins
-plugins:
-  storage:
-    blob:
-      provider: \"badger\"
-      config:
-        # Optional Badger data directory. When unset, databasePath applies.
-        dataDir: \"$DINGO_HOME/.dingo/badger\"
-        blockCacheSize: 0
-        compression: false
-        gc: true
-        indexCacheSize: 0
-    metadata:
-      provider: \"sqlite\"
-      config:
-        # Optional SQLite data directory. When unset, databasePath applies.
-        dataDir: \"$DINGO_HOME/.dingo/metadata.db\"
-  mempool:
-    provider: \"default\"
-    config:
-      # `capacity` is an optional override, not a required setting.
-      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
-      # Leave the key commented or omit it to use the mode default.
-      # capacity: 1048576
-      # `revalidationDeltaCap` is optional. Default: 64. The value must be positive.
-      # revalidationDeltaCap: 64
-  api:
-    blockfrost:
-      provider: \"builtin\"
-      config:
-        port: 3000
-    mesh:
-      provider: \"builtin\"
-      config:
-        port: 8080
-    utxorpc:
-      provider: \"builtin\"
-      config:
-        port: 9090
-
-# Mithril
-mithril:
-  aggregatorUrl: \"\"
-  cleanupAfterLoad: true
-  enabled: true
-  verifyCertificates: true
-
 # Network
-bindAddr: \"0.0.0.0\"
-metricsPort: 12798
-debugPort: 0
 network: \"musashi\"
-privateBindAddr: \"127.0.0.1\"
-privatePort: 3002
 relayPort: 3010
 socketPath: \"$DINGO_HOME/dingo.socket\"
 
-# Storage
-barkBaseUrl: \"\"
-barkPort: 0
-storageMode: \"core\"
-# Database lifecycle
-databaseLifecycle:
-  # Dingo captures automatic database snapshots at epoch boundaries.
-  # Default: false.
-  snapshotEnabled: false
-  # Dingo writes automatic snapshots to this local filesystem directory.
-  # Set this when snapshotEnabled is true and when Bark mounts the live service.
-  snapshotDir: \"$HOME/dingo/snapshots\"
-  # Keep only the most recent automatic snapshots.
-  # Default: 0.
-  snapshotRetention: 0
-  # Optional cloud mirror for snapshots.
-  # snapshotCloudDestination: \"\"
-  # snapshotCloudDestinationPrefix: \"\"
-  # Capture an automatic snapshot every N epoch closes.
-  # CLI: --db-snapshot-every-n-epochs
-  snapshotEveryNEpochs: 1
+# Topology
+topology: \"$DINGO_HOME/config/leios/topology.json\"
+
 EOF"
 ```
 
