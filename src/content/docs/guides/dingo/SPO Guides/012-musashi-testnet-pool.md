@@ -446,7 +446,59 @@ cardano-cli dijkstra node issue-op-cert \
 
 <br>
 
-## Step 9 - Register Stake Address and Pool
+## Step 9 - Create your pool's metadata JSON file
+Update the values below with your pool's information. 
+
+📝 **ticker** must be between 3-5 characters in length
+📝 **description** cannot exceed 255 characters in length.
+
+```
+cat > leios-pool-metadata.json << EOF
+{
+"name": "MyPoolName",
+"description": "My pool description",
+"ticker": "ABC",
+"homepage": "https://pool-Website.com"
+}
+EOF
+```
+
+***
+
+Calculate the metadata hash
+Calculate the hash of your metadata file. The hash is saved to `leiosPoolMetaDataHash.txt`
+
+```
+cardano-cli dijkstra stake-pool metadata-hash \
+--pool-metadata-file leios-pool-metadata.json \
+--out-file leiosPoolMetaDataHash.txt
+```
+
+***
+
+Upload `leios-pool-metadata.json` to a public website
+
+Upload your `leios-pool-metadata.json` file to a website that you administer or a public Web site. For example, you can upload your pool metadata to GitHub. <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-v-tips/uploading-pool-metadata-to-github" target="_blank">See Coincashew guide here for uploading to GitHub.</a> 
+
+***
+
+Verify the metadata hashes
+First retrieve the metadata hash from your metadata JSON URL.  
+
+Replace <https://www.METADATA-URL.com> with your actual URL from above.
+```
+cardano-cli dijkstra stake-pool metadata-hash --pool-metadata-file <(curl -s -L <https://www.METADATA-URL.com>)
+```
+
+Verify that this hash matches the value here:
+
+```
+cat leiosPoolMetaDataHash.txt
+```
+
+***
+
+## Step 10 - Register Stake Address and Pool
 Build both Stake and Pool certificates, then submit them in a single transaction.
 
 Stake-address registration certificate:
@@ -471,6 +523,8 @@ cardano-cli dijkstra stake-pool registration-certificate \
   --pool-owner-stake-verification-key-file stake.vkey \
   --pool-relay-ipv4 <YOUR_PUBLIC_IP> \
   --pool-relay-port 3010 \
+  --metadata-url=<https://website.com/leios-pool-metadata.json>
+  --metadata-hash=$(cat $DINGO_HOME/keys/leiosPoolMetaDataHash.txt)
   --out-file pool-reg.cert
 ```
 
@@ -511,7 +565,7 @@ cardano-cli dijkstra transaction submit \
 
 <br>
 
-## Step 10 - Delegate Stake to Your Pool
+## Step 11 - Delegate Stake to Your Pool
 Build a delegation certificate and submit it in its own transaction.
 
 Create delegation cert by running:
@@ -555,7 +609,7 @@ cardano-cli dijkstra transaction submit \
 
 <br>
 
-## Step 11 - Get bech32 Id
+## Step 12 - Get bech32 Id
 
 ```
 cardano-cli dijkstra stake-pool id --output-bech32 --cold-verification-key-file cold.vkey
@@ -590,7 +644,7 @@ cardano-cli dijkstra query stake-address-info --address "$STAKE_ADDR"
 
 <br>
 
-## Step 12 - Update your `dingo.yaml` with the new KES key, VRF key and operation certificate
+## Step 13 - Update your `dingo.yaml` with the new KES key, VRF key and operation certificate
 
 Stop the Dingo node by running:
 ```
@@ -619,7 +673,7 @@ sudo nano /etc/dingo/dingo.yaml
 
 <br>
 
-## Step 13 - Start Dingo Node
+## Step 14 - Start Dingo Node
 
 ```
 sudo systemctl start dingo
@@ -629,7 +683,7 @@ sudo systemctl start dingo
 
 <br>
 
-## Step 14 - Check Status
+## Step 15 - Check Status
 
 Verify that Dingo is running:
 
