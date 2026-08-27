@@ -198,13 +198,18 @@ Go to <a href="https://kleioscan.com/#/musashi/pools" target=_blank">https://kle
      alt="dingo-kleio-explorer-pools"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
      
-Click on some of your SPO friends and copy their public IPs and Ports
+Click on some of your SPO friends and copy 📝 their public IPs and Ports
 
+<img src="/dingo-kleio-explorer-pool-relay-example.png"
+     alt="dingo-kleio-explorer-pool-relay-example"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Use the IPs and Ports to edit your `localRoots` in your `topology.json` file:
 ```
 sudo nano topology.json
 ```
 
-Edit Local roots adding your friends' pools. For this example we just added 3 pools.
+Edit Local roots adding your friends' pools. For this example, we just added 3 pools.
 ```{
   "bootstrapPeers": [
     {
