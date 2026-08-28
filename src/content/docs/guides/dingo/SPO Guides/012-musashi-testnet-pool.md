@@ -115,7 +115,7 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 <br>
 
-We need the Shelley Genesis json file to run some of our CLI commands.
+We need the Shelley Genesis JSON file to run some of our CLI commands.
 
 We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/leios/` by running the following command in our `$DINGO_HOME` directory:
 
@@ -194,7 +194,7 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 
 **To help with initial sync, we will use the Kleioscan explorer to find peers to connect to.**
 
-Go to <a href="https://kleioscan.com/#/musashi/pools" target=_blank">https://kleioscan.com/#/musashi/pools</a>
+Go to <a href="https://kleioscan.com/#/musashi/pools" target="_blank">https://kleioscan.com/#/musashi/pools</a>
 
 <img src="/dingo-kleio-explorer-pools.png"
      alt="dingo-kleio-explorer-pools"
@@ -211,7 +211,7 @@ Use the IPs and Ports to edit your `localRoots` in your `topology.json` file:
 sudo nano topology.json
 ```
 
-Edit Local roots adding your friends' pools. For this example, we just added 3 pools.
+Edit `localRoots` adding your friends' pools. For this example, we just added 3 pools.
 ```
 {
   "bootstrapPeers": [
@@ -696,7 +696,7 @@ example: `pool1…`
 
 **Go to faucet and request delegation for your pool.** 
 
-Paste your pool id from above
+Paste your pool id from above.
 <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
 
 **Verify Registration**
@@ -724,7 +724,7 @@ cardano-cli dijkstra query stake-address-info --address "$STAKE_ADDR"
 
 <br>
 
-## Step 13 - Update your `dingo.yaml` with the new KES key, VRF key and operation certificate
+## Step 13 - Update your `dingo.yaml` with the new KES key, VRF key and Operational Certificate
 
 Stop the Dingo node by running:
 ```
