@@ -37,6 +37,11 @@ Next create directory:
 mkdir -p "$DINGO_HOME"
 ```
 
+> You can verify by running:
+> ```
+> echo $DINGO_HOME
+> ```
+
 ***
 
 <br>
@@ -369,10 +374,6 @@ source ~/.bashrc
 ```
 
 > You can verify your environment variables by running:
-> ```
-> echo $DINGO_HOME
-> ```
->
 > ```
 > echo $CARDANO_NODE_NETWORK_ID
 > ```
