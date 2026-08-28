@@ -53,7 +53,7 @@ cd $DINGO_HOME
 wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.1/dingo-v0.70.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
-You can verify the binary works by running:
+You can verify the binary version by running:
 
 ```
 ./dingo version
