@@ -199,6 +199,12 @@ cd $DINGO_HOME/config
 wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 ```
 
+Then download peer-snapshot JSON file:
+```
+cd $DINGO_HOME/config
+wget https://book.play.dev.cardano.org/environments-pre/leios/peer-snapshot.json
+```
+
 > 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
 
 ***
