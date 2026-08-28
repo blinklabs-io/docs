@@ -82,38 +82,34 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 <br>
 
-### Step 3 -Download the latest Cardano-CLI binary 
+### Step 3 -Download the Leios Cardano-CLI binary 
 
-First, go to the Cardano-CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
+Make directory and move into it:
+```
+mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
+```
 
 Download the Cardano-CLI binary and run the following command:
 
-
-⚠️ Adjust the link path to the correct path for the version you want to download. 
-
 ```
-cd $DINGO_HOME
-wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.2.2.0/cardano-cli-11.2.2.0-x86_64-linux.tar.gz -O - | tar -xz
+wget https://github.com/input-output-hk/ouroboros-leios/releases/download/prototype-2026w34/cardano-node-leios-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
 ***
 
-Rename the Cardano CLI binary and set execute permissions.
-
-To make the file executable, run:
+Move `cardano-cli to`/usr/local/bin` by running:
 
 ```
-chmod +x cardano-cli-x86_64-linux
-```
-
-<br>
-
-For this example, we will rename the binary to `cardano-cli` and move it to `/usr/local/bin/`:
-
-⚠️ Adjust the file path and file name if needed. 
-
-```
+cd bin
 sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
+```
+
+***
+
+Remove unneeded files:
+```
+cd $DINGO_HOME
+rm -rf cli
 ```
 
 ***
