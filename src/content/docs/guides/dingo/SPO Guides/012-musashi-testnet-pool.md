@@ -9,11 +9,11 @@ This guide splits the setup into two sections:
 1. **Dingo Node Setup.**
 2. **Musashi Testnet Pool Registration.**
 
-***
-
 <br>
 
-# Section 1 - Dingo Node Setup
+***
+
+## Section 1 - Dingo Node Setup
 
 ✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
@@ -21,7 +21,7 @@ This guide splits the setup into two sections:
 
 <br>
 
-## Step 1 - Create Working Directory
+### Step 1 - Create Working Directory
 We will create a directory for all our files related to the pool setup.
 
 First export directory path to `.bashrc` by running:
@@ -41,7 +41,7 @@ mkdir -p "$DINGO_HOME"
 
 <br>
 
-## Step 2 - Download Dingo Binary
+### Step 2 - Download Dingo Binary
 <br>
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
@@ -77,7 +77,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 <br>
 
-## Step 3 -Download the latest Cardano CLI binary 
+### Step 3 -Download the latest Cardano CLI binary 
 
 First, go to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
 
@@ -142,7 +142,7 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.js
 
 <br>
 
-## Step 4 - Create dingo.yaml Configuration File
+### Step 4 - Create dingo.yaml Configuration File
 
 Dingo ships with embedded Cardano network configurations (genesis files and config.json) for Musashi, so you do not need to download them separately.
 
@@ -180,7 +180,7 @@ sudo nano /etc/dingo/dingo.yaml
 
 <br>
 
-## Step 5 - Setup Topology File
+### Step 5 - Setup Topology File
 ***If you plan a standard setup of a BP behind relays you can skip this step***
 
 First download the topology file to your `$DINGO_HOME/config/leios` directory by running:
@@ -254,7 +254,7 @@ Edit `localRoots` adding your friends' pools. For this example, we just added 3 
 
 Save and exit.
 
-## Step 6 - Create `dingo.service` Unit File
+### Step 6 - Create `dingo.service` Unit File
 
 Create the systemd service file. Replace `YOUR_USER` with your Linux username (`echo $USER`):
 
@@ -290,7 +290,7 @@ sudo nano /etc/systemd/system/dingo.service
 
 <br>
 
-## Step 7 - Enable and Start the Service
+### Step 7 - Enable and Start the Service
 
 Enable the service to start on boot and start it now:
 
@@ -304,7 +304,7 @@ sudo systemctl start dingo.service
 
 <br>
 
-## Step 8 - Check Status
+### Step 8 - Check Status
 
 Verify the service is running:
 
@@ -328,13 +328,13 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-### Congratulations! You can now move to the **Musashi Testnet Pool Registration** section
-
-***
+#### Congratulations! You can now move to the **Musashi Testnet Pool Registration** section
 
 <br>
 
-# Section 2 - Musashi Testnet Pool Registration
+***
+
+## Section 2 - Musashi Testnet Pool Registration
 
 > Make sure the node is fully synced before proceeding. Run the command to see if the node is 100% synced.
 > 
@@ -346,7 +346,7 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-## Step 1 - Add Environment Variables
+### Step 1 - Add Environment Variables
 
 Open your bashrc:
 
@@ -386,7 +386,7 @@ source ~/.bashrc
 
 <br>
 
-## Step 2 - Create `keys` Folder
+### Step 2 - Create `keys` Folder
 We will create a `keys` folder for all our pool keys and `cert` files. The following command will create directory and move into that directory.
 
 ```
@@ -397,7 +397,7 @@ mkdir -p "$DINGO_HOME/keys" && cd "$DINGO_HOME/keys"
 
 <br>
 
-## Step 3 - Create Payment and Stake Keys
+### Step 3 - Create Payment and Stake Keys
 
 Create payment keys:
 ```
@@ -417,7 +417,7 @@ cardano-cli dijkstra stake-address key-gen \
 
 <br>
 
-## Step 4 - Create Payment Address
+### Step 4 - Create Payment Address
 Create payment address and `payment.addr` file
 ```
 cardano-cli dijkstra address build \
@@ -436,7 +436,7 @@ cat payment.addr
 
 <br>
 
-## Step 5 - Fund Address
+### Step 5 - Fund Address
 Go to the faucet and paste your address from above.
 
 <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">https://faucet.leios.play.dev.cardano.org/basic-faucet</a>
@@ -452,7 +452,7 @@ Go to the faucet and paste your address from above.
 
 <br>
 
-## Step 6 - Create Node Operational Keys
+### Step 6 - Create Node Operational Keys
 Create Cold keys, KES keys and VRF keys
 
 ***
@@ -483,7 +483,7 @@ cardano-cli dijkstra node key-gen-VRF \
 
 <br>
 
-## Step 7 - Create BLS Keys
+### Step 7 - Create BLS Keys
 BLS keys are keys that pools use to vote on and certify endorser blocks. You need them to register a Leios-enabled stake pool.
 
 **BLS key pair (Leios voting/certification key)**
@@ -497,7 +497,7 @@ cardano-cli dijkstra node key-gen-BLS \
 
 <br>
 
-## Step 8 - Create Operational Certificate
+### Step 8 - Create Operational Certificate
 We can find the starting KES period by running:
 
 ```
@@ -519,7 +519,7 @@ cardano-cli dijkstra node issue-op-cert \
 
 <br>
 
-## Step 9 - Create your pool's metadata JSON file
+### Step 9 - Create your pool's metadata JSON file
 Update the values below with your pool's information. 
 
 📝 **ticker** must be between 3-5 characters in length
@@ -571,7 +571,7 @@ cat leiosPoolMetaDataHash.txt
 
 ***
 
-## Step 10 - Register Stake Address and Pool
+### Step 10 - Register Stake Address and Pool
 Build both Stake and Pool certificates, then submit them in a single transaction.
 
 **Stake-address registration certificate:**
@@ -643,7 +643,7 @@ cardano-cli dijkstra transaction submit \
 
 <br>
 
-## Step 11 - Delegate Stake to Your Pool
+### Step 11 - Delegate Stake to Your Pool
 Build a delegation certificate and submit it in its own transaction.
 
 Create delegation cert by running:
@@ -687,7 +687,7 @@ cardano-cli dijkstra transaction submit \
 
 <br>
 
-## Step 12 - Get bech32 Id
+### Step 12 - Get bech32 Id
 
 ```
 cardano-cli dijkstra stake-pool id --output-bech32 --cold-verification-key-file cold.vkey
@@ -724,7 +724,7 @@ cardano-cli dijkstra query stake-address-info --address "$STAKE_ADDR"
 
 <br>
 
-## Step 13 - Update your `dingo.yaml` with the new KES key, VRF key and Operational Certificate
+### Step 13 - Update your `dingo.yaml` with the new KES key, VRF key and Operational Certificate
 
 Stop the Dingo node by running:
 ```
@@ -753,7 +753,7 @@ sudo nano /etc/dingo/dingo.yaml
 
 <br>
 
-## Step 14 - Start Dingo Node
+### Step 14 - Start Dingo Node
 
 ```
 sudo systemctl start dingo
@@ -763,7 +763,7 @@ sudo systemctl start dingo
 
 <br>
 
-## Step 15 - Check Status
+### Step 15 - Check Status
 
 Verify that Dingo is running:
 
@@ -787,7 +787,7 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-### Congratulations! You have a Leios Dingo Node running on the Musashi Testnet.
+#### Congratulations! You have a Leios Dingo Node running on the Musashi Testnet.
 
 ***
 
