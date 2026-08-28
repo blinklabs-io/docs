@@ -77,11 +77,11 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 <br>
 
-### Step 3 -Download the latest Cardano CLI binary 
+### Step 3 -Download the latest Cardano-CLI binary 
 
-First, go to the Cardano CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
+First, go to the Cardano-CLI repo <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a> page.
 
-Download the Cardano CLI binary and run the following command:
+Download the Cardano-CLI binary and run the following command:
 
 
 ⚠️ Adjust the link path to the correct path for the version you want to download. 
@@ -115,19 +115,11 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 <br>
 
-We need the Shelley Genesis JSON file to run some of our CLI commands.
+**We need the Shelley Genesis JSON file to run some of our CLI commands.** 
 
-We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/leios/` by running the following command in our `$DINGO_HOME` directory:
-
+For this example, we will use the following directory structure `$DINGO_HOME/config/leios/`. The following command will create the directory and move into that directory:
 ```
-cd $DINGO_HOME
-mkdir -p config/leios
-```
-
-Next, navigate to the `config/leios` folder and download the Cardano Shelley Genesis file.
-
-```
-cd config/leios
+mkdir -p "$DINGO_HOME/config/leios" && cd "$DINGO_HOME/config/leios"
 ```
 
 To download the Shelley Genesis file, run:
@@ -191,27 +183,30 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 
 > 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
 
+***
 
 **To help with initial sync, we will use the Kleioscan explorer to find peers to connect to.**
 
-Go to <a href="https://kleioscan.com/#/musashi/pools" target="_blank">https://kleioscan.com/#/musashi/pools</a>
+- Go to <a href="https://kleioscan.com/#/musashi/pools" target="_blank">https://kleioscan.com/#/musashi/pools</a>
 
 <img src="/dingo-kleio-explorer-pools.png"
      alt="dingo-kleio-explorer-pools"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
      
-Click on some of your SPO friends and copy 📝 their public IPs and Ports
+- Click on some of your SPO friends and copy 📝 their public IPs and Ports
 
 <img src="/dingo-kleio-explorer-pool-relay-example.png"
      alt="dingo-kleio-explorer-pool-relay-example"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Use the IPs and Ports to edit your `localRoots` in your `topology.json` file:
+- Use the IPs and Ports to edit your `localRoots` in your `topology.json` file by running:
 ```
 sudo nano topology.json
 ```
 
-Edit `localRoots` adding your friends' pools. For this example, we just added 3 pools.
+- Then edit `localRoots` section by adding your friends' pools. (For this example, we just added 3 pools.)
+
+***Example `topology` file:*** 
 ```
 {
   "bootstrapPeers": [
@@ -253,6 +248,10 @@ Edit `localRoots` adding your friends' pools. For this example, we just added 3 
 ```
 
 Save and exit.
+
+***
+
+<br>
 
 ### Step 6 - Create `dingo.service` Unit File
 
