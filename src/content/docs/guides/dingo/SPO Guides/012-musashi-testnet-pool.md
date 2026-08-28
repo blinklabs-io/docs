@@ -122,9 +122,9 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 **We need the Shelley Genesis JSON file to run some of our CLI commands.** 
 
-For this example, we will use the following directory structure `$DINGO_HOME/config/leios/`. The following command will create the directory and move into that directory:
+For this example, we will use the following directory structure `$DINGO_HOME/config/`. The following command will create the directory and move into that directory:
 ```
-mkdir -p "$DINGO_HOME/config/leios" && cd "$DINGO_HOME/config/leios"
+mkdir -p "$DINGO_HOME/config" && cd "$DINGO_HOME/config"
 ```
 
 To download the Shelley Genesis file, run:
@@ -157,7 +157,7 @@ relayPort: 3010
 socketPath: \"$DINGO_HOME/dingo.socket\"
 
 # Path to the topology configuration file for Cardano node
-topology: \"$DINGO_HOME/config/leios/topology.json\"
+topology: \"$DINGO_HOME/config/topology.json\"
 
 EOF"
 ```
@@ -180,9 +180,9 @@ sudo nano /etc/dingo/dingo.yaml
 ### Step 5 - Setup Topology File
 ***If you plan a standard setup of a BP behind relays you can skip this step***
 
-First download the topology file to your `$DINGO_HOME/config/leios` directory by running:
+First download the topology file to your `$DINGO_HOME/config` directory by running:
 ```
-cd $DINGO_HOME/config/leios
+cd $DINGO_HOME/config
 wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 ```
 
@@ -206,7 +206,7 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
 
 - Use the IPs and Ports to edit your `localRoots` in your `topology.json` file by running:
 ```
-sudo nano topology.json
+sudo nano $DINGO_HOME/config/topology.json
 ```
 
 - Then edit `localRoots` section by adding your friends' pools. (For this example, we just added 3 pools.)
@@ -501,7 +501,7 @@ cardano-cli dijkstra node key-gen-BLS \
 We can find the starting KES period by running:
 
 ```
-slotsPerKESPeriod=$(jq -r '.slotsPerKESPeriod' "$DINGO_HOME/config/leios/shelley-genesis.json")
+slotsPerKESPeriod=$(jq -r '.slotsPerKESPeriod' "$DINGO_HOME/config/shelley-genesis.json")
 slotNo=$(cardano-cli query tip | jq -r '.slot')
 kesPeriod=$(( slotNo / slotsPerKESPeriod ))
 ```
