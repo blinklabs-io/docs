@@ -143,7 +143,14 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/shelley-genesis.js
 
 Dingo ships with embedded Cardano network configurations (genesis files and config.json) for Musashi, so you do not need to download them separately.
 
-The `$DINGO_HOME` variable will automatically expand to your home directory path:
+- First create directory:
+```
+sudo mkdir -p /etc/dingo
+```
+
+- Then create `dingo.yaml` file:
+
+> The `$DINGO_HOME` variable will automatically expand to your home directory path.
 
 ```
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
