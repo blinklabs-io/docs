@@ -359,15 +359,12 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 ## Section 2 - Musashi Testnet Pool Registration
 
-> Make sure the node is fully synced before proceeding. Run the command to see if the node is 100% synced.
+> Make sure the node is fully synced before proceeding.
+> To follow the logs in real time:
 > 
 > ```
-> cardano-cli query tip
+> sudo journalctl -u dingo -f
 > ```
-
-***
-
-<br>
 
 ### Step 1 - Add Environment Variables
 
@@ -399,6 +396,16 @@ source ~/.bashrc
 >
 > ```
 > echo $CARDANO_NODE_SOCKET_PATH
+> ```
+
+***
+
+<br>
+
+Run this command to see if the node is 100% synced.
+> 
+> ```
+> cardano-cli query tip
 > ```
 
 ***
