@@ -130,7 +130,6 @@ description: Lista de Comandos de Adder.
 
 > comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'
 >
-> Adder elimina los espacios al principio y al final de cada valor e ignora las entradas vacías. Si no queda ningún punto no vacío, aplica el comportamiento de `--input-chainsync-intersect-tip`. Los valores no vacíos con formato incorrecto generan un error.
 <br />
 
 ```text
