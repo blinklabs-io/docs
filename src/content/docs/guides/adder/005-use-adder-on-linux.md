@@ -6,7 +6,6 @@ description: How to use Adder on Linux.
 
 ## Download Adder binary
 
-
 You can download the latest Adder release from the <a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a> page.
 
 We will download the Adder binary by running the following command. ⚠️ Adjust download link to the most current version.
