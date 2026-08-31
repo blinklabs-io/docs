@@ -24,16 +24,16 @@ Esta guía describe cómo instalar y usar Adder en Windows. La instalación empa
    - `%ProgramFiles%\Adder\adder-tray.exe`: aplicación de bandeja del sistema.
 
 El MSI no agrega el ejecutable de línea de comandos a `PATH`. Tampoco crea una
-tarea programada ni una entrada de inicio automático. Cuando la opción de inicio
-automático se activa durante la configuración inicial, `Adder Tray` gestiona el
-registro de inicio por usuario.
+tarea programada ni una entrada de inicio automático. `Adder Tray` gestiona el
+registro de inicio por usuario cuando la configuración inicial activa la opción
+de inicio automático.
 
 ## Alternativa: ejecutable independiente
 
 El ejecutable independiente `.exe` sigue siendo una alternativa válida para usar
-Adder desde la línea de comandos sin la instalación MSI. Descárguelo desde
-<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>
-si se utiliza esta modalidad.
+Adder desde la línea de comandos sin la instalación MSI. La modalidad
+independiente utiliza el archivo disponible en
+<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>.
 
 ### Paso 1 - Abrir una línea de comandos en Windows
 
@@ -82,7 +82,7 @@ El editor muestra casillas para las categorías de notificación. Active o desac
 El botón `Apply & Restart` (Aplicar y reiniciar) guarda los objetivos y las
 preferencias de Adder Tray, aplica los cambios, reinicia Adder y actualiza las
 reglas y el límite de notificaciones en ejecución. El botón `Cancel` (Cancelar)
-descarta las modificaciones que todavía no se hayan guardado.
+descarta las modificaciones sin guardar.
 
 La sección `Advanced — Rate Limiting` permite definir el máximo de notificaciones por ventana y la duración de la ventana. La duración acepta valores como `5s`, `30s` o `1m`. Los campos vacíos hacen que Adder Tray use los valores predeterminados de una notificación por ventana de cinco segundos. Un máximo negativo desactiva la agrupación de notificaciones.
 
