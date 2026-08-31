@@ -367,7 +367,7 @@ description: Lista de Comandos de Adder.
 >
 > La opción `--json` emite un resultado de validación legible por máquinas.
 >
-> Consulte la [referencia JSON de notificaciones](./007-notification_json) para obtener el esquema.
+> Consulte la [referencia JSON de notificaciones](./007-notification-json) para obtener el esquema.
 
 ***
 
