@@ -75,7 +75,6 @@ description: Adderコマンドのリスト。
 > 6. `input.drep-update` - DRepの更新イベント。
 > 7. `input.drep-retirement` - DRepの退任イベント。
 >
-> 完全なイベントスキーマとフィルターの説明は、[ガバナンスページ](./007-governance)を参照してください。
 >
 
 ***
