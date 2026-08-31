@@ -289,7 +289,7 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica la ruta al archivo de cuenta de servicio
-> La opción `--output-push-serviceAccountFilePath` debe contener una ruta no vacía cuando se selecciona `--output push`. El archivo JSON de cuenta de servicio indicado debe contener `project_id` como una cadena no vacía. La configuración falla si `project_id` falta, no es una cadena o está vacío.
+> Cuando se selecciona `--output push`, `--output-push-serviceAccountFilePath` debe especificar una ruta no vacía. El JSON de cuenta de servicio indicado debe incluir `project_id` como una cadena no vacía. La configuración falla cuando falta `project_id`, no es una cadena o está vacío.
 <br />
 
 ```text
