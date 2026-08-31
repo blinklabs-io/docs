@@ -294,7 +294,6 @@ description: List of Adder Commands.
 >
 > The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
 >
-> Configure the equivalent YAML option as `plugins.output.push.serviceAccountFilePath`.
 <br />
 
 ```
