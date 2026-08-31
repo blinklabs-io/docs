@@ -5,7 +5,7 @@ description: Adderのinput.governanceイベントとガバナンスフィルタ�
 
 # ガバナンスイベント
 
-Adderは、Cardanoブロックチェーン上のオンチェーンガバナンスアクションと証明書の活動を構造化イベントとして出力します。これらのイベントにはConway時代のガバナンスデータが含まれ、提案手続き、投票活動、DRepの登録、投票委任、憲法委員会の変更を監視できます。
+Adderは、Cardanoブロックチェーン上のオンチェーンガバナンスアクションと証明書の活動を構造化イベントとして出力します。AdderはこれらのイベントにConway時代のガバナンスデータを含め、提案手続き、投票活動、DRepの登録、投票委任、憲法委員会の変更を監視できるようにします。
 
 ## 概要
 
@@ -23,7 +23,7 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 
 ### Contextフィールド
 
-`context`オブジェクトは、ガバナンスデータが見つかったトランザクションとチェーン上の位置を識別します。
+`context`オブジェクトは、Adderがガバナンスデータを検出したトランザクションとチェーン上の位置を識別します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
@@ -35,12 +35,12 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 
 ### Payloadフィールド
 
-`payload`オブジェクトには、ブロック情報とガバナンス関連項目の配列が含まれます。Adderは空の配列を省略します。
+Adderは`payload`オブジェクトにブロック情報とガバナンス関連項目の配列を含め、空の配列を省略します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `blockHash` | string | トランザクションを含むブロックの16進数エンコード済みハッシュ。 |
-| `transactionCbor` | string | 16進数形式のトランザクションの生CBOR。`--input-chainsync-include-cbor`を指定すると含まれます。 |
+| `transactionCbor` | string | 16進数形式のトランザクションの生CBOR。`--input-chainsync-include-cbor`を指定すると、Adderはこの値を含めます。 |
 | `proposalProcedures` | array | このトランザクションで提案されたガバナンスアクションの一覧。 |
 | `votingProcedures` | array | このトランザクションで行われた投票の一覧。 |
 | `drepCertificates` | array | DRepの登録、更新、または退任の証明書の一覧。 |
@@ -53,12 +53,12 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 
 ### `proposalProcedures[]`
 
-新しい提案である、提案されたガバナンスアクションを表します。
+新しいガバナンスアクションを提案する手続きを表します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `index` | number | トランザクション内の提案のインデックス。 |
-| `deposit` | number | この提案のためにロックされたデポジット額（Lovelace）。 |
+| `deposit` | number | この提案のためにロックするデポジット額（Lovelace）。 |
 | `rewardAccount` | string | 提案の完了時にAdderがデポジットを返還するステークまたは報酬アドレス。 |
 | `actionType` | string | `ParameterChange`、`HardForkInitiation`、`TreasuryWithdrawal`、`NoConfidence`、`UpdateCommittee`、`NewConstitution`、`Info`のいずれか。 |
 | `actionData` | object | アクション固有のデータ。アクションに対応するキー（例: `parameterChange`、`treasuryWithdrawal`、`newConstitution`）を使い、ちょうど1つのフィールドに値が入ります。 |
@@ -66,7 +66,7 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 
 ### `votingProcedures[]`
 
-有効な提案に対して行われた投票を表します。
+有効な提案に対する投票を表します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
@@ -101,8 +101,8 @@ DRepの状態に対する変更を表します。
 | `drepType` | string | 委任先。`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュ（`Abstain`または`NoConfidence`では省略）。 |
 | `drepId` | string | Bech32形式のDRep ID（`Abstain`または`NoConfidence`では省略）。 |
-| `poolKeyHash` | string | プールキーハッシュ（ステークと投票を組み合わせた委任タイプの場合だけ含まれます）。 |
-| `deposit` | number | デポジット額（Lovelace）。登録を伴う委任タイプの場合だけ含まれます。 |
+| `poolKeyHash` | string | プールキーハッシュ（ステークと投票を組み合わせた委任タイプの場合にだけAdderは含めます）。 |
+| `deposit` | number | デポジット額（Lovelace）。登録を伴う委任タイプの場合にだけAdderは含めます。 |
 
 ### `committeeCertificates[]`
 
@@ -112,8 +112,8 @@ DRepの状態に対する変更を表します。
 | :--- | :--- | :--- |
 | `certificateType` | string | `AuthHot`（ホット資格情報を認証）または`ResignCold`（コールド資格情報を辞任）のいずれか。 |
 | `coldCredential` | string | 委員会のコールド資格情報ハッシュ（16進数エンコード済み）。 |
-| `hotCredential` | string | 委員会のホット資格情報ハッシュ（16進数エンコード済み）。`AuthHot`の場合だけ含まれます。 |
-| `anchor` | object | オプションの`{ "url", "dataHash" }`メタデータ。`ResignCold`の場合だけ含まれます。 |
+| `hotCredential` | string | 委員会のホット資格情報ハッシュ（16進数エンコード済み）。`AuthHot`の場合にだけAdderは含めます。 |
+| `anchor` | object | オプションの`{ "url", "dataHash" }`メタデータ。`ResignCold`の場合にだけAdderは含めます。 |
 
 ---
 
@@ -182,7 +182,7 @@ DRep証明書タイプごとに、次のイベントタイプ値を出力しま�
 | `Update` | `input.drep-update` |
 | `Deregistration` | `input.drep-retirement` |
 
-従来の`chainsync.drep.registration`、`chainsync.drep.update`、`chainsync.drep.deregistration`は使用せず、表に示す現行のイベントタイプ値を使用します。証明書の用語としては`Deregistration`を使用しますが、該当イベントのワイヤー値には`input.drep-retirement`を使用します。
+従来の`chainsync.drep.registration`、`chainsync.drep.update`、`chainsync.drep.deregistration`は現行のイベントタイプ値に置き換わります。証明書の用語には`Deregistration`を使用し、ワイヤー値は表の対応関係に従います。
 
 ---
 
