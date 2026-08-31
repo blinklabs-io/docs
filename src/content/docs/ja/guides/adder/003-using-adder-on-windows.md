@@ -7,8 +7,6 @@ description: WindowsでAdderを使用する方法。
 
 このガイドでは、WindowsでAdderを使用する方法を説明します。以下のセクションでは、Adderの使用例を示します。これらはAdderの機能に慣れるためのサンプルであることを覚えておいてください。Adderの真の力は、あなたの想像力によって解き放たれます。
 
-> このガイドでは、署名済みリリースのWindows MSIを使用する手順を説明します。スタンドアロンの`adder.exe`を使用する手順は、MSIとは別の代替手段として後述します。
-
 > このガイドでは、<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>からAdder exeをダウンロード済みであることを前提としています。exeをダウンロードしていない場合は、[クイックスタート](../002-quick-start-overview)を参照してください
 
 ## ステップ1 - Windowsでコマンドプロンプトを開く
