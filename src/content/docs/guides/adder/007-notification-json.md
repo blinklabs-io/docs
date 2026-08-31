@@ -7,7 +7,7 @@ description: Configure and consume Adder's headless notification JSON output.
 
 ## Overview
 
-This guide describes Adder's `notify-json` output. Adder writes one JSON object per line to standard output, so a supervisor or another process can consume connection status and target aware notification records without a graphical interface.
+This guide describes Adder's `notify-json` output. Adder writes one JSON object per line to standard output, so a supervisor or another process can consume connection status and target-aware notification records without a graphical interface.
 
 The output uses the same notification rules and rate limiting as the tray. A versioned JSON configuration controls the network, monitoring targets, alert categories, rate limits, and connection staleness threshold.
 
@@ -15,7 +15,7 @@ The output uses the same notification rules and rate limiting as the tray. A ver
 
 - A Cardano node that Adder can reach through the `chainsync` input.
 - A JSON configuration file that follows the `schemaVersion` 1 contract in this guide.
-- A process that reads standard output as a line oriented JSON stream and keeps standard error separate.
+- A process that reads standard output as a line-oriented JSON stream and keeps standard error separate.
 
 See the [Command Reference Guide](./006-command_list.md) for the other Adder command line options.
 
@@ -34,7 +34,7 @@ adder \
   --output-notify-json-config ./notification.json
 ```
 
-The `--output-notify-json-config` option identifies the versioned notification JSON file. The `notify-json` output requires `chainsync`; it does not support the `mempool` input.
+The `--output-notify-json-config` option identifies the versioned notification JSON file.
 
 ### Validate a configuration
 
@@ -50,9 +50,9 @@ For a valid file, the command writes:
 notification configuration is valid
 ```
 
-For an invalid file, the command writes one `field: message` line for each problem and exits with a failure. The validator also fails when the `--config` path is missing, the file does not exist, the JSON is malformed, the file contains an unknown field or more than one top level JSON value, or a value violates the configuration rules.
+For an invalid file, the command writes one `field: message` line for each problem and exits with a failure. The validator also fails when the `--config` path is missing, the file does not exist, the JSON is malformed, the file contains an unknown field or more than one top-level JSON value, or a value violates the configuration rules.
 
-Add `--json` when a supervisor needs a machine readable result:
+Add `--json` when a supervisor needs a machine-readable result:
 
 ```shell
 adder notifications validate --config ./notification.json --json
@@ -76,7 +76,7 @@ The validator returns a failure even when it writes a JSON result with `"valid":
 
 ## Configuration schema
 
-The configuration file must contain JSON with `schemaVersion` `1` and these top level fields:
+The configuration file must contain JSON with `schemaVersion` `1` and these top-level fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -87,7 +87,7 @@ The configuration file must contain JSON with `schemaVersion` `1` and these top 
 | `rateLimit` | object | Sets the notification maximum and time window. |
 | `connectionStaleSeconds` | integer | Sets the interval after which Adder reports that no chain event has arrived. The value must range from `30` through `3600`. |
 
-Adder rejects unknown fields, including unknown fields inside the nested objects. The decoder also rejects multiple top level JSON values. Adder trims leading and trailing whitespace from network names, custom addresses, target identifiers, and match modes before it validates them. The file decoder does not fill omitted fields from `DefaultNotificationConfig`; a file must provide values that pass validation. Applications that explicitly use that helper receive its default configuration, including a 90 second connection staleness interval.
+Adder rejects unknown fields, including unknown fields inside the nested objects. The configuration reader also rejects multiple top-level JSON values. Adder trims leading and trailing whitespace from network names, custom addresses, target identifiers, and match modes before it validates them. The file reader does not fill omitted fields from `DefaultNotificationConfig`; a file must provide values that pass validation. Applications that explicitly use that helper receive its default configuration, including a 90-second connection staleness interval.
 
 ### Network
 
@@ -152,7 +152,7 @@ The `rateLimit` object supports these fields:
 | `max` | integer | Accepts `-1` to disable the limit, or any value of `0` or greater. Values below `-1` fail validation. |
 | `windowSeconds` | integer | The rate limit window in seconds. The value must be greater than `0`. |
 
-Adder applies this limit to notification requests using the same notification engine that the tray uses.
+Adder applies this limit to notification requests using the same notification rules that the tray uses.
 
 ### Complete example
 
@@ -262,11 +262,11 @@ For example:
 
 ## Startup compatibility checks
 
-Before the pipeline starts, Adder performs these checks when `--output notify-json` is selected:
+Before Adder starts processing, it performs these checks when `--output notify-json` is selected:
 
 1. Select `chainsync` as the input. Adder rejects any other input.
 2. Set a nonempty `--output-notify-json-config` path. Adder rejects an empty path or a configuration that fails to load or validate.
-3. Make `network.name` equal to `--input-chainsync-network`. Adder rejects a mismatch before it starts the pipeline.
-4. When `network.customAddress` has a value, make its normalized `host:port` equal to `--input-chainsync-address`. Adder normalizes host names without regard to case, canonicalizes IP addresses, and compares the port number. Adder rejects an invalid or mismatched address before it starts the pipeline.
+3. Make `network.name` equal to `--input-chainsync-network`. Adder rejects a mismatch before it starts processing.
+4. When `network.customAddress` has a value, make its normalized `host:port` equal to `--input-chainsync-address`. Adder normalizes host names without regard to case, canonicalizes IP addresses, and compares the port number. Adder rejects an invalid or mismatched address before it starts processing.
 
 The startup checks prevent the notification rules from monitoring a network or custom node different from the one that supplies chain events.
