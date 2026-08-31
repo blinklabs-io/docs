@@ -30,8 +30,6 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-The MSI installs both Adder binaries under `%ProgramFiles%\Adder`: the CLI at `%ProgramFiles%\Adder\adder.exe` and the tray GUI at `%ProgramFiles%\Adder\adder-tray.exe`. The `Adder` shortcut in the Windows Start Menu launches `adder-tray.exe`. The installer does not register a Scheduled Task. The first-run tray setup controls startup registration for the current user.
-
 ***
 
 ### Step 2 - Launch Adder
@@ -72,13 +70,9 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Use the `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies` sections to choose what to monitor. Add multiple values to any section. The wizard validates each value and reports malformed or duplicate entries inline.
+Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
 
-Enable `Monitor Everything` to ignore all per-target lists, or leave it disabled and add at least one wallet, DRep, pool, asset, or policy. The wizard does not accept an empty target configuration.
-
-Within each section, any saved value can match an event. Use the visible connectors between populated sections to join those groups with `OR` or `AND`.
-
-For this example, enter a Pool ID and a DRep ID to follow. 
+For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
 
 <img src="/adder-windows-config-pool-id-drep-id.webp"
      alt="adder-windows-config-pool-id-drep-id"
