@@ -28,8 +28,6 @@ Configure the socket path with either the CLI flag or the custom environment var
 export CARDANO_NODE_SOCKET_PATH=/path/to/cardano-node.socket
 ```
 
-The CLI flag is `--input-chainsync-socket-path`. The supported custom environment variable is `CARDANO_NODE_SOCKET_PATH`.
-
 ### Resolve a network mismatch
 
 Set the network to the same Cardano network that the node serves. Use the network name or the node's numeric network magic:
