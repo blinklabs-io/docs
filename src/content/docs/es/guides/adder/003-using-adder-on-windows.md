@@ -5,51 +5,84 @@ description: Como usar Adder en Windows.
 
 # Usando Adder en Windows
 
-Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te mostraremos ejemplos de como usar Adder. Recuerda que estos son ejemplos para familiarizarte con el tipo de cosas que Adder es capaz de hacer. El verdadero poder de Adder puede ser desbloqueado por tu imaginacion.
+Esta guía describe cómo instalar y usar Adder en Windows. La instalación empaquetada recomendada utiliza el MSI firmado de la versión publicada.
 
-> Nota: esta guia asume que has descargado el exe de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si no has descargado el exe, por favor consulta nuestro [Inicio Rapido](../002-quick-start-overview)
+## Instalar Adder con el MSI de la versión publicada
 
-## Paso 1 - Abrir una Linea de Comandos en Windows
+1. Descargue el archivo MSI firmado correspondiente a la arquitectura de Windows:
+   `amd64` para Windows x64 o `arm64` para Windows ARM64. Los archivos siguen el
+   formato `adder-<version>-windows-<arch>.msi`.
 
-Ahora que tienes el archivo exe de Adder descargado, necesitamos abrir una linea de comandos. Aqui es donde mas tarde alimentaremos a Adder con filtros y comandos para que nos notifique de los eventos que queremos rastrear.
+2. Abra o ejecute el archivo `.msi` y complete el instalador de Windows.
 
+3. Abra el menú Inicio y seleccione `Adder`. El acceso directo inicia `Adder Tray`
+   y su asistente de configuración.
 
+4. Verifique que el instalador haya colocado los dos ejecutables en las rutas
+   siguientes:
+   - `%ProgramFiles%\Adder\adder.exe`: ejecutable de línea de comandos.
+   - `%ProgramFiles%\Adder\adder-tray.exe`: aplicación de bandeja del sistema.
 
-Para abrir una linea de comandos en Windows, ve a tu menu de inicio de Windows
+El MSI no agrega el ejecutable de línea de comandos a `PATH`. Tampoco crea una
+tarea programada ni una entrada de inicio automático. Cuando la opción de inicio
+automático se activa durante la configuración inicial, `Adder Tray` gestiona el
+registro de inicio por usuario.
+
+## Alternativa: ejecutable independiente
+
+El ejecutable independiente `.exe` sigue siendo una alternativa válida para usar
+Adder desde la línea de comandos sin la instalación MSI. Descárguelo desde
+<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>
+si se utiliza esta modalidad.
+
+### Paso 1 - Abrir una línea de comandos en Windows
+
+Abra el menú Inicio de Windows.
 
 ![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
-
-
-Luego escribe `cmd` en el cuadro de busqueda y haz clic en `Abrir`
+Escriba `cmd` en el cuadro de búsqueda y seleccione `Abrir`.
 
 ![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
 
-## Paso 2 - Obtener la ruta del exe de Adder
+### Paso 2 - Obtener la ruta del ejecutable independiente de Adder
 
-A continuacion, necesitaremos obtener la ruta del archivo exe de Adder que descargamos para poder ejecutarlo en la linea de comandos.
+Obtenga la ruta del archivo `.exe` descargado para ejecutarlo desde la línea de
+comandos.
 
-En este ejemplo descargamos el exe de Adder en nuestro escritorio, asi que podemos hacer clic derecho en el exe de Adder y copiar la ruta.
+Por ejemplo, haga clic derecho en el ejecutable de Adder del escritorio y copie
+la ruta.
 
-Toma nota de la ruta, la necesitaremos mas adelante
+Conserve la ruta para el paso siguiente.
 
 ![adder-exe-path](/adder-exe-path.png)
 
-## Paso 3 - Ejecutar Adder en la Linea de Comandos
+### Paso 3 - Ejecutar Adder en la línea de comandos
 
-Ahora que tenemos la ruta del exe de Adder, escribe la ruta o pegala si copiaste la ruta en el paso anterior.
+Escriba la ruta del ejecutable o péguela si la copió en el paso anterior.
 
 ![adder-cmd-paste-path](/adder-cmd-paste-path.png)
 
 ## Configurar Adder Tray
 
-El asistente de Adder Tray organiza los objetivos de monitoreo en las listas `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. Cada lista admite varias entradas.
+Después de completar la configuración inicial, haga clic derecho en el icono de
+Adder Tray y seleccione `Notification Rules...`.
+
+El editor permite modificar las cinco listas de objetivos de monitoreo:
+`Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. Cada lista admite varias
+entradas. Al eliminar un objetivo, el editor solicita confirmación antes de
+quitarlo.
 
 `Monitor Everything` y las listas de objetivos son opciones mutuamente excluyentes. Con `Monitor Everything` activado, Adder Tray monitorea todos los eventos e ignora las listas. Si la opción permanece desactivada, el asistente exige al menos un objetivo y rechaza los valores vacíos, mal formados o duplicados.
 
-Adder Tray combina los valores de cada lista con `OR`. El asistente une los grupos con contenido mediante `OR` o `AND`. `OR` acepta una coincidencia en cualquiera de los grupos; `AND` exige que el evento coincida con todos los grupos unidos. Una combinación `AND` entre objetivos de bloques, transacciones y gobernanza nunca coincide, por lo que `OR` permite combinar esos tipos de eventos.
+Adder Tray combina los valores de cada lista con `OR`. El editor muestra los conectores `OR` y `AND` entre los grupos con contenido. `OR` acepta una coincidencia en cualquiera de los grupos; `AND` exige que el evento coincida con todos los grupos unidos. Una combinación `AND` entre objetivos de bloques, transacciones y gobernanza nunca coincide, por lo que `OR` permite combinar esos tipos de eventos.
 
-El asistente muestra las categorías de notificación según los grupos que la configuración selecciona. Adder Tray muestra las alertas sobre problemas de conexión por separado y guarda todas las preferencias al aplicar la configuración.
+El editor muestra casillas para las categorías de notificación. Active o desactive cada categoría según las alertas de escritorio requeridas. Adder Tray muestra las alertas sobre problemas de conexión por separado.
+
+El botón `Apply & Restart` (Aplicar y reiniciar) guarda los objetivos y las
+preferencias de Adder Tray, aplica los cambios, reinicia Adder y actualiza las
+reglas y el límite de notificaciones en ejecución. El botón `Cancel` (Cancelar)
+descarta las modificaciones que todavía no se hayan guardado.
 
 La sección `Advanced — Rate Limiting` permite definir el máximo de notificaciones por ventana y la duración de la ventana. La duración acepta valores como `5s`, `30s` o `1m`. Los campos vacíos hacen que Adder Tray use los valores predeterminados de una notificación por ventana de cinco segundos. Un máximo negativo desactiva la agrupación de notificaciones.
 
