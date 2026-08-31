@@ -7,43 +7,51 @@ description: WindowsでAdderを使用する方法。
 
 このガイドでは、WindowsでAdderを使用する方法を説明します。以下のセクションでは、Adderの使用例を示します。これらはAdderの機能に慣れるためのサンプルであることを覚えておいてください。Adderの真の力は、あなたの想像力によって解き放たれます。
 
-> このガイドでは、<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>からAdder exeをダウンロード済みであることを前提としています。exeをダウンロードしていない場合は、[クイックスタート](../002-quick-start-overview)を参照してください
+> このガイドでは、署名済みリリースのWindows MSIを使用する手順を説明します。スタンドアロンの`adder.exe`を使用する手順は、MSIとは別の代替手段として後述します。
 
-## ステップ1 - Windowsでコマンドプロンプトを開く
+## ステップ1 - Windows用MSIを選択
 
-Adder exeファイルをダウンロードしたので、コマンドラインプロンプトを開く必要があります。ここで後ほど、追跡したいイベントについてAdderにフィルターとコマンドを入力します。
+1. Adderの署名済みリリースから、Windowsのプロセッサに対応するMSIをダウンロードします。x64の場合は`adder-<version>-windows-amd64.msi`、arm64の場合は`adder-<version>-windows-arm64.msi`を選択します。
+2. ダウンロードしたMSIを開き、インストーラーの手順に従ってインストールします。
 
+## ステップ2 - Adderを起動
 
+1. Windowsのスタートメニューから`Adder`を起動します。インストーラーは、次の2つの実行ファイルを`%ProgramFiles%\Adder`に配置します。
 
-コマンドプロンプトを開くには、Windowsのスタートメニューに移動します
+   - `%ProgramFiles%\Adder\adder.exe`: コマンドライン版
+   - `%ProgramFiles%\Adder\adder-tray.exe`: 通知領域版
+
+2. スタートメニューの`Adder`ショートカットは`adder-tray.exe`を起動し、トレイとセットアップウィザードを開きます。
+
+MSIはコマンドライン版を`PATH`に追加しません。コマンドライン版を直接実行する場合は、`%ProgramFiles%\Adder\adder.exe`のパスを指定します。MSIはScheduled Taskや自動起動項目も作成しません。ログオン時のトレイ自動起動は、トレイの初回セットアップがユーザー単位で設定します。
+
+## スタンドアロン`.exe`を使う場合
+
+MSIを使用しない場合は、ダウンロードしたスタンドアロンの`adder.exe`をコマンドプロンプトから実行できます。この手順では、MSIのインストール先ではなく、ダウンロードしたファイルのパスを使用します。
+
+### ステップ1 - Windowsでコマンドプロンプトを開く
+
+Windowsのスタートメニューからコマンドプロンプトを開きます。ここで、追跡するイベントのフィルターとコマンドをAdderに入力します。
 
 ![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
-
-
-次に、検索ボックスに`cmd`と入力し、`開く`をクリックします
+検索ボックスに`cmd`と入力し、`開く`をクリックします。
 
 ![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
 
-## ステップ2 - Adder exeのパスを取得
+### ステップ2 - Adder exeのパスを取得
 
-次に、コマンドラインで実行できるように、ダウンロードしたAdder exeファイルのパスを取得する必要があります。
-
-この例では、Adder exeをデスクトップにダウンロードしたので、Adder exeを右クリックしてパスをコピーできます。
-
-パスをメモしてください。今後必要になります
+ダウンロードした`adder.exe`を右クリックしてパスをコピーします。この例では、ファイルをデスクトップにダウンロードしています。
 
 ![adder-exe-path](/adder-exe-path.png)
 
-## ステップ3 - コマンドプロンプトでAdderを実行
+### ステップ3 - コマンドプロンプトでAdderを実行
 
-Adder exeのパスが取得できたので、パスを入力するか、前のステップでコピーした場合は貼り付けます。
+コマンドプロンプトに`adder.exe`のパスを入力するか、コピーしたパスを貼り付けて実行します。
 
 ![adder-cmd-paste-path](/adder-cmd-paste-path.png)
 
-### おめでとうございます！
-
-これで、特定の情報を追跡し、通知方法を選択するために、フィルターとコマンドを使用してAdderを実行する準備ができました。
+これで、フィルターとコマンドを使用してAdderを実行できます。
 
 ## Adder Trayの監視と通知を設定する
 
