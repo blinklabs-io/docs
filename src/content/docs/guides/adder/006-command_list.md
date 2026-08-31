@@ -371,7 +371,6 @@ adder notifications validate --config <path> [--json]
 >
 > `--config <path>` is required. Normal output reports validity and errors. `--json` emits the machine-readable validation result.
 >
-> See the [notification JSON reference](./007-notification-json) for the configuration schema.
 
 ***
 
