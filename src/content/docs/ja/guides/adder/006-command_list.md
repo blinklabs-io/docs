@@ -363,7 +363,6 @@ description: Adderコマンドのリスト。
 adder notifications validate --config <path> [--json]
 ```
 
-> 通知JSON設定を検証します。`--config`は必須です。`--json`を指定すると、検証結果を機械可読形式で出力します。設定スキーマの詳細は[通知JSONリファレンス](./007-notification-json)を参照してください。
 
 ***
 
