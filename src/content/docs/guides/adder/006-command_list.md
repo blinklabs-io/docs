@@ -65,6 +65,10 @@ description: List of Adder Commands.
 ```
   
 > specifies event type to filter on
+>
+> For `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep`, and `--filter-type`, Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
+>
+> See the [governance reference](./governance) for the event schema and filter semantics.
 > 
 > **Event Types:**
 > 1. `input.block` - A new block was observed.
