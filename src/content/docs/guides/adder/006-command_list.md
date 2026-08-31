@@ -255,7 +255,7 @@ description: List of Adder Commands.
   
 > output plugin to use, 'list' to show available (default "log")
 >
-> Select `notify-json` to emit notification requests. It requires the `chainsync` input and a versioned notification JSON configuration.
+> The `notify-json` output emits notification requests. It requires the `chainsync` input and a versioned notification JSON configuration.
 <br />
 
 ```
