@@ -48,3 +48,14 @@ ADHOC=1 ./packaging/macos/build-pkg.sh
 
 La opción firma la aplicación local de forma ad hoc, pero el `.pkg` resultante sigue sin firma y Gatekeeper puede rechazarlo. El paquete local no sustituye al paquete `.pkg` firmado y notarizado de las versiones publicadas.
 
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

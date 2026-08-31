@@ -48,3 +48,14 @@ ADHOC=1 ./packaging/macos/build-pkg.sh
 ```
 
 This option ad hoc signs the app bundle for local development. The resulting `.pkg` remains unsigned, and Gatekeeper does not accept it. This local package is for development only; use the release package for distribution.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
