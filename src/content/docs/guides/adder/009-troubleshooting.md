@@ -53,6 +53,7 @@ Use only one network name variable for a setting. The generated variable for the
 ### Distinguish NtN and NtC over TCP
 
 Use the connection form that matches the protocol exposed by the Cardano node:
+Use the connection form that matches the protocol the Cardano node exposes:
 
 - For the default remote Node-to-Node (NtN) connection, set `--input-chainsync-address` to `host:port`:
 
@@ -89,11 +90,11 @@ Use the documented `--config` flag to select a YAML file:
 ./adder --config ./config.yaml
 ```
 
-Root configuration environment variables use names such as `INPUT`, `OUTPUT`, `API_PORT`, `LOGGING_LEVEL`, and `DEBUG_PORT`. Plugin options generate names from the plugin type, plugin name, and option name. For example, the chainsync network option uses `INPUT_CHAINSYNC_NETWORK`.
+Root configuration environment variables use names such as `INPUT`, `OUTPUT`, `API_PORT`, `LOGGING_LEVEL`, and `DEBUG_PORT`. Plugin options generate names from the plugin type, plugin name, and option name.
 
 Do not add an `ADDER_` prefix to any environment variable name. Use the exact names shown in the connection procedures.
 
-When a YAML file configures plugin options, use the documented plugin nesting and the option's expected YAML type. For example, `network` and `socket-path` accept strings, while `ntc-tcp` accepts a Boolean:
+When a YAML file configures plugin options, use the documented plugin nesting and the option's expected YAML type. For example, `network` and `socket-path` accept strings, while `ntc-tcp` accepts a `true` or `false` value:
 
 ```yaml
 plugins:
