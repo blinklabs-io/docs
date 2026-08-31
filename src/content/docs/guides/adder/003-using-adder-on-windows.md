@@ -30,7 +30,7 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-The MSI installs both Adder binaries under `%ProgramFiles%\Adder`: the CLI at `%ProgramFiles%\Adder\adder.exe` and the tray GUI at `%ProgramFiles%\Adder\adder-tray.exe`. The `Adder` shortcut in the Windows Start Menu launches `adder-tray.exe`. The installer does not register a Scheduled Task or a startup entry; the first-run tray setup registers startup for the current user.
+The MSI installs both Adder binaries under `%ProgramFiles%\Adder`: the CLI at `%ProgramFiles%\Adder\adder.exe` and the tray GUI at `%ProgramFiles%\Adder\adder-tray.exe`. The `Adder` shortcut in the Windows Start Menu launches `adder-tray.exe`. The installer does not register a Scheduled Task. The first-run tray setup controls startup registration for the current user.
 
 ***
 
