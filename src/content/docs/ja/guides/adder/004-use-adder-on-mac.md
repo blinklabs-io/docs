@@ -17,3 +17,14 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 
 - `/Applications` から `Adder` を開きます。
 - または、`ターミナル` で `open /Applications/Adder.app` を実行します.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
