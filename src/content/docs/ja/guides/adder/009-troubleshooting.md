@@ -34,7 +34,7 @@ description: Adder の接続、設定、フィルター、Push 通知、Webhook 
 
 ### ネットワーク設定の不一致
 
-接続後すぐにハンドシェイクが失敗し、ネットワークマジックの不一致が表示される場合は、Adder と Cardano ノードが異なるネットワークを使用しています。両方のネットワーク名をそろえます。
+接続後すぐにハンドシェイクが失敗し、ログにネットワークマジックの不一致が出る場合は、Adder と Cardano ノードが異なるネットワークを使用しています。両方のネットワーク名をそろえます。
 
 `--input-chainsync-network` または `--input-chainsync-network-magic` を使用します。`--input-chainsync-network-magic` は `--input-chainsync-network` の値より優先されます。
 
@@ -103,7 +103,7 @@ plugins:
 
 3. トランザクションイベントが出力されることを確認してから、フィルターを 1 つずつ追加します。
 
-`--filter-policy` と `--filter-asset` は `input.block` または `input.governance` イベントには適用されません。アドレスには有効な Bech32 の支払いアドレスまたはステークアドレスを、ポリシー ID には 56 文字の 16 進数文字列を指定します。
+Adder は `--filter-policy` と `--filter-asset` を `input.block` または `input.governance` イベントに適用しません。アドレスには有効な Bech32 の支払いアドレスまたはステークアドレスを、ポリシー ID には 56 文字の 16 進数文字列を指定します。
 
 ## 4. Push 通知の問題
 
@@ -134,7 +134,7 @@ cat /path/to/service-account.json | grep "project_id"
 }
 ```
 
-ファイルが存在しない、読み取れない、JSON として解析できない、または `project_id` がないか空文字列の場合、Push 出力は起動できません。
+Adder は、ファイルを読み取れない場合、JSON を解析できない場合、または `project_id` がないか空文字列の場合、Push 出力を起動しません。
 
 ### 無効な FCM トークンの削除
 
