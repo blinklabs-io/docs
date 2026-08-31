@@ -62,7 +62,7 @@ Use the connection form that matches the protocol exposed by the Cardano node:
   ./adder --input-chainsync-address host:port
   ```
 
-- For a Node-to-Client (NtC) socket exposed through TCP, set the same address and add `--input-chainsync-ntc-tcp`:
+- When the Cardano node exposes a Node-to-Client (NtC) socket through TCP, set the same address and add `--input-chainsync-ntc-tcp`:
 
   ```bash
   ./adder --input-chainsync-address host:port --input-chainsync-ntc-tcp
@@ -93,7 +93,7 @@ Use the documented `--config` flag to select a YAML file:
 
 Root configuration environment variables use names such as `INPUT`, `OUTPUT`, `API_PORT`, `LOGGING_LEVEL`, and `DEBUG_PORT`. Plugin options generate names from the plugin type, plugin name, and option name. For example, the chainsync network option uses `INPUT_CHAINSYNC_NETWORK`.
 
-Do not add an `ADDER_` prefix. For the chainsync socket and network name, use the exact supported names `CARDANO_NODE_SOCKET_PATH` and `CARDANO_NETWORK`.
+Do not add an `ADDER_` prefix to any environment variable name. Use the exact names shown in the connection procedures.
 
 When a YAML file configures plugin options, use the documented plugin nesting and the option's expected YAML type. For example, `network` and `socket-path` accept strings, while `ntc-tcp` accepts a Boolean:
 
@@ -173,7 +173,7 @@ curl -X POST \
   https://example.com/webhook
 ```
 
-The supported webhook controls are `--output-webhook-url`, `--output-webhook-format`, `--output-webhook-username`, `--output-webhook-password`, and `--output-webhook-tls-skip-verify`. Retry and backoff settings are internal defaults, not user-configurable CLI or YAML options.
+The supported controls above do not include retry or backoff values. Adder keeps those settings as internal defaults, so CLI and YAML cannot configure them.
 
 ---
 
