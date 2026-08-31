@@ -27,7 +27,7 @@ Si Adder rechaza la conexión o muestra un error como `no such file or directory
 
 ### B. Desajuste de red
 
-Si la conexión se establece pero el protocolo de enlace falla con un error como `handshake failed: network magic mismatch`, haga coincidir la red y el valor magic del nodo de Cardano con los de Adder.
+Si Adder establece la conexión pero no completa el protocolo de enlace y muestra un error como `handshake failed: network magic mismatch`, haga coincidir la red y el valor magic del nodo de Cardano con los de Adder.
 
 Configure el nombre de la red con `--input-chainsync-network` o con `INPUT_CHAINSYNC_NETWORK`. También puede usar la variable de entorno personalizada `CARDANO_NETWORK`:
 
@@ -91,7 +91,7 @@ Los filtros de tipos diferentes usan lógica `AND`; los valores de una misma lis
 
 ### A. Los eventos no atraviesan el filtro
 
-Si Adder se ejecuta pero no emite eventos, quite temporalmente los filtros adicionales y compruebe primero la emisión de eventos sin condiciones específicas. Los filtros `--filter-policy` y `--filter-asset` no se aplican a los eventos `input.block` ni `input.governance`.
+Si Adder se ejecuta pero no emite eventos, quite temporalmente los filtros adicionales y compruebe primero la emisión de eventos sin condiciones específicas. Los eventos `input.block` e `input.governance` no admiten los filtros `--filter-policy` ni `--filter-asset`.
 
 Ejecute un filtro mínimo por tipo:
 
@@ -107,7 +107,7 @@ Si este comando produce eventos, vuelva a agregar los demás filtros de uno en u
 
 ### A. Credenciales de FCM
 
-El plugin `push` necesita una ruta no vacía al archivo de cuenta de servicio. Configure `--output-push-serviceAccountFilePath` con la ruta del archivo JSON y confirme que el archivo se puede leer:
+El plugin `push` necesita una ruta no vacía al archivo de cuenta de servicio. Configure `--output-push-serviceAccountFilePath` con la ruta del archivo JSON y confirme que el sistema puede leer el archivo:
 
 ```bash
 cat /path/to/service-account.json | grep "project_id"
@@ -117,7 +117,7 @@ El archivo debe contener el campo JSON `project_id` como una cadena no vacía. U
 
 ### B. Fallos de entrega
 
-Si FCM indica que un token no está registrado (`UNREGISTERED`), elimine el token del registro mediante la ruta de API completa:
+Si FCM indica que no tiene registrado un token (`UNREGISTERED`), elimine el token del registro mediante la ruta de API completa:
 
 ```bash
 curl -X DELETE http://localhost:8080/v1/fcm/<token>
