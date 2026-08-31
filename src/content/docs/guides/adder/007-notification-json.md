@@ -96,7 +96,7 @@ The `network` object supports these fields:
 | Field | Type | Description |
 | --- | --- | --- |
 | `name` | string | Required. Accepts `mainnet`, `preprod`, or `preview`. |
-| `customAddress` | string | Optional host name or IP address for a custom node. Set `customPort` when this field has a value. |
+| `customAddress` | string | Optional host name or IP address for a custom node. Adder combines this value with `customPort` for the startup address check. |
 | `customPort` | integer | Optional TCP port. It must range from `1` through `65535` when `customAddress` has a value. If `customPort` has a nonzero value, `customAddress` must also have a value. |
 
 The configuration validator trims `name` and `customAddress` before it applies these rules.
@@ -210,7 +210,7 @@ The following file enables every alert category, monitors selected targets, and 
 
 ## NDJSON output contract
 
-When `notify-json` starts, Adder reserves standard output for one JSON record per line. A consumer can read each complete line as one independent JSON object. Runtime errors and logging use the error and standard error path instead of standard output, so diagnostic text does not corrupt the record stream.
+When `notify-json` starts, Adder reserves standard output for one JSON record per line. A consumer can read each complete line as one independent JSON object. Adder sends runtime errors and log messages through standard error instead of standard output, so diagnostic text does not corrupt the record stream.
 
 Adder emits two record kinds, `status` and `notification`, and uses UTC timestamps for both kinds.
 
