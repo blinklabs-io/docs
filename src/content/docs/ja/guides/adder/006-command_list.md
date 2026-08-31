@@ -126,7 +126,9 @@ description: Adderコマンドのリスト。
   --input-chainsync-intersect-point string
 ```
 
-> '<slot>.<hash>'形式で指定されたチェーンポイントから同期を開始
+> '<slot>.<hash>'形式のチェーンポイントをカンマ区切りで指定して、その地点から同期を開始
+>
+> 各項目の前後の空白を取り除き、空の項目を無視します。空白または空の項目だけの場合は、`--input-chainsync-intersect-tip`の動作に戻ります。空でない項目の形式が正しくない場合はエラーになります。
 <br />
 
 ```
