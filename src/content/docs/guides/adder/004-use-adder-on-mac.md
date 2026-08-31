@@ -7,21 +7,16 @@ description: How to use Adder on Mac.
 
 Adder ships as a signed and notarized macOS `.pkg` package.
 
-## Prerequisites
-
-- Select the release asset that matches the Mac's architecture: `darwin-arm64` or `darwin-amd64`.
-- The installer requires macOS 11.0 or later.
-
 ## Install Adder
 
 1. Open the Adder release page and download the macOS `.pkg` package.
 2. Double-click the `.pkg` file and follow the installer prompts.
 3. The installer places `Adder.app` in `/Applications`.
-4. The package installs the tray GUI and the `adder` CLI inside `Adder.app`.
 
 ## Launch Adder
 
-- Opening `Adder.app` launches the tray GUI.
+- Open `Adder` from `/Applications`.
+- Or run `open /Applications/Adder.app` in Terminal.
 - Open `Adder` from `/Applications`.
 - Or run `open /Applications/Adder.app` in Terminal.
 
