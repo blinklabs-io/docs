@@ -264,6 +264,12 @@ description: List of Adder Commands.
   
 > specifies the output format: text (human-readable, default) or json (machine-parseable) (default "text")
 <br />
+```
+  --output-notify-json-config string
+```
+  
+> path to the versioned notification JSON configuration used by `notify-json`
+<br />
 
 ```
   --output-notify-title string
