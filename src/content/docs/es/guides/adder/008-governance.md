@@ -7,7 +7,7 @@ description: Esquema de eventos de gobernanza y filtros de Adder.
 
 Esta guía describe el evento `input.governance` de Adder, sus datos de gobernanza de la era Conway y los filtros que permiten seleccionar eventos relacionados con DRep, pools y direcciones.
 
-## Cuándo se emite el evento
+## Emisión del evento
 
 El componente de entrada `chainsync` emite un evento `input.governance` por cada transacción de un bloque que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce exactamente un evento de gobernanza, que reúne todos los datos de gobernanza de esa transacción.
 
@@ -63,7 +63,7 @@ Cada elemento representa una acción de gobernanza propuesta.
 | `index` | number | Índice de la propuesta dentro de las propuestas de la transacción. |
 | `deposit` | number | Depósito en Lovelace bloqueado para la propuesta. |
 | `rewardAccount` | string | Dirección de stake o recompensa que recibe el depósito cuando finaliza la propuesta. |
-| `actionType` | string | Tipo de acción de gobernanza. Consulte [Acciones de gobernanza admitidas](#acciones-de-gobernanza-admitidas). |
+| `actionType` | string | Tipo de acción de gobernanza. La sección [Acciones de gobernanza admitidas](#acciones-de-gobernanza-admitidas) enumera los valores válidos. |
 | `actionData` | object | Datos específicos de la acción. El objeto contiene exactamente un campo, identificado por la acción, como `parameterChange`, `treasuryWithdrawal` o `newConstitution`. |
 | `anchor` | object | Referencia opcional a metadatos externos mediante `url` y `dataHash`. |
 
@@ -257,4 +257,4 @@ Los eventos independientes de actividad DRep usan los siguientes valores en el c
 
 `Deregistration` sigue siendo el valor del tipo de certificado. El evento independiente correspondiente usa `input.drep-retirement` como valor de cableado.
 
-Adder ya no emite los valores anteriores `chainsync.drep.registration`, `chainsync.drep.update` ni `chainsync.drep.deregistration`. Actualice los filtros y consumidores que todavía buscan esos valores.
+Adder ya no emite los valores anteriores `chainsync.drep.registration`, `chainsync.drep.update` ni `chainsync.drep.deregistration`. Los filtros y consumidores que todavía buscan esos valores deben usar los valores actuales.
