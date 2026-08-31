@@ -262,6 +262,12 @@ description: Adderコマンドのリスト。
 
 > 出力フォーマットを指定：text（人間が読める形式、デフォルト）またはjson（機械が解析可能）（デフォルト"text"）
 <br />
+```
+  --output-notify-json-config string
+```
+
+> `notify-json`で使用するバージョン付き通知JSON設定ファイルのパスを指定
+<br />
 
 ```
   --output-notify-title string
