@@ -127,33 +127,9 @@ Click `Finish Setup`.
 ***
 
 ## Using the Tray Menu
-After setup, right-click the Adder icon in the system tray and select `Notification Rules...` to edit the notification configuration.
+If you want to view recent events, adjust the configuration, or start, stop, or restart the app, you can right-click the Adder app in your system tray to adjust the settings as needed.
 
-In the editor:
-
-- Edit the `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies` target groups.
-- Select `Monitor Everything` to ignore the target lists, or use the visible `OR` and `AND` connectors between populated groups.
-- Toggle the notification category checkboxes to choose which events generate desktop notifications.
-- Remove a target only after confirming the prompt shown by the editor.
-
-Select `Apply & Restart` to save the target, notification preference, and rate limit changes to `%APPDATA%\Adder\adder-tray.yaml` and apply the updated notification rules and rate limit to the running tray. Select `Cancel` to discard the working changes. The tray menu also supports viewing recent events and starting, stopping, or restarting the app.
 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-
-
-
-
-
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
