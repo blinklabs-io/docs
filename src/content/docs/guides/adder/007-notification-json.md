@@ -270,3 +270,13 @@ Before Adder starts processing, it performs these checks when `--output notify-j
 4. When `network.customAddress` has a value, make its normalized `host:port` equal to `--input-chainsync-address`. Adder normalizes host names without regard to case, canonicalizes IP addresses, and compares the port number. Adder rejects an invalid or mismatched address before it starts processing.
 
 The startup checks prevent the notification rules from monitoring a network or custom node different from the one that supplies chain events.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

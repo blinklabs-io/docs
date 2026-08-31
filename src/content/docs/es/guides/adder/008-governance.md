@@ -258,3 +258,14 @@ Los eventos independientes de actividad DRep usan los siguientes valores en el c
 `Deregistration` sigue siendo el valor del tipo de certificado. El evento independiente correspondiente usa `input.drep-retirement` como valor de cableado.
 
 Adder ya no emite los valores anteriores `chainsync.drep.registration`, `chainsync.drep.update` ni `chainsync.drep.deregistration`. Los filtros y consumidores que todavía buscan esos valores deben usar los valores actuales.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

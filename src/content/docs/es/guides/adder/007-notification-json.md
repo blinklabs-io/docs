@@ -299,3 +299,14 @@ Adder ejecuta las comprobaciones de `notify-json` antes de iniciar el flujo de p
 La comparación de direcciones separa el host y el puerto, normaliza los nombres de host a minúsculas, normaliza las direcciones IP y compara el puerto numérico. Por tanto, las diferencias de mayúsculas en un nombre de host o las diferencias de representación de un puerto no impiden la coincidencia cuando ambos valores representan el mismo `host:port`.
 
 Si la red configurada no coincide, si el nodo personalizado no coincide o si falla cualquiera de las comprobaciones anteriores, Adder devuelve un error y no inicia la canalización. La configuración de un nodo personalizado activa la comprobación de dirección; sin `customAddress`, Adder no compara una dirección personalizada.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

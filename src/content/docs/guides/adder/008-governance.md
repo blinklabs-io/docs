@@ -255,3 +255,13 @@ Adder emits standalone events for DRep certificates with these event type values
 | `Deregistration` | `input.drep-retirement` |
 
 These values replace `chainsync.drep.registration`, `chainsync.drep.update`, and `chainsync.drep.deregistration`. The certificate type remains `Deregistration`, while the emitted standalone event value is `input.drep-retirement`.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

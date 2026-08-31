@@ -321,3 +321,13 @@ Adder はチェーンイベントを受け取るたびに停止判定タイマ�
 カスタムノードの比較では、ホスト名を小文字に変換し、IP アドレスを標準表記にし、ポートを数値として正規化します。したがって、表記が異なっていても正規化後の同じ `host:port` は一致します。`customAddress` を設定していない場合、Adder は入力アドレスのカスタムノード比較を行いません。
 
 いずれかの条件を満たさない場合、Adder はエラーを返して起動を拒否します。これにより、Adder が別のネットワークや別のチェーン同期ノードに対して通知ルールを実行することを防ぎます。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
