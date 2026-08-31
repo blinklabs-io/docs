@@ -24,13 +24,13 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 
 ## CLI を使用する
 
-インストール後、通常は `/usr/local/bin/adder` のシンボリックリンクを通じて `adder` を実行できます。
+インストール後は、通常 `/usr/local/bin/adder` のシンボリックリンクを通じて `adder` を実行できます。
 
 ```bash
 adder --help
 ```
 
-インストーラはこのシンボリックリンクを可能な範囲で作成します。macOS で `/usr/local` が読み取り専用または書き込み制限下にある場合、リンクを作成できないことがあります。また、別のツールがすでに `/usr/local/bin/adder` を使用している場合、インストーラはそのファイルを上書きしません。リンクを利用できない場合も、CLIは `/Applications/Adder.app/Contents/MacOS/adder` から直接実行できます。
+インストーラは `/usr/local/bin/adder` のシンボリックリンクの作成を試みますが、macOS で `/usr/local` が読み取り専用または書き込み制限下にある場合、リンクを作成できないことがあります。また、別のツールがすでに `/usr/local/bin/adder` を使用している場合、インストーラはそのファイルを上書きしません。リンクを利用できない場合も、CLIは `/Applications/Adder.app/Contents/MacOS/adder` から直接実行できます。
 
 ```bash
 /Applications/Adder.app/Contents/MacOS/adder --help
