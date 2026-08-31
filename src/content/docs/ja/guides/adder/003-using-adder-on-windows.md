@@ -55,7 +55,7 @@ Windowsのスタートメニューからコマンドプロンプトを開きま�
 
 ## Adder Trayの監視と通知を設定する
 
-Adder Trayのウィザードでは、監視対象を次のグループに分けて登録できます。各グループには複数の値を追加できます。
+Adder Trayのウィザードと`Notification Rules...`エディターでは、監視対象を次のグループに分けて登録できます。各グループには複数の値を追加できます。
 
 - `Wallets`: ウォレットアドレス
 - `DReps`: DRep ID
@@ -72,6 +72,17 @@ Adder Trayのウィザードでは、監視対象を次のグループに分け�
 `Advanced — Rate Limiting`では、通知をまとめる上限と時間枠を設定できます。最大通知数には`Max notifications per window`、時間枠には`Window duration`を使用し、時間枠には`5s`、`30s`、`1m`などを指定します。空欄にした項目は、最大通知数なら既定値の1件、時間枠なら既定値の5秒を使用します。最大通知数に負の値を指定すると、通知のまとめ処理を無効にします。
 
 WindowsでAdder Trayが使用する設定ファイルの保存先は`%APPDATA%\Adder\adder-tray.yaml`です。以前の設定でAdder Trayのフィルター設定が未設定の場合、アップグレード時に`engine.yaml`の`filter.cardano`にある旧対象キー（`address`、`drep`、`pool`、`asset`、`policy`）を対応する対象リストへ移行します。新しい設定を適用すると、`engine.yaml`からこれらの旧対象キーを削除します。
+
+### `Notification Rules...`で通知ルールを編集する
+
+セットアップ完了後、通知領域のAdderアイコンを右クリックし、`Notification Rules...`を選択します。
+
+1. 画面に表示される上記5つの対象リスト（`Wallets`、`DReps`、`Pools`、`Assets`、`Policies`）を編集します。各リストの項目を削除するときは、表示される確認ダイアログで削除を確定します。
+2. `Monitor Everything (ignore per-target lists)`を有効にすると、個別の対象リストを使わずにすべてのイベントを監視します。無効にすると、対象リストを使用します。
+3. 複数の対象グループを登録した場合は、対象リストの間に表示される`OR`または`AND`コネクターを選択します。各グループ内の値は`OR`で照合します。
+4. `Notification Preferences`に表示される通知カテゴリのチェックボックスを選択または解除します。
+5. `Apply & Restart`（適用して再起動）を選択すると、対象と通知設定を`%APPDATA%\Adder\adder-tray.yaml`に保存し、実行中の通知ルールと通知のレート制限を更新します。
+6. 変更を保存せずに終了する場合は、`Cancel`（キャンセル）を選択します。未保存の編集を破棄し、現在の設定を維持します。
 
 <br />
 
