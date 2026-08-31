@@ -71,6 +71,13 @@ description: Lista de Comandos de Adder.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
+> 5. `input.drep-registration` - Se registró un DRep.
+> 6. `input.drep-update` - Se actualizó un DRep.
+> 7. `input.drep-retirement` - Se retiró un DRep.
+>
+> Consulte la página de gobernanza para consultar el esquema completo y la semántica de los filtros.
+
+> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder separa los valores por comas, elimina los espacios al principio y al final de cada elemento e ignora los elementos vacíos.
 
 ***
 
@@ -121,7 +128,9 @@ description: Lista de Comandos de Adder.
   --input-chainsync-intersect-point string
 ```
 
-> comenzar la sincronización en el(los) punto(s) de cadena especificado(s) en formato '<slot>.<hash>'
+> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'
+>
+> Adder elimina los espacios al principio y al final de cada valor e ignora las entradas vacías. Si no queda ningún punto no vacío, aplica el comportamiento de `--input-chainsync-intersect-tip`. Los valores no vacíos con formato incorrecto generan un error.
 <br />
 
 ```text
