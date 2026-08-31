@@ -77,7 +77,6 @@ description: Lista de Comandos de Adder.
 >
 > Consulte la [página de gobernanza](./008-governance) para obtener el esquema completo y la semántica de los filtros.
 
-> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder separa los valores por comas, elimina los espacios al principio y al final de cada elemento e ignora los elementos vacíos.
 
 ***
 
