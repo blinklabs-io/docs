@@ -30,7 +30,7 @@ The `context` object identifies the transaction and its position in the chain.
 
 | Field | Type | Meaning |
 | :--- | :--- | :--- |
-| `transactionHash` | string | 32 byte hexadecimal hash of the transaction containing the governance data. |
+| `transactionHash` | string | 32-byte hexadecimal hash of the transaction containing the governance data. |
 | `blockNumber` | number | Absolute height of the block containing the transaction. |
 | `slotNumber` | number | Slot number of the block containing the transaction. |
 | `transactionIdx` | number | Zero-based position of the transaction within the block. |
