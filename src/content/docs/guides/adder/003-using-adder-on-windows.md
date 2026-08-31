@@ -30,7 +30,7 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-The MSI installs the Adder CLI at `%ProgramFiles%\Adder\adder.exe` and the tray GUI at `%ProgramFiles%\Adder\adder-tray.exe`. The `Adder` shortcut in the Windows Start Menu launches the tray GUI. The installer does not register a Scheduled Task or another installer-owned autostart entry; the tray setup process handles per-user startup registration.
+The MSI installs both Adder binaries under `%ProgramFiles%\Adder`: the CLI at `%ProgramFiles%\Adder\adder.exe` and the tray GUI at `%ProgramFiles%\Adder\adder-tray.exe`. The `Adder` shortcut in the Windows Start Menu launches `adder-tray.exe`. The installer does not register a Scheduled Task or a startup entry; the first-run tray setup registers startup for the current user.
 
 ***
 
@@ -113,7 +113,7 @@ The wizard derives the available event alert checkboxes from the selected target
 #### Advanced rate limiting
 Expand `Advanced — Rate Limiting` to set `Max notifications per window` and `Window duration`. Enter a duration such as `5s`, `30s`, or `1m`. Leave the fields blank to use the defaults of one notification per five seconds. When alerts exceed the maximum, Adder combines the additional alerts into a single notification at the end of the window. Enter a negative maximum to disable coalescing and send each alert immediately.
 
-> **Note:** On Windows, `%APPDATA%\Adder\adder-tray.yaml` is the authoritative file for tray targets and notification preferences. The `Notification Rules...` editor writes the tray targets and preferences to this file. When that file has no target filter, Adder migrates legacy target keys from `engine.yaml` `filter.cardano` once. Adder removes those target keys from `engine.yaml` when the new plan is applied. Do not edit the legacy fields; they do not control tray monitoring.
+> **Note:** On Windows, `%APPDATA%\Adder\adder-tray.yaml` is the authoritative file for tray targets and notification preferences. The `Notification Rules...` editor writes the tray targets and notification preferences to this file. When that file has no target filter, Adder migrates legacy target keys from `engine.yaml` `filter.cardano` once. Adder removes those target keys from `engine.yaml` when the new plan is applied. Do not edit the legacy fields; they do not control tray monitoring.
 
 ***
 
@@ -143,11 +143,11 @@ After setup, right-click the Adder icon in the system tray and select `Notificat
 In the editor:
 
 - Edit the `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies` target groups.
-- Select `Monitor Everything` to ignore the per-target lists, or use the visible `OR` and `AND` connectors between populated groups.
-- Toggle the notification-category checkboxes to choose which events generate desktop notifications.
+- Select `Monitor Everything` to ignore the target lists, or use the visible `OR` and `AND` connectors between populated groups.
+- Toggle the notification category checkboxes to choose which events generate desktop notifications.
 - Remove a target only after confirming the prompt shown by the editor.
 
-Select `Apply & Restart` to save the target, preference, and rate-limit changes to `%APPDATA%\Adder\adder-tray.yaml` and apply the updated notification rules and rate limit to the running tray. Select `Cancel` to discard the working changes. The tray menu also supports viewing recent events and starting, stopping, or restarting the app.
+Select `Apply & Restart` to save the target, notification preference, and rate limit changes to `%APPDATA%\Adder\adder-tray.yaml` and apply the updated notification rules and rate limit to the running tray. Select `Cancel` to discard the working changes. The tray menu also supports viewing recent events and starting, stopping, or restarting the app.
 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
