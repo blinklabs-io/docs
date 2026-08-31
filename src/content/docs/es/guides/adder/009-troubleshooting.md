@@ -152,7 +152,7 @@ curl -H "Content-Type: application/json" -X POST -d '{"type":"test"}' https://yo
 
 ### B. Problemas con el certificado TLS
 
-Si la entrega falla con `x509: certificate signed by unknown authority`, compruebe el certificado TLS del servidor. Para un certificado autofirmado, habilite `--output-webhook-tls-skip-verify` únicamente cuando la omisión de la verificación resulte aceptable.
+Si el servidor rechaza la entrega y devuelve `x509: certificate signed by unknown authority`, compruebe su certificado TLS. Para un certificado autofirmado, habilite `--output-webhook-tls-skip-verify` únicamente cuando la omisión de la verificación resulte aceptable.
 
 ---
 
