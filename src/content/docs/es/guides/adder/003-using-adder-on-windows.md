@@ -5,7 +5,7 @@ description: Como usar Adder en Windows.
 
 # Usando Adder en Windows
 
-Esta guía describe cómo instalar y usar Adder en Windows. La instalación empaquetada recomendada utiliza el MSI firmado de la versión publicada.
+Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te mostraremos ejemplos de como usar Adder. Recuerda que estos son ejemplos para familiarizarte con el tipo de cosas que Adder es capaz de hacer. El verdadero poder de Adder puede ser desbloqueado por tu imaginacion.
 
 ## Instalar Adder con el MSI de la versión publicada
 
