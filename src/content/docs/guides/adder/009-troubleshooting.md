@@ -52,7 +52,6 @@ Use only one network name variable for a setting. The generated variable for the
 
 ### Distinguish NtN and NtC over TCP
 
-Use the connection form that matches the protocol exposed by the Cardano node:
 Use the connection form that matches the protocol the Cardano node exposes:
 
 - For the default remote Node-to-Node (NtN) connection, set `--input-chainsync-address` to `host:port`:
