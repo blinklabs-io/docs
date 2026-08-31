@@ -126,6 +126,8 @@ description: List of Adder Commands.
 ```
   
 > start syncing at the specified chain point(s) in '<slot>.<hash>' format
+>
+> Use commas to separate chain points. Adder trims surrounding whitespace and ignores empty entries. If no nonempty points remain, Adder falls back to the intersect-tip setting. Malformed nonempty points remain errors.
 <br />
 
 ```
