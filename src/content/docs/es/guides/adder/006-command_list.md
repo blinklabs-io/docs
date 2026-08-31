@@ -355,6 +355,22 @@ description: Lista de Comandos de Adder.
 
 ***
 
+## Notificaciones:
+
+```text
+  adder notifications validate --config <path> [--json]
+```
+
+> valida una configuración JSON de notificaciones.
+>
+> La opción `--config` es obligatoria y requiere la ruta del archivo.
+>
+> La opción `--json` emite un resultado de validación legible por máquinas.
+>
+> Consulte la [referencia JSON de notificaciones](./007-notification_json) para consultar el esquema.
+
+***
+
 ## Version:
 
 ```text
