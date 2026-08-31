@@ -9,13 +9,9 @@ Esta guía describe el evento `input.governance` de Adder, sus datos de gobernan
 
 ## Cuándo se emite el evento
 
-El plugin de entrada `chainsync` emite un evento `input.governance` por cada transacción de un bloque que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce exactamente un evento de gobernanza, que reúne todos los datos de gobernanza de esa transacción.
+El componente de entrada `chainsync` emite un evento `input.governance` por cada transacción de un bloque que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce exactamente un evento de gobernanza, que reúne todos los datos de gobernanza de esa transacción.
 
 Adder emite el evento `input.governance` además del evento `input.transaction` correspondiente. Las transacciones sin datos de gobernanza no producen un evento `input.governance`.
-
-| Campo | Valor |
-| :--- | :--- |
-| Nombre del tipo de evento | `input.governance` |
 
 ## Estructura del evento
 
@@ -49,7 +45,7 @@ El objeto `payload` contiene la información del bloque y arreglos con los eleme
 | Campo | Tipo | Descripción |
 | :--- | :--- | :--- |
 | `blockHash` | string | Hash hexadecimal del bloque que contiene la transacción. |
-| `transactionCbor` | string | CBOR sin procesar de la transacción en formato hexadecimal. Adder incluye este campo únicamente cuando se habilita `--input-chainsync-include-cbor`. |
+| `transactionCbor` | string | CBOR sin procesar de la transacción en formato hexadecimal. Adder incluye este campo únicamente cuando el proceso usa `--input-chainsync-include-cbor`. |
 | `proposalProcedures` | array | Propuestas de acciones de gobernanza incluidas en la transacción. |
 | `votingProcedures` | array | Votos incluidos en la transacción. |
 | `drepCertificates` | array | Certificados de registro, actualización o retiro de DRep. |
@@ -127,7 +123,7 @@ Cada elemento representa un cambio en las credenciales del Comité Constituciona
 La era Conway admite los siguientes tipos de acción de propuesta:
 
 1. `ParameterChange`: propone actualizar uno o más parámetros del protocolo de red.
-2. `HardForkInitiation`: propone una actualización de hard fork a una versión de protocolo posterior.
+2. `HardForkInitiation`: propone una actualización de protocolo a una versión posterior.
 3. `TreasuryWithdrawal`: propone retirar fondos en Lovelace de la tesorería y enviarlos a direcciones de recompensa específicas.
 4. `NoConfidence`: propone retirar la confianza del Comité Constitucional actual.
 5. `UpdateCommittee`: propone cambiar los miembros, el umbral o las condiciones del Comité Constitucional.
