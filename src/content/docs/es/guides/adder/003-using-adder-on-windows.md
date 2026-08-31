@@ -43,17 +43,17 @@ Ahora que tenemos la ruta del exe de Adder, escribe la ruta o pegala si copiaste
 
 ## Configurar Adder Tray
 
-El asistente de Adder Tray separa los objetivos de monitoreo en las listas `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. Cada lista admite varias entradas.
+El asistente de Adder Tray organiza los objetivos de monitoreo en las listas `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. Cada lista admite varias entradas.
 
-Active `Monitor Everything` para monitorear todos los eventos e ignorar las listas de objetivos. Si desactiva esta opción, debe añadir al menos un objetivo. El asistente rechaza los valores vacíos, mal formados o duplicados.
+Con `Monitor Everything` activado, Adder Tray monitorea todos los eventos e ignora las listas de objetivos. Cuando esta opción permanece desactivada, el asistente exige al menos un objetivo. El asistente rechaza los valores vacíos, mal formados o duplicados.
 
-Dentro de cada lista, los valores se combinan con `OR`. Los grupos que contienen objetivos se pueden unir con `OR` o `AND`. `OR` acepta una coincidencia en cualquiera de los grupos; `AND` exige que el evento coincida con todos los grupos unidos. Una combinación `AND` entre objetivos de bloques, transacciones y gobernanza nunca coincide, por lo que debe usarse `OR` para combinar esos tipos de eventos.
+Adder Tray combina los valores de cada lista con `OR`. El asistente une los grupos con contenido mediante `OR` o `AND`. `OR` acepta una coincidencia en cualquiera de los grupos; `AND` exige que el evento coincida con todos los grupos unidos. Una combinación `AND` entre objetivos de bloques, transacciones y gobernanza nunca coincide, por lo que `OR` permite combinar esos tipos de eventos.
 
-Las preferencias de notificación dependen de los grupos de objetivos seleccionados. Las alertas sobre problemas de conexión se configuran por separado y el asistente guarda ambas preferencias al aplicar el plan.
+El asistente muestra las categorías de notificación según los grupos de objetivos seleccionados. Adder Tray muestra las alertas sobre problemas de conexión por separado y guarda todas las preferencias al aplicar la configuración.
 
-Abra `Advanced — Rate Limiting` para configurar el máximo de notificaciones por ventana y la duración de la ventana. La duración acepta valores como `5s`, `30s` o `1m`. Deje los campos en blanco para usar los valores predeterminados de una notificación por ventana de cinco segundos. Introduzca un máximo negativo para desactivar la agrupación de notificaciones.
+La sección `Advanced — Rate Limiting` permite definir el máximo de notificaciones por ventana y la duración de la ventana. La duración acepta valores como `5s`, `30s` o `1m`. Los campos vacíos hacen que Adder Tray use los valores predeterminados de una notificación por ventana de cinco segundos. Un máximo negativo desactiva la agrupación de notificaciones.
 
-Adder Tray guarda la configuración autorizada en `%APPDATA%\\Adder\\adder-tray.yaml`. Al actualizar una configuración sin un filtro de Adder Tray, el asistente migra los objetivos antiguos de `engine.yaml`, incluidos los valores de `filter.cardano`, a las listas estructuradas. Al aplicar el nuevo plan, Adder elimina esas claves antiguas de `filter.cardano`.
+Adder Tray guarda la configuración principal en `%APPDATA%\Adder\adder-tray.yaml`. Cuando una configuración no incluye un filtro de Adder Tray, el asistente migra los objetivos antiguos de `engine.yaml`, incluidos los valores de `filter.cardano`, a las listas estructuradas. Al aplicar la nueva configuración, Adder elimina esas claves antiguas de `filter.cardano`.
 
 ### Felicitaciones!
 
