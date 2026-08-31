@@ -109,7 +109,7 @@ The wizard derives the available event alert checkboxes from the selected target
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 #### Advanced rate limiting
-Expand `Advanced — Rate Limiting` to set `Max notifications per window` and `Window duration`. Enter a duration such as `5s`, `30s`, or `1m`. Leave the fields blank to use the defaults of one notification per five seconds. When the maximum is reached, Adder batches additional alerts into a single notification at the end of the window. Enter a negative maximum to disable coalescing.
+Expand `Advanced — Rate Limiting` to set `Max notifications per window` and `Window duration`. Enter a duration such as `5s`, `30s`, or `1m`. Leave the fields blank to use the defaults of one notification per five seconds. When alerts exceed the maximum, Adder combines the additional alerts into a single notification at the end of the window. Enter a negative maximum to disable coalescing and send each alert immediately.
 
 > **Note:** On Windows, `%APPDATA%\Adder\adder-tray.yaml` is the authoritative file for tray targets and notification preferences. When no tray filter exists, Adder migrates legacy target keys from `engine.yaml` `filter.cardano` once. Applying the new plan removes those target keys from `engine.yaml`; changes to the legacy fields do not control tray monitoring.
 
