@@ -21,7 +21,7 @@ Adder ships as a signed and notarized macOS `.pkg` package.
 
 ## Launch Adder
 
-- Opening `Adder.app` launches the tray interface.
+- Opening `Adder.app` launches the tray GUI.
 - Open `Adder` from `/Applications`.
 - Or run `open /Applications/Adder.app` in Terminal.
 
