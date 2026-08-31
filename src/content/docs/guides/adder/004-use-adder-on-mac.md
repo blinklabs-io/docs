@@ -47,4 +47,4 @@ For a local package that needs macOS notification authorization, set `ADHOC=1` w
 ADHOC=1 ./packaging/macos/build-pkg.sh
 ```
 
-This option ad hoc signs the app bundle for local development. The resulting `.pkg` remains unsigned, and Gatekeeper does not accept it; use the signed and notarized release package for distribution.
+This option ad hoc signs the app bundle for local development. The resulting `.pkg` remains unsigned, and Gatekeeper does not accept it. This local package is for development only; use the release package for distribution.
