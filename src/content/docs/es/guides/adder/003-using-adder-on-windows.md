@@ -45,11 +45,11 @@ Ahora que tenemos la ruta del exe de Adder, escribe la ruta o pegala si copiaste
 
 El asistente de Adder Tray organiza los objetivos de monitoreo en las listas `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. Cada lista admite varias entradas.
 
-Con `Monitor Everything` activado, Adder Tray monitorea todos los eventos e ignora las listas de objetivos. Cuando esta opción permanece desactivada, el asistente exige al menos un objetivo. El asistente rechaza los valores vacíos, mal formados o duplicados.
+`Monitor Everything` y las listas de objetivos son opciones mutuamente excluyentes. Con `Monitor Everything` activado, Adder Tray monitorea todos los eventos e ignora las listas. Si la opción permanece desactivada, el asistente exige al menos un objetivo y rechaza los valores vacíos, mal formados o duplicados.
 
 Adder Tray combina los valores de cada lista con `OR`. El asistente une los grupos con contenido mediante `OR` o `AND`. `OR` acepta una coincidencia en cualquiera de los grupos; `AND` exige que el evento coincida con todos los grupos unidos. Una combinación `AND` entre objetivos de bloques, transacciones y gobernanza nunca coincide, por lo que `OR` permite combinar esos tipos de eventos.
 
-El asistente muestra las categorías de notificación según los grupos de objetivos seleccionados. Adder Tray muestra las alertas sobre problemas de conexión por separado y guarda todas las preferencias al aplicar la configuración.
+El asistente muestra las categorías de notificación según los grupos que la configuración selecciona. Adder Tray muestra las alertas sobre problemas de conexión por separado y guarda todas las preferencias al aplicar la configuración.
 
 La sección `Advanced — Rate Limiting` permite definir el máximo de notificaciones por ventana y la duración de la ventana. La duración acepta valores como `5s`, `30s` o `1m`. Los campos vacíos hacen que Adder Tray use los valores predeterminados de una notificación por ventana de cinco segundos. Un máximo negativo desactiva la agrupación de notificaciones.
 
