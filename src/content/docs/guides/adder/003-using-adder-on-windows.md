@@ -70,15 +70,19 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
+Use the `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies` sections to add the targets to monitor. Add more than one value to any section. The wizard validates each value and reports malformed or duplicate entries inline.
 
-For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
+Enable `Monitor Everything` to ignore all per-target lists, or leave it disabled and add at least one wallet, DRep, pool, asset, or policy. The wizard does not accept an empty target configuration.
+
+Values within each populated section match with `OR`. The connector controls that appear between populated sections join those groups with `OR` or `AND`.
+
+For this example, enter a Pool ID and a DRep ID to follow. 
 
 <img src="/adder-windows-config-pool-id-drep-id.webp"
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
+Set the visible connector between the populated groups to `OR` to receive an alert if either the Pool or DRep performs an event selected for tracking.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
@@ -99,10 +103,15 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Select the checkboxes for the events for which you would like to receive a desktop alert.
+The wizard derives the available event alert checkboxes from the selected target kinds. Connection issue alerts remain available separately. Select the checkboxes for the events for which desktop alerts should appear. The wizard saves these notification preferences with the tray configuration.
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+#### Advanced rate limiting
+Expand `Advanced — Rate Limiting` to set `Max notifications per window` and `Window duration`. Enter a duration such as `5s`, `30s`, or `1m`. Leave the fields blank to use the defaults of one notification per five seconds. When the maximum is reached, Adder batches additional alerts into a single notification at the end of the window. Enter a negative maximum to disable coalescing.
+
+> **Note:** On Windows, `%APPDATA%\Adder\adder-tray.yaml` is the authoritative file for tray targets and notification preferences. When no tray filter exists, Adder migrates legacy target keys from `engine.yaml` `filter.cardano` once. Applying the new plan removes those target keys from `engine.yaml`; changes to the legacy fields do not control tray monitoring.
 
 ***
 
