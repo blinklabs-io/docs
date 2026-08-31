@@ -75,10 +75,7 @@ plugins:
 
 ### B. Archivo YAML ausente o valor no válido
 
-Compruebe la ruta indicada por `--config` y valide la sintaxis YAML antes de iniciar Adder:
-
-```bash
-```
+Compruebe la ruta indicada por `--config` antes de iniciar Adder.
 
 Cada valor YAML debe usar el tipo esperado por la opción correspondiente. Por ejemplo, `network` acepta una cadena y `ntc-tcp` acepta un valor booleano.
 
