@@ -18,10 +18,6 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 - `/Applications` から `Adder` を開きます。
 - または、`ターミナル` で `open /Applications/Adder.app` を実行します.
 
-```bash
-adder --help
-```
-
 インストーラは `/usr/local/bin/adder` のシンボリックリンクの作成を試みますが、macOS で `/usr/local` が読み取り専用または書き込み制限下にある場合、リンクを作成できないことがあります。また、別のツールがすでに `/usr/local/bin/adder` を使用している場合、インストーラはそのファイルを上書きしません。リンクを利用できない場合も、CLIは `/Applications/Adder.app/Contents/MacOS/adder` から直接実行できます。
 
 ```bash
