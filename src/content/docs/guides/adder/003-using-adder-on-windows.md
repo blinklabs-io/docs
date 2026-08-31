@@ -78,7 +78,7 @@ For this example, we will enter a Pool ID and a DRep ID that we want to follow.
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Set the visible connector between the populated groups to `OR` to receive an alert if either the Pool or DRep performs an event selected for tracking.
+Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
@@ -131,15 +131,3 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
-     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
