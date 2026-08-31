@@ -274,7 +274,7 @@ description: Lista de Comandos de Adder.
   --output-notify-json-config string
 ```
 
-> especifica la ruta a una configuración JSON de notificaciones versionada; se usa con la opción de salida `notify-json`
+> especifica la ruta a una configuración JSON de notificaciones versionada. La opción de salida `notify-json` utiliza esta configuración.
 <br />
 
 ```text
