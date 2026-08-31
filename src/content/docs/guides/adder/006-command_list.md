@@ -68,7 +68,7 @@ description: List of Adder Commands.
 >
 > For `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep`, and `--filter-type`, Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
 >
-> See the [governance reference](./governance) for the event schema and filter semantics.
+> See the [governance reference](./008-governance) for the event schema and filter semantics.
 > 
 > **Event Types:**
 > 1. `input.block` - A new block was observed.
@@ -367,7 +367,7 @@ adder notifications validate --config <path> [--json]
 >
 > `--config <path>` is required. Normal output reports validity and errors. `--json` emits the machine-readable validation result.
 >
-> See the [notification JSON reference](./notifications) for the configuration schema.
+> See the [notification JSON reference](./007-notification-json) for the configuration schema.
 
 ***
 
