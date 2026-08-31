@@ -71,6 +71,11 @@ description: Adderコマンドのリスト。
 > 2. `input.rollback` -	以前のチェーンポイントへのロールバックが発生した。
 > 3. `input.transaction` -	ブロック内でトランザクションが確認された。
 > 4. `input.governance` -	ガバナンス関連のイベント（CIP-1694時代）。
+> 5. `input.drep-registration` - DRepの登録イベント。
+> 6. `input.drep-update` - DRepの更新イベント。
+> 7. `input.drep-retirement` - DRepの退任イベント。
+>
+> 完全なイベントスキーマとフィルターの説明は、[ガバナンスページ](./007-governance)を参照してください。
 
 ***
 
