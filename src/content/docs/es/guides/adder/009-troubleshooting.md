@@ -78,7 +78,6 @@ plugins:
 Compruebe la ruta indicada por `--config` y valide la sintaxis YAML antes de iniciar Adder:
 
 ```bash
-python3 -c "import yaml; yaml.safe_load(open('config.yaml'))"
 ```
 
 Cada valor YAML debe usar el tipo esperado por la opción correspondiente. Por ejemplo, `network` acepta una cadena y `ntc-tcp` acepta un valor booleano.
