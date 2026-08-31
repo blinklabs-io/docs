@@ -37,6 +37,3 @@ Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos
 
 Ahora estamos listos para revisar algunos [ejemplos](../examples/001-using-adder-examples-desc) sobre la utilidad y el poder de Adder!
 
-
----
-
