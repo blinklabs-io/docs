@@ -290,7 +290,7 @@ description: Adderコマンドのリスト。
   --output-push-serviceAccountFilePath string
 ```
 
- > `--output push`を選択する場合は、`--output-push-serviceAccountFilePath`に空でないサービスアカウントファイルのパスを指定。参照するサービスアカウントJSONには、空でない文字列の`project_id`を含める。`project_id`がない場合、文字列でない場合、または空の場合、設定に失敗します
+> `--output push`を選択する場合は、`--output-push-serviceAccountFilePath`に空でないサービスアカウントファイルのパスを指定。参照先のサービスアカウントJSONには、空でない文字列の`project_id`を含める。`project_id`がない、文字列でない、または空の場合は設定に失敗します
 <br />
 
 ```
