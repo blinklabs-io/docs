@@ -35,12 +35,12 @@ chainsync入力プラグインは、Conway時代のオンチェーンガバナ�
 
 ### Payloadフィールド
 
-`payload`オブジェクトには、ブロック情報とガバナンス関連項目の配列が含まれます。空の配列は省略される場合があります。
+`payload`オブジェクトには、ブロック情報とガバナンス関連項目の配列が含まれます。Adderは空の配列を省略します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `blockHash` | string | トランザクションを含むブロックの16進数エンコード済みハッシュ。 |
-| `transactionCbor` | string | 16進数形式のトランザクションの生CBOR。`--input-chainsync-include-cbor`を指定した場合にだけ存在します。 |
+| `transactionCbor` | string | 16進数形式のトランザクションの生CBOR。`--input-chainsync-include-cbor`を指定すると含まれます。 |
 | `proposalProcedures` | array | このトランザクションで提案されたガバナンスアクションの一覧。 |
 | `votingProcedures` | array | このトランザクションで行われた投票の一覧。 |
 | `drepCertificates` | array | DRepの登録、更新、または退任の証明書の一覧。 |
@@ -87,7 +87,7 @@ DRepの状態に対する変更を表します。
 | `certificateType` | string | `Registration`、`Update`、`Deregistration`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュ（16進数エンコード済み）。 |
 | `drepId` | string | Bech32形式のDRep ID（`drep1...`または`drep_script1...`）。 |
-| `deposit` | number | 登録時に必要な、または退任時に返還されるデポジット（Lovelace）。 |
+| `deposit` | number | 登録時に必要な、または退任時にAdderが退任時に返還するデポジット（Lovelace）。 |
 | `anchor` | object | オフチェーンのDRepメタデータを参照するオプションの`{ "url", "dataHash" }`。 |
 
 ### `voteDelegationCertificates[]`
@@ -101,7 +101,7 @@ DRepの状態に対する変更を表します。
 | `drepType` | string | 委任先。`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュ（`Abstain`または`NoConfidence`では省略）。 |
 | `drepId` | string | Bech32形式のDRep ID（`Abstain`または`NoConfidence`では省略）。 |
-| `poolKeyHash` | string | プールキーのハッシュ（ステークと投票を組み合わせた委任タイプの場合だけ存在）。 |
+| `poolKeyHash` | string | プールキーハッシュ（ステークと投票を組み合わせた委任タイプの場合だけ含まれます）。 |
 | `deposit` | number | デポジット額（Lovelace）。登録を伴う委任タイプの場合だけ存在。 |
 
 ### `committeeCertificates[]`
@@ -112,8 +112,8 @@ DRepの状態に対する変更を表します。
 | :--- | :--- | :--- |
 | `certificateType` | string | `AuthHot`（ホット資格情報を認証）または`ResignCold`（コールド資格情報を辞任）のいずれか。 |
 | `coldCredential` | string | 委員会のコールド資格情報ハッシュ（16進数エンコード済み）。 |
-| `hotCredential` | string | 委員会のホット資格情報ハッシュ（16進数エンコード済み）。`AuthHot`の場合だけ存在。 |
-| `anchor` | object | オプションの`{ "url", "dataHash" }`メタデータ。`ResignCold`の場合だけ存在。 |
+| `hotCredential` | string | 委員会のホット資格情報ハッシュ（16進数エンコード済み）。`AuthHot`の場合だけ含まれます。 |
+| `anchor` | object | オプションの`{ "url", "dataHash" }`メタデータ。`ResignCold`の場合だけ含まれます。 |
 
 ---
 
@@ -136,7 +136,7 @@ Conwayレジャーには、提案アクションタイプが7種類あります�
 ガバナンスイベントは、Cardano固有の次の3つのパイプラインフィルターをサポートします。
 
 - **DRepフィルター（`--filter-drep`）**: 特定のDRepに関係するイベントに一致します。DRepの登録、更新、退任の証明書、そのDRepを委任先とする投票委任証明書、投票者がそのDRepである投票手続きが対象です。16進数形式またはBech32形式（スクリプトDRep IDを含む）を使用できます。
-- **プールフィルター（`--filter-pool`）**: ステークプールに関係するイベントに一致します。プールをSPOとして行った投票手続きと、プールのキー���ッシュを参照する投票委任証明書が対象です。トランザクションにSPOの投票手続きが含まれている場合、プール関連の証明書がなくても一致します。
+- **プールフィルター（`--filter-pool`）**: ステークプールに関係するイベントに一致します。プールをSPOとして行った投票手続きと、プールのキーハッシュを参照する投票委任証明書が対象です。トランザクションにSPOの投票手続きが含まれている場合、プール関連の証明書がなくても一致します。
 - **アドレスフィルター（`--filter-address`）**: ガバナンスアクションに関係するアドレスに一致します。提案の報酬アカウント、トレジャリー引き出し先アドレス、または委任元のステーク資格情報が対象です。
 
 一般的なフラグ構文については、[コマンドリファレンス](./006-command_list.md)を参照してください。
@@ -182,7 +182,7 @@ DRep証明書タイプごとに、次のイベントタイプ値を出力しま�
 | `Update` | `input.drep-update` |
 | `Deregistration` | `input.drep-retirement` |
 
-`input.drep-registration`、`input.drep-update`、`input.drep-retirement`が有効なDRepイベント値です。これらは、従来の`chainsync.drep.registration`、`chainsync.drep.update`、`chainsync.drep.deregistration`の値に置き換わります。証明書の用語としては`Deregistration`を使用しますが、そのイベントのワイヤー値は`input.drep-retirement`です。
+従来の`chainsync.drep.registration`、`chainsync.drep.update`、`chainsync.drep.deregistration`は使用せず、表に示す現行のイベントタイプ値を使用します。証明書の用語としては`Deregistration`を使用しますが、該当イベントのワイヤー値には`input.drep-retirement`を使用します。
 
 ---
 
@@ -264,4 +264,3 @@ DRep証明書タイプごとに、次のイベントタイプ値を出力しま�
 }
 ```
 
-`transactionCbor`をイベントに含めるには、chainsync入力で`--input-chainsync-include-cbor`を指定します。
