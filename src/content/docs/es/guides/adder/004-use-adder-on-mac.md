@@ -26,13 +26,17 @@ Adder se distribuye como un paquete macOS `.pkg` firmado y notarizado.
 
 ## Usar la CLI
 
-Después de la instalación, el instalador intenta crear el enlace simbólico `/usr/local/bin/adder` hacia la CLI incluida en `Adder.app`. Cuando el enlace está disponible, ejecuta la CLI con un comando como:
+Tras la instalación, el comando `adder` suele estar disponible mediante el enlace simbólico `/usr/local/bin/adder`, que apunta a la CLI incluida en `Adder.app`. Ejecuta la CLI con un comando como:
 
 ```bash
 adder --help
 ```
 
-El instalador intenta crear este enlace, pero no detiene la instalación si `/usr/local` es de solo lectura o está restringido. Si ya existe un `/usr/local/bin/adder` que pertenece a otra herramienta, el instalador lo deja intacto. En cualquiera de esos casos, ejecuta directamente `/Applications/Adder.app/Contents/MacOS/adder`.
+El instalador no detiene la instalación si no puede crear el enlace, por ejemplo, cuando `/usr/local` es de solo lectura o está restringido. Si ya existe un `/usr/local/bin/adder` que pertenece a otra herramienta, el instalador lo deja intacto. En cualquiera de esos casos, ejecuta directamente la CLI:
+
+```bash
+/Applications/Adder.app/Contents/MacOS/adder --help
+```
 
 ## Paquetes locales
 
