@@ -290,11 +290,11 @@ description: List of Adder Commands.
   --output-push-serviceAccountFilePath string
 ```
   
-> specifies the path to the service account file; this value must be non-empty when using `--output push`
+> specifies the path to the service account file. This value must be non-empty when using `--output push`.
 >
 > The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
 >
-> The equivalent YAML option is `plugins.output.push.serviceAccountFilePath`.
+> Configure the equivalent YAML option as `plugins.output.push.serviceAccountFilePath`.
 <br />
 
 ```
