@@ -11,7 +11,7 @@ Adderは、Cardanoブロックチェーン上のオンチェーンガバナン�
 
 chainsync入力プラグインは、Conway時代のオンチェーンガバナンスデータを含むブロック内の各トランザクションに対して、`input.governance`イベントを出力します。1つのトランザクションにつき、`input.governance`イベントを正確に1つ出力し、そのトランザクションに含まれるすべてのガバナンスデータをそのイベントにまとめます。
 
-ガバナンスイベントは、同じトランザクションの通常の`input.transaction`イベントに加えて出力されます。ガバナンスデータを含まないトランザクションは、`input.governance`イベントを出力しません。
+Adderは、同じトランザクションの通常の`input.transaction`イベントに加えて、ガバナンスイベントも出力します。ガバナンスデータを含まないトランザクションには、`input.governance`イベントを出力しません。
 
 - **イベントタイプ名**: `input.governance`
 
@@ -59,7 +59,7 @@ chainsync入力プラグインは、Conway時代のオンチェーンガバナ�
 | :--- | :--- | :--- |
 | `index` | number | トランザクション内の提案のインデックス。 |
 | `deposit` | number | この提案のためにロックされたデポジット額（Lovelace）。 |
-| `rewardAccount` | string | 提案の完了時にデポジットが返還されるステークまたは報酬アドレス。 |
+| `rewardAccount` | string | 提案の完了時にAdderがデポジットを返還するステークまたは報酬アドレス。 |
 | `actionType` | string | `ParameterChange`、`HardForkInitiation`、`TreasuryWithdrawal`、`NoConfidence`、`UpdateCommittee`、`NewConstitution`、`Info`のいずれか。 |
 | `actionData` | object | アクション固有のデータ。アクションに対応するキー（例: `parameterChange`、`treasuryWithdrawal`、`newConstitution`）を使い、ちょうど1つのフィールドに値が入ります。 |
 | `anchor` | object | オフチェーンメタデータを参照するオプションの`{ "url", "dataHash" }`。 |
@@ -87,7 +87,7 @@ DRepの状態に対する変更を表します。
 | `certificateType` | string | `Registration`、`Update`、`Deregistration`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュ（16進数エンコード済み）。 |
 | `drepId` | string | Bech32形式のDRep ID（`drep1...`または`drep_script1...`）。 |
-| `deposit` | number | 登録時に必要な、または退任時にAdderが退任時に返還するデポジット（Lovelace）。 |
+| `deposit` | number | 登録時に必要な、または退任時にAdderが返還するデポジット（Lovelace）。 |
 | `anchor` | object | オフチェーンのDRepメタデータを参照するオプションの`{ "url", "dataHash" }`。 |
 
 ### `voteDelegationCertificates[]`
@@ -102,7 +102,7 @@ DRepの状態に対する変更を表します。
 | `drepHash` | string | DRep資格情報ハッシュ（`Abstain`または`NoConfidence`では省略）。 |
 | `drepId` | string | Bech32形式のDRep ID（`Abstain`または`NoConfidence`では省略）。 |
 | `poolKeyHash` | string | プールキーハッシュ（ステークと投票を組み合わせた委任タイプの場合だけ含まれます）。 |
-| `deposit` | number | デポジット額（Lovelace）。登録を伴う委任タイプの場合だけ存在。 |
+| `deposit` | number | デポジット額（Lovelace）。登録を伴う委任タイプの場合だけ含まれます。 |
 
 ### `committeeCertificates[]`
 
@@ -176,7 +176,7 @@ filter:
 
 DRep証明書タイプごとに、次のイベントタイプ値を出力します。
 
-| 証明書タイプ | 出力されるイベントタイプ |
+| 証明書タイプ | イベントタイプ |
 | :--- | :--- |
 | `Registration` | `input.drep-registration` |
 | `Update` | `input.drep-update` |
