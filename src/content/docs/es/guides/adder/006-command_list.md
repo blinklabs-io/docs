@@ -253,7 +253,7 @@ description: Lista de Comandos de Adder.
   --output string
 ```
 
-> plugin de salida a usar, 'list' para mostrar disponibles (predeterminado "log")
+> plugin de salida a usar, 'list' para mostrar disponibles (incluye `notify-json`; predeterminado "log")
 <br />
 
 ```text
@@ -268,6 +268,13 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica el título a usar (predeterminado "Adder")
+<br />
+
+```text
+  --output-notify-json-config string
+```
+
+> especifica la ruta a una configuración JSON de notificaciones versionada; se usa con la opción de salida `notify-json`
 <br />
 
 ```text
