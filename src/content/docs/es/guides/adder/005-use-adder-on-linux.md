@@ -6,7 +6,6 @@ description: Cómo usar Adder en Linux.
 
 ## Descargar binario de Adder
 
-La compilación de Adder desde el código fuente requiere Go `1.26.0` o una versión posterior. El binario de Linux descargado no necesita Go.
 
 Puedes descargar la última versión de Adder desde la página <a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a>.
 
@@ -38,14 +37,3 @@ Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos
 <br />
 
 Ahora estamos listos para revisar algunos [ejemplos](../examples/001-using-adder-examples-desc) sobre la utilidad y el poder de Adder!
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
