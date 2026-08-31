@@ -108,7 +108,7 @@ La configuración debe contener al menos un objetivo en `monitor`, salvo que `mo
 | `customAddress` | cadena | Dirección de host opcional para un nodo personalizado. Debe aparecer junto con `customPort`. |
 | `customPort` | entero sin signo | Puerto opcional del nodo personalizado. Cuando se configura, debe estar entre `1` y `65535`. |
 
-Si se especifica `customPort`, `customAddress` también debe estar presente. Si se especifica `customAddress`, `customPort` debe ser válido.
+Cuando el archivo define `customPort`, también debe definir `customAddress`. Cuando define `customAddress`, debe proporcionar un `customPort` válido.
 
 ### Objetivos de monitorización
 
@@ -116,7 +116,7 @@ Si se especifica `customPort`, `customAddress` también debe estar presente. Si 
 
 | Propiedad | Tipo | Descripción |
 | --- | --- | --- |
-| `everything` | booleano | Cuando vale `true`, monitoriza todos los eventos y no requiere objetivos en las listas. |
+| `everything` | booleano | Cuando vale `true`, Adder monitoriza todos los eventos y no exige objetivos en las listas. |
 | `wallets` | arreglo de cadenas | Direcciones de pago o de stake. Cada valor debe comenzar por `addr` o `stake`. |
 | `dreps` | arreglo de cadenas | Identificadores de DRep. Cada valor debe comenzar por `drep1` o ser bytes hexadecimales. |
 | `pools` | arreglo de cadenas | Identificadores de stake pool. Cada valor debe comenzar por `pool1` o ser bytes hexadecimales. |
@@ -127,9 +127,9 @@ Si se especifica `customPort`, `customAddress` también debe estar presente. Si 
 | `assetMatch` | cadena | Conecta el grupo `assets` con el grupo anterior usando `any` o `all`. |
 | `policyMatch` | cadena | Conecta el grupo `policies` con el grupo anterior usando `any` o `all`. |
 
-Los grupos de objetivos aceptan valores únicos dentro de cada lista. Adder rechaza duplicados sin distinguir mayúsculas y minúsculas. `wallets` no tiene una propiedad `walletMatch`; el grupo de wallets se combina con los conectores de los grupos siguientes.
+Cada lista de objetivos debe contener valores únicos. Adder rechaza duplicados sin distinguir mayúsculas y minúsculas. `wallets` no tiene una propiedad `walletMatch`; los conectores de los grupos siguientes combinan el grupo de wallets.
 
-`any` y `all` son los únicos modos válidos cuando se proporciona una propiedad de coincidencia. `any` conecta grupos con una condición OR y `all` los conecta con una condición AND. Las propiedades de coincidencia también pueden omitirse cuando no se necesita un conector explícito.
+`any` y `all` son los únicos modos válidos cuando el archivo proporciona una propiedad de coincidencia. El modo `any` conecta grupos con una condición OR y el modo `all` los conecta con una condición AND. El archivo también puede omitir las propiedades de coincidencia cuando no necesita un conector explícito.
 
 ### Categorías de alerta
 
@@ -219,7 +219,7 @@ El siguiente ejemplo incluye todos los campos del esquema, todos los grupos de o
 
 ### Decodificación y normalización
 
-Adder rechaza propiedades desconocidas mediante una decodificación JSON estricta. El archivo debe contener exactamente un valor JSON; un segundo valor, aunque también sea válido, hace que el análisis falle. El JSON mal formado y los valores con tipos incorrectos también hacen que la configuración sea inválida.
+Adder rechaza propiedades desconocidas mediante una decodificación JSON estricta. El archivo debe contener exactamente un valor JSON; un segundo valor, aunque también sea válido, hace que el análisis falle. El JSON mal formado y los valores con tipos incorrectos también invalidan la configuración.
 
 Antes de validar, Adder elimina los espacios iniciales y finales de:
 
@@ -228,11 +228,11 @@ Antes de validar, Adder elimina los espacios iniciales y finales de:
 - Cada elemento de `wallets`, `dreps`, `pools`, `assets` y `policies`.
 - `drepMatch`, `poolMatch`, `assetMatch` y `policyMatch`.
 
-La validación usa esos valores normalizados. Las claves de `alerts` siguen siendo claves de máquina exactas; no deben traducirse ni modificarse.
+La validación usa esos valores normalizados. Las claves de `alerts` siguen siendo claves de máquina exactas; el archivo no debe traducirlas ni modificarlas.
 
 ## Contrato de salida NDJSON
 
-La salida `notify-json` escribe un objeto JSON completo por línea en `stdout`. Cada objeto contiene `schemaVersion: 1` y `kind`. Los registros de estado usan `kind: "status"`; las notificaciones usan `kind: "notification"`. Los consumidores deben leer cada línea de forma independiente y no esperar un arreglo JSON envolvente.
+La salida `notify-json` escribe un objeto JSON completo por línea en `stdout`. Cada objeto contiene `schemaVersion: 1` y `kind`. Los registros de estado usan `kind: "status"`; las notificaciones usan `kind: "notification"`. El consumidor debe leer cada línea de forma independiente y no esperar un arreglo JSON envolvente.
 
 ### Registros de estado
 
@@ -243,7 +243,7 @@ Los registros de estado contienen:
 | `schemaVersion` | Obligatorio | Versión del contrato. Su valor es `1`. |
 | `kind` | Obligatorio | Su valor es `status`. |
 | `status` | Obligatorio | Estado `starting`, `connected` o `stale`. |
-| `timestamp` | Obligatorio | Marca de tiempo UTC en formato JSON de fecha y hora. |
+| `timestamp` | Obligatorio | Cadena de fecha y hora RFC3339 en UTC. |
 | `message` | Opcional | Mensaje descriptivo del estado. |
 
 Al iniciar correctamente la salida, Adder emite:
@@ -270,7 +270,7 @@ Los registros de notificación contienen:
 | --- | --- | --- |
 | `schemaVersion` | Obligatorio | Versión del contrato. Su valor es `1`. |
 | `kind` | Obligatorio | Su valor es `notification`. |
-| `timestamp` | Obligatorio | Marca de tiempo UTC de la notificación. |
+| `timestamp` | Obligatorio | Cadena de fecha y hora RFC3339 en UTC de la notificación. |
 | `ruleId` | Obligatorio | Identificador de la regla que generó la notificación. |
 | `eventType` | Opcional | Tipo de evento que originó la notificación. |
 | `title` | Obligatorio | Título renderizado. Adder usa `Adder` si la regla no proporciona título. |
@@ -299,5 +299,3 @@ Adder ejecuta las comprobaciones de `notify-json` antes de iniciar el flujo de p
 La comparación de direcciones separa el host y el puerto, normaliza los nombres de host a minúsculas, normaliza las direcciones IP y compara el puerto numérico. Por tanto, las diferencias de mayúsculas en un nombre de host o las diferencias de representación de un puerto no impiden la coincidencia cuando ambos valores representan el mismo `host:port`.
 
 Si la red configurada no coincide, si el nodo personalizado no coincide o si falla cualquiera de las comprobaciones anteriores, Adder devuelve un error y no inicia la canalización. La configuración de un nodo personalizado activa la comprobación de dirección; sin `customAddress`, Adder no compara una dirección personalizada.
-
-La salida `notify-json` solo acepta eventos de `chainsync` y conserva el estado `stale` cuando no recibe eventos antes del primer evento o entre eventos posteriores. Esta combinación permite que un supervisor distinga la espera inicial, la conexión activa y la falta de eventos sin interpretar mensajes de registro no estructurados.
