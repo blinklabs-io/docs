@@ -26,6 +26,7 @@ adder \
 ```
 
 `--output-notify-json-config` identifica el archivo de configuración JSON versionado. Adder rechaza una ruta vacía, un archivo que no puede leer o una configuración que no supera la validación. `notify-json` requiere `--input chainsync`; no funciona con `mempool` ni con otra entrada.
+`--output-notify-json-config` identifica el archivo de configuración JSON versionado. Adder rechaza una ruta vacía, un archivo que no puede leer o una configuración que no supera la validación.
 
 La salida aplica las mismas reglas de notificación orientadas a objetivos y la misma limitación de tasa que las notificaciones de Adder, pero entrega solicitudes en formato JSON para que otro proceso las consuma.
 
@@ -79,7 +80,7 @@ Una respuesta inválida incluye `valid: false` y, cuando existen problemas, un a
 }
 ```
 
-El comando devuelve un estado de fallo aunque emita el resultado JSON de validación. Un error de lectura o de análisis se representa como un problema cuyo campo es `config`.
+El comando devuelve un estado de fallo aunque emita el resultado JSON de validación. Un error de lectura o de análisis genera un problema cuyo campo es `config`.
 
 ## Esquema JSON versionado
 
@@ -284,7 +285,7 @@ Ejemplo de un registro:
 {"schemaVersion":1,"kind":"notification","timestamp":"2026-01-01T12:00:05Z","ruleId":"incoming-tx","eventType":"input.transaction","title":"Adder","body":"Incoming transaction detected","batched":false,"count":1}
 ```
 
-Adder normaliza los eventos nativos antes de aplicar las reglas para que la coincidencia de objetivos use la misma forma de datos que los eventos ya normalizados. Los errores de ejecución se comunican como errores del proceso y no forman parte de los registros NDJSON de `stdout`.
+Adder normaliza los eventos nativos antes de aplicar las reglas para que la coincidencia de objetivos use la misma forma de datos que los eventos ya normalizados. Adder comunica los errores de ejecución como errores del proceso y no los incluye en los registros NDJSON de `stdout`.
 
 ## Comprobaciones antes del inicio
 
