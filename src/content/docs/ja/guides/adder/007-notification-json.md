@@ -29,7 +29,7 @@ adder \
   --output-notify-json-config ./notifications.json
 ```
 
-`--output-notify-json-config` には空でないパスが必要です。Adder は設定を検証してから通知処理を開始します。
+Adder は設定を検証してから通知処理を開始します。
 
 ### 設定の検証
 
@@ -266,13 +266,13 @@ Adder は設定を読み込んで出力を開始すると、次の `starting` �
 {"schemaVersion":1,"kind":"status","status":"connected","timestamp":"2026-01-01T00:00:10Z","message":"receiving chain events from mainnet"}
 ```
 
-`connectionStaleSeconds` の時間内にチェーンイベントを受け取らない場合、Adder は `stale` レコードを出力します。最初のイベントをまだ受け取っていない場合のメッセージは `no chain events received before startup timeout` です。いったん接続した後のメッセージは `no chain events received recently` です。
+`connectionStaleSeconds` の時間内にチェーンイベントを受け取らない場合、Adder は `stale` レコードを出力します。Adder が最初のイベントをまだ受け取っていない場合は `no chain events received before startup timeout` を、すでにイベントを受け取った場合は `no chain events received recently` を `message` に設定します。
 
 ```json
 {"schemaVersion":1,"kind":"status","status":"stale","timestamp":"2026-01-01T00:02:10Z","message":"no chain events received recently"}
 ```
 
-Adder はチェーンイベントを受け取るたびに停止判定タイマーをリセットします。`stale` の後にイベントを受け取ると、再び `connected` レコードを出力してからイベントを通知ルールへ渡します。最初のイベントは必ず `connected` 状態を発生させ、最初のイベントより前に `stale` が発生した場合も同じ動作をします。
+Adder はチェーンイベントを受け取るたびに停止判定タイマーをリセットします。`stale` の後にイベントを受け取ると、Adder は再び `connected` レコードを出力してからイベントを通知ルールへ渡します。最初のイベントを受け取ったとき、Adder は必ず `connected` レコードを出力します。最初のイベントより前に `stale` が発生した場合も同じ動作をします。
 
 ### 通知レコード
 
@@ -310,7 +310,7 @@ Adder はチェーンイベントを受け取るたびに停止判定タイマ�
 
 ## 起動時の整合性検証
 
-`--output notify-json` を選択すると、Adder はパイプラインを起動する前に次の条件を検証します。
+`--output notify-json` を選択すると、Adder は実行処理を開始する前に次の条件を検証します。
 
 1. `--input` に `chainsync` を指定すること。Adder は `mempool` など別の入力を拒否します。
 2. `--output-notify-json-config` が空でないこと。
