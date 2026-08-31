@@ -7,41 +7,21 @@ description: Como usar Adder en Windows.
 
 Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te mostraremos ejemplos de como usar Adder. Recuerda que estos son ejemplos para familiarizarte con el tipo de cosas que Adder es capaz de hacer. El verdadero poder de Adder puede ser desbloqueado por tu imaginacion.
 
-## Instalar Adder con el MSI de la versión publicada
+> Nota: esta guia asume que has descargado el exe de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si no has descargado el exe, por favor consulta nuestro [Inicio Rapido](../002-quick-start-overview)
 
-1. Descargue el archivo MSI firmado correspondiente a la arquitectura de Windows:
-   `amd64` para Windows x64 o `arm64` para Windows ARM64. Los archivos siguen el
-   formato `adder-<version>-windows-<arch>.msi`.
+## Paso 1 - Abrir una Linea de Comandos en Windows
 
-2. Abra o ejecute el archivo `.msi` y complete el instalador de Windows.
+Ahora que tienes el archivo exe de Adder descargado, necesitamos abrir una linea de comandos. Aqui es donde mas tarde alimentaremos a Adder con filtros y comandos para que nos notifique de los eventos que queremos rastrear.
 
-3. Abra el menú Inicio y seleccione `Adder`. El acceso directo inicia `Adder Tray`
-   y su asistente de configuración.
 
-4. Verifique que el instalador haya colocado los dos ejecutables en las rutas
-   siguientes:
-   - `%ProgramFiles%\Adder\adder.exe`: ejecutable de línea de comandos.
-   - `%ProgramFiles%\Adder\adder-tray.exe`: aplicación de bandeja del sistema.
 
-El MSI no agrega el ejecutable de línea de comandos a `PATH`. Tampoco crea una
-tarea programada ni una entrada de inicio automático. `Adder Tray` gestiona el
-registro de inicio por usuario cuando la configuración inicial activa la opción
-de inicio automático.
-
-## Alternativa: ejecutable independiente
-
-El ejecutable independiente `.exe` sigue siendo una alternativa válida para usar
-Adder desde la línea de comandos sin la instalación MSI. Esta modalidad requiere
-el archivo disponible en
-<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>.
-
-### Paso 1 - Abrir una línea de comandos en Windows
-
-Abra el menú Inicio de Windows.
+Para abrir una linea de comandos en Windows, ve a tu menu de inicio de Windows
 
 ![adder-windows-start-menu](/adder-windows-start-menu.webp)
 
-Escriba `cmd` en el cuadro de búsqueda y seleccione `Abrir`.
+
+
+Luego escribe `cmd` en el cuadro de busqueda y haz clic en `Abrir`
 
 ![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
 
