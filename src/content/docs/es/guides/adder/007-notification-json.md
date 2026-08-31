@@ -25,7 +25,6 @@ adder \
   --output-notify-json-config ./notifications.json
 ```
 
-`--output-notify-json-config` identifica el archivo de configuración JSON versionado. Adder rechaza una ruta vacía, un archivo que no puede leer o una configuración que no supera la validación. `notify-json` requiere `--input chainsync`; no funciona con `mempool` ni con otra entrada.
 `--output-notify-json-config` identifica el archivo de configuración JSON versionado. Adder rechaza una ruta vacía, un archivo que no puede leer o una configuración que no supera la validación.
 
 La salida aplica las mismas reglas de notificación orientadas a objetivos y la misma limitación de tasa que las notificaciones de Adder, pero entrega solicitudes en formato JSON para que otro proceso las consuma.
@@ -84,7 +83,7 @@ El comando devuelve un estado de fallo aunque emita el resultado JSON de validac
 
 ## Esquema JSON versionado
 
-La configuración usa JSON estricto con `schemaVersion: 1`. Los nombres de propiedades y los valores enumerados que aparecen en los bloques de código distinguen mayúsculas y minúsculas y deben conservarse exactamente.
+La configuración usa JSON estricto con `schemaVersion: 1`. Los nombres de propiedades y los valores enumerados que aparecen en los bloques de código distinguen mayúsculas y minúsculas; el archivo debe conservarlos exactamente.
 
 ### Propiedades de nivel superior
 
