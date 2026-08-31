@@ -77,7 +77,6 @@ description: List of Adder Commands.
 > 4. `input.governance` -	A governance-related event (CIP-1694 era).
 > 5. `input.drep-registration` - A DRep registration occurred.
 > 6. `input.drep-update` - A DRep update occurred.
-> 7. `input.drep-retirement` - A DRep retirement occurred.
         
 ***
 
