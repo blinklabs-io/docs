@@ -7,7 +7,7 @@ description: Reference for Adder governance events, filters, and DRep event valu
 
 ## Overview
 
-This guide describes the `input.governance` event emitted by Adder's chainsync input plugin. The event contains Conway-era governance data from a transaction, including proposal procedures, voting procedures, DRep activity, vote delegations, and Constitutional Committee changes.
+This guide describes how Adder's chainsync input plugin emits the `input.governance` event. The event contains Conway-era governance data from a transaction, including proposal procedures, voting procedures, DRep activity, vote delegations, and Constitutional Committee changes.
 
 Adder emits one `input.governance` event for each block transaction that contains governance data. The event appears in addition to the regular `input.transaction` event for the same transaction. Adder does not emit an `input.governance` event for a transaction without governance data.
 
@@ -59,7 +59,7 @@ Each item represents a proposed governance action.
 | Field | Type | Meaning |
 | :--- | :--- | :--- |
 | `index` | number | Position of the proposal within the transaction's proposals. |
-| `deposit` | number | Lovelace deposit locked for the proposal. |
+| `deposit` | number | Lovelace amount that the ledger locks for the proposal. |
 | `rewardAccount` | string | Stake or reward address that receives the deposit when the proposal completes. |
 | `actionType` | string | Governance action type. See [supported action types](#supported-governance-actions). |
 | `actionData` | object | Action-specific data. The object contains exactly one field keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, or `newConstitution`. |
@@ -77,7 +77,7 @@ Each item represents a vote on an active governance proposal.
 | `govActionTxId` | string | Transaction ID of the governance action receiving the vote. |
 | `govActionIndex` | number | Position of the governance action within that transaction. |
 | `vote` | string | Vote value: `Yes`, `No`, or `Abstain`. |
-| `anchor` | object | Optional off chain vote rationale reference with `url` and `dataHash` fields. |
+| `anchor` | object | Optional off-chain vote rationale reference with `url` and `dataHash` fields. |
 
 ### `drepCertificates[]`
 
@@ -88,8 +88,8 @@ Each item represents a change to a DRep's status.
 | `certificateType` | string | Certificate type: `Registration`, `Update`, or `Deregistration`. |
 | `drepHash` | string | Hexadecimal DRep credential hash. |
 | `drepId` | string | Bech32 DRep identifier, such as `drep1...` or `drep_script1...`. |
-| `deposit` | number | Lovelace deposit required for registration or refunded on deregistration. |
-| `anchor` | object | Optional off chain DRep metadata reference with `url` and `dataHash` fields. |
+| `deposit` | number | Lovelace deposit that registration requires or deregistration refunds. |
+| `anchor` | object | Optional off-chain DRep metadata reference with `url` and `dataHash` fields. |
 
 ### `voteDelegationCertificates[]`
 
@@ -127,7 +127,7 @@ The `actionType` field accepts these values:
 | `TreasuryWithdrawal` | Proposal to withdraw Lovelace from the treasury to specified reward accounts. |
 | `NoConfidence` | Proposal expressing no confidence in the current Constitutional Committee. |
 | `UpdateCommittee` | Proposal to change Constitutional Committee membership, threshold, or terms. |
-| `NewConstitution` | Proposal to update the network Constitution and its off chain anchor. |
+| `NewConstitution` | Proposal to update the network Constitution and its off-chain anchor. |
 | `Info` | Proposal with no ledger effect, typically used to gauge community opinion or publish an announcement. |
 
 ## Corrected event example
