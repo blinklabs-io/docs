@@ -7,7 +7,7 @@ description: Reference for Adder governance events, filters, and DRep event valu
 
 ## Overview
 
-This guide describes the `input.governance` event emitted by Adder's chainsync input plugin. The event contains Conway era governance data from a transaction, including proposal procedures, voting procedures, DRep activity, vote delegations, and Constitutional Committee changes.
+This guide describes the `input.governance` event emitted by Adder's chainsync input plugin. The event contains Conway-era governance data from a transaction, including proposal procedures, voting procedures, DRep activity, vote delegations, and Constitutional Committee changes.
 
 Adder emits one `input.governance` event for each block transaction that contains governance data. The event appears in addition to the regular `input.transaction` event for the same transaction. Adder does not emit an `input.governance` event for a transaction without governance data.
 
@@ -15,7 +15,7 @@ For general flag syntax and the complete list of commands, see the [Command Refe
 
 ## Event envelope
 
-The event uses a top level JSON object with these fields:
+The event uses a top-level JSON object with these fields:
 
 | Field | Type | Meaning |
 | :--- | :--- | :--- |
@@ -33,7 +33,7 @@ The `context` object identifies the transaction and its position in the chain.
 | `transactionHash` | string | 32 byte hexadecimal hash of the transaction containing the governance data. |
 | `blockNumber` | number | Absolute height of the block containing the transaction. |
 | `slotNumber` | number | Slot number of the block containing the transaction. |
-| `transactionIdx` | number | Zero based position of the transaction within the block. |
+| `transactionIdx` | number | Zero-based position of the transaction within the block. |
 | `networkMagic` | number | Network magic identifier of the connected node. |
 
 ### Payload fields
@@ -62,8 +62,8 @@ Each item represents a proposed governance action.
 | `deposit` | number | Lovelace deposit locked for the proposal. |
 | `rewardAccount` | string | Stake or reward address that receives the deposit when the proposal completes. |
 | `actionType` | string | Governance action type. See [supported action types](#supported-governance-actions). |
-| `actionData` | object | Action specific data. The object contains exactly one field keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, or `newConstitution`. |
-| `anchor` | object | Optional off chain metadata reference with `url` and `dataHash` fields. |
+| `actionData` | object | Action-specific data. The object contains exactly one field keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, or `newConstitution`. |
+| `anchor` | object | Optional off-chain metadata reference with `url` and `dataHash` fields. |
 
 ### `votingProcedures[]`
 
