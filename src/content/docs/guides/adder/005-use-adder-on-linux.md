@@ -6,7 +6,6 @@ description: How to use Adder on Linux.
 
 ## Download Adder binary
 
-Build Adder from source with Go `1.26.0` or newer. A downloaded prebuilt Linux binary does not require Go.
 
 You can download the latest Adder release from the <a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a> page.
 
