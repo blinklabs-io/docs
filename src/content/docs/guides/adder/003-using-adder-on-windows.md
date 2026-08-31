@@ -99,15 +99,10 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-The wizard derives the available event alert checkboxes from the selected target types, such as `Wallets`, `DReps`, or `Pools`. Connection issue alerts remain available separately. Select the checkboxes for the events for which desktop alerts should appear. The wizard saves these notification preferences with the tray configuration.
+Select the checkboxes for the events for which you would like to receive a desktop alert.
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-
-#### Advanced rate limiting
-Expand `Advanced — Rate Limiting` to set `Max notifications per window` and `Window duration`. Enter a duration such as `5s`, `30s`, or `1m`. Leave the fields blank to use the defaults of one notification per five seconds. When alerts exceed the maximum, Adder combines the additional alerts into a single notification at the end of the window. Enter a negative maximum to disable coalescing and send each alert immediately.
-
-> **Note:** On Windows, `%APPDATA%\Adder\adder-tray.yaml` is the authoritative file for tray targets and notification preferences. The `Notification Rules...` editor writes the tray targets and notification preferences to this file. When that file has no target filter, Adder migrates legacy target keys from `engine.yaml` `filter.cardano` once. Adder removes those target keys from `engine.yaml` when the new plan is applied. Do not edit the legacy fields; they do not control tray monitoring.
 
 ***
 
