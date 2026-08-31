@@ -55,6 +55,3 @@ Adder exeのパスが取得できたので、パスを入力するか、前の�
 
 これで、Adderの有用性とパワーについて、いくつかの[例](../examples/001-using-adder-examples-desc)を見ていく準備ができました！
 
-
----
-
