@@ -6,7 +6,6 @@ description: LinuxでAdderを使用する方法。
 
 ## Adderバイナリをダウンロード
 
-Adderをソースからビルドする場合は、Go `1.26.0` 以降が必要です。リリースからダウンロードしたビルド済みのLinuxバイナリを使用する場合、Goは必要ありません。
 
 最新のAdderリリースは、<a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a>ページからダウンロードできます。
 
