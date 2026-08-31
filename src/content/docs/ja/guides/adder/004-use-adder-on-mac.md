@@ -18,8 +18,6 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 - `/Applications` から `Adder` を開きます。
 - または、`ターミナル` で `open /Applications/Adder.app` を実行します.
 
-## CLI を使用する
-
 インストール後は、通常 `/usr/local/bin/adder` のシンボリックリンクを通じて `adder` を実行できます。
 
 ```bash
