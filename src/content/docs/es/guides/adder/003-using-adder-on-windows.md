@@ -31,8 +31,8 @@ de inicio automático.
 ## Alternativa: ejecutable independiente
 
 El ejecutable independiente `.exe` sigue siendo una alternativa válida para usar
-Adder desde la línea de comandos sin la instalación MSI. La modalidad
-independiente utiliza el archivo disponible en
+Adder desde la línea de comandos sin la instalación MSI. Esta modalidad requiere
+el archivo disponible en
 <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>.
 
 ### Paso 1 - Abrir una línea de comandos en Windows
