@@ -17,7 +17,7 @@ The output uses the same notification rules and rate limiting as the tray. A ver
 - A JSON configuration file that follows the `schemaVersion` 1 contract in this guide.
 - A process that reads standard output as a line-oriented JSON stream and keeps standard error separate.
 
-See the [Command Reference Guide](./006-command_list.md) for the other Adder command line options.
+See the [Command Reference Guide](./006-command_list.md) for the other Adder command-line options.
 
 ## Command usage
 
@@ -99,7 +99,7 @@ The `network` object supports these fields:
 | `customAddress` | string | Optional host name or IP address for a custom node. Set `customPort` when this field has a value. |
 | `customPort` | integer | Optional TCP port. It must range from `1` through `65535` when `customAddress` has a value. If `customPort` has a nonzero value, `customAddress` must also have a value. |
 
-The configuration validator trims `name` and `customAddress` before it applies these rules. Startup matching compares `network.name` with `--input-chainsync-network`.
+The configuration validator trims `name` and `customAddress` before it applies these rules.
 
 ### Monitoring targets
 
@@ -107,7 +107,7 @@ The `monitor` object supports these fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `everything` | Boolean | When `true`, monitors all supported event families and ignores the target arrays. When `false`, configure at least one target in one of the arrays. |
+| `everything` | Boolean | When `true`, Adder monitors all supported event families and ignores the target arrays. When `false`, configure at least one target in one of the arrays. |
 | `wallets` | array of strings | Cardano payment or stake addresses. Each value must start with `addr` or `stake`. |
 | `dreps` | array of strings | DRep identifiers. Each value must start with `drep1` or contain valid hexadecimal bytes. |
 | `pools` | array of strings | Stake pool identifiers. Each value must start with `pool1` or contain valid hexadecimal bytes. |
@@ -212,7 +212,7 @@ The following file enables every alert category, monitors selected targets, and 
 
 When `notify-json` starts, Adder reserves standard output for one JSON record per line. A consumer can read each complete line as one independent JSON object. Runtime errors and logging use the error and standard error path instead of standard output, so diagnostic text does not corrupt the record stream.
 
-Every record contains `schemaVersion: 1`, `kind`, and `timestamp`. The timestamp uses UTC time. The output contains two record kinds: `status` and `notification`.
+Adder emits two record kinds, `status` and `notification`, and uses UTC timestamps for both kinds.
 
 ### Status records
 
