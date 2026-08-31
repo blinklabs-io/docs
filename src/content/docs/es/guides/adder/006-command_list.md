@@ -75,7 +75,6 @@ description: Lista de Comandos de Adder.
 > 6. `input.drep-update` - Adder actualiza un DRep.
 > 7. `input.drep-retirement` - Adder retira un DRep.
 >
-> Consulte la [página de gobernanza](./008-governance) para obtener el esquema completo y la semántica de los filtros.
 
 
 ***
