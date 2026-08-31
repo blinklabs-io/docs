@@ -148,7 +148,7 @@ curl -X DELETE http://localhost:8080/v1/fcm/<token>
 
 ## 5. Webhook の問題
 
-Webhook の送信先が応答しない場合、URL、ペイロード形式、Basic 認証、TLS 検証の設定を確認します。Webhook 出力では、次の CLI フラグを使用できます。
+Webhook の送信先が応答しない場合は、URL、ペイロード形式、Basic 認証、TLS 検証の設定を確認します。Webhook 出力を次の CLI フラグで設定します。
 
 ```bash
 ./adder --output webhook \
@@ -159,7 +159,7 @@ Webhook の送信先が応答しない場合、URL、ペイロード形式、Bas
   --output-webhook-tls-skip-verify
 ```
 
-同じ設定は、YAML の `plugins`、`output`、`webhook` の下に記述します。
+Webhook の設定を YAML の `plugins`、`output`、`webhook` の下に記述することもできます。
 
 ```yaml
 plugins:
@@ -174,7 +174,7 @@ plugins:
 
 `--output-webhook-max-retries` と `--output-webhook-initial-backoff` は CLI オプションでも YAML オプションでもありません。これらの設定をコマンドや YAML に追加しないでください。
 
-自己署名証明書を使用する場合だけ `--output-webhook-tls-skip-verify` を指定します。通常の TLS 接続では TLS 検証を有効にします。
+自己署名証明書を使用する場合だけ `--output-webhook-tls-skip-verify` を指定してください。通常の TLS 接続では TLS 検証を有効にします。
 
 ---
 <!-- doc-holiday-watermark -->
