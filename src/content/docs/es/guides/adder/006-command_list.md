@@ -71,11 +71,11 @@ description: Lista de Comandos de Adder.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
-> 5. `input.drep-registration` - Se registró un DRep.
-> 6. `input.drep-update` - Se actualizó un DRep.
-> 7. `input.drep-retirement` - Se retiró un DRep.
+> 5. `input.drep-registration` - Adder registra un DRep.
+> 6. `input.drep-update` - Adder actualiza un DRep.
+> 7. `input.drep-retirement` - Adder retira un DRep.
 >
-> Consulte la página de gobernanza para consultar el esquema completo y la semántica de los filtros.
+> Consulte la página de gobernanza para obtener el esquema completo y la semántica de los filtros.
 
 > Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder separa los valores por comas, elimina los espacios al principio y al final de cada elemento e ignora los elementos vacíos.
 
@@ -367,7 +367,7 @@ description: Lista de Comandos de Adder.
 >
 > La opción `--json` emite un resultado de validación legible por máquinas.
 >
-> Consulte la [referencia JSON de notificaciones](./007-notification_json) para consultar el esquema.
+> Consulte la [referencia JSON de notificaciones](./007-notification_json) para obtener el esquema.
 
 ***
 
