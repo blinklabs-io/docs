@@ -6,7 +6,6 @@ description: LinuxでAdderを使用する方法。
 
 ## Adderバイナリをダウンロード
 
-
 最新のAdderリリースは、<a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a>ページからダウンロードできます。
 
 以下のコマンドを実行してAdderバイナリをダウンロードします。ダウンロードリンクを最新バージョンに調整してください。
