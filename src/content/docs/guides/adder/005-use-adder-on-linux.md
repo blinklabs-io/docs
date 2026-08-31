@@ -37,10 +37,3 @@ Now we are ready to run Adder with filters and commands so we can track certain 
 <br />
 
 We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power 💪 of Adder!
-
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
