@@ -126,7 +126,7 @@ storageMode: \"core\"
 # Database lifecycle
 databaseLifecycle:
   # Automatic database snapshots run at epoch boundaries.
-  # Do not enable this setting when the primary blob provider is "s3" or "gcs".
+  # Do not enable this setting when the primary blob provider is "badger", "s3", or "gcs".
   # Select a local primary blob provider instead.
   # Default: false.
   snapshotEnabled: false
@@ -147,7 +147,7 @@ EOF"
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
-> 📝 `databaseLifecycle.snapshotEnabled` controls automatic epoch boundary snapshots. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available even when `s3` or `gcs` is the primary blob provider. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
+> 📝 `databaseLifecycle.snapshotEnabled` controls automatic epoch boundary snapshots. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available when `badger`, `s3`, or `gcs` is the primary blob provider. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
 > 📝 Set `databaseLifecycle.snapshotRetention` to keep only the most recent automatic snapshots. Set `databaseLifecycle.snapshotCloudDestination` to mirror each snapshot to S3 or GCS when Dingo runs with `dingo_extra_plugins`. This mirror destination is separate from the primary blob provider.
 
