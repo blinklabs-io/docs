@@ -126,7 +126,7 @@ storageMode: \"core\"
 # Database lifecycle
 databaseLifecycle:
   # Automatic database snapshots run at epoch boundaries.
-  # Do not enable this setting when the primary blob provider is "badger", "s3", or "gcs".
+  # Do not enable automatic snapshots when the primary blob provider is "badger", "s3", or "gcs".
   # Select a local primary blob provider instead.
   # Default: false.
   snapshotEnabled: false
