@@ -11,7 +11,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 ```
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.3/dingo-v0.70.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -113,3 +113,14 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

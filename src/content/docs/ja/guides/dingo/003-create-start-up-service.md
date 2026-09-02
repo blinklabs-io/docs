@@ -121,7 +121,7 @@ barkPort: 0
 # `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
 databaseLifecycle:
   # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
-  # プライマリの blob provider が `s3` または `gcs` の場合は使用できないため、自動スナップショットを無効にするか、ローカルのプライマリ blob provider を使用してください。
+  # プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできないため、`snapshotEnabled` を無効にしてください。
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
   snapshotDir: \"$HOME/dingo/snapshots\"
@@ -177,7 +177,7 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 `snapshotEnabled` の制限は自動スナップショットだけに適用され、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできませんが、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 
 ***
 
