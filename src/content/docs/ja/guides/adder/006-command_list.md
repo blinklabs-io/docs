@@ -74,7 +74,6 @@ description: Adderコマンドのリスト。
 > 5. `input.drep-registration` - DRepの登録イベント。
 >
 >
->
 
 ***
 
