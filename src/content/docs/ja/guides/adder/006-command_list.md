@@ -72,8 +72,6 @@ description: Adderコマンドのリスト。
 > 3. `input.transaction` -	ブロック内でトランザクションが確認された。
 > 4. `input.governance` -	ガバナンス関連のイベント（CIP-1694時代）。
 > 5. `input.drep-registration` - DRepの登録イベント。
-> 6. `input.drep-update` - DRepの更新イベント。
-> 7. `input.drep-retirement` - DRepの退任イベント。
 >
 >
 
