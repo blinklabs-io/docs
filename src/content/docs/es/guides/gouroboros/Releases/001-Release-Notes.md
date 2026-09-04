@@ -10,6 +10,8 @@ description: Notas de la versión de gOuroboros
 ☑️ La lista siguiente permite ver las notas de la versión completas.
 
 - Versión: v0.202.6 - *[Ver notas de la versión](../v0-202-6)*
+- Versión: v0.202.7 - *[Ver notas de la versión](../v0-202-7)*
+- Versión: v0.202.6 - *[Ver notas de la versión](../v0-202-6)*
 - Versión: v0.202.5 - *[Ver notas de la versión](../v0-202-5)*
 - Versión: v0.202.4 - *[Ver notas de la versión](../v0-202-4)*
 - Versión: v0.202.3 - *[Ver notas de la versión](../v0-202-3)*
