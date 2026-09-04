@@ -17,14 +17,3 @@ Adder se distribuye como un paquete macOS `.pkg` firmado y notarizado.
 
 - Abre `Adder` desde `/Applications`.
 - O ejecuta `open /Applications/Adder.app` en Terminal.
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
