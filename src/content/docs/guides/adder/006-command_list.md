@@ -366,7 +366,6 @@ adder notifications validate --config <path> [--json]
 >
 
 ***
-
 ## Version:
 
 ```
