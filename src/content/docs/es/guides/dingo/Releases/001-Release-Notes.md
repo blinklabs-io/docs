@@ -10,6 +10,7 @@ description: Notas de la versión de Dingo
 Cada versión enlaza a las notas completas. La versión más reciente aparece primero.
 
 - Versión: v0.70.5 - *[Ver las notas de la versión](../v0-70-5)*
+- Versión: v0.70.6 - *[Ver las notas de la versión](../v0-70-6)*
 - Versión: v0.70.4 - *[Ver las notas de la versión](../v0-70-4)*
 - Versión: v0.70.3 - *[Ver las notas de la versión](../v0-70-3)*
 - Versión: v0.70.2 - *[Ver las notas de la versión](../v0-70-2)*
