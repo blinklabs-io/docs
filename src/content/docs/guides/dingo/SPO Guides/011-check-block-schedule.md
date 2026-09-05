@@ -5,7 +5,7 @@ description: SPO Guide for Dingo Pools - How to run slot leader check to see you
 
 You can check if you are scheduled to mint block by running the slot leader check in the `cardano-cli`.
 
-This can be done for either the current epoch or the next epoch. The next epoch's schedule becomes avaiable once the current epoch is at least 70% complete.
+This can be done for either the current epoch or the next epoch. The next epoch's schedule becomes available once the current epoch is at least 70% complete.
 
 ***
 
@@ -20,7 +20,7 @@ This can be done for either the current epoch or the next epoch. The next epoch'
 ## Run Slot Leader Check for Current Epoch
 Run the following command to check whether your pool is scheduled to mint a block in the current epoch. 
 
-> ✅ This assumes you have a stakepoodid.txt file on your BP. If not, follow steps [here](../005-register-pool/#step-81---create-stakepoolidtxt-file).
+> ✅ This assumes you have a stakepoolid.txt file on your BP. If not, follow steps [here](../005-register-pool/#step-81---create-stakepoolidtxt-file).
 >
 > ⚠️ Adjust paths if needed
 
@@ -30,6 +30,7 @@ cardano-cli query leadership-schedule \
    --genesis $HOME/dingo/config/cardano/preview/shelley-genesis.json \
    --stake-pool-id $(cat stakepoolid.txt) \
    --vrf-signing-key-file vrf.skey \
+   --testnet-magic 2 \
    --current
 ```
 
@@ -40,7 +41,7 @@ cardano-cli query leadership-schedule \
 ## Run Slot Leader Check for Next Epoch
 Run the following command to check whether your pool is scheduled to mint a block in the next epoch. (Only run this when the current epoch is more than 70% complete.)
 
-> ✅ This assumes you have a stakepoodid.txt file on your BP. If not, follow steps [here](../005-register-pool/#step-81---create-stakepoolidtxt-file).
+> ✅ This assumes you have a stakepoolid.txt file on your BP. If not, follow steps [here](../005-register-pool/#step-81---create-stakepoolidtxt-file).
 >
 > ⚠️ Adjust paths if needed
 
@@ -50,6 +51,7 @@ cardano-cli query leadership-schedule \
    --genesis $HOME/dingo/config/cardano/preview/shelley-genesis.json \
    --stake-pool-id $(cat stakepoolid.txt) \
    --vrf-signing-key-file vrf.skey \
+   --testnet-magic 2 \
    --next
 ```
 
