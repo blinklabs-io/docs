@@ -26,7 +26,7 @@ Dingo valida la instantánea antes de iniciar las conexiones de salida. La confi
 - `NodeToClientVersion` debe ser `23`.
 - `NetworkMagic` debe estar especificado y coincidir con el `NetworkMagic` configurado para el nodo.
 - `Point.blockPointHash` debe contener exactamente 64 caracteres hexadecimales, que representan 32 bytes.
-- La instantánea debe poblar exactamente uno de estos modos de grupos de registros: `bigLedgerPools` o `allLedgerPools`.
+- La instantánea debe tener exactamente uno de estos campos poblado: `bigLedgerPools` o `allLedgerPools`.
 - El modo seleccionado debe contener al menos un grupo.
 - Cada grupo seleccionado debe contener al menos un relay.
 
