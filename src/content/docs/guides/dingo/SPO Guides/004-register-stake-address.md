@@ -89,4 +89,4 @@ cardano-cli conway transaction submit --tx-file tx.signed
 
 <br>
 
-### Congratulations!
+### Congratulations! You are ready to move to the next section.
