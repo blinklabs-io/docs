@@ -107,4 +107,4 @@ cardano-cli conway query utxo \
 
 <br>
 
-### Congratulations!
+### Congratulations! You are ready to move to the next section.
