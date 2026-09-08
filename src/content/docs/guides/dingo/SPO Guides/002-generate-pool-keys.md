@@ -20,20 +20,16 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
-> ⚠️ The following guide assumes you have already completed the following 3 steps. If not please complete them first and return here when you are done. 
-> 
-> - [x] 1. Complete the [Quick Start](../../002-quick-start-overview) guide.
-> - [x] 2. [Create Startup Service](../../003-create-start-up-service)
-> - [x] 3. [Install Cardano CLI](../../004-using-dingo-with-cardano-cli)
+> ⚠️ The following guide assumes you have already completed the Dingo Node Setup and your node is 100% synced. If not please complete first and return here when you are done. 
 
 ***
 
-✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $DINGO_HOME path. Adjust paths below if necessary.
 
 ## Step 1 - Generate KES key pair
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway node key-gen-KES \
 --verification-key-file kes.vkey \
 --signing-key-file kes.skey
@@ -45,9 +41,9 @@ cardano-cli conway node key-gen-KES \
 
 ⚠️ On an air-gapped machine
 
+Make directory and move into it:
 ```
-mkdir $HOME/dingo/cold-keys
-pushd $HOME/dingo/cold-keys
+mkdir -p "$DINGO_HOME/cold-keys" && cd "$DINGO_HOME/cold-keys"
 ```
 
 ***
@@ -69,17 +65,11 @@ cardano-cli conway node key-gen \
 
 We need the Shelley Genesis json file to run our CLI command
 
-We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `/config/cardano/preview/` by running the following command in our `dingo` directory:
+We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `$DINOG_HOME/config/` by running the following command:
 
+Make directory and move into it:
 ```
-cd ~/dingo
-mkdir -p config/cardano/preview
-```
-
-Next, navigate to the `config/cardano/preview` folder and download the Cardano Shelley Genesis file.
-
-```
-cd config/cardano/preview
+mkdir -p "$DINGO_HOME/config" && cd "$DINGO_HOME/config"
 ```
 
 To download the Shelley Genesis file, run:
@@ -93,9 +83,11 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 ***
 
 Now we can find the starting KES period by running:
+
 ```
+cd $DINGO_HOME
 slotNo=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
-slotsPerKESPeriod=$(cat $HOME/dingo/config/cardano/preview/shelley-genesis.json | jq -r '.slotsPerKESPeriod')
+slotsPerKESPeriod=$(cat $DINGO_HOME/config/shelley-genesis.json | jq -r '.slotsPerKESPeriod')
 kesPeriod=$((${slotNo} / ${slotsPerKESPeriod}))
 startKesPeriod=${kesPeriod}
 echo startKesPeriod: ${startKesPeriod}
@@ -112,11 +104,11 @@ echo startKesPeriod: ${startKesPeriod}
 ⚠️ On an air-gapped machine once you have copied `kes.vkey` to your cold environment.
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway node issue-op-cert \
 --kes-verification-key-file kes.vkey \
---cold-signing-key-file $HOME/dingo/cold-keys/node.skey \
---operational-certificate-issue-counter $HOME/dingo/cold-keys/node.counter \
+--cold-signing-key-file $DINGO_HOME/cold-keys/node.skey \
+--operational-certificate-issue-counter $DINGO_HOME/cold-keys/node.counter \
 --kes-period <startKesPeriod> \
 --out-file node.cert
 ```
@@ -131,7 +123,7 @@ Copy your `node.cert` file to your Block Producer.
 ## Step 7 - Generate a VRF key pair
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway node key-gen-VRF \
 --verification-key-file vrf.vkey \
 --signing-key-file vrf.skey
