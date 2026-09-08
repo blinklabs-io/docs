@@ -11,7 +11,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 ```
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.6/dingo-v0.70.6-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.7/dingo-v0.70.7-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -50,6 +50,7 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 
 ## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
 Since Dingo is under active development it is recommended during upgrading to delete database and start fresh.
+> ⚠️ If the existing database contains reward-state calculation version 1 data, v0.70.7 cannot reuse it. Remove the `.dingo` database and follow Steps 5.1 and 5.2 to rebootstrap with a Mithril snapshot before normal operation.
 
 ### Step 5.1 - Delete the `.dingo` Database
 > 💡 To view hidden files and double-check path run:
