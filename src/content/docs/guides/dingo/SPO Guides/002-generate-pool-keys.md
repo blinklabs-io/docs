@@ -24,7 +24,7 @@ For background on what these keys do, see <a href="https://developers.cardano.or
 
 ***
 
-✅ This guide assumes your files are in the $DINGO_HOME path. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $DINGO_HOME directory. Adjust paths below if necessary.
 
 ## Step 1 - Generate KES key pair
 
@@ -37,6 +37,8 @@ cardano-cli conway node key-gen-KES \
 
 ***
 
+<br>
+
 ## Step 2 - Make a directory to store your cold keys
 
 ⚠️ On an air-gapped machine
@@ -47,6 +49,8 @@ mkdir -p "$DINGO_HOME/cold-keys" && cd "$DINGO_HOME/cold-keys"
 ```
 
 ***
+
+<br>
 
 ## Step 3 - Generate a set of cold keys and create the cold counter file
 
@@ -60,6 +64,8 @@ cardano-cli conway node key-gen \
 ```
 
 ***
+
+<br>
 
 ## Step 4 - Find the starting KES period
 
@@ -82,7 +88,7 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 
 ***
 
-Now we can find the starting KES period by running:
+**Now we can find the starting KES period by running:**
 
 ```
 cd $DINGO_HOME
@@ -96,6 +102,8 @@ echo startKesPeriod: ${startKesPeriod}
 📝 WRITE DOWN THIS NUMBER
 
 ***
+
+<br>
 
 ## Step 5 - Generate the operational certificate for your pool
 
@@ -115,10 +123,15 @@ cardano-cli conway node issue-op-cert \
 
 ***
 
+<br>
+
 ## Step 6 - Copy node.cert to your hot environment
 
 Copy your `node.cert` file to your Block Producer.
+
 ***
+
+<br>
 
 ## Step 7 - Generate a VRF key pair
 
@@ -130,6 +143,8 @@ cardano-cli conway node key-gen-VRF \
 ```
 
 ***
+
+<br>
 
 ## Step 8 - Update VRF key permissions to read-only. You must also copy vrf.vkey to your cold environment.
 
@@ -156,3 +171,9 @@ chmod 400 vrf.skey
 > 
 > **Relay Nodes**
 > Relay nodes must NOT store any operational certificates, VRF keys, signing keys or cold keys.
+
+***
+
+<br>
+
+### Congratulations! You are ready to move to the next section.
