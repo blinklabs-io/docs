@@ -3,8 +3,6 @@ title: Dingo Node Setup
 description: SPO Guide for Dingo Pools - Dingo Node Setup and Configuration.
 ---
 
-## Dingo Node Setup
-
 ✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
 ***
@@ -114,7 +112,45 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 
 <br>
 
-### Step 4 - Create dingo.yaml Configuration File
+### Step 4 - Add Environment Variables
+
+Open your bashrc:
+
+```
+nano ~/.bashrc
+```
+
+Add the environment variables:
+
+```
+export CARDANO_NODE_NETWORK_ID=2
+export CARDANO_NODE_SOCKET_PATH="$DINGO_HOME/dingo.socket"
+```
+
+**Save and exit.**
+
+Reload your bashrc:
+
+```
+source ~/.bashrc
+```
+
+***
+
+> You can verify your environment variables by running:
+> ```
+> echo $CARDANO_NODE_NETWORK_ID
+> ```
+>
+> ```
+> echo $CARDANO_NODE_SOCKET_PATH
+> ```
+
+***
+
+<br>
+
+### Step 5 - Create dingo.yaml Configuration File
 
 Dingo ships with embedded Cardano network configurations (genesis files and config.json) for preview, preprod, and mainnet. So you do not need to download them separately.
 
@@ -162,9 +198,9 @@ sudo nano /etc/dingo/dingo.yaml
 
 <br>
 
-### Step 5 - Create `dingo.service` Unit File
+### Step 6 - Create `dingo.service` Unit File
 
-Create the systemd service file. Replace `YOUR_USER` with your Linux username (`echo $USER`):
+Create the systemd service file. ⚠️ Replace `YOUR_USER` with your Linux username (`echo $USER`):
 
 ```
 cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
@@ -198,7 +234,7 @@ sudo nano /etc/systemd/system/dingo.service
 
 <br>
 
-### Step 6 - Enable and Start the Service
+### Step 7 - Enable and Start the Service
 
 Enable the service to start on boot and start it now:
 
@@ -212,7 +248,7 @@ sudo systemctl start dingo.service
 
 <br>
 
-### Step 7 - Check Status
+### Step 8 - Check Status
 
 Verify the service is running:
 
@@ -236,52 +272,7 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-#### Congratulations! You can now move to the **Musashi Testnet Pool Registration** section
-
-<br>
-
-***
-
-## Section 2 - Musashi Testnet Pool Registration
-
-> Make sure the node is fully synced before proceeding.
-> To follow the logs in real time:
-> 
-> ```
-> sudo journalctl -u dingo -f
-> ```
-
-### Step 1 - Add Environment Variables
-
-Open your bashrc:
-
-```
-nano ~/.bashrc
-```
-
-Add the environment variables:
-
-```
-export CARDANO_NODE_NETWORK_ID=164
-export CARDANO_NODE_SOCKET_PATH="$DINGO_HOME/dingo.socket"
-```
-
-**Save and exit.**
-
-Reload your bashrc:
-
-```
-source ~/.bashrc
-```
-
-> You can verify your environment variables by running:
-> ```
-> echo $CARDANO_NODE_NETWORK_ID
-> ```
->
-> ```
-> echo $CARDANO_NODE_SOCKET_PATH
-> ```
+#### Congratulations! You can now have a Dingo Node Syncing! <br><br> Make sure the node is fully synced before proceeding.
 
 ***
 
@@ -296,3 +287,11 @@ Run this command to see if the node is 100% synced.
 ***
 
 <br>
+
+> To follow the logs in real time:
+> 
+> ```
+> sudo journalctl -u dingo -f
+> ```
+
+
