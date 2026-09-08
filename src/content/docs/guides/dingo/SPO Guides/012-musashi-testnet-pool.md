@@ -55,7 +55,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.2/dingo-v0.70.2-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.7/dingo-v0.70.7-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary version by running:
