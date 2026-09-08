@@ -5,12 +5,12 @@ description: SPO Guide for Dingo Pools - Generate Payment and Stake Keys.
 
 # Dingo - Generate Payment and Stake Keys
 
-✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $DINGO_HOME folder. Adjust paths below if necessary.
 
 ## Step 1 - Obtain the protocol parameters
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway query protocol-parameters \
 --testnet-magic 2 \
 --out-file params.json
@@ -24,7 +24,7 @@ Generate a new payment key pair (`payment.skey` and `payment.vkey`)
 ⚠️ On an air-gapped machine
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway address key-gen \
 --verification-key-file payment.vkey \
 --signing-key-file payment.skey
@@ -38,6 +38,7 @@ Generate a new stake address key pair (`stake.skey` and `stake.vkey`)
 ⚠️ On an air-gapped machine
 
 ```
+cd $DINGO_HOME
 cardano-cli conway stake-address key-gen \
 --verification-key-file stake.vkey \
 --signing-key-file stake.skey
@@ -51,6 +52,7 @@ Generate a stake address from the stake address verification key and store it in
 ⚠️ On an air-gapped machine
 
 ```
+cd $DINGO_HOME
 cardano-cli conway stake-address build \
 --stake-verification-key-file stake.vkey \
 --out-file stake.addr \
@@ -63,6 +65,7 @@ cardano-cli conway stake-address build \
 Generate a payment address for the payment key (`payment.vkey`) and stake key (`stake.vkey`) and store it in `payment.addr`
 
 ```
+cd $DINGO_HOME
 cardano-cli conway address build \
 --payment-verification-key-file payment.vkey \
 --stake-verification-key-file stake.vkey \
@@ -89,3 +92,5 @@ cardano-cli conway query utxo \
 --address $(cat payment.addr) \
 --testnet-magic 2
 ```
+
+#### Congratulations!
