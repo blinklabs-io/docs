@@ -3,7 +3,7 @@ title: ピアスナップショット設定
 description: DingoのpeerSnapshotFileとピアスナップショットの起動時検証を説明する。
 ---
 
-# Dingo
+# ピアスナップショット設定
 
 このページでは、`topology.json` から `cardano-node` のピアスナップショットを読み込むための `peerSnapshotFile` と、起動時に適用される検証条件を説明します。
 
