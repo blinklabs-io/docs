@@ -50,7 +50,7 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 
 ## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
 Since Dingo is under active development it is recommended during upgrading to delete database and start fresh.
-> ⚠️ If the existing database contains reward-state calculation version 1 data, v0.70.7 cannot reuse it. Remove the `.dingo` database and follow Steps 5.1 and 5.2 to rebootstrap with a Mithril snapshot before normal operation.
+> ⚠️ Dingo v0.70.7 cannot reuse an existing database that contains reward-state calculation version 1 data. Follow Steps 5.1 and 5.2 to remove the `.dingo` database and rebootstrap the node with a Mithril snapshot before normal operation.
 
 ### Step 5.1 - Delete the `.dingo` Database
 > 💡 To view hidden files and double-check path run:
