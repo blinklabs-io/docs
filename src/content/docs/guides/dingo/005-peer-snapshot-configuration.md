@@ -40,10 +40,8 @@ Every relay in the selected pool list must meet all of the following requirement
 - Set a non-empty address to either a valid DNS hostname or a non-unspecified IP address.
 - Set an explicit TCP port from `1` through `65535`.
 
-Portless SRV relays and port `0` are unsupported.
+Dingo does not support portless SRV relays or port `0`.
 
 ## Startup behavior
 
 Dingo validates the complete peer snapshot before its relay endpoints can replace configured bootstrap peers. A malformed or inconsistent snapshot fails node startup before Dingo uses its endpoints; Dingo does not silently accept the snapshot.
-
- исправ
