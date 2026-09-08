@@ -7,7 +7,7 @@ description: Configure and validate a Dingo peer snapshot reference.
 
 ## Overview
 
-This reference describes the `peerSnapshotFile` setting in Dingo's `topology.json` and the checks that a peer snapshot must pass at startup. Dingo accepts the cardano-node `peer-snapshot.json` format with `NodeToClientVersion: 23`.
+This reference describes the `peerSnapshotFile` setting in Dingo's `topology.json` and the checks that a peer snapshot must pass at startup. The supported snapshot format is cardano-node's `peer-snapshot.json` with `NodeToClientVersion` set to `23`.
 
 ## Configure `peerSnapshotFile`
 
@@ -28,20 +28,20 @@ The snapshot must meet all of the following requirements:
 - Set `NodeToClientVersion` to `23`.
 - Specify `NetworkMagic` and set it to the node's configured network magic.
 - Set `Point.blockPointHash` to exactly 64 hexadecimal characters, representing 32 bytes.
-- Retain `Point.blockPointSlot` as part of `Point`. This validation does not impose an additional constraint on its value.
-- Populate exactly one of `bigLedgerPools` or `allLedgerPools`. Populate neither or both, and Dingo rejects the snapshot.
-- Ensure that the selected pool list contains at least one pool.
-- Ensure that every pool contains at least one relay.
+- Include `Point.blockPointSlot` as part of `Point`. Dingo applies no additional constraint to its value.
+- Populate exactly one of `bigLedgerPools` or `allLedgerPools`. Leave both lists empty or populate both lists, and Dingo rejects the snapshot.
+- Add at least one pool to the populated list.
+- Add at least one relay to every pool.
 
 ## Relay requirements
 
-Every relay in the selected pool list must meet all of the following requirements:
+Apply all of the following requirements to every relay in the populated pool list:
 
-- Set a non-empty address to either a valid DNS hostname or a non-unspecified IP address.
-- Set an explicit TCP port from `1` through `65535`.
+- Give each relay a non-empty address that names either a valid DNS hostname or a non-unspecified IP address.
+- Give each relay an explicit TCP port from `1` through `65535`.
 
-Dingo does not support portless SRV relays or port `0`.
+Dingo rejects portless SRV relays and port `0`.
 
 ## Startup behavior
 
-Dingo validates the complete peer snapshot before its relay endpoints can replace configured bootstrap peers. A malformed or inconsistent snapshot fails node startup before Dingo uses its endpoints; Dingo does not silently accept the snapshot.
+Dingo validates the complete peer snapshot before its relay endpoints can replace configured bootstrap peers. If the snapshot is malformed or inconsistent, Dingo stops node startup before it uses the relay endpoints and does not silently accept the snapshot.
