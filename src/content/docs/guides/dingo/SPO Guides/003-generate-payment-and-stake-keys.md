@@ -18,6 +18,8 @@ cardano-cli conway query protocol-parameters \
 
 ***
 
+<br>
+
 ## Step 2 - Generate a new payment key pair
 Generate a new payment key pair (`payment.skey` and `payment.vkey`)
 
@@ -31,6 +33,8 @@ cardano-cli conway address key-gen \
 ```
 
 ***
+
+<br>
 
 ## Step 3 - Generate a new stake address key pair
 Generate a new stake address key pair (`stake.skey` and `stake.vkey`)
@@ -46,6 +50,8 @@ cardano-cli conway stake-address key-gen \
 
 ***
 
+<br>
+
 ## Step 4 - Generate your stake address
 Generate a stake address from the stake address verification key and store it in `stake.addr`
 
@@ -60,6 +66,8 @@ cardano-cli conway stake-address build \
 ```
 
 ***
+
+<br>
 
 ## Step 5 - Generate payment address
 Generate a payment address for the payment key (`payment.vkey`) and stake key (`stake.vkey`) and store it in `payment.addr`
@@ -82,6 +90,8 @@ cat payment.addr
 
 ***
 
+<br>
+
 ## Step 6 -  Fund your payment address
 On testnets you can use the <a href="https://docs.cardano.org/cardano-testnets/tools/faucet" target="_blank">Cardano faucet</a> to get test ADA. Select the Preview testnet and paste your payment.addr.
 
@@ -93,4 +103,8 @@ cardano-cli conway query utxo \
 --testnet-magic 2
 ```
 
-#### Congratulations!
+***
+
+<br>
+
+### Congratulations!
