@@ -1,8 +1,9 @@
-# Configuración de la instantánea de pares
 ---
 title: Configuración de la instantánea de pares
 description: Requisitos para configurar peerSnapshotFile en la topología de Dingo.
 ---
+
+# Configuración de la instantánea de pares
 
 Esta guía describe cómo configurar una instantánea de pares de `cardano-node` en `topology.json`. Dingo obtiene la ruta de la instantánea mediante `peerSnapshotFile`.
 
