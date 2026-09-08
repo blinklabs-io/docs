@@ -88,7 +88,6 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 Move `cardano-cli to`/usr/local/bin` by running:
 
 ```
-cd bin
 sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 ```
 
@@ -117,7 +116,7 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 
 ### Step 4 - Create dingo.yaml Configuration File
 
-Dingo ships with embedded Cardano network configurations (genesis files and config.json) for Musashi, so you do not need to download them separately.
+Dingo ships with embedded Cardano network configurations (genesis files and config.json) for preview, preprod, and mainnet. So you do not need to download them separately.
 
 - First create needed directories:
 ```
@@ -141,12 +140,9 @@ sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 databasePath: \"$DINGO_HOME/.dingo\"
 
 # Network
-network: \"musashi\"
-relayPort: 3010
+network: \"preview\"
+relayPort: 3001
 socketPath: \"$DINGO_HOME/dingo.socket\"
-
-# Path to the topology configuration file for Cardano node
-topology: \"$DINGO_HOME/config/topology.json\"
 
 EOF"
 ```
@@ -157,103 +153,16 @@ You can view and verify `dingo.yaml` file by running:
 sudo nano /etc/dingo/dingo.yaml
 ```
 
-> 💡 Tip: Make sure port 3010 is open.
+> 💡 Tip: Make sure port 3001 is open.
 > ```
-> sudo ufw allow 3010/tcp
+> sudo ufw allow 3001/tcp
 > ```
 
 ***
 
 <br>
 
-### Step 5 - Setup Topology File
-***If you plan a standard setup of a BP behind relays you can skip this step***
-
-First download the topology file to your `$DINGO_HOME/config` directory by running:
-```
-cd $DINGO_HOME/config
-wget https://book.play.dev.cardano.org/environments-pre/leios/topology.json
-```
-
-Then download peer-snapshot JSON file:
-```
-cd $DINGO_HOME/config
-wget https://book.play.dev.cardano.org/environments-pre/leios/peer-snapshot.json
-```
-
-> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
-
-***
-
-**To help with initial sync, we will use the Kleioscan explorer to find peers to connect to.**
-
-- Go to <a href="https://kleioscan.com/#/musashi/pools" target="_blank">https://kleioscan.com/#/musashi/pools</a>
-
-<img src="/dingo-kleio-explorer-pools.png"
-     alt="dingo-kleio-explorer-pools"
-     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-     
-- Click on some of your SPO friends and copy 📝 their public IPs and Ports
-
-<img src="/dingo-kleio-explorer-pool-relay-example.png"
-     alt="dingo-kleio-explorer-pool-relay-example"
-     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-
-- Use the IPs and Ports to edit your `localRoots` in your `topology.json` file by running:
-```
-sudo nano $DINGO_HOME/config/topology.json
-```
-
-- Then edit `localRoots` section by adding your friends' pools. (For this example, we just added 3 pools.)
-
-***Example `topology` file:*** 
-```
-{
-  "bootstrapPeers": [
-    {
-      "address": "leios-node.play.dev.cardano.org",
-      "port": 3001
-    }
-  ],
-  "localRoots": [
-    {
-      "accessPoints": [
-      {
-        "address": "74.208.206.133",
-        "port": 3010
-      },
-      {
-        "address": "cerk-musashi.ddns.net",
-        "port": 3001
-      },
-      {
-        "address": "74.122.122.121",
-        "port": 6400
-      }
-      ],
-      "advertise": false,
-      "trustable": false,
-      "valency": 3
-    }
-  ],
-  "peerSnapshotFile": "peer-snapshot.json",
-  "publicRoots": [
-    {
-      "accessPoints": [],
-      "advertise": false
-    }
-  ],
-  "useLedgerAfterSlot": 64800
-}
-```
-
-Save and exit.
-
-***
-
-<br>
-
-### Step 6 - Create `dingo.service` Unit File
+### Step 5 - Create `dingo.service` Unit File
 
 Create the systemd service file. Replace `YOUR_USER` with your Linux username (`echo $USER`):
 
@@ -289,7 +198,7 @@ sudo nano /etc/systemd/system/dingo.service
 
 <br>
 
-### Step 7 - Enable and Start the Service
+### Step 6 - Enable and Start the Service
 
 Enable the service to start on boot and start it now:
 
@@ -303,7 +212,7 @@ sudo systemctl start dingo.service
 
 <br>
 
-### Step 8 - Check Status
+### Step 7 - Check Status
 
 Verify the service is running:
 
