@@ -45,3 +45,13 @@ Dingo rejects portless SRV relays and port `0`.
 ## Startup behavior
 
 Dingo validates the complete peer snapshot before its relay endpoints can replace configured bootstrap peers. If the snapshot is malformed or inconsistent, Dingo stops node startup before it uses the relay endpoints and does not silently accept the snapshot.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

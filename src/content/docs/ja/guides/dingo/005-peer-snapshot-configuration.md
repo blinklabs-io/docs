@@ -38,3 +38,13 @@ Dingoは、スナップショットからピアを読み込む前に、次の条
 - DingoはポートなしのSRVリレーをサポートしません。`port: 0` をポート未指定として拒否し、起動に失敗します。
 
 不正な形式のスナップショットを受け付けないため、Dingoは起動に失敗します。検証に成功したスナップショットだけをピアの入力として使用します。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

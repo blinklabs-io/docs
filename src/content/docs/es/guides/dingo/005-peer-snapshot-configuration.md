@@ -41,3 +41,13 @@ Cada relay del modo seleccionado debe cumplir estas condiciones:
 - `port` debe estar especificado y debe ser un puerto TCP entre `1` y `65535`.
 
 Los relays SRV sin puerto explícito, incluidos los relays con `port` igual a `0`, no son compatibles. Dingo detiene el inicio cuando la instantánea está mal formada o cuando incumple cualquiera de estos requisitos.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
