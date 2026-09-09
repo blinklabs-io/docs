@@ -5,7 +5,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Pool.
 
 # Dingo - Registering Your Stake Pool
 
-✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $DINGO_HOME folder. Adjust paths below if necessary.
 
 ## Step 1 - Create your pool's metadata JSON file
 Update the values below with your pool's information. 
@@ -14,7 +14,7 @@ Update the values below with your pool's information.
 📝 **description** cannot exceed 255 characters in length.
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cat > preview-pool-metadata.json << EOF
 {
 "name": "MyPoolName",
@@ -70,7 +70,7 @@ To simplify future updates to your pool registration certificate, create an envi
 ⚠️ On an air-gapped machine
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 mkdir pool-scripts
 ```
 
@@ -80,7 +80,7 @@ Create an environment (`env`) file for our pool in the pool-scripts folder.
 ✅ Update the values below with your metadata URL, your relay node IP and port, pool pledge amount and cost (min pool fee) and margin.
 
 ```
-cat > $HOME/dingo/pool-scripts/env << 'EOF' 
+cat > $DINGO_HOME/pool-scripts/env << 'EOF' 
 #!/bin/bash
 
 PLEDGE=25000000000  # 25,000 ADA
@@ -93,7 +93,7 @@ RELAY1_PORT=6000
 RELAY2_HOST=55.23.123.206
 RELAY2_PORT=6000
 METADATA_URL=https://website.com/preview-pool-metadata.json
-METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
+METADATA_HASH=$(cat $DINGO_HOME/previewPoolMetaDataHash.txt)
 EOF
 ```
 
@@ -117,19 +117,19 @@ sudo ufw status numbered
 Create pool-registration.sh script in the pool-scripts folder:
 
 ```
-cat > $HOME/dingo/pool-scripts/pool-registration.sh << EOF 
+cat > $DINGO_HOME/pool-scripts/pool-registration.sh << EOF 
 #!/bin/bash
 
 source ./env
 
 cardano-cli conway stake-pool registration-certificate \
---cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
---vrf-verification-key-file $HOME/dingo/vrf.vkey \
+--cold-verification-key-file $DINGO_HOME/cold-keys/node.vkey \
+--vrf-verification-key-file $DINGO_HOME/vrf.vkey \
 --pool-pledge \${PLEDGE} \
 --pool-cost \${COST} \
 --pool-margin \${MARGIN} \
---pool-reward-account-verification-key-file $HOME/dingo/stake.vkey \
---pool-owner-stake-verification-key-file $HOME/dingo/stake.vkey \
+--pool-reward-account-verification-key-file $DINGO_HOME/stake.vkey \
+--pool-owner-stake-verification-key-file $DINGO_HOME/stake.vkey \
 \${NET} \
 --pool-relay-ipv4 \${RELAY1_HOST} \
 --pool-relay-port \${RELAY1_PORT} \
@@ -137,7 +137,7 @@ cardano-cli conway stake-pool registration-certificate \
 --pool-relay-port \${RELAY2_PORT} \
 --metadata-url \${METADATA_URL} \
 --metadata-hash \${METADATA_HASH} \
---out-file $HOME/dingo/pool.cert
+--out-file $DINGO_HOME/pool.cert
 EOF
 ```
 
@@ -145,19 +145,19 @@ EOF
 Add execute permissions to the `pool-registration.sh` script.
 
 ```
-chmod +x $HOME/dingo/pool-scripts/pool-registration.sh
+chmod +x $DINGO_HOME/pool-scripts/pool-registration.sh
 ```
 
 ### Step 5.5 - Execute the Script
 The script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
 
 ```
-cd $HOME/dingo/pool-scripts
+cd $DINGO_HOME/pool-scripts
 ./pool-registration.sh
 ```
 
 ### Step 5.6 - Copy pool.cert to your hot environment
-Copy `pool.cert` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `pool.cert` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ***
 
@@ -165,10 +165,10 @@ Copy `pool.cert` to the `~/dingo` directory on your hot environment (block produ
 ⚠️ On an air-gapped machine
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway stake-address stake-delegation-certificate \
 --stake-verification-key-file stake.vkey \
---cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
+--cold-verification-key-file $DINGO_HOME/cold-keys/node.vkey \
 --out-file deleg.cert
 ```
 
@@ -185,7 +185,7 @@ echo Current Slot: $currentSlot
 
 ### Step 7.2 - Build the transaction
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction build \
     --tx-in $(cardano-cli query utxo --address $(cat payment.addr) --out-file /dev/stdout | jq -r 'keys[0]') \
     --change-address $(cat payment.addr) \
@@ -197,11 +197,11 @@ cardano-cli conway transaction build \
 ```
 
 ### Step 7.3 - Sign the transaction
-Copy `tx.raw` to the `~/dingo` directory on your air-gapped machine.
+Copy `tx.raw` to the `$DINGO_HOME` directory on your air-gapped machine.
 
 ⚠️ On an air-gapped machine
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
@@ -211,10 +211,10 @@ cardano-cli conway transaction sign \
 ```
 
 ### Step 7.4 - Submit transaction
-Copy `tx.signed` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `tx.signed` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction submit --tx-file tx.signed
 ```
 
@@ -227,7 +227,7 @@ cardano-cli conway transaction submit --tx-file tx.signed
 ⚠️ On an air-gapped machine
 ```
 cardano-cli conway stake-pool id \
---cold-verification-key-file $HOME/dingo/cold-keys/node.vkey \
+--cold-verification-key-file $DINGO_HOME/cold-keys/node.vkey \
 --output-format hex \
 > stakepoolid.txt
 
@@ -235,11 +235,11 @@ cat stakepoolid.txt
 ```
 
 ### Step 8.2 - Copy `stakepoolid.txt` to your hot environment
-Copy `stakepoolid.txt` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `stakepoolid.txt` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ### Step 8.3 - Verify that the pool has appeared on-chain:
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli query stake-snapshot --stake-pool-id $(cat stakepoolid.txt)
 ```
 
@@ -260,9 +260,9 @@ Add the following lines to your `dingo.yaml` file by running:
 sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
 # Validator / block producer (core storage, API ports ignored):
 blockProducer: true
-shelleyVrfKey: \"$HOME/dingo/vrf.skey\"
-shelleyKesKey: \"$HOME/dingo/kes.skey\"
-shelleyOperationalCertificate: \"$HOME/dingo/node.cert\"
+shelleyVrfKey: \"$DINGO_HOME/vrf.skey\"
+shelleyKesKey: \"$DINGO_HOME/kes.skey\"
+shelleyOperationalCertificate: \"$DINGO_HOME/node.cert\"
 EOF"
 ```
 
