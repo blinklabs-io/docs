@@ -19,7 +19,7 @@ Update the values in your `env` file with the updated information for your pool.
 ⚠️ On an air-gapped machine
 
 ```
-sudo nano $HOME/dingo/pool-scripts/env
+sudo nano $DINGO_HOME/pool-scripts/env
 ```
 
 Sample `env` file:
@@ -34,7 +34,7 @@ RELAY1_PORT=6000
 RELAY2_HOST=55.23.123.206
 RELAY2_PORT=6000
 METADATA_URL=https://website.com/preview-pool-metadata.json
-METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
+METADATA_HASH=$(cat $DINGO_HOME/previewPoolMetaDataHash.txt)
 ```
 
 ***
@@ -43,14 +43,14 @@ METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
 The script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
 
 ```
-cd $HOME/dingo/pool-scripts
+cd $DINGO_HOME/pool-scripts
 ./pool-registration.sh
 ```
 
 ***
 
 ## Step 3 - Copy pool.cert to your hot environment
-Copy `pool.cert` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `pool.cert` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ***
 
@@ -65,7 +65,7 @@ echo Current Slot: $currentSlot
 
 ### Step 4.2 - Build the Transaction
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction build \
     --tx-in $(cardano-cli query utxo --address $(cat payment.addr) --out-file /dev/stdout | jq -r 'keys[0]') \
     --change-address $(cat payment.addr) \
@@ -82,7 +82,7 @@ cardano-cli conway transaction build \
 > ```
 
 ### Step 4.3 - Sign the Transaction
-Copy `tx.raw` to your cold environment in your `~dingo` directory
+Copy `tx.raw` to your cold environment in your `$DINGO_HOME` directory
 
 ⚠️ On an air-gapped machine
 ```
@@ -90,12 +90,12 @@ cd ~/dingo
 cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
---signing-key-file $HOME/dingo/cold-keys/node.skey \
+--signing-key-file $DINGO_HOME/cold-keys/node.skey \
 --out-file tx.signed
 ```
 
 ### Step 4.4 - Submit the Transaction
-Copy `tx.signed` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `tx.signed` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ```
 cd ~/dingo
