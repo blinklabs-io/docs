@@ -13,5 +13,7 @@ description: SPO Guide for Dingo Pools - Operational Tips and Maintenance.
 
 [Using nview to Monitor Your Dingo Nodes](../010-using-nview-to-monitor-dingo-node)
 
+[Check Block Schedule](../011-check-block-schedule)
+
 More Coming Soon!
 
