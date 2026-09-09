@@ -25,9 +25,9 @@ Run the following command to check whether your pool is scheduled to mint a bloc
 > ⚠️ Adjust paths if needed
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli query leadership-schedule \
-   --genesis $HOME/dingo/config/cardano/preview/shelley-genesis.json \
+   --genesis $DINGO_HOME/config/shelley-genesis.json \
    --stake-pool-id $(cat stakepoolid.txt) \
    --vrf-signing-key-file vrf.skey \
    --testnet-magic 2 \
@@ -46,9 +46,9 @@ Run the following command to check whether your pool is scheduled to mint a bloc
 > ⚠️ Adjust paths if needed
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli query leadership-schedule \
-   --genesis $HOME/dingo/config/cardano/preview/shelley-genesis.json \
+   --genesis $DINGO_HOME/config/shelley-genesis.json \
    --stake-pool-id $(cat stakepoolid.txt) \
    --vrf-signing-key-file vrf.skey \
    --testnet-magic 2 \
