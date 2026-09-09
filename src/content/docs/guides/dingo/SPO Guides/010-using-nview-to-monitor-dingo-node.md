@@ -26,14 +26,14 @@ wget -O - https://github.com/blinklabs-io/nview/releases/download/v0.15.0/nview-
 
 ## Step 2 - Change Permissions
 
-For this example, we named the binary file `nview` and saved the file to our `~/dingo` directory. 
+For this example, we named the binary file `nview` and saved the file to our `$DINGO_HOME` directory. 
 
 To make the binary executable, run:
 
 ⚠️ Adjust the file path and file name if needed. 
 
 ```
-chmod +x ~/dingo/nview
+chmod +x $DINGO_HOME/nview
 ```
 
 
@@ -44,10 +44,10 @@ chmod +x ~/dingo/nview
 
 Run `nview`
 
-⚠️ For this example, the `nview` binary is located in the `~/dingo` directory.
+⚠️ For this example, the `nview` binary is located in the `$DINGO_HOME` directory.
 
 ```
-cd ~/dingo
+$DINGO_HOME
 ./nview
 ```
 
