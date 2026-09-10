@@ -10,7 +10,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Pool.
 ## Step 1 - Create your pool's metadata JSON file
 Update the values below with your pool's information. 
 
-📝 **ticker** must be between 3-5 characters in length
+📝 **ticker** must be between 3-5 characters in length.
 📝 **description** cannot exceed 255 characters in length.
 
 ```
@@ -28,7 +28,7 @@ EOF
 ***
 
 ## Step 2 - Calculate the metadata hash
-Calculate the hash of your metadata file. The hash is saved to `previewPoolMetaDataHash.txt`
+Calculate the hash of your metadata file. The hash is saved to `previewPoolMetaDataHash.txt`.
 
 ```
 cardano-cli conway stake-pool metadata-hash \
@@ -42,12 +42,12 @@ Copy `previewPoolMetaDataHash.txt` to your air-gapped machine.
 
 ## Step 3 - Upload `preview-pool-metadata.json` to a public website
 
-Upload your `preview-pool-metadata.json` file to a website that you administer or a public Web site. For example, you can upload your pool metadata to GitHub. <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-v-tips/uploading-pool-metadata-to-github" target="_blank">See Coincashew guide here for uploading to GitHub.</a> 
+Upload your `preview-pool-metadata.json` file to a website that you administer or a public website. For example, you can upload your pool metadata to GitHub. <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-v-tips/uploading-pool-metadata-to-github" target="_blank">See Coincashew guide here for uploading to GitHub.</a> 
 
 ***
 
 ## Step 4 - Verify the metadata hashes
-First retrieve the metadata hash from your metadata JSON URL.  
+Retrieve the metadata hash from your metadata JSON URL.  
 
 Replace <https://www.METADATA-URL.com> with your actual URL from Step 3.
 ```
@@ -77,7 +77,7 @@ mkdir pool-scripts
 ### Step 5.2 - Create an env file
 Create an environment (`env`) file for our pool in the pool-scripts folder.
 
-✅ Update the values below with your metadata URL, your relay node IP and port, pool pledge amount and cost (min pool fee) and margin.
+✅ Update the values below with your metadata URL, relay node IP and port, pool pledge amount, cost (min pool fee), and margin.
 
 ```
 cat > $DINGO_HOME/pool-scripts/env << 'EOF' 
@@ -205,7 +205,7 @@ cd $DINGO_HOME
 cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
---signing-key-file $HOME/dingo/cold-keys/node.skey \
+--signing-key-file $DINGO_HOME/cold-keys/node.skey \
 --signing-key-file stake.skey \
 --out-file tx.signed
 ```
@@ -245,7 +245,7 @@ cardano-cli query stake-snapshot --stake-pool-id $(cat stakepoolid.txt)
 
 ***
 
-## Step 9 - Update your `dingo.yaml` with the new KES key, VRF key and operation certificate
+## Step 9 - Update your `dingo.yaml` with the new KES key, VRF key, and operation certificate
 
 ⚠️ On Block Producer
 
