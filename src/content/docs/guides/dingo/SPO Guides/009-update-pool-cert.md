@@ -4,7 +4,7 @@ description: SPO Guide for Dingo Pools - Update Pool Certificate.
 ---
 
 # Dingo - Updating the Pool Certificate
-Over time, you may need to update your pool certificate (`pool.cert`) to change your pledge amount, fees or relay information. This guide will walk you through the process.
+Over time, you may need to update your pool certificate (`pool.cert`) to change your pledge amount, fees, or relay information. This guide will walk you through the process.
 
 > ✅ This guide assumes you generated your original `pool.cert` by following the [Register Your Stake Pool](../005-register-pool) guide.
 > 
@@ -63,7 +63,7 @@ currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
 echo Current Slot: $currentSlot
 ```
 
-### Step 4.2 - Build the Transaction
+### Step 4.2 - Build the transaction
 ```
 cd $DINGO_HOME
 cardano-cli conway transaction build \
@@ -81,12 +81,12 @@ cardano-cli conway transaction build \
 > --tx-body-file tx.raw
 > ```
 
-### Step 4.3 - Sign the Transaction
-Copy `tx.raw` to your cold environment in your `$DINGO_HOME` directory
+### Step 4.3 - Sign the transaction
+Copy `tx.raw` to your cold environment in your `$DINGO_HOME` directory.
 
 ⚠️ On an air-gapped machine
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
@@ -98,7 +98,7 @@ cardano-cli conway transaction sign \
 Copy `tx.signed` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction submit --tx-file tx.signed
 ```
 
@@ -107,4 +107,4 @@ cardano-cli conway transaction submit --tx-file tx.signed
 ## Step 5 - Verify the Registration
 Changes take effect in two epochs. After the next epoch transition, verify that your pool settings are correct.
 
-Wait a few minutes for the transaction to reach the chain, then you can use your preferred Cardano explorer to see if transaction was successful like: https://cardanoscan.io/
+Wait a few minutes for the transaction to reach the chain, then you can use your preferred Cardano explorer to verify that the transaction was successful, such as <a href="https://preview.cardanoscan.io/" target="_blank">https://preview.cardanoscan.io</a>.
