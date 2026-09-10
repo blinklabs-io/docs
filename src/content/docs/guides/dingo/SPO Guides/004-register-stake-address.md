@@ -9,7 +9,7 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Address.
 
 ✅ This guide assumes your files are in the $DINGO_HOME folder. Adjust paths below if necessary.
 
-## Step 1 - Generate stake registration certificate
+## Step 1 - Generate the stake registration certificate
 
 ⚠️ On an air-gapped machine
 
@@ -25,7 +25,7 @@ cardano-cli conway stake-address registration-certificate \
 
 <br>
 
-## Step 2 - Build Transaction 
+## Step 2 - Build the transaction 
 Copy `stake.cert` to the `$DINGO_HOME` directory on your hot environment.
 
 
@@ -36,7 +36,7 @@ currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
 echo Current Slot: $currentSlot
 ```
 
-Next build the transaction. The `transaction build` calculates fees and change automatically:
+Next, build the transaction. The `transaction build` command calculates fees and change automatically:
 
 ```
 cd $DINGO_HOME
@@ -55,11 +55,11 @@ cardano-cli conway transaction build \
 
 <br>
 
-## Step 3 - Sign Transaction
+## Step 3 - Sign the transaction
 
 Copy `tx.raw` to the `$DINGO_HOME` directory on your air-gapped machine.
 
-Sign transaction using both the payment and stake signing keys:
+Sign the transaction using both the payment and stake signing keys:
 
 ⚠️ On an air-gapped machine
 
@@ -76,7 +76,7 @@ cardano-cli conway transaction sign \
 
 <br>
 
-## Step 4 - Submit Transaction
+## Step 4 - Submit the transaction
 
 Copy `tx.signed` to the `$DINGO_HOME` directory on your hot environment.
 
