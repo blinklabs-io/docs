@@ -69,9 +69,9 @@ cardano-cli conway node key-gen \
 
 ## Step 4 - Find the starting KES period
 
-We need the Shelley Genesis json file to run our CLI command
+We need the Shelley Genesis JSON file to run our CLI command.
 
-We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `$DINOG_HOME/config/` by running the following command:
+We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `$DINGO_HOME/config/` by running the following command:
 
 Make directory and move into it:
 ```
@@ -99,7 +99,7 @@ startKesPeriod=${kesPeriod}
 echo startKesPeriod: ${startKesPeriod}
 ```
 
-📝 WRITE DOWN THIS NUMBER
+📝 WRITE DOWN THIS NUMBER.
 
 ***
 
@@ -109,7 +109,7 @@ echo startKesPeriod: ${startKesPeriod}
 
 ✅ Change the <startKesPeriod> value you wrote down in the previous step.
 
-⚠️ On an air-gapped machine once you have copied `kes.vkey` to your cold environment.
+⚠️ On an air‑gapped machine, after you have copied `kes.vkey` to your cold environment.
 
 ```
 cd $DINGO_HOME
@@ -146,7 +146,9 @@ cardano-cli conway node key-gen-VRF \
 
 <br>
 
-## Step 8 - Update VRF key permissions to read-only. You must also copy vrf.vkey to your cold environment.
+## Step 8 - Update VRF key permissions to read-only. 
+
+You must also copy `vrf.vkey` to your cold environment.
 
 ```
 chmod 400 vrf.skey
@@ -170,7 +172,7 @@ chmod 400 vrf.skey
 > **All other keys must remain offline in your air-gapped cold environment.**
 > 
 > **Relay Nodes**
-> Relay nodes must NOT store any operational certificates, VRF keys, signing keys or cold keys.
+> Relay nodes must NOT store operational certificates, VRF keys, signing keys, or cold keys.
 
 ***
 
