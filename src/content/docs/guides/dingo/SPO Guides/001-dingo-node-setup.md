@@ -70,7 +70,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 <br>
 
-### Step 3 -Download the Cardano-CLI binary 
+### Step 3 - Download the Cardano-CLI binary 
 
 Download the Cardano-CLI binary and run the following command:
 
@@ -83,7 +83,7 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 ***
 
-Move `cardano-cli to`/usr/local/bin` by running:
+Move `cardano-cli` to`/usr/local/bin` by running:
 
 ```
 sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
@@ -95,7 +95,7 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 
 **We need the Shelley Genesis JSON file to run some of our CLI commands.** 
 
-For this example, we will use the following directory structure `$DINGO_HOME/config/`. The following command will create the directory and move into that directory:
+For this example, we will use the following directory structure: `$DINGO_HOME/config/`. The following command will create the directory and move into that directory:
 ```
 mkdir -p "$DINGO_HOME/config" && cd "$DINGO_HOME/config"
 ```
@@ -159,7 +159,7 @@ Dingo ships with embedded Cardano network configurations (genesis files and conf
 sudo mkdir -p /etc/dingo
 ```
 
-**and**
+**Then create the `.dingo` directory:**
 
 ```
 mkdir -p $DINGO_HOME/.dingo
@@ -200,7 +200,7 @@ sudo nano /etc/dingo/dingo.yaml
 
 ### Step 6 - Create `dingo.service` Unit File
 
-Create the systemd service file. ⚠️ Replace `YOUR_USER` with your Linux username (`echo $USER`):
+Create the systemd service file. ⚠️ Replace `YOUR_USER` with your Linux username (run `echo $USER` to confirm):
 
 ```
 cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
@@ -236,7 +236,7 @@ sudo nano /etc/systemd/system/dingo.service
 
 ### Step 7 - Enable and Start the Service
 
-Enable the service to start on boot and start it now:
+Enable the service to start on boot, then start it:
 
 ```
 sudo systemctl daemon-reload
@@ -272,7 +272,7 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-#### Congratulations! You can now have a Dingo Node Syncing! <br><br> Make sure the node is fully synced before proceeding.
+#### Congratulations! Your Dingo node should now be syncing. <br><br> Make sure the node is fully synced before proceeding.
 
 ***
 
