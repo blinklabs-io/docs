@@ -30,12 +30,12 @@ sudo systemctl stop dingo
 sudo cp $DINGO_HOME/dingo /usr/local/bin/
 ```
 
-Verify it has been copied by `which dingo`
+Verify it has been copied by `which dingo`.
 
 ***
 
 ## Step 4 - Check for Configuration File Updates
-Check to make sure no config updates are required.
+Check whether any configuration updates are required.
 
 Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release Notes</a>.
 
@@ -49,7 +49,7 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 ***
 
 ## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
-Since Dingo is under active development it is recommended during upgrading to delete database and start fresh.
+Since Dingo is under active development, it is recommended during upgrades to delete database and start fresh.
 
 ### Step 5.1 - Delete the `.dingo` Database
 > 💡 To view hidden files and double-check path run:
@@ -78,7 +78,7 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-This takes approximately 20-30 minutes depending on your system and network speed.
+This process takes approximately 20-30 minutes, depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
