@@ -7,7 +7,7 @@ description: gOuroboros Release Notes
 
 <br>
 
--☑️ Select a version below to view the full release notes.
+☑️ Select a version below to view the full release notes.
 
 - Version: v0.204.4 - *[View Release Notes](../v0-204-4)*
 - Version: v0.204.1 - *[View Release Notes](../v0-204-1)*
