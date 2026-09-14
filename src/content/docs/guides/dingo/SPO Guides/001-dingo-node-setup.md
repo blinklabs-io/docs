@@ -25,7 +25,9 @@ Next create directory:
 mkdir -p "$DINGO_HOME"
 ```
 
-> You can verify by running:
+<br> 
+
+> ✅ You can verify by running:
 > ```
 > echo $DINGO_HOME
 > ```
@@ -43,10 +45,12 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.7/dingo-v0.70.7-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.10/dingo-v0.70.10-linux-amd64.tar.gz -O - | tar -xz
 ```
 
-You can verify the binary version by running:
+<br>
+
+✅ You can verify the binary version by running:
 
 ```
 ./dingo version
@@ -64,17 +68,23 @@ Copy the binary:
 sudo cp $DINGO_HOME/dingo /usr/local/bin/
 ```
 
-> ✅ You can verify the binary was copied by running `which dingo`
+<br>
+
+> ✅ You can verify the binary was copied by running: 
+> ```
+> which dingo
+> ```
 
 ***
 
 <br>
 
-### Step 3 - Download the Cardano-CLI binary 
+### Step 3 - Download the Cardano-CLI Binary 
 
 Download the Cardano-CLI binary and run the following command:
 
 ```
+cd $DINGO_HOME
 wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.2.3.1/cardano-cli-11.2.3.1-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
@@ -83,10 +93,20 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 ***
 
-Move `cardano-cli` to`/usr/local/bin` by running:
+<br>
+
+Move `cardano-cli` to `/usr/local/bin` by running:
 
 ```
 sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
+```
+
+<br>
+
+✅ You can verify the `cardano-cli` version by running:
+
+```
+cardano-cli version
 ```
 
 ***
@@ -99,6 +119,8 @@ For this example, we will use the following directory structure: `$DINGO_HOME/co
 ```
 mkdir -p "$DINGO_HOME/config" && cd "$DINGO_HOME/config"
 ```
+
+<br> 
 
 To download the Shelley Genesis file, run:
 
@@ -127,6 +149,10 @@ export CARDANO_NODE_NETWORK_ID=2
 export CARDANO_NODE_SOCKET_PATH="$DINGO_HOME/dingo.socket"
 ```
 
+> 💡 Tip: 2 = Preview.
+
+<br>
+
 **Save and exit.**
 
 Reload your bashrc:
@@ -137,7 +163,7 @@ source ~/.bashrc
 
 ***
 
-> You can verify your environment variables by running:
+> ✅ You can verify your environment variables by running:
 > ```
 > echo $CARDANO_NODE_NETWORK_ID
 > ```
@@ -167,7 +193,7 @@ mkdir -p $DINGO_HOME/.dingo
 
 - Then create `dingo.yaml` file:
 
-> The `$DINGO_HOME` variable will automatically expand to your home directory path.
+> The `$DINGO_HOME` variable will automatically expand to your home directory path in the command provided below.
 
 ```
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
@@ -183,7 +209,7 @@ socketPath: \"$DINGO_HOME/dingo.socket\"
 EOF"
 ```
 
-You can view and verify `dingo.yaml` file by running:
+You can view and check your `dingo.yaml` file by running:
 
 ```
 sudo nano /etc/dingo/dingo.yaml
@@ -224,7 +250,7 @@ ENDFILE
 
 ***
 
-We can view and verify our `dingo.service` file by running:
+✅ You can view and check your `dingo.service` file by running:
 
 ```
 sudo nano /etc/systemd/system/dingo.service
@@ -250,7 +276,7 @@ sudo systemctl start dingo.service
 
 ### Step 8 - Check Status
 
-Verify the service is running:
+✅ Verify the service is running:
 
 ```
 sudo systemctl status dingo.service
@@ -279,19 +305,9 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 Run this command to see if the node is 100% synced.
-> 
+
 > ```
 > cardano-cli query tip
 > ```
 
 ***
-
-<br>
-
-> To follow the logs in real time:
-> 
-> ```
-> sudo journalctl -u dingo -f
-> ```
-
-
