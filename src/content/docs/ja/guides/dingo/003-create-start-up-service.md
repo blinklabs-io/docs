@@ -61,7 +61,6 @@ sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 # Database
 databasePath: \"$HOME/dingo/.dingo\"
 
-# Plugins
 # 起動時の reward_live_stake 整合性スキャンを省略する高度な診断用オプトアウトです。
 # 既定値は false です。通常は変更しないでください。
 # true にすると reward_live_stake のスキャンだけを省略します。
