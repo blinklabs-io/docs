@@ -35,3 +35,13 @@ Dingo aplica las reglas de valencia por separado a cada elemento de `localRoots`
 - Una lista `accessPoints` vacía es válida. Cuando la lista está vacía, Dingo omite la comparación entre `valency` y el número de puntos de acceso, pero mantiene la regla `warmValency <= valency` cuando `warmValency` es distinto de `0`.
 
 `bootstrapPeers` solo usa las reglas de los puntos de acceso. Esta colección no usa las reglas `warmValency` ni `valency`.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
