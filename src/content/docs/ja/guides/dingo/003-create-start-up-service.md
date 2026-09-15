@@ -61,15 +61,6 @@ sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 # Database
 databasePath: \"$HOME/dingo/.dingo\"
 
-# 起動時の reward_live_stake 整合性スキャンを省略する高度な診断用オプトアウトです。
-# 既定値は false です。通常は変更しないでください。
-# true にすると reward_live_stake のスキャンだけを省略します。
-# CLI: --skip-reward-live-stake-backfill-check
-# 環境変数: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
-# StaleConsensusStakeSnapshotsExist はコンセンサス stake snapshot の来歴を常に確認し、
-# fail-closed の安全チェックとして機能します。
-skipRewardLiveStakeBackfillCheck: false
-
 # Plugins
 plugins:
   storage:
