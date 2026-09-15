@@ -66,7 +66,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 # true にすると reward_live_stake のスキャンだけを省略します。
 # CLI: --skip-reward-live-stake-backfill-check
 # 環境変数: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
-# StaleConsensusStakeSnapshotsExist によるコンセンサス stake snapshot の来歴確認は常に実行され、
+# StaleConsensusStakeSnapshotsExist はコンセンサス stake snapshot の来歴を常に確認し、
 # fail-closed の安全チェックとして機能します。
 skipRewardLiveStakeBackfillCheck: false
 # Plugins
