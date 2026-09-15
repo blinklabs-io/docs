@@ -13,6 +13,9 @@ description: gOuroboros Release Notes
   * Strengthened message authentication by requiring a `StakeAuthority`, deriving the correct 28 byte Blake2b 224 pool key hash, verifying KES signatures in process, rejecting zero stake, preventing KES period overflow, and failing closed when DMQ authentication is not configured. Integrations that construct `MessageAuthenticator` must now provide the required stake authority.
   * Improved shutdown reliability by allowing message delivery to observe a context and making `BlockFetch` and `ChainSync` `Stop` wait up to 250 ms for the shutdown message. Delivery failures, including `context.DeadlineExceeded`, now return to the caller.
   * Preserved duplicate keys in nested metadata maps while continuing to reject duplicate labels in outer auxiliary data maps.
+  * Aligned Byron dropped field decoding and SSC structural validation with cardano ledger behavior. Compatible variable length byte strings and wider values are accepted, while invalid wire shapes remain rejected.
+  * Hardened UTxO RPC rational validation across Shelley, Mary, Alonzo, and Babbage by rejecting nil embedded rationals and values outside the permitted range.
+  * Enforced protocol aware pool metadata URL limits of 64 bytes before Conway and 128 bytes from Conway onward. UTxO RPC now handles absent metadata safely, and JSON keys use lowercase spelling.
 - Version: v0.204.6 - *[View Release Notes](../v0-204-6)*
 - Version: v0.204.5 - *[View Release Notes](../v0-204-5)*
 - Version: v0.204.4 - *[View Release Notes](../v0-204-4)*
