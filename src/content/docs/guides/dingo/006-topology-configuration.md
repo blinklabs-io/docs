@@ -7,7 +7,7 @@ description: Validate Dingo topology.json access points and root valencies.
 
 ## Overview
 
-This reference describes the validation Dingo applies while loading `topology.json`. Dingo validates the decoded topology before the loader returns the configuration. When a rule fails, the loader returns an error instead of a topology configuration.
+This reference describes the validation Dingo applies while loading `topology.json`. Dingo checks the decoded topology before it accepts the configuration. When a rule fails, Dingo returns an error and does not return the topology configuration.
 
 ## Validated topology collections
 
@@ -17,7 +17,7 @@ Dingo validates access points in these JSON paths:
 - `publicRoots[*].accessPoints[*]`
 - `bootstrapPeers[*]`
 
-The `[*]` segments represent the root and access point array indexes. Each `bootstrapPeers[*]` entry directly contains an address and port.
+The `[*]` notation identifies array elements. Each `bootstrapPeers[*]` entry directly contains an address and port.
 
 ## Access point validation
 
@@ -26,7 +26,7 @@ Every access point in the three collections must meet both requirements:
 - `address` must contain at least one non-whitespace character. An empty or whitespace-only value fails validation.
 - `port` must use the inclusive TCP range from `1` through `65535`.
 
-Validation errors identify the affected collection and array indexes. Errors for root access points identify the root and access point, such as `localRoots[index].accessPoints[index]` or `publicRoots[index].accessPoints[index]`. Errors for bootstrap peers identify the peer, such as `bootstrapPeers[index]`.
+Validation errors identify the affected collection and array indexes. A root access point error identifies the root and access point, such as `localRoots[index].accessPoints[index]` or `publicRoots[index].accessPoints[index]`. A bootstrap peer error identifies the peer, such as `bootstrapPeers[index]`.
 
 ## Root valency rules
 
@@ -35,7 +35,7 @@ Dingo applies the following rules to every entry in `localRoots` and `publicRoot
 - When `warmValency` is nonzero, `warmValency` must be less than or equal to `valency` (`warmValency <= valency`).
 - When `accessPoints` contains one or more entries, `valency` must be less than or equal to the number of access points (`valency <= len(accessPoints)`).
 
-An empty `accessPoints` list is valid. Dingo skips the access point count comparison for an empty list, but it still applies the `warmValency <= valency` rule when `warmValency` is nonzero.
+An empty `accessPoints` list is valid. Dingo skips the access point count comparison for an empty list. The nonzero `warmValency` rule still applies to that root.
 
 ## Bootstrap peer scope
 
