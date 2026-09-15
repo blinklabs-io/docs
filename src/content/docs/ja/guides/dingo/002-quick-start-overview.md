@@ -57,11 +57,6 @@ cat <<EOF > ~/dingo/dingo.yaml
 # Storage
 databasePath: "$HOME/dingo/.dingo"
 
-# 起動時の `reward_live_stake` 整合性スキャンを省略する設定。
-# CLI: `--skip-reward-live-stake-backfill-check`
-# 環境変数: `CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK`
-skipRewardLiveStakeBackfillCheck: false
-
 plugins:
   storage:
     blob:
