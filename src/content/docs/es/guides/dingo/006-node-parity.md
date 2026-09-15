@@ -9,9 +9,9 @@ Esta página describe la sintaxis, las opciones y las validaciones de `node-pari
 
 ## Requisitos
 
-`node-parity` compara dos extremos de node-to-client que ya deben estar ejecutándose y sincronizados. El comando no inicia ni administra ninguno de los nodos.
+`node-parity` compara dos extremos node-to-client que deben estar en ejecución y sincronizados antes de iniciar el comando. El comando no inicia ni administra ninguno de los nodos.
 
-La sección de indicadores compartidos define los valores obligatorios para seleccionar la red y conectar los dos extremos.
+La tabla de indicadores compartidos especifica los valores obligatorios para seleccionar la red y conectar ambos extremos.
 
 Las direcciones pueden usar el formato `host:port` o una ruta a un socket Unix que comience por `/`.
 
