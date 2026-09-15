@@ -21,14 +21,14 @@ Los errores de validación identifican la colección y los índices de los eleme
 
 Cada elemento de las rutas validadas debe cumplir estas condiciones:
 
-- `address` no puede estar vacío. Un valor que solo contiene espacios en blanco también se considera vacío.
+- `address` no puede estar vacío. Dingo trata como vacío cualquier valor que solo contiene espacios en blanco.
 - `port` debe estar dentro del rango TCP inclusivo de `1` a `65535`.
 
 Estas reglas se aplican a cada elemento de `localRoots[*].accessPoints[*]`, `publicRoots[*].accessPoints[*]` y `bootstrapPeers[*]`.
 
 ## Reglas de valencia para las raíces
 
-Las reglas de valencia se aplican por separado a cada elemento de `localRoots` y `publicRoots`:
+Dingo aplica las reglas de valencia por separado a cada elemento de `localRoots` y `publicRoots`:
 
 - Cuando `warmValency` es distinto de `0`, debe ser menor o igual que `valency`: `warmValency <= valency`.
 - Cuando `accessPoints` contiene al menos un elemento, `valency` debe ser menor o igual que el número de puntos de acceso: `valency <= len(accessPoints)`.
