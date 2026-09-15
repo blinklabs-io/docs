@@ -5,11 +5,11 @@ description: Dingoのtopology.jsonに対するアクセス先とルートのvale
 
 # Dingoのトポロジー設定
 
-このページでは、Dingoが`topology.json`を読み込むときに検証するトポロジー設定を説明します。対象は、`localRoots[*].accessPoints[*]`、`publicRoots[*].accessPoints[*]`、`bootstrapPeers[*]`の3つのコレクションです。
+このページでは、Dingoが`topology.json`を読み込むときに検証するトポロジー設定を説明します。対象は、`localRoots[*].accessPoints[*]`、`publicRoots[*].accessPoints[*]`、`bootstrapPeers[*]`の3つの設定項目群です。
 
 ## 検証のタイミング
 
-Dingoは、`topology.json`をJSONとして読み込んだ後、設定を返す前にトポロジーを検証します。検証に失敗した設定は読み込み時に拒否されます。
+Dingoは、`topology.json`をJSONとして読み込んだ後、設定を返す前にトポロジーを検証します。検証に失敗した設定を読み込み時に拒否します。
 
 ## アクセス先の検証
 
@@ -19,22 +19,22 @@ Dingoは、`topology.json`をJSONとして読み込んだ後、設定を返す�
 - `publicRoots[*].accessPoints[*]`
 - `bootstrapPeers[*]`
 
-各アクセス先には、次の条件が適用されます。
+Dingoは各アクセス先に次の条件を適用します。
 
 - `address`には、空文字列や空白だけの値を指定できません。
 - `port`には、`1`から`65535`までの範囲にあるTCPポートを指定します。`1`と`65535`は指定できます。
 
-検証エラーには、対象のコレクションと配列インデックスが含まれます。たとえば、`localRoots[0].accessPoints[1]`や`bootstrapPeers[0]`のように、影響を受けたエントリを特定できます。
+Dingoは検証エラーに対象の設定項目群と配列インデックスを含めます。たとえば、`localRoots[0].accessPoints[1]`や`bootstrapPeers[0]`のように、影響を受けたエントリを特定できます。
 
 ## ルートの`warmValency`と`valency`
 
-`localRoots`と`publicRoots`の各ルートには、次の条件が適用されます。
+Dingoは`localRoots`と`publicRoots`の各ルートに次の条件を適用します。
 
 - `warmValency`が`0`ではない場合、`warmValency`は`valency`以下である必要があります（`warmValency <= valency`）。
 - `accessPoints`が空ではない場合、`valency`は`accessPoints`のエントリ数以下である必要があります（`valency <= len(accessPoints)`）。
 - `accessPoints`が空のリストでも有効です。空のリストの場合、`valency`と`accessPoints`のエントリ数は比較しません。ただし、`warmValency`が`0`ではない場合の`warmValency <= valency`の条件は適用されます。
 
-`bootstrapPeers`にはアクセス先の検証だけを適用します。`bootstrapPeers`には`warmValency`と`valency`の検証を適用しません。
+Dingoは`bootstrapPeers`にアクセス先の検証だけを適用します。`bootstrapPeers`では`warmValency`と`valency`を検証しません。
 
 ---
 
