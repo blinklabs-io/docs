@@ -37,7 +37,6 @@ Dingo aplica las reglas de valencia por separado a cada elemento de `localRoots`
 `bootstrapPeers` solo usa las reglas de los puntos de acceso. Esta colección no usa las reglas `warmValency` ni `valency`.
 
 ---
- 
 <!-- doc-holiday-watermark -->
 <p align="center">
   <a href="https://doc.holiday">
