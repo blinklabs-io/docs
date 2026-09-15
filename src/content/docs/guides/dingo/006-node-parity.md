@@ -68,7 +68,7 @@ node-parity watch \
 
 ### Full mode
 
-Set `--mode full` to run the whole-ledger comparison mode. Configure its fallback schedule and per-cycle timeout with these flags:
+Set `--mode full` to configure the fallback schedule and per-cycle timeout with these flags:
 
 | Flag | Default | Requirement |
 | --- | --- | --- |
