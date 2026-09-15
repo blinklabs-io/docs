@@ -62,6 +62,7 @@ sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Plugins
+skipRewardLiveStakeBackfillCheck: false
 plugins:
   storage:
     blob:
