@@ -11,11 +11,7 @@ Esta página describe la sintaxis, las opciones y las validaciones de `node-pari
 
 `node-parity` compara dos extremos de node-to-client que ya deben estar ejecutándose y sincronizados. El comando no inicia ni administra ninguno de los nodos.
 
-Los siguientes indicadores son obligatorios:
-
-- `--network` debe ser `preview` o `preprod`.
-- `--dingo-addr` debe especificar la dirección node-to-client de Dingo.
-- `--cardano-addr` debe especificar la dirección node-to-client de `cardano-node`.
+La sección de indicadores compartidos define los valores obligatorios para seleccionar la red y conectar los dos extremos.
 
 Las direcciones pueden usar el formato `host:port` o una ruta a un socket Unix que comience por `/`.
 
@@ -102,7 +98,7 @@ node-parity check \
   --dingo-addr 127.0.0.1:3002 \
   --cardano-addr 127.0.0.1:3003 \
   --at-slot 123456 \
-  --at-hash <hash-hexadecimal-de-64-caracteres>
+  --at-hash <HASH_HEX_64_CARACTERES>
 ```
 
 `--at-slot` y `--at-hash` deben aparecer juntos o ambos deben omitirse. `--at-hash` debe contener un valor hexadecimal que se decodifique exactamente en `32` bytes, es decir, `64` caracteres hexadecimales.
