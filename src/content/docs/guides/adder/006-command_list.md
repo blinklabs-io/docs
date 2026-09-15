@@ -65,12 +65,15 @@ description: List of Adder Commands.
 ```
   
 > specifies event type to filter on
+>
+> For `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep`, and `--filter-type`, Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
 > 
 > **Event Types:**
 > 1. `input.block` - A new block was observed.
 > 2. `input.rollback` -	A rollback occurred to a previous chain point.
 > 3. `input.transaction` -	A transaction was seen in a block.
 > 4. `input.governance` -	A governance-related event (CIP-1694 era).
+> 5. `input.drep-registration` - A DRep registration occurred.
         
 ***
 
@@ -122,6 +125,7 @@ description: List of Adder Commands.
 ```
   
 > start syncing at the specified chain point(s) in '<slot>.<hash>' format
+>
 <br />
 
 ```
@@ -245,6 +249,7 @@ description: List of Adder Commands.
 ```
   
 > output plugin to use, 'list' to show available (default "log")
+>
 <br />
 
 ```
@@ -252,6 +257,13 @@ description: List of Adder Commands.
 ```
   
 > specifies the output format: text (human-readable, default) or json (machine-parseable) (default "text")
+<br />
+
+```
+  --output-notify-json-config string
+```
+  
+> path to the versioned notification JSON configuration used by `notify-json`
 <br />
 
 ```
@@ -272,7 +284,10 @@ description: List of Adder Commands.
   --output-push-serviceAccountFilePath string
 ```
   
-> specifies the path to the service account file
+> specifies the path to the service account file. This value must be non-empty when using `--output push`.
+>
+> The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
+>
 <br />
 
 ```
@@ -339,6 +354,18 @@ description: List of Adder Commands.
 
 ***
 
+## Notifications:
+
+```
+adder notifications validate --config <path> [--json]
+```
+
+> validates a notification JSON configuration
+>
+> `--config <path>` is required. Normal output reports validity and errors. `--json` emits the machine-readable validation result.
+>
+
+***
 ## Version:
 
 ```
@@ -347,3 +374,14 @@ description: List of Adder Commands.
   
 > show version and exit
 
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

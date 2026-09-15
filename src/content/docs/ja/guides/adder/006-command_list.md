@@ -71,6 +71,9 @@ description: Adderコマンドのリスト。
 > 2. `input.rollback` -	以前のチェーンポイントへのロールバックが発生した。
 > 3. `input.transaction` -	ブロック内でトランザクションが確認された。
 > 4. `input.governance` -	ガバナンス関連のイベント（CIP-1694時代）。
+> 5. `input.drep-registration` - DRepの登録イベント。
+>
+>
 
 ***
 
@@ -121,7 +124,9 @@ description: Adderコマンドのリスト。
   --input-chainsync-intersect-point string
 ```
 
-> '<slot>.<hash>'形式で指定されたチェーンポイントから同期を開始
+> '<slot>.<hash>'形式のチェーンポイントをカンマ区切りで指定して、その地点から同期を開始
+>
+> 各項目の前後の空白を取り除き、空の項目を無視します。空白または空の項目だけの場合は、`--input-chainsync-intersect-tip`の設定に従います。空でない項目の形式が正しくない場合はエラーになります。
 <br />
 
 ```
@@ -245,6 +250,8 @@ description: Adderコマンドのリスト。
 ```
 
 > 使用する出力プラグイン、利用可能なものを表示するには'list'（デフォルト"log"）
+>
+> `notify-json`を指定すると、通知リクエストをNDJSONとして出力します。
 <br />
 
 ```
@@ -252,6 +259,13 @@ description: Adderコマンドのリスト。
 ```
 
 > 出力フォーマットを指定：text（人間が読める形式、デフォルト）またはjson（機械が解析可能）（デフォルト"text"）
+<br />
+
+```
+  --output-notify-json-config string
+```
+
+> `notify-json`で使用するバージョン付き通知JSON設定ファイルのパスを指定
 <br />
 
 ```
@@ -272,7 +286,6 @@ description: Adderコマンドのリスト。
   --output-push-serviceAccountFilePath string
 ```
 
-> サービスアカウントファイルのパスを指定
 <br />
 
 ```
@@ -339,6 +352,15 @@ description: Adderコマンドのリスト。
 
 ***
 
+## 通知：
+
+```
+adder notifications validate --config <path> [--json]
+```
+
+
+***
+
 ## バージョン：
 
 ```
@@ -347,3 +369,14 @@ description: Adderコマンドのリスト。
 
 > バージョンを表示して終了
 
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
