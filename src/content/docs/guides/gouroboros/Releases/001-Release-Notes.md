@@ -16,6 +16,9 @@ description: gOuroboros Release Notes
   * Aligned Byron dropped field decoding and SSC structural validation with cardano ledger behavior. Compatible variable length byte strings and wider values are accepted, while invalid wire shapes remain rejected.
   * Hardened UTxO RPC rational validation across Shelley, Mary, Alonzo, and Babbage by rejecting nil embedded rationals and values outside the permitted range.
   * Enforced protocol aware pool metadata URL limits of 64 bytes before Conway and 128 bytes from Conway onward. UTxO RPC now handles absent metadata safely, and JSON keys use lowercase spelling.
+  * Propagated the enclosing era through nested UTXO and UT XOW failures, including Conway and Dijkstra cases, while preserving unknown raw CBOR context for diagnosis.
+  * Corrected certificate UTxO RPC responses to preserve deposit amounts as `Coin` values and to use the correct pool hash for stake vote delegation certificates.
+  * Added explicit `Start` and `Stop` lifecycle controls for KeepAlive, Client, and Server, along with simpler notification callbacks that preserve legacy callback precedence.
 - Version: v0.204.6 - *[View Release Notes](../v0-204-6)*
 - Version: v0.204.5 - *[View Release Notes](../v0-204-5)*
 - Version: v0.204.4 - *[View Release Notes](../v0-204-4)*
