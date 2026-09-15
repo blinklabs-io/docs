@@ -64,8 +64,8 @@ databasePath: \"$HOME/dingo/.dingo\"
  # Cuando es true, Dingo omite únicamente el análisis de coherencia de inicio de `reward_live_stake`.
  # CLI: --skip-reward-live-stake-backfill-check
  # Env: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
- # La comprobación de procedencia `StaleConsensusStakeSnapshotsExist` sigue
- # ejecutándose siempre y rechaza el inicio si falla (fail-closed).
+ # Dingo ejecuta siempre la comprobación de procedencia `StaleConsensusStakeSnapshotsExist` y
+ # rechaza el inicio si falla (fail-closed).
  skipRewardLiveStakeBackfillCheck: false
 
 plugins:
