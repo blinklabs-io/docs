@@ -5,15 +5,15 @@ description: Dingoのtopology.jsonに対するアクセス先とルートのvale
 
 # Dingoのトポロジー設定
 
-このページでは、Dingoが`topology.json`を読み込むときに検証するトポロジー設定を説明します。対象は、`localRoots[*].accessPoints[*]`、`publicRoots[*].accessPoints[*]`、`bootstrapPeers[*]`の3つの設定項目群です。
+このページでは、Dingoが`topology.json`を読み込むときに検証するトポロジー設定を説明します。対象は、`localRoots[*].accessPoints[*]`、`publicRoots[*].accessPoints[*]`、`bootstrapPeers[*]`の3つの設定配列です。
 
 ## 検証のタイミング
 
-Dingoは、`topology.json`をJSONとして読み込んだ後、設定を返す前にトポロジーを検証します。検証に失敗した設定を読み込み時に拒否します。
+Dingoは、`topology.json`をJSONとして読み込んだ後、読み込みを完了する前にトポロジーを検証します。検証に失敗した設定を読み込み時に拒否します。
 
 ## アクセス先の検証
 
-次のJSONパスにある各エントリを検証します。
+Dingoは次のJSONパスにある各エントリを検証します。
 
 - `localRoots[*].accessPoints[*]`
 - `publicRoots[*].accessPoints[*]`
@@ -24,7 +24,7 @@ Dingoは各アクセス先に次の条件を適用します。
 - `address`には、空文字列や空白だけの値を指定できません。
 - `port`には、`1`から`65535`までの範囲にあるTCPポートを指定します。`1`と`65535`は指定できます。
 
-Dingoは検証エラーに対象の設定項目群と配列インデックスを含めます。たとえば、`localRoots[0].accessPoints[1]`や`bootstrapPeers[0]`のように、影響を受けたエントリを特定できます。
+Dingoは検証エラーに対象のJSONパスと配列インデックスを含めます。たとえば、`localRoots[0].accessPoints[1]`や`bootstrapPeers[0]`のように、影響を受けたエントリを特定できます。
 
 ## ルートの`warmValency`と`valency`
 
