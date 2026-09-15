@@ -69,6 +69,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 # StaleConsensusStakeSnapshotsExist によるコンセンサス stake snapshot の来歴確認は常に実行され、
 # fail-closed の安全チェックとして機能します。
 skipRewardLiveStakeBackfillCheck: false
+# Plugins
 plugins:
   storage:
     blob:
