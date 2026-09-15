@@ -10,12 +10,12 @@ description: gOuroboros Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.205.0 - *[View Release Notes](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.205.0)*
-  * Strengthened message authentication by requiring a `StakeAuthority`, deriving the correct 28-byte Blake2b-224 pool key hash, verifying KES signatures in process, rejecting zero stake, preventing KES period overflow, and failing closed when DMQ authentication is not configured. Integrations that construct `MessageAuthenticator` must now provide the required stake authority.
-  * Improved shutdown reliability by allowing message delivery to observe a context and making `BlockFetch` and `ChainSync` `Stop` wait up to 250 ms for the shutdown message. Delivery failures, including `context.DeadlineExceeded`, now return to the caller.
+  * Strengthened message authentication by requiring a `StakeAuthority`, deriving the correct 28-byte Blake2b-224 pool key hash, verifying KES signatures in process, rejecting zero stake, preventing KES period overflow, and rejecting DMQ authentication when configuration is absent. Integrations that construct `MessageAuthenticator` must now provide the required stake authority.
+  * Improved shutdown reliability by allowing message delivery to observe a context and making `BlockFetch` and `ChainSync` `Stop` wait up to 250 ms for shutdown message delivery. Delivery failures, including `context.DeadlineExceeded`, now return to the caller.
   * Preserved duplicate keys in nested metadata maps while continuing to reject duplicate labels in outer auxiliary data maps.
   * Aligned Byron dropped field decoding and SSC structural validation with cardano-ledger behavior. The decoder accepts compatible variable-length byte strings and wider values and rejects invalid wire shapes.
   * Hardened UTxO RPC rational validation across Shelley, Mary, Alonzo, and Babbage by rejecting nil embedded rationals and values outside the permitted range.
-  * Enforced protocol-aware pool metadata URL limits of 64 bytes before Conway and 128 bytes from Conway onward. UTxO-RPC now handles absent metadata safely, and JSON keys use lowercase spelling.
+  * Enforced protocol-version-aware pool metadata URL limits of 64 bytes before Conway and 128 bytes from Conway onward. UTxO-RPC now handles absent metadata safely, and JSON keys use lowercase spelling.
   * Propagated the enclosing era through nested UTXO and UTXOW failures, including Conway and Dijkstra cases, while preserving unknown raw CBOR context for diagnosis.
   * Corrected certificate UTxO-RPC responses to preserve deposit amounts as `Coin` values and to use the correct pool hash for stake-vote delegation certificates.
   * Added explicit `Start` and `Stop` lifecycle controls for KeepAlive, Client, and Server, along with simpler notification callbacks that preserve legacy callback precedence.
