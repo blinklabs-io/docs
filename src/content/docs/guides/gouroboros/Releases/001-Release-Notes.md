@@ -9,7 +9,7 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
-- Version: v0.205.0 - *[View Release Notes](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.205.0)*
+- Version: v0.205.0 - *[View Release Notes](../v0-205-0)*
   * Strengthened message authentication by requiring a `StakeAuthority`, deriving the correct 28-byte Blake2b-224 pool key hash, verifying KES signatures in process, rejecting zero stake, preventing KES period overflow, and rejecting DMQ authentication when configuration is absent. Integrations that construct `MessageAuthenticator` must now provide the required stake authority.
   * Improved shutdown reliability by allowing message delivery to observe a context and making `BlockFetch` and `ChainSync` `Stop` wait up to 250 ms for shutdown message delivery. Delivery failures, including `context.DeadlineExceeded`, now return to the caller.
   * Preserved duplicate keys in nested metadata maps while continuing to reject duplicate labels in outer auxiliary data maps.
