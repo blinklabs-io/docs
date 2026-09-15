@@ -24,7 +24,7 @@ Cada elemento de las rutas validadas debe cumplir estas condiciones:
 - `address` no puede estar vacío. Dingo trata como vacío cualquier valor que solo contiene espacios en blanco.
 - `port` debe estar dentro del rango TCP inclusivo de `1` a `65535`.
 
-Estas reglas se aplican a cada elemento de `localRoots[*].accessPoints[*]`, `publicRoots[*].accessPoints[*]` y `bootstrapPeers[*]`.
+Dingo aplica estas reglas a cada elemento de `localRoots[*].accessPoints[*]`, `publicRoots[*].accessPoints[*]` y `bootstrapPeers[*]`.
 
 ## Reglas de valencia para las raíces
 
