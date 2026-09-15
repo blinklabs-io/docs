@@ -60,8 +60,8 @@ Como el servicio se ejecutará como tu usuario pero la configuración ahora est�
 sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 databasePath: \"$HOME/dingo/.dingo\"
 
- # false es el valor predeterminado y normal. Usa true solo para diagnóstico avanzado.
- # Cuando es true, Dingo omite únicamente el análisis de coherencia de inicio de `reward_live_stake`.
+ # false es el valor normal y predeterminado; true es solo para diagnóstico avanzado.
+ # Con true, Dingo omite únicamente el análisis de coherencia de inicio de `reward_live_stake`.
  # CLI: --skip-reward-live-stake-backfill-check
  # Env: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
  # Dingo ejecuta siempre la comprobación de procedencia `StaleConsensusStakeSnapshotsExist` y
