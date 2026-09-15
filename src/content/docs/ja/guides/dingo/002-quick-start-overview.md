@@ -131,7 +131,7 @@ EOF
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
-> 📝 `skipRewardLiveStakeBackfillCheck` は高度な診断用オプションで、既定値は `false` です。`true` にすると高コストな `reward_live_stake` 起動時整合性スキャンだけを省略します。Dingoは`StaleConsensusStakeSnapshotsExist` によるコンセンサスステークスナップショットの来歴チェックを常に実行し、必要な場合は起動を拒否します。通常の起動では `false` のままにしてください。
+> 📝 `skipRewardLiveStakeBackfillCheck` は高度な診断用オプションです。既定値は `false` なので、通常の起動ではこの値を使用してください。`true` にすると高コストな `reward_live_stake` 起動時整合性スキャンだけを省略します。Dingoは`StaleConsensusStakeSnapshotsExist` によるコンセンサスステークスナップショットの来歴チェックを常に実行し、必要な場合は起動を拒否します。
 
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
