@@ -13,7 +13,7 @@ Both endpoints must be running and reachable before the command starts. Supply `
 
 ## Watch command
 
-`watch` starts a comparison cycle when chain activity changes. This invocation uses the default incremental mode:
+`watch` starts a comparison cycle when either node produces a new block. This invocation uses the default incremental mode:
 
 ```bash
 node-parity watch \
@@ -27,10 +27,10 @@ node-parity watch \
 
 | Flag | Description |
 | --- | --- |
-| `--network` | Required. Accepts `preview` or `preprod`. |
-| `--dingo-addr` | Required. Dingo's node-to-client address, specified as `host:port` or a Unix socket path beginning with `/`. |
-| `--cardano-addr` | Required. Cardano node's node-to-client address, specified as `host:port` or a Unix socket path beginning with `/`. |
-| `--metrics-addr` | Optional. Sets the address for the `watch` Prometheus metrics endpoint. Set it to an empty value to disable metrics. |
+| `--network` | Required. Set it to `preview` or `preprod`. |
+| `--dingo-addr` | Required. Provide Dingo's node-to-client address as `host:port` or a Unix socket path beginning with `/`. |
+| `--cardano-addr` | Required. Provide the Cardano node's node-to-client address as `host:port` or a Unix socket path beginning with `/`. |
+| `--metrics-addr` | Optional. Set the address for the `watch` Prometheus metrics endpoint, or set an empty value to disable metrics. |
 
 ### Comparison mode
 
