@@ -63,7 +63,7 @@ databasePath: \"$HOME/dingo/.dingo\"
 
 # Plugins
 # 起動時の reward_live_stake 整合性スキャンを省略する高度な診断用オプトアウトです。
-# 既定値は false で、通常は false のままにしてください。
+# 既定値は false です。通常は変更しないでください。
 # true にすると reward_live_stake のスキャンだけを省略します。
 # CLI: --skip-reward-live-stake-backfill-check
 # 環境変数: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
