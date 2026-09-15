@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.10/dingo-v0.70.10-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.11/dingo-v0.70.11-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -56,6 +56,15 @@ Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expa
 cat <<EOF > ~/dingo/dingo.yaml
 # Ruta de datos compartida para los almacenes locales de blob y metadata.
 databasePath: "$HOME/dingo/.dingo"
+
+# Opción avanzada/de diagnóstico para omitir el escaneo de consistencia de
+# inicio de `reward_live_stake`. Predeterminado: false; se recomienda mantenerlo
+# en false. Al activarla, solo se omite este escaneo; la comprobación de
+# procedencia `StaleConsensusStakeSnapshotsExist` se ejecuta siempre y bloquea
+# el inicio si detecta la condición correspondiente.
+# CLI: --skip-reward-live-stake-backfill-check
+# Variable de entorno: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
+skipRewardLiveStakeBackfillCheck: false
 
 # Plugins de almacenamiento y API
 plugins:
