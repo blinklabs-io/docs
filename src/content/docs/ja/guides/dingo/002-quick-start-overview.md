@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.10）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.11）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.10/dingo-v0.70.10-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.11/dingo-v0.70.11-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -125,6 +125,8 @@ EOF
 ```
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
+
+> 📝 `skipRewardLiveStakeBackfillCheck` は高度な診断用オプションです。既定値は `false` なので、通常の起動ではこの値を使用してください。`true` にすると高コストな `reward_live_stake` 起動時整合性スキャンだけを省略します。Dingoは`StaleConsensusStakeSnapshotsExist` によるコンセンサスステークスナップショットの来歴チェックを常に実行し、必要な場合は起動を拒否します。
 
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
 
