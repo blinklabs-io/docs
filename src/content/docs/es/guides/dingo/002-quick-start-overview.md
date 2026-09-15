@@ -57,16 +57,6 @@ cat <<EOF > ~/dingo/dingo.yaml
 # Ruta de datos compartida para los almacenes locales de blob y metadata.
 databasePath: "$HOME/dingo/.dingo"
 
-# Opción avanzada y de diagnóstico para omitir únicamente el escaneo de
-# consistencia de inicio de `reward_live_stake`. El valor predeterminado es
-# false y constituye el uso normal. Si se establece en true, solo se omite este
-# escaneo; la comprobación de procedencia `StaleConsensusStakeSnapshotsExist`
-# se ejecuta siempre y hace que el inicio falle de forma segura si detecta la
-# condición correspondiente.
-# CLI: --skip-reward-live-stake-backfill-check
-# Variable de entorno: CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK
-skipRewardLiveStakeBackfillCheck: false
-
 # Plugins de almacenamiento y API
 plugins:
   storage:
