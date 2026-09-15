@@ -63,10 +63,10 @@ sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
 databasePath: \"$HOME/dingo/.dingo\"
 
 # Skip the startup consistency check for reward_live_stake and the live UTxO/account set.
-# Default: false; Dingo runs the check by default.
+# Keep false for normal operation; Dingo runs the check by default.
 # Advanced/diagnostic use only: enabling this option bypasses the expensive scan.
-# Dingo always runs the StaleConsensusStakeSnapshotsExist consensus stake-snapshot
-# provenance check, which fails closed.
+# Dingo runs the StaleConsensusStakeSnapshotsExist consensus stake-snapshot
+# provenance check unconditionally and fails closed.
 # Can be overridden with CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK.
 # CLI: --skip-reward-live-stake-backfill-check
 skipRewardLiveStakeBackfillCheck: false
