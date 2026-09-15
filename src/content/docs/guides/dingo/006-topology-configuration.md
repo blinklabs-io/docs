@@ -7,7 +7,7 @@ description: Validate Dingo topology.json access points and root valencies.
 
 ## Overview
 
-This reference describes the validation Dingo applies while loading `topology.json`. Dingo checks the decoded topology before it accepts the configuration. When a rule fails, Dingo returns an error and does not return the topology configuration.
+This reference describes the validation Dingo applies while loading `topology.json`. Dingo checks the topology before returning the configuration. When a rule fails, Dingo returns an error and does not return the topology configuration.
 
 ## Validated topology collections
 
@@ -24,9 +24,9 @@ The `[*]` notation identifies array elements. Each `bootstrapPeers[*]` entry dir
 Every access point in the three collections must meet both requirements:
 
 - `address` must contain at least one non-whitespace character. An empty or whitespace-only value fails validation.
-- `port` must use the inclusive TCP range from `1` through `65535`.
+- `port` must be in the inclusive TCP range from `1` through `65535`.
 
-Validation errors identify the affected collection and array indexes. A root access point error identifies the root and access point, such as `localRoots[index].accessPoints[index]` or `publicRoots[index].accessPoints[index]`. A bootstrap peer error identifies the peer, such as `bootstrapPeers[index]`.
+Validation errors identify the affected collection and array indexes. A root access point error identifies the root and access point with a path such as `localRoots[index].accessPoints[index]` or `publicRoots[index].accessPoints[index]`. A bootstrap peer error identifies the peer with a path such as `bootstrapPeers[index]`.
 
 ## Root valency rules
 
