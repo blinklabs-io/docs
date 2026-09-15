@@ -59,11 +59,11 @@ databasePath: "$HOME/dingo/.dingo"
 
 # Startup consistency checks
 # Skip the `reward_live_stake` startup consistency scan (default: false).
-# Advanced/diagnostic use only: enable this only when the database is known to
-# be consistent. This skips only the `reward_live_stake` scan; the
+# Advanced/diagnostic use only: enable this only after confirming that the
+# database is consistent. This skips only the `reward_live_stake` scan; the
 # `StaleConsensusStakeSnapshotsExist` provenance check still runs
 # unconditionally and fails closed when it detects a problem.
-# Can be overridden with `CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK`
+# Set `CARDANO_SKIP_REWARD_LIVE_STAKE_BACKFILL_CHECK` to override this setting.
 # CLI: `--skip-reward-live-stake-backfill-check`
 skipRewardLiveStakeBackfillCheck: false
 
