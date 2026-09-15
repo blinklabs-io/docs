@@ -57,9 +57,9 @@ cat <<EOF > ~/dingo/dingo.yaml
 # Shared database path for the local blob and metadata stores.
 databasePath: "$HOME/dingo/.dingo"
 
-# Startup consistency checks
+# Startup consistency check
 # Skip the `reward_live_stake` startup consistency scan (default: false).
-# Advanced/diagnostic use only: enable this only after confirming that the
+# Advanced or diagnostic use only: enable this only after confirming that the
 # database is consistent. This skips only the `reward_live_stake` scan; the
 # `StaleConsensusStakeSnapshotsExist` provenance check still runs
 # unconditionally and fails closed when it detects a problem.
