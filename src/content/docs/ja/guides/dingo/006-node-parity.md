@@ -24,15 +24,15 @@ description: Dingoのnode-parity CLIでノードの台帳状態を比較する�
 
 ## `watch`コマンド
 
-`watch`は、いずれかのノードのチェーン先端が変化したときに比較を実行します。次の例は、既定の`incremental`モードを明示した実行例です。
+`watch`は、いずれかのノードのチェーン先端が変化したときに比較を実行します。次の例では、環境に合わせてプレースホルダーを置き換えます。
 
 ```bash
 ./node-parity watch \
-  --network preview \
-  --dingo-addr 127.0.0.1:3002 \
-  --cardano-addr /var/lib/cardano/node.socket \
+  --network <preview-or-preprod> \
+  --dingo-addr <dingo-host>:<port> \
+  --cardano-addr <cardano-host>:<port> \
   --mode incremental \
-  --cursor-file /var/lib/node-parity/cursor
+  --cursor-file <cursor-file-path>
 ```
 
 ### 比較モード
