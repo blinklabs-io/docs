@@ -158,6 +158,8 @@ EOF"
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
 
+> 📝 En el modo de almacenamiento `core`, Dingo rechaza antes de cualquier mutación una solicitud de truncate anterior a `consumed_utxo_prune_floor`, porque las filas de UTxO consumidas por debajo de ese límite ya se han podado. Un objetivo exactamente en el límite sí se permite y el modo de almacenamiento `api` no cambia. Si el retroceso solicitado es demasiado antiguo, selecciona un objetivo menos profundo o recupera el nodo desde un snapshot de un peer completamente sincronizado.
+
 > 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `CreateSnapshot`, `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
 > 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
@@ -281,6 +283,16 @@ Para ver los registros recientes si hay un error:
 ```bash
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+Comprueba el estado de salud en el puerto `12799`:
+
+```bash
+curl -f http://127.0.0.1:12799/health
+curl -f http://127.0.0.1:12799/healthz
+curl -f http://127.0.0.1:12799/readyz
+```
+
+`/health` y `/healthz` son comprobaciones de actividad. `/readyz` es la comprobación de disponibilidad: indica que el nodo no está listo cuando se desconoce la brecha hasta el tip o cuando supera `healthReadyGapSlots`. Dingo sirve estas sondas también durante el arranque de Mithril.
 
 ***
 
