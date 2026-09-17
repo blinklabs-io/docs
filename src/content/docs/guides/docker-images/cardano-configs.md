@@ -12,6 +12,8 @@ docker run --rm \
   ghcr.io/blinklabs-io/cardano-configs:latest /output preprod
 ```
 
+> **Compatibility:** The current `mainnet`, `preprod`, and `preview` configurations require Cardano node `11.1.0` or newer; older node versions are unsupported. Configuration consumers must read snapshot settings from `LedgerDB.Snapshots`, not the removed top-level `NumOfDiskSnapshots` and `SnapshotInterval` fields. The `mainnet` configuration uses `GenesisMode`.
+
 Omit `preprod` to copy every bundled network. Supported directories normally
 include `mainnet`, `preprod`, `preview`, `sanchonet`, and `devnet` when devnet
 files were included. An unknown network fails with available directories.
