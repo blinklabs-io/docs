@@ -13,6 +13,6 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 ## Dingoの使い方
 
-このガイドでは、Dingoバイナリの取得、Dingoに組み込まれているCardano設定ファイルを別途ダウンロードせずに使用する方法、およびMithrilスナップショットを使用したDingoノードのブートストラップ方法について説明します。また、Cardano CLIを使用してDingoノードと対話する方法も探ります。このガイドでは、Cardano PreviewネットワークでDingoノードを実行します。
+このガイドでは、Dingoバイナリの取得、Dingoが組み込んでいるCardano設定ファイルを別途ダウンロードせずに使用する方法、およびMithrilスナップショットを使用したDingoノードのブートストラップ方法について説明します。また、Cardano CLIを使用してDingoノードと対話する方法も探ります。このガイドでは、Cardano PreviewネットワークでDingoノードを実行します。
 
 ✅ [クイックスタート](../002-quick-start-overview)ガイドから始めましょう。
