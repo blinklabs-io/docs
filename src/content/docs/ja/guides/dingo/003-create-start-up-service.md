@@ -106,6 +106,10 @@ mithril:
   verifyCertificates: true
 
 # Network
+# ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
+healthPort: 12799
+# readiness の許容 tip gap（スロット数）。`--health-ready-gap-slots` / `DINGO_HEALTH_READY_GAP_SLOTS` で変更できます。
+healthReadyGapSlots: 1000
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
@@ -178,6 +182,7 @@ midnight:
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
 > 📝 プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできませんが、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 core ストレージモードでは、`consumed_utxo_prune_floor` より前の消費済み UTxO 行を保持処理がすでに削除しているため、その下限より古い truncate 対象を指定すると、Dingo は変更を加える前に要求を拒否します。下限と同じ対象は指定できます。API ストレージモードではこの判定を行わず、動作は変わりません。巻き戻しが古すぎる場合は、より浅い対象を選ぶか、完全に同期したピアのスナップショットから復旧してください。
 
 ***
 
@@ -244,6 +249,15 @@ sudo systemctl start dingo.service
 <br>
 
 ## ステップ6 - ステータスの確認
+ポート `12799` のヘルスエンドポイントを確認します：
+
+```bash
+curl -i http://127.0.0.1:12799/health
+curl -i http://127.0.0.1:12799/healthz
+curl -i http://127.0.0.1:12799/readyz
+```
+
+`/health` と `/healthz` は liveness（生存確認）プローブです。`/readyz` は readiness（準備完了確認）プローブで、tip gap が不明、または `healthReadyGapSlots` を超える場合は未準備になります。Mithril のブートストラップ中もこれらのプローブを利用できます。
 
 サービスが実行中であることを確認します：
 

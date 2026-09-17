@@ -110,6 +110,11 @@ mithril:
   verifyCertificates: true
 
 # Network
+# Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
+# Set healthPort to 0 to disable the health listener.
+healthPort: 12799
+# CLI: --health-ready-gap-slots; environment: DINGO_HEALTH_READY_GAP_SLOTS.
+healthReadyGapSlots: 1000
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
@@ -154,6 +159,8 @@ EOF"
 > 📝 Use `dingo database snapshot`, `dingo database restore <snapshot-dir>`, and `dingo database truncate --slot <slot>`, `--hash <hash>`, or `--block-number <n>` on an offline data directory. `restore` also accepts the same cloud URI that `snapshotCloudDestination` uses and downloads it to a temporary directory before restoration.
 
 > 📝 When `barkPort` runs together with `databaseLifecycle.snapshotDir`, Bark also exposes live `Restore` and `Truncate` access.
+
+> 📝 In core storage mode, Dingo rejects an offline `dingo database truncate` target or a live Bark `Truncate` target older than `consumed_utxo_prune_floor` before any mutation because Dingo already pruned consumed UTxO history below that floor. Dingo allows a target exactly at the floor, and API storage mode remains unchanged. Choose a shallower target or recover from a fully synced peer snapshot when the requested rewind is older than the floor.
 
 ```yaml
 storageMode: "api"
@@ -295,6 +302,16 @@ Verify the service is running:
 ```
 sudo systemctl status dingo.service
 ```
+
+Check `/health` or `/healthz` for liveness and `/readyz` for readiness on port `12799`:
+
+```
+curl http://127.0.0.1:12799/health
+curl http://127.0.0.1:12799/healthz
+curl http://127.0.0.1:12799/readyz
+```
+
+`/health` and `/healthz` report liveness. `/readyz` reports readiness and is not ready while the tip gap is unavailable or exceeds `healthReadyGapSlots`.
 
 To follow the logs in real time:
 

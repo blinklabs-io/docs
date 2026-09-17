@@ -132,6 +132,12 @@ databaseLifecycle:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+# Puerto del listener de salud. `0` deshabilita el listener.
+# CLI: --health-port | Variable de entorno: DINGO_HEALTH_PORT
+healthPort: 12799
+# Brecha máxima del tip para indicar que el nodo está listo, en slots.
+# CLI: --health-ready-gap-slots | Variable de entorno: DINGO_HEALTH_READY_GAP_SLOTS
+healthReadyGapSlots: 1000
 debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
@@ -151,6 +157,8 @@ EOF"
 > 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`. No habilites `databaseLifecycle.snapshotEnabled` para capturas automáticas cuando `badger`, `s3` o `gcs` sea el proveedor principal de blobs. Las operaciones manuales `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles.
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
+
+> 📝 En el modo de almacenamiento `core`, Dingo rechaza antes de cualquier mutación una solicitud de truncate anterior al límite persistido `consumed_utxo_prune_floor`, porque Dingo ya ha podado las filas de UTxO consumidas por debajo de ese límite. Un objetivo exactamente en el límite sí se permite y el modo de almacenamiento `api` no cambia. Si el retroceso solicitado es demasiado antiguo, selecciona un objetivo menos profundo o recupera el nodo desde un snapshot de un peer completamente sincronizado.
 
 > 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `CreateSnapshot`, `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
@@ -275,6 +283,16 @@ Para ver los registros recientes si hay un error:
 ```bash
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+Comprueba las sondas de salud en el puerto `12799`:
+
+```bash
+curl -f http://127.0.0.1:12799/health
+curl -f http://127.0.0.1:12799/healthz
+curl -f http://127.0.0.1:12799/readyz
+```
+
+`/health` y `/healthz` confirman que el proceso está activo. `/readyz` comprueba la disponibilidad: el nodo no está listo cuando el sistema no conoce la brecha hasta el tip o cuando la brecha supera `healthReadyGapSlots`. Dingo sirve estas sondas también durante el arranque de Mithril.
 
 ***
 

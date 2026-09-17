@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.12/dingo-v0.70.12-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.13/dingo-v0.70.13-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -104,6 +104,11 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+# Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
+# `healthPort: 0` desactiva el listener de salud.
+healthPort: 12799
+# Alias de CLI: `--health-ready-gap-slots`. Variable de entorno: `DINGO_HEALTH_READY_GAP_SLOTS`.
+healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
@@ -192,6 +197,8 @@ cd ~/dingo
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
+> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando la brecha de slots respecto a la punta de la red está disponible y no supera `healthReadyGapSlots`; informa que no está listo cuando la brecha no se conoce o supera ese límite. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
+
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada
 2. Verificará la cadena de certificados
@@ -213,6 +220,8 @@ Una vez que la instantánea de Mithril se haya cargado, inicia el nodo:
 cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
+
+> 📝 La comprobación de salud del contenedor usa `/health` en el puerto `12799`, no `/metrics`.
 
 Deberías ver la salida del registro mostrando el nodo conectándose a los pares y sincronizando los bloques restantes para alcanzar la punta de la cadena.
 
