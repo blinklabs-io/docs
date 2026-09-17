@@ -110,6 +110,11 @@ mithril:
   verifyCertificates: true
 
 # Network
+# Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
+# Set healthPort to 0 to disable the health listener.
+healthPort: 12799
+# CLI: --health-ready-gap-slots; environment: DINGO_HEALTH_READY_GAP_SLOTS.
+healthReadyGapSlots: 1000
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
