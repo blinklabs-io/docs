@@ -303,6 +303,16 @@ Verify the service is running:
 sudo systemctl status dingo.service
 ```
 
+Check the health endpoints on port `12799`:
+
+```
+curl http://127.0.0.1:12799/health
+curl http://127.0.0.1:12799/healthz
+curl http://127.0.0.1:12799/readyz
+```
+
+`/health` and `/healthz` report liveness. `/readyz` reports readiness and is not ready while the tip gap is unavailable or exceeds `healthReadyGapSlots`.
+
 To follow the logs in real time:
 
 ```
