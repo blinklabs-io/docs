@@ -284,7 +284,7 @@ Para ver los registros recientes si hay un error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-Comprueba el estado de salud en el puerto `12799`:
+Comprueba las sondas de salud en el puerto `12799`:
 
 ```bash
 curl -f http://127.0.0.1:12799/health
@@ -292,7 +292,7 @@ curl -f http://127.0.0.1:12799/healthz
 curl -f http://127.0.0.1:12799/readyz
 ```
 
-`/health` y `/healthz` comprueban que el proceso está activo. `/readyz` comprueba la disponibilidad: el nodo no está listo cuando el sistema no conoce la brecha hasta el tip o cuando la brecha supera `healthReadyGapSlots`. Dingo sirve estas sondas también durante el arranque de Mithril.
+`/health` y `/healthz` confirman que el proceso está activo. `/readyz` comprueba la disponibilidad: el nodo no está listo cuando el sistema no conoce la brecha hasta el tip o cuando la brecha supera `healthReadyGapSlots`. Dingo sirve estas sondas también durante el arranque de Mithril.
 
 ***
 
