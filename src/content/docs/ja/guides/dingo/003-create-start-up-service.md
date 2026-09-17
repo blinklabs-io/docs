@@ -106,6 +106,10 @@ mithril:
   verifyCertificates: true
 
 # Network
+# ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
+healthPort: 12799
+# readiness の許容 tip gap（スロット数）。`--health-ready-gap-slots` / `DINGO_HEALTH_READY_GAP_SLOTS` で変更できます。
+healthReadyGapSlots: 1000
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
