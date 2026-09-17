@@ -33,7 +33,7 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 ```
 mkdir -p ~/dingo
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.13/dingo-v0.70.13-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.13/dingo-v0.70.13-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -192,7 +192,7 @@ Dingoは次の処理を行います：
 
 > 📝 このステップをスキップした場合、Dingoは起動時にgenesisから同期するため、はるかに長い時間がかかります。
 
-> 📝 ヘルスプローブはポート `12799` で提供されます。`/health` と `/healthz` は稼働確認、`/readyz` はレディネス確認に使用します。`/readyz` は先端とのギャップが不明な場合、または `healthReadyGapSlots` の設定値を超えた場合に未準備になります。ヘルスプローブは Mithril のブートストラップ中も利用でき、コンテナのヘルスチェックは `/metrics` ではなく `/health` を使用します。
+> 📝 Dingoはポート `12799` でヘルスプローブを提供します。`/health` と `/healthz` は稼働確認に、`/readyz` はレディネス確認に使用します。先端とのギャップを取得できない場合、または `healthReadyGapSlots` の設定値を超えた場合、`/readyz` は未準備を示します。ヘルスプローブは Mithril のブートストラップ中も利用できます。コンテナのヘルスチェックは `/metrics` ではなく `/health` を使用します。
 
 ***
 
