@@ -249,6 +249,15 @@ sudo systemctl start dingo.service
 <br>
 
 ## ステップ6 - ステータスの確認
+ポート `12799` のヘルスエンドポイントを確認します：
+
+```bash
+curl -i http://127.0.0.1:12799/health
+curl -i http://127.0.0.1:12799/healthz
+curl -i http://127.0.0.1:12799/readyz
+```
+
+`/health` と `/healthz` は liveness check です。`/readyz` は readiness check で、tip gap が不明、または `healthReadyGapSlots` を超える場合は未準備として扱います。Mithril のブートストラップ中もこれらのプローブを利用できます。
 
 サービスが実行中であることを確認します：
 
