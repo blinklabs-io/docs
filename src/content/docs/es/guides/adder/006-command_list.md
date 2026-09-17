@@ -71,6 +71,9 @@ description: Lista de Comandos de Adder.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
+> 5. `input.drep-registration` - Adder registra un DRep.
+>
+
 
 ***
 
@@ -121,7 +124,8 @@ description: Lista de Comandos de Adder.
   --input-chainsync-intersect-point string
 ```
 
-> comenzar la sincronización en el(los) punto(s) de cadena especificado(s) en formato '<slot>.<hash>'
+> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'
+>
 <br />
 
 ```text
@@ -244,7 +248,6 @@ description: Lista de Comandos de Adder.
   --output string
 ```
 
-> plugin de salida a usar, 'list' para mostrar disponibles (predeterminado "log")
 <br />
 
 ```text
@@ -262,6 +265,13 @@ description: Lista de Comandos de Adder.
 <br />
 
 ```text
+  --output-notify-json-config string
+```
+
+> especifica la ruta a una configuración JSON de notificaciones versionada. La opción de salida `notify-json` utiliza esta configuración.
+<br />
+
+```text
   --output-push-accessTokenUrl string
 ```
 
@@ -273,6 +283,7 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica la ruta al archivo de cuenta de servicio
+> Cuando se selecciona `--output push`, `--output-push-serviceAccountFilePath` debe especificar una ruta no vacía. El JSON de cuenta de servicio indicado debe incluir `project_id` como una cadena no vacía. La configuración falla cuando falta `project_id`, no es una cadena o está vacío.
 <br />
 
 ```text
@@ -339,6 +350,21 @@ description: Lista de Comandos de Adder.
 
 ***
 
+## Notificaciones:
+
+```text
+  adder notifications validate --config <path> [--json]
+```
+
+> valida una configuración JSON de notificaciones.
+>
+> La opción `--config` es obligatoria y requiere la ruta del archivo.
+>
+> La opción `--json` emite un resultado de validación legible por máquinas.
+>
+
+***
+
 ## Version:
 
 ```text
@@ -346,3 +372,14 @@ description: Lista de Comandos de Adder.
 ```
 
 > mostrar versión y salir
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
