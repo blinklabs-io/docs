@@ -257,7 +257,7 @@ curl -i http://127.0.0.1:12799/healthz
 curl -i http://127.0.0.1:12799/readyz
 ```
 
-`/health` と `/healthz` は liveness check です。`/readyz` は readiness check で、tip gap が不明、または `healthReadyGapSlots` を超える場合は未準備として扱います。Mithril のブートストラップ中もこれらのプローブを利用できます。
+`/health` と `/healthz` は liveness（生存確認）プローブです。`/readyz` は readiness（準備完了確認）プローブで、tip gap が不明、または `healthReadyGapSlots` を超える場合は未準備になります。Mithril のブートストラップ中もこれらのプローブを利用できます。
 
 サービスが実行中であることを確認します：
 
