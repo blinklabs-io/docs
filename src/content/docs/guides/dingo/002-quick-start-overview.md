@@ -34,6 +34,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 mkdir -p ~/dingo
 cd ~/dingo
 wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.12/dingo-v0.70.12-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.13/dingo-v0.70.13-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -104,6 +105,8 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+healthPort: 12799
+healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
@@ -119,6 +122,8 @@ EOF
 ```
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+
+> 📝 `healthPort` uses `--health-port` or `DINGO_HEALTH_PORT`; set `healthPort: 0` to disable the health listener. `healthReadyGapSlots` uses `--health-ready-gap-slots` or `DINGO_HEALTH_READY_GAP_SLOTS`.
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
@@ -199,6 +204,8 @@ Run the following command from your `~/dingo` directory:
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 Check `http://127.0.0.1:12799/health` or `/healthz` for liveness and `http://127.0.0.1:12799/readyz` for readiness. The `/readyz` check reports unready while the tip gap is unknown or outside `healthReadyGapSlots`. The container health check uses `/health`, not the metrics endpoint. The health listener remains available while `dingo mithril sync` runs.
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
