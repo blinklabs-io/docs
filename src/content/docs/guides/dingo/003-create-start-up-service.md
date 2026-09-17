@@ -160,6 +160,8 @@ EOF"
 
 > 📝 When `barkPort` runs together with `databaseLifecycle.snapshotDir`, Bark also exposes live `Restore` and `Truncate` access.
 
+> 📝 In core storage mode, Dingo rejects an offline `dingo database truncate` or live Bark `Truncate` target older than `consumed_utxo_prune_floor` before changing data because Dingo has already pruned consumed UTxO history below that floor. Dingo allows a target exactly at the floor, and API storage mode remains unchanged. Choose a shallower target or recover from a fully synced peer snapshot when the requested rewind is older than the floor.
+
 ```yaml
 storageMode: "api"
 plugins:
