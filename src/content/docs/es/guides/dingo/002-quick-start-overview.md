@@ -104,10 +104,10 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
-# Equivalente CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
-# Usa `0` para desactivar el listener de salud.
+# Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
+# `healthPort: 0` desactiva el listener de salud.
 healthPort: 12799
-# Equivalente CLI: `--health-ready-gap-slots`. Variable de entorno: `DINGO_HEALTH_READY_GAP_SLOTS`.
+# Alias de CLI: `--health-ready-gap-slots`. Variable de entorno: `DINGO_HEALTH_READY_GAP_SLOTS`.
 healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
