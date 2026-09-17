@@ -103,9 +103,9 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
-# `healthPort` は `--health-port` または `DINGO_HEALTH_PORT` で設定できます。`0` にするとリスナーを無効にします。
+# `healthPort` は `--health-port` CLI フラグまたは `DINGO_HEALTH_PORT` 環境変数で設定できます。`healthPort: 0` にするとリスナーを無効にします。
 healthPort: 12799
-# `healthReadyGapSlots` は `--health-ready-gap-slots` または `DINGO_HEALTH_READY_GAP_SLOTS` で設定できます。
+# `healthReadyGapSlots` は `--health-ready-gap-slots` CLI フラグまたは `DINGO_HEALTH_READY_GAP_SLOTS` 環境変数で設定できます。
 healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
