@@ -10,7 +10,7 @@ description: gOuroboros Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.205.3 - *[View Release Notes](../v0-205-3)*
-- Version: v0.205.4 - *[View Release Notes](../v0-205-4)* — Improved transaction matching performance while preserving input matching behavior.
+- Version: v0.205.4 - *[View Release Notes](../v0-205-4)* — Improved transaction input matching performance while preserving which inputs match.
 - Version: v0.205.2 - *[View Release Notes](../v0-205-2)*
 - Version: v0.205.1 - *[View Release Notes](../v0-205-1)*
 - Version: v0.205.0 - *[View Release Notes](../v0-205-0)*
