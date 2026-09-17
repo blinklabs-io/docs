@@ -12,8 +12,6 @@ docker run --rm \
   ghcr.io/blinklabs-io/cardano-configs:latest /output preprod
 ```
 
-> **Compatibility:** The current `mainnet`, `preprod`, and `preview` configurations require Cardano node `11.1.0` or newer. Older node versions cannot use these configurations. Tools that read these configurations must use snapshot settings under `LedgerDB.Snapshots` rather than the removed top-level fields `NumOfDiskSnapshots` and `SnapshotInterval`. The `mainnet` configuration uses `GenesisMode`.
-
 Omit `preprod` to copy every bundled network. Supported directories normally
 include `mainnet`, `preprod`, `preview`, `sanchonet`, and `devnet` when devnet
 files were included. An unknown network fails with available directories.
@@ -27,14 +25,3 @@ controls:
 | `LEIOS_GO_BRR` | When `true`, refresh the `musashi`/Leios configuration. |
 
 [Source repository](https://github.com/blinklabs-io/docker-cardano-configs)
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
