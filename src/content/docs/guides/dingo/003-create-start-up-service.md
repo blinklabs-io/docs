@@ -303,7 +303,7 @@ Verify the service is running:
 sudo systemctl status dingo.service
 ```
 
-Check the health endpoints on port `12799`:
+Check `/health` or `/healthz` for liveness and `/readyz` for readiness on port `12799`:
 
 ```
 curl http://127.0.0.1:12799/health
