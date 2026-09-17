@@ -132,6 +132,12 @@ databaseLifecycle:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+# Puerto del listener de salud. `0` deshabilita el listener.
+# CLI: --health-port | Variable de entorno: DINGO_HEALTH_PORT
+healthPort: 12799
+# Brecha máxima del tip para indicar que el nodo está listo, en slots.
+# CLI: --health-ready-gap-slots | Variable de entorno: DINGO_HEALTH_READY_GAP_SLOTS
+healthReadyGapSlots: 1000
 debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
