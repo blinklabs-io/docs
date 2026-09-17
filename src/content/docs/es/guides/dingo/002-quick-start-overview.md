@@ -197,7 +197,7 @@ cd ~/dingo
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
-> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` indican que el nodo está activo. La ruta `/readyz` indica que el nodo está listo cuando la diferencia entre la punta local y la punta de la red está disponible y se encuentra dentro de `healthReadyGapSlots`; de lo contrario, indica que el nodo no está listo. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
+> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando la brecha de slots respecto a la punta de la red está disponible y no supera `healthReadyGapSlots`; informa que no está listo cuando la brecha no se conoce o supera ese límite. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
 
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada
