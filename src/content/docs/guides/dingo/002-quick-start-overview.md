@@ -204,7 +204,7 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 Check `http://127.0.0.1:12799/health` or `/healthz` for liveness and `http://127.0.0.1:12799/readyz` for readiness. The `/readyz` check reports unready while the tip gap is unknown or outside `healthReadyGapSlots`. The container health check uses `/health`, not the metrics endpoint. The health listener remains available while `dingo mithril sync` runs.
+> 📝 Check `http://127.0.0.1:12799/health` or `http://127.0.0.1:12799/healthz` for liveness and `http://127.0.0.1:12799/readyz` for readiness. The `/readyz` check reports unready while the tip gap is unknown or outside `healthReadyGapSlots`. The container health check uses `/health`, not the metrics endpoint. The health listener remains available while `dingo mithril sync` runs.
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
