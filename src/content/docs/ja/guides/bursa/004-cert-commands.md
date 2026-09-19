@@ -115,7 +115,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 > -  `--pledge`          プレッジ額(lovelace)
 > -  `--cost`            エポックごとの固定コスト(lovelace)
 > -  `--margin`          プールマージン（`0.0`以上`1.0`以下の有限値）
->    負の値、`1.0`を超える値、`NaN`、正負の無限大を指定すると、Bursaは`pool margin must be a finite value between 0.0 and 1.0`というエラーを表示し、証明書を生成しません。
+>    負の値、`1.0`を超える値、`NaN`、正または負の無限大は無効です。Bursaは無効な値を拒否し、`pool margin must be a finite value between 0.0 and 1.0`というエラーを表示して、証明書を生成しません。
 > -  `--reward-account`  報酬アカウントアドレス (bech32ステークアドレス)
 
 >オプションの入力:
