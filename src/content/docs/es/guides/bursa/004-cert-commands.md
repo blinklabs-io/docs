@@ -114,7 +114,7 @@ El certificado de registro de pool registra un nuevo stake pool o actualiza un r
 > -  `--vrf-vkey`        Archivo de clave de verificación VRF
 > -  `--pledge`          Cantidad de pledge en lovelace
 > -  `--cost`            Costo fijo por época en lovelace
-> -  `--margin`          Margen del pool: debe ser un valor finito entre 0.0 y 1.0, ambos inclusive. Bursa rechaza los valores negativos, mayores que 1.0, `NaN` e infinitos, muestra el error `pool margin must be a finite value between 0.0 and 1.0` y no genera el certificado.
+> -  `--margin`          Margen del pool: debe ser un valor finito entre `0.0` y `1.0`, ambos inclusive. Bursa rechaza los valores negativos, mayores que `1.0`, `NaN` e infinitos, muestra el error `pool margin must be a finite value between 0.0 and 1.0` y no genera el certificado.
 > -  `--reward-account`  Dirección de cuenta de recompensa (dirección de stake bech32)
 
 >Entradas opcionales:
