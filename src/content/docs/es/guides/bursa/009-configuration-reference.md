@@ -7,6 +7,12 @@ description: Configura los ajustes del firmante, KES-agent y PKCS#11 de Bursa.
 
 Esta guía describe la configuración del firmante y KES-agent de Bursa, incluida la configuración de `signer.backends` para el backend de firma `PKCS#11`.
 
+## Variable de entorno de la billetera
+
+| Variable de entorno | Valor predeterminado | Comportamiento |
+| --- | --- | --- |
+| `BURSA_CONNECTOR` | `false` | Habilita el backend del conector de dApps. |
+
 ## Referencia de configuración
 
 Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11`. Usa los campos siguientes:
