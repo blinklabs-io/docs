@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-LinuxとFreeBSDのCLIダウンロードは`.tar.gz`アーカイブ、WindowsのCLIダウンロードは`.exe`ファイル、macOSのCLIダウンロードは`.zip`ファイルです。公式のmacOSデスクトップウォレットの`.pkg`リリースは`arm64`（Apple Silicon）のみをサポートしており、Bursaは公式のIntel macOSウォレットパッケージを公開していません。
+LinuxとFreeBSDのCLIダウンロードには`.tar.gz`アーカイブ、WindowsのCLIダウンロードには`.exe`ファイル、macOSのCLIダウンロードには`.zip`ファイルを使用します。公式のmacOSデスクトップウォレット`.pkg`リリースは`arm64`（Apple Silicon）のみをサポートし、Bursaは公式のIntel macOSウォレットパッケージを公開していません。
 
 ***
 
