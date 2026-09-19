@@ -81,7 +81,7 @@ Configura `signer.watermark.type` con `postgres` para guardar de forma duradera 
 | Ruta de configuración | Uso | Requisito |
 | --- | --- | --- |
 | `signer.watermark.type` | Selecciona el almacén de marcas de agua. | Establece `postgres` para usar PostgreSQL. |
-| `signer.watermark.dsn` | Proporciona un DSN de PostgreSQL en texto plano. | Bursa lo usa como alternativa cuando `dsn_env` no proporciona el DSN. |
+| `signer.watermark.dsn` | Proporciona un DSN de PostgreSQL en texto plano. | Bursa lo usa como alternativa cuando `dsn_env` no está configurado. |
 | `signer.watermark.dsn_env` | Indica el nombre de la variable de entorno que contiene el DSN. | Bursa da prioridad a esta fuente sobre `dsn`; la variable indicada debe tener un valor no vacío. |
 
 Una configuración `postgres` requiere una fuente de DSN. Si `dsn_env` nombra una variable inexistente o vacía, Bursa rechaza la configuración y no recurre a `dsn`. El rol de la base de datos debe poder crear las tablas de marcas de agua y después leerlas y escribirlas. Mantén las credenciales fuera del archivo YAML y proporciónalas mediante un gestor de secretos o el entorno.
