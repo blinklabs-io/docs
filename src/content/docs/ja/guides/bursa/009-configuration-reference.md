@@ -89,6 +89,46 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 `software`/`file`バックエンドを設定すると、`signer.listen_address`がループバック以外の場合に、`signer.allow_insecure_file_backend`が`true`でなければBursaは起動を拒否します。空の`signer.listen_address`は全インターフェースを意味し、この判定ではループバック以外として扱います。ループバックリスナーまたは明示的な`true`のオプトインでは起動できますが、バックエンドの使用時にはBursaが警告を出力します。本番環境では、プレーンテキストの鍵素材ではなく`Vault`や`SOPS`などの保管バックエンドを使用します。
 
+## 署名者のウォーターマーク
+
+`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはファイルベースの保存方法と異なり、同じ鍵を保護する署名者レプリカ間で共有できます。
+
+| YAMLキー | 説明 | 要件 |
+| --- | --- | --- |
+| `signer.watermark.type` | ウォーターマークの保存先を選択します。 | PostgreSQLを使用する場合は`postgres`を設定します。 |
+| `signer.watermark.dsn` | PostgreSQLへの接続に使うDSNをプレーンテキストで指定します。 | `dsn_env`を使用しない場合のDSNソースです。 |
+| `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。設定すると`dsn`より優先されます。 |
+| `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
+
+`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。`dsn_env`で指定した環境変数が空の場合、Bursaは設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
+
+```yaml
+signer:
+  watermark:
+    type: postgres
+    mode: enforce
+    dsn_env: BURSA_SIGNER_WATERMARK_DSN
+```
+
+```bash
+export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=require'
+```
+
+同じコールドキーを保護する高可用性レプリカは、同じ権威データベースを使用する必要があります。PostgreSQLのデータベースロールには、ウォーターマークテーブルを初期化するための作成権限と、初期化後にテーブルを読み書きする権限が必要です。
+
+### 運用証明書の発行カウンター
+
+`signer.watermark.mode`は、コールドキーごとに保存した最大の`issue_counter`を基準に検査します。
+
+- `enforce`（デフォルト）は、保存済みの最大値より`issue_counter`が厳密に大きい場合だけ署名します。同じ値または小さい値は拒否します。
+- `warn`は同じ値または小さい値を回帰として記録およびログ出力しますが、署名は返します。
+- `off`は発行カウンターの検査を適用しません。
+
+### 署名者のヘルスエンドポイント
+
+- `/healthz`は静的な生存確認で、HTTP `200`を返します。
+- `/readyz`は設定済みのSQLiteまたはPostgreSQLウォーターマークストアが書き込み可能かを3秒以内に確認します。ストアを利用できない場合または書き込めない場合はHTTP `503`を返し、正常なストアにはHTTP `200`を返します。メモリ内ストアは外部依存関係を持たないため、HTTP `200`を返します。
+
 ## `kes_agent`の設定
 
 | YAMLキー | 環境変数 | 説明 | デフォルトまたは要件 |
