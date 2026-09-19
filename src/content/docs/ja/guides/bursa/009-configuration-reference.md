@@ -181,17 +181,16 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 
 サービスソケットでプロデューサーのグループアクセスが必要な場合は、`kes_agent.service_socket_mode`に`0660`などのグループ書き込みを許可する値を指定できます。制御ソケットは鍵をインストールまたは破棄できるため、`kes_agent.control_socket_mode`にグループまたは他ユーザーの書き込みを許可する値を指定できません。新しい設定を省略した場合、両方のソケットは`0600`になります。
 
-## 署名者のトランザクションポリシー
 ## 署名者の運用証明書ポリシー
-
+ 
 `POST /v1/sign`で`type: opcert`を指定して運用証明書に署名するには、対象キーの`allowed_requests`に`opcert`を追加します。
-
+ 
 | 設定パス | 許可値 | 動作 |
 | --- | --- | --- |
 | `signer.keys[].allowed_requests` | `opcert` | `POST /v1/sign`の`type: opcert`リクエストを許可します。 |
-
+ 
 キーのポリシーがない場合、または`allowed_requests`に`opcert`がない場合、Bursaはこの操作をデフォルトで拒否します。
-
+ 
 ## 署名者のトランザクションポリシー
 
 操作を認識するトランザクション権限を`signer.keys[].tx_policy`の下に設定します。粗い`allow_certificates`と`allow_votes`の設定も使用できますが、空でない`allowed_certificates`リストは`allow_certificates`より優先されます。空でない`allowed_voter_kinds`または`allowed_drep_ids`リストは、`allow_votes`の代わりに許可リストモードを選択します。該当する許可リストまたはブール権限を設定しない場合、Bursaは操作をデフォルトで拒否します。
