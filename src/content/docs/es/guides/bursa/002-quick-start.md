@@ -88,9 +88,9 @@ chmod +x bursa
 
 <br>
 
-De forma predeterminada, la API de Bursa escucha en `127.0.0.1:8080`. Los clientes locales pueden conectarse a `localhost:8080` sin abrir un puerto del firewall.
+De forma predeterminada, la API de Bursa escucha en `127.0.0.1:8080`. Los clientes locales se conectan a `localhost:8080` sin abrir un puerto del firewall.
 
-Para permitir conexiones remotas, configura explícitamente `api.address` en el archivo YAML o `API_LISTEN_ADDRESS`. Cuando la escucha no usa loopback, Bursa requiere TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. Consulta la [referencia de configuración](./009-configuration-reference) para configurar estos ajustes.
+Para aceptar conexiones remotas, configura explícitamente `api.address` en el archivo YAML o `API_LISTEN_ADDRESS`. Cuando Bursa escucha fuera del loopback, requiere TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. Consulta la [referencia de configuración](./009-configuration-reference) para configurar estos ajustes.
 
 ***
 
