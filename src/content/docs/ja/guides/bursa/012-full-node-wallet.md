@@ -78,7 +78,7 @@ make wallet-webview
 
 - macOSは`WKWebView`を使用します。
 - Windowsは`WebView2`を使用します。
-- Linuxでは、`webkit2gtk`の開発用ヘッダーと、`webview`タグのビルドを実行するための`libayatana-appindicator3`ランタイムが必要です。
+- Linuxでは、`webkit2gtk`の開発用ヘッダーと、`webview`タグのビルドでトレイを表示するための`libayatana-appindicator3`ランタイムが必要です。
 
 Linuxで`webkit2gtk-4.1`だけをインストールしている場合、ビルド処理は`4.0`を要求するWebView部品向けに`pkg-config`互換設定を作成します。
 
