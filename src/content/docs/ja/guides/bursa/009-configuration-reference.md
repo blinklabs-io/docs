@@ -34,7 +34,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 ## 署名の制約
 
-`PKCS#11`バックエンドは秘密鍵をトークン内に保持し、トークンに`Ed25519`署名の生成を依頼します。`CIP-8`の`COSE`署名はこのバックエンドに対応していません。`PKCS#11`鍵を使用する`CIP-8`リクエストに対して、Bursaは`CodeUnsupported`を返します。
+`PKCS#11`バックエンドは秘密鍵をトークン内に保持し、トークンに`Ed25519`署名の生成を依頼します。このバックエンドは`CIP-8`の`COSE`署名をサポートしません。`PKCS#11`鍵を使用する`CIP-8`リクエストに対して、Bursaは`CodeUnsupported`を返します。
 
 ## トラブルシューティング
 
