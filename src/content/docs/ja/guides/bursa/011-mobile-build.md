@@ -11,14 +11,14 @@ description: BursaのAndroidとiOSモバイルビルドに必要な設定とCI�
 
 ### ビルドモード
 
-Androidビルドは、リポジトリを`/code`に、出力先を任意で`/out`にマウントしたビルドコンテナで実行します。`BURSA_BUILD_TYPE`でビルドモードを選択します。
+Androidビルドは、リポジトリを`/code`へ、任意の出力先を`/out`へマウントしたビルドコンテナで実行します。`BURSA_BUILD_TYPE`でビルドモードを選択します。
 
 | `BURSA_BUILD_TYPE` | 生成物 | 署名要件 |
 | --- | --- | --- |
 | `debug` | 未署名のデバッグAPK | 不要 |
 | `release` | 署名済みのリリースAPKとAAB | 既存のキーストアと4つの`BURSA_*`環境変数が必要 |
 
-`BURSA_BUILD_TYPE=debug`では、コンテナが`assembleDebug`を実行してデバッグAPKを`/out`にコピーします。`release`では、コンテナが`assembleRelease bundleRelease`を実行してリリースAPKとAABを生成します。
+`BURSA_BUILD_TYPE=debug`では、コンテナが`assembleDebug`を実行し、デバッグAPKを`/out`へコピーします。`release`では、コンテナが`assembleRelease bundleRelease`を実行し、リリースAPKとAABを生成します。
 
 ### リリース署名
 
@@ -29,7 +29,7 @@ Androidビルドは、リポジトリを`/code`に、出力先を任意で`/out`
 - `BURSA_KEY_ALIAS`
 - `BURSA_KEY_PASSWORD`
 
-署名情報がない場合、ビルドは失敗します。ビルドは未署名APKを配布可能な成果物として扱わず、署名済みAPKを選択し、`apksigner verify --verbose --print-certs`で検証します。署名済みAPKまたはAABを生成できない場合や、`apksigner`の検証に失敗した場合も、ビルドは失敗します。
+署名情報がない場合、ビルドは失敗します。ビルドは未署名APKを配布可能な成果物として扱わず、署名済みAPKだけを選択して`apksigner verify --verbose --print-certs`で検証します。署名済みAPKまたはAABを生成できない場合や、`apksigner`の検証に失敗した場合も、ビルドは失敗します。
 
 CIでは、次のシークレットを使用します。
 
@@ -38,7 +38,7 @@ CIでは、次のシークレットを使用します。
 - `ANDROID_KEY_ALIAS`
 - `ANDROID_KEY_PASSWORD`
 
-CIは`ANDROID_KEYSTORE_BASE64`をデコードして一時ディレクトリ内のキーストアにし、そのファイルをコンテナ内の`/signing/release.jks`へ読み取り専用でマウントします。コンテナには、そのパスを`BURSA_KEYSTORE_PATH`として渡します。残りのシークレットは、それぞれ`BURSA_KEYSTORE_PASSWORD`、`BURSA_KEY_ALIAS`、`BURSA_KEY_PASSWORD`として渡します。シークレットの値をログや成果物に出力しません。
+CIは`ANDROID_KEYSTORE_BASE64`をデコードして一時ディレクトリ内にキーストアを作成し、そのファイルをコンテナ内の`/signing/release.jks`へ読み取り専用でマウントします。CIはそのパスを`BURSA_KEYSTORE_PATH`としてコンテナに渡し、残りのシークレットをそれぞれ`BURSA_KEYSTORE_PASSWORD`、`BURSA_KEY_ALIAS`、`BURSA_KEY_PASSWORD`として渡します。CIはシークレットの値をログや成果物に出力しません。
 
 リリースAPKの選択では`*-unsigned.apk`を除外します。これにより、署名処理が設定されていないAPKを選択して公開することを防ぎます。
 
