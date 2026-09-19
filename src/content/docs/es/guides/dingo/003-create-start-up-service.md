@@ -239,8 +239,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <diges
 DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-Durante la puesta al día de una base de datos completa, Dingo rechaza cualquier pin explícito. Si una importación se detiene, Dingo reanuda con la identidad de artefacto que conserva de forma persistente y rechaza cualquier pin diferente.
-
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
 Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
