@@ -223,9 +223,6 @@ network: preview
 # Pre-production testnet
 network: preprod
 
-# Prime testnet
-network: prime-testnet
-
 # Mainnet - NOT CURRENTLY RECOMMENDED
 network: mainnet
 ```
