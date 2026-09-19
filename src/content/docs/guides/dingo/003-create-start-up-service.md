@@ -246,13 +246,6 @@ Before starting the service for the first time, bootstrap the database from a Mi
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-For a fresh bootstrap, configure the optional `mithril.pinnedDigest` shown above to select an exact Mithril artifact. Use `--mithril-pinned-digest` or set `DINGO_MITHRIL_PINNED_DIGEST` to provide the pin through the command line or environment:
-
-```
-dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
-DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
-```
-
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
