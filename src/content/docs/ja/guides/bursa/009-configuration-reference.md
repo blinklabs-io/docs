@@ -1,21 +1,21 @@
 ---
 title: Bursa設定リファレンス
-description: Bursaの署名、KES-agent、APIのTLSおよびbearer認証設定を構成します。
+description: Bursaの署名、KESエージェント、APIのTLSおよびBearer認証設定を構成します。
 ---
 
 ## 概要
 
-このガイドでは、Bursaの署名およびKES-agent設定、APIのTLSとbearer認証、および`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
+このガイドでは、Bursaの署名およびKESエージェント設定、APIのTLSとBearer認証、および`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
 
 ## 設定ファイルの読み込み
 
-`bursa kes-agent`は、`--config`で指定した任意のYAMLファイルを読み込みます。`--config`を指定しない場合は、`BURSA_CONFIG`の値を設定ファイルのパスとして使用します。両方を指定した場合は`--config`が優先されます。
+`bursa kes-agent`は、`--config`で指定した任意の`YAML`ファイルを読み込みます。`--config`を指定しない場合は、`BURSA_CONFIG`の値を設定ファイルのパスとして使用します。両方を指定した場合は`--config`が優先されます。
 
 ```bash
 bursa kes-agent --config /etc/bursa/config.yaml
 ```
 
-YAMLの値を読み込んだ後、環境変数の値で上書きします。環境変数名は各表に記載しています。
+`YAML`の値を読み込んだ後、環境変数の値で上書きします。環境変数名は各表に記載しています。
 
 ## ウォレット環境変数
 
@@ -113,22 +113,22 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 期間ガードはエージェントが承認した最高のKES期間を保存し、再起動後にその期間を復元し、期間のロールバックを拒否します。デーモンはこのガードにメモリ内の代替手段を使用しません。
 
-## APIのTLSとbearer認証
+## APIのTLSと`Bearer`認証
 
 | YAMLキー | 環境変数 | 説明 | デフォルトまたは要件 |
 | --- | --- | --- | --- |
 | `api.address` | `API_LISTEN_ADDRESS` | APIの待ち受けアドレス。 | `127.0.0.1` |
 | `api.port` | `API_LISTEN_PORT` | APIの待ち受けポート。 | `8080` |
-| `api.tls_cert_file` | `API_TLS_CERT_FILE` | APIサーバー証明書のファイルパス。 | 非loopbackの待ち受けでは必須 |
-| `api.tls_key_file` | `API_TLS_KEY_FILE` | APIサーバー秘密鍵のファイルパス。 | 非loopbackの待ち受けでは必須 |
-| `api.jwt_secret` | `API_JWT_SECRET` | `HS256` Bearer認証の共有シークレット。設定時はこの値を認証元として使用します。 | 非ループバックの待ち受けでは`api.jwks_url`と排他的に指定。32バイト以上 |
-| `api.jwks_url` | `API_JWKS_URL` | `RS256`、`ES256`、または`EdDSA` Bearer認証で使用するJWKSのURL。 | 非ループバックの待ち受けでは`api.jwt_secret`と排他的に指定。HTTPSが必須 |
-| `api.jwt_issuer` | `API_JWT_ISSUER` | Bearerトークンの発行者を検証する制約。 | 任意 |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearerトークンの対象者を検証する制約。 | 任意 |
+| `api.tls_cert_file` | `API_TLS_CERT_FILE` | APIサーバー証明書のファイルパス。 | 非ループバックの待ち受けでは必須 |
+| `api.tls_key_file` | `API_TLS_KEY_FILE` | APIサーバー秘密鍵のファイルパス。 | 非ループバックの待ち受けでは必須 |
+| `api.jwt_secret` | `API_JWT_SECRET` | `HS256`の`Bearer`認証で使用する共有シークレット。設定時はこの値を認証元として使用します。 | 非ループバックの待ち受けでは`api.jwks_url`と排他的に指定。32バイト以上 |
+| `api.jwks_url` | `API_JWKS_URL` | `RS256`、`ES256`、または`EdDSA`の`Bearer`認証で使用するJWKSのURL。 | 非ループバックの待ち受けでは`api.jwt_secret`と排他的に指定。`HTTPS`が必須 |
+| `api.jwt_issuer` | `API_JWT_ISSUER` | `Bearer`トークンの発行者を検証する制約。 | 任意 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | `Bearer`トークンの対象者を検証する制約。 | 任意 |
 
-`api.address`にループバック以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、またはBearer認証元を両方またはどちらも指定した場合、起動できません。
+`api.address`にループバック以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、または`Bearer`認証元を両方またはどちらも指定した場合、起動できません。
 
-`api.jwt_secret`には32バイト以上のシークレットを指定し、設定ファイルへ直接保存せずデプロイメントのシークレットとして管理します。`api.jwks_url`は非ループバックの待ち受けではHTTPS URLが必要です。ループバックの待ち受けではTLSファイルとBearer認証元を省略でき、開発用の`api.jwks_url`にはHTTP URLも使用できます。
+`api.jwt_secret`には32バイト以上のシークレットを指定し、設定ファイルへ直接保存せずデプロイメントのシークレットとして管理します。`api.jwks_url`は非ループバックの待ち受けでは`HTTPS` URLが必要です。ループバックの待ち受けではTLSファイルと`Bearer`認証元を省略でき、開発用の`api.jwks_url`には`HTTP` URLも使用できます。
 
 `api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、発行者または対象者による追加の制約は適用されません。
 
