@@ -83,7 +83,7 @@ The hex `cborHex` value encodes the canonical two element CBOR structure:
 [[kes_vkey, counter, kes_period, signature], cold_vkey]
 ```
 
-The outer array contains the four element certificate tuple and the 32 byte `cold_vkey`. Bursa derives the `cold_vkey` from the supplied 32 byte seed or 64 byte Ed25519 private key and includes it for verification and round tripping.
+The outer array has two elements: the four element certificate tuple and the 32 byte `cold_vkey`. Bursa derives this cold verification key from the supplied 32 byte seed or 64 byte Ed25519 private key and includes it for verification and round tripping.
 
 > **Required inputs:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
