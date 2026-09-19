@@ -96,15 +96,6 @@ The `software`/`file` signer backend loads plaintext private key material into p
 
 For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
 
-The `software`/`file` signer backend loads plaintext private key material into process memory. Bursa protects this backend when the signer listens beyond the local machine:
-
-| Configuration path | Environment variable | Default | Behavior |
-| --- | --- | --- | --- |
-| `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | Explicitly permits a `software`/`file` backend on a non-loopback signer listener. |
-| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | Determines whether the signer listener uses a loopback address. |
-
-For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
-
 ## Signer watermark
 
 Configure `signer.watermark` to store signer safety watermarks and operational certificate issue counters. The `memory` backend keeps this state in memory, `sqlite` stores it in SQLite, and `postgres` stores it in a durable PostgreSQL database that multiple signer replicas can share.
