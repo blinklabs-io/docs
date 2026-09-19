@@ -100,14 +100,14 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Solo se aplica a un arranque nuevo desde una base de datos vacía.
+  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo aplica este valor solo durante un arranque nuevo desde una base de datos vacía.
   # pinnedDigest: ""
 
 # Network
-# Límite total de conexiones NtC. Predeterminado: 100. Los valores no positivos se ignoran.
+# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
 maxNtCConns: 100
 # Alias de CLI: `--max-ntc-conns`. Variable de entorno: `DINGO_MAX_NTC_CONNS`.
-# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Los valores no positivos se ignoran.
+# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
 maxNtCConnectionsPerIP: 5
 # Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
 bindAddr: "0.0.0.0"
@@ -203,9 +203,9 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 Para seleccionar un artefacto Mithril específico, configura `mithril.pinnedDigest` en `dingo.yaml`, usa `--mithril-pinned-digest` o define `DINGO_MITHRIL_PINNED_DIGEST`. En v1, el valor es un digest de instantánea; en v2, es un hash de artefacto de base de datos de Cardano. El comando anterior no fija ningún artefacto y usa la selección predeterminada.
+> 📝 Para seleccionar un artefacto Mithril específico durante un arranque nuevo, configura `mithril.pinnedDigest` en `dingo.yaml`, usa `--mithril-pinned-digest` o define `DINGO_MITHRIL_PINNED_DIGEST`. El comando anterior no fija ningún artefacto y usa la selección predeterminada.
 
-> ⚠️ Un pin explícito requiere una base de datos nueva: Dingo rechaza el pin cuando una base de datos completa intenta ponerse al día mediante catch-up. Si una importación interrumpida se reanuda, Dingo conserva la identidad del artefacto guardada de forma duradera y rechaza un pin diferente.
+> ⚠️ Un pin explícito requiere una base de datos nueva: Dingo rechaza el pin durante el catch-up de una base de datos completa. Al reanudar una importación interrumpida, Dingo conserva la identidad duradera del artefacto y rechaza cualquier pin diferente.
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
