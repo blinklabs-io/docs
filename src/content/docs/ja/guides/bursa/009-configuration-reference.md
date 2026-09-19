@@ -12,6 +12,30 @@ description: Bursaの署名、KES-agent、PKCS#11設定を構成します。
 | 環境変数 | デフォルト | 動作 |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | `dApp`コネクタバックエンドを有効にします。 |
+| `BURSA_LEAN` | `false` | 永続化された`history-expiry`設定がまだない初回起動時だけ、lean-node/history-expiryの初期値を設定します。値を設定ファイルに永続化した後は、環境変数より永続化されたユーザー設定を優先します。未設定または解釈できない値には`false`を使用します。 |
+
+### history-expiry設定API
+
+`history-expiry`設定は永続化され、次のAPIで参照および更新できます。
+
+#### 設定の取得
+
+```http
+GET /wallet/settings/history-expiry
+```
+
+レスポンスは、`enabled`と`restart_required`の2つの`boolean`フィールドを含みます。形式は`{ "enabled": boolean, "restart_required": boolean }`です。
+
+#### 設定の更新
+
+```http
+PUT /wallet/settings/history-expiry
+Content-Type: application/json
+```
+
+リクエスト本文は`{ "enabled": boolean }`です。`enabled`には必須のJSON boolean値を指定します。不正なJSONまたは`enabled`の欠落にはHTTP `400`を返します。更新に成功すると、APIは`enabled`と`restart_required`を含む同じ2フィールドのレスポンスを返します。
+
+history expiryはノード構築時の設定です。永続化した値が実行中のノードにまだ適用されていない場合、レスポンスの`restart_required`は`true`になります。
 
 ## 設定リファレンス
 
@@ -31,6 +55,8 @@ description: Bursaの署名、KES-agent、PKCS#11設定を構成します。
 ## ビルド要件
 
 `PKCS#11`バックエンドを含めるには、`CGO`を有効にし、`pkcs11`ビルドタグを指定してBursaをコンパイルします。このビルドタグなしで設定がこのバックエンドを選択すると、Bursaは即座に失敗し、次のエラーを返します。
+
+ソースからBursaをビルドする場合は、Go `1.26.0`以上が必要です。
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)
