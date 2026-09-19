@@ -226,7 +226,7 @@ Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de
 
 ## Paso 5 - Iniciar Dingo
 
-Una vez que el artefacto de Mithril se haya cargado, inicia el nodo:
+Una vez que la instantánea de Mithril se haya cargado, inicia el nodo:
 
 ```bash
 cd ~/dingo
