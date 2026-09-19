@@ -64,15 +64,16 @@ if: ${{ vars.BURSA_ANDROID_ENABLED == 'true' }}
 ```
 
 Cuando `vars.BURSA_ANDROID_ENABLED` no es exactamente `true`, CI no ejecuta el trabajo de Android. Por ello no se ejecutan la compilación, la atestación ni la carga de artefactos. El trabajo `android-smoke-test` tampoco se ejecuta.
+Cuando `vars.BURSA_ANDROID_ENABLED` no es exactamente `true`, CI no ejecuta el trabajo de Android. Por ello no se ejecutan la compilación, la atestación ni la carga de artefactos. El trabajo `android-smoke-test` tampoco se ejecuta.
 
 Cuando el control está habilitado, la prueba de humo descarga el artefacto Android y lo inicia en un emulador `arm64-v8a` con API 34 sobre un ejecutor arm64. La prueba falla si el APK seleccionado no demuestra que la billetera integrada está lista o que `WalletService` funciona.
 
 ## iOS
 
-La compilación de iOS se ejecuta en macOS y genera un artefacto para simulador sin firma. El flujo relevante es:
+El flujo de CI ejecuta la compilación de iOS en macOS y genera un artefacto para simulador sin firma. El flujo relevante es:
 
 1. Ejecutar `gomobile bind` con `-target=ios` para generar `mobile/ios/Bursa.xcframework`.
-2. Ejecutar `cd mobile/ios && xcodegen generate` para generar `Bursa.xcodeproj` desde `project.yml`.
+2. Ejecutar `cd mobile/ios && xcodegen generate`; XcodeGen genera `Bursa.xcodeproj` desde `project.yml`.
 3. Ejecutar `xcodebuild` con el proyecto `Bursa.xcodeproj`, el esquema `Bursa`, `-sdk iphonesimulator` y `-configuration Debug`.
 
 El comando de compilación de simulador usa `CODE_SIGNING_ALLOWED=NO`. El proyecto también establece `CODE_SIGNING_ALLOWED: NO` y `CODE_SIGNING_REQUIRED: NO`, por lo que esta compilación no necesita una identidad de firma.
@@ -87,6 +88,7 @@ El proyecto conserva estos ajustes de identidad y enlace:
 | `PRODUCT_BUNDLE_IDENTIFIER` | `io.blinklabs.bursa` |
 
 La aplicación incorpora `Bursa.xcframework` como framework. `PRODUCT_NAME` y `PRODUCT_BUNDLE_IDENTIFIER` permanecen sin cambios mientras `PRODUCT_MODULE_NAME` define el módulo Swift `BursaApp` y `OTHER_LDFLAGS` enlaza `-lresolv`.
+La aplicación incorpora `Bursa.xcframework` como framework.
 
 ---
 
