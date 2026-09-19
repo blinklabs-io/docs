@@ -48,7 +48,7 @@ You can verify the binary works by running:
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-Dingo ships with embedded Cardano network configurations for `preview`, `preprod`, `mainnet`, and `prime-testnet`. The first three networks use embedded `config.json` files, and Prime testnet uses an embedded `configuration.yaml` file. Separate network file downloads are unnecessary.
+Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
