@@ -250,6 +250,15 @@ Before starting the service for the first time, bootstrap the database from a Mi
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
+For a fresh bootstrap, an exact Mithril artifact can be selected in `dingo.yaml` with `mithril.pinnedDigest`. The value identifies a v1 snapshot digest or a v2 Cardano database artifact hash. The same pin can be provided with `--mithril-pinned-digest` or `DINGO_MITHRIL_PINNED_DIGEST`:
+
+```
+dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
+DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
+```
+
+Leave the pin unset to use the normal command above and select the latest available artifact. A complete-database catch-up rejects an explicit pin because pins apply only to fresh bootstraps. If an import is interrupted, resume it with the durable artifact identity recorded for that import; a different explicit pin cannot override it.
+
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
