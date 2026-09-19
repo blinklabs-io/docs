@@ -116,7 +116,7 @@ The pool registration certificate registers a new stake pool or updates an exist
 > -  `--vrf-vkey`        VRF verification key file
 > -  `--pledge`          Pledge amount in lovelace
 > -  `--cost`            Fixed cost per epoch in lovelace
- > -  `--margin`          Pool margin (a finite value from `0.0` to `1.0`, inclusive). Bursa rejects negative values, values greater than `1`, `NaN`, and positive or negative infinity before generating the pool-registration certificate.
+> -  `--margin`          Pool margin must be a finite value from `0.0` to `1.0`, inclusive. Bursa rejects negative values, values greater than `1`, `NaN`, and positive or negative infinity before generating the pool-registration certificate.
 > -  `--reward-account`  Reward account address (bech32 stake address)
 
 >Optional inputs:
