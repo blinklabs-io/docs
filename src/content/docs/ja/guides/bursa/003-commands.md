@@ -67,7 +67,7 @@ http://localhost:8080/swagger/index.html
 
 <a name="kes-agent"></a>
 
-## コマンドラインでKESエージェントを起動
+## コマンドラインで `kes-agent` を起動
 
 `kes-agent` は `serve-key` または `sign` モードで起動します。設定ファイルは、以下のコマンドの `--config` フラグで指定します。
 
