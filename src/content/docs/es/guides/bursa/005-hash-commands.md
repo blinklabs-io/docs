@@ -17,7 +17,7 @@ Podemos usar Bursa para crear hashes para metadatos o `anchor-data`, usados a me
 #### Metadata
 Los comandos de hash de metadatos se usan para el registro de metadatos de pool y DRep.
 El comando `bursa hash metadata <file>` valida el archivo como JSON y calcula el hash Blake2b-256 usando los bytes exactos que lee del archivo.
-Las diferencias de formato, incluidos los espacios en blanco o el orden de los campos, pueden producir hashes distintos para JSON semánticamente equivalentes. Cuando un flujo de trabajo requiere JSON canónico, escriba esa representación en el archivo antes de calcular el hash y alojarlo.
+Las diferencias de formato, como los espacios en blanco o el orden de los campos, pueden producir hashes distintos aunque el JSON sea semánticamente equivalente. Si un flujo de trabajo requiere JSON canónico, escriba esa representación en el archivo antes de calcular el hash y alojarlo.
 
 **Tipos de metadatos soportados:**
   - pool: Metadatos de registro de pool
