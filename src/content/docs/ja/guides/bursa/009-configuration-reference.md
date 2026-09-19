@@ -43,8 +43,9 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | 設定パス | 環境変数 | デフォルト | 動作 |
 | --- | --- | --- | --- |
 | `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | ループバック以外の署名者リスナーで`software`/`file`バックエンドを使用することを明示的に許可します。 |
+| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | 署名者リスナーがループバックアドレスを使用するかどうかを決定します。 |
 
-`software`/`file`バックエンドが設定され、`signer.listen_address`がループバック以外の場合、`signer.allow_insecure_file_backend`が`true`でなければBursaは起動を拒否します。空の`signer.listen_address`は全インターフェースを意味し、この判定ではループバック以外として扱います。ループバックリスナーまたは明示的な`true`のオプトインでは起動できますが、バックエンドの使用時にはBursaが警告を出力します。本番環境では、プレーンテキストの鍵素材ではなく`Vault`や`SOPS`などの保管バックエンドを使用します。
+`software`/`file`バックエンドを設定すると、`signer.listen_address`がループバック以外の場合に、`signer.allow_insecure_file_backend`が`true`でなければBursaは起動を拒否します。空の`signer.listen_address`は全インターフェースを意味し、この判定ではループバック以外として扱います。ループバックリスナーまたは明示的な`true`のオプトインでは起動できますが、バックエンドの使用時にはBursaが警告を出力します。本番環境では、プレーンテキストの鍵素材ではなく`Vault`や`SOPS`などの保管バックエンドを使用します。
 
 ## KES-agentの期間ガード
 
@@ -58,7 +59,7 @@ KES-agentは単調増加する期間ガードのために永続的なパスを�
 
 ## 署名者のトランザクションポリシー
 
-操作を認識するトランザクション権限を`signer.keys[].tx_policy`の下に設定します。粗い`allow_certificates`と`allow_votes`の設定も使用できますが、空でない`allowed_certificates`リストは`allow_certificates`より優先されます。空でない`allowed_voter_kinds`または`allowed_drep_ids`リストは、`allow_votes`の代わりに許可リストモードを選択します。該当する許可リストまたはブール権限を設定しない場合、Bursaはデフォルトで操作を拒否します。
+操作を認識するトランザクション権限を`signer.keys[].tx_policy`の下に設定します。粗い`allow_certificates`と`allow_votes`の設定も使用できますが、空でない`allowed_certificates`リストは`allow_certificates`より優先されます。空でない`allowed_voter_kinds`または`allowed_drep_ids`リストは、`allow_votes`の代わりに許可リストモードを選択します。該当する許可リストまたはブール権限を設定しない場合、Bursaは操作をデフォルトで拒否します。
 
 ```yaml
 signer:
