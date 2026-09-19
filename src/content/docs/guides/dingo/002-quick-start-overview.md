@@ -206,7 +206,7 @@ sudo ufw allow 3001/tcp
 
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-For a fresh bootstrap, an exact Mithril artifact can be selected through any one of these equivalent options:
+For a fresh bootstrap, select an exact Mithril artifact through any one of these equivalent options:
 
 - Set `mithril.pinnedDigest` in `dingo.yaml`.
 - Pass `--mithril-pinned-digest` to `dingo mithril sync`.
