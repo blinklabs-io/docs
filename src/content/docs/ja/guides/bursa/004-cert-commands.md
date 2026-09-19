@@ -114,7 +114,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 > -  `--vrf-vkey`        VRF検証鍵ファイル
 > -  `--pledge`          プレッジ額(lovelace)
 > -  `--cost`            エポックごとの固定コスト(lovelace)
-> -  `--margin`          プールマージン（有限値で、`0.0`以上`1.0`以下）。負の値、`1.0`を超える値、`NaN`、正負の無限大は指定できません。無効な値を指定すると、Bursaは`pool margin must be a finite value between 0.0 and 1.0`というエラーを表示し、証明書を生成しません。
+> -  `--margin`          プールマージン（`0.0`以上`1.0`以下の有限値）
+>    負の値、`1.0`を超える値、`NaN`、正負の無限大を指定すると、Bursaは`pool margin must be a finite value between 0.0 and 1.0`というエラーを表示し、証明書を生成しません。
 > -  `--reward-account`  報酬アカウントアドレス (bech32ステークアドレス)
 
 >オプションの入力:
