@@ -7,6 +7,12 @@ description: Configure Bursa signer, KES-agent, and PKCS#11 settings.
 
 This guide describes Bursa signer and KES-agent configuration, including the `signer.backends` configuration for the `PKCS#11` signer backend. The backend uses a `PKCS#11` module, keeps private keys on the token, and has the token produce `Ed25519` signatures.
 
+## Wallet environment variables
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
+
 ## Configuration reference
 
 Add a backend entry under `signer.backends` and set its `type` to `pkcs11`. Use the following fields:
