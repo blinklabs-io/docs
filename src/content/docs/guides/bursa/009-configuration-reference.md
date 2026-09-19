@@ -104,7 +104,7 @@ Configure `signer.watermark` to store signer safety watermarks and operational c
 | --- | --- | --- |
 | `signer.watermark.type` | Selects the watermark store. | Bursa supports `memory`, `sqlite`, and `postgres`. |
 | `signer.watermark.dsn` | Provides the PostgreSQL connection string directly. | Acts as the fallback when `dsn_env` is not configured. |
-| `signer.watermark.dsn_env` | Names an environment variable that contains the PostgreSQL connection string. | Takes precedence over `dsn`; the named variable must contain a nonempty value. A `postgres` store requires a DSN from this variable or from `dsn`. |
+| `signer.watermark.dsn_env` | Names an environment variable that contains the PostgreSQL connection string. | Takes precedence over `dsn`; the named variable must contain a nonempty value or Bursa returns an error. A `postgres` store requires a DSN from this variable or from `dsn`. |
 | `signer.watermark.mode` | Controls the operational certificate issue-counter guard. | Defaults to `enforce`; set `off`, `warn`, or `enforce`. |
 
 Use the `postgres` store when signer replicas must share the same authoritative watermark and counter state. Point every replica guarding the same keys to that database. The database role must be able to create the watermark tables and read from and write to them. Keep credentials out of committed YAML, and configure verified TLS for remote database connections as appropriate for the deployment.
