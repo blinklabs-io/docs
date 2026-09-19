@@ -11,7 +11,7 @@ Esta referencia describe los contratos HTTP de `POST /v1/sign` para firmar certi
 
 ### Solicitud
 
-Envía una solicitud `POST /v1/sign` con `type` igual a `opcert`:
+La solicitud `POST /v1/sign` debe usar `type` igual a `opcert`:
 
 ```json
 {
@@ -23,11 +23,11 @@ Envía una solicitud `POST /v1/sign` con `type` igual a `opcert`:
 }
 ```
 
-El cuerpo requiere estos campos:
+La solicitud requiere estos campos:
 
 | Campo | Tipo | Contrato |
 | --- | --- | --- |
-| `type` | cadena | Usa el valor `opcert`. |
+| `type` | cadena | El valor debe ser `opcert`. |
 | `kes_vkey` | cadena | Contiene en hexadecimal la clave de verificación KES de 32 bytes, es decir, 64 caracteres hexadecimales. |
 | `issue_counter` | entero | Indica el contador de emisión del certificado operativo. |
 | `kes_period` | entero | Indica el periodo KES del certificado operativo. |
@@ -58,7 +58,7 @@ Bursa rechaza la solicitud cuando se cumple cualquiera de estas condiciones:
 - La política de la clave no incluye `opcert` en `allowed_requests`.
 - La clave fría no corresponde a una clave fría de un pool de stake.
 
-Configura `signer.keys[].allowed_requests` con `opcert` y establece la ACL correspondiente en la [referencia de configuración de Bursa](./009-configuration-reference). Esa referencia también describe las políticas del firmante y sus requisitos de configuración.
+La configuración debe incluir `opcert` en `signer.keys[].allowed_requests` y la ACL correspondiente. La [referencia de configuración de Bursa](./009-configuration-reference) describe las políticas del firmante y sus requisitos de configuración.
 
 ## Wallets persistentes en GCP
 
@@ -86,7 +86,7 @@ El `subject` del JWT debe aparecer en `api.jwt_admin_subjects`. La variable de e
 | Falta la autenticación o el JWT no es válido | HTTP `401 Unauthorized`. |
 | El JWT es válido, pero su `subject` no aparece en la lista de administradores | HTTP `403 Forbidden`. |
 
-Configura una fuente de confianza JWT y al menos un sujeto administrador antes de habilitar el almacenamiento GCP. Consulta la [referencia de configuración de Bursa](./009-configuration-reference) para los requisitos de inicio, las variables de entorno y las restricciones de exposición de la API.
+El inicio requiere una fuente de confianza JWT y al menos un sujeto administrador antes de habilitar el almacenamiento GCP. La [referencia de configuración de Bursa](./009-configuration-reference) describe los requisitos de inicio, las variables de entorno y las restricciones de exposición de la API.
 
 ### Esquemas de solicitud heredados
 
