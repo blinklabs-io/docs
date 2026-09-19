@@ -204,7 +204,7 @@ sudo ufw allow 3001/tcp
 
 ## Step 4 - Bootstrap from Mithril Snapshot
 
-Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
+Dingo has a built-in Mithril client that downloads and loads a Mithril artifact automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
 For a fresh bootstrap, select an exact Mithril artifact through any one of these equivalent options:
 
@@ -228,7 +228,7 @@ cd ~/dingo
 Dingo will:
 1. Download the latest Mithril artifact, or the selected pinned artifact, for your configured network
 2. Verify the certificate chain
-3. Load the snapshot into the database
+3. Load the artifact into the database
 
 This takes approximately 20-30 minutes depending on your system and network speed.
 
