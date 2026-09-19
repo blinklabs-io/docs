@@ -67,7 +67,23 @@ Estos comandos de Bursa se pueden usar para generar varios certificados de Carda
 
 El comando `op-cert` se puede usar para generar un certificado operacional, también conocido como `node.cert`, que vincula una clave KES a una clave fría del pool. Los stake pools necesitan crear un nuevo `node.cert` al rotar su clave KES. Así que los SPOs pueden usar Bursa para crear un nuevo `node.cert` con su nueva `kes.vkey`, clave fría y período KES.
 
-El formato de salida es compatible con los certificados operacionales de cardano-cli.
+Cuando se proporciona `--out`, Bursa escribe un sobre de texto JSON compatible con `cardano-cli`:
+
+```json
+{
+    "type": "NodeOperationalCertificate",
+    "description": "Operational Certificate",
+    "cborHex": "<hex>"
+}
+```
+
+El valor `cborHex` codificado en hexadecimal representa la estructura CBOR canónica de dos elementos:
+
+```text
+[[kes_vkey, counter, kes_period, signature], cold_vkey]
+```
+
+El arreglo externo contiene dos elementos: la tupla del certificado de cuatro elementos y el `cold_vkey` de 32 bytes. Bursa deriva esta clave de verificación fría a partir de la semilla de 32 bytes o de la clave privada Ed25519 de 64 bytes proporcionada, y la incluye para la verificación y para permitir la conversión de ida y vuelta.
 
 > **Entradas requeridas:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; Archivo de clave de verificación KES (formato bech32 o hex) <br>
@@ -76,8 +92,6 @@ El formato de salida es compatible con los certificados operacionales de cardano
 >   `--kes-period` &emsp; Período KES en el momento de la creación del certificado
 
 El valor del contador debe incrementarse cada vez que se crea un nuevo certificado operacional, si y solo si has minado un bloque con la clave KES anterior. El período KES es el slot actual dividido por los slots por período KES (típicamente 129600 slots = ~36 horas en mainnet).
-
-El formato de salida de `node.cert` es compatible con los certificados operacionales de cardano-cli.
 
 Para crear `node.cert` podemos ejecutar el siguiente comando.
 
