@@ -228,7 +228,7 @@ cd ~/dingo
 Dingo will:
 1. Download the latest Mithril artifact, or the selected pinned artifact, for your configured network
 2. Verify the certificate chain
-3. Load the artifact into the database
+3. Load the snapshot into the database
 
 This takes approximately 20-30 minutes depending on your system and network speed.
 
