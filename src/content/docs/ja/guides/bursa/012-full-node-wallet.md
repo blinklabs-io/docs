@@ -105,7 +105,7 @@ make pkg-macos
 
 ### Linuxでウィンドウが空白になる
 
-`make wallet-webview`で作成したビルドには、空白のウィンドウを防ぐために`webkit2gtk`が必要です。Linuxでは、実行時に`libayatana-appindicator3`もインストールしてください。`webkit2gtk`をインストールできない場合は、`make wallet`で純粋なGoのビルドを作成し、ブラウザーで`http://127.0.0.1:8090`を開いてください。
+`make wallet-webview`で作成したビルドでは、空白のウィンドウを防ぐために`webkit2gtk`が必要です。Linuxでは、`libayatana-appindicator3`も実行時に必要です。`webkit2gtk`をインストールできない場合は、`make wallet`で純粋なGoのビルドを作成し、ブラウザーで`http://127.0.0.1:8090`を開いてください。
 
 ### ディスク使用量が大きい
 
