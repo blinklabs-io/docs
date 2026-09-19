@@ -12,7 +12,7 @@ This guide describes Bursa signer and KES-agent configuration, including the `si
 | Environment variable | Default | Behavior |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
-| `BURSA_LEAN` | `false` | Seeds the lean-node history-expiry setting that Bursa persists on first run only. If `BURSA_LEAN` is unset or unparsable, Bursa uses `false`; after Bursa persists a value, changing or setting this variable does not override the persisted choice. |
+| `BURSA_LEAN` | `false` | Seeds the lean-node history-expiry setting that Bursa persists on first run only. If `BURSA_LEAN` is unset or cannot be interpreted as a boolean, Bursa uses `false`; after Bursa persists a value, changing or setting this variable does not override the persisted choice. |
 
 ## History-expiry API
 
