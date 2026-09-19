@@ -194,7 +194,7 @@ sudo ufw allow 3001/tcp
 
 ## Paso 4 - Iniciar desde un artefacto de Mithril
 
-Dingo tiene un cliente Mithril integrado que descarga y carga un artefacto de Mithril automáticamente. Esto ahorra horas de tiempo de sincronización en comparación con reproducir la cadena desde el génesis.
+Dingo tiene un cliente Mithril integrado que descarga y carga una instantánea automáticamente. Esto ahorra horas de tiempo de sincronización en comparación con reproducir la cadena desde el génesis.
 
 Ejecuta el siguiente comando desde tu directorio dingo:
 
