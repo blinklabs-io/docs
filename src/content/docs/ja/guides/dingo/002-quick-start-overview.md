@@ -96,6 +96,7 @@ plugins:
 # Mithril
 mithril:
   aggregatorUrl: ""
+  # pinnedDigest: ""
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
