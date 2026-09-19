@@ -77,7 +77,7 @@ When `--out` is supplied, Bursa writes a `cardano-cli` compatible JSON text enve
 }
 ```
 
-The hex `cborHex` value encodes the canonical two element CBOR structure:
+The hex encoded `cborHex` value represents the canonical two element CBOR structure:
 
 ```text
 [[kes_vkey, counter, kes_period, signature], cold_vkey]
