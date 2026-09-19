@@ -37,13 +37,13 @@ blinklabs.ioからBursaのバイナリファイルをダウンロードするだ
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**ステップ1-C** - アーカイブファイルをダウンロードし、希望の場所に移動するか、または...
+**ステップ1-C** - LinuxまたはFreeBSDでCLIを使用する場合は、アーキテクチャに合った`.tar.gz`アーカイブをダウンロードし、希望の場所に移動するか、または...
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードし、展開します。
+LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードし、展開します。Windowsの`.msi`またはmacOSの`.pkg`デスクトップウォレットを使用する場合は、アーカイブを展開したり実行権限を変更したりせず、各プラットフォームのインストーラーを使用してください。
 
 <br>
 
@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-LinuxとFreeBSDのCLIダウンロードには`.tar.gz`アーカイブ、WindowsのCLIダウンロードには`.exe`ファイル、macOSのCLIダウンロードには`.zip`ファイルを使用します。公式のmacOSデスクトップウォレット`.pkg`リリースは`arm64`（Apple Silicon）のみをサポートし、Bursaは公式のIntel macOSウォレットパッケージを公開していません。
+LinuxとFreeBSDのCLIダウンロードはアーキテクチャ別の`.tar.gz`アーカイブ、WindowsのCLIダウンロードは`.exe`ファイル、macOSのCLIダウンロードは`.zip`ファイルです。デスクトップウォレットは、Windowsではアーキテクチャ別の署名済み`.msi`インストーラー、macOSではアーキテクチャ別の公証済み`.pkg`インストーラーで配布されます。Windowsの`.msi`には、そのリリースがオプションのWebView2 Evergreenブートストラッパーを含み、WebView2ランタイムが未インストールの場合に限り、ブートストラッパーが含まれることがあります。
 
 ***
 
@@ -64,11 +64,11 @@ LinuxとFreeBSDのCLIダウンロードには`.tar.gz`アーカイブ、Windows�
 
 
 
-## ステップ2 - 権限の変更
+## ステップ2 - Linux/FreeBSD CLIの権限の変更
 
 <br>
 
-この例では、バイナリファイルを`bursa`と名付けました。ファイルを実行可能にするには、以下のコマンドを実行します:
+この手順はLinuxまたはFreeBSDのCLIアーカイブから展開したバイナリに適用します。この例では、バイナリファイルを`bursa`と名付けました。ファイルを実行可能にするには、以下のコマンドを実行します。Windowsの`.msi`またはmacOSの`.pkg`デスクトップウォレットには、このコマンドを実行しないでください。
 
 <br>
 
