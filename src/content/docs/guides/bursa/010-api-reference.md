@@ -38,7 +38,7 @@ The successful response contains the audit identifier, the cold signature, the c
 
 The endpoint returns `signature` and `cold_vkey` as hexadecimal values. The signature supplies the cold signature material required with the request KES verification key, issue counter, and KES period to construct the operational certificate envelope. `audit_id` correlates the response with the signing audit record.
 
-Bursa rejects the request when any of the following conditions applies:
+Bursa rejects the request when any of the following conditions apply:
 
 - The caller ACL does not authorize the cold key.
 - The cold key policy does not list `opcert` in `allowed_requests`.
