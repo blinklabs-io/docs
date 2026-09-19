@@ -18,6 +18,7 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 > - Byron/ブートストラップアドレス (レガシー)
 
 ### アドレスの作成
+ネットワーク値には `mainnet`、`preprod`、または `preview` を指定します。対象のAPIリクエスト（`POST /api/script/create`、`POST /api/script/address`、`POST /api/address/build`）で `testnet` を指定すると、HTTP 400のバリデーションエラーになります。
 - ベースアドレス (支払い + ステーク認証情報)
 ```bash
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
