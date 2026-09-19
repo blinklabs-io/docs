@@ -136,10 +136,10 @@ databaseLifecycle:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
-# Límite total de conexiones NtC. Predeterminado: 100. Los valores no positivos se ignoran.
+# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
 # CLI: `--max-ntc-conns` | Variable de entorno: `DINGO_MAX_NTC_CONNS`
 maxNtCConns: 100
-# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Los valores no positivos se ignoran.
+# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
 # CLI: `--max-ntc-connections-per-ip` | Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`
 maxNtCConnectionsPerIP: 5
 # Puerto del listener de salud. `0` deshabilita el listener.
