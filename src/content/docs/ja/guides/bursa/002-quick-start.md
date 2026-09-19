@@ -43,7 +43,7 @@ blinklabs.ioからBursaのバイナリファイルをダウンロードするだ
 
 <br>
 
-LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードし、展開します。Windowsの`.msi`またはmacOSの`.pkg`デスクトップウォレットを使用する場合は、アーカイブを展開したり実行権限を変更したりせず、各プラットフォームのインストーラーを使用してください。
+LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードし、展開します。WindowsまたはmacOSのデスクトップウォレットを使用する場合は、各プラットフォームのインストーラーを使用し、アーカイブの展開や実行権限の変更は行いません。
 
 <br>
 
@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-LinuxとFreeBSDのCLIダウンロードはアーキテクチャ別の`.tar.gz`アーカイブ、WindowsのCLIダウンロードは`.exe`ファイル、macOSのCLIダウンロードは`.zip`ファイルです。デスクトップウォレットは、Windowsではアーキテクチャ別の署名済み`.msi`インストーラー、macOSではアーキテクチャ別の公証済み`.pkg`インストーラーで配布されます。Windowsの`.msi`には、そのリリースがオプションのWebView2 Evergreenブートストラッパーを含み、WebView2ランタイムが未インストールの場合に限り、ブートストラッパーが含まれることがあります。
+LinuxとFreeBSDのCLIダウンロードにはアーキテクチャ別の`.tar.gz`アーカイブを使用し、WindowsのCLIダウンロードには`.exe`ファイル、macOSのCLIダウンロードには`.zip`ファイルを使用します。Windowsではアーキテクチャ別の署名済み`.msi`インストーラーを、macOSではアーキテクチャ別の公証済み`.pkg`インストーラーをデスクトップウォレット向けに配布します。そのリリースがオプションのWebView2 Evergreenブートストラッパーを含み、WebView2ランタイムが未インストールの場合、Windowsの`.msi`はブートストラッパーを含むことがあります。
 
 ***
 
