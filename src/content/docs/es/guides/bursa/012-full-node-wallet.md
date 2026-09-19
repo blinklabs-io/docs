@@ -90,7 +90,7 @@ make wallet-webview
 
 Esta variante requiere CGO, una cadena de herramientas de C y las cabeceras de desarrollo del webview del sistema. Usa `WKWebView` en macOS, `WebView2` en Windows y `webkit2gtk` en Linux. Compilarla en una máquina de la arquitectura de destino: esta variante no admite compilación cruzada.
 
-En Linux, instalar las cabeceras de desarrollo de `webkit2gtk` y disponer de `libayatana-appindicator3` en tiempo de ejecución antes de ejecutar el destino. Si el sistema solo ofrece `webkit2gtk-4.1`, el archivo Makefile crea la adaptación `pkg-config` necesaria para la dependencia que solicita `4.0`.
+En Linux, una compilación con la etiqueta `webview` requiere las cabeceras de desarrollo de `webkit2gtk` y que el sistema disponga de `libayatana-appindicator3` en tiempo de ejecución para ejecutarse con soporte de bandeja. Si el sistema solo ofrece `webkit2gtk-4.1`, el archivo Makefile crea la adaptación `pkg-config` necesaria para la dependencia que solicita `4.0`.
 
 ### Crear paquetes para macOS
 
@@ -122,7 +122,7 @@ Este destino aplica la firma y la notarización de Apple, y requiere los secreto
 
 ### La ventana aparece en blanco en Linux
 
-El binario con webview necesita `webkit2gtk` y sus cabeceras de desarrollo para mostrar la ventana. Además, `libayatana-appindicator3` debe estar instalada en tiempo de ejecución para que la compilación con la etiqueta `webview` se ejecute correctamente; esta dependencia no sustituye a `webkit2gtk` para resolver una ventana en blanco. Instalar ambas dependencias y volver a ejecutar `make wallet-webview`. Como alternativa, compilar el binario puro de Go y abrir `http://127.0.0.1:8090` en un navegador:
+El binario con webview necesita `webkit2gtk` y sus cabeceras de desarrollo para mostrar la ventana. Además, la compilación con la etiqueta `webview` requiere que el sistema disponga de `libayatana-appindicator3` en tiempo de ejecución; esta dependencia no sustituye a `webkit2gtk` para resolver una ventana en blanco. Instalar ambas dependencias y volver a ejecutar `make wallet-webview`. Como alternativa, compilar el binario puro de Go y abrir `http://127.0.0.1:8090` en un navegador:
 
 ```bash
 make wallet
