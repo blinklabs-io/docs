@@ -222,9 +222,14 @@ network: preview
 # Pre-production testnet
 network: preprod
 
+# Prime testnet
+network: prime-testnet
+
 # Mainnet - NOT CURRENTLY RECOMMENDED
 network: mainnet
 ```
+
+Dingo embeds the Prime testnet configuration. Its embedded configuration file is `configuration.yaml`.
 
 ***
 
