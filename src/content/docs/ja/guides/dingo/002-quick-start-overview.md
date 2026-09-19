@@ -185,8 +185,6 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-`mithril.pinnedDigest`、`--mithril-pinned-digest`、または `DINGO_MITHRIL_PINNED_DIGEST` を使用すると、ブートストラップで取得するMithrilアーティファクトを指定できます。v1ではスナップショットダイジェスト、v2ではCardanoデータベースアーティファクトハッシュを指定します。この固定値は新しいデータベースからのブートストラップにのみ適用されます。
-
 > 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
 
 
