@@ -39,7 +39,7 @@ bursa-wallet
 
 The desktop build opens a native window. The headless build serves the wallet interface at <http://127.0.0.1:8090>; open that address in a browser. The wallet binds to loopback on `127.0.0.1:8090`.
 
-The first launch synchronizes the embedded node. The default `mithril` mode bootstraps from a Mithril snapshot instead of replaying the chain from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/` and writes logs to `~/.bursa-wallet/<network>/logs/bursa-wallet.log`.
+The first launch synchronizes the embedded node. The default `mithril` mode bootstraps from a Mithril snapshot instead of replaying the chain from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
 
 ## Configuration
 
@@ -52,7 +52,7 @@ Set environment variables before the first launch to seed the wallet configurati
 | `BURSA_LEAN` | `false` | Enables lean storage, which prunes historical chain data to reduce disk usage. |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
 
-Settings exposed in the wallet interface persist after the first run. After a setting is stored, the persisted value takes precedence over the environment variable.
+The wallet persists settings configured in its interface after the first run. After the wallet stores a setting, that value takes precedence over the environment variable.
 
 ## Build from source
 
@@ -109,7 +109,7 @@ The `pkg-macos` target requires the Apple signing and notarization secrets.
 
 ### The Linux webview window is blank
 
-Install `webkit2gtk` and its development headers for the webview build. If the system webview remains unavailable, use the pure-Go browser build and open <http://127.0.0.1:8090> in a browser.
+Install `webkit2gtk` and its development headers for the webview build. If the system lacks a webview, use the pure-Go browser build and open the loopback address.
 
 ### The wallet uses too much disk space
 
