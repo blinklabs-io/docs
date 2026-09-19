@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files, while the official Windows desktop wallet release provides a signed, architecture-specific `.msi` installer. The Windows installer may include the WebView2 Evergreen bootstrapper when that release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files, while the official macOS desktop wallet release provides a notarized, architecture-specific `.pkg` installer.
+Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files. The official Windows desktop wallet release provides a signed, architecture-specific `.msi` installer. The installer can include the WebView2 Evergreen bootstrapper only when the release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files. The official macOS desktop wallet release provides a notarized, architecture-specific `.pkg` installer.
 
 ***
 
@@ -74,7 +74,7 @@ After extracting a Linux or FreeBSD CLI archive, make the `bursa` binary executa
 
 ⚠️ Adjust the file path and file name if needed. 
 
-Windows `.msi` and macOS `.pkg` users should use the platform installer; do not extract those installer files or run `chmod` on them.
+Windows `.msi` and macOS `.pkg` users should use the platform installer. Do not extract those installer files or run `chmod` on them.
 
 ```
 chmod +x bursa
