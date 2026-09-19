@@ -16,7 +16,7 @@ Esta guía describe la configuración del firmante y KES-agent de Bursa, incluid
 
 ## API de configuración de history expiry
 
-Bursa persiste el ajuste de lean-node/history-expiry. `history expiry` es una opción de construcción del nodo, por lo que el nodo en ejecución debe reiniciarse para aplicar un valor persistido que todavía no use.
+Bursa persiste el ajuste de lean-node/history-expiry. `history expiry` es una opción de construcción del nodo, por lo que Bursa requiere reiniciar el nodo para aplicar un valor persistido que todavía no use.
 
 `GET /wallet/settings/history-expiry` devuelve:
 
