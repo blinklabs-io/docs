@@ -9,7 +9,7 @@ This guide describes Bursa signer and KES-agent configuration, including the `si
 
 ## Wallet environment variables
 
-| Variable | Default | Purpose |
+| Environment variable | Default | Behavior |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
 
