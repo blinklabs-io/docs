@@ -100,6 +100,10 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Identidad opcional del artefacto de Mithril para un arranque nuevo.
+  # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
+  # Solo se aplica al arranque nuevo; no se usa para una base de datos completa ni para cambiar una importación interrumpida.
+  # pinnedDigest: \"\"
 
 # Lifecycle de base de datos
 databaseLifecycle:
