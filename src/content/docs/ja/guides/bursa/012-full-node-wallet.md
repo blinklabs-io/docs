@@ -15,7 +15,7 @@ description: Bursaフルノードウォレットのインストール、起動�
 
 | プラットフォーム | 資産 | 動作 |
 | --- | --- | --- |
-| macOS arm64（Apple Silicon） | `.pkg` | 署名および公証済み。`Bursa.app`をインストールします。 |
+| macOS arm64（Apple Silicon） | `.pkg` | 署名と公証を済ませています。`Bursa.app`をインストールします。 |
 | Windows amd64、arm64 | `.msi` | 署名済み。 |
 | Linux amd64、arm64 | `.tar.gz` | ネイティブウィンドウを表示します。 |
 | FreeBSD amd64、arm64 | `.tar.gz` | ヘッドレスで動作します。ブラウザーでインターフェースを開きます。 |
@@ -32,7 +32,7 @@ bursa-wallet
 
 ネイティブウィンドウを使用しないビルドは、同じインターフェースを`http://127.0.0.1:8090`で提供します。ブラウザーでこのURLを開いてください。ウォレットはループバックアドレスにだけバインドします。
 
-初回起動ではノードの同期を開始します。既定では`mithril`を使用してスナップショットから同期します。同期の進行状況はウォレットに表示され、同期中は読み取り専用でボールトを開けます。
+初回起動ではノードの同期を開始します。既定では`mithril`を使用してスナップショットから同期します。ウォレットは同期の進行状況を表示し、同期中も読み取り専用で開けます。
 
 ## 実行時設定
 
@@ -42,14 +42,14 @@ bursa-wallet
 | --- | --- | --- |
 | `BURSA_NETWORK` | `preview` | Cardanoネットワークを選択し、そのネットワークのデータディレクトリを選択します。 |
 | `BURSA_SYNC` | `mithril` | `genesis`を指定すると、Mithrilスナップショットを使わずにチェーンを最初から再生します。 |
-| `BURSA_LEAN` | `false` | `true`を指定すると、履歴チェーンデータを整理するlean-nodeプロファイルを使用します。 |
+| `BURSA_LEAN` | `false` | `true`を指定すると、履歴チェーンデータを整理する省容量プロファイルを使用します。 |
 | `BURSA_CONNECTOR` | `false` | `true`を指定すると、dAppコネクターのバックエンドを有効にします。 |
 
 ```bash
 BURSA_NETWORK=preview BURSA_SYNC=mithril BURSA_LEAN=false BURSA_CONNECTOR=false bursa-wallet
 ```
 
-ウォレットは`127.0.0.1:8090`でサービスを提供します。インターフェースで変更した設定は初回起動後に保存され、保存済みの値が以後の環境変数より優先されます。`BURSA_NETWORK`は`~/.bursa-wallet/<network>/`のデータディレクトリも決定し、ログはその配下の`logs/bursa-wallet.log`に保存します。
+ウォレットは`127.0.0.1:8090`でサービスを提供します。ウォレットはインターフェースで変更した設定を初回起動後に保存し、保存済みの値を以後の環境変数より優先します。`BURSA_NETWORK`は`~/.bursa-wallet/<network>/`のデータディレクトリも決定し、ウォレットはログをその配下の`logs/bursa-wallet.log`に保存します。
 
 ## ソースからのビルド
 
@@ -89,7 +89,7 @@ make bundle-macos
 make pkg-macos
 ```
 
-`make bundle-macos`はローカルテスト用のアドホック署名済み`.pkg`を作成します。`make pkg-macos`は署名および公証済みの`.pkg`を作成し、Appleのシークレットを必要とします。
+`make bundle-macos`はローカルテスト用に署名した`.pkg`を作成します。`make pkg-macos`は署名と公証を済ませた`.pkg`を作成し、Appleのシークレットを必要とします。
 
 ## トラブルシューティング
 
@@ -109,7 +109,7 @@ make pkg-macos
 
 ### ディスク使用量が大きい
 
-初回起動時に`BURSA_LEAN=true`を設定して、履歴チェーンデータを整理するlean-nodeプロファイルを選択します。既存のウォレットでは、設定からlean storageを有効にします。
+初回起動時に`BURSA_LEAN=true`を設定して、履歴チェーンデータを整理する省容量プロファイルを選択します。既存のウォレットでは、設定からlean storageを有効にします。
 
 ---
 
