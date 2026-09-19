@@ -129,6 +129,18 @@ The `mode` setting applies the issue-counter guard separately for each cold key:
 - `warn` records and logs an equal or lower counter regression, but Bursa still returns a signature.
 - `off` disables the issue-counter guard.
 
+## Operational certificate signer policy
+
+Add `opcert` to `signer.keys[].allowed_requests` to permit `POST /v1/sign` requests with `type: opcert`. Bursa denies the request when the key has no policy or when the policy omits `opcert`.
+
+```yaml
+signer:
+  keys:
+    - hash: "0000000000000000000000000000000000000000000000000000000000"
+      allowed_requests:
+        - opcert
+```
+
 ## Signer health endpoints
 
 `/healthz` provides static liveness and always returns HTTP `200`.
