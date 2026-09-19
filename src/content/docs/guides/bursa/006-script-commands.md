@@ -51,9 +51,9 @@ Bursa can also be used to generate multi-signature scripts. The Bursa script com
 
 - `--script` specifies the required path to the script file.
 - `--public-keys` accepts a comma-separated list of hex-encoded Ed25519 verification keys. `--signatures` accepts a comma-separated list of hex-encoded signatures. The item at position `i` in each list forms one witness, and both lists must have matching lengths.
-- Use `--message` for the signed payload as UTF-8 text or `--message-hex` for the signed payload as hex; these flags exclude each other.
+- Use `--message` for the signed payload as UTF-8 text or `--message-hex` for the signed payload as hex; these flags exclude each other. Default witness verification requires one of these flags when witnesses are supplied.
 - `--slot` supplies the current slot for timelock validation.
-- By default, Bursa validates each supplied witness cryptographically: it matches the Blake2b-224 hash of each verification key to the script key hash and verifies the Ed25519 signature against the supplied message. A signature requiring script with no witnesses exits with a non-zero diagnostic.
+- By default, Bursa validates each supplied witness cryptographically: it matches the Blake2b-224 hash of each verification key to the script key hash and verifies the Ed25519 signature against the supplied message. A script that requires signatures and receives no witnesses exits with a non-zero diagnostic.
 - `--structural-only` performs structural validation without verifying witnesses or signatures.
 
 The command returns JSON with `valid`, `slot`, `signatures`, `scriptHash`, and `structuralOnly` fields.
