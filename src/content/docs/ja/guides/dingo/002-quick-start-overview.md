@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.14）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.15）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.14/dingo-v0.70.14-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.15/dingo-v0.70.15-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -174,9 +174,9 @@ sudo ufw allow 3001/tcp
 
 <br>
 
-## ステップ4 - Mithrilスナップショットからのブートストラップ
+## ステップ4 - Mithrilアーティファクトからのブートストラップ
 
-Dingoには、スナップショットを自動的にダウンロードしてロードする組み込みのMithrilクライアントがあります。これにより、genesisからチェーンをリプレイする場合と比較して、数時間の同期時間を節約できます。
+Dingoには、Mithrilアーティファクトを自動的にダウンロードしてロードする組み込みのMithrilクライアントがあります。これにより、genesisからチェーンをリプレイする場合と比較して、数時間の同期時間を節約できます。
 
 dingoディレクトリから以下のコマンドを実行します：
 
@@ -194,9 +194,9 @@ cd ~/dingo
 
 
 Dingoは次の処理を行います：
-1. 設定したネットワークの最新Mithrilスナップショットをダウンロード
+1. 設定したネットワークの最新Mithrilアーティファクト、または選択した固定アーティファクトをダウンロード
 2. 証明書チェーンを検証
-3. スナップショットをデータベースにロード
+3. アーティファクトをデータベースにロード
 
 これにはシステムとネットワーク速度によって、約10〜15分かかります。
 
@@ -210,7 +210,7 @@ Dingoは次の処理を行います：
 
 ## ステップ5 - Dingoの起動
 
-Mithrilスナップショットがロードされたら、ノードを起動します：
+Mithrilアーティファクトがロードされたら、ノードを起動します：
 
 ```
 cd ~/dingo
