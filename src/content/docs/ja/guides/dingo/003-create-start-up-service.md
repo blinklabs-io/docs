@@ -199,7 +199,7 @@ midnight:
 
 ## ステップ3 - Mithrilアーティファクトを使用したブートストラップ（初回実行のみ）
 
-サービスを初めて起動する前に、Mithrilアーティファクトを使用してデータベースをブートストラップします：
+サービスを初めて起動する前に、Mithrilスナップショットからデータベースをブートストラップします：
 
 ```bash
 dingo mithril sync --config /etc/dingo/dingo.yaml
