@@ -49,5 +49,6 @@ hash anchor-dataコマンドは、Cardanoガバナンスで使用されるアン
 > 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
 > 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
 > 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 8. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
 
 ***
