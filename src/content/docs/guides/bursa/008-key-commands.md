@@ -280,12 +280,12 @@ Explore other Bursa Commands
 > **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
-> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-> 8. [kes-agent](../003-commands#kes-agent)  &emsp;&nbsp;&nbsp; - Commands for running the KES agent
+> 3. [kes-agent](../003-commands#kes-agent)  &emsp;&nbsp;&nbsp; - Commands for running the KES agent
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
+> 7. [address](../007-address-commands) - Commands for working with Cardano addresses
+> 8. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
 
