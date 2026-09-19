@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos para cada arquitectura. Las descargas de CLI para Windows siguen usando archivos `.exe`, y el monedero de escritorio para Windows se distribuye como un instalador `.msi` firmado y específico para cada arquitectura. El instalador MSI puede incluir el bootstrapper de WebView2 Evergreen cuando la versión incluye ese paquete opcional y el runtime no está instalado. Las descargas de CLI para macOS siguen usando archivos `.zip`, y el monedero de escritorio para macOS se distribuye como un instalador `.pkg` notarizado y específico para cada arquitectura.
+Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos para cada arquitectura. Las descargas de CLI para Windows siguen usando archivos `.exe`, y Bursa distribuye el monedero de escritorio para Windows como un instalador `.msi` firmado y específico para cada arquitectura. El instalador MSI puede incluir el bootstrapper de WebView2 Evergreen cuando la versión incluye ese paquete opcional y el runtime no está instalado. Las descargas de CLI para macOS siguen usando archivos `.zip`, y Bursa distribuye el monedero de escritorio para macOS como un instalador `.pkg` notarizado y específico para cada arquitectura.
 
 ***
 
@@ -68,11 +68,11 @@ Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos p
 
 <br>
 
-Este paso solo aplica al archivo binario de CLI obtenido mediante un archivo comprimido para Linux o FreeBSD. Para este ejemplo, nombramos el archivo binario `bursa`. Para hacer el archivo ejecutable, ejecuta el siguiente comando:
+Este paso solo aplica al archivo binario de CLI obtenido mediante un archivo comprimido para Linux o FreeBSD. Este ejemplo usa `bursa` como nombre del archivo binario. Concede permisos de ejecución con el siguiente comando:
 
 <br>
 
-Ajusta la ruta del archivo y el nombre del archivo si es necesario. Para los instaladores de escritorio `.msi` de Windows y `.pkg` de macOS, usa el instalador de la plataforma correspondiente en lugar de extraer el archivo o ejecutar `chmod`.
+Ajusta la ruta del archivo y el nombre del archivo si es necesario. En Windows y macOS, el instalador de escritorio correspondiente evita la extracción del archivo y la ejecución de `chmod`.
 
 ```
 chmod +x bursa
