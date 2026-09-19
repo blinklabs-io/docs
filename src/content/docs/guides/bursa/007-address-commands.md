@@ -18,7 +18,7 @@ Bursa can be used to generate Cardano wallet addresses from a payment verificati
 > - Byron/Bootstrap addresses (legacy) 
 
 #### Address Build
-Use `mainnet`, `preprod`, or `preview` as the network value. The affected API requests (`POST /api/script/create`, `POST /api/script/address`, and `POST /api/address/build`) reject `testnet` with an HTTP 400 validation error.
+Set the network value to one of `mainnet`, `preprod`, or `preview`. The affected API requests (`POST /api/script/create`, `POST /api/script/address`, and `POST /api/address/build`) reject `testnet` and return HTTP 400.
 - Base addresses (payment + stake credentials)
 ```
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
