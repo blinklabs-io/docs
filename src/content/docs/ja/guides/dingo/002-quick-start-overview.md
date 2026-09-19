@@ -111,7 +111,9 @@ healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+ privatePort: 3002
+maxNtCConns: 100
+maxNtCConnectionsPerIP: 5
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
