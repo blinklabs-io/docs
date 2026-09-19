@@ -62,7 +62,7 @@ When Bursa exports an HD derived signing key to a file, it writes an extended Ed
 
 Pool cold signing files are the exception. The canonical pool cold signing file uses a standard non extended Ed25519 envelope. The optional extended pool cold representation preserves the same pool identity.
 
-Legacy HD derived signing files that declare a non extended type cannot be repaired by changing only the `type` field, and Bursa does not rewrite them automatically. Regenerate the signing and verification files together from the original mnemonic, then compare the resulting address, key hash, or other existing identity before signing.
+Do not repair legacy HD derived signing files that declare a non extended type by changing only the `type` field; Bursa does not rewrite them automatically. Regenerate the signing and verification files together from the original mnemonic, then compare the resulting address, key hash, or other existing identity before signing.
 
 <a name="root"></a>
 
