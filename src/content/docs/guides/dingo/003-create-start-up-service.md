@@ -262,7 +262,7 @@ Leave the pin unset to use the normal command above and select the latest availa
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
-This downloads and loads a Mithril artifact into the database, saving hours of sync time. See [Step 4 of the Quick Start guide: Bootstrap from a Mithril artifact](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+This downloads and loads a Mithril artifact into the database, saving hours of sync time. See [Step 4 of the Quick Start guide: Bootstrap from a Mithril artifact](../002-quick-start-overview#step-4---bootstrap-from-a-mithril-artifact) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
