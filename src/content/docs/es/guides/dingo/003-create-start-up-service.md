@@ -222,21 +222,6 @@ Antes de iniciar el servicio por primera vez, inicia la base de datos desde una 
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-El comando anterior inicia normalmente sin fijar un artefacto. Un arranque nuevo admite una identidad exacta de Mithril mediante cualquiera de estas opciones:
-
-```yaml
-mithril:
-  pinnedDigest: "<digest>"
-```
-
-```bash
-dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
-```
-
-```bash
-DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
-```
-
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
 Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
