@@ -104,6 +104,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # `pinnedDigest` は任意です。v1 ではスナップショットのダイジェスト、v2 では Cardano データベースアーティファクトのハッシュを指定します。
+  # この指定は新しいデータベースの初回ブートストラップにのみ使用します。
+  # pinnedDigest: \"\"
 
 # Network
 # ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
@@ -114,6 +117,12 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+# Prime testnet では埋め込みの `configuration.yaml` を使用します。設定ファイルを別途ダウンロードする必要はありません。
+# network: \"prime-testnet\"
+# NtC 接続の上限は合計 100、送信元 IP ごとに 5 です。`--max-ntc-conns` / `DINGO_MAX_NTC_CONNS` と `--max-ntc-connections-per-ip` / `DINGO_MAX_NTC_CONNECTIONS_PER_IP` でも設定できます。
+# 値が 0 以下の場合は無視され、既定値が使用されます。
+maxNtCConns: 100
+maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
