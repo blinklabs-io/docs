@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.14/dingo-v0.70.14-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.15/dingo-v0.70.15-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -100,6 +100,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap only.
+  # Mithril v1 uses a snapshot digest; Mithril v2 uses a Cardano database artifact hash.
+  # pinnedDigest: ""
 
 # Network
 bindAddr: "0.0.0.0"
@@ -112,6 +115,12 @@ privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
+# Total NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS
+maxNtCConns: 100
+# Per-IP NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP
+maxNtCConnectionsPerIP: 5
 
 # Storage
 barkBaseUrl: ""

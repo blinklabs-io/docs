@@ -108,6 +108,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap:
+  # v1 snapshot digest or v2 Cardano database artifact hash.
+  # pinnedDigest: "<digest>"
 
 # Network
 # Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
@@ -119,6 +122,12 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+# Total NtC admission limit. Default: 100. Non-positive values are ignored.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS.
+maxNtCConns: 100
+# Per-IP NtC admission limit. Default: 5. Non-positive values are ignored.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
+maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
