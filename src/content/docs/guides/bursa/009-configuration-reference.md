@@ -1,11 +1,21 @@
 ---
-title: Bursa Configuration Reference
-description: Configure Bursa signer, KES-agent, and PKCS#11 settings.
+title: Configuration Reference
+description: YAML and environment-variable reference for Bursa `kes-agent` and legacy API security.
 ---
 
 ## Overview
 
 This guide describes Bursa signer and KES-agent configuration, including the `signer.backends` configuration for the `PKCS#11` signer backend. The backend uses a `PKCS#11` module, keeps private keys on the token, and has the token produce `Ed25519` signatures.
+
+## Load a configuration file
+
+The `kes-agent` command accepts a YAML file with `--config`. When the flag is not set, the command reads the path from `BURSA_CONFIG`. If neither source provides a path, Bursa loads environment variables and built-in defaults without a YAML file. Environment variables override matching YAML values.
+
+```bash
+bursa kes-agent --config /etc/bursa/config.yaml
+```
+
+The command validates the loaded values before it opens either Unix socket. For command usage, see the [API section of the CLI guide](../003-commands#api) and the [kes-agent section of the CLI guide](../003-commands#kes-agent).
 
 ## Wallet environment variable
 
@@ -86,15 +96,79 @@ The `software`/`file` signer backend loads plaintext private key material into p
 
 For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
 
-## KES-agent period guard
+## `kes_agent`
 
-The KES agent requires a durable path for its monotonic period guard:
+Configure the daemon under the `kes_agent` YAML key. Each field also accepts the corresponding `KESAGENT_*` environment variable.
 
-| Configuration path | Environment variable | Requirement |
-| --- | --- | --- |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Set a non-empty durable file path that the KES-agent daemon can open. |
+| YAML key | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `kes_agent.mode` | `KESAGENT_MODE` | Select `serve-key` to provide the current KES signing key to the producer, or `sign` to sign block headers without releasing the key. | Required; `serve-key` or `sign` |
+| `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | Unix socket used by the block producer. | Required |
+| `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | Unix socket used for KES key management commands. | Required and different from `service_socket` |
+| `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | Octal permission mode for the service socket. Group access can support a producer that runs under a different user ID. | `0600`; other write access is rejected |
+| `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | Octal permission mode for the control socket. | `0600`; group and other write access are rejected |
+| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | File containing the pool cold verification key as a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex` |
+| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Inline hexadecimal pool cold verification key. | Provide this field or `cold_vkey_file`; inline hex takes precedence when both are set |
+| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley genesis system start. | Required RFC3339 timestamp |
+| `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Wall clock length of one slot in seconds. | `1`; must be positive |
+| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | Number of slots in one KES period. | Required and greater than `0` |
+| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Maximum number of operational certificate evolutions. | `62` |
+| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Scheduler interval expressed as a Go duration, such as `1m`. | `1m` |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Durable path that stores the monotonic KES period guard. | Required |
 
-Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
+The daemon requires different service and control socket paths. It accepts octal socket modes and defaults both modes to owner-only `0600` access. A service socket can grant group access when the producer needs a different user ID, but it cannot grant write access to other users. The control socket must remain owner-only for write access because it accepts commands that can install or remove KES keys.
+
+The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and a durable `guard_file` path before startup can continue.
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  service_socket_mode: "0660"
+  control_socket_mode: "0600"
+  cold_vkey_file: /etc/bursa/pool-cold.vkey
+  system_start: "2022-03-31T00:00:00Z"
+  slot_length: 1
+  slots_per_kes_period: 129600
+  max_kes_evolutions: 62
+  evolve_interval: 1m
+  guard_file: /var/lib/bursa/kes-period.guard
+```
+
+### Migrate socket permissions
+
+Replace the former `kes_agent.socket_mode` key with both `kes_agent.service_socket_mode` and `kes_agent.control_socket_mode`. The old key is not valid. Keep the control socket at `0600`; widen only the service socket when the producer requires group access.
+
+## Legacy API security
+
+Configure the legacy API under the `api` YAML key. The environment variables override the matching YAML values.
+
+| YAML key | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `api.tls_cert_file` | `API_TLS_CERT_FILE` | Server TLS certificate file. | Required for a non-loopback listener |
+| `api.tls_key_file` | `API_TLS_KEY_FILE` | Server TLS private key file. | Required for a non-loopback listener |
+| `api.jwt_secret` | `API_JWT_SECRET` | HS256 bearer authentication secret. | Mutually exclusive with `api.jwks_url`; at least 32 bytes |
+| `api.jwks_url` | `API_JWKS_URL` | JWKS endpoint for bearer authentication. | Mutually exclusive with `api.jwt_secret`; HTTPS is required except for loopback development |
+| `api.jwt_issuer` | `API_JWT_ISSUER` | Optional accepted issuer constraint for bearer tokens. | Optional |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Optional accepted audience constraint for bearer tokens. | Optional |
+
+A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup when it receives neither source or both sources. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
+
+The default API listener uses loopback. Loopback development can remain plaintext when TLS files are not configured, but a non-loopback listener cannot start without TLS and bearer authentication.
+
+```yaml
+api:
+  address: 0.0.0.0
+  port: 8080
+  tls_cert_file: /run/secrets/bursa-api-cert.pem
+  tls_key_file: /run/secrets/bursa-api-key.pem
+  jwks_url: https://identity.example.com/.well-known/jwks.json
+  jwt_issuer: https://identity.example.com
+  jwt_audience: bursa-api
+```
+
+Keep `api.jwt_secret` in an environment variable or deployment secret rather than in a committed YAML file. The [API section of the CLI guide](../003-commands#api) provides the command entry point, and the [kes-agent section](../003-commands#kes-agent) provides the daemon entry point.
 
 ## Signer transaction policies
 
