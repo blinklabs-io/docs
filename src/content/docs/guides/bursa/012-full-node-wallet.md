@@ -80,7 +80,7 @@ This target requires CGO, a C toolchain, and the webview development headers for
 
 - macOS: `WKWebView`
 - Windows: `WebView2`
-- Linux: `webkit2gtk` development headers and `libayatana-appindicator3` at runtime. A `webview`-tagged build needs both to run with tray support.
+- Linux: `webkit2gtk` development headers for the build and `libayatana-appindicator3` for runtime use. A `webview`-tagged build needs both to run with tray support.
 
 The webview build does not support compilation for another target architecture. Build it on a machine with the target architecture. On Linux, the build can use `webkit2gtk-4.1`; the Makefile supplies a `pkg-config` shim when the upstream binding requests `4.0`.
 
@@ -109,7 +109,7 @@ The `pkg-macos` target requires the Apple signing and notarization secrets.
 
 ### The Linux webview window is blank
 
-Install `webkit2gtk` and its development headers for the webview build. Separately, ensure that `libayatana-appindicator3` is installed at runtime for a `webview`-tagged build. If the system lacks a webview, use the pure-Go browser build and open the loopback address.
+Install `webkit2gtk` and its development headers for the webview build. Separately, install `libayatana-appindicator3` for runtime use before running a `webview`-tagged build. If the system lacks a webview, use the pure-Go browser build and open the loopback address.
 
 ### The wallet uses too much disk space
 
