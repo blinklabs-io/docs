@@ -7,7 +7,7 @@ description: Bursa Quick Start Overview.
 
 A programmatic Cardano wallet, written in Go, which exposes an API, CLI, and library interface, allowing developers to easily integrate wallet functionality.
 
-Simply download the Bursa binary file from blinklabs.io. Then run the Bursa in the command line or API.
+Download the appropriate CLI binary or archive, or the platform installer, from blinklabs.io. Then run Bursa from the command line or API.
 
 <br>
 
