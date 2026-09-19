@@ -24,7 +24,7 @@ Bursaは`history-expiry`設定を永続化し、次のAPIで参照および更�
 GET /wallet/settings/history-expiry
 ```
 
-レスポンスは、`enabled`と`restart_required`の2つの`boolean`フィールドを含みます。形式は`{ "enabled": boolean, "restart_required": boolean }`です。
+レスポンスは`enabled`と`restart_required`の2つの`boolean`フィールドを含み、形式は`{ "enabled": boolean, "restart_required": boolean }`です。
 
 #### 設定の更新
 
@@ -33,7 +33,7 @@ PUT /wallet/settings/history-expiry
 Content-Type: application/json
 ```
 
-リクエスト本文は`{ "enabled": boolean }`です。`enabled`には必須のJSON boolean値を指定します。不正なJSONまたは`enabled`の欠落にはHTTP `400`を返します。更新に成功すると、APIは`enabled`と`restart_required`を含む同じ2フィールドのレスポンスを返します。
+リクエスト本文は`{ "enabled": boolean }`です。`enabled`は必須のJSON `boolean`値です。不正なJSONまたは`enabled`の欠落にはHTTP `400`を返します。更新に成功すると、APIはGETと同じ`{ "enabled": boolean, "restart_required": boolean }`形式のレスポンスを返します。
 
 `history-expiry`はノード構築時に決まる設定です。実行中のノードが永続化した値をまだ適用していない場合、レスポンスの`restart_required`は`true`になります。
 
