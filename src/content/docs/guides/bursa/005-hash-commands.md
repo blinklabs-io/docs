@@ -44,7 +44,7 @@ Explore other Bursa Commands
 > **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - Commands for running the KES agent daemon for a Cardano block producer
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp; - Commands for running the KES agent daemon for a Cardano block producer
 > 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
 > 5. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
