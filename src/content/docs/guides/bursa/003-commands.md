@@ -63,7 +63,7 @@ http://localhost:8080/swagger/index.html
 
 ![bursa-swagger](/bursa-swagger.png)
 
-For non-loopback listeners, configure TLS and exactly one bearer authentication trust source as described in the [configuration reference](../009-configuration-reference).
+For non-loopback listeners, use the [configuration reference](../009-configuration-reference) to configure TLS and exactly one bearer authentication trust source.
 
 ***
 
@@ -77,7 +77,7 @@ Start the KES agent daemon for a Cardano block producer with a YAML configuratio
 ./bursa kes-agent --config /path/to/kes-agent.yaml
 ```
 
-The `--config` flag selects the YAML configuration file. When the flag is omitted, Bursa uses the `BURSA_CONFIG` environment variable. Configure the `kes_agent.mode` value as `serve-key` or `sign`. The mode and required socket, key, and timing settings are described in the [configuration reference](../009-configuration-reference).
+The `--config` flag selects the YAML configuration file. When the flag is omitted, Bursa uses the `BURSA_CONFIG` environment variable. Configure the `kes_agent.mode` value as `serve-key` or `sign`. The [configuration reference](../009-configuration-reference) lists the mode and required socket, key, and timing settings.
 
 ***
 
