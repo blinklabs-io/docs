@@ -67,7 +67,23 @@ These Bursa commands can be used for generating various Cardano certificates.
 
 The `op-cert` command can be used to generate an operational certificate, aka `node.cert`, linking a KES key to a pool cold key. Stake Pools need to create a new node.cert when rotating their KES key. So SPOs can use Bursa to create a new `node.cert` with their new kes.vkey, cold key and kes period.
 
-🔁 Output format is compatible with cardano-cli operational certificates.
+When `--out` is supplied, Bursa writes a `cardano-cli` compatible JSON text envelope:
+
+```json
+{
+    "type": "NodeOperationalCertificate",
+    "description": "Operational Certificate",
+    "cborHex": "<hex>"
+}
+```
+
+The hex `cborHex` value encodes the canonical two element CBOR structure:
+
+```text
+[[kes_vkey, counter, kes_period, signature], cold_vkey]
+```
+
+The outer array contains the four element certificate tuple and the 32 byte `cold_vkey`. Bursa derives the `cold_vkey` from the supplied 32 byte seed or 64 byte Ed25519 private key and includes it for verification and round tripping.
 
 > **Required inputs:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
@@ -78,8 +94,6 @@ The `op-cert` command can be used to generate an operational certificate, aka `n
 ✅ The counter value must be incremented each time a new operational certificate
 is created, if and only if, you minted a block with old KES key. The KES period is the current slot divided by the slots per KES
 period (typically 129600 slots = ~36 hours on mainnet).
-
-Output format of `node.cert` is compatible with cardano-cli operational certificates. 
 
 To create `node.cert` we can run the following command.
 
