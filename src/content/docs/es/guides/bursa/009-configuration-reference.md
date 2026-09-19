@@ -141,7 +141,7 @@ Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El re
 }
 ```
 
-El hook permite firmar únicamente cuando devuelve HTTP `200` con la respuesta JSON `{\"allow\": true}`. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado y cualquier valor de `allow` distinto de `true` deniegan la firma.
+El hook permite firmar únicamente cuando devuelve HTTP `200` con la respuesta JSON `{"allow": true}`. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado y cualquier valor de `allow` distinto de `true` deniegan la firma.
 
 ## Solución de problemas
 
