@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-Las descargas de CLI para Linux y FreeBSD son archivos `.tar.gz`, las descargas de CLI para Windows son archivos `.exe` y las descargas de CLI para macOS son archivos `.zip`. Las versiones oficiales del monedero de escritorio para macOS en formato `.pkg` solo admiten `arm64` (Apple Silicon); Bursa ya no publica un paquete oficial del monedero para macOS Intel.
+Las descargas de CLI para Linux y FreeBSD son archivos `.tar.gz`, las descargas de CLI para Windows son archivos `.exe` y las descargas de CLI para macOS son archivos `.zip`. Las versiones oficiales del monedero de escritorio para macOS en formato `.pkg` solo están disponibles para `arm64` (Apple Silicon); Bursa ya no publica un paquete oficial del monedero para macOS Intel.
 
 ***
 
