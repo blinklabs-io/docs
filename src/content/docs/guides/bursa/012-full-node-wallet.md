@@ -17,10 +17,10 @@ bursa-wallet-<version>-<os>-<arch>.<ext>
 
 | Platform | Asset | Installation behavior |
 | --- | --- | --- |
-| macOS arm64 (Apple Silicon) | `.pkg` | Signed and notarized. The installer installs `Bursa.app`. |
-| Windows amd64 or arm64 | `.msi` | Signed Windows installer. |
+| macOS arm64 (Apple Silicon) | `.pkg` | Apple signs and notarizes the installer; it installs `Bursa.app`. |
+| Windows amd64 or arm64 | `.msi` | Windows signs the installer. |
 | Linux amd64 or arm64 | `.tar.gz` | Extract the archive to run the native window build. |
-| FreeBSD amd64 or arm64 | `.tar.gz` | Extract the archive to run the headless build. FreeBSD does not provide a native window build; open the wallet in a browser instead. |
+| FreeBSD amd64 or arm64 | `.tar.gz` | Extract the archive and run the headless build in a browser. FreeBSD does not provide a native window build. |
 
 For Linux or FreeBSD, extract the archive and run the included `bursa-wallet` executable:
 
@@ -52,13 +52,7 @@ Set environment variables before the first launch to seed the wallet configurati
 | `BURSA_LEAN` | `false` | Enables lean storage, which prunes historical chain data to reduce disk usage. |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
 
-Settings exposed in the wallet interface persist after the first run. After a setting is stored, the persisted value takes precedence over the environment variable. The wallet continues to serve the interface on `127.0.0.1:8090`.
-
-For example, enable lean storage on a first run with:
-
-```bash
-BURSA_LEAN=true bursa-wallet
-```
+Settings exposed in the wallet interface persist after the first run. After a setting is stored, the persisted value takes precedence over the environment variable.
 
 ## Build from source
 
@@ -72,7 +66,7 @@ Build the web bundle and the default pure-Go binary with:
 make wallet
 ```
 
-The command writes the binary to `ui/bursa-wallet`. This build serves the interface over loopback and supports cross-compilation.
+The command writes the binary to `ui/bursa-wallet`. This build serves the interface over loopback and supports cross compilation.
 
 ### Build the native-window wallet
 
@@ -88,7 +82,7 @@ This target requires CGO, a C toolchain, and the webview development headers for
 - Windows: `WebView2`
 - Linux: `webkit2gtk`
 
-The webview build cannot be cross-compiled. Build it on a machine with the target architecture. On Linux, the build can use `webkit2gtk-4.1`; the Makefile supplies a `pkg-config` shim when the upstream binding requests `4.0`.
+The webview build does not support compilation for another target architecture. Build it on a machine with the target architecture. On Linux, the build can use `webkit2gtk-4.1`; the Makefile supplies a `pkg-config` shim when the upstream binding requests `4.0`.
 
 ### Package for macOS
 
@@ -115,7 +109,7 @@ The `pkg-macos` target requires the Apple signing and notarization secrets.
 
 ### The Linux webview window is blank
 
-Install `webkit2gtk` and its development headers for the webview build. If the system webview remains unavailable, build the pure-Go version with `make wallet` and open <http://127.0.0.1:8090> in a browser.
+Install `webkit2gtk` and its development headers for the webview build. If the system webview remains unavailable, use the pure-Go browser build and open <http://127.0.0.1:8090> in a browser.
 
 ### The wallet uses too much disk space
 
