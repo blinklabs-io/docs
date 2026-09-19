@@ -63,8 +63,7 @@ Los trabajos `android` y `android-smoke-test` usan exactamente este control:
 if: ${{ vars.BURSA_ANDROID_ENABLED == 'true' }}
 ```
 
-Cuando `vars.BURSA_ANDROID_ENABLED` no es exactamente `true`, CI no ejecuta el trabajo de Android. Por ello no se ejecutan la compilación, la atestación ni la carga de artefactos. El trabajo `android-smoke-test` tampoco se ejecuta.
-Cuando `vars.BURSA_ANDROID_ENABLED` no es exactamente `true`, CI no ejecuta el trabajo de Android. Por ello no se ejecutan la compilación, la atestación ni la carga de artefactos. El trabajo `android-smoke-test` tampoco se ejecuta.
+Cuando `vars.BURSA_ANDROID_ENABLED` no es exactamente `true`, CI no ejecuta el trabajo de Android. CI omite la compilación, la atestación y la carga de artefactos. CI tampoco ejecuta el trabajo `android-smoke-test`.
 
 Cuando el control está habilitado, la prueba de humo descarga el artefacto Android y lo inicia en un emulador `arm64-v8a` con API 34 sobre un ejecutor arm64. La prueba falla si el APK seleccionado no demuestra que la billetera integrada está lista o que `WalletService` funciona.
 
@@ -87,7 +86,6 @@ El proyecto conserva estos ajustes de identidad y enlace:
 | `PRODUCT_NAME` | `Bursa` |
 | `PRODUCT_BUNDLE_IDENTIFIER` | `io.blinklabs.bursa` |
 
-La aplicación incorpora `Bursa.xcframework` como framework. `PRODUCT_NAME` y `PRODUCT_BUNDLE_IDENTIFIER` permanecen sin cambios mientras `PRODUCT_MODULE_NAME` define el módulo Swift `BursaApp` y `OTHER_LDFLAGS` enlaza `-lresolv`.
 La aplicación incorpora `Bursa.xcframework` como framework.
 
 ---
