@@ -43,8 +43,9 @@ El backend de firma `software`/`file` carga material de clave privada en texto p
 | Ruta de configuración | Variable de entorno | Valor predeterminado | Comportamiento |
 | --- | --- | --- | --- |
 | `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | Permite explícitamente un backend `software`/`file` en un listener del firmante que no sea de bucle local. |
+| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | Determina si el listener del firmante usa una dirección de bucle local. |
 
-Cuando se configura un backend `software`/`file` y `signer.listen_address` no es de bucle local, Bursa rechaza el inicio a menos que `signer.allow_insecure_file_backend` sea `true`. El valor vacío de `signer.listen_address` significa todas las interfaces y cuenta como no perteneciente al bucle local para esta comprobación. Un listener de bucle local o una autorización explícita con `true` permite el inicio, pero Bursa emite una advertencia cada vez que se usa el backend. En producción, usa un backend de custodia como `Vault` o `SOPS` en lugar de material de clave en texto plano.
+Para un backend `software`/`file` configurado, Bursa rechaza el inicio cuando `signer.listen_address` no es de bucle local, a menos que `signer.allow_insecure_file_backend` sea `true`. El valor vacío de `signer.listen_address` significa todas las interfaces y cuenta como no perteneciente al bucle local para esta comprobación. Un listener de bucle local o una autorización explícita con `true` permite el inicio, pero Bursa emite una advertencia cada vez que se usa el backend. En producción, usa un backend de custodia como `Vault` o `SOPS` en lugar de material de clave en texto plano.
 
 ## Guardia de periodo del KES-agent
 
@@ -58,7 +59,7 @@ Bursa rechaza el inicio del KES-agent cuando `kes_agent.guard_file` está vacío
 
 ## Políticas de transacciones del firmante
 
-Configura los permisos de transacciones según la operación debajo de `signer.keys[].tx_policy`. Los ajustes generales `allow_certificates` y `allow_votes` siguen disponibles, pero una lista no vacía de `allowed_certificates` tiene prioridad sobre `allow_certificates`. Una lista no vacía de `allowed_voter_kinds` o `allowed_drep_ids` selecciona el modo de lista permitida en lugar de `allow_votes`. Cuando no se establece ninguna lista permitida ni permiso booleano aplicable, Bursa deniega la operación de forma predeterminada.
+Configura los permisos de transacciones según la operación debajo de `signer.keys[].tx_policy`. Los ajustes generales `allow_certificates` y `allow_votes` siguen disponibles, pero una lista no vacía de `allowed_certificates` tiene prioridad sobre `allow_certificates`. Una lista no vacía de `allowed_voter_kinds` o `allowed_drep_ids` selecciona el modo de lista permitida en lugar de `allow_votes`. Bursa deniega la operación de forma predeterminada cuando no se establece ninguna lista permitida ni permiso booleano aplicable.
 
 ```yaml
 signer:
