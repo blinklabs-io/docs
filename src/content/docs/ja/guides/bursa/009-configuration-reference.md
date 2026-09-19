@@ -91,7 +91,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 ## 署名者のウォーターマーク
 
-`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはファイルベースの保存方法と異なり、同じコールドキーを保護する署名者レプリカで共有できます。
+`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはSQLiteの保存方法と異なり、同じコールドキーを保護する署名者レプリカで共有できます。
 
 | YAMLキー | 説明 | 要件 |
 | --- | --- | --- |
