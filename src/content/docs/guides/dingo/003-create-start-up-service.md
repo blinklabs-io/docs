@@ -122,9 +122,10 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
-# NtC admission limits. Non-positive values are ignored.
+# Total NtC admission limit. Default: 100. Non-positive values are ignored.
 # CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS.
 maxNtCConns: 100
+# Per-IP NtC admission limit. Default: 5. Non-positive values are ignored.
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
@@ -250,14 +251,14 @@ Before starting the service for the first time, bootstrap the database from a Mi
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-For a fresh bootstrap, an exact Mithril artifact can be selected in `dingo.yaml` with `mithril.pinnedDigest`. The value identifies a v1 snapshot digest or a v2 Cardano database artifact hash. The same pin can be provided with `--mithril-pinned-digest` or `DINGO_MITHRIL_PINNED_DIGEST`:
+For a fresh bootstrap, set `mithril.pinnedDigest` in `dingo.yaml` to select an exact Mithril artifact. The value identifies a v1 snapshot digest or a v2 Cardano database artifact hash. Use `--mithril-pinned-digest` or set `DINGO_MITHRIL_PINNED_DIGEST` to provide the same pin:
 
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
 DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-Leave the pin unset to use the normal command above and select the latest available artifact. A complete-database catch-up rejects an explicit pin because pins apply only to fresh bootstraps. If an import is interrupted, resume it with the durable artifact identity recorded for that import; a different explicit pin cannot override it.
+Leave the pin unset to use the normal command above and select the latest available artifact. Dingo rejects an explicit pin during catch-up on a complete database because pins apply only to fresh bootstraps. If an import is interrupted, resume it with the durable artifact identity that Dingo recorded for that import; a different explicit pin cannot override it.
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
