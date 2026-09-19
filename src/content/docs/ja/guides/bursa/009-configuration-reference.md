@@ -42,3 +42,13 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 - Bursaが`token_label`または`slot`が必要だと報告した場合は、トークン選択フィールドを少なくとも1つ指定します。
 - Bursaが`pin_env`が必要、またはその環境変数が空だと報告した場合は、`signer.backends[].pin_env`に環境変数の名前を設定し、その変数を通じてユーザーPINを指定します。
 - Bursaが無効な鍵タイプを報告した場合は、各`signer.backends[].keys[].type`に設定する値を設定リファレンスに記載されたサポート対象の値のいずれかに変更します。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

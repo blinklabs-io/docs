@@ -105,3 +105,14 @@ Ahora podemos usar la línea de comandos para crear una billetera de Cardano y g
 Bursa también se puede usar para generar scripts multifirma, hashes y claves, incluidas las claves y certificados necesarios para ejecutar un stake pool de Cardano.
 
 [Aprende más sobre cómo usar Bursa con la línea de comandos y los comandos útiles que puedes ejecutar.](../003-commands)
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

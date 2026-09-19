@@ -42,3 +42,14 @@ The `PKCS#11` backend keeps private keys on the token and asks the token to prod
 - If Bursa reports that `token_label` or `slot` is required, provide at least one token selection field.
 - If Bursa reports that `pin_env` is required or that its environment variable is empty, set `signer.backends[].pin_env` to the name of an environment variable and provide the user PIN through that variable.
 - If Bursa reports an invalid key type, set each `signer.backends[].keys[].type` value to one of the supported values in the configuration reference.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
