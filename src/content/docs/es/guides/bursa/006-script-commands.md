@@ -70,7 +70,7 @@ Explora otros comandos de Bursa
 > 5. [script](#script) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
 > 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
-> 8. [kes-agent](../003-commands#kes-agent)  - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 8. [kes-agent](../003-commands#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
 
 ***
 
