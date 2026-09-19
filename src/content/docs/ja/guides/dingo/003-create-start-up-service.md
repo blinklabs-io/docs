@@ -207,7 +207,6 @@ dingo mithril sync --config /etc/dingo/dingo.yaml
 
 > 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
 
-特定のMithrilアーティファクトを選択する場合は、YAMLの `mithril.pinnedDigest`、CLIの `--mithril-pinned-digest`、または環境変数 `DINGO_MITHRIL_PINNED_DIGEST` を使ってピンを指定します。このピンは新しいデータベースの初回ブートストラップにのみ使用できます。完全なデータベースのキャッチアップで明示的なピンを指定すると、Dingoは処理を拒否します。中断したインポートを再開する場合は、保存済みのアーティファクト識別子を使い、別のピンで上書きしないでください。
 特定のMithrilアーティファクトを選択する場合は、YAMLの `mithril.pinnedDigest`、CLIの `--mithril-pinned-digest`、または環境変数 `DINGO_MITHRIL_PINNED_DIGEST` を使ってピンを指定します。完全なデータベースのキャッチアップで明示的なピンを指定すると、Dingoは処理を拒否します。中断したインポートを再開する場合は、保存済みのアーティファクト識別子を使い、別のピンで上書きしないでください。
 
 これによりスナップショットがダウンロードおよびロードされ、数時間の同期時間を節約できます。詳細は[クイックスタートガイドのステップ4](../002-quick-start-overview#ステップ4---mithrilスナップショットからのブートストラップ)を参照してください。
