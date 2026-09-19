@@ -37,13 +37,13 @@ blinklabs.ioからBursaのバイナリファイルをダウンロードするだ
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**ステップ1-C** - アーカイブファイルをダウンロードして希望の場所に移動するか、または...
+**ステップ1-C** - アーカイブファイルをダウンロードし、希望の場所に移動するか、または...
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードして展開します。
+Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードし、展開します。
 
 <br>
 
