@@ -240,7 +240,7 @@ This takes approximately 20-30 minutes depending on your system and network spee
 
 ## Step 5 - Start Dingo
 
-Once the Mithril artifact has loaded, start the node:
+Once the Mithril snapshot has loaded, start the node:
 
 ```
 cd ~/dingo
