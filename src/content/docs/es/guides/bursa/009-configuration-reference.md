@@ -76,7 +76,7 @@ Para un backend `software`/`file` configurado, Bursa rechaza el inicio cuando `s
 
 ## Archivo de configuración de `bursa kes-agent`
 
-Usa `--config` para indicar el archivo YAML:
+El indicador `--config` indica el archivo YAML:
 
 ```bash
 bursa kes-agent --config /ruta/a/bursa.yaml
@@ -88,19 +88,19 @@ Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CO
 
 | Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
-| `kes_agent.mode` | `KESAGENT_MODE` | `""` | Requerida. Usa `serve-key` para enviar la clave KES de firma al productor o `sign` para firmar los encabezados de bloque sin enviar la clave al productor. |
+| `kes_agent.mode` | `KESAGENT_MODE` | `""` | Requerida. El valor `serve-key` envía la clave KES de firma al productor y `sign` firma los encabezados de bloque sin enviar la clave al productor. |
 | `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | `""` | Requerida. Ruta del socket Unix al que se conecta el productor. Debe diferir de `kes_agent.control_socket`. |
 | `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | `""` | Requerida. Ruta del socket Unix para los comandos de control. Debe diferir de `kes_agent.service_socket`. |
 | `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | `0600` | Modo de archivo octal del socket de servicio. No puede conceder escritura a otros usuarios; la escritura del grupo sí está permitida. |
 | `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | `0600` | Modo de archivo octal del socket de control. No puede conceder escritura al grupo ni a otros usuarios. |
-| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `""` | Ruta opcional a la clave de verificación fría. Admite un sobre de texto de `cardano-cli`, hexadecimal o 32 bytes sin procesar. Se requiere esta clave o `kes_agent.cold_vkey_hex`. |
-| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | `""` | Clave de verificación fría en hexadecimal. Se requiere esta clave o `kes_agent.cold_vkey_file`; si se proporcionan ambas, Bursa usa este valor hexadecimal. |
-| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | `""` | Requerida. Indica el inicio del sistema Shelley con formato `RFC3339`. |
+| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `""` | Ruta opcional a la clave de verificación fría. Admite un sobre de texto de `cardano-cli`, hexadecimal o 32 bytes sin procesar. Bursa requiere esta clave o `kes_agent.cold_vkey_hex`. |
+| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | `""` | Clave de verificación fría en hexadecimal. Bursa requiere esta clave o `kes_agent.cold_vkey_file`; si aparecen ambas, Bursa usa este valor hexadecimal. |
+| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | `""` | Requerida. La configuración debe indicar el inicio del sistema Shelley con formato `RFC3339`. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | `1` | Duración de cada slot en segundos. El valor debe ser positivo. |
-| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | `0` | Requerida. Indica un número mayor que `0` de slots por periodo KES. |
+| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | `0` | Requerida. La configuración debe indicar un número mayor que `0` de slots por periodo KES. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | `62` | Número máximo de evoluciones del certificado operativo. |
-| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | `1m` | Intervalo del planificador como cadena de duración de Go, por ejemplo `1m`. |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida. Indica una ruta de archivo persistente y no vacía que el agente pueda abrir. |
+| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | `1m` | Intervalo del planificador como cadena de duración de Go. El valor predeterminado es `1m`. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida. La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
 
 El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia conserva el periodo KES autorizado más alto, lo restaura después de un reinicio y rechaza una reducción del periodo. Bursa no usa una alternativa en memoria para este guardia.
 
@@ -108,18 +108,18 @@ El agente KES solo conserva la clave de verificación fría; la clave de firma f
 
 Los dos modos deben ser cadenas de permisos octales válidas, como `0600`. El modo del socket de servicio puede conceder escritura al grupo, por ejemplo `0660`, cuando el productor y el agente comparten un grupo dedicado. Nunca puede conceder escritura a otros usuarios.
 
-El socket de control acepta comandos que pueden generar, instalar o eliminar claves KES. Por eso `kes_agent.control_socket_mode` nunca puede ampliar la escritura al grupo ni a otros usuarios. Mantén el valor predeterminado `0600` salvo que la instalación necesite una política de propietario más restrictiva.
+El socket de control acepta comandos que pueden generar, instalar o eliminar claves KES. Por eso `kes_agent.control_socket_mode` nunca puede ampliar la escritura al grupo ni a otros usuarios. El valor predeterminado `0600` cubre la política de propietario más restrictiva.
 
 ### Migración desde `kes_agent.socket_mode`
 
-`kes_agent.socket_mode` ya no configura los sockets. Sustituye esa clave por dos valores independientes:
+`kes_agent.socket_mode` ya no configura los sockets. La migración sustituye esa clave por dos valores independientes:
 
 | Configuración anterior | Configuración nueva | Variable de entorno nueva |
 | --- | --- | --- |
 | `kes_agent.socket_mode` | `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` |
 | `kes_agent.socket_mode` | `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` |
 
-Conserva para el socket de servicio la misma amplitud que necesita el productor, pero establece para el socket de control un modo que no conceda escritura al grupo ni a otros usuarios. La migración no puede ampliar el acceso de escritura del socket de control.
+El socket de servicio conserva la amplitud que necesita el productor, pero el socket de control usa un modo que no concede escritura al grupo ni a otros usuarios. La migración no puede ampliar el acceso de escritura del socket de control.
 
 ## Configuración de la API heredada
 
@@ -127,16 +127,16 @@ Conserva para el socket de servicio la misma amplitud que necesita el productor,
 | --- | --- | --- | --- |
 | `api.address` | `API_LISTEN_ADDRESS` | `127.0.0.1` | Dirección de escucha de la API. El valor predeterminado limita la escucha al loopback. |
 | `api.port` | `API_LISTEN_PORT` | `8080` | Puerto de escucha de la API. |
-| `api.tls_cert_file` | `API_TLS_CERT_FILE` | `""` | Ruta al certificado TLS del servidor. Debe acompañarse de `api.tls_key_file` para TLS. |
-| `api.tls_key_file` | `API_TLS_KEY_FILE` | `""` | Ruta a la clave privada TLS del servidor. Debe acompañarse de `api.tls_cert_file` para TLS. |
-| `api.jwt_secret` | `API_JWT_SECRET` | `""` | Fuente de confianza bearer con HS256. El secreto debe tener al menos 32 bytes. Mantenlo en un gestor de secretos o en una variable de entorno, no en un archivo YAML confirmado. |
-| `api.jwks_url` | `API_JWKS_URL` | `""` | Fuente de confianza bearer mediante un endpoint `JWKS`. Usa una URL `https://`; el uso de HTTP solo está permitido para desarrollo en loopback. |
+| `api.tls_cert_file` | `API_TLS_CERT_FILE` | `""` | Ruta al certificado TLS del servidor. TLS requiere este valor y `api.tls_key_file`. |
+| `api.tls_key_file` | `API_TLS_KEY_FILE` | `""` | Ruta a la clave privada TLS del servidor. TLS requiere este valor y `api.tls_cert_file`. |
+| `api.jwt_secret` | `API_JWT_SECRET` | `""` | Fuente de confianza bearer con HS256. El secreto debe tener al menos 32 bytes. El secreto debe permanecer en un gestor de secretos o en una variable de entorno, no en un archivo YAML. |
+| `api.jwks_url` | `API_JWKS_URL` | `""` | Fuente de confianza bearer mediante un endpoint `JWKS`. La URL debe usar `https://`; HTTP solo está permitido para desarrollo en loopback. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | `""` | Restricción opcional del emisor aceptado en los tokens bearer. |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | `""` | Restricción opcional de la audiencia aceptada en los tokens bearer. |
 
-Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar si no encuentra los dos archivos TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. No configures ambas fuentes. La URL `API_JWKS_URL` debe usar `https://` fuera de loopback.
+Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar si no encuentra los dos archivos TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. La configuración no debe incluir ambas fuentes. La URL `API_JWKS_URL` debe usar `https://` fuera de loopback.
 
-La escucha de loopback permite el desarrollo mediante texto sin cifrar: puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, proporciona siempre el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
+La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, la configuración debe incluir el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
 
 ## Políticas de transacciones del firmante
 
