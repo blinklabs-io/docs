@@ -251,7 +251,7 @@ Before starting the service for the first time, bootstrap the database from a Mi
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-For a fresh bootstrap, set `mithril.pinnedDigest` in `dingo.yaml` to select an exact Mithril artifact. The value identifies a v1 snapshot digest or a v2 Cardano database artifact hash. Use `--mithril-pinned-digest` or set `DINGO_MITHRIL_PINNED_DIGEST` to provide the same pin:
+For a fresh bootstrap, configure the optional `mithril.pinnedDigest` shown above to select an exact Mithril artifact. Use `--mithril-pinned-digest` or set `DINGO_MITHRIL_PINNED_DIGEST` to provide the pin through the command line or environment:
 
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
