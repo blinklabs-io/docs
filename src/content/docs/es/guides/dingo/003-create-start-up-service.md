@@ -216,7 +216,7 @@ Estos puertos coinciden con el ejemplo actualizado del explorador local de Block
 
 <br>
 
-## Paso 3 - Iniciar con un artefacto de Mithril (solo primera ejecución)
+## Paso 3 - Iniciar desde Mithril (solo primera ejecución)
 
 Antes de iniciar el servicio por primera vez, inicia la base de datos desde una instantánea de Mithril:
 
