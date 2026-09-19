@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.14）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.15）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.14/dingo-v0.70.14-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.15/dingo-v0.70.15-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -48,7 +48,7 @@ wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.14/dingo-v0.7
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、config.json）が組み込まれています。これらを別途ダウンロードする必要はありません。
+Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
 dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`変数は自動的にホームディレクトリのパスに展開されます：
 
@@ -96,6 +96,7 @@ plugins:
 # Mithril
 mithril:
   aggregatorUrl: ""
+  # pinnedDigest: ""
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
@@ -111,6 +112,8 @@ debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
+maxNtCConns: 100
+maxNtCConnectionsPerIP: 5
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -129,6 +132,8 @@ EOF
 ```
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
+
+> 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
 
 > 📝 `skipRewardLiveStakeBackfillCheck` は高度な診断用オプションです。既定値は `false` なので、通常の起動ではこの値を使用してください。`true` にすると高コストな `reward_live_stake` 起動時整合性スキャンだけを省略します。Dingoは`StaleConsensusStakeSnapshotsExist` によるコンセンサスステークスナップショットの来歴チェックを常に実行し、必要な場合は起動を拒否します。
 
@@ -171,7 +176,7 @@ sudo ufw allow 3001/tcp
 
 ## ステップ4 - Mithrilスナップショットからのブートストラップ
 
-Dingoには、スナップショットを自動的にダウンロードしてロードする組み込みのMithrilクライアントがあります。これにより、genesisからチェーンをリプレイする場合と比較して、数時間の同期時間を節約できます。
+Dingoには、Mithrilアーティファクトを自動的にダウンロードしてロードする組み込みのMithrilクライアントがあります。これにより、genesisからチェーンをリプレイする場合と比較して、数時間の同期時間を節約できます。
 
 dingoディレクトリから以下のコマンドを実行します：
 
@@ -180,6 +185,9 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
+`mithril.pinnedDigest`、`--mithril-pinned-digest`、または `DINGO_MITHRIL_PINNED_DIGEST` を使用すると、ブートストラップで取得するMithrilアーティファクトを指定できます。v1ではスナップショットダイジェスト、v2ではCardanoデータベースアーティファクトハッシュを指定します。この固定値は新しいデータベースからのブートストラップにのみ適用されます。
+
+> ⚠️ 完全なデータベースのキャッチアップで明示的なアーティファクト固定値を指定すると、Dingoは同期を拒否します。中断したインポートを再開するとき、Dingoは中断時に永続化されたアーティファクト識別子を保持します。Dingoは別の固定値による上書きを許可せず、別のアーティファクトへの切り替えを拒否します。
 > 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
 
 

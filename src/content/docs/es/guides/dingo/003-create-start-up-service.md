@@ -100,6 +100,10 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Identidad opcional del artefacto de Mithril para un arranque nuevo.
+  # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
+  # Dingo solo usa este valor para un arranque nuevo; no lo usa para una base de datos completa ni para cambiar una importación interrumpida.
+  # pinnedDigest: \"\"
 
 # Lifecycle de base de datos
 databaseLifecycle:
@@ -132,6 +136,12 @@ databaseLifecycle:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
+# CLI: `--max-ntc-conns` | Variable de entorno: `DINGO_MAX_NTC_CONNS`
+maxNtCConns: 100
+# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
+# CLI: `--max-ntc-connections-per-ip` | Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`
+maxNtCConnectionsPerIP: 5
 # Puerto del listener de salud. `0` deshabilita el listener.
 # CLI: --health-port | Variable de entorno: DINGO_HEALTH_PORT
 healthPort: 12799
@@ -140,6 +150,7 @@ healthPort: 12799
 healthReadyGapSlots: 1000
 debugPort: 0
 network: \"preview\"
+# Prime testnet usa el valor `prime-testnet` y la configuración integrada `configuration.yaml`; Dingo no requiere descargarla por separado.
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
@@ -210,6 +221,21 @@ Antes de iniciar el servicio por primera vez, inicia la base de datos desde una 
 
 ```bash
 dingo mithril sync --config /etc/dingo/dingo.yaml
+```
+
+El comando anterior inicia normalmente sin fijar un artefacto. Un arranque nuevo admite una identidad exacta de Mithril mediante cualquiera de estas opciones:
+
+```yaml
+mithril:
+  pinnedDigest: "<digest>"
+```
+
+```bash
+dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
+```
+
+```bash
+DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.

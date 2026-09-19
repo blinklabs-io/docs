@@ -108,6 +108,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap:
+  # v1 snapshot digest or v2 Cardano database artifact hash.
+  # pinnedDigest: "<digest>"
 
 # Network
 # Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
@@ -119,6 +122,12 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+# Total NtC admission limit. Default: 100. Non-positive values are ignored.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS.
+maxNtCConns: 100
+# Per-IP NtC admission limit. Default: 5. Non-positive values are ignored.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
+maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
@@ -235,6 +244,13 @@ Before starting the service for the first time, bootstrap the database from a Mi
 
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml
+```
+
+For a fresh bootstrap, configure the optional `mithril.pinnedDigest` shown above to select an exact Mithril artifact. Use `--mithril-pinned-digest` or set `DINGO_MITHRIL_PINNED_DIGEST` to provide the pin through the command line or environment:
+
+```
+dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <digest>
+DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
