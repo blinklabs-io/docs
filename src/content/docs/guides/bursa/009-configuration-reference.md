@@ -12,11 +12,11 @@ This guide describes Bursa signer and KES-agent configuration, including the `si
 | Environment variable | Default | Behavior |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
-| `BURSA_LEAN` | `false` | Seeds the persisted lean-node history-expiry setting on first run only. An unset or unparsable value uses `false`; after a value is persisted, changing or setting this variable does not override the persisted choice. |
+| `BURSA_LEAN` | `false` | Seeds the lean-node history-expiry setting that Bursa persists on first run only. If `BURSA_LEAN` is unset or unparsable, Bursa uses `false`; after Bursa persists a value, changing or setting this variable does not override the persisted choice. |
 
 ## History-expiry API
 
-The ungated history-expiry endpoints read and update the persisted lean-node setting.
+The ungated history-expiry endpoints read and update the lean-node setting that Bursa persists.
 
 ### Get the history-expiry setting
 
@@ -42,7 +42,7 @@ Send the required `enabled` field as a JSON boolean:
 { "enabled": boolean }
 ```
 
-Malformed JSON or a request without `enabled` returns HTTP `400`. A successful update returns the same `enabled` and `restart_required` response shape as `GET`. Bursa applies history expiry when it constructs the node, so `restart_required` is `true` when the persisted setting has not yet been applied to the running node and a restart is required.
+Malformed JSON or a request without `enabled` returns HTTP `400`. A successful update returns the same `enabled` and `restart_required` response shape as `GET`. Bursa applies history expiry when it constructs the node, so `restart_required` is `true` when the running node has not yet adopted the persisted setting and needs a restart.
 
 ## Configuration reference
 
