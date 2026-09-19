@@ -5,7 +5,7 @@ description: Consulta los contratos HTTP de firma de certificados operativos y d
 
 ## Descripción general
 
-Esta referencia describe los contratos HTTP de `POST /v1/sign` para firmar certificados operativos y de las operaciones de wallets persistentes en GCP. Incluye los cuerpos JSON, las respuestas correctas y las condiciones de autorización que afectan a cada solicitud.
+Esta referencia describe los contratos HTTP de `POST /v1/sign` para firmar certificados operativos y las operaciones de wallets persistentes en GCP. Incluye los cuerpos JSON, las respuestas correctas y las condiciones de autorización que afectan a cada solicitud.
 
 ## Firma de un certificado operativo
 
@@ -16,10 +16,10 @@ Envía una solicitud `POST /v1/sign` con `type` igual a `opcert`:
 ```json
 {
   "type": "opcert",
-  "kes_vkey": "<64-caracteres-hexadecimales>",
+  "kes_vkey": "<64 caracteres hexadecimales>",
   "issue_counter": 42,
   "kes_period": 123,
-  "key": "<hash-de-la-clave-fria>"
+  "key": "<hash de la clave fría>"
 }
 ```
 
@@ -39,16 +39,16 @@ Una solicitud autorizada devuelve HTTP `200` con esta estructura:
 
 ```json
 {
-  "audit_id": "<identificador-de-auditoria>",
-  "signature": "<firma-hexadecimal>",
-  "cold_vkey": "<clave-de-verificacion-fria-hexadecimal>",
-  "key": "<hash-de-la-clave-fria>"
+  "audit_id": "<identificador de auditoría>",
+  "signature": "<firma hexadecimal>",
+  "cold_vkey": "<clave de verificación fría hexadecimal>",
+  "key": "<hash de la clave fría>"
 }
 ```
 
 `signature` contiene en hexadecimal la firma de 64 bytes de la clave fría. `cold_vkey` contiene en hexadecimal la clave de verificación fría de 32 bytes. `audit_id` identifica la solicitud y `key` identifica la clave usada para firmar.
 
-El consumidor combina `kes_vkey`, `issue_counter`, `kes_period` y `signature` con `cold_vkey` para formar el sobre del certificado operativo. Bursa conserva la clave privada fría en su backend de custodia y no la incluye en la respuesta.
+El consumidor combina `kes_vkey`, `issue_counter`, `kes_period` y `signature` con `cold_vkey` para formar el sobre del certificado operativo. Bursa conserva la clave privada fría en su servicio de custodia y no la incluye en la respuesta.
 
 ### Condiciones de denegación
 
@@ -64,12 +64,12 @@ Configura `signer.keys[].allowed_requests` con `opcert` y establece la ACL corre
 
 Bursa registra estas operaciones cuando la configuración activa el almacenamiento de wallets en GCP:
 
-| Operación | Método y ruta | Cuerpo de solicitud | Respuesta correcta |
-| --- | --- | --- | --- |
-| Listar wallets | `GET /api/wallet/list` | Sin cuerpo | Una lista JSON de nombres. |
-| Obtener una wallet | `POST /api/wallet/get` | `{"name":"<nombre>"}` | Los detalles JSON de la wallet. |
-| Actualizar una wallet | `POST /api/wallet/update` | `{"name":"<nombre>","description":"<descripción>"}` | La cadena JSON `"OK"`. |
-| Eliminar una wallet | `POST /api/wallet/delete` | `{"name":"<nombre>"}` | La cadena JSON `"OK"`. |
+| Operación | Método y ruta | Respuesta correcta |
+| --- | --- | --- |
+| Listar wallets | `GET /api/wallet/list` | Una lista JSON de nombres. |
+| Obtener una wallet | `POST /api/wallet/get` | Los detalles JSON de la wallet. |
+| Actualizar una wallet | `POST /api/wallet/update` | La cadena JSON `"OK"`. |
+| Eliminar una wallet | `POST /api/wallet/delete` | La cadena JSON `"OK"`. |
 
 ### Autenticación y autorización
 
@@ -85,7 +85,6 @@ El `subject` del JWT debe aparecer en `api.jwt_admin_subjects`. La variable de e
 | --- | --- |
 | Falta la autenticación o el JWT no es válido | HTTP `401 Unauthorized`. |
 | El JWT es válido, pero su `subject` no aparece en la lista de administradores | HTTP `403 Forbidden`. |
-|
 
 Configura una fuente de confianza JWT y al menos un sujeto administrador antes de habilitar el almacenamiento GCP. Consulta la [referencia de configuración de Bursa](./009-configuration-reference) para los requisitos de inicio, las variables de entorno y las restricciones de exposición de la API.
 
