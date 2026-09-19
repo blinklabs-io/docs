@@ -43,8 +43,9 @@ The `software`/`file` signer backend loads plaintext private key material into p
 | Configuration path | Environment variable | Default | Behavior |
 | --- | --- | --- | --- |
 | `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | Explicitly permits a `software`/`file` backend on a non-loopback signer listener. |
+| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | Determines whether the signer listener uses a loopback address. |
 
-When a `software`/`file` backend is configured and `signer.listen_address` is non-loopback, Bursa refuses startup unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
+For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
 
 ## KES-agent period guard
 
@@ -58,7 +59,7 @@ Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period
 
 ## Signer transaction policies
 
-Configure operation-aware transaction permissions below `signer.keys[].tx_policy`. The coarse `allow_certificates` and `allow_votes` settings remain available, but a non-empty `allowed_certificates` list takes precedence over `allow_certificates`. A non-empty `allowed_voter_kinds` or `allowed_drep_ids` list selects allowlist mode instead of `allow_votes`. When no applicable allowlist or boolean permission is set, Bursa denies the operation by default.
+Configure operation-aware transaction permissions below `signer.keys[].tx_policy`. The coarse `allow_certificates` and `allow_votes` settings remain available, but a non-empty `allowed_certificates` list takes precedence over `allow_certificates`. A non-empty `allowed_voter_kinds` or `allowed_drep_ids` list selects allowlist mode instead of `allow_votes`. Bursa denies the operation by default when no applicable allowlist or boolean permission is set.
 
 ```yaml
 signer:
