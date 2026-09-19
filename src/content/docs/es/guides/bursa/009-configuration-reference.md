@@ -11,7 +11,7 @@ Esta guía describe la configuración del firmante y KES-agent de Bursa, incluid
 
 | Variable de entorno | Valor predeterminado | Comportamiento |
 | --- | --- | --- |
-| `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
+| `BURSA_CONNECTOR` | `false` | Habilita el backend del conector de dApps. |
 
 ## Referencia de configuración
 
