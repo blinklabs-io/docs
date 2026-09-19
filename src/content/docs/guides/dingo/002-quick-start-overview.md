@@ -202,7 +202,7 @@ sudo ufw allow 3001/tcp
 
 <br>
 
-## Step 4 - Bootstrap from Mithril Snapshot
+## Step 4 - Bootstrap from a Mithril Artifact
 
 Dingo has a built-in Mithril client that downloads and loads a Mithril artifact automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
