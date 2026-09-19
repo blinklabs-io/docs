@@ -63,6 +63,7 @@ Cuando Bursa exporta una clave de firma que sigue una ruta HD, escribe un sobre 
 Las nuevas exportaciones de pool-cold usan un sobre Ed25519 estándar no extendido con el tipo `StakePoolSigningKey_ed25519`. El sobre de verificación correspondiente usa `StakePoolVerificationKey_ed25519`. Al cargar archivos, Bursa acepta los tipos heredados `StakePoolSigningKeyShelley_ed25519` y `StakePoolVerificationKeyShelley_ed25519`, pero no los reescribe automáticamente. La clave de verificación exportada de pool-cold es la identidad Ed25519 estándar que usan los certificados operativos. La representación extendida opcional de pool-cold conserva la misma identidad del pool.
 
 Bursa solo acepta archivos de clave secreta (`.skey`) con acceso exclusivo del propietario. En Unix, rechaza cualquier bit de permisos para el grupo u otros usuarios; en Windows, requiere una DACL restrictiva limitada al propietario. Bursa rechaza los archivos de clave secreta inseguros con `ErrInsecureFileMode`. Si un directorio contiene únicamente archivos `.skey` rechazados por esta comprobación, Bursa informa el error de permisos. Los artefactos públicos, como los archivos `.vkey` y los certificados operativos, siguen la ruta de carga de claves públicas y no están sujetos a esta comprobación de permisos de claves secretas.
+Al cargar una clave desde un archivo, Bursa exige que la entrada sea un archivo regular. En Unix, rechaza las entradas que usan enlaces simbólicos; en Windows, rechaza los puntos de reanálisis. Bursa limita la entrada al máximo admitido por la implementación y rechaza los archivos sobredimensionados antes de procesarlos. La ruta de clave pública permite seguir leyendo los archivos públicos. Bursa aplica la comprobación de permisos de propietario únicamente cuando carga material secreto; los archivos `.vkey` y los certificados operativos no quedan sujetos a ella.
 No intente reparar un archivo de firma HD antiguo cambiando únicamente el campo `type`. Regenere conjuntamente los archivos de firma y verificación a partir de la mnemónica original y compare la dirección o el hash de clave resultantes con la dirección, el hash de clave o la identidad que ya están en uso antes de firmar.
 
 <a name="root"></a>
@@ -173,6 +174,8 @@ Las claves VRF son usadas por los operadores de stake pool para la elección de 
 
 La salida incluye tanto la clave de firma (vrf_sk) como la clave de verificación (vrf_vk) en formato bech32, a menos que se especifiquen archivos de clave.
 
+Antes de exportar o cargar material VRF, Bursa valida las longitudes requeridas. La clave de verificación `vrf_vk` debe tener la longitud esperada. La clave de firma `vrf_sk` debe usar una forma de semilla aceptada: una semilla sola o una semilla seguida de su clave pública. En la segunda forma, Bursa comprueba que la clave pública incluida coincide con la identidad derivada de la semilla. Si el material tiene una longitud incorrecta o esa identidad no coincide, Bursa rechaza la entrada y no genera un sobre.
+
 ```bash
 ./bursa key vrf --mnemonic "word1 word2 ..." --index 0
 ```
@@ -196,6 +199,8 @@ Esta implementación usa la profundidad 6 de Cardano, proporcionando 64 período
 La semilla se deriva determinísticamente de la mnemónica, lo que permite la recuperación de la clave.
 
 La salida incluye tanto la clave de firma (kes_sk, 608 bytes) como la clave de verificación (kes_vk, 32 bytes) en formato bech32, a menos que se especifiquen archivos de clave.
+
+Antes de exportar o cargar material KES, Bursa valida las longitudes requeridas. La clave de verificación `kes_vk` debe tener la longitud esperada. La clave de firma `kes_sk` debe usar la profundidad de Cardano KES y el tamaño de clave secreta esperados. Las longitudes malformadas, una profundidad KES inválida o un tamaño de clave secreta inválido hacen que Bursa rechace la entrada en lugar de generar un sobre.
 
 ```bash
 ./bursa key kes --mnemonic "word1 word2 ..." --index 0
