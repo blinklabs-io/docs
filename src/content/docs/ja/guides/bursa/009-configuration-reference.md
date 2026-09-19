@@ -11,7 +11,7 @@ description: Bursaの署名、KES-agent、PKCS#11設定を構成します。
 
 | 環境変数 | デフォルト | 動作 |
 | --- | --- | --- |
-| `BURSA_CONNECTOR` | `false` | `dApp`コネクタのバックエンドを有効にします。 |
+| `BURSA_CONNECTOR` | `false` | `dApp`コネクタバックエンドを有効にします。 |
 
 ## 設定リファレンス
 
