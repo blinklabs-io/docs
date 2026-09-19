@@ -63,7 +63,7 @@ http://localhost:8080/swagger/index.html
 
 ![bursa-swagger](/bursa-swagger.png)
 
-Para una escucha de la API heredada en una dirección que no sea de loopback, configure TLS y exactamente una fuente de confianza bearer. Consulte la [referencia de configuración](../009-configuration-reference).
+Cuando la API heredada escucha en una dirección que no sea de loopback, configure TLS y exactamente una fuente de confianza bearer. Consulte la [referencia de configuración](../009-configuration-reference).
 
 ***
 
