@@ -74,7 +74,7 @@ CI calculates the version code with this formula:
 ((MAJOR * 10000 + MINOR * 100 + PATCH) * 100) + rank
 ```
 
-CI rejects tags that do not satisfy these rules instead of assigning a potentially colliding version code. Non tag builds use the debug variant and do not set tag derived version values.
+CI rejects tags that do not satisfy these rules instead of assigning a potentially colliding version code. Non-tag builds use the debug variant and do not set tag-derived version values.
 
 ## Android CI gate and smoke test
 
@@ -92,9 +92,9 @@ When enabled, the smoke test downloads the APK selected by the Android build and
 
 The iOS build uses this sequence:
 
-1. Run `gomobile bind -target=ios` from `ui` to create `mobile/ios/Bursa.xcframework`.
-2. Run `xcodegen generate` from `mobile/ios` to create `Bursa.xcodeproj`.
-3. Run `xcodebuild` for the `Bursa` scheme and `iphonesimulator` SDK in `Debug` configuration.
+1. Run `cd ui && gomobile bind -target=ios -o ../mobile/ios/Bursa.xcframework ./mobile` to create `mobile/ios/Bursa.xcframework`.
+2. Run `cd mobile/ios && xcodegen generate` to create `Bursa.xcodeproj`.
+3. Run `cd mobile/ios && xcodebuild -project Bursa.xcodeproj -scheme Bursa -sdk iphonesimulator -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO build` to create the unsigned simulator app.
 
 The generated iOS app target must use these settings:
 
