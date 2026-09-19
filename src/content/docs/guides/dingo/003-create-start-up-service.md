@@ -122,6 +122,11 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+# NtC admission limits. Non-positive values are ignored.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS.
+maxNtCConns: 100
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
+maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
