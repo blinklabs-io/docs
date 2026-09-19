@@ -141,7 +141,7 @@ Bursa sends the transaction summary as a JSON `POST` request. The summary uses t
 }
 ```
 
-The hook permits signing only when it returns HTTP `200` with the JSON response `{\"allow\": true}`. Transport errors, timeouts, non-`200` responses, unreadable or malformed JSON, and any `allow` value other than `true` deny signing.
+The hook permits signing only when it returns HTTP `200` with the JSON response `{"allow": true}`. Transport errors, timeouts, non-`200` responses, unreadable or malformed JSON, and any `allow` value other than `true` deny signing.
 
 ## Troubleshooting
 
