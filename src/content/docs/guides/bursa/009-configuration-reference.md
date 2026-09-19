@@ -30,7 +30,7 @@ Compile Bursa with `CGO` enabled and the `pkcs11` build tag to include the `PKCS
 pkcs11 backend not compiled in (build with -tags pkcs11)
 ```
 
-The default build does not silently enable PKCS#11 support.
+The default build does not silently enable `PKCS#11` support.
 
 ## Signing constraints
 
