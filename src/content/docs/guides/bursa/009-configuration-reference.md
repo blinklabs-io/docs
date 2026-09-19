@@ -5,7 +5,7 @@ description: Configure the Bursa PKCS#11 signer backend.
 
 ## Overview
 
-This guide describes the `signer.backends` configuration for the PKCS#11 signer backend. The backend uses a PKCS#11 module and keeps private keys on the token while the token produces Ed25519 signatures.
+This guide describes the `signer.backends` configuration for the PKCS#11 signer backend. The backend uses a PKCS#11 module, keeps private keys on the token, and has the token produce Ed25519 signatures.
 
 ## Configuration reference
 
@@ -14,13 +14,13 @@ Add a backend entry under `signer.backends` and set its `type` to `pkcs11`. Use 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
 | `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`. |
-| `signer.backends[].module` | Specifies the path to the PKCS#11 module, including the `.so` file. | Required. Bursa rejects the backend configuration when this value is empty. |
-| `signer.backends[].token_label` | Selects the token or slot by its label. | Provide `token_label` or `slot`. At least one selection field is required. |
-| `signer.backends[].slot` | Selects a slot by its explicit slot ID. | Provide `slot` or `token_label`. At least one selection field is required. |
-| `signer.backends[].pin_env` | Names the environment variable that contains the user PIN. | Required. The named environment variable must contain a nonempty value. Bursa does not read the PIN from plaintext configuration. |
-| `signer.backends[].keys[]` | Defines an optional allowlist of token objects. | Each entry must include `name` and `type`. |
-| `signer.backends[].keys[].name` | Matches the token object's `CKA_LABEL`. | Required for each `keys` entry. |
-| `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Required for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
+| `signer.backends[].module` | Specifies the path to the PKCS#11 module, including the `.so` file. | Set this field. Bursa rejects an empty value. |
+| `signer.backends[].token_label` | Selects the token or slot by its label. | Set this field or `slot`. Bursa requires at least one selection field. |
+| `signer.backends[].slot` | Selects a slot by its explicit slot ID. | Set this field or `token_label`. Bursa requires at least one selection field. |
+| `signer.backends[].pin_env` | Names the environment variable that contains the user PIN. | Set this field and populate the named environment variable with a nonempty value. Bursa does not read the PIN from plaintext configuration. |
+| `signer.backends[].keys[]` | Defines an optional allowlist of token objects. | When present, give every entry a `name` and `type`. |
+| `signer.backends[].keys[].name` | Matches the token object's `CKA_LABEL`. | Set this field for each `keys` entry. |
+| `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Set this field for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
 
 ## Build requirements
 
