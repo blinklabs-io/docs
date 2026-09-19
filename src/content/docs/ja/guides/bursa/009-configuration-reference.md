@@ -91,7 +91,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 ## 署名者のウォーターマーク
 
-`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはファイルベースの保存方法と異なり、同じ鍵を保護する署名者レプリカ間で共有できます。
+`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはファイルベースの保存方法と異なり、同じコールドキーを保護する署名者レプリカで共有できます。
 
 | YAMLキー | 説明 | 要件 |
 | --- | --- | --- |
@@ -100,7 +100,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。設定すると`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
 
-`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。`dsn_env`で指定した環境変数が空の場合、Bursaは設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
+`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。`dsn_env`を設定すると、Bursaは`dsn`より先に指定した環境変数からDSNを読み取ります。環境変数が空の場合、Bursaは設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
 ```yaml
 signer:
@@ -118,16 +118,16 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 
 ### 運用証明書の発行カウンター
 
-`signer.watermark.mode`は、コールドキーごとに保存した最大の`issue_counter`を基準に検査します。
+`signer.watermark.mode`では、Bursaがコールドキーごとに保存した最大の`issue_counter`を基準に検査します。
 
-- `enforce`（デフォルト）は、保存済みの最大値より`issue_counter`が厳密に大きい場合だけ署名します。同じ値または小さい値は拒否します。
-- `warn`は同じ値または小さい値を回帰として記録およびログ出力しますが、署名は返します。
+- `enforce`（デフォルト）では、Bursaは保存済みの最大値より`issue_counter`が厳密に大きい場合だけ署名します。同じ値または小さい値は拒否します。
+- `warn`では、Bursaは同じ値または小さい値を回帰として記録およびログ出力しますが、署名は返します。
 - `off`は発行カウンターの検査を適用しません。
 
 ### 署名者のヘルスエンドポイント
 
 - `/healthz`は静的な生存確認で、HTTP `200`を返します。
-- `/readyz`は設定済みのSQLiteまたはPostgreSQLウォーターマークストアが書き込み可能かを3秒以内に確認します。ストアを利用できない場合または書き込めない場合はHTTP `503`を返し、正常なストアにはHTTP `200`を返します。メモリ内ストアは外部依存関係を持たないため、HTTP `200`を返します。
+- `/readyz`は、設定したSQLiteまたはPostgreSQLウォーターマークストアに3秒以内に書き込めることを確認します。ストアを利用できない場合または書き込めない場合はHTTP `503`を返し、書き込み可能なストアにはHTTP `200`を返します。メモリ内ストアは外部依存関係を持たないため、HTTP `200`を返します。
 
 ## `kes_agent`の設定
 
