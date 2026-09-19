@@ -17,7 +17,7 @@ bursa-wallet-<version>-<os>-<arch>.<ext>
 
 | Plataforma | Activo | Comportamiento |
 | --- | --- | --- |
-| macOS arm64 (Apple Silicon) | `.pkg` | Instalar `Bursa.app`. El paquete está firmado y notarizado. |
+| macOS arm64 (Apple Silicon) | `.pkg` | Instalar `Bursa.app`. El proveedor firma y notariza el paquete. |
 | Windows amd64 o arm64 | `.msi` | Instalar el monedero con un paquete firmado. |
 | Linux amd64 o arm64 | `.tar.gz` | Extraer el archivo para usar la ventana nativa. |
 | FreeBSD amd64 o arm64 | `.tar.gz` | Extraer el archivo y abrir la interfaz desde un navegador. Este activo no incluye la ventana nativa. |
@@ -58,7 +58,7 @@ Por ejemplo, iniciar el monedero en `mainnet` con la sincronización predetermin
 BURSA_NETWORK=mainnet bursa-wallet
 ```
 
-El monedero sirve la interfaz en `127.0.0.1:8090`. Las opciones que también se modifican desde la interfaz se guardan después del primer inicio; a partir de entonces, el valor guardado tiene prioridad sobre la variable de entorno correspondiente.
+El monedero sirve la interfaz en `127.0.0.1:8090`. El monedero guarda las opciones que también se modifican desde la interfaz después del primer inicio; a partir de entonces, el valor guardado tiene prioridad sobre la variable de entorno correspondiente.
 
 ## Compilar desde el código fuente
 
