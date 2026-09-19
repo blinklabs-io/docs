@@ -58,7 +58,7 @@ Guía de línea de comandos de Bursa para derivar claves individuales a partir d
 
 ### Formato de archivo de clave de firma
 
-Cuando Bursa exporta una clave de firma derivada de una ruta HD, escribe un sobre extendido Ed25519-BIP32. Los archivos de firma de las claves raíz, cuenta, pago, stake, gobernanza, política, multifirma y Calidus usan tipos de sobre como `*_ExtendedSigningKeyShelley_ed25519_bip32` y CBOR de 128 bytes que comienza con `5880`. Los archivos antiguos no extendidos usan CBOR de 32 bytes que comienza con `5820`.
+Cuando Bursa exporta una clave de firma que sigue una ruta HD, escribe un sobre extendido Ed25519-BIP32. Los archivos de firma de las claves raíz, cuenta, pago, stake, gobernanza, política, multifirma y Calidus usan tipos de sobre como `*_ExtendedSigningKeyShelley_ed25519_bip32` y CBOR de 128 bytes que comienza con `5880`. Los archivos antiguos no extendidos usan CBOR de 32 bytes que comienza con `5820`.
 
 Los archivos de firma de claves frías de pool constituyen la excepción. El archivo de firma canónico de pool-cold usa un sobre Ed25519 estándar no extendido. La representación extendida opcional de pool-cold conserva la misma identidad del pool.
 
