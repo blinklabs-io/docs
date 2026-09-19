@@ -245,7 +245,7 @@ sudo nano dingo.yaml
 
 ## Step 3 - Bootstrap a Mithril Artifact (First Run Only)
 
-Before starting the service for the first time, bootstrap the database using a Mithril artifact:
+Before starting the service for the first time, bootstrap the database from a Mithril snapshot:
 
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml
