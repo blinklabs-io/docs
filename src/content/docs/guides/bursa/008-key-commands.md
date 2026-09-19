@@ -56,6 +56,14 @@ Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 
 ***
 
+### Signing Key File Format
+
+When Bursa exports an HD derived signing key to a file, it writes an extended Ed25519-BIP32 envelope. Root, account, payment, stake, governance, policy, multisig, and Calidus signing files use an envelope type such as `*_ExtendedSigningKeyShelley_ed25519_bip32` and 128 byte CBOR beginning with `5880`. The legacy non extended form uses 32 byte CBOR beginning with `5820`.
+
+Pool cold signing files are the exception. The canonical pool cold signing file uses a standard non extended Ed25519 envelope. The optional extended pool cold representation preserves the same pool identity.
+
+Legacy HD derived signing files that declare a non extended type cannot be repaired by changing only the `type` field, and Bursa does not rewrite them automatically. Regenerate the signing and verification files together from the original mnemonic, then compare the resulting address, key hash, or other existing identity before signing.
+
 <a name="root"></a>
 
 #### Root Key
