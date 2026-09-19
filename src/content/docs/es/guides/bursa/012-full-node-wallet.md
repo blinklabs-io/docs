@@ -20,7 +20,7 @@ bursa-wallet-<version>-<os>-<arch>.<ext>
 | macOS arm64 (Apple Silicon) | `.pkg` | Instalar `Bursa.app`. El paquete incluye firma y notarización. |
 | Windows amd64 o arm64 | `.msi` | Instalar el monedero con un paquete que incluye firma. |
 | Linux amd64 o arm64 | `.tar.gz` | Extraer el archivo para usar la ventana nativa. |
-| FreeBSD amd64 o arm64 | `.tar.gz` | Extraer el archivo y abrir la interfaz desde un navegador. Este activo no incluye la ventana nativa. |
+| FreeBSD amd64 o arm64 | `.tar.gz` | Extraer el archivo y abrir la interfaz desde un navegador. Este archivo no incluye la ventana nativa. |
 
 En macOS, abrir el archivo `.pkg` y completar el instalador. En Windows, abrir el archivo `.msi` y completar el instalador. En Linux y FreeBSD, extraer el archivo y conceder permisos de ejecución al ejecutable `bursa-wallet`:
 
