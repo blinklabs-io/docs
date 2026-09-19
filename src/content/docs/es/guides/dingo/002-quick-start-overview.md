@@ -212,7 +212,7 @@ cd ~/dingo
 > 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando la brecha de slots respecto a la punta de la red está disponible y no supera `healthReadyGapSlots`; informa que no está listo cuando la brecha no se conoce o supera ese límite. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
 
 Dingo:
-1. Descargará el último artefacto de Mithril o el artefacto fijado que hayas seleccionado para tu red configurada
+1. Descargará la última instantánea de Mithril para tu red configurada
 2. Verificará la cadena de certificados
 3. Cargará la instantánea en la base de datos
 
