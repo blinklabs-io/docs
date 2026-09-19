@@ -34,7 +34,7 @@ La compilación predeterminada no habilita silenciosamente la compatibilidad con
 
 ## Restricciones de firma
 
-El backend `PKCS#11` mantiene las claves privadas en el token y solicita al token que produzca firmas `Ed25519`. La firma `COSE` de `CIP-8` no admite este backend. Bursa devuelve `CodeUnsupported` para las solicitudes de `CIP-8` que usan claves `PKCS#11`.
+El backend `PKCS#11` mantiene las claves privadas en el token y solicita al token que produzca firmas `Ed25519`. El backend `PKCS#11` no admite la firma `COSE` de `CIP-8`. Bursa devuelve `CodeUnsupported` para las solicitudes de `CIP-8` que usan claves `PKCS#11`.
 
 ## Solución de problemas
 
