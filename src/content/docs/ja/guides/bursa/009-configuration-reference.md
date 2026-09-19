@@ -100,7 +100,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
 
-`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを1つ指定します。`dsn_env`に指定した環境変数が空の場合、Bursaは設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
+`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。両方を指定した場合は`dsn_env`を優先し、そこに指定した環境変数が空の場合はBursaが設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
 ```yaml
 signer:
@@ -118,7 +118,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 
 ### `opcert`の発行カウンター
 
-`signer.watermark.mode`では、Bursaがコールドキーごとに保存した最大の`opcert`の`issue_counter`を基準に検査します。
+`signer.watermark.mode`では、Bursaがコールドキーごとに保存した`opcert`の`issue_counter`の最大値を基準に検査します。
 
 - `enforce`（デフォルト）では、Bursaは保存済みの最大値より`issue_counter`が厳密に大きい場合だけ署名します。同じ値または小さい値は拒否します。
 - `warn`では、Bursaは同じ値または小さい値を回帰として記録およびログ出力しますが、署名は返します。
