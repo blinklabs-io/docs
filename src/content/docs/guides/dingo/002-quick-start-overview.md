@@ -212,7 +212,6 @@ For a fresh bootstrap, select an exact Mithril artifact through any one of these
 - Pass `--mithril-pinned-digest` to `dingo mithril sync`.
 - Set `DINGO_MITHRIL_PINNED_DIGEST` in the environment.
 
-Use the Mithril v1 snapshot digest or the Mithril v2 Cardano database artifact hash as the pin value. Do not use a pin for catch-up on a complete database. When resuming an interrupted import, do not replace the durable artifact identity with a different pin.
 
 Run the following command from your `~/dingo` directory:
 
