@@ -98,20 +98,20 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | `gen-staged-key`、`install-key`、`drop-key`、`info`コマンドを受け付けるUnixソケット。 | 必須。`kes_agent.service_socket`と異なるパス |
 | `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | サービスソケットの8進ファイルモード。プロデューサーのUIDが異なる場合は、専用グループへの書き込みを許可できます。 | `0600`。他ユーザーの書き込みは不可。例:`0660` |
 | `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | 制御ソケットの8進ファイルモード。鍵の生成、インストール、破棄を受け付けるため、グループまたは他ユーザーの書き込みを許可できません。 | `0600`。グループまたは他ユーザーの書き込みは不可 |
-| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | プールのcold verification keyを含むファイル。`cardano-cli`のテキストエンベロープ、rawバイト、またはhexを使用できます。 | `kes_agent.cold_vkey_hex`とどちらか一方を指定 |
-| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのcold verification keyを表すhex値。 | `kes_agent.cold_vkey_file`とどちらか一方を指定 |
-| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley genesisのシステム開始時刻。 | `RFC3339`形式で必須 |
+| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | プールのコールド検証鍵を含むファイル。`cardano-cli`のテキストエンベロープ、生のバイト列、または16進値を使用できます。 | `kes_agent.cold_vkey_hex`とどちらか一方を指定 |
+| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵を表す16進値。 | `kes_agent.cold_vkey_file`とどちらか一方を指定 |
+| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelleyジェネシスのシステム開始時刻。 | `RFC3339`形式で必須 |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1スロットの実時間（秒）。 | `1`。正の値が必須 |
-| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES periodに含まれるスロット数。 | 0以外の値が必須。例:`129600` |
-| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | operational certificateの最大evolution回数。 | `62` |
-| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | KES鍵を進めるスケジューラーの間隔。Goのduration文字列を使用します。 | `1m` |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加するKES periodを永続化するdurable guardファイルのパス。 | 必須。デフォルトなし |
+| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES期間に含まれるスロット数。 | 0以外の値が必須。例:`129600` |
+| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | 運用証明書を更新できる最大回数。 | `62` |
+| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | KES鍵を進めるスケジューラーの間隔。Goの期間文字列を使用します。 | `1m` |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加するKES期間を永続化するガードファイルのパス。 | 必須。デフォルトなし |
 
-`kes_agent.cold_vkey_file`と`kes_agent.cold_vkey_hex`は、プールのcold signing keyではなくcold verification keyを指定します。両方を指定した場合は`kes_agent.cold_vkey_hex`を使用します。エージェントはcold signing keyを保持しません。
+`kes_agent.cold_vkey_file`と`kes_agent.cold_vkey_hex`は、プールのコールド署名鍵ではなくコールド検証鍵を指定します。両方を指定した場合は`kes_agent.cold_vkey_hex`を使用します。エージェントはコールド署名鍵を保持しません。
 
-`kes_agent.service_socket_mode`はグループ書き込みを許可できますが、他ユーザーの書き込みを許可するモードは使用できません。`kes_agent.control_socket_mode`はグループまたは他ユーザーの書き込みを許可できません。両方の値は8進文字列として指定します。
+`kes_agent.service_socket_mode`はグループ書き込みを許可できますが、他ユーザーの書き込みを許可するモードは使用できません。`kes_agent.control_socket_mode`はグループまたは他ユーザーの書き込みを許可できません。両方の値を8進文字列として指定します。
 
-`kes_agent.guard_file`が空の場合、BursaはKES-agentの起動を拒否します。期間ガードはエージェントが承認した最高のKES期間を保存し、再起動後にその期間を復元し、期間のロールバックを拒否します。デーモンはこのガードにインメモリのフォールバックを使用しません。
+期間ガードはエージェントが承認した最高のKES期間を保存し、再起動後にその期間を復元し、期間のロールバックを拒否します。デーモンはこのガードにメモリ内の代替手段を使用しません。
 
 ## APIのTLSとbearer認証
 
@@ -121,16 +121,16 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | `api.port` | `API_LISTEN_PORT` | APIの待ち受けポート。 | `8080` |
 | `api.tls_cert_file` | `API_TLS_CERT_FILE` | APIサーバー証明書のファイルパス。 | 非loopbackの待ち受けでは必須 |
 | `api.tls_key_file` | `API_TLS_KEY_FILE` | APIサーバー秘密鍵のファイルパス。 | 非loopbackの待ち受けでは必須 |
-| `api.jwt_secret` | `API_JWT_SECRET` | HS256 bearer認証の共有シークレット。設定時はこの値を認証元として使用します。 | 非loopbackの待ち受けでは`api.jwks_url`と排他的に指定。32バイト以上 |
-| `api.jwks_url` | `API_JWKS_URL` | RS256、ES256、またはEdDSA bearer認証で使用するJWKS URL。 | 非loopbackの待ち受けでは`api.jwt_secret`と排他的に指定。HTTPSが必須 |
-| `api.jwt_issuer` | `API_JWT_ISSUER` | bearer tokenのissuerを検証する制約。 | 任意 |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | bearer tokenのaudienceを検証する制約。 | 任意 |
+| `api.jwt_secret` | `API_JWT_SECRET` | `HS256` Bearer認証の共有シークレット。設定時はこの値を認証元として使用します。 | 非ループバックの待ち受けでは`api.jwks_url`と排他的に指定。32バイト以上 |
+| `api.jwks_url` | `API_JWKS_URL` | `RS256`、`ES256`、または`EdDSA` Bearer認証で使用するJWKSのURL。 | 非ループバックの待ち受けでは`api.jwt_secret`と排他的に指定。HTTPSが必須 |
+| `api.jwt_issuer` | `API_JWT_ISSUER` | Bearerトークンの発行者を検証する制約。 | 任意 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearerトークンの対象者を検証する制約。 | 任意 |
 
-`api.address`にloopback以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、またはbearer認証元を両方またはどちらも指定した場合、起動できません。
+`api.address`にループバック以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、またはBearer認証元を両方またはどちらも指定した場合、起動できません。
 
-`api.jwt_secret`には32バイト以上のシークレットを指定し、設定ファイルへ直接保存せずデプロイメントのシークレットとして管理します。`api.jwks_url`は非loopbackの待ち受けではHTTPS URLが必要です。loopbackの待ち受けではTLSファイルとbearer認証元を省略でき、開発用の`api.jwks_url`にはHTTP URLも使用できます。
+`api.jwt_secret`には32バイト以上のシークレットを指定し、設定ファイルへ直接保存せずデプロイメントのシークレットとして管理します。`api.jwks_url`は非ループバックの待ち受けではHTTPS URLが必要です。ループバックの待ち受けではTLSファイルとBearer認証元を省略でき、開発用の`api.jwks_url`にはHTTP URLも使用できます。
 
-`api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、issuerまたはaudienceによる追加の制約は適用されません。
+`api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、発行者または対象者による追加の制約は適用されません。
 
 ## `socket_mode`から分割設定への移行
 
