@@ -62,7 +62,7 @@ When Bursa exports a signing key derived from an HD path, it writes an extended 
 
 Pool-cold signing files are the exception. Fresh exports use a standard, non-extended Ed25519 envelope with type `StakePoolSigningKey_ed25519`; the matching verification envelope uses type `StakePoolVerificationKey_ed25519`. Bursa accepts the legacy `StakePoolSigningKeyShelley_ed25519` and `StakePoolVerificationKeyShelley_ed25519` types when loading and leaves those files unchanged. The pool-cold signing seed produces the exported verification key as the standard Ed25519 identity used by pool registration and operational certificates. The optional extended pool-cold representation preserves that same identity.
 
-Secret-key files (`.skey`) must be regular files with owner-only access. On Unix, Bursa rejects any group or other permission bits. On Windows, the file must use a restrictive DACL scoped to the owner. Bursa rejects insecure secret-key files with `ErrInsecureFileMode`. When a directory contains only `.skey` files that fail this permission check, Bursa reports that permission reason for the directory. Public artifacts such as `.vkey` files and operational certificates use the public-key loading path and are not subject to this secret-key permission check.
+Bursa accepts key inputs only when they are regular files. On Unix, Bursa rejects symlinked inputs; on Windows, it rejects reparse-point inputs. Bursa caps key-file input at its supported maximum and rejects oversized files before processing. Secret-key files (`.skey`) must have owner-only access: Unix files cannot include group or other permission bits, and Windows files must use a restrictive DACL scoped to the owner. Bursa rejects insecure secret-key files with `ErrInsecureFileMode` when the loaded material contains a secret key. When a directory contains only `.skey` files that fail this permission check, Bursa reports that permission reason for the directory. Public artifacts such as `.vkey` files and operational certificates remain readable through the public-key loading path and are not subject to this secret-key permission check.
 
 Do not repair legacy HD-derived signing files that declare a non-extended type by changing only the `type` field; Bursa does not rewrite them automatically. Regenerate the signing and verification files together from the original mnemonic, then compare the resulting address, key hash, or other existing identity before signing.
 
@@ -209,6 +209,10 @@ Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_v
 ```
 ./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
+
+### VRF and KES Key Validation
+
+Bursa validates VRF and KES material before exporting or loading it. VRF verification keys must have the expected length. VRF signing material must use an accepted seed form; when it includes a seed and public key, the embedded public key must match the seed. KES verification keys must have the expected length, and KES signing keys must use Cardano KES depth and the expected secret-key size. Malformed lengths, mismatched VRF seed and public-key identities, invalid KES depth, and invalid KES secret size fail instead of producing an envelope.
 
 ***
 
