@@ -67,7 +67,23 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 `op-cert`コマンドは、KESキーをプールコールドキーに紐付ける運用証明書(別名`node.cert`)を生成するために使用できます。ステークプールはKESキーをローテーションする際に新しいnode.certを作成する必要があります。そのため、SPOはBursaを使用して、新しいkes.vkey、コールドキー、KES期間で新しい`node.cert`を作成できます。
 
-🔁 出力形式は、cardano-cliの運用証明書と互換性があります。
+🔁 `--out`を指定すると、Bursaは`node.cert`にcardano-cli互換のJSONテキストエンベロープを書き込みます。
+
+```json
+{
+    "type": "NodeOperationalCertificate",
+    "description": "Operational Certificate",
+    "cborHex": "<hex>"
+}
+```
+
+16進数で表した`cborHex`は、次の正規の2要素CBOR構造を示します。
+
+```text
+[[kes_vkey, counter, kes_period, signature], cold_vkey]
+```
+
+外側の配列は、4要素の証明書タプルと32バイトの`cold_vkey`の2要素で構成されます。Bursaは指定された32バイトのシードまたは64バイトのEd25519秘密鍵からこのコールド検証鍵を導出し、検証とラウンドトリップのために含めます。
 
 > **必要な入力:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; KES検証鍵ファイル (bech32またはhex形式) <br>
