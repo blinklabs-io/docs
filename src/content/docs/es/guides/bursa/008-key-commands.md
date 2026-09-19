@@ -62,7 +62,7 @@ Cuando Bursa exporta una clave de firma que sigue una ruta HD, escribe un sobre 
 
 Los archivos de firma de claves frías de pool constituyen la excepción. El archivo de firma canónico de pool-cold usa un sobre Ed25519 estándar no extendido. La representación extendida opcional de pool-cold conserva la misma identidad del pool.
 
-Bursa no reescribe automáticamente los archivos antiguos. No intente reparar un archivo de firma HD antiguo cambiando únicamente el campo `type`. Regenere conjuntamente los archivos de firma y verificación a partir de la mnemónica original y compare la dirección, el hash de clave o la identidad resultantes con la identidad que ya está en uso antes de firmar.
+Bursa no reescribe automáticamente los archivos antiguos. No intente reparar un archivo de firma HD antiguo cambiando únicamente el campo `type`. Regenere conjuntamente los archivos de firma y verificación a partir de la mnemónica original y compare la dirección o el hash de clave resultantes con la dirección, el hash de clave o la identidad que ya están en uso antes de firmar.
 
 <a name="root"></a>
 
