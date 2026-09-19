@@ -126,7 +126,6 @@ JWTのsubjectは、`api.jwt_admin_subjects`または`API_JWT_ADMIN_SUBJECTS`に�
 ```
 
 `name`は削除対象のウォレット名です。このリクエストには`password`を指定しません。`password`の削除はlegacy walletのget、update、deleteリクエストだけを対象とし、`/api/wallet/create`および`/api/wallet/restore`のパスワード項目には適用しません。
-`password`の変更範囲はlegacy walletのget、update、deleteリクエストだけです。APIはこれら3つのリクエストで`password`プロパティを受け付けません。`/api/wallet/create`および`/api/wallet/restore`のパスワード項目にはこの変更を適用しません。
 
 ---
 
