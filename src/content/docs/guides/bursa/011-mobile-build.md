@@ -34,7 +34,7 @@ Set `BURSA_BUILD_TYPE=release` to run `assembleRelease bundleRelease`. A release
 | `BURSA_KEY_ALIAS` | Alias of the signing key. |
 | `BURSA_KEY_PASSWORD` | Password for the signing key. |
 
-The release build fails when any input is missing or when the keystore file does not exist. The Gradle configuration also refuses artifact producing release tasks without signing material. These checks prevent the build from producing a distributable unsigned APK.
+The release build fails when any input is missing or when the keystore file does not exist. The Gradle configuration also refuses artifact-producing release tasks without signing material. These checks prevent the build from producing a distributable unsigned APK.
 
 The container selects only an APK whose name does not end in `-unsigned.apk` and selects the release AAB. It then runs `apksigner verify --verbose --print-certs` against the selected APK. The verification must pass before the container copies the signed APK and AAB to `/out`.
 
