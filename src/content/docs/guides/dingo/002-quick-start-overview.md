@@ -226,7 +226,7 @@ cd ~/dingo
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 Dingo will:
-1. Download the latest Mithril artifact, or the selected pinned artifact, for your configured network
+1. Download the latest Mithril snapshot for your configured network
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
