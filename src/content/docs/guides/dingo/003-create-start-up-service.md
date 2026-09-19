@@ -243,9 +243,9 @@ sudo nano dingo.yaml
 
 <br>
 
-## Step 3 - Bootstrap from Mithril (First Run Only)
+## Step 3 - Bootstrap from a Mithril Artifact (First Run Only)
 
-Before starting the service for the first time, bootstrap the database from a Mithril snapshot:
+Before starting the service for the first time, bootstrap the database from a Mithril artifact:
 
 ```
 dingo mithril sync --config /etc/dingo/dingo.yaml
@@ -262,7 +262,7 @@ Leave the pin unset to use the normal command above and select the latest availa
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
-This downloads and loads a snapshot, saving hours of sync time. See [Step 4 of the Quick Start guide](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
+This downloads and loads a Mithril artifact, saving hours of sync time. See [Step 4 of the Quick Start guide: Bootstrap from a Mithril artifact](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot) for details.
 
 > 📝 You only need to do this once. After the initial bootstrap, the systemd service will keep the node synced.
 
