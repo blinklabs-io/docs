@@ -12,6 +12,25 @@ Esta guía describe la configuración del firmante y KES-agent de Bursa, incluid
 | Variable de entorno | Valor predeterminado | Comportamiento |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | Habilita el backend del conector de dApps. |
+| `BURSA_LEAN` | `false` | Establece el valor inicial de lean-node/history-expiry solo en la primera ejecución, cuando todavía no existe un valor persistido. Una preferencia ya persistida tiene prioridad y la variable no la sobrescribe después. |
+
+## API de configuración de history expiry
+
+Bursa persiste el ajuste de lean-node/history-expiry. `history expiry` es una opción de construcción del nodo, por lo que el nodo en ejecución debe reiniciarse para aplicar un valor persistido que todavía no use.
+
+`GET /wallet/settings/history-expiry` devuelve:
+
+```text
+{ "enabled": boolean, "restart_required": boolean }
+```
+
+`PUT /wallet/settings/history-expiry` requiere este cuerpo JSON:
+
+```text
+{ "enabled": boolean }
+```
+
+El campo `enabled` es obligatorio y debe ser un booleano JSON. El JSON no válido o la ausencia de `enabled` producen HTTP `400`. Una actualización correcta persiste el valor y devuelve los mismos campos `enabled` y `restart_required`. `restart_required` es `true` cuando el valor persistido todavía no coincide con el valor aplicado al nodo en ejecución.
 
 ## Referencia de configuración
 
@@ -30,7 +49,7 @@ Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11
 
 ## Requisitos de compilación
 
-Compila Bursa con `CGO` habilitado y la etiqueta de compilación `pkcs11` para incluir el backend `PKCS#11`. Sin esa etiqueta, Bursa falla de inmediato cuando una configuración selecciona este backend y devuelve:
+Una compilación de Bursa desde el código fuente requiere Go `1.26.0` o posterior. Además, compila Bursa con `CGO` habilitado y la etiqueta de compilación `pkcs11` para incluir el backend `PKCS#11`. Sin esa etiqueta, Bursa falla de inmediato cuando una configuración selecciona este backend y devuelve:
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)
