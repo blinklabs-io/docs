@@ -76,7 +76,7 @@ Para un backend `software`/`file` configurado, Bursa rechaza el inicio cuando `s
 
 ## Almacenamiento de marcas de agua del firmante
 
-Configura `signer.watermark.type` con `postgres` para guardar de forma duradera y compartida las marcas de agua y los contadores del firmante. Los almacenes en memoria y SQLite siguen disponibles; las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
+Configura `signer.watermark.type` con `postgres` para guardar de forma duradera y compartida las marcas de agua y los contadores del firmante. El almacenamiento en memoria y el almacenamiento en SQLite siguen disponibles. Las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
 
 | Ruta de configuración | Uso | Requisito |
 | --- | --- | --- |
@@ -84,7 +84,7 @@ Configura `signer.watermark.type` con `postgres` para guardar de forma duradera 
 | `signer.watermark.dsn` | Proporciona un DSN de PostgreSQL en texto plano. | Bursa lo usa como alternativa cuando `dsn_env` no proporciona el DSN. |
 | `signer.watermark.dsn_env` | Indica el nombre de la variable de entorno que contiene el DSN. | Bursa da prioridad a esta fuente sobre `dsn`; la variable indicada debe tener un valor no vacío. |
 
-Una configuración `postgres` requiere una fuente de DSN. Si `dsn_env` nombra una variable inexistente o vacía, Bursa rechaza la configuración aunque `dsn` contenga un valor. El rol de la base de datos debe poder crear las tablas de marcas de agua y después leerlas y escribirlas. Mantén las credenciales fuera del archivo YAML y proporciónalas mediante un gestor de secretos o el entorno.
+Una configuración `postgres` requiere una fuente de DSN. Si `dsn_env` nombra una variable inexistente o vacía, Bursa rechaza la configuración y no recurre a `dsn`. El rol de la base de datos debe poder crear las tablas de marcas de agua y después leerlas y escribirlas. Mantén las credenciales fuera del archivo YAML y proporciónalas mediante un gestor de secretos o el entorno.
 
 ```yaml
 signer:
@@ -110,7 +110,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?ss
 
 ### Sondeos de salud y disponibilidad
 
-`/healthz` realiza una comprobación estática de vida y devuelve HTTP `200`. `/readyz` comprueba el almacén de marcas de agua configurado con un tiempo de espera de tres segundos.
+`/healthz` realiza una comprobación estática de vida y devuelve HTTP `200`. `/readyz` comprueba el almacén de marcas de agua configurado y aplica un tiempo de espera de tres segundos.
 
 Con SQLite o PostgreSQL, `/readyz` verifica que el almacén esté disponible y pueda aceptar escrituras. Devuelve HTTP `200` cuando la comprobación tiene éxito y HTTP `503` cuando el almacén no está disponible o no permite escribir. El almacenamiento en memoria no tiene una dependencia externa, por lo que `/readyz` devuelve HTTP `200` en ese modo.
 
