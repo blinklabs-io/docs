@@ -37,13 +37,13 @@ Esta guía asume una configuración típica de Linux. Por favor ajusta los coman
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**Paso 1-C** - Puedes descargar el archivo comprimido y moverlo a tu ubicación preferida o...
+**Paso 1-C** - Para la ruta de CLI en Linux o FreeBSD, puedes descargar el archivo comprimido y moverlo a tu ubicación preferida o...
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-Copia la ruta desde Blinklabs y ejecuta los siguientes comandos para descargar y extraer el archivo comprimido de la versión.
+En la ruta de CLI para Linux o FreeBSD, copia la ruta desde Blinklabs y ejecuta los siguientes comandos para descargar y extraer el archivo comprimido de la versión.
 
 <br>
 
@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz`; las descargas de CLI para Windows usan archivos `.exe`, y las descargas de CLI para macOS usan archivos `.zip`. Las versiones oficiales del monedero de escritorio para macOS en formato `.pkg` solo están disponibles para `arm64` (Apple Silicon); Bursa ya no publica un paquete oficial del monedero para macOS Intel.
+Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos para cada arquitectura. Las descargas de CLI para Windows siguen usando archivos `.exe`, y el monedero de escritorio para Windows se distribuye como un instalador `.msi` firmado y específico para cada arquitectura. El instalador MSI puede incluir el bootstrapper de WebView2 Evergreen cuando la versión incluye ese paquete opcional y el runtime no está instalado. Las descargas de CLI para macOS siguen usando archivos `.zip`, y el monedero de escritorio para macOS se distribuye como un instalador `.pkg` notarizado y específico para cada arquitectura.
 
 ***
 
@@ -68,11 +68,11 @@ Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz`; las descargas
 
 <br>
 
-Para este ejemplo, nombramos el archivo binario `bursa`. Para hacer el archivo ejecutable ejecuta el siguiente comando:
+Este paso solo aplica al archivo binario de CLI obtenido mediante un archivo comprimido para Linux o FreeBSD. Para este ejemplo, nombramos el archivo binario `bursa`. Para hacer el archivo ejecutable, ejecuta el siguiente comando:
 
 <br>
 
-Ajusta la ruta del archivo y el nombre del archivo si es necesario.
+Ajusta la ruta del archivo y el nombre del archivo si es necesario. Para los instaladores de escritorio `.msi` de Windows y `.pkg` de macOS, usa el instalador de la plataforma correspondiente en lugar de extraer el archivo o ejecutar `chmod`.
 
 ```
 chmod +x bursa
