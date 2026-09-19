@@ -150,7 +150,6 @@ healthPort: 12799
 healthReadyGapSlots: 1000
 debugPort: 0
 network: \"preview\"
-# Prime testnet usa el valor `prime-testnet` y la configuración integrada `configuration.yaml`; Dingo no requiere descargarla por separado.
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
