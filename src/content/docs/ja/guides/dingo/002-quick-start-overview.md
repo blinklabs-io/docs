@@ -48,7 +48,7 @@ wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.14/dingo-v0.7
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、config.json）が組み込まれています。これらを別途ダウンロードする必要はありません。
+Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
 dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`変数は自動的にホームディレクトリのパスに展開されます：
 
