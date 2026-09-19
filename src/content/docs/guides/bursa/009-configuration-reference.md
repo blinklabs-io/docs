@@ -199,6 +199,8 @@ A non-loopback legacy API listener must provide both readable TLS files and exac
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
+When authenticated GCP wallet storage is enabled, Bursa protects `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete` with Bearer JWT authentication and administrator-subject authorization. The token subject must appear in `api.jwt_admin_subjects`. Detailed request and response examples are available in the [wallet administration API reference](./010-api-reference).
+
 ```yaml
 api:
   address: 0.0.0.0
