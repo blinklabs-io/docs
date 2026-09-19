@@ -23,7 +23,7 @@ Set `type` to `opcert` to request a cold signature for an operational certificat
 }
 ```
 
-`kes_vkey` accepts hexadecimal encoding for a 32 byte KES verification key. `issue_counter` identifies the operational certificate sequence, `kes_period` identifies the KES period, and `key` identifies the cold key that signs the request.
+`kes_vkey` accepts hexadecimal encoding for a 32-byte KES verification key. `issue_counter` identifies the operational certificate sequence, `kes_period` identifies the KES period, and `key` identifies the cold key that signs the request.
 
 The successful response contains the audit identifier, the cold signature, the cold verification key, and the key identifier:
 
@@ -48,7 +48,7 @@ Configure `allowed_requests` as described in the [operational certificate signer
 
 ## GCP persisted wallet administration
 
-When GCP wallet storage is enabled, the following legacy wallet operations require administrator authorization:
+When the configuration enables GCP wallet storage, Bursa requires administrator authorization for these legacy wallet operations:
 
 | Method and path | Request body | Operation |
 | --- | --- | --- |
@@ -94,11 +94,9 @@ The `get`, `update`, and `delete` requests use these JSON shapes:
 }
 ```
 
-These three legacy persisted-wallet request schemas do not accept a `password` property. Wallet creation and restoration remain separate operations; this schema change does not remove their password fields.
+These three legacy persisted wallet request schemas do not accept a `password` property. Wallet creation and restoration remain separate operations; this schema change does not remove their password fields.
 
 ### Authorization responses
 
 - Bursa returns HTTP `401 Unauthorized` when the request lacks valid bearer authentication.
-- Bursa returns HTTP `403 Forbidden` when the JWT authenticates successfully but its subject does not appear in the administrator subject configuration.
-
-Successful wallet responses and storage errors use the endpoint-specific response behavior. The authorization checks occur before Bursa performs the requested list, get, update, or delete operation.
+- Bursa returns HTTP `403 Forbidden` when the JWT authenticates successfully but its subject is not on that allowlist.
