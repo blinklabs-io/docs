@@ -214,7 +214,7 @@ cd ~/dingo
 Dingo:
 1. Descargará el último artefacto de Mithril o el artefacto fijado que hayas seleccionado para tu red configurada
 2. Verificará la cadena de certificados
-3. Cargará el artefacto en la base de datos
+3. Cargará la instantánea en la base de datos
 
 Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de red.
 
