@@ -48,7 +48,7 @@ You can verify the binary works by running:
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
+Dingo ships with embedded Cardano network configurations for `preview`, `preprod`, `mainnet`, and `prime-testnet`. The first three networks use embedded `config.json` files, and Prime testnet uses an embedded `configuration.yaml` file. Separate network file downloads are unnecessary.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
@@ -100,6 +100,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap only.
+  # Mithril v1 uses a snapshot digest; Mithril v2 uses a Cardano database artifact hash.
+  # pinnedDigest: ""
 
 # Network
 bindAddr: "0.0.0.0"
@@ -112,6 +115,12 @@ privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
+# Total NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS
+maxNtCConns: 100
+# Per-IP NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP
+maxNtCConnectionsPerIP: 5
 
 # Storage
 barkBaseUrl: ""
@@ -197,6 +206,14 @@ sudo ufw allow 3001/tcp
 
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
+For a fresh bootstrap, an exact Mithril artifact can be selected through any one of these equivalent options:
+
+- Set `mithril.pinnedDigest` in `dingo.yaml`.
+- Pass `--mithril-pinned-digest` to `dingo mithril sync`.
+- Set `DINGO_MITHRIL_PINNED_DIGEST` in the environment.
+
+Use the Mithril v1 snapshot digest or the Mithril v2 Cardano database artifact hash as the pin value. Do not use a pin for catch-up on a complete database. When resuming an interrupted import, do not replace the durable artifact identity with a different pin.
+
 Run the following command from your `~/dingo` directory:
 
 ```
@@ -209,7 +226,7 @@ cd ~/dingo
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
 Dingo will:
-1. Download the latest Mithril snapshot for your configured network
+1. Download the latest Mithril artifact, or the selected pinned artifact, for your configured network
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
