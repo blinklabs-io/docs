@@ -37,13 +37,13 @@ To get started follow the steps below
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**Step 1-C** - You can either download the binary file and move the file to your preferred location or...  
+**Step 1-C** - You can either download the archive file and move the file to your preferred location or...  
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-Copy the path from Blinklabs and run the following command to download the binary file.  
+Copy the path from Blinklabs and run the following commands to download and extract the release archive.  
 
 <br>
 
@@ -52,8 +52,11 @@ Copy the path from Blinklabs and run the following command to download the binar
 > 💡 Tip: You can download the latest Bursa release from the <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a> page.
 
 ```
-wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64 > bursa
+wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64.tar.gz
+tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
+
+Linux and FreeBSD CLI downloads use `.tar.gz` archives, Windows CLI downloads use `.exe` files, and macOS CLI downloads use `.zip` files. Official macOS desktop-wallet `.pkg` releases support `arm64` (Apple Silicon) only; an official Intel macOS wallet package is no longer published.
 
 ***
 
