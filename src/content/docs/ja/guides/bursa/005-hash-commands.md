@@ -16,7 +16,7 @@ Bursaを使用して、Cardanoのガバナンスやステークプール運用�
 
 #### メタデータ
 hash metadataコマンドは、プールおよびDRepメタデータの登録に使用されます。
-ハッシュは正規のJSON表現から計算されます。
+ハッシュは、入力ファイルから読み取った正確なバイト列をBlake2b-256でハッシュします。JSONとしての妥当性は検証しますが、意味的に同等なJSONでも空白、フィールドの順序、書式が異なるとハッシュが変わることがあります。正規JSONが必要な場合は、コマンドを実行する前に、正規化したJSONを入力ファイルまたはホスト先のファイルに保存してください。
 
 **サポートされているメタデータの種類:**
   - pool: プール登録メタデータ
@@ -44,10 +44,22 @@ hash anchor-dataコマンドは、Cardanoガバナンスで使用されるアン
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](../003-commands) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

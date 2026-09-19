@@ -7,16 +7,17 @@ description: Bursaコマンドラインガイド。
 
 Bursaは、マルチシグネチャスクリプト、ハッシュ、鍵の生成にも使用できます。これにはCardanoステークプールの運用に必要な鍵や証明書も含まれます。
 
-現在、Bursaが実行できるコマンドのカテゴリは7つあり、Cardanoユーザーにとって強力なツールとなっています。
+現在、Bursaが実行できるコマンドのカテゴリは8つあり、Cardanoユーザーにとって強力なツールとなっています。
 
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](#wallet) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](#api)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
 
@@ -62,6 +63,22 @@ http://localhost:8080/swagger/index.html
 
 ![bursa-swagger](/bursa-swagger.png)
 
+ループバック以外でAPIを公開する場合のTLSとBearer認証の要件は、[設定リファレンス](../009-configuration-reference)を参照してください。
+
+<a name="kes-agent"></a>
+
+## コマンドラインで `kes-agent` を起動
+
+`kes-agent` は `serve-key` または `sign` モードで起動します。設定ファイルは、以下のコマンドの `--config` フラグで指定します。
+
+```
+./bursa kes-agent --config /path/to/kes-agent.yaml
+```
+
+`--config` にはYAML設定ファイルのパスを指定します。フラグを省略した場合は、`BURSA_CONFIG` 環境変数で設定ファイルのパスを指定できます。
+
+`kes-agent` のモード、ソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
+
 ***
 
 その他のBursaコマンドを探索
@@ -69,10 +86,22 @@ http://localhost:8080/swagger/index.html
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](#wallet) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](#api)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

@@ -67,7 +67,23 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 `op-cert`コマンドは、KESキーをプールコールドキーに紐付ける運用証明書(別名`node.cert`)を生成するために使用できます。ステークプールはKESキーをローテーションする際に新しいnode.certを作成する必要があります。そのため、SPOはBursaを使用して、新しいkes.vkey、コールドキー、KES期間で新しい`node.cert`を作成できます。
 
-🔁 出力形式は、cardano-cliの運用証明書と互換性があります。
+🔁 `--out`を指定すると、Bursaは`node.cert`にcardano-cli互換のJSONテキストエンベロープを書き込みます。
+
+```json
+{
+    "type": "NodeOperationalCertificate",
+    "description": "Operational Certificate",
+    "cborHex": "<hex>"
+}
+```
+
+16進数の`cborHex`は、次の正規の2要素CBOR構造を表します。
+
+```text
+[[kes_vkey, counter, kes_period, signature], cold_vkey]
+```
+
+外側の配列は、4要素の証明書タプルと32バイトの`cold_vkey`を2要素として持ちます。Bursaは指定された32バイトのシードまたは64バイトのEd25519秘密鍵からこのコールド検証鍵を導出し、検証とラウンドトリップのために含めます。
 
 > **必要な入力:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; KES検証鍵ファイル (bech32またはhex形式) <br>
@@ -76,8 +92,6 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 >   `--kes-period` &emsp; 証明書作成時のKES期間
 
 ✅ カウンタの値は、新しい運用証明書を作成するたびに、古いKESキーでブロックをミントした場合に限り、インクリメントする必要があります。KES期間は、現在のスロットをKES期間あたりのスロット数で割ったものです (通常はメインネットで129600スロット = 約36時間)。
-
-`node.cert`の出力形式は、cardano-cliの運用証明書と互換性があります。
 
 `node.cert`を作成するには、次のコマンドを実行できます。
 
@@ -100,7 +114,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 > -  `--vrf-vkey`        VRF検証鍵ファイル
 > -  `--pledge`          プレッジ額(lovelace)
 > -  `--cost`            エポックごとの固定コスト(lovelace)
-> -  `--margin`          プールマージン (0.0から1.0)
+> -  `--margin`          プールマージン（`0.0`以上`1.0`以下の有限値）
+>    負の値、`1.0`を超える値、`NaN`、正または負の無限大は無効です。Bursaは無効な値を拒否し、`pool margin must be a finite value between 0.0 and 1.0`というエラーを表示して、証明書を生成しません。
 > -  `--reward-account`  報酬アカウントアドレス (bech32ステークアドレス)
 
 >オプションの入力:
@@ -340,10 +355,22 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](../003-commands) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](#cert)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](#cert)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

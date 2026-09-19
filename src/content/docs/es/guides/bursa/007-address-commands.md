@@ -18,6 +18,7 @@ Bursa se puede usar para generar direcciones de billetera de Cardano a partir de
 > - Direcciones Byron/Bootstrap (legado)
 
 #### Construcción de dirección
+Bursa acepta `mainnet`, `preprod` y `preview` como valores de red. Las solicitudes de API afectadas (`POST /api/script/create`, `POST /api/script/address` y `POST /api/address/build`) rechazan `testnet` y devuelven un error de validación HTTP 400.
 - Direcciones base (credenciales de pago + stake)
 ```bash
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
@@ -57,10 +58,22 @@ Explora otros comandos de Bursa
 > **Categorías de comandos de Bursa**
 > 1. [wallet](../003-commands) &nbsp; - Comandos para generar billetera y los archivos necesarios para administrar una billetera de Cardano
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Comandos para ejecutar la API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
-> 6. [address](#address) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
+> 3. [kes-agent](../003-commands#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
+> 7. [address](#address) - Comandos para trabajar con direcciones de Cardano
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
