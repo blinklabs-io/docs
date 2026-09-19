@@ -96,6 +96,54 @@ The `software`/`file` signer backend loads plaintext private key material into p
 
 For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
 
+The `software`/`file` signer backend loads plaintext private key material into process memory. Bursa protects this backend when the signer listens beyond the local machine:
+
+| Configuration path | Environment variable | Default | Behavior |
+| --- | --- | --- | --- |
+| `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | Explicitly permits a `software`/`file` backend on a non-loopback signer listener. |
+| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | Determines whether the signer listener uses a loopback address. |
+
+For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
+
+## Signer watermark
+
+Configure `signer.watermark` to store signer safety watermarks and operational certificate issue counters. The `memory` backend keeps this state in memory, `sqlite` stores it in SQLite, and `postgres` stores it in a durable PostgreSQL database that multiple signer replicas can share.
+
+| Configuration path | Purpose | Default or requirement |
+| --- | --- | --- |
+| `signer.watermark.type` | Selects the watermark store. | Bursa supports `memory`, `sqlite`, and `postgres`. |
+| `signer.watermark.dsn` | Provides the PostgreSQL connection string directly. | Acts as the fallback when `dsn_env` does not resolve to a nonempty value. |
+| `signer.watermark.dsn_env` | Names an environment variable that contains the PostgreSQL connection string. | Takes precedence over `dsn`; the named variable must contain a nonempty value. A `postgres` store requires a DSN from this variable or from `dsn`. |
+| `signer.watermark.mode` | Controls the operational certificate issue-counter guard. | Defaults to `enforce`; set `off`, `warn`, or `enforce`. |
+
+Use the `postgres` store when signer replicas must share the same authoritative watermark and counter state. Point every replica guarding the same keys to that database. The database role must be able to create the watermark tables and read from and write to them. Keep credentials out of committed YAML, and configure verified TLS for remote database connections as appropriate for the deployment.
+
+```yaml
+signer:
+  watermark:
+    type: postgres
+    mode: enforce
+    dsn_env: BURSA_SIGNER_WATERMARK_DSN
+```
+
+Provide the DSN through the named environment variable rather than embedding a password in the YAML file:
+
+```bash
+export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?sslmode=verify-full'
+```
+
+The `mode` setting applies the issue-counter guard separately for each cold key:
+
+- `enforce` requires each operational certificate `issue_counter` to be strictly greater than the highest stored counter for that cold key. Bursa rejects equal or lower counters.
+- `warn` records and logs an equal or lower counter regression, but Bursa still returns a signature.
+- `off` disables the issue-counter guard.
+
+## Signer health endpoints
+
+`/healthz` provides static liveness and always returns HTTP `200`.
+
+`/readyz` checks the configured watermark store with a three-second timeout. For SQLite and PostgreSQL, Bursa verifies that the store accepts the watermark writes required for signing. A healthy and writable store returns HTTP `200`; an unavailable or non-writable store returns HTTP `503`. An in-memory store has no external dependency and remains ready with HTTP `200`.
+
 ## `kes_agent`
 
 Configure the daemon under the `kes_agent` YAML key. Each field also accepts the corresponding `KESAGENT_*` environment variable.
