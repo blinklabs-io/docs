@@ -37,13 +37,13 @@ Esta guía asume una configuración típica de Linux. Por favor ajusta los coman
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**Paso 1-C** - Puedes descargar el archivo binario y mover el archivo a tu ubicación preferida o...
+**Paso 1-C** - Puedes descargar el archivo comprimido y moverlo a tu ubicación preferida o...
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-Copia la ruta desde Blinklabs y ejecuta el siguiente comando para descargar el archivo binario.
+Copia la ruta desde Blinklabs y ejecuta los siguientes comandos para descargar y extraer el archivo comprimido de la versión.
 
 <br>
 
@@ -52,8 +52,11 @@ Ajusta la ruta del enlace a la ruta correcta para la versión que deseas descarg
 > Consejo: Puedes descargar la última versión de Bursa desde la página <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a>.
 
 ```
-wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64 > bursa
+wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64.tar.gz
+tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
+
+Las descargas de CLI para Linux y FreeBSD son archivos `.tar.gz`, las descargas de CLI para Windows son archivos `.exe` y las descargas de CLI para macOS son archivos `.zip`. Las versiones oficiales del monedero de escritorio para macOS en formato `.pkg` solo admiten `arm64` (Apple Silicon); Bursa ya no publica un paquete oficial del monedero para macOS Intel.
 
 ***
 
