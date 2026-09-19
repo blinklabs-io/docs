@@ -173,13 +173,13 @@ El socket de servicio conserva la amplitud que necesita el productor, pero el so
 | `api.jwks_url` | `API_JWKS_URL` | `""` | Fuente de confianza bearer mediante un endpoint `JWKS`. La URL debe usar `https://`; HTTP solo está permitido para desarrollo en loopback. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | `""` | Restricción opcional del emisor aceptado en los tokens bearer. |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | `""` | Restricción opcional de la audiencia aceptada en los tokens bearer. |
-| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | `[]` | Lista de sujetos JWT administradores permitidos para administrar billeteras persistidas. |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | `[]` | Lista no vacía de sujetos JWT autorizados para administrar billeteras persistidas cuando se habilita el almacenamiento GCP. |
 
 Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar si no encuentra los dos archivos TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. La configuración no debe incluir ambas fuentes. La URL `API_JWKS_URL` debe usar `https://` fuera de loopback.
 
 La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, la configuración debe incluir el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
 
-Cuando la configuración del proyecto y el recurso de Google habilita el almacenamiento autenticado de billeteras GCP, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un JWT válido en el encabezado `Authorization: Bearer`, y el sujeto del token debe pertenecer a la lista de administradores. Consulta la [referencia de la API de Bursa en español](./010-api-reference) para ver los ejemplos detallados de solicitudes y respuestas.
+Cuando la configuración del proyecto y el recurso de Google habilita el almacenamiento de billeteras GCP con autenticación, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un encabezado `Authorization: Bearer <JWT>` válido, y el sujeto del token debe coincidir con un sujeto de la lista de administradores. Consulta la [referencia de la API de Bursa en español](./010-api-reference) para ver los ejemplos detallados de solicitudes y respuestas.
 
 ## Políticas de transacciones del firmante
 
@@ -212,7 +212,7 @@ Establece `allowed_drep_ids` con ID de credencial hexadecimales para limitar los
 
 ### Política de solicitudes del firmante
 
-Configura `signer.keys[].allowed_requests` para autorizar solicitudes específicas de firma. Bursa deniega las solicitudes de certificados operativos salvo que la política de la clave incluya `opcert`:
+Incluye `opcert` en `signer.keys[].allowed_requests` para autorizar solicitudes específicas de firma de certificados operativos. Bursa deniega estas solicitudes cuando la política de la clave no incluye `opcert`:
 
 | Configuración | Solicitud | Comportamiento |
 | --- | --- | --- |
