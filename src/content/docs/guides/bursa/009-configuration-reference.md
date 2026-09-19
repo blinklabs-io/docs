@@ -193,6 +193,7 @@ Configure the legacy API under the `api` YAML key.
 | `api.jwks_url` | `API_JWKS_URL` | Authenticate bearer tokens through a JWKS endpoint. | Use instead of `api.jwt_secret`; Bursa requires HTTPS except for loopback development. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Constrain the issuer that bearer tokens can contain. | Set to constrain the accepted issuer. |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | Constrain the audience that bearer tokens can contain. | Set to constrain the accepted audience. |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | Define the non-empty JWT subject allowlist for persisted wallet administration. | When authenticated GCP wallet storage is enabled, include at least one non-empty subject. Bursa refuses startup when the list is empty or missing. |
 
 A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
 
