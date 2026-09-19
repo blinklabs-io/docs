@@ -7,6 +7,8 @@ Ahora podemos usar la línea de comandos para crear una billetera de Cardano y g
 
 Bursa también se puede usar para generar scripts multifirma, hashes y claves, incluidas las claves y certificados necesarios para ejecutar un stake pool de Cardano.
 
+Consulta la [referencia de configuración de Bursa](../009-configuration-reference) para configurar `bursa kes-agent`.
+
 Actualmente hay 8 categorías de comandos que Bursa puede ejecutar, lo que la convierte en una herramienta poderosa para los usuarios de Cardano.
 
 > **Categorías de comandos de Bursa**
