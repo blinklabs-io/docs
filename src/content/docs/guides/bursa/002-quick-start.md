@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-Linux and FreeBSD CLI downloads use `.tar.gz` archives, Windows CLI downloads use `.exe` files, and macOS CLI downloads use `.zip` files. Official macOS desktop-wallet `.pkg` releases support `arm64` (Apple Silicon) only; an official Intel macOS wallet package is no longer published.
+Linux and FreeBSD CLI downloads use `.tar.gz` archives, Windows CLI downloads use `.exe` files, and macOS CLI downloads use `.zip` files. Official macOS desktop-wallet `.pkg` releases support `arm64` (Apple Silicon) only; Bursa no longer publishes an official Intel macOS wallet package.
 
 ***
 
