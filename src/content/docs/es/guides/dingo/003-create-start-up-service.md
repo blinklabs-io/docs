@@ -239,7 +239,7 @@ dingo mithril sync --config /etc/dingo/dingo.yaml --mithril-pinned-digest <diges
 DINGO_MITHRIL_PINNED_DIGEST=<digest> dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-En v1, el pin identifica el digest de una instantánea; en v2, identifica el hash de un artefacto de base de datos de Cardano. Dingo solo acepta un pin explícito durante un arranque nuevo: rechaza el pin cuando una base de datos completa requiere una puesta al día. Si una importación se interrumpe, Dingo reanuda con la identidad de artefacto guardada de forma persistente y rechaza un pin diferente.
+Dingo solo acepta un pin explícito durante un arranque nuevo y rechaza el pin cuando una base de datos completa requiere una puesta al día. Cuando una importación se detiene, Dingo reanuda con la identidad de artefacto que conserva de forma persistente y rechaza un pin diferente.
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
