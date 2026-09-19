@@ -37,13 +37,13 @@ blinklabs.ioからBursaのバイナリファイルをダウンロードするだ
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**ステップ1-C** - バイナリファイルをダウンロードして希望の場所に移動するか、または...
+**ステップ1-C** - アーカイブファイルをダウンロードして希望の場所に移動するか、または...
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-Blinklabsからパスをコピーし、以下のコマンドを実行してバイナリファイルをダウンロードします。
+Blinklabsからパスをコピーし、以下のコマンドを実行してリリースアーカイブをダウンロードして展開します。
 
 <br>
 
@@ -52,8 +52,11 @@ Blinklabsからパスをコピーし、以下のコマンドを実行してバ�
 > ヒント: 最新のBursaリリースは<a href="https://github.com/blinklabs-io/bursa/releases" target="_blank">https://github.com/blinklabs-io/bursa/releases</a>ページからダウンロードできます。
 
 ```bash
-wget -O - https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64 > bursa
+wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64.tar.gz
+tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
+
+LinuxとFreeBSDのCLIダウンロードは`.tar.gz`アーカイブ、WindowsのCLIダウンロードは`.exe`ファイル、macOSのCLIダウンロードは`.zip`ファイルです。公式のmacOSデスクトップウォレットの`.pkg`リリースは`arm64`（Apple Silicon）のみをサポートしており、Bursaは公式のIntel macOSウォレットパッケージを公開していません。
 
 ***
 
