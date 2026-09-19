@@ -110,9 +110,9 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?ss
 
 ### Sondeos de salud y disponibilidad
 
-`/healthz` realiza una comprobación estática de vida y devuelve HTTP `200`. `/readyz` comprueba el almacén de marcas de agua configurado y aplica un tiempo de espera de tres segundos.
+`/healthz` solo comprueba que el proceso está vivo y devuelve HTTP `200`. `/readyz` comprueba el almacén de marcas de agua configurado y aplica un tiempo de espera de tres segundos.
 
-Con SQLite o PostgreSQL, `/readyz` verifica que el almacén esté disponible y pueda aceptar escrituras. Devuelve HTTP `200` cuando la comprobación tiene éxito y HTTP `503` cuando el almacén no está disponible o no permite escribir. El almacenamiento en memoria no tiene una dependencia externa, por lo que `/readyz` devuelve HTTP `200` en ese modo.
+Con SQLite o PostgreSQL, `/readyz` verifica que el almacén esté disponible y acepte operaciones de escritura. Devuelve HTTP `200` cuando la comprobación tiene éxito y HTTP `503` cuando el almacén no está disponible o no permite escribir. El almacenamiento en memoria no tiene una dependencia externa, por lo que `/readyz` devuelve HTTP `200` en ese modo.
 
 ## Archivo de configuración de `bursa kes-agent`
 
