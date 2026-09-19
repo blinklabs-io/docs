@@ -9,16 +9,16 @@ Esta guía describe la instalación, ejecución, configuración, compilación y 
 
 ## Instalación
 
-Descargar un instalador o archivo de la [página de versiones de Bursa](https://github.com/blinklabs-io/bursa/releases). Los activos siguen este patrón de nombres:
+Descargar un instalador o archivo de la [página de versiones de Bursa](https://github.com/blinklabs-io/bursa/releases). Los archivos siguen este patrón de nombres:
 
 ```text
 bursa-wallet-<version>-<os>-<arch>.<ext>
 ```
 
-| Plataforma | Activo | Comportamiento |
+| Plataforma | Archivo | Comportamiento |
 | --- | --- | --- |
-| macOS arm64 (Apple Silicon) | `.pkg` | Instalar `Bursa.app`. El proveedor firma y notariza el paquete. |
-| Windows amd64 o arm64 | `.msi` | Instalar el monedero con un paquete firmado. |
+| macOS arm64 (Apple Silicon) | `.pkg` | Instalar `Bursa.app`. El paquete incluye firma y notarización. |
+| Windows amd64 o arm64 | `.msi` | Instalar el monedero con un paquete que incluye firma. |
 | Linux amd64 o arm64 | `.tar.gz` | Extraer el archivo para usar la ventana nativa. |
 | FreeBSD amd64 o arm64 | `.tar.gz` | Extraer el archivo y abrir la interfaz desde un navegador. Este activo no incluye la ventana nativa. |
 
@@ -37,7 +37,7 @@ Ejecutar el binario desde un terminal:
 bursa-wallet
 ```
 
-El activo de escritorio abre una ventana nativa. El activo sin ventana sirve la misma interfaz en `http://127.0.0.1:8090`; abrir esa dirección en un navegador. El proceso solo escucha en la interfaz de loopback.
+El archivo de escritorio abre una ventana nativa. El binario sin ventana sirve la misma interfaz en `http://127.0.0.1:8090`; abrir esa dirección en un navegador. El proceso solo escucha en la interfaz de loopback.
 
 El primer inicio sincroniza el nodo. La configuración predeterminada usa una instantánea de Mithril para evitar reproducir la cadena desde el génesis. La pantalla de sincronización muestra el progreso mientras el nodo se pone al día.
 
@@ -50,7 +50,7 @@ Configurar las variables de entorno antes de ejecutar `bursa-wallet`:
 | `BURSA_NETWORK` | `preview` | Seleccionar la red de Cardano y el directorio de datos correspondiente. |
 | `BURSA_SYNC` | `mithril` | Usar una instantánea de Mithril para la sincronización. El valor `genesis` reproduce la cadena desde el inicio. |
 | `BURSA_LEAN` | `false` | Usar el perfil de almacenamiento reducido, que elimina datos históricos de la cadena para reducir el espacio en disco. |
-| `BURSA_CONNECTOR` | `false` | Activar el backend del conector de aplicaciones descentralizadas. |
+| `BURSA_CONNECTOR` | `false` | Activar el conector de aplicaciones descentralizadas. |
 
 Por ejemplo, iniciar el monedero en `mainnet` con la sincronización predeterminada:
 
@@ -100,13 +100,13 @@ Para realizar pruebas locales, ejecutar:
 make bundle-macos
 ```
 
-Este destino genera un paquete `.pkg` con firma ad hoc. Para generar el paquete firmado y notarizado de distribución, ejecutar:
+Este destino genera un paquete `.pkg` con firma ad hoc. Para generar el paquete de distribución, ejecutar:
 
 ```bash
 make pkg-macos
 ```
 
-Este destino requiere los secretos de Apple.
+Este destino aplica la firma y la notarización de Apple, y requiere los secretos de Apple.
 
 ## Solución de problemas
 
