@@ -12,6 +12,37 @@ This guide describes Bursa signer and KES-agent configuration, including the `si
 | Environment variable | Default | Behavior |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
+| `BURSA_LEAN` | `false` | Seeds the persisted lean-node history-expiry setting on first run only. An unset or unparsable value uses `false`; after a value is persisted, changing or setting this variable does not override the persisted choice. |
+
+## History-expiry API
+
+The ungated history-expiry endpoints read and update the persisted lean-node setting.
+
+### Get the history-expiry setting
+
+```http
+GET /wallet/settings/history-expiry
+```
+
+The response has this shape:
+
+```json
+{ "enabled": boolean, "restart_required": boolean }
+```
+
+### Update the history-expiry setting
+
+```http
+PUT /wallet/settings/history-expiry
+```
+
+Send the required `enabled` field as a JSON boolean:
+
+```json
+{ "enabled": boolean }
+```
+
+Malformed JSON or a request without `enabled` returns HTTP `400`. A successful update returns the same `enabled` and `restart_required` response shape as `GET`. Bursa applies history expiry when it constructs the node, so `restart_required` is `true` when the persisted setting has not yet been applied to the running node and a restart is required.
 
 ## Configuration reference
 
@@ -29,6 +60,8 @@ Add a backend entry under `signer.backends` and set its `type` to `pkcs11`. Use 
 | `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Set this field for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
 
 ## Build requirements
+
+Building Bursa from source requires Go `1.26.0` or newer, in addition to `CGO` and the `pkcs11` build tag for the `PKCS#11` backend.
 
 Compile Bursa with `CGO` enabled and the `pkcs11` build tag to include the `PKCS#11` backend. Without that build tag, Bursa fails fast when a configuration selects this backend and returns:
 
