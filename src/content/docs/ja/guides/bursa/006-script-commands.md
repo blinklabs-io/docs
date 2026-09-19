@@ -65,11 +65,12 @@ Bursaは、マルチシグネチャスクリプトの生成にも使用できま
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](../003-commands) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](#script) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](#script) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
 
