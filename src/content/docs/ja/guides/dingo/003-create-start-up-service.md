@@ -117,7 +117,6 @@ bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
-# Prime testnet では埋め込みの `configuration.yaml` を使用します。設定ファイルを別途ダウンロードする必要はありません。
 # NtC 接続の上限は合計 100、送信元 IP ごとに 5 です。`--max-ntc-conns` / `DINGO_MAX_NTC_CONNS` と `--max-ntc-connections-per-ip` / `DINGO_MAX_NTC_CONNECTIONS_PER_IP` でも設定できます。
 # 値が 0 以下の場合は無視され、既定値が使用されます。
 maxNtCConns: 100
