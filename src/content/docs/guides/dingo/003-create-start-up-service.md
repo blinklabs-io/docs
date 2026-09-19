@@ -230,8 +230,6 @@ network: prime-testnet
 network: mainnet
 ```
 
-Dingo embeds the Prime testnet configuration. Its embedded configuration file is `configuration.yaml`.
-
 ***
 
 You can view and verify our `dingo.yaml` file by running:
