@@ -48,7 +48,7 @@ Puedes verificar que el binario funciona ejecutando:
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis, config.json) para preview, preprod y mainnet. No necesitas descargarlas por separado.
+Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
 Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expandirá automáticamente a la ruta de tu directorio de inicio:
 
@@ -100,8 +100,16 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Solo se aplica a un arranque nuevo desde una base de datos vacía.
+  # pinnedDigest: ""
 
 # Network
+# Límite total de conexiones NtC. Predeterminado: 100. Los valores no positivos se ignoran.
+maxNtCConns: 100
+# Alias de CLI: `--max-ntc-conns`. Variable de entorno: `DINGO_MAX_NTC_CONNS`.
+# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Los valores no positivos se ignoran.
+maxNtCConnectionsPerIP: 5
+# Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
 bindAddr: "0.0.0.0"
 metricsPort: 12798
 # Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
@@ -194,6 +202,10 @@ Ejecuta el siguiente comando desde tu directorio dingo:
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 Para seleccionar un artefacto Mithril específico, configura `mithril.pinnedDigest` en `dingo.yaml`, usa `--mithril-pinned-digest` o define `DINGO_MITHRIL_PINNED_DIGEST`. En v1, el valor es un digest de instantánea; en v2, es un hash de artefacto de base de datos de Cardano. El comando anterior no fija ningún artefacto y usa la selección predeterminada.
+
+> ⚠️ Un pin explícito requiere una base de datos nueva: Dingo rechaza el pin cuando una base de datos completa intenta ponerse al día mediante catch-up. Si una importación interrumpida se reanuda, Dingo conserva la identidad del artefacto guardada de forma duradera y rechaza un pin diferente.
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
