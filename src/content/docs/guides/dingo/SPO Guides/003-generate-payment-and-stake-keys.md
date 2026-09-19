@@ -5,12 +5,12 @@ description: SPO Guide for Dingo Pools - Generate Payment and Stake Keys.
 
 # Dingo - Generate Payment and Stake Keys
 
-✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $DINGO_HOME folder. Adjust paths below if necessary.
 
 ## Step 1 - Obtain the protocol parameters
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway query protocol-parameters \
 --testnet-magic 2 \
 --out-file params.json
@@ -18,13 +18,15 @@ cardano-cli conway query protocol-parameters \
 
 ***
 
+<br>
+
 ## Step 2 - Generate a new payment key pair
-Generate a new payment key pair (`payment.skey` and `payment.vkey`)
+Generate a new payment key pair (`payment.skey` and `payment.vkey`).
 
 ⚠️ On an air-gapped machine
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway address key-gen \
 --verification-key-file payment.vkey \
 --signing-key-file payment.skey
@@ -32,12 +34,15 @@ cardano-cli conway address key-gen \
 
 ***
 
+<br>
+
 ## Step 3 - Generate a new stake address key pair
-Generate a new stake address key pair (`stake.skey` and `stake.vkey`)
+Generate a new stake address key pair (`stake.skey` and `stake.vkey`).
 
 ⚠️ On an air-gapped machine
 
 ```
+cd $DINGO_HOME
 cardano-cli conway stake-address key-gen \
 --verification-key-file stake.vkey \
 --signing-key-file stake.skey
@@ -45,12 +50,15 @@ cardano-cli conway stake-address key-gen \
 
 ***
 
+<br>
+
 ## Step 4 - Generate your stake address
-Generate a stake address from the stake address verification key and store it in `stake.addr`
+Generate a stake address from the stake address verification key and store it in `stake.addr`.
 
 ⚠️ On an air-gapped machine
 
 ```
+cd $DINGO_HOME
 cardano-cli conway stake-address build \
 --stake-verification-key-file stake.vkey \
 --out-file stake.addr \
@@ -59,10 +67,13 @@ cardano-cli conway stake-address build \
 
 ***
 
+<br>
+
 ## Step 5 - Generate payment address
-Generate a payment address for the payment key (`payment.vkey`) and stake key (`stake.vkey`) and store it in `payment.addr`
+Generate a payment address for the payment key (`payment.vkey`) and stake key (`stake.vkey`), and store it in `payment.addr`.
 
 ```
+cd $DINGO_HOME
 cardano-cli conway address build \
 --payment-verification-key-file payment.vkey \
 --stake-verification-key-file stake.vkey \
@@ -79,13 +90,21 @@ cat payment.addr
 
 ***
 
+<br>
+
 ## Step 6 -  Fund your payment address
 On testnets you can use the <a href="https://docs.cardano.org/cardano-testnets/tools/faucet" target="_blank">Cardano faucet</a> to get test ADA. Select the Preview testnet and paste your payment.addr.
 
-After funding your account, check your payment address balance.
+After funding your account, verify your payment address balance.
 
 ```
 cardano-cli conway query utxo \
 --address $(cat payment.addr) \
 --testnet-magic 2
 ```
+
+***
+
+<br>
+
+### Congratulations! You are ready to move to the next section.

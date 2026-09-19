@@ -7,14 +7,14 @@ description: SPO Guide for Dingo Pools - Registering Your Stake Address.
 
 > The stake address must be registered on-chain before it can be used. This costs transaction fees plus a deposit (currently 2 ADA, as defined by the network protocol parameters). The deposit is returned when the stake address is deregistered.
 
-✅ This guide assumes your files are in the $HOME/dingo folder. Adjust paths below if necessary.
+✅ This guide assumes your files are in the $DINGO_HOME folder. Adjust paths below if necessary.
 
-## Step 1 - Generate stake registration certificate
+## Step 1 - Generate the stake registration certificate
 
 ⚠️ On an air-gapped machine
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway stake-address registration-certificate \
 --stake-verification-key-file stake.vkey \
 --key-reg-deposit-amt "$(jq -r '.stakeAddressDeposit' params.json)" \
@@ -23,8 +23,10 @@ cardano-cli conway stake-address registration-certificate \
 
 ***
 
-## Step 2 - Build Transaction 
-Copy `stake.cert` to the `~/dingo` directory on your hot environment.
+<br>
+
+## Step 2 - Build the transaction 
+Copy `stake.cert` to the `$DINGO_HOME` directory on your hot environment.
 
 
 Query the current slot (used for `--invalid-hereafter`):
@@ -34,10 +36,10 @@ currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
 echo Current Slot: $currentSlot
 ```
 
-Next build the transaction. The `transaction build` calculates fees and change automatically:
+Next, build the transaction. The `transaction build` command calculates fees and change automatically:
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction build \
 --tx-in $(cardano-cli query utxo --address $(cat payment.addr) --out-file /dev/stdout | jq -r 'keys[0]') \
 --change-address $(cat payment.addr) \
@@ -51,16 +53,18 @@ cardano-cli conway transaction build \
 
 ***
 
-## Step 3 - Sign Transaction
+<br>
 
-Copy `tx.raw` to the `~/dingo` directory on your air-gapped machine.
+## Step 3 - Sign the transaction
 
-Sign transaction using both the payment and stake signing keys:
+Copy `tx.raw` to the `$DINGO_HOME` directory on your air-gapped machine.
+
+Sign the transaction using both the payment and stake signing keys:
 
 ⚠️ On an air-gapped machine
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
@@ -70,11 +74,19 @@ cardano-cli conway transaction sign \
 
 ***
 
-## Step 4 - Submit Transaction
+<br>
 
-Copy `tx.signed` to the `~/dingo` directory on your hot environment.
+## Step 4 - Submit the transaction
+
+Copy `tx.signed` to the `$DINGO_HOME` directory on your hot environment.
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction submit --tx-file tx.signed
 ```
+
+***
+
+<br>
+
+### Congratulations! You are ready to move to the next section.
