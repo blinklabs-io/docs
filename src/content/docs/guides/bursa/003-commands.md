@@ -77,7 +77,7 @@ Start the KES agent daemon for a Cardano block producer with a YAML configuratio
 ./bursa kes-agent --config /path/to/kes-agent.yaml
 ```
 
-The `--config` flag selects the YAML configuration file. When the flag is omitted, Bursa uses the `BURSA_CONFIG` environment variable. Configure the `kes_agent.mode` value as `serve-key` or `sign`. The [configuration reference](../009-configuration-reference) lists the mode and required socket, key, and timing settings.
+The `--config` flag selects the YAML configuration file. When the flag is omitted, Bursa uses the `BURSA_CONFIG` environment variable. Configure the `kes_agent.mode` value as `serve-key` or `sign`. Use the [configuration reference](../009-configuration-reference) for the `kes_agent` YAML fields and environment variables, including the mode and required socket, key, and timing settings.
 
 ***
 
