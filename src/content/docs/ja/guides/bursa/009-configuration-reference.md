@@ -1,11 +1,21 @@
 ---
 title: Bursa設定リファレンス
-description: Bursaの署名、KES-agent、PKCS#11設定を構成します。
+description: Bursaの署名、KES-agent、APIのTLSおよびbearer認証設定を構成します。
 ---
 
 ## 概要
 
-このガイドでは、Bursaの署名およびKES-agent設定と、`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
+このガイドでは、Bursaの署名およびKES-agent設定、APIのTLSとbearer認証、および`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
+
+## 設定ファイルの読み込み
+
+`bursa kes-agent`は、`--config`で指定した任意のYAMLファイルを読み込みます。`--config`を指定しない場合は、`BURSA_CONFIG`の値を設定ファイルのパスとして使用します。両方を指定した場合は`--config`が優先されます。
+
+```bash
+bursa kes-agent --config /etc/bursa/config.yaml
+```
+
+YAMLの値を読み込んだ後、環境変数の値で上書きします。環境変数名は各表に記載しています。
 
 ## ウォレット環境変数
 
@@ -79,15 +89,54 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 `software`/`file`バックエンドを設定すると、`signer.listen_address`がループバック以外の場合に、`signer.allow_insecure_file_backend`が`true`でなければBursaは起動を拒否します。空の`signer.listen_address`は全インターフェースを意味し、この判定ではループバック以外として扱います。ループバックリスナーまたは明示的な`true`のオプトインでは起動できますが、バックエンドの使用時にはBursaが警告を出力します。本番環境では、プレーンテキストの鍵素材ではなく`Vault`や`SOPS`などの保管バックエンドを使用します。
 
-## KES-agentの期間ガード
+## `kes_agent`の設定
 
-KES-agentは単調増加する期間ガードのために永続的なパスを必要とします。
+| YAMLキー | 環境変数 | 説明 | デフォルトまたは要件 |
+| --- | --- | --- | --- |
+| `kes_agent.mode` | `KESAGENT_MODE` | KESエージェントの動作モード。`serve-key`は現在のKES署名鍵をプロデューサーへ渡し、`sign`はエージェント内に鍵を保持したままブロックヘッダーに署名します。 | `serve-key`または`sign`。必須 |
+| `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | ブロックプロデューサーが接続するUnixソケット。 | 必須。`kes_agent.control_socket`と異なるパス |
+| `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | `gen-staged-key`、`install-key`、`drop-key`、`info`コマンドを受け付けるUnixソケット。 | 必須。`kes_agent.service_socket`と異なるパス |
+| `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | サービスソケットの8進ファイルモード。プロデューサーのUIDが異なる場合は、専用グループへの書き込みを許可できます。 | `0600`。他ユーザーの書き込みは不可。例:`0660` |
+| `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | 制御ソケットの8進ファイルモード。鍵の生成、インストール、破棄を受け付けるため、グループまたは他ユーザーの書き込みを許可できません。 | `0600`。グループまたは他ユーザーの書き込みは不可 |
+| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | プールのcold verification keyを含むファイル。`cardano-cli`のテキストエンベロープ、rawバイト、またはhexを使用できます。 | `kes_agent.cold_vkey_hex`とどちらか一方を指定 |
+| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのcold verification keyを表すhex値。 | `kes_agent.cold_vkey_file`とどちらか一方を指定 |
+| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley genesisのシステム開始時刻。 | `RFC3339`形式で必須 |
+| `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1スロットの実時間（秒）。 | `1`。正の値が必須 |
+| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES periodに含まれるスロット数。 | 0以外の値が必須。例:`129600` |
+| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | operational certificateの最大evolution回数。 | `62` |
+| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | KES鍵を進めるスケジューラーの間隔。Goのduration文字列を使用します。 | `1m` |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加するKES periodを永続化するdurable guardファイルのパス。 | 必須。デフォルトなし |
 
-| 設定パス | 環境変数 | 要件 |
-| --- | --- | --- |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | KES-agentデーモンが開ける、空でない永続ファイルパスを設定します。 |
+`kes_agent.cold_vkey_file`と`kes_agent.cold_vkey_hex`は、プールのcold signing keyではなくcold verification keyを指定します。両方を指定した場合は`kes_agent.cold_vkey_hex`を使用します。エージェントはcold signing keyを保持しません。
+
+`kes_agent.service_socket_mode`はグループ書き込みを許可できますが、他ユーザーの書き込みを許可するモードは使用できません。`kes_agent.control_socket_mode`はグループまたは他ユーザーの書き込みを許可できません。両方の値は8進文字列として指定します。
 
 `kes_agent.guard_file`が空の場合、BursaはKES-agentの起動を拒否します。期間ガードはエージェントが承認した最高のKES期間を保存し、再起動後にその期間を復元し、期間のロールバックを拒否します。デーモンはこのガードにインメモリのフォールバックを使用しません。
+
+## APIのTLSとbearer認証
+
+| YAMLキー | 環境変数 | 説明 | デフォルトまたは要件 |
+| --- | --- | --- | --- |
+| `api.address` | `API_LISTEN_ADDRESS` | APIの待ち受けアドレス。 | `127.0.0.1` |
+| `api.port` | `API_LISTEN_PORT` | APIの待ち受けポート。 | `8080` |
+| `api.tls_cert_file` | `API_TLS_CERT_FILE` | APIサーバー証明書のファイルパス。 | 非loopbackの待ち受けでは必須 |
+| `api.tls_key_file` | `API_TLS_KEY_FILE` | APIサーバー秘密鍵のファイルパス。 | 非loopbackの待ち受けでは必須 |
+| `api.jwt_secret` | `API_JWT_SECRET` | HS256 bearer認証の共有シークレット。設定時はこの値を認証元として使用します。 | 非loopbackの待ち受けでは`api.jwks_url`と排他的に指定。32バイト以上 |
+| `api.jwks_url` | `API_JWKS_URL` | RS256、ES256、またはEdDSA bearer認証で使用するJWKS URL。 | 非loopbackの待ち受けでは`api.jwt_secret`と排他的に指定。HTTPSが必須 |
+| `api.jwt_issuer` | `API_JWT_ISSUER` | bearer tokenのissuerを検証する制約。 | 任意 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | bearer tokenのaudienceを検証する制約。 | 任意 |
+
+`api.address`にloopback以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、またはbearer認証元を両方またはどちらも指定した場合、起動できません。
+
+`api.jwt_secret`には32バイト以上のシークレットを指定し、設定ファイルへ直接保存せずデプロイメントのシークレットとして管理します。`api.jwks_url`は非loopbackの待ち受けではHTTPS URLが必要です。loopbackの待ち受けではTLSファイルとbearer認証元を省略でき、開発用の`api.jwks_url`にはHTTP URLも使用できます。
+
+`api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、issuerまたはaudienceによる追加の制約は適用されません。
+
+## `socket_mode`から分割設定への移行
+
+`kes_agent.socket_mode`はサポートされていません。既存の`kes_agent.socket_mode`を削除し、サービスソケットには`kes_agent.service_socket_mode`、制御ソケットには`kes_agent.control_socket_mode`を個別に設定します。
+
+サービスソケットでプロデューサーのグループアクセスが必要な場合は、`kes_agent.service_socket_mode`に`0660`などのグループ書き込みを許可する値を指定できます。制御ソケットは鍵をインストールまたは破棄できるため、`kes_agent.control_socket_mode`にグループまたは他ユーザーの書き込みを許可する値を指定できません。新しい設定を省略した場合、両方のソケットは`0600`になります。
 
 ## 署名者のトランザクションポリシー
 
