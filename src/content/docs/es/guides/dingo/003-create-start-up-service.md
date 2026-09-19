@@ -216,9 +216,9 @@ Estos puertos coinciden con el ejemplo actualizado del explorador local de Block
 
 <br>
 
-## Paso 3 - Iniciar desde Mithril (solo primera ejecución)
+## Paso 3 - Iniciar desde un artefacto de Mithril (solo primera ejecución)
 
-Antes de iniciar el servicio por primera vez, inicia la base de datos desde una instantánea de Mithril:
+Antes de iniciar el servicio por primera vez, inicia la base de datos desde un artefacto de Mithril:
 
 ```bash
 dingo mithril sync --config /etc/dingo/dingo.yaml
@@ -243,7 +243,7 @@ Durante la puesta al día de una base de datos completa, Dingo rechaza cualquier
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
-Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
+Esto descarga y carga un artefacto de Mithril, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido: iniciar desde un artefacto de Mithril](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
 
 > 📝 Solo necesitas hacer esto una vez. Después del inicio inicial, el servicio systemd mantendrá el nodo sincronizado.
 
