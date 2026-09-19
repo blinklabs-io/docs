@@ -361,7 +361,7 @@ Explore other Bursa Commands
 > 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 6. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-> 8. [kes-agent](../003-commands#kes-agent) - Commands for running the KES agent daemon
+> 8. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp; - Commands for running the KES agent daemon
 
 ***
 
