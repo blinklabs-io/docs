@@ -63,19 +63,19 @@ http://localhost:8080/swagger/index.html
 
 ![bursa-swagger](/bursa-swagger.png)
 
-ループバック以外でAPIを公開する場合は、TLSとBearer認証の要件について[設定リファレンス](../009-configuration-reference)を参照してください。
+ループバック以外でAPIを公開する場合のTLSとBearer認証の要件は、[設定リファレンス](../009-configuration-reference)を参照してください。
 
 <a name="kes-agent"></a>
 
 ## コマンドラインでKESエージェントを起動
 
-`kes-agent` は `serve-key` または `sign` モードで起動します。設定ファイルを指定するには、以下のコマンドを実行します。
+`kes-agent` は `serve-key` または `sign` モードで起動します。設定ファイルは、以下のコマンドの `--config` フラグで指定します。
 
 ```
 ./bursa kes-agent --config /path/to/kes-agent.yaml
 ```
 
-`--config` フラグにはYAML設定ファイルのパスを指定します。`--config` を省略した場合は、`BURSA_CONFIG` 環境変数で設定ファイルのパスを指定できます。
+`--config` にはYAML設定ファイルのパスを指定します。フラグを省略した場合は、`BURSA_CONFIG` 環境変数で設定ファイルのパスを指定できます。
 
 `kes-agent` のモード、ソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
 
