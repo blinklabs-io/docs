@@ -52,9 +52,9 @@ Bursa también se puede usar para generar scripts multifirma. El comando `script
 - `--script` especifica la ruta obligatoria al archivo de script.
 - `--public-keys` acepta una lista separada por comas de claves de verificación Ed25519 codificadas en hexadecimal. `--signatures` acepta una lista separada por comas de firmas codificadas en hexadecimal. El elemento de la posición `i` en cada lista forma un testigo y ambas listas deben tener la misma longitud.
 - Use `--message` para indicar el mensaje firmado como texto UTF-8 o `--message-hex` para indicarlo en hexadecimal. Estos indicadores no se pueden especificar a la vez. El modo de validación predeterminado requiere uno de estos indicadores cuando se proporcionan testigos.
-- `--slot` proporciona el slot actual para la validación de bloqueos de tiempo.
+- `--slot` proporciona el valor del slot actual para validar bloqueos de tiempo.
 - De forma predeterminada, Bursa valida criptográficamente cada testigo proporcionado: compara el hash Blake2b-224 de cada clave de verificación con el hash de clave del script y verifica la firma Ed25519 con el mensaje proporcionado. Un script que requiere firmas y no recibe testigos termina con un diagnóstico distinto de cero.
-- `--structural-only` realiza la validación estructural sin verificar testigos ni firmas.
+- `--structural-only` valida solo la estructura, sin verificar los testigos ni las firmas.
 
 El comando devuelve JSON con los campos `valid`, `slot`, `signatures`, `scriptHash` y `structuralOnly`.
 
