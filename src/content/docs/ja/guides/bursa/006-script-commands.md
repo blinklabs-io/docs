@@ -43,17 +43,17 @@ Bursaは、マルチシグネチャスクリプトの生成にも使用できま
 
 #### スクリプトの検証
 
-- Ed25519 witnessでスクリプトを検証します:
+- Ed25519 vkey witnessでスクリプトを検証します:
 
 ```
 ./bursa script validate --script script.json --public-keys abcdef1234...,1234567890... --signatures 0123abcd...,fedcba9876... --message-hex 74657874 --slot 123456789
 ```
 
 - `--script` はスクリプトファイルのパスを必須で指定します。
-- `--public-keys` はhexでエンコードしたEd25519 verification keyをカンマ区切りで指定します。`--signatures` はhexでエンコードしたsignatureをカンマ区切りで指定します。各リストの位置 `i` の項目を1つのwitnessとして対応付け、両リストは同じ長さである必要があります。
+- `--public-keys` はhexでエンコードしたEd25519 verification keyをカンマ区切りで指定します。`--signatures` はhexでエンコードしたsignatureをカンマ区切りで指定します。各リストの位置 `i` の項目を1つのwitnessとして対応付け、両リストは同じ長さにする必要があります。
 - `--message` は署名対象のpayloadをUTF-8テキストで指定し、`--message-hex` はhexで指定します。両flagは同時に使用できません。witnessを指定する場合、defaultのwitness検証にはどちらかのflagが必要です。
 - `--slot` はtimelock検証用の現在のslotを指定します。
-- defaultでは、Bursaは入力された各witnessを暗号学的に検証します。各verification keyのBlake2b-224 hashをscript key hashに照合し、入力されたpayloadに対するEd25519 signatureを検証します。signatureを必要とするスクリプトにwitnessを指定しない場合、ゼロ以外の終了ステータスで終了します。
+- defaultでは、Bursaは入力された各witnessを暗号学的に検証します。各verification keyのBlake2b-224 hashをスクリプトのkey hashに照合し、入力されたpayloadに対するEd25519 signatureを検証します。signatureを必要とするスクリプトにwitnessを指定しない場合、ゼロ以外の終了ステータスで終了します。
 - `--structural-only` はwitnessやsignatureを検証せずに、構造だけを検証します。
 
 このコマンドは、`valid`、`slot`、`signatures`、`scriptHash`、`structuralOnly`フィールドを含むJSONを返します。
