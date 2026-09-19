@@ -165,6 +165,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 | `api.jwks_url` | `API_JWKS_URL` | `RS256`、`ES256`、または`EdDSA`の`Bearer`認証で使用するJWKSのURL。 | 非ループバックの待ち受けでは`api.jwt_secret`と排他的に指定。`HTTPS`が必須 |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | `Bearer`トークンの発行者を検証する制約。 | 任意 |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | `Bearer`トークンの対象者を検証する制約。 | 任意 |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続ウォレットを管理できるJWT subjectの許可リスト。 | 認証付きGCPウォレットストレージでは、空でないsubjectを少なくとも1つ指定 |
 
 `api.address`にループバック以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、または`Bearer`認証元を両方またはどちらも指定した場合、起動できません。
 
@@ -172,11 +173,24 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 
 `api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、発行者または対象者による追加の制約は適用されません。
 
+認証付きGCPウォレットストレージを有効にする場合は、`api.jwt_admin_subjects`に空でない管理者subjectを少なくとも1つ指定します。リストが空または未指定の場合、Bursaは起動を拒否します。`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete`の各ルートでは、有効な`Bearer` JWTと、そのsubjectが管理者リストに含まれることの両方を要求します。
+
 ## `socket_mode`から分割設定への移行
 
 `kes_agent.socket_mode`はサポートされていません。既存の`kes_agent.socket_mode`を削除し、サービスソケットには`kes_agent.service_socket_mode`、制御ソケットには`kes_agent.control_socket_mode`を個別に設定します。
 
 サービスソケットでプロデューサーのグループアクセスが必要な場合は、`kes_agent.service_socket_mode`に`0660`などのグループ書き込みを許可する値を指定できます。制御ソケットは鍵をインストールまたは破棄できるため、`kes_agent.control_socket_mode`にグループまたは他ユーザーの書き込みを許可する値を指定できません。新しい設定を省略した場合、両方のソケットは`0600`になります。
+
+## 署名者のトランザクションポリシー
+## 署名者の運用証明書ポリシー
+
+`POST /v1/sign`で`type: opcert`を指定して運用証明書に署名するには、対象キーの`allowed_requests`に`opcert`を追加します。
+
+| 設定パス | 許可値 | 動作 |
+| --- | --- | --- |
+| `signer.keys[].allowed_requests` | `opcert` | `POST /v1/sign`の`type: opcert`リクエストを許可します。 |
+
+キーのポリシーがない場合、または`allowed_requests`に`opcert`がない場合、Bursaはこの操作をデフォルトで拒否します。
 
 ## 署名者のトランザクションポリシー
 
