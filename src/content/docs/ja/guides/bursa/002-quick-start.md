@@ -7,7 +7,7 @@ description: Bursaクイックスタート概要。
 
 Go言語で書かれたプログラマティックなCardanoウォレットで、API、CLI、ライブラリインターフェースを提供し、開発者がウォレット機能を簡単に統合できるようにします。
 
-blinklabs.ioからBursaのCLI用バイナリまたはアーカイブ、あるいは各プラットフォーム用インストーラーをダウンロードするだけです。その後、コマンドラインまたはAPIでBursaを実行します。
+blinklabs.ioからBursaのCLI用のバイナリまたはアーカイブ、各プラットフォーム用のインストーラーをダウンロードするだけです。その後、コマンドラインまたはAPIでBursaを実行します。
 
 <br>
 
@@ -21,7 +21,7 @@ blinklabs.ioからBursaのCLI用バイナリまたはアーカイブ、あるい
 
 <br>
 
-## ステップ1 - BlinklabsからCLI用バイナリまたはアーカイブ、あるいは各プラットフォーム用インストーラーをダウンロード
+## ステップ1 - BlinklabsからCLI用のバイナリまたはアーカイブ、各プラットフォーム用のインストーラーをダウンロード
 <br>
 
 **ステップ1-A** - まず<a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a>にアクセスし、Bursaまでスクロールします。
