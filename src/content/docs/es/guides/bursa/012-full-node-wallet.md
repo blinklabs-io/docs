@@ -88,7 +88,7 @@ Ejecutar:
 make wallet-webview
 ```
 
-Esta variante requiere CGO, una cadena de herramientas de C y las cabeceras de desarrollo del webview del sistema. Usa `WKWebView` en macOS, `WebView2` en Windows y `webkit2gtk` en Linux. En Linux, una compilación con la etiqueta `webview` también requiere `libayatana-appindicator3` en tiempo de ejecución para ejecutarse con soporte de bandeja. Compilarla en una máquina de la arquitectura de destino: esta variante no admite compilación cruzada.
+Esta variante requiere CGO, una cadena de herramientas de C y las cabeceras de desarrollo del webview del sistema. Usa `WKWebView` en macOS, `WebView2` en Windows y `webkit2gtk` en Linux. Compilarla en una máquina de la arquitectura de destino: esta variante no admite compilación cruzada.
 
 En Linux, instalar las cabeceras de desarrollo de `webkit2gtk` y disponer de `libayatana-appindicator3` en tiempo de ejecución antes de ejecutar el destino. Si el sistema solo ofrece `webkit2gtk-4.1`, el archivo Makefile crea la adaptación `pkg-config` necesaria para la dependencia que solicita `4.0`.
 
