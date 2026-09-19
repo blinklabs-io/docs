@@ -78,12 +78,12 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 ```
 
 16進数で表した`cborHex`は、次の正規の2要素CBOR構造を示します。
+16進数の`cborHex`は、次の正規の2要素CBOR構造を表します。
 
 ```text
 [[kes_vkey, counter, kes_period, signature], cold_vkey]
 ```
 
-外側の配列は、4要素の証明書タプルと32バイトの`cold_vkey`という2要素を持ちます。Bursaは指定された32バイトのシードまたは64バイトのEd25519秘密鍵からこのコールド検証鍵を導出し、検証とラウンドトリップのために含めます。
 
 > **必要な入力:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; KES検証鍵ファイル (bech32またはhex形式) <br>
