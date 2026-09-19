@@ -37,13 +37,13 @@ Esta guía asume una configuración típica de Linux. Por favor ajusta los coman
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**Paso 1-C** - Para la ruta de CLI en Linux o FreeBSD, puedes descargar el archivo comprimido y moverlo a tu ubicación preferida o...
+**Paso 1-C** - La ruta de CLI en Linux o FreeBSD permite descargar el archivo comprimido y moverlo a la ubicación preferida o...
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-En la ruta de CLI para Linux o FreeBSD, copia la ruta desde Blinklabs y ejecuta los siguientes comandos para descargar y extraer el archivo comprimido de la versión.
+En la ruta de CLI para Linux o FreeBSD, la ruta copiada desde Blinklabs permite ejecutar los siguientes comandos para descargar y extraer el archivo comprimido de la versión.
 
 <br>
 
@@ -68,7 +68,7 @@ Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos p
 
 <br>
 
-Este paso solo aplica al archivo binario de CLI obtenido mediante un archivo comprimido para Linux o FreeBSD. Este ejemplo usa `bursa` como nombre del archivo binario. Concede permisos de ejecución con el siguiente comando:
+Este paso solo aplica al archivo binario de CLI obtenido mediante un archivo comprimido para Linux o FreeBSD. Este ejemplo usa `bursa` como nombre del archivo binario. El siguiente comando concede permisos de ejecución:
 
 <br>
 
