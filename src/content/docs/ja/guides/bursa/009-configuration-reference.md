@@ -96,11 +96,11 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | YAMLキー | 説明 | 要件 |
 | --- | --- | --- |
 | `signer.watermark.type` | ウォーターマークの保存先を選択します。 | PostgreSQLを使用する場合は`postgres`を設定します。 |
-| `signer.watermark.dsn` | PostgreSQLへの接続に使うDSNをプレーンテキストで指定します。 | `dsn_env`を使用しない場合のDSNソースです。 |
-| `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。設定すると`dsn`より優先されます。 |
+| `signer.watermark.dsn` | PostgreSQLへの接続に使うDSNをプレーンテキストで指定します。 | `dsn_env`を使用しない場合のフォールバックです。 |
+| `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
 
-`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。`dsn_env`を設定すると、Bursaは`dsn`より先に指定した環境変数からDSNを読み取ります。環境変数が空の場合、Bursaは設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
+`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを1つ指定します。`dsn_env`に指定した環境変数が空の場合、Bursaは設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
 ```yaml
 signer:
@@ -116,9 +116,9 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 
 同じコールドキーを保護する高可用性レプリカは、同じ権威データベースを使用する必要があります。PostgreSQLのデータベースロールには、ウォーターマークテーブルを初期化するための作成権限と、初期化後にテーブルを読み書きする権限が必要です。
 
-### 運用証明書の発行カウンター
+### `opcert`の発行カウンター
 
-`signer.watermark.mode`では、Bursaがコールドキーごとに保存した最大の`issue_counter`を基準に検査します。
+`signer.watermark.mode`では、Bursaがコールドキーごとに保存した最大の`opcert`の`issue_counter`を基準に検査します。
 
 - `enforce`（デフォルト）では、Bursaは保存済みの最大値より`issue_counter`が厳密に大きい場合だけ署名します。同じ値または小さい値は拒否します。
 - `warn`では、Bursaは同じ値または小さい値を回帰として記録およびログ出力しますが、署名は返します。
