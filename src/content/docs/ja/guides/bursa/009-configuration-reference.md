@@ -12,11 +12,11 @@ description: Bursaの署名、KES-agent、PKCS#11設定を構成します。
 | 環境変数 | デフォルト | 動作 |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | `dApp`コネクタバックエンドを有効にします。 |
-| `BURSA_LEAN` | `false` | 永続化された`history-expiry`設定がまだない初回起動時だけ、lean-node/history-expiryの初期値を設定します。値を設定ファイルに永続化した後は、環境変数より永続化されたユーザー設定を優先します。未設定または解釈できない値には`false`を使用します。 |
+| `BURSA_LEAN` | `false` | `history-expiry`の値をまだ設定ファイルに保存していない初回起動時だけ、lean-node/history-expiryの初期値を設定します。値を設定ファイルに保存した後は、環境変数より保存済みのユーザー設定を優先します。未設定または解釈できない値には`false`を使用します。 |
 
 ### history-expiry設定API
 
-`history-expiry`設定は永続化され、次のAPIで参照および更新できます。
+Bursaは`history-expiry`設定を永続化し、次のAPIで参照および更新できます。
 
 #### 設定の取得
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 リクエスト本文は`{ "enabled": boolean }`です。`enabled`には必須のJSON boolean値を指定します。不正なJSONまたは`enabled`の欠落にはHTTP `400`を返します。更新に成功すると、APIは`enabled`と`restart_required`を含む同じ2フィールドのレスポンスを返します。
 
-history expiryはノード構築時の設定です。永続化した値が実行中のノードにまだ適用されていない場合、レスポンスの`restart_required`は`true`になります。
+`history-expiry`はノード構築時に決まる設定です。実行中のノードが永続化した値をまだ適用していない場合、レスポンスの`restart_required`は`true`になります。
 
 ## 設定リファレンス
 
