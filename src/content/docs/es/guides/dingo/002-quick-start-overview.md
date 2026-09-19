@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.14/dingo-v0.70.14-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.15/dingo-v0.70.15-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -192,9 +192,9 @@ sudo ufw allow 3001/tcp
 
 <br>
 
-## Paso 4 - Iniciar desde instantánea de Mithril
+## Paso 4 - Iniciar desde un artefacto de Mithril
 
-Dingo tiene un cliente Mithril integrado que descarga y carga una instantánea automáticamente. Esto ahorra horas de tiempo de sincronización en comparación con reproducir la cadena desde el génesis.
+Dingo tiene un cliente Mithril integrado que descarga y carga un artefacto de Mithril automáticamente. Esto ahorra horas de tiempo de sincronización en comparación con reproducir la cadena desde el génesis.
 
 Ejecuta el siguiente comando desde tu directorio dingo:
 
@@ -212,9 +212,9 @@ cd ~/dingo
 > 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando la brecha de slots respecto a la punta de la red está disponible y no supera `healthReadyGapSlots`; informa que no está listo cuando la brecha no se conoce o supera ese límite. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
 
 Dingo:
-1. Descargará la última instantánea de Mithril para tu red configurada
+1. Descargará el último artefacto de Mithril, o el artefacto fijado seleccionado, para tu red configurada
 2. Verificará la cadena de certificados
-3. Cargará la instantánea en la base de datos
+3. Cargará el artefacto en la base de datos
 
 Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de red.
 
@@ -226,7 +226,7 @@ Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de
 
 ## Paso 5 - Iniciar Dingo
 
-Una vez que la instantánea de Mithril se haya cargado, inicia el nodo:
+Una vez que el artefacto de Mithril se haya cargado, inicia el nodo:
 
 ```bash
 cd ~/dingo
