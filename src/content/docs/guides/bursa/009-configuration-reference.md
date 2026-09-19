@@ -102,23 +102,25 @@ Configure the daemon under the `kes_agent` YAML key. Each field also accepts the
 
 | YAML key | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
-| `kes_agent.mode` | `KESAGENT_MODE` | Select `serve-key` to provide the current KES signing key to the producer, or `sign` to sign block headers without releasing the key. | Required; `serve-key` or `sign` |
-| `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | Unix socket used by the block producer. | Required |
-| `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | Unix socket used for KES key management commands. | Required and different from `service_socket` |
-| `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | Octal permission mode for the service socket. Group access can support a producer that runs under a different user ID. | `0600`; other write access is rejected |
-| `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | Octal permission mode for the control socket. | `0600`; group and other write access are rejected |
-| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | File containing the pool cold verification key as a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex` |
-| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Inline hexadecimal pool cold verification key. | Provide this field or `cold_vkey_file`; inline hex takes precedence when both are set |
-| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley genesis system start. | Required RFC3339 timestamp |
-| `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Wall clock length of one slot in seconds. | `1`; must be positive |
-| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | Number of slots in one KES period. | Required and greater than `0` |
-| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Maximum number of operational certificate evolutions. | `62` |
-| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Scheduler interval expressed as a Go duration, such as `1m`. | `1m` |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Durable path that stores the monotonic KES period guard. | Required |
+| `kes_agent.mode` | `KESAGENT_MODE` | Select `serve-key` to provide the current KES signing key to the producer, or `sign` to sign block headers without releasing the key. | Set to `serve-key` or `sign`. |
+| `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | Unix socket used by the block producer. | Set a service socket path. |
+| `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | Unix socket used for KES key management commands. | Set a control socket path different from `service_socket`. |
+| `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | Octal permission mode for the service socket. Group access can support a producer that runs under a different user ID. | Use `0600` by default; do not grant write access to other users. |
+| `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | Octal permission mode for the control socket. | Use `0600` by default; do not grant group or other write access. |
+| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | File containing the pool cold verification key as a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
+| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Inline hexadecimal pool cold verification key. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
+| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley genesis system start. | Set an RFC3339 timestamp. |
+| `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
+| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | Number of slots in one KES period. | Set a value greater than `0`. |
+| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Maximum number of operational certificate evolutions. | Bursa uses `62` by default. |
+| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Scheduler interval expressed as a Go duration, such as `1m`. | Bursa uses `1m` by default; set a Go duration. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Durable path that stores the monotonic KES period guard. | Set a durable path. |
 
 The daemon requires different service and control socket paths. It accepts octal socket modes and defaults both modes to owner-only `0600` access. A service socket can grant group access when the producer needs a different user ID, but it cannot grant write access to other users. The control socket must remain owner-only for write access because it accepts commands that can install or remove KES keys.
 
 The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and a durable `guard_file` path before startup can continue.
+
+Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
 
 ```yaml
 kes_agent:
@@ -142,20 +144,20 @@ Replace the former `kes_agent.socket_mode` key with both `kes_agent.service_sock
 
 ## Legacy API security
 
-Configure the legacy API under the `api` YAML key. The environment variables override the matching YAML values.
+Configure the legacy API under the `api` YAML key.
 
 | YAML key | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
-| `api.tls_cert_file` | `API_TLS_CERT_FILE` | Server TLS certificate file. | Required for a non-loopback listener |
-| `api.tls_key_file` | `API_TLS_KEY_FILE` | Server TLS private key file. | Required for a non-loopback listener |
-| `api.jwt_secret` | `API_JWT_SECRET` | HS256 bearer authentication secret. | Mutually exclusive with `api.jwks_url`; at least 32 bytes |
-| `api.jwks_url` | `API_JWKS_URL` | JWKS endpoint for bearer authentication. | Mutually exclusive with `api.jwt_secret`; HTTPS is required except for loopback development |
-| `api.jwt_issuer` | `API_JWT_ISSUER` | Optional accepted issuer constraint for bearer tokens. | Optional |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Optional accepted audience constraint for bearer tokens. | Optional |
+| `api.tls_cert_file` | `API_TLS_CERT_FILE` | Server TLS certificate file. | Set for a non-loopback listener. |
+| `api.tls_key_file` | `API_TLS_KEY_FILE` | Server TLS private key file. | Set for a non-loopback listener. |
+| `api.jwt_secret` | `API_JWT_SECRET` | HS256 bearer authentication secret. | Use instead of `api.jwks_url`; provide at least 32 bytes. |
+| `api.jwks_url` | `API_JWKS_URL` | JWKS endpoint for bearer authentication. | Use instead of `api.jwt_secret`; Bursa requires HTTPS except for loopback development. |
+| `api.jwt_issuer` | `API_JWT_ISSUER` | Optional accepted issuer constraint for bearer tokens. | Set to constrain the accepted issuer. |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Optional accepted audience constraint for bearer tokens. | Set to constrain the accepted audience. |
 
 A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup when it receives neither source or both sources. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
 
-The default API listener uses loopback. Loopback development can remain plaintext when TLS files are not configured, but a non-loopback listener cannot start without TLS and bearer authentication.
+The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
 ```yaml
 api:
@@ -168,7 +170,7 @@ api:
   jwt_audience: bursa-api
 ```
 
-Keep `api.jwt_secret` in an environment variable or deployment secret rather than in a committed YAML file. The [API section of the CLI guide](../003-commands#api) provides the command entry point, and the [kes-agent section](../003-commands#kes-agent) provides the daemon entry point.
+Keep `api.jwt_secret` in an environment variable or deployment secret rather than in a committed YAML file.
 
 ## Signer transaction policies
 
