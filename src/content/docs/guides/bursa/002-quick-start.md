@@ -21,7 +21,7 @@ To get started follow the steps below
 
 <br>
 
-## Step 1 - Download a CLI binary or platform installer from Blinklabs  
+## Step 1 - Download a CLI binary or a platform installer from Blinklabs  
 <br>
 
 **Step 1-A** - First start by going to <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> and scroll down to Bursa.
@@ -37,13 +37,13 @@ To get started follow the steps below
 ![bursa-blinklabs-site-operating-system](/bursa-blinklabs-site-operating-system.png)
 <br>
 
-**Step 1-C** - For a CLI download, you can either download the binary or archive file and move the file to your preferred location. For the desktop wallet, download the platform installer.  
+**Step 1-C** - For a CLI download, download the binary or archive file and move it to the preferred location. For the desktop wallet, download the platform installer.  
 
 ![bursa-blinklabs-site-download](/bursa-blinklabs-site-download.png)
 
 <br>
 
-For Linux or FreeBSD CLI archive downloads, copy the path from Blinklabs and run the following commands to download and extract the release archive.  
+For Linux or FreeBSD CLI archive downloads, copy the path from Blinklabs and run the following commands to download and extract the archive.  
 
 <br>
 
@@ -56,7 +56,7 @@ wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/r
 tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 ```
 
-Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files, while the official Windows desktop wallet release uses a signed, architecture-specific `.msi` installer. The Windows installer may include the WebView2 Evergreen bootstrapper when that release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files, while the official macOS desktop wallet release uses a notarized, architecture-specific `.pkg` installer.
+Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files, while the official Windows desktop wallet release provides a signed, architecture-specific `.msi` installer. The Windows installer may include the WebView2 Evergreen bootstrapper when that release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files, while the official macOS desktop wallet release provides a notarized, architecture-specific `.pkg` installer.
 
 ***
 
@@ -68,13 +68,13 @@ Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows
 
 <br>
 
-After extracting a Linux or FreeBSD CLI archive, make the `bursa` binary executable by running the following command:
+After extracting a Linux or FreeBSD CLI archive, make the `bursa` binary executable with the following command:
 
 <br>
 
 ⚠️ Adjust the file path and file name if needed. 
 
-Windows `.msi` and macOS `.pkg` users should use the platform installer instead of extracting the installer or running `chmod` on it.
+Windows `.msi` and macOS `.pkg` users should use the platform installer; do not extract those installer files or run `chmod` on them.
 
 ```
 chmod +x bursa
