@@ -16,7 +16,7 @@ We can use Bursa to create hashes for metadata or anchor-data, often used in Car
 
 #### Metadata
 The hash metadata commands are used for pool and DRep metadata registration.
-The command validates the file as JSON, then hashes its exact bytes with Blake2b-256.
+After validating the file as JSON, the command hashes the exact file bytes with Blake2b-256.
 Formatting changes, including whitespace or field ordering, can produce different hashes for semantically equivalent JSON. When a workflow requires canonical JSON, write the canonical representation to the file before hashing and hosting it.
 
 **Supported metadata types:**
