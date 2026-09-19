@@ -12,7 +12,7 @@ Bursa también se puede usar para generar scripts multifirma. El comando `script
 
 > **Tipos de comandos de script:**
 >  - **create:** Crea un nuevo script multifirma
->  - **validate:** Valida un script contra firmas y slot
+>  - **validate:** Valida un script contra testigos de vkey y el slot
 >  - **address:** Genera una dirección de mainnet desde un script
 
 #### Crear script multifirma
@@ -40,6 +40,23 @@ Bursa también se puede usar para generar scripts multifirma. El comando `script
 ```bash
 ./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
 ```
+
+#### Validar script
+
+- Validar un script con testigos de Ed25519:
+
+```bash
+./bursa script validate --script script.json --public-keys abcdef1234...,1234567890... --signatures 0123abcd...,fedcba9876... --message-hex 74657874 --slot 123456789
+```
+
+- `--script` requiere la ruta al archivo de script.
+- `--public-keys` acepta una lista separada por comas de claves de verificación Ed25519 codificadas en hexadecimal. `--signatures` acepta una lista separada por comas de firmas codificadas en hexadecimal. El elemento de la posición `i` en cada lista forma un testigo y ambas listas deben tener la misma longitud.
+- Use `--message` para indicar el mensaje firmado como texto UTF-8 o `--message-hex` para indicarlo en hexadecimal. Estos indicadores son mutuamente excluyentes. El modo de validación predeterminado requiere uno de estos indicadores cuando se proporcionan testigos.
+- `--slot` proporciona el slot actual para la validación de bloqueos de tiempo.
+- De forma predeterminada, Bursa valida criptográficamente cada testigo proporcionado: compara el hash Blake2b-224 de cada clave de verificación con el hash de clave del script y verifica la firma Ed25519 con el mensaje proporcionado. Un script que requiere firmas y no recibe testigos termina con un diagnóstico distinto de cero.
+- `--structural-only` realiza la validación estructural sin verificar testigos ni firmas.
+
+El comando devuelve JSON con los campos `valid`, `slot`, `signatures`, `scriptHash` y `structuralOnly`.
 
 ***
 
