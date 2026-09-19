@@ -224,7 +224,7 @@ Antes de iniciar el servicio por primera vez, inicia la base de datos desde una 
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-El comando anterior inicia normalmente sin fijar un artefacto. Para un arranque nuevo, puede fijarse una identidad exacta de Mithril de cualquiera de estas formas:
+El comando anterior inicia normalmente sin fijar un artefacto. Un arranque nuevo admite una identidad exacta de Mithril mediante cualquiera de estas opciones:
 
 ```yaml
 mithril:
