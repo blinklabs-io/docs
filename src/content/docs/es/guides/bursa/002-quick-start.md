@@ -7,7 +7,7 @@ description: Resumen de inicio rápido de Bursa.
 
 Una billetera programática de Cardano, escrita en Go, que expone una API, CLI e interfaz de biblioteca, permitiendo a los desarrolladores integrar fácilmente la funcionalidad de billetera.
 
-Descarga un binario o archivo comprimido de CLI de Bursa, o un instalador de escritorio, desde blinklabs.io. Luego ejecuta Bursa en la línea de comandos o API.
+Descarga el binario o archivo comprimido de CLI de Bursa o el instalador de escritorio correspondiente desde blinklabs.io. Luego ejecuta Bursa en la línea de comandos o API.
 
 <br>
 
@@ -21,7 +21,7 @@ Esta guía asume una configuración típica de Linux. Por favor ajusta los coman
 
 <br>
 
-## Paso 1 - Descargar un binario o archivo comprimido de CLI o un instalador de escritorio desde Blinklabs
+## Paso 1 - Descargar el binario o archivo comprimido de CLI o el instalador de escritorio desde Blinklabs
 <br>
 
 **Paso 1-A** - Primero ve a <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> y desplázate hacia abajo hasta Bursa.
