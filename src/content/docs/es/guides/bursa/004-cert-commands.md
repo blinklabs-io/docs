@@ -67,7 +67,7 @@ Estos comandos de Bursa se pueden usar para generar varios certificados de Carda
 
 El comando `op-cert` se puede usar para generar un certificado operacional, también conocido como `node.cert`, que vincula una clave KES a una clave fría del pool. Los stake pools necesitan crear un nuevo `node.cert` al rotar su clave KES. Así que los SPOs pueden usar Bursa para crear un nuevo `node.cert` con su nueva `kes.vkey`, clave fría y período KES.
 
-Al incluir `--out`, Bursa escribe un sobre de texto JSON compatible con `cardano-cli`:
+Al proporcionar `--out`, Bursa escribe un sobre de texto JSON compatible con `cardano-cli`:
 
 ```json
 {
