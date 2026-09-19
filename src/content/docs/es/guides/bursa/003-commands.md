@@ -14,12 +14,12 @@ Actualmente hay 8 categorías de comandos que Bursa puede ejecutar, lo que la co
 > **Categorías de comandos de Bursa**
 > 1. [wallet](#wallet) &nbsp; - Comandos para generar billetera y los archivos necesarios para administrar una billetera de Cardano
 > 2. [api](#api)  &emsp;&nbsp;&nbsp; - Comandos para ejecutar la API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
-> 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
-> 8. [kes-agent](#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 3. [kes-agent](#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
+> 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
 
 ***
 
@@ -88,11 +88,11 @@ Explora otros comandos de Bursa
 > **Categorías de comandos de Bursa**
 > 1. [wallet](#wallet) &nbsp; - Comandos para generar billetera y los archivos necesarios para administrar una billetera de Cardano
 > 2. [api](#api)  &emsp;&nbsp;&nbsp; - Comandos para ejecutar la API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
-> 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
-> 8. [kes-agent](#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 3. [kes-agent](#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
+> 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
 
 ***
