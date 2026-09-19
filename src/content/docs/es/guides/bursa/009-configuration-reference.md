@@ -30,7 +30,7 @@ Bursa persiste el ajuste de lean-node/history-expiry. `history expiry` es una op
 { "enabled": boolean }
 ```
 
-El campo `enabled` es obligatorio y debe ser un booleano JSON. El JSON no válido o la ausencia de `enabled` producen HTTP `400`. Una actualización correcta persiste el valor y devuelve los mismos campos `enabled` y `restart_required`. `restart_required` es `true` cuando el valor persistido todavía no coincide con el valor aplicado al nodo en ejecución.
+El cliente debe enviar el campo obligatorio `enabled` como un booleano JSON. El JSON no válido o la ausencia de `enabled` producen HTTP `400`. Una actualización correcta persiste el valor y devuelve los mismos campos `enabled` y `restart_required`. `restart_required` es `true` cuando el valor persistido todavía no coincide con el valor aplicado al nodo en ejecución.
 
 ## Referencia de configuración
 
