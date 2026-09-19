@@ -5,7 +5,7 @@ description: Configura el backend de firma PKCS#11 de Bursa.
 
 ## Descripción general
 
-Esta guía describe la configuración de `signer.backends` para el backend de firma `PKCS#11`. El backend usa un módulo `PKCS#11`, mantiene las claves privadas en el token y hace que el token produzca firmas `Ed25519`.
+Esta guía describe la configuración de `signer.backends` para el backend de firma `PKCS#11`.
 
 ## Referencia de configuración
 
@@ -18,7 +18,7 @@ Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11
 | `signer.backends[].token_label` | Selecciona el token o el slot mediante su etiqueta. | Establece este campo o `slot`. Bursa requiere al menos un campo de selección. |
 | `signer.backends[].slot` | Selecciona un slot mediante su ID de slot explícito. | Establece este campo o `token_label`. Bursa requiere al menos un campo de selección. |
 | `signer.backends[].pin_env` | Indica el nombre de la variable de entorno que contiene el PIN de usuario. | Establece este campo y asigna a la variable de entorno indicada un valor no vacío. Bursa no lee el PIN de la configuración en texto plano. |
-| `signer.backends[].keys[]` | Define una lista de permitidos opcional de objetos del token. | Cuando aparece, incluye `name` y `type` en cada entrada. |
+| `signer.backends[].keys[]` | Define una lista opcional de objetos permitidos del token. | Cuando aparece, incluye `name` y `type` en cada entrada. |
 | `signer.backends[].keys[].name` | Coincide con el `CKA_LABEL` del objeto del token. | Establece este campo para cada entrada de `keys`. |
 | `signer.backends[].keys[].type` | Asigna un tipo de clave de Cardano al objeto del token coincidente. | Establece este campo para cada entrada de `keys`. Usa `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool` o `policy`. |
 
