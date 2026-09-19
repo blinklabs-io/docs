@@ -100,7 +100,7 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo aplica este valor solo durante un arranque nuevo desde una base de datos vacía.
+  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
   # pinnedDigest: ""
 
 # Network
@@ -205,7 +205,7 @@ cd ~/dingo
 
 > 📝 Para seleccionar un artefacto Mithril específico durante un arranque nuevo, configura `mithril.pinnedDigest` en `dingo.yaml`, usa `--mithril-pinned-digest` o define `DINGO_MITHRIL_PINNED_DIGEST`. El comando anterior no fija ningún artefacto y usa la selección predeterminada.
 
-> ⚠️ Un pin explícito requiere una base de datos nueva: Dingo rechaza el pin durante el catch-up de una base de datos completa. Al reanudar una importación interrumpida, Dingo conserva la identidad duradera del artefacto y rechaza cualquier pin diferente.
+> ⚠️ Dingo exige una base de datos nueva para un pin explícito y rechaza el pin durante el catch-up de una base de datos completa. Al reanudar una importación interrumpida, Dingo conserva la identidad duradera del artefacto y no acepta un pin diferente.
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
