@@ -108,6 +108,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap:
+  # v1 snapshot digest or v2 Cardano database artifact hash.
+  # pinnedDigest: "<digest>"
 
 # Network
 # Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
