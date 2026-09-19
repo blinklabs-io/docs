@@ -58,7 +58,7 @@ tar xzf bursa-v0.15.0-linux-amd64.tar.gz
 
 Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files. The official Windows desktop wallet release provides a signed, architecture-specific `.msi` installer. The installer can include the WebView2 Evergreen bootstrapper only when the release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files. The official macOS desktop wallet release provides a notarized, architecture-specific `.pkg` installer.
 
-For the platform wallet's installation, source build, and troubleshooting instructions, see the [full-node wallet guide](../012-full-node-wallet).
+For platform wallet installation, source builds, and troubleshooting, see the [full-node wallet guide](../012-full-node-wallet).
 
 ***
 
@@ -92,7 +92,7 @@ chmod +x bursa
 
 <br>
 
-The API listens on `127.0.0.1:8080` by default, and local clients can use `localhost:8080` without opening a firewall port. Remote access requires explicitly setting `api.address` in YAML or `API_LISTEN_ADDRESS`, then applying the required TLS and bearer authentication protections described in the [configuration reference](../009-configuration-reference).
+The API listens on `127.0.0.1:8080` by default. Local clients can use `localhost:8080` without a firewall rule. To enable remote access, set `api.address` in YAML or `API_LISTEN_ADDRESS`, then apply the required TLS and bearer authentication protections described in the [configuration reference](../009-configuration-reference).
 
 ***
 
