@@ -84,15 +84,13 @@ chmod +x bursa
 
 
 
-## Paso 3 - Abrir el firewall en el puerto 8080 para la API
+## Paso 3 - Conectarse a la API
 
 <br>
 
-Asegúrate de que tu firewall esté abierto para la API. Para este ejemplo, usamos el puerto 8080. Para abrir el puerto 8080 ejecutamos el siguiente comando:
+De forma predeterminada, Bursa escucha la API en `127.0.0.1:8080`. Los clientes locales pueden usar `localhost:8080` y no necesitan abrir un puerto del firewall.
 
-```
-sudo ufw allow 8080/tcp
-```
+Para permitir el acceso remoto, establece explícitamente `api.address` en el archivo YAML o `API_LISTEN_ADDRESS`. El acceso fuera del loopback requiere TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. Consulta la [referencia de configuración](./009-configuration-reference) para conocer los detalles de estos ajustes.
 
 ***
 
@@ -105,6 +103,8 @@ Ahora podemos usar la línea de comandos para crear una billetera de Cardano y g
 Bursa también se puede usar para generar scripts multifirma, hashes y claves, incluidas las claves y certificados necesarios para ejecutar un stake pool de Cardano.
 
 [Aprende más sobre cómo usar Bursa con la línea de comandos y los comandos útiles que puedes ejecutar.](../003-commands)
+
+Consulta la [guía del monedero de nodo completo](../012-full-node-wallet) para instalarlo, compilarlo desde el código fuente y solucionar problemas.
 
 
 ---
