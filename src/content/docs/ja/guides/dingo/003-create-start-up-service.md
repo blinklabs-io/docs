@@ -104,9 +104,14 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # `allowInsecureHttp` はローカル開発・テスト専用です。有効にすると HTTP とローカルまたはプライベートな宛先を許可します。
+  allowInsecureHttp: false
+  # `allowInsecureHttp` は `--mithril-allow-insecure-http` / `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` で上書きできます。
   # `pinnedDigest` は任意です。v1 ではスナップショットのダイジェスト、v2 では Cardano データベースアーティファクトのハッシュを指定します。
   # この指定は新しいデータベースの初回ブートストラップにのみ使用します。
   # pinnedDigest: \"\"
+
+> 📝 既定では、Mithril は HTTPS と公開された宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp: true` はローカル開発またはテストでのみ使用する明示的な例外であり、本番環境では有効にしないでください。
 
 # Network
 # ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
