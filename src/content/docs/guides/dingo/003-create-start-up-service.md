@@ -109,7 +109,7 @@ mithril:
   enabled: true
   verifyCertificates: true
   # CLI: --mithril-allow-insecure-http; environment: DINGO_MITHRIL_ALLOW_INSECURE_HTTP.
-  # Set to true only for local development or testing; permits HTTP and local/private destinations.
+  # When true, Dingo permits HTTP and local or private destinations for local development or testing only.
   allowInsecureHttp: false
   # Optional exact artifact identity for a fresh bootstrap:
   # v1 snapshot digest or v2 Cardano database artifact hash.
