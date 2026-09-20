@@ -101,7 +101,7 @@ mithril:
   enabled: true
   verifyCertificates: true
   # Mithril exige HTTPS y destinos públicos por defecto.
-  # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; en producción, este valor usa false.
+  # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; la configuración de producción mantiene este valor en false.
   # CLI: --mithril-allow-insecure-http | Variable de entorno: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
   allowInsecureHttp: false
   # Identidad opcional del artefacto de Mithril para un arranque nuevo.
