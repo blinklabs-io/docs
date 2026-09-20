@@ -162,6 +162,8 @@ databaseLifecycle:
 EOF"
 ```
 
+> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Set `mithril.allowInsecureHttp: true` only for local development or testing; do not enable it in production.
+
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
 > 📝 The `databaseLifecycle.snapshotEnabled` setting controls automatic epoch boundary snapshots. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available with `badger`, `s3`, or `gcs` as the primary blob provider. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
