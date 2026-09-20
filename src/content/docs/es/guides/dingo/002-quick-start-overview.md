@@ -100,8 +100,13 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # `true` permite HTTP y destinos locales o privados solo para desarrollo o pruebas locales.
+  allowInsecureHttp: false
+  # Alias de CLI: `--mithril-allow-insecure-http`. Variable de entorno: `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`.
   # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
   # pinnedDigest: ""
+
+> 📝 Mithril exige HTTPS y destinos públicos de forma predeterminada. Activa `mithril.allowInsecureHttp` solo para desarrollo o pruebas locales con destinos locales o privados; no lo actives en producción.
 
 # Network
 # Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
