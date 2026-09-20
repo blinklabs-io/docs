@@ -132,6 +132,8 @@ storageMode: "core"
 EOF
 ```
 
+> 📝 Mithril requires HTTPS and public destinations by default. Enable `mithril.allowInsecureHttp` only for local development or testing; do not enable it in production. The setting also accepts `--mithril-allow-insecure-http` or `DINGO_MITHRIL_ALLOW_INSECURE_HTTP`.
+
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
 > 📝 `healthPort` uses `--health-port` or `DINGO_HEALTH_PORT`; set `healthPort: 0` to disable the health listener. `healthReadyGapSlots` uses `--health-ready-gap-slots` or `DINGO_HEALTH_READY_GAP_SLOTS`.
