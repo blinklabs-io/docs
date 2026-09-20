@@ -100,7 +100,7 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # `allowInsecureHttp: true` はローカル開発・テスト時のみ、HTTP とローカル/プライベート宛先を許可します。
+  # `allowInsecureHttp: true` は、ローカル開発・テスト時に HTTP とローカルまたはプライベートの宛先を許可します。
   allowInsecureHttp: false
 
 # Network
@@ -133,7 +133,7 @@ midnight:
 EOF
 ```
 
-> 📝 Mithril の接続先は既定で HTTPS を使用し、公開宛先である必要があります。ローカル、プライベート、その他の非公開の宛先は拒否されます。`allowInsecureHttp` は `--mithril-allow-insecure-http` CLI フラグまたは `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` 環境変数でも上書きできます。この設定はローカル開発・テスト専用の例外であり、本番環境では有効にしないでください。
+> 📝 Mithril は既定で HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp` は `--mithril-allow-insecure-http` CLI フラグまたは `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` 環境変数でも上書きできます。これはローカル開発・テスト専用の例外であり、本番環境では有効にしないでください。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
