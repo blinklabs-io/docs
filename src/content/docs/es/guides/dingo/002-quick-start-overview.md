@@ -106,7 +106,7 @@ mithril:
   # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
   # pinnedDigest: ""
 
-> 📝 De forma predeterminada, Mithril requiere HTTPS y destinos públicos. El valor `true` de `mithril.allowInsecureHttp` permite HTTP y destinos locales o privados solo durante el desarrollo o las pruebas locales. La configuración de producción debe mantener este valor en `false`.
+> 📝 De forma predeterminada, Mithril exige HTTPS y rechaza los destinos locales, privados o no públicos. El valor `true` de `mithril.allowInsecureHttp` permite HTTP y destinos locales o privados solo durante el desarrollo o las pruebas locales. La configuración de producción debe mantener este valor en `false`.
 
 # Network
 # Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
