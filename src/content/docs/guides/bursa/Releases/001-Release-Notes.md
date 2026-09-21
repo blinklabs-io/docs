@@ -11,3 +11,14 @@ description: Bursa Release Notes
 
 - Version: v0.18.0 - *[View Release Notes](../v0-18-0)*
 - Version: v0.16.0 - *[View Release Notes](../v0-16-0)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

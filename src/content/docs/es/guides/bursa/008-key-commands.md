@@ -304,3 +304,14 @@ Explora otros comandos de Bursa
 > 7. [key](#key)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
