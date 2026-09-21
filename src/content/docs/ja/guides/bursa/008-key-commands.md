@@ -283,7 +283,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
 ```
 
-各フラグは任意です。
+3つのフラグはすべて任意です。
 
 - `--signing-key-file` は、BLS署名鍵を書き込むファイルのパスです。指定した場合、Bursaは署名鍵を`cardano-cli`互換の`BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。指定しない場合、署名用秘密鍵を表示または保存しません。
 - `--verification-key-file` は、BLS検証鍵を書き込むファイルのパスです。指定した場合、Bursaは検証鍵を`cardano-cli`互換の`BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
@@ -294,7 +294,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 - `publicKey`: 96バイトの公開鍵を表す小文字の16進数文字列
 - `possessionProof`: 48バイトの所有証明を表す小文字の16進数文字列
 
-Bursaは指定した生成先ファイルを、所有者だけが読み書きできる権限で作成します。`--signing-key-file` のファイルはステークプールの認証情報として厳重に保護し、安全なバックアップを作成してください。
+Bursaは指定した各生成先ファイルを、所有者だけが読み書きできる権限で作成します。`--signing-key-file` のファイルはステークプールの認証情報として厳重に保護し、安全なバックアップを作成してください。
 
 `--signing-key-file`、`--verification-key-file`、`--output-file` に指定する3つのパスは、同じ生成先を指してはいけません。Bursaは正規化したパスが一致する場合や、シンボリックリンクをたどった結果が同じファイルになる場合に、パスの衝突を拒否します。
 
