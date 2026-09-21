@@ -245,7 +245,7 @@ cardano-cli query stake-snapshot --stake-pool-id $(cat stakepoolid.txt)
 
 ***
 
-## Step 9 - Update your `dingo.yaml` with the new KES key, VRF key, and operation certificate
+## Step 9 - Configure block producer credentials in `dingo.yaml`
 
 ⚠️ On Block Producer
 
@@ -254,7 +254,9 @@ Stop the Dingo node by running:
 sudo systemctl stop dingo
 ```
 
-Add the following lines to your `dingo.yaml` file by running:
+Configure the common block producer fields and exactly one KES source. Both configurations require `shelleyVrfKey` and `shelleyOperationalCertificate`. Choose one of the following complete configurations.
+
+For a local KES key, run:
 
 ```
 sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
@@ -265,6 +267,38 @@ shelleyKesKey: \"$DINGO_HOME/kes.skey\"
 shelleyOperationalCertificate: \"$DINGO_HOME/node.cert\"
 EOF"
 ```
+
+For a Bursa KES agent, run this instead:
+
+```
+sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
+# Validator / block producer (core storage, API ports ignored):
+blockProducer: true
+shelleyVrfKey: \"$DINGO_HOME/vrf.skey\"
+shelleyKesAgentSocket: \"/run/bursa/kes-agent.sock\"
+shelleyKesAgentMode: \"serve-key\"
+shelleyKesAgentSignTimeout: 0s
+shelleyOperationalCertificate: \"$DINGO_HOME/node.cert\"
+EOF"
+```
+
+When `shelleyKesAgentSocket` is configured, omit `shelleyKesKey`; Dingo accepts the socket-only configuration and rejects a configuration that sets both KES sources. The socket must identify a Bursa KES agent through a Unix-domain socket. `shelleyVrfKey` and `shelleyOperationalCertificate` still refer to local files in the agent configuration.
+
+`serve-key` is the default for `shelleyKesAgentMode`. In this mode, the agent supplies evolving KES material and Dingo signs locally. `sign` delegates signatures to the agent and keeps the KES secret outside Dingo. A zero `shelleyKesAgentSignTimeout` selects the `500ms` default; an explicit timeout must be positive and less than one second.
+
+The agent socket path must fit the Unix socket limit: ordinary paths can use up to 103 bytes on macOS or 107 bytes on Linux. Linux abstract socket paths can use the full platform limit. Dingo rejects an overlong path at startup. Block production with this configuration supports Linux and macOS, not Windows.
+
+The following `dingo serve` flags override the matching YAML parameters:
+
+| YAML parameter | `dingo serve` flag |
+| --- | --- |
+| `blockProducer` | `--block-producer` |
+| `shelleyVrfKey` | `--shelley-vrf-key` |
+| `shelleyKesKey` | `--shelley-kes-key` |
+| `shelleyOperationalCertificate` | `--shelley-opcert` |
+| `shelleyKesAgentSocket` | `--shelley-kes-agent-socket` |
+| `shelleyKesAgentMode` | `--shelley-kes-agent-mode` |
+| `shelleyKesAgentSignTimeout` | `--shelley-kes-agent-sign-timeout` |
 
 You can view and verify our `dingo.yaml` file by running:
 
