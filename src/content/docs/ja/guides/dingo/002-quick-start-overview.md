@@ -147,13 +147,13 @@ shelleyKesAgentSocket: "$HOME/dingo/bursa-kes-agent.sock"
 # shelleyKesKey: "$HOME/dingo/kes.skey"
 ```
 
-`shelleyKesAgentSocket` を設定すると、Dingo は Unix ドメインソケット経由で外部 Bursa KES エージェントから KES 署名キーを取得するため、ローカルの `shelleyKesKey` は不要です。`shelleyKesKey` と `shelleyKesAgentSocket` を同時に設定すると、設定は拒否されます。`shelleyVrfKey` と `shelleyOperationalCertificate` は常にローカルファイルとして必要です。
+`shelleyKesAgentSocket` を設定すると、Dingo は Unix ドメインソケット経由で外部 Bursa KES エージェントから KES 署名キーを取得するため、ローカルの `shelleyKesKey` は不要です。`shelleyKesKey` と `shelleyKesAgentSocket` を同時に設定すると、Dingo はこの設定を拒否します。`shelleyVrfKey` と `shelleyOperationalCertificate` は常にローカルファイルとして必要です。
 
 `shelleyKesAgentMode` には `serve-key` または `sign` を指定します。`serve-key` はエージェントが提供する更新中のキーを使用して Dingo がローカルで署名するモードで、ソケット設定時の既定値です。`sign` は署名生成をエージェントに委任し、KES の秘密キーを Dingo に読み込みません。
 
 `shelleyKesAgentSignTimeout` は `sign` モードの署名処理に設定するタイムアウトです。明示する値は正の値かつ `1s` 未満でなければなりません。`0` を指定すると既定値の `500ms` を使用します。
 
-コマンドラインでは、対応するオプションとして `--shelley-kes-agent-socket`、`--shelley-kes-agent-mode`、`--shelley-kes-agent-sign-timeout` を使用できます。KES エージェントのブロックプロデューサー機能は Linux と macOS でサポートされ、Windows では使用できません。ソケットパスは実行プラットフォームの Unix ソケットパス長制限を超えないようにしてください。
+コマンドラインでは、対応するオプションとして `--shelley-kes-agent-socket`、`--shelley-kes-agent-mode`、`--shelley-kes-agent-sign-timeout` を使用できます。Dingo は Linux と macOS で KES エージェントのブロックプロデューサー機能を使用できますが、Windows では使用できません。ソケットパスは実行プラットフォームの Unix ソケットパス長制限を超えないようにしてください。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
