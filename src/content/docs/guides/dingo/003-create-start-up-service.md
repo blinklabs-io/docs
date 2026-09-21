@@ -153,6 +153,7 @@ storageMode: \"core\"
 # Agent-only KES source; omit shelleyKesKey:
 # shelleyKesAgentSocket: \"/run/bursa/kes-agent.sock\" # CLI: --shelley-kes-agent-socket
 # shelleyKesAgentMode: \"serve-key\" # CLI: --shelley-kes-agent-mode; valid values: serve-key or sign
+# If shelleyKesAgentMode is omitted, Dingo uses serve-key when a socket is set.
 #   In serve-key mode, the agent pushes key material and Dingo signs locally.
 #   In sign mode, the agent returns signatures and Dingo does not load the local KES secret.
 # shelleyKesAgentSignTimeout: 0 # CLI: --shelley-kes-agent-sign-timeout; 0 selects the 500ms default
