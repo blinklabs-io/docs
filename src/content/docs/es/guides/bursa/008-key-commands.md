@@ -39,7 +39,7 @@ Bursa permite derivar claves individuales a partir de una mnemónica y generar m
 
 ***
 
-Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra para el registro de stake pools.
+Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica y para generar material BLS de Dijkstra para el registro de stake pools.
 
 **La mnemónica se puede proporcionar mediante:**
   1. Bandera --mnemonic
@@ -288,7 +288,7 @@ El JSON contiene los campos `publicKey` y `possessionProof`. `publicKey` contien
 
 Bursa crea los archivos de destino con permisos solo para el propietario (`0600`). La clave de firma constituye material de credenciales del pool y requiere protección y una copia de respaldo segura.
 
-Bursa exige que `--signing-key-file`, `--verification-key-file` y `--output-file` no apunten al mismo destino. Bursa rechaza las colisiones entre rutas normalizadas y entre alias que usan enlaces simbólicos.
+Bursa exige que `--signing-key-file`, `--verification-key-file` y `--output-file` no apunten al mismo destino. Bursa convierte las rutas a una forma canónica y rechaza las colisiones entre ellas, incluidos los alias que usan enlaces simbólicos.
 
 ***
 
