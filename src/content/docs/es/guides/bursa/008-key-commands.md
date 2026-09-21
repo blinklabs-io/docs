@@ -6,7 +6,7 @@ description: Guía de línea de comandos de Bursa para derivar claves individual
 <a name="key"></a>
 
 ## Crear Claves
-Bursa se puede usar para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra para el registro de stake pools.
+Bursa permite derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra para el registro de stake pools.
 
 <table>
   <tr>
@@ -48,7 +48,7 @@ Guía de línea de comandos de Bursa para derivar claves individuales a partir d
   4. Archivo por defecto "seed.txt"
 <br>
 
-> Las claves derivadas a partir de una mnemónica siguen los estándares CIP de Cardano y se generan en formato bech32 adecuado para usar con cardano-cli y otras herramientas.
+> Bursa genera las claves derivadas a partir de una mnemónica según los estándares CIP de Cardano y en formato bech32 adecuado para usar con cardano-cli y otras herramientas.
 >
 > **Rutas de derivación por tipo de clave:**
 > -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
@@ -272,7 +272,7 @@ La salida es en formato bech32 (prefijo cc_hot_xsk) a menos que se especifiquen 
 <a name="bls"></a>
 
 ### Clave BLS de Dijkstra para registro de stake pool
-El comando `bursa key bls` genera material BLS12-381 MinSig criptográficamente aleatorio para el registro de stake pools de la era Dijkstra en Leios y Peras. No usa la entrada de mnemónica ni las fuentes `--mnemonic`, `MNEMONIC`, `--mnemonic-file` o `seed.txt` de los demás comandos.
+El comando `bursa key bls` genera material BLS12-381 MinSig criptográficamente aleatorio para el registro de stake pools de la era Dijkstra en Leios y Peras. El comando no consume una mnemónica ni las fuentes `--mnemonic`, `MNEMONIC`, `--mnemonic-file` o `seed.txt` de los demás comandos.
 
 ```bash
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
@@ -280,15 +280,15 @@ El comando `bursa key bls` genera material BLS12-381 MinSig criptográficamente 
 
 Las tres banderas de destino son opcionales:
 
-- `--signing-key-file` guarda la clave de firma en un sobre compatible con cardano-cli de tipo `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa nunca imprime el secreto de firma y solo lo guarda cuando se proporciona esta bandera.
+- `--signing-key-file` guarda la clave de firma en un sobre compatible con cardano-cli de tipo `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa nunca imprime el secreto de firma; el comando solo lo guarda cuando recibe esta bandera.
 - `--verification-key-file` guarda la clave de verificación en un sobre compatible con cardano-cli de tipo `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`.
-- `--output-file` guarda el material de registro en formato JSON. Si se omite, Bursa escribe el JSON en la salida estándar.
+- `--output-file` guarda el material de registro en formato JSON. Cuando el comando omite esta bandera, Bursa escribe el JSON en la salida estándar.
 
 El JSON contiene los campos `publicKey` y `possessionProof`. `publicKey` contiene la clave pública de 96 bytes y `possessionProof` contiene la prueba de posesión de 48 bytes; ambos valores usan cadenas hexadecimales en minúsculas. Bursa verifica la prueba generada antes de producir la salida.
 
-Bursa crea los archivos de destino generados con permisos solo para el propietario (`0600`). La clave de firma es material de credenciales del pool: protégela y conserva una copia de respaldo segura.
+Bursa crea los archivos de destino con permisos solo para el propietario (`0600`). La clave de firma constituye material de credenciales del pool y requiere protección y una copia de respaldo segura.
 
-`--signing-key-file`, `--verification-key-file` y `--output-file` no deben resolverse al mismo destino. Bursa rechaza las colisiones entre rutas normalizadas y entre alias que usan enlaces simbólicos.
+Bursa exige que `--signing-key-file`, `--verification-key-file` y `--output-file` no apunten al mismo destino. Bursa rechaza las colisiones entre rutas normalizadas y entre alias que usan enlaces simbólicos.
 
 ***
 
