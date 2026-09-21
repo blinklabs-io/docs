@@ -282,11 +282,11 @@ shelleyOperationalCertificate: \"$DINGO_HOME/node.cert\"
 EOF"
 ```
 
-When the configuration includes `shelleyKesAgentSocket`, omit `shelleyKesKey`; Dingo accepts the socket-only configuration and rejects a configuration that sets both KES sources. The socket must identify a Bursa KES agent through a Unix-domain socket. `shelleyVrfKey` and `shelleyOperationalCertificate` still refer to local files in the agent configuration.
+When the configuration includes `shelleyKesAgentSocket`, omit `shelleyKesKey`; Dingo accepts the socket-only configuration and rejects a configuration that sets both KES sources. Dingo connects to a Bursa KES agent through the configured Unix-domain socket. `shelleyVrfKey` and `shelleyOperationalCertificate` still refer to local files in the agent configuration.
 
 Both `shelleyKesAgentMode` and `shelleyKesAgentSignTimeout` are optional. `serve-key` is the default for `shelleyKesAgentMode`. In this mode, the agent supplies evolving KES material and Dingo signs locally. `sign` delegates signatures to the agent and keeps the KES secret outside Dingo. A zero `shelleyKesAgentSignTimeout` selects the `500ms` default; an explicit timeout must be positive and less than one second.
 
-The agent socket path must fit the Unix socket limit: ordinary paths can use up to 103 bytes on macOS or 107 bytes on Linux. Linux abstract socket paths can use the full platform limit. Dingo rejects an overlong path at startup. Block production with this configuration supports Linux and macOS, not Windows.
+The configured Unix-domain socket path must fit the platform limit. macOS accepts ordinary paths up to 103 bytes, and Linux accepts ordinary paths up to 107 bytes. Linux abstract socket paths can use the full platform limit. Dingo rejects an overlong path at startup. Block production with this configuration supports Linux and macOS, not Windows.
 
 Operators can override the matching YAML parameters with the following `dingo serve` flags:
 
