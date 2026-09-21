@@ -32,6 +32,9 @@ Bursaは、ニーモニックから個別の鍵を導出するために使用で
   <td><a href="#committee-cold">憲法委員会コールドキー</a></td>
   <td><a href="#committee-hot">憲法委員会ホットキー</a></td>
 </tr>
+<tr>
+  <td><a href="#bls">Dijkstra BLSステークプール登録鍵</a></td>
+</tr>
 </table>
 
 ***
@@ -262,6 +265,42 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 ```bash
 ./bursa key committee-hot --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
 ```
+
+***
+
+<a name="bls"></a>
+
+### Dijkstra BLSステークプール登録鍵
+`bursa key bls` は、Dijkstra時代のLeiosおよびPerasでステークプールを登録するためのBLS12-381 MinSig鍵と所有証明を生成します。このコマンドは、他の鍵コマンドで使用するニーモニックやニーモニックファイルを読み取らず、暗号学的に安全な乱数から新しい鍵の素材を生成します。
+
+```bash
+./bursa key bls
+```
+
+3つの出力先を指定する例:
+
+```bash
+./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
+```
+
+各フラグは任意です。
+
+- `--signing-key-file` は、BLS署名鍵を書き込むファイルのパスです。指定した場合、Bursaは署名鍵を`cardano-cli`互換の`BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。指定しない場合、署名用秘密鍵を表示または保存しません。
+- `--verification-key-file` は、BLS検証鍵を書き込むファイルのパスです。指定した場合、Bursaは検証鍵を`cardano-cli`互換の`BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
+- `--output-file` は、登録用JSONを書き込むファイルのパスです。省略すると、Bursaは登録用JSONを標準出力に書き込みます。
+
+登録用JSONには、次の2つのフィールドが含まれます。Bursaは出力前に生成した所有証明を検証します。
+
+```json
+{
+  "publicKey": "96バイトの公開鍵を表す小文字の16進数文字列",
+  "possessionProof": "48バイトの所有証明を表す小文字の16進数文字列"
+}
+```
+
+Bursaは指定した生成先ファイルを、所有者だけが読み書きできる権限で作成します。`--signing-key-file` のファイルはステークプールの認証情報として厳重に保護し、安全なバックアップを作成してください。
+
+`--signing-key-file`、`--verification-key-file`、`--output-file` に指定する3つのパスは、同じ生成先を指してはいけません。Bursaは正規化したパスが一致する場合や、シンボリックリンクをたどった結果が同じファイルになる場合に、パスの衝突を拒否します。
 
 ***
 
