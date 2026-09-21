@@ -100,9 +100,6 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # Set true only for local development or testing; permits HTTP and local or private destinations.
-  # CLI: --mithril-allow-insecure-http; environment: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
-  allowInsecureHttp: false
   # Optional exact artifact identity for a fresh bootstrap only.
   # Mithril v1 uses a snapshot digest; Mithril v2 uses a Cardano database artifact hash.
   # pinnedDigest: ""
