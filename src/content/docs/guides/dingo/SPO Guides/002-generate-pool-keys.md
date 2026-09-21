@@ -17,6 +17,11 @@ We will now generate the pool keys needed for block production on the Preview ne
 
 
 For background on what these keys do, see <a href="https://developers.cardano.org/docs/operate-a-stake-pool/basics/cardano-key-pairs/" target="new" >Cardano Key Pairs</a>.
+Choose one KES source for the block producer. For local KES signing, configure `shelleyKesKey` and keep `kes.skey` on the block producer. For an external Bursa agent, configure `shelleyKesAgentSocket` and omit `shelleyKesKey`; keep `vrf.skey` and `node.cert` local to Dingo. The agent supports two modes:
+
+- `serve-key` supplies evolving KES key material for local header signing.
+- `sign` returns signatures to Dingo without loading the KES secret into the Dingo process.
+
 
 ***
 
