@@ -175,7 +175,14 @@ chmod 400 vrf.skey
 > CERT = node.cert
 > ```
 > 
-> **All other keys must remain offline in your air-gapped cold environment.**
+> For external Bursa-agent signing:
+> 
+> ```
+> VRF = vrf.skey
+> CERT = node.cert
+> ```
+> 
+> The external agent supplies the KES material, so `kes.skey` does not reside on the block producer. Cold keys must remain offline in your air-gapped cold environment.
 > 
 > **Relay Nodes**
 > Relay nodes must NOT store operational certificates, VRF keys, signing keys, or cold keys.
