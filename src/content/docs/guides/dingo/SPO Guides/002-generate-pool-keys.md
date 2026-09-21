@@ -163,7 +163,7 @@ chmod 400 vrf.skey
 
 > ### Reminder
 >**Block-producing Node**
-> The only stake pool keys and certs that should be stored on the block producer, are the following three files:
+> The files stored on the block producer depend on the KES source:
 > 
 > ```
 > ###
