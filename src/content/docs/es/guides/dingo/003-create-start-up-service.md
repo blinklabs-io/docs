@@ -168,7 +168,7 @@ storageMode: \"core\"
 # blockProducer: true
 # shelleyVrfKey: \"/ruta/absoluta/vrf.skey\"
 # shelleyOperationalCertificate: \"/ruta/absoluta/opcert.cert\"
-# Configura solo una de las siguientes fuentes de KES.
+# Configura solo una fuente de KES; ambas fuentes son mutuamente excluyentes.
 # shelleyKesKey: \"/ruta/absoluta/kes.skey\"
 # shelleyKesAgentSocket: \"/ruta/absoluta/bursa-kes-agent.sock\"
 # shelleyKesAgentMode: \"serve-key\"
@@ -176,7 +176,7 @@ storageMode: \"core\"
 EOF"
 ```
 
-> 📝 Para activar la producción de bloques, establece `blockProducer: true`, proporciona `shelleyVrfKey` y `shelleyOperationalCertificate`, y configura exactamente una fuente de KES. Usa `shelleyKesKey` para una clave local o `shelleyKesAgentSocket` para obtener el material KES de un agente Unix de Bursa. Con un socket configurado no necesitas `shelleyKesKey`; si configuras ambos valores, Dingo devuelve un error. El socket debe usar una ruta Unix válida y Dingo valida que su longitud respete el límite de la plataforma. La producción de bloques funciona en Linux y macOS, pero no en Windows.
+> 📝 Para activar la producción de bloques, establece `blockProducer: true`, proporciona `shelleyVrfKey` y `shelleyOperationalCertificate`, y configura exactamente una fuente de KES. Usa `shelleyKesKey` para una clave local o `shelleyKesAgentSocket` para obtener el material KES mediante un socket de un agente KES de Bursa. Con un socket configurado no necesitas `shelleyKesKey`; si configuras ambos valores, Dingo devuelve un error. El socket debe usar una ruta Unix válida y Dingo valida que su longitud respete el límite de la plataforma. La producción de bloques funciona en Linux y macOS, pero no en Windows.
 
 > 📝 `shelleyKesAgentMode` acepta `serve-key` y `sign`; `serve-key` es el valor predeterminado cuando configuras un socket. En `serve-key`, el agente entrega la clave evolucionada y Dingo firma localmente. En `sign`, el agente devuelve las firmas y la clave secreta KES no entra en Dingo. Las flags equivalentes son `--shelley-kes-agent-socket`, `--shelley-kes-agent-mode` y `--shelley-kes-agent-sign-timeout`.
 
