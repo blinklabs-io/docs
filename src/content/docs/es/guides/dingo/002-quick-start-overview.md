@@ -104,11 +104,12 @@ plugins:
 # Elige una sola fuente de claves KES; no configures ambas.
 # shelleyKesKey: "$HOME/dingo/kes.skey"
 # shelleyKesAgentSocket: "$HOME/bursa/kes-agent.sock"
-# `shelleyKesAgentSocket` conecta con un agente KES externo de Bursa y sustituye
-# `shelleyKesKey`; `shelleyVrfKey` y `shelleyOperationalCertificate` siguen siendo archivos locales.
-# Con el socket configurado, no se necesita `shelleyKesKey` y `serve-key` es el modo predeterminado.
-# `serve-key` usa el material KES que el agente envía para que Dingo firme localmente.
-# `sign` delega las firmas al agente sin cargar el secreto KES en Dingo.
+# `shelleyKesAgentSocket` conecta Dingo con un agente KES externo de Bursa; el agente proporciona
+# la clave KES en lugar de `shelleyKesKey`, mientras `shelleyVrfKey` y
+# `shelleyOperationalCertificate` permanecen en archivos locales.
+# Dingo no necesita `shelleyKesKey` cuando configura el socket, y `serve-key` es el modo predeterminado.
+# En `serve-key`, el agente envía el material KES y Dingo firma localmente.
+# En `sign`, Dingo delega las firmas al agente sin cargar el secreto KES.
 # Valores válidos para `shelleyKesAgentMode`: `serve-key` y `sign`.
 # `shelleyKesAgentSignTimeout` controla el tiempo de espera de una firma: `0` usa 500ms;
 # un valor explícito debe ser positivo y menor de un segundo.
