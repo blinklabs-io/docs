@@ -140,7 +140,7 @@ storageMode: "core"
 #
 # External Bursa KES agent:
 # shelleyKesAgentSocket: "$HOME/dingo/bursa-kes-agent.sock"
-# shelleyKesAgentMode: "serve-key" # valid values: serve-key or sign; default: serve-key
+# shelleyKesAgentMode: "serve-key" # valid values: serve-key or sign; default: serve-key when a socket is set
 # shelleyKesAgentSignTimeout: 0s # 0 uses 500ms; explicit values must be >0 and <1s
 EOF
 ```
