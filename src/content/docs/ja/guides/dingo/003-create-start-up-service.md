@@ -175,7 +175,7 @@ shelleyKesAgentSignTimeout: 0
 
 対応するCLIフラグは`--shelley-kes-agent-socket`、`--shelley-kes-agent-mode`、`--shelley-kes-agent-sign-timeout`です。モードを省略すると、ソケット設定時は`serve-key`を使用します。`--shelley-kes-agent-sign-timeout`または`shelleyKesAgentSignTimeout`の`0`は既定値の`500ms`を選択し、明示する値は`<1s`でなければなりません。
 
-DingoはKESエージェントを使用するブロックプロデューサー構成をLinuxとmacOSでサポートしますが、Windowsではサポートしません。Unixドメインソケットのパスはプラットフォームの制限内に収めます。上限はmacOSで104バイト、Linuxで108バイトです。Dingoは起動時に長すぎるパスを拒否します。
+DingoはKESエージェントを使用するブロックプロデューサー構成をLinuxとmacOSでサポートしますが、Windowsではサポートしません。Unixドメインソケットのパスはプラットフォームの制限内に収めます。ソケットアドレスの格納領域はmacOSで104バイト、Linuxで108バイトです。通常のファイルパスは終端用の1バイトが必要なため、実際の上限はmacOSで103バイト、Linuxで107バイトです。Dingoは制限を超えるパスを起動時に拒否します。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
 
