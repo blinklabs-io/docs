@@ -100,6 +100,10 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Mithril exige HTTPS y destinos públicos por defecto.
+  # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; la configuración de producción mantiene este valor en false.
+  # CLI: --mithril-allow-insecure-http | Variable de entorno: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
+  allowInsecureHttp: false
   # Identidad opcional del artefacto de Mithril para un arranque nuevo.
   # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
   # Dingo solo usa este valor para un arranque nuevo; no lo usa para una base de datos completa ni para cambiar una importación interrumpida.

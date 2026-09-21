@@ -108,6 +108,9 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # CLI: --mithril-allow-insecure-http; environment: DINGO_MITHRIL_ALLOW_INSECURE_HTTP.
+  # When true, Dingo permits HTTP and local or private destinations for local development or testing only.
+  allowInsecureHttp: false
   # Optional exact artifact identity for a fresh bootstrap:
   # v1 snapshot digest or v2 Cardano database artifact hash.
   # pinnedDigest: "<digest>"
@@ -158,6 +161,8 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF"
 ```
+
+> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
