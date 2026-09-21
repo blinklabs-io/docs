@@ -279,7 +279,7 @@ Each destination flag is optional:
 
 - `--signing-key-file` writes the signing key to the specified file. The command never prints the signing key. When the command omits this flag, it does not print or persist the signing secret.
 - `--verification-key-file` writes the verification key to the specified file.
-- `--output-file` writes the registration JSON to the specified file. If this flag is omitted, Bursa prints the registration JSON to standard output.
+- `--output-file` writes the registration JSON to the specified file. When the command omits this flag, Bursa prints the registration JSON to standard output.
 
 ```bash
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
