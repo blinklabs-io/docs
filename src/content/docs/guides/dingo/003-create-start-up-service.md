@@ -140,6 +140,25 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
+#
+# Block production is disabled unless this section is explicitly enabled.
+# blockProducer: true
+# shelleyVrfKey: \"/path/to/vrf.skey\"
+# shelleyOperationalCertificate: \"/path/to/opcert.cert\"
+#
+# Select exactly one KES source:
+# Local KES source:
+# shelleyKesKey: \"/path/to/kes.skey\"
+#
+# Agent-only KES source; omit shelleyKesKey:
+# shelleyKesAgentSocket: \"/run/bursa/kes-agent.sock\" # CLI: --shelley-kes-agent-socket
+# shelleyKesAgentMode: \"serve-key\" # CLI: --shelley-kes-agent-mode; valid values: serve-key or sign
+#   serve-key makes Dingo sign locally with key material pushed by the agent.
+#   sign makes the agent return signatures without loading the local KES secret into Dingo.
+# shelleyKesAgentSignTimeout: 0 # CLI: --shelley-kes-agent-sign-timeout; 0 selects the 500ms default
+# An explicit sign timeout must be positive and less than 1s.
+# The socket must be a usable Unix-domain path. This KES-agent block producer
+# configuration is supported on Linux and macOS, not Windows.
 # Database lifecycle
 databaseLifecycle:
   # Automatic database snapshots run at epoch boundaries.
