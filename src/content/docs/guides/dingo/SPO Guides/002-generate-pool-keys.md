@@ -164,6 +164,7 @@ chmod 400 vrf.skey
 > ### Reminder
 >**Block-producing Node**
 > The files stored on the block producer depend on the KES source:
+> For local KES signing:
 > 
 > ```
 > ###
