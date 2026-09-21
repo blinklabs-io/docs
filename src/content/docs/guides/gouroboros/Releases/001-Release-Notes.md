@@ -11,6 +11,7 @@ description: gOuroboros Release Notes
 
 - Version: v0.206.0 - *[View Release Notes](../v0-206-0)*
 - Version: v0.206.1 - *[View Release Notes](../v0-206-1)*
+- Version: v0.206.0 - *[View Release Notes](../v0-206-0)*
 - Version: v0.205.7 - *[View Release Notes](../v0-205-7)*
 - Version: v0.205.6 - *[View Release Notes](../v0-205-6)*
 - Version: v0.205.5 - *[View Release Notes](../v0-205-5)*
