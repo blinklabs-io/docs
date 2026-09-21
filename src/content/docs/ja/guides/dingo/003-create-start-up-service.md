@@ -156,6 +156,27 @@ EOF"
 
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 
+ブロックプロデューサーとして実行する場合に限り、以下の任意の設定を`/etc/dingo/dingo.yaml`に追加します。通常のノードサービスをブロックプロデューサーへ変更しないように、このブロックは必要な場合だけ有効にしてください。
+
+```yaml
+blockProducer: true
+shelleyVrfKey: "/absolute/path/to/vrf.skey"
+shelleyOperationalCertificate: "/absolute/path/to/opcert.cert"
+shelleyKesAgentSocket: "/absolute/path/to/kes-agent.sock"
+shelleyKesAgentMode: "serve-key"
+shelleyKesAgentSignTimeout: 0
+# `shelleyKesKey` または `shelleyKesAgentSocket` のどちらか一方だけを設定します。
+# shelleyKesKey: "/absolute/path/to/kes.skey"
+```
+
+`shelleyKesAgentSocket`を使用すると、ローカルのKES秘密鍵は不要になります。`shelleyVrfKey`と`shelleyOperationalCertificate`は引き続きローカルファイルから読み込みます。`shelleyKesKey`と`shelleyKesAgentSocket`を同時に設定すると、検証エラーになります。
+
+`shelleyKesAgentMode`には`serve-key`または`sign`を指定します。`serve-key`は既定のモードで、エージェントがKESキーを提供し、Dingoがローカルで署名します。`sign`は署名をエージェントに委譲し、DingoにKES秘密鍵を読み込ませません。
+
+対応するCLIフラグは`--shelley-kes-agent-socket`、`--shelley-kes-agent-mode`、`--shelley-kes-agent-sign-timeout`です。モードを省略すると、ソケット設定時は`serve-key`を使用します。`--shelley-kes-agent-sign-timeout`または`shelleyKesAgentSignTimeout`の`0`は既定値の`500ms`を選択し、明示する値は`<1s`でなければなりません。
+
+KESエージェントを使用するブロックプロデューサー構成はLinuxとmacOSでサポートしますが、Windowsではサポートしません。Unixドメインソケットのパスはプラットフォームの制限内に収めます。上限はmacOSで104バイト、Linuxで108バイトです。長すぎるパスは起動時に拒否されます。
+
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
 
 ```yaml
