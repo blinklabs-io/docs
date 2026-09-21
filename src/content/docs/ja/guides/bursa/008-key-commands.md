@@ -289,14 +289,10 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 - `--verification-key-file` は、BLS検証鍵を書き込むファイルのパスです。指定した場合、Bursaは検証鍵を`cardano-cli`互換の`BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
 - `--output-file` は、登録用JSONを書き込むファイルのパスです。省略すると、Bursaは登録用JSONを標準出力に書き込みます。
 
-登録用JSONには、次の2つのフィールドが含まれます。Bursaは出力前に生成した所有証明を検証します。
+登録用JSONは次のフィールドを出力します。Bursaは出力前に生成した所有証明を検証します。
 
-```json
-{
-  "publicKey": "96バイトの公開鍵を表す小文字の16進数文字列",
-  "possessionProof": "48バイトの所有証明を表す小文字の16進数文字列"
-}
-```
+- `publicKey`: 96バイトの公開鍵を表す小文字の16進数文字列
+- `possessionProof`: 48バイトの所有証明を表す小文字の16進数文字列
 
 Bursaは指定した生成先ファイルを、所有者だけが読み書きできる権限で作成します。`--signing-key-file` のファイルはステークプールの認証情報として厳重に保護し、安全なバックアップを作成してください。
 
