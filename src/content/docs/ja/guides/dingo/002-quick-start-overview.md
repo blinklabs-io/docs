@@ -100,8 +100,6 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # `allowInsecureHttp: true` は、ローカル開発・テスト時に限り HTTP とローカルまたはプライベート宛先を許可します。
-  allowInsecureHttp: false
 
 # Network
 bindAddr: "0.0.0.0"
@@ -134,7 +132,6 @@ EOF
 ```
 
 > 📝 Mithril は既定で HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開の宛先を拒否します。`allowInsecureHttp` は `--mithril-allow-insecure-http` CLI フラグまたは `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` 環境変数で上書きできます。この設定はローカル開発・テスト専用の例外であり、本番環境では有効にしないでください。
-
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
 > 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
