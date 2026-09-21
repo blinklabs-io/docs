@@ -94,6 +94,29 @@ plugins:
 #     config:
 #       capacity: 1048576
 
+# Producción de bloques opcional
+# El flujo normal de inicio rápido no activa la producción de bloques. Para producir bloques,
+# activa `blockProducer` y configura `shelleyVrfKey`, `shelleyOperationalCertificate` y una sola
+# fuente de claves KES: `shelleyKesKey` local o `shelleyKesAgentSocket` para un agente externo.
+# blockProducer: true
+# shelleyVrfKey: "$HOME/dingo/vrf.skey"
+# shelleyOperationalCertificate: "$HOME/dingo/opcert.cert"
+# Elige una sola fuente de claves KES; no configures ambas.
+# shelleyKesKey: "$HOME/dingo/kes.skey"
+# shelleyKesAgentSocket: "$HOME/bursa/kes-agent.sock"
+# `shelleyKesAgentSocket` conecta con un agente KES externo de Bursa y sustituye
+# `shelleyKesKey`; `shelleyVrfKey` y `shelleyOperationalCertificate` siguen siendo archivos locales.
+# Con el socket configurado, no se necesita `shelleyKesKey` y `serve-key` es el modo predeterminado.
+# `serve-key` usa el material KES que el agente envía para que Dingo firme localmente.
+# `sign` delega las firmas al agente sin cargar el secreto KES en Dingo.
+# Valores válidos para `shelleyKesAgentMode`: `serve-key` y `sign`.
+# `shelleyKesAgentSignTimeout` controla el tiempo de espera de una firma: `0` usa 500ms;
+# un valor explícito debe ser positivo y menor de un segundo.
+# Flags CLI equivalentes: `--shelley-kes-agent-socket`, `--shelley-kes-agent-mode`
+# y `--shelley-kes-agent-sign-timeout`.
+# Esta ruta de producción de bloques funciona en Linux y macOS, no en Windows.
+# La ruta de `shelleyKesAgentSocket` debe respetar el límite de longitud del socket Unix de la plataforma.
+
 # Mithril
 mithril:
   aggregatorUrl: ""
