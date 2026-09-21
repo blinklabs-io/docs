@@ -277,7 +277,7 @@ The BLS command generates cryptographically random BLS12-381 MinSig material for
 
 Each destination flag is optional:
 
-- `--signing-key-file` writes the signing key to the specified file. The command never prints the signing key. If this flag is omitted, the command does not print or persist the signing secret.
+- `--signing-key-file` writes the signing key to the specified file. The command never prints the signing key. When the command omits this flag, it does not print or persist the signing secret.
 - `--verification-key-file` writes the verification key to the specified file.
 - `--output-file` writes the registration JSON to the specified file. If this flag is omitted, Bursa prints the registration JSON to standard output.
 
