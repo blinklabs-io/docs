@@ -104,6 +104,8 @@ plugins:
 # Elige una sola fuente de claves KES; no configures ambas.
 # shelleyKesKey: "$HOME/dingo/kes.skey"
 # shelleyKesAgentSocket: "$HOME/bursa/kes-agent.sock"
+# shelleyKesAgentMode: "serve-key"
+# shelleyKesAgentSignTimeout: 0
 # `shelleyKesAgentSocket` conecta Dingo con un agente KES externo de Bursa y reemplaza
 # `shelleyKesKey` como fuente de credenciales KES, mientras `shelleyVrfKey` y
 # `shelleyOperationalCertificate` permanecen en archivos locales.
