@@ -1,12 +1,12 @@
 ---
 title: Guía de línea de comandos de claves
-description: Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica.
+description: Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra.
 ---
 
 <a name="key"></a>
 
 ## Crear Claves
-Bursa se puede usar para derivar claves individuales a partir de una mnemónica.
+Bursa se puede usar para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra para el registro de stake pools.
 
 <table>
   <tr>
@@ -32,11 +32,14 @@ Bursa se puede usar para derivar claves individuales a partir de una mnemónica.
   <td><a href="#committee-cold">Clave fría del Comité Constitucional</a></td>
   <td><a href="#committee-hot">Clave caliente del Comité Constitucional</a></td>
 </tr>
+<tr>
+  <td><a href="#bls">Clave BLS de Dijkstra para registro de stake pool</a></td>
+</tr>
 </table>
 
 ***
 
-Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica.
+Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra para el registro de stake pools.
 
 **La mnemónica se puede proporcionar mediante:**
   1. Bandera --mnemonic
@@ -45,7 +48,7 @@ Guía de línea de comandos de Bursa para derivar claves individuales a partir d
   4. Archivo por defecto "seed.txt"
 <br>
 
-> Las claves se derivan siguiendo los estándares CIP de Cardano y se generan en formato bech32 adecuado para usar con cardano-cli y otras herramientas.
+> Las claves derivadas a partir de una mnemónica siguen los estándares CIP de Cardano y se generan en formato bech32 adecuado para usar con cardano-cli y otras herramientas.
 >
 > **Rutas de derivación por tipo de clave:**
 > -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
@@ -53,6 +56,7 @@ Guía de línea de comandos de Bursa para derivar claves individuales a partir d
 > -  CIP-1855: policy (m/1855'/1815'/...)
 > -  CIP-0105: drep, committee-cold, committee-hot (m/1852'/1815'/account'/role/...)
 > -  CIP-88/151: calidus (m/1852'/1815'/account'/0/index, autenticación SPO)
+> -  Dijkstra: bls (material BLS12-381 MinSig aleatorio para el registro de Leios y Peras)
 
 ***
 
@@ -265,6 +269,29 @@ La salida es en formato bech32 (prefijo cc_hot_xsk) a menos que se especifiquen 
 
 ***
 
+<a name="bls"></a>
+
+### Clave BLS de Dijkstra para registro de stake pool
+El comando `bursa key bls` genera material BLS12-381 MinSig criptográficamente aleatorio para el registro de stake pools de la era Dijkstra en Leios y Peras. No usa la entrada de mnemónica ni las fuentes `--mnemonic`, `MNEMONIC`, `--mnemonic-file` o `seed.txt` de los demás comandos.
+
+```bash
+./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
+```
+
+Las tres banderas de destino son opcionales:
+
+- `--signing-key-file` guarda la clave de firma en un sobre compatible con cardano-cli de tipo `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa nunca imprime el secreto de firma y solo lo guarda cuando se proporciona esta bandera.
+- `--verification-key-file` guarda la clave de verificación en un sobre compatible con cardano-cli de tipo `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`.
+- `--output-file` guarda el material de registro en formato JSON. Si se omite, Bursa escribe el JSON en la salida estándar.
+
+El JSON contiene los campos `publicKey` y `possessionProof`. `publicKey` contiene la clave pública de 96 bytes y `possessionProof` contiene la prueba de posesión de 48 bytes; ambos valores usan cadenas hexadecimales en minúsculas. Bursa verifica la prueba generada antes de producir la salida.
+
+Bursa crea los archivos de destino generados con permisos solo para el propietario (`0600`). La clave de firma es material de credenciales del pool: protégela y conserva una copia de respaldo segura.
+
+`--signing-key-file`, `--verification-key-file` y `--output-file` no deben resolverse al mismo destino. Bursa rechaza las colisiones entre rutas normalizadas y entre alias que usan enlaces simbólicos.
+
+***
+
 Explora otros comandos de Bursa
 
 > **Categorías de comandos de Bursa**
@@ -274,6 +301,6 @@ Explora otros comandos de Bursa
 > 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
 > 5. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
+> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra
 
 ***
