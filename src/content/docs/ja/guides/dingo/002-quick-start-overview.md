@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.70.16）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.71.1）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.16/dingo-v0.70.16-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.1/dingo-v0.71.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -128,6 +128,16 @@ midnight:
   port: 50051
   host: "127.0.0.1"
   authTokenPolicyId: ""
+
+# Shelley KESエージェント（任意）
+# `shelleyKesAgentSocket` は、ローカルの KESキーの代わりにBursa KESエージェントを使用します。
+# VRFキーとオペレーショナル証明書の設定は引き続き適用されます。
+# `shelleyKesAgentSocket` は `--shelley-kes-agent-socket` でも設定できます。
+# `shelleyKesAgentMode` は `--shelley-kes-agent-mode` でも設定でき、モードは `serve-key`（ソケット設定時の既定値）または `sign` です。
+# `shelleyKesAgentSignTimeout` は `--shelley-kes-agent-sign-timeout` でも設定できます。`0` はクライアントの既定値 `500ms` を使用し、`sign` モードでは1スロット未満にする必要があります。
+# shelleyKesAgentSocket: ""
+# shelleyKesAgentMode: "serve-key"
+# shelleyKesAgentSignTimeout: 0s
 EOF
 ```
 
