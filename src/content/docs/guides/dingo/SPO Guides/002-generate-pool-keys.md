@@ -11,7 +11,7 @@ We will now generate the pool keys needed for block production on the Preview ne
 | Key	| Purpose	| Where it lives
 |-------|---------------|-------------------|
 |Cold key<br> (node.skey / node.vkey)	|Authorizes pool registration and KES rotation	|Air-gapped machine only — never transferred
-|KES key<br> (kes.skey / kes.vkey) |Signs blocks; rotated before KES expiration |kes.skey - Block producer
+|KES key<br> (kes.skey / kes.vkey)	|Signs blocks; rotated before KES expiration	|kes.skey - Block producer
 |VRF key<br> (vrf.skey / vrf.vkey)	|Proves slot leadership	|vrf.skey - Block producer
 |Operational certificate<br> (node.cert)	|Binds KES key to cold key for the node	|Block producer
 
