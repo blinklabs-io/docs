@@ -126,30 +126,8 @@ maxNtCConnectionsPerIP: 5
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
-
-# Optional block production. Uncomment and configure this section only when
-# running Dingo as a block producer. The VRF key and operational certificate
-# remain local and are required together with blockProducer.
-# blockProducer: true
-# shelleyVrfKey: "$HOME/dingo/keys/vrf.skey"
-# shelleyOperationalCertificate: "$HOME/dingo/keys/opcert.cert"
-#
-# Select exactly one KES key source. Omit shelleyKesKey when using the agent.
-# Local KES key:
-# shelleyKesKey: "$HOME/dingo/keys/kes.skey"
-#
-# External Bursa KES agent:
-# shelleyKesAgentSocket: "$HOME/dingo/bursa-kes-agent.sock"
-# shelleyKesAgentMode: "serve-key" # valid values: serve-key or sign; default: serve-key when a socket is set
-# shelleyKesAgentSignTimeout: 0s # 0 uses 500ms; explicit values must be >0 and <1s
 EOF
 ```
-
-> 📝 The block producer settings are optional for the quick start. Block production requires `blockProducer`, `shelleyVrfKey`, and `shelleyOperationalCertificate`. Use either the local `shelleyKesKey` or the external `shelleyKesAgentSocket`; do not configure both. The agent socket supplies the KES key, so Dingo can use the agent without a local `shelleyKesKey`.
-
-> 📝 The agent socket connects to an external Bursa KES agent over a Unix domain socket. `serve-key` makes the agent provide KES material while Dingo signs locally; `sign` keeps the KES secret with the agent and delegates signing to it. The `shelleyVrfKey` and `shelleyOperationalCertificate` paths remain local in both modes. The equivalent CLI flags are `--shelley-kes-agent-socket`, `--shelley-kes-agent-mode`, and `--shelley-kes-agent-sign-timeout`. The `--shelley-kes-agent-sign-timeout` flag controls one `sign` mode round trip and accepts a duration below one second: `0` selects the 500ms default, and an explicit value must be positive and less than one second.
-
-> ⚠️ Block production through the KES agent works on Linux and macOS, not Windows. Use a Unix socket path within the limit imposed by the platform.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
