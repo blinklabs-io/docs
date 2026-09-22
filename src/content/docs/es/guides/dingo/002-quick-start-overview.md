@@ -126,13 +126,13 @@ socketPath: "$HOME/dingo/dingo.socket"
 
 # Agente Shelley KES opcional
 # Un agente KES de Bursa en ejecución sustituye una clave KES local.
-# El socket selecciona el agente; la clave VRF y el certificado operativo siguen aplicándose.
+# El socket selecciona el agente; la configuración de la clave VRF y del certificado operativo sigue aplicándose.
 # shelleyKesAgentSocket: ""
 # Alias de CLI: `--shelley-kes-agent-socket`.
 # shelleyKesAgentMode: "serve-key"
 # Alias de CLI: `--shelley-kes-agent-mode`. La configuración usa `serve-key` de forma predeterminada si incluye un socket; también admite `sign`.
 # shelleyKesAgentSignTimeout: 0
-# Alias de CLI: `--shelley-kes-agent-sign-timeout`. El valor `0` usa el valor predeterminado de 500 ms; en modo `sign`, debe ser menor que un slot.
+# Alias de CLI: `--shelley-kes-agent-sign-timeout`. El valor `0` usa el valor predeterminado del cliente de 500 ms; en modo `sign`, el tiempo de espera debe ser menor que un slot.
 
 # Storage
 barkBaseUrl: ""
