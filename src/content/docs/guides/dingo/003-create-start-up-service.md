@@ -140,7 +140,6 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
-#
 # Block production is disabled unless this section is explicitly enabled.
 # blockProducer: true
 # shelleyVrfKey: \"/path/to/vrf.skey\"
