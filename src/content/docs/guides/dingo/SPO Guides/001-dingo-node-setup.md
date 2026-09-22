@@ -45,7 +45,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.10/dingo-v0.70.10-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.0/dingo-v0.71.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 <br>
