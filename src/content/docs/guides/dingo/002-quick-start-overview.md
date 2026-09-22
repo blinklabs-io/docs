@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.16/dingo-v0.70.16-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.1/dingo-v0.71.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -126,6 +126,19 @@ maxNtCConnectionsPerIP: 5
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
+
+# Optional Shelley KES agent settings for block producers.
+# shelleyKesAgentSocket: ""
+# CLI: --shelley-kes-agent-socket
+# A configured socket obtains the KES signing key from a running Bursa KES
+# agent instead of shelleyKesKey. Shelley VRF and operational certificate
+# settings still apply.
+# shelleyKesAgentMode: ""
+# CLI: --shelley-kes-agent-mode
+# Values: serve-key (default when a socket is set) or sign.
+# shelleyKesAgentSignTimeout: 0
+# CLI: --shelley-kes-agent-sign-timeout
+# Zero uses 500ms; a sign-mode timeout must remain below one slot.
 EOF
 ```
 
