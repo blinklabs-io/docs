@@ -140,7 +140,7 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
-# Database lifecycle 
+# Database lifecycle
 databaseLifecycle:
   # Automatic database snapshots run at epoch boundaries.
   # Do not enable automatic snapshots when the primary blob provider is "badger", "s3", or "gcs".
