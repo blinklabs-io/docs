@@ -131,30 +131,6 @@ midnight:
 EOF
 ```
 
-### ブロックプロデューサーとKESエージェントの設定（任意）
-
-通常のクイックスタートでは `blockProducer` を設定しません。ブロックプロデューサーとして起動する場合は、次の設定を追加します。`blockProducer`、`shelleyVrfKey`、`shelleyOperationalCertificate` は必須です。KES キーには、ローカルの `shelleyKesKey` または外部 Bursa KES エージェントの `shelleyKesAgentSocket` のどちらか一方を指定します。
-
-```yaml
-blockProducer: true
-shelleyVrfKey: "$HOME/dingo/vrf.skey"
-shelleyOperationalCertificate: "$HOME/dingo/opcert.cert"
-shelleyKesAgentSocket: "$HOME/dingo/bursa-kes-agent.sock"
-# shelleyKesAgentMode: "serve-key"
-# shelleyKesAgentSignTimeout: 0
-
-# エージェントソケットの代わりにローカル KES キーを使用する場合:
-# shelleyKesKey: "$HOME/dingo/kes.skey"
-```
-
-`shelleyKesAgentSocket` を設定すると、Dingo は Unix ドメインソケット経由で外部 Bursa KES エージェントから KES 署名キーを取得するため、ローカルの `shelleyKesKey` は不要です。`shelleyKesKey` と `shelleyKesAgentSocket` を同時に設定すると、Dingo はこの設定を拒否します。`shelleyVrfKey` と `shelleyOperationalCertificate` は常にローカルファイルとして必要です。
-
-`shelleyKesAgentMode` には `serve-key` または `sign` を指定します。`serve-key` はエージェントが提供する更新中のキーを使用して Dingo がローカルで署名するモードで、ソケット設定時の既定値です。`sign` は署名生成をエージェントに委任し、KES の秘密キーを Dingo に読み込みません。
-
-`sign` モードでは `shelleyKesAgentSignTimeout` で署名処理のタイムアウトを指定します。明示する値は正の値かつ `1s` 未満でなければなりません。`0` を指定すると既定値の `500ms` を使用します。
-
-コマンドラインには、`--shelley-kes-agent-socket`、`--shelley-kes-agent-mode`、`--shelley-kes-agent-sign-timeout` を指定します。Dingo は Linux と macOS で KES エージェントのブロックプロデューサー機能を使用できますが、Windows では使用できません。ソケットパスは実行プラットフォームの Unix ソケットパス長制限を超えないようにしてください。
-
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
 > 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
