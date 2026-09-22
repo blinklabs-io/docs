@@ -311,12 +311,3 @@ sudo journalctl -u dingo -n 50 --no-pager
 ### Congratulations! You are now running a Dingo stake pool on the Preview network.
 
 
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
