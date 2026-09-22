@@ -131,7 +131,7 @@ midnight:
 
 # Shelley KESエージェント（任意）
 # `shelleyKesAgentSocket` は、ローカルの KESキーの代わりにBursa KESエージェントを使用します。
-# VRFキーとオペレーショナル証明書の設定は引き続き適用されます。
+# VRFキーとオペレーショナル証明書の設定は引き続き有効です。
 # `shelleyKesAgentSocket` は `--shelley-kes-agent-socket` でも設定できます。
 # `shelleyKesAgentMode` は `--shelley-kes-agent-mode` でも設定でき、モードは `serve-key`（ソケット設定時の既定値）または `sign` です。
 # `shelleyKesAgentSignTimeout` は `--shelley-kes-agent-sign-timeout` でも設定できます。`0` はクライアントの既定値 `500ms` を使用し、`sign` モードでは1スロット未満にする必要があります。
