@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.16/dingo-v0.70.16-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.1/dingo-v0.71.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -123,6 +123,16 @@ privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
+
+# Agente Shelley KES opcional
+# Usa un agente KES de Bursa en ejecución en lugar de una clave KES local.
+# El socket selecciona el agente; la clave VRF y el certificado operativo siguen aplicándose.
+# shelleyKesAgentSocket: ""
+# Alias de CLI: `--shelley-kes-agent-socket`.
+# shelleyKesAgentMode: "serve-key"
+# Alias de CLI: `--shelley-kes-agent-mode`. Usa `serve-key` de forma predeterminada cuando se configura un socket; también admite `sign`.
+# shelleyKesAgentSignTimeout: 0
+# Alias de CLI: `--shelley-kes-agent-sign-timeout`. El valor `0` usa el valor predeterminado de 500 ms; en modo `sign`, debe ser menor que un slot.
 
 # Storage
 barkBaseUrl: ""
