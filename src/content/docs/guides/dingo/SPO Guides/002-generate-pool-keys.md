@@ -159,8 +159,7 @@ chmod 400 vrf.skey
 
 > ### Reminder
 >**Block-producing Node**
-> The block producer stores files according to the KES source:
-> For local KES signing:
+> The only stake pool keys and certs that should be stored on the block producer, are the following three files:
 > 
 > ```
 > ###
@@ -171,14 +170,7 @@ chmod 400 vrf.skey
 > CERT = node.cert
 > ```
 > 
-> For external Bursa-agent signing:
-> 
-> ```
-> VRF = vrf.skey
-> CERT = node.cert
-> ```
-> 
-> The external agent supplies the KES material, so `kes.skey` does not reside on the block producer. Cold keys must remain offline in your air-gapped cold environment.
+> **All other keys must remain offline in your air-gapped cold environment.**
 > 
 > **Relay Nodes**
 > Relay nodes must NOT store operational certificates, VRF keys, signing keys, or cold keys.
