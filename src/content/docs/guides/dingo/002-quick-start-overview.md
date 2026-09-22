@@ -132,8 +132,8 @@ storageMode: "core"
 # shelleyKesAgentSocket: ""
 # CLI: --shelley-kes-agent-socket
 # A configured socket selects a running Bursa KES agent for the KES signing
-# key instead of shelleyKesKey. Shelley VRF and operational certificate
-# settings still apply.
+# key instead of the local --shelley-kes-key file. Shelley VRF and operational
+# certificate settings still apply.
 # shelleyKesAgentMode: ""
 # CLI: --shelley-kes-agent-mode
 # Values: serve-key (default when a socket is set) or sign.
