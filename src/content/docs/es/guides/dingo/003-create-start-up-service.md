@@ -163,7 +163,6 @@ socketPath: \"$HOME/dingo/dingo.socket\"
 barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
-
 EOF"
 ```
 
