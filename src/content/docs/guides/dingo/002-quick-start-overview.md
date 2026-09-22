@@ -127,11 +127,12 @@ barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
 
-# Optional Shelley KES agent settings for block producers.
+# Optional Shelley KES agent settings for block producers. Leave commented
+# unless block production is configured.
 # shelleyKesAgentSocket: ""
 # CLI: --shelley-kes-agent-socket
-# A configured socket obtains the KES signing key from a running Bursa KES
-# agent instead of shelleyKesKey. Shelley VRF and operational certificate
+# A configured socket selects a running Bursa KES agent for the KES signing
+# key instead of shelleyKesKey. Shelley VRF and operational certificate
 # settings still apply.
 # shelleyKesAgentMode: ""
 # CLI: --shelley-kes-agent-mode
