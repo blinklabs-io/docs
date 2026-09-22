@@ -164,15 +164,6 @@ barkBaseUrl: \"\"
 barkPort: 0
 storageMode: \"core\"
 
-# Productor de bloques opcional. Descomenta este bloque solo cuando el servicio deba producir bloques.
-# blockProducer: true
-# shelleyVrfKey: \"/ruta/absoluta/vrf.skey\"
-# shelleyOperationalCertificate: \"/ruta/absoluta/opcert.cert\"
-# Configura solo una fuente de KES; ambas fuentes son mutuamente excluyentes.
-# shelleyKesKey: \"/ruta/absoluta/kes.skey\"
-# shelleyKesAgentSocket: \"/ruta/absoluta/bursa-kes-agent.sock\"
-# shelleyKesAgentMode: \"serve-key\"
-# shelleyKesAgentSignTimeout: 0
 EOF"
 ```
 
