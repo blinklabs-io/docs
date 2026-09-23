@@ -18,7 +18,6 @@ We will now generate the pool keys needed for block production on the Preview ne
 
 For background on what these keys do, see <a href="https://developers.cardano.org/docs/operate-a-stake-pool/basics/cardano-key-pairs/" target="new" >Cardano Key Pairs</a>.
 
-
 ***
 
 > ⚠️ The following guide assumes you have already completed the Dingo Node Setup and your node is 100% synced. If not please complete first and return here when you are done. 
@@ -180,16 +179,3 @@ chmod 400 vrf.skey
 <br>
 
 ### Congratulations! You are ready to move to the next section.
-
-
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
