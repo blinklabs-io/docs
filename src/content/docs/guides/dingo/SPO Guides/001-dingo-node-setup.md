@@ -45,7 +45,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.10/dingo-v0.70.10-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.0/dingo-v0.71.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 <br>
@@ -311,3 +311,14 @@ Run this command to see if the node is 100% synced.
 > ```
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
