@@ -7,6 +7,10 @@ While Dingo will work with the default topology file embedded it's recommened as
 
 Please modify according to the network you are using and to your Node structure. For this guide we will provide an overview based on the common recommendation of using a Block producer node behind two relay nodes.
 
+***
+
+## Default Preview Topology JSON File
+
 The default Preview topology JSON file looks like this:
 ```
 {
@@ -35,6 +39,21 @@ The default Preview topology JSON file looks like this:
 }
 ```
 
+To understand how to modify and use the topology JSON file it's important to understand:
+
+- <a href="#local">Local vs Public Peers</a>
+- <a href="#bootstrapping">Bootstrapping Peers</a>
+- <a href="#advertise">Advertise Flag</a>
+- <a href="#access">Access Points</a>
+
+<h2 id="local"> Local vs Public Peers</h2>
+Local Roots is designed for peers that the node should always keep as hot or warm, such as its own block producer. On the other hand, Public Roots serves as a source of fallback peers.
+
+<h2 id="bootstrapping">Bootstrapping Peers</h2
+
+<h2 id="advertise">Advertise Flag</h2>
+
+<h2 id="access">Access Points</h2>
 
 ## Relay Sample Topology File
 
