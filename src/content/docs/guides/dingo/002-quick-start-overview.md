@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.0/dingo-v0.71.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.71.1/dingo-v0.71.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -126,6 +126,7 @@ maxNtCConnectionsPerIP: 5
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
+
 EOF
 ```
 
