@@ -49,21 +49,29 @@ To understand how to modify and use the topology JSON file it's important to und
 - <a href="#bootstrapping">Bootstrapping Peers</a>
 - <a href="#advertise">Advertise Flag</a>
 - <a href="#access">Access Points</a>
-- < href="#trustable">Trustable</a> 
+- <a href="#trustable">Trustable</a> 
 
 <h3 id="local"> Local vs Public Peers</h3>
 Local Roots is designed for peers that the node should always keep as hot or warm, such as its own block producer. On the other hand, Public Roots serves as a source of fallback peers.
 
+***
+
 <h3 id="bootstrapping">Bootstrapping Peers</h3>
 Bootstrapping peers are good for when your node has had an extended outage, you'll sync from those and trusted peers and then ledger once on tip.
+
+***
 
 <h3 id="advertise">Advertise Flag</h3>
 Advertise will tell your peers "hey I have this really good peer, you should try to connect to them" which can give that relay more inbound connections. 
 
 Could be used for situations like unregistered relays.
 
+***
+
 <h3 id="access">Access Points</h3>
 You can have multiple access points within Local Roots. Why would you want to use this? This way you can keep advertise as false for your BP while True for your relay. 
+
+***
 
 <h3 id="trustable">Trustable</h3>
 Trustable peers are composed by the bootstrap peers and the trustable local root peers. By default local root peers are not trustable.
