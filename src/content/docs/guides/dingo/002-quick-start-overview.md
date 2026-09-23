@@ -127,19 +127,6 @@ barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
 
-# Optional Shelley KES agent settings for block producers. Leave commented
-# unless block production is configured.
-# shelleyKesAgentSocket: ""
-# CLI: --shelley-kes-agent-socket
-# A configured socket selects a running Bursa KES agent for the KES signing
-# key instead of the local --shelley-kes-key file. Shelley VRF and operational
-# certificate settings still apply.
-# shelleyKesAgentMode: ""
-# CLI: --shelley-kes-agent-mode
-# Values: serve-key (default when a socket is set) or sign.
-# shelleyKesAgentSignTimeout: 0
-# CLI: --shelley-kes-agent-sign-timeout
-# Zero uses 500ms; a sign-mode timeout must remain below one slot.
 EOF
 ```
 
