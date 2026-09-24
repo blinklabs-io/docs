@@ -14,7 +14,7 @@ description: AppleのネイティブコンテナランタイムでDingoを実行
 次の環境が必要です。
 
 - macOS
-- `apple/container`の動作するインストール環境。[公式の`apple/container`ビルド手順](https://github.com/apple/container#building-from-source)を参照してください。
+- `apple/container`をインストールして動作する環境。[公式の`apple/container`ビルド手順](https://github.com/apple/container#building-from-source)を参照してください。
 - `scripts/container-dingo-start.sh`および`scripts/container-dingo-stop.sh`のヘルパースクリプトを含むAdderリポジトリ
 
 コマンドはAdderリポジトリのルートから実行します。このセットアップではリポジトリからAdderを実行するため、インストールまたはビルドのコマンドは含まれません。
