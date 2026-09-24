@@ -7,15 +7,39 @@ Esta referencia describe los cambios de configuración de Adder Tray en `adder-t
 
 ## Ubicación del archivo de configuración
 
-Adder Tray guarda su configuración en `adder-tray.yaml` en la siguiente ruta, que depende de la plataforma:
+Adder Tray guarda su configuración en `adder-tray.yaml` en `<ConfigDir>/adder-tray.yaml`.
 
-| Plataforma | Ruta de configuración |
-| --- | --- |
-| macOS | `$HOME/Library/Application Support/Adder/adder-tray.yaml` |
-| Windows | `%APPDATA%\Adder\adder-tray.yaml`, o `%USERPROFILE%\AppData\Roaming\Adder\adder-tray.yaml` cuando `APPDATA` no está configurada |
-| Linux | `$XDG_CONFIG_HOME/adder/adder-tray.yaml`, o `$HOME/.config/adder/adder-tray.yaml` cuando `XDG_CONFIG_HOME` no está configurada |
+Configure `ADDER_TRAY_CONFIG_DIR` para cambiar el directorio que contiene `adder-tray.yaml`. El valor identifica el directorio, no un nombre de archivo alternativo. Este archivo es independiente de la configuración del motor.
 
-Configure `ADDER_TRAY_CONFIG_DIR` para cambiar el directorio que contiene `adder-tray.yaml`. El valor de reemplazo identifica el directorio, no un nombre de archivo alternativo.
+## Inicio automático y estado
+
+Adder Tray guarda la opción de inicio automático como un booleano YAML en `auto_start`:
+
+```yaml
+auto_start: true
+```
+
+- `true` solicita que Adder Tray se inicie automáticamente al iniciar sesión o reiniciar el equipo.
+- `false` desactiva el inicio automático.
+
+El asistente de configuración ofrece esta opción con la etiqueta `Start Adder automatically on login / reboot`. Esta es la forma normal de cambiar el valor; al guardar la configuración, el asistente persiste la selección en `adder-tray.yaml`.
+
+El asistente muestra el estado en `Background Activity`:
+
+- `Registered & Running`: el sistema tiene registrado el inicio de Adder y el proceso está activo.
+- `Registered`: el sistema tiene registrado el inicio, pero el proceso no está activo.
+- `Not registered`: el sistema no tiene registrado el inicio automático.
+- `Status unknown`: Adder Tray no pudo determinar el estado.
+
+El estado `Registered` no garantiza que el proceso esté ejecutándose. `Registered & Running` confirma ambas condiciones.
+
+### Windows
+
+Con `auto_start: true`, Windows registra Adder Tray para el usuario actual mediante el registro `Run`. La bandeja se inicia de forma silenciosa al iniciar sesión y después administra el proceso del motor. Con `auto_start: false`, Adder no solicita ese inicio automático.
+
+### macOS
+
+Con `auto_start: true`, macOS configura el `LaunchAgent` de Adder para iniciarlo al cargar la sesión y agrega la aplicación a `Login Items`. Con `auto_start: false`, macOS desactiva el inicio automático del agente y quita la aplicación de `Login Items`.
 
 ## Filtros de objetivos
 
