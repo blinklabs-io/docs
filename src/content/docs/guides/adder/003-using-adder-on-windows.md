@@ -140,7 +140,7 @@ Click `Finish Setup`.
 
 ### Step 4 - Startup and Background Activity
 
-Use the `Start Adder automatically on login / reboot` checkbox to enable or disable Adder startup for the current Windows user. Windows stores this choice in the current user's startup registration. The tray runs the Adder engine in the background without opening a window, and the installer does not need administrator elevation for this setting.
+Select the `Start Adder automatically on login / reboot` checkbox to start Adder automatically for the current Windows user. Clear the checkbox to disable automatic startup. Windows stores this choice in the current user's startup registration. The tray runs the Adder engine in the background without opening a window, and the installer does not need administrator elevation for this setting.
 
 The background activity status shows one of these states:
 
@@ -164,7 +164,7 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Select `About` to open an in-app dialog with the running Adder version. If Adder includes commit metadata, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays `Version: <version>`.
+Select `About` to open an in-app dialog that shows the running Adder version. If Adder includes commit metadata, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays `Version: <version>`.
 
 
 ---
