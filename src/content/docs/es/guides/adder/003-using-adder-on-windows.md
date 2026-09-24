@@ -7,45 +7,18 @@ description: Como usar Adder en Windows.
 
 Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te mostraremos ejemplos de como usar Adder. Recuerda que estos son ejemplos para familiarizarte con el tipo de cosas que Adder es capaz de hacer. El verdadero poder de Adder puede ser desbloqueado por tu imaginacion.
 
-> Nota: esta guia asume que has descargado el exe de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si no has descargado el exe, por favor consulta nuestro [Inicio Rapido](../002-quick-start-overview)
+> Nota: esta guía asume que se ha descargado el instalador `.msi` de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si no se ha descargado el instalador, consulta [Inicio Rápido](../002-quick-start-overview).
 
-## Paso 1 - Abrir una Linea de Comandos en Windows
+## Paso 1 - Instalar Adder en Windows
 
-Ahora que tienes el archivo exe de Adder descargado, necesitamos abrir una linea de comandos. Aqui es donde mas tarde alimentaremos a Adder con filtros y comandos para que nos notifique de los eventos que queremos rastrear.
+1. Descarga el MSI correspondiente a la arquitectura de Windows: `x64` o `arm64`.
+2. Ejecuta el MSI y completa el asistente de instalación.
 
+El MSI de lanzamiento instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. También crea el acceso directo de la bandeja en el menú Inicio y registra Adder en `Aplicaciones y características` o `Agregar o quitar programas`.
 
+El MSI no registra una `Tarea programada` ni activa el inicio automático por sí mismo. Los MSI compilados localmente o de prueba pueden no estar firmados y mostrar una advertencia de `SmartScreen` o de editor desconocido.
 
-Para abrir una linea de comandos en Windows, ve a tu menu de inicio de Windows
-
-![adder-windows-start-menu](/adder-windows-start-menu.webp)
-
-
-
-Luego escribe `cmd` en el cuadro de busqueda y haz clic en `Abrir`
-
-![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
-
-## Paso 2 - Obtener la ruta del exe de Adder
-
-A continuacion, necesitaremos obtener la ruta del archivo exe de Adder que descargamos para poder ejecutarlo en la linea de comandos.
-
-En este ejemplo descargamos el exe de Adder en nuestro escritorio, asi que podemos hacer clic derecho en el exe de Adder y copiar la ruta.
-
-Toma nota de la ruta, la necesitaremos mas adelante
-
-![adder-exe-path](/adder-exe-path.png)
-
-## Paso 3 - Ejecutar Adder en la Linea de Comandos
-
-Ahora que tenemos la ruta del exe de Adder, escribe la ruta o pegala si copiaste la ruta en el paso anterior.
-
-![adder-cmd-paste-path](/adder-cmd-paste-path.png)
-
-### Felicitaciones!
-
-Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos rastrear cierta informacion y elegir la forma en que somos notificados.
-
-## Configurar Adder Tray
+## Paso 2 - Configurar Adder Tray
 
 En el asistente de configuración, seleccione un modo de monitoreo:
 
@@ -70,7 +43,7 @@ Consulte la [referencia de configuración de la bandeja](../007-tray-configurati
 
 ### Paso 4 - Inicio automático y actividad en segundo plano
 
-Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. Esta opción se registra solo para el usuario actual de Windows. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
+Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. Esta opción se registra solo para el usuario actual de Windows; el MSI no la activa de forma independiente. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
 
 El estado de actividad en segundo plano muestra uno de los siguientes valores:
 
@@ -85,7 +58,21 @@ Seleccione `Open Login Items Settings...` para abrir la configuración de aplica
 
 Haga clic con el botón derecho en Adder desde la bandeja del sistema para abrir el menú y ajustar la configuración de la aplicación.
 
+Seleccione [Notification Rules...](../007-tray-configuration-reference) para editar los objetivos de monitoreo y las categorías de notificación. `Apply & Restart` guarda los cambios y reinicia el motor necesario sin reiniciar la bandeja. Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer los formatos y conectores disponibles.
+
+Seleccione `Recent Events` para consultar los eventos recientes. Las entradas de transacción y gobernanza abren la transacción en el explorador; las entradas de bloque abren el bloque. Cada enlace usa la red del evento.
+
+Seleccione `Show Logs` para abrir la carpeta de registros. La bandeja guarda el registro en `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`.
+
 Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro muestra la versión que está en ejecución y, si está disponible, el hash del commit con el formato `Version: <version> (commit: <hash>)`. Si no hay información del commit, muestra `Version: <version>`.
+
+## Diagnóstico y reintento
+
+La GUI de Windows no tiene una consola normal. Los fallos de inicio o ejecución, incluidos los pánicos y los problemas de gráficos, se registran en `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`; use `Show Logs` para abrir la carpeta y revisar el archivo.
+
+Adder ejecuta una sola instancia de la bandeja por sesión de inicio de Windows. Si un segundo lanzamiento termina inmediatamente, compruebe si ya existe una instancia de la bandeja en ejecución.
+
+Si aparece un aviso al aplicar la configuración, la configuración ya quedó guardada. El editor permanece abierto y sus controles vuelven a habilitarse cuando falla de forma recuperable el reinicio o la reconexión. Revise el estado o los registros y vuelva a aplicar la configuración.
 
 <br />
 
