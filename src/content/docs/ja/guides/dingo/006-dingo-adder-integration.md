@@ -78,7 +78,7 @@ docker compose logs adder
 
 `intersect-tip: true`設定により、Adderはblock 1から再開せず、アクティブなDingo tipから処理を再開します。
 
-統合したサービスログで運用上の異常を検索します。
+すべてのサービスログで運用上の異常を検索します。
 
 ```bash
 docker compose logs | grep -iE "error|panic|warn|reconnect"
