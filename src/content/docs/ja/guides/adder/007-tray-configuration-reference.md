@@ -159,3 +159,13 @@ filter:
 ```
 
 Adder Tray が新しい設定を保存すると、エンジン設定から従来の `address`、`drep`、`pool`、`asset`、`policy` キーを削除します。その後に従来のエンジン値を手動で編集しても、Tray の通知照合は変わりません。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

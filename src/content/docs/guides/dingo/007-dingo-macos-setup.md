@@ -66,3 +66,14 @@ The helper stops and removes the `dingo` container, removes the contents of `~/d
 ## Startup failures
 
 If startup fails before the socket becomes ready, the start helper stops and removes the partially started `dingo` container and removes the published socket files. Run the start helper again after correcting the reported problem.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

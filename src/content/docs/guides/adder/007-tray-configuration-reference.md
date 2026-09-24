@@ -159,3 +159,13 @@ filter:
 ```
 
 When Adder Tray saves the new configuration, it removes the legacy `address`, `drep`, `pool`, `asset`, and `policy` keys from the engine configuration. Manual edits to those legacy engine values afterward do not change tray notification matching. This migration affects tray matching only; it does not remove CLI filter options.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

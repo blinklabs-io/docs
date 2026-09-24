@@ -66,3 +66,13 @@ go run ./cmd/adder --input chainsync \
 ## 起動に失敗した場合
 
 ソケットの準備が完了する前に起動が失敗した場合、起動ヘルパーは起動途中の`dingo`コンテナを停止して削除し、公開されたソケットファイルを削除します。表示された問題を修正してから、起動ヘルパーを再実行します。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

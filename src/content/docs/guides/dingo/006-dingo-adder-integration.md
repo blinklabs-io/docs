@@ -93,3 +93,14 @@ docker compose down -v
 ```
 
 This command removes the `dingo-ipc` and `dingo-data` volumes, so the next stack start begins with clean validation state. Docker configures each service with the `json-file` logging driver, a maximum file size of `5m`, and a maximum of two log files.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

@@ -45,3 +45,14 @@ ARCH=amd64 make pkg-macos-adhoc
 ```
 
 Los paquetes de lanzamiento usan firma, notarización y un comprobante de notarización cuando las credenciales están disponibles. El destino `pkg-macos-adhoc` establece `ADHOC=1`, firma la aplicación para las notificaciones locales, pero deja el `.pkg` sin firma y sin notarización. Gatekeeper puede rechazar los paquetes locales sin firma y con firma ad hoc.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

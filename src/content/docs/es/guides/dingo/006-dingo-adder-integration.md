@@ -93,3 +93,13 @@ docker compose down -v
 ```
 
 Este comando elimina los volúmenes `dingo-ipc` y `dingo-data`, por lo que el siguiente inicio de la pila comienza con un estado de validación limpio. Como detalle de configuración, Docker usa el controlador de registros `json-file`, con un tamaño máximo de archivo de `5m` y un máximo de dos archivos de registro por servicio.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

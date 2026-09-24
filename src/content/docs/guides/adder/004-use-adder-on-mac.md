@@ -45,3 +45,14 @@ ARCH=amd64 make pkg-macos-adhoc
 ```
 
 Release packages use release signing, notarization, and stapling when the release credentials are available. The `pkg-macos-adhoc` target sets `ADHOC=1`, which signs the app bundle for local notifications but leaves the `.pkg` unsigned and not notarized. Gatekeeper may reject local unsigned and ad hoc packages.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

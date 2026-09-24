@@ -45,3 +45,14 @@ ARCH=amd64 make pkg-macos-adhoc
 ```
 
 リリース用パッケージは、リリース用の認証情報が利用できる場合にリリース署名、ノータライズ、チケットのステープル処理を行います。`pkg-macos-adhoc` ターゲットは `ADHOC=1` を設定し、アプリバンドルにローカル用のアドホック署名を付けて通知を有効にします。ただし、`.pkg` 自体には署名せず、ノータライズもしません。Gatekeeper はローカルの署名なしまたはアドホックパッケージを受け付けない場合があります。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

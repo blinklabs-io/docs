@@ -159,3 +159,13 @@ filter:
 ```
 
 Cuando Adder Tray guarda la nueva configuración, elimina las claves heredadas `address`, `drep`, `pool`, `asset` y `policy` de la configuración del motor. Las modificaciones manuales posteriores de esos valores heredados del motor no cambian la coincidencia de las notificaciones de Tray. Esta migración solo afecta a la coincidencia de Tray; no elimina las opciones de filtro de la CLI.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
