@@ -31,7 +31,7 @@ El asistente aplica la opción de inicio y mantiene sincronizados el agente de l
 
 ### Consultar los metadatos de About
 
-Abre `About Adder` desde el menú de la bandeja para consultar la versión en ejecución. El diálogo también muestra el hash del commit cuando la compilación lo incluye. Si no hay una versión disponible, el diálogo muestra `devel`.
+Abre `About Adder` desde el menú de la bandeja para consultar la versión en ejecución. El diálogo también muestra el identificador del commit cuando la compilación lo incluye. Si no hay una versión disponible, el diálogo muestra `devel`.
 
 ## Crear un paquete macOS local
 
