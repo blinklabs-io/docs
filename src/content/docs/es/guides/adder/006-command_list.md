@@ -24,9 +24,9 @@ description: Lista de Comandos de Adder.
 
 Consulta la [referencia de filtros y gobernanza](../009-filter-governance-reference) para ver ejemplos y el esquema detallado.
 
-Los indicadores de filtro aceptan varios valores separados por comas. Adder recorta los espacios de cada valor e ignora los elementos vacíos. Dentro de un mismo indicador, los valores funcionan como alternativas: el evento debe coincidir con al menos uno. Los filtros de tipos distintos se combinan con `AND`, por lo que el evento debe cumplir todos los filtros configurados. La excepción combina `--filter-pool` y `--filter-drep` con `OR`: basta que el evento coincida con el pool o con el DRep. Los demás filtros configurados siguen aplicándose con `AND` a esa combinación.
+Los indicadores de filtro aceptan varios valores separados por comas. Adder recorta los espacios de cada valor e ignora los elementos vacíos. Dentro de un mismo indicador, los valores funcionan como alternativas: el evento debe coincidir con al menos uno. Adder combina los filtros de tipos distintos con `AND`, por lo que el evento debe cumplir todos los filtros configurados. La excepción combina `--filter-pool` y `--filter-drep` con `OR`: basta que el evento coincida con el pool o con el DRep. Adder aplica los demás filtros configurados con `AND` a esa combinación.
 
-Usa la forma larga con dos guiones, como `--filter-type`. La forma con un solo guion, como `-filter-type`, se interpreta como un grupo de indicadores abreviados y se rechaza.
+Usa la forma larga con dos guiones, como `--filter-type`. Adder interpreta la forma con un solo guion, como `-filter-type`, como un grupo de indicadores abreviados y la rechaza.
 
 ### Aplicabilidad de los filtros
 
