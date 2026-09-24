@@ -17,7 +17,7 @@ The setup requires:
 - A working `apple/container` installation. Follow the official [`apple/container` build instructions](https://github.com/apple/container#building-from-source).
 - The Adder repository with the `scripts/container-dingo-start.sh` and `scripts/container-dingo-stop.sh` helper scripts
 
-Run the commands in this guide from the Adder repository root. The guide does not install or build Adder; it runs Adder from the repository.
+Run the commands from the Adder repository root. This setup runs Adder from the repository and does not include an installation or build command.
 
 ## Connection topology
 
@@ -37,7 +37,7 @@ From the repository root, start Dingo with the macOS helper:
 
 The helper starts the Apple container services, stops and removes a previous `dingo` container, creates and clears `~/dingo-ipc`, and starts `ghcr.io/blinklabs-io/dingo:0.70.9`. Dingo serves the `preview` network through `/ipc/node.socket`, and the helper publishes that path as `~/dingo-ipc/node.socket` on macOS.
 
-The helper waits for the host socket before it completes and prints the Adder command when Dingo is ready.
+The helper waits until the host socket is ready, then prints the Adder command.
 
 ## Run Adder natively
 
