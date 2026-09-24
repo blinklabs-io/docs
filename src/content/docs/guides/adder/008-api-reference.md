@@ -51,12 +51,46 @@ Replace `{token}` in `/v1/fcm/{token}` with the stored token value:
 
 ### Stream events
 
-Use `GET /events` to open an event stream. The server upgrades the connection to WebSocket when the client requests that protocol; otherwise, the server uses SSE. The route accepts these optional query parameters:
+Use `GET /events` to open an event stream. The server upgrades the connection to WebSocket when the client requests that protocol; otherwise, the server uses Server-Sent Events (SSE). A WebSocket connection delivers each event as a text message containing JSON. An SSE connection delivers each event in the `data` field of an SSE message.
 
-- `types`: A comma separated list of event types to include, such as `input.block` or `input.transaction`.
-- `replay`: A Boolean value that controls whether the server replays recently retained events when the connection opens. The API defaults this value to `true`.
+The route accepts these optional query parameters:
 
-The route returns event data as `text/event-stream` or `application/json`, depending on the connection mode.
+- `types`: A comma separated list of event types to include, such as `input.block` or `input.transaction`. Omit this parameter to receive all event types.
+- `replay`: A Boolean value that controls whether the server sends recent buffered events when the connection opens. The API defaults this value to `true`.
+
+The server applies the `types` filter to buffered and live events. With `replay=true`, the server sends recent buffered events that match the filter before continuing with live events. With `replay=false`, the server skips the buffered history and starts with live delivery.
+
+Use these URLs with an SSE client:
+
+```text
+http://localhost:8080/events
+http://localhost:8080/events?replay=false
+```
+
+Use these URLs with a WebSocket client:
+
+```text
+ws://localhost:8080/events
+ws://localhost:8080/events?replay=false
+```
+
+Replace `localhost:8080` with the host and port where the Adder API runs. Add a type filter when needed, such as `/events?types=input.block,input.transaction`.
+
+Each event contains a JSON object with these fields:
+
+| Field | Description |
+| --- | --- |
+| `type` | The event type. |
+| `timestamp` | The event timestamp. |
+| `context` | Context associated with the event. |
+| `payload` | The event data. |
+
+The contents of `context` and `payload` vary by event type.
+
+For a client that reconnects after a disconnect, request `replay=false` on the first connection and `replay=true` on subsequent connections. Adder Tray uses this live first, replay on reconnect strategy to recover buffered events produced during an outage. This strategy remains optional for other consumers.
+
+A consumer that requests replay after reconnecting should handle duplicate or already seen events. The stream does not promise exactly once delivery because replay can include events the consumer already processed, and the tray delivers events without blocking when its event channel is full.
+
 
 ## Path and slash rules
 
