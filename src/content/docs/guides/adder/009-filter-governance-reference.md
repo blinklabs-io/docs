@@ -15,7 +15,7 @@ Different filter kinds use AND semantics. An event must satisfy every configured
 
 `input.block` events match `--filter-pool`, but `--filter-drep` does not apply to blocks. Configuring both filters therefore does not expand the set of matching blocks.
 
-> **Important:** Use the double dash for long flags, such as `--filter-type`. The single dash form, such as `-filter-type`, is parsed as a shorthand flag cluster and is rejected.
+> **Important:** Use the double dash for long flags, such as `--filter-type`. Adder parses the single dash form, such as `-filter-type`, as a shorthand flag cluster and rejects it.
 
 ### Filter reference
 
@@ -196,7 +196,7 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | Field | Type | Description |
 | --- | --- | --- |
 | `blockHash` | string | Hash of the containing block in hexadecimal form |
-| `transactionCbor` | string | Raw transaction CBOR in hexadecimal form; present only with `--input-chainsync-include-cbor` |
+| `transactionCbor` | string | Raw transaction CBOR in hexadecimal form; Adder includes it only with `--input-chainsync-include-cbor` |
 | `proposalProcedures` | array | Governance actions proposed in the transaction |
 | `votingProcedures` | array | Votes cast in the transaction |
 | `drepCertificates` | array | DRep registration, update, or retirement certificates |
@@ -211,7 +211,7 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `deposit` | number | Deposit in lovelace locked for the proposal |
 | `rewardAccount` | string | Stake or reward address to which the deposit returns |
 | `actionType` | string | One of `ParameterChange`, `HardForkInitiation`, `TreasuryWithdrawal`, `NoConfidence`, `UpdateCommittee`, `NewConstitution`, `Info` |
-| `actionData` | object | Action specific data; exactly one field is populated and keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, `newConstitution`, `updateCommittee`, `hardForkInitiation`, `noConfidence`, or `info` |
+| `actionData` | object | Action specific data; the object contains exactly one field keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, `newConstitution`, `updateCommittee`, `hardForkInitiation`, `noConfidence`, or `info` |
 | `anchor` | object | Optional `{ "url", "dataHash" }` object that points to off chain metadata |
 
 #### `votingProcedures[]`
@@ -233,7 +233,7 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `certificateType` | string | One of `Registration`, `Update`, `Deregistration` |
 | `drepHash` | string | DRep credential hash in hexadecimal form |
 | `drepId` | string | DRep ID in bech32 form, using `drep1...` or `drep_script1...` |
-| `deposit` | number | Deposit in lovelace; present for registration and deregistration |
+| `deposit` | number | Deposit in lovelace; Adder includes it for registration and deregistration |
 | `anchor` | object | Optional `{ "url", "dataHash" }` metadata |
 
 #### `voteDelegationCertificates[]`
@@ -243,10 +243,10 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `certificateType` | string | One of `VoteDelegation`, `StakeVoteDelegation`, `VoteRegistrationDelegation`, `StakeVoteRegistrationDelegation` |
 | `stakeCredential` | string | Delegating stake credential hash in hexadecimal form |
 | `drepType` | string | One of `KeyHash`, `ScriptHash`, `Abstain`, `NoConfidence` |
-| `drepHash` | string | DRep credential hash in hexadecimal form; present for `KeyHash` and `ScriptHash` |
-| `drepId` | string | DRep ID in bech32 form; present for `KeyHash` and `ScriptHash` |
-| `poolKeyHash` | string | Pool key hash in hexadecimal form; present for the combined stake and vote delegation types |
-| `deposit` | number | Deposit in lovelace; present for the registration delegation types |
+| `drepHash` | string | DRep credential hash in hexadecimal form; Adder includes it for `KeyHash` and `ScriptHash` |
+| `drepId` | string | DRep ID in bech32 form; Adder includes it for `KeyHash` and `ScriptHash` |
+| `poolKeyHash` | string | Pool key hash in hexadecimal form; Adder includes it for the combined stake and vote delegation types |
+| `deposit` | number | Deposit in lovelace; Adder includes it for the registration delegation types |
 
 #### `committeeCertificates[]`
 
@@ -254,8 +254,8 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | --- | --- | --- |
 | `certificateType` | string | `AuthHot` for hot key authorization or `ResignCold` for cold key resignation |
 | `coldCredential` | string | Committee cold credential hash in hexadecimal form |
-| `hotCredential` | string | Committee hot credential hash in hexadecimal form; present for `AuthHot` |
-| `anchor` | object | Optional `{ "url", "dataHash" }`; present for `ResignCold` |
+| `hotCredential` | string | Committee hot credential hash in hexadecimal form; Adder includes it for `AuthHot` |
+| `anchor` | object | Optional `{ "url", "dataHash" }`; Adder includes it for `ResignCold` |
 
 ## Filtering governance events
 
