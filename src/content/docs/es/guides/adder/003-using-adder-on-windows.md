@@ -64,7 +64,7 @@ Los valores de una misma sección funcionan como alternativas. Los controles `OR
 
 En la pantalla `Notifications`, seleccione las categorías de alertas relevantes para los grupos de destino configurados. Seleccione `Notify on connection issues` por separado para recibir alertas sobre problemas de conexión.
 
-Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y `Window duration`. La duración acepta valores como `5s`, `30s` o `1m`. Los campos vacíos usan el valor predeterminado de una notificación cada cinco segundos. Introduzca un límite negativo para desactivar por completo la agrupación de notificaciones.
+Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y `Window duration`. Introduzca una duración como `5s`, `30s` o `1m`. Los campos vacíos usan el valor predeterminado de una notificación cada cinco segundos. Introduzca un límite negativo para desactivar por completo la agrupación de notificaciones.
 
 Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer las opciones disponibles de destinos y notificaciones.
 
