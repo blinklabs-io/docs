@@ -76,7 +76,7 @@ Notificationsステップで`Start Adder automatically on login / reboot`を有�
 
 `Notification Rules...`を選択すると、`Wallets`、`DReps`、`Pools`、`Assets`、`Policies`の監視対象と通知カテゴリを編集できます。`Apply & Restart`を選択すると設定を保存して実行中の通知エンジンを更新します。トレイアプリ自体を再起動する必要はありません。設定の形式、コネクター、通知カテゴリの詳細は[Tray設定リファレンス](../007-tray-configuration-reference)を参照してください。
 
-重複する対象や、異なるイベント種別をまたぐ成立しない`AND`条件は適用できません。`Pools`はブロック、`Wallets`・`Assets`・`Policies`はトランザクション、`DReps`はガバナンスイベントに一致するため、必要に応じて`OR`を選択するか対象を削除します。
+`Notification Rules...`でも、重複する対象や成立しない条件は適用できません。入力を修正してからもう一度`Apply & Restart`を選択します。
 
 `Recent Events`のイベントを選択すると、トランザクションまたはガバナンスイベントではトランザクションハッシュを使ったexplorerのトランザクションページを開き、ブロックイベントではブロックハッシュを使ったブロックページを開きます。リンク先はイベントのネットワークに対応します。
 
@@ -88,7 +88,7 @@ Notificationsステップで`Start Adder automatically on login / reboot`を有�
 
 Windowsのログオンセッションごとに実行できるトレイアプリは1つだけです。2回目の起動がすぐ終了する場合は、既存のAdderトレイが実行中でないか確認します。
 
-`Notification Rules...`で`Apply & Restart`を選択した後に警告が表示されても、設定は保存されています。サービスの再起動またはAdder APIへの再接続が完了しない場合、ルールエディターは開いたまま入力を再び有効にします。状態と`adder-tray.log`を確認し、接続が復旧してから再度`Apply & Restart`を選択します。
+警告が表示されても、設定は保存されています。サービスの再起動またはAdder APIへの再接続が完了しない場合、ルールエディターは開いたまま入力を再び有効にします。状態と`adder-tray.log`を確認し、接続が復旧してから設定を再試行します。
 
 ## ステップ1 - Windowsでコマンドプロンプトを開く
 
