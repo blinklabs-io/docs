@@ -51,12 +51,62 @@ El cliente reemplaza `{token}` en `/v1/fcm/{token}` por el valor del token guard
 
 ### Transmitir eventos
 
-La integración usa `GET /events` para abrir una transmisión de eventos. El servidor actualiza la conexión a WebSocket cuando el cliente solicita ese protocolo; de lo contrario, usa SSE. La ruta acepta estos parámetros de consulta opcionales:
+La integración usa `GET /events` para abrir una transmisión de eventos. El servidor usa WebSocket cuando el cliente solicita una actualización a WebSocket; si no, usa Server-Sent Events (SSE).
 
-- `types`: El cliente proporciona una lista de tipos de eventos y separa sus valores con comas, como `input.block` o `input.transaction`.
-- `replay`: Valor booleano que indica si el servidor reproduce los eventos retenidos recientemente cuando el cliente abre la conexión. La API establece este valor en `true` de forma predeterminada.
+Cada evento llega como un objeto JSON con estos campos:
 
-La ruta devuelve datos de eventos como `text/event-stream` o `application/json`, según el modo de conexión.
+- `type`: tipo del evento, como `input.block` o `input.transaction`.
+- `timestamp`: marca de tiempo del evento.
+- `context`: contexto asociado al evento.
+- `payload`: datos del evento.
+
+Con SSE, el servidor envía cada objeto JSON en un mensaje `data`. Con WebSocket, el servidor envía cada objeto JSON como un mensaje de texto.
+
+#### Parámetros de consulta
+
+- `types`: parámetro opcional que acepta una lista de tipos separada por comas. Por ejemplo, `types=input.block,input.transaction` limita la transmisión a esos tipos. Si se omite, la transmisión incluye todos los tipos de eventos.
+- `replay`: parámetro booleano opcional que usa `true` de forma predeterminada.
+  - `replay=true` envía primero los eventos recientes del búfer que cumplen el filtro `types` y después los eventos nuevos.
+  - `replay=false` omite el contenido anterior del búfer y comienza directamente con los eventos nuevos.
+
+#### Ejemplos de URL
+
+Sustituye `localhost:8080` por el host y el puerto de la API de Adder sin cambiar la ruta `/events`.
+
+SSE con repetición predeterminada:
+
+```text
+http://localhost:8080/events
+```
+
+WebSocket con repetición predeterminada:
+
+```text
+ws://localhost:8080/events
+```
+
+SSE en modo solo en vivo:
+
+```text
+http://localhost:8080/events?replay=false
+```
+
+WebSocket en modo solo en vivo:
+
+```text
+ws://localhost:8080/events?replay=false
+```
+
+Al omitir `replay`, el cliente recibe primero los eventos recientes que coinciden con el filtro y después los eventos nuevos. Los ejemplos con `replay=false` comienzan directamente con los eventos nuevos.
+
+#### Reconexión
+
+Adder Tray aplica una estrategia específica para mantener su transmisión:
+
+1. La primera conexión usa `/events?replay=false` para comenzar con eventos en vivo.
+2. Después de establecer una conexión correctamente, una reconexión usa `/events?replay=true` para recuperar eventos emitidos mientras la bandeja estaba desconectada.
+
+Este patrón pertenece a Adder Tray y no obliga a otros consumidores a usar los mismos valores. Un consumidor que solicite una repetición después de reconectarse debe tolerar eventos repetidos o eventos que ya haya procesado. El flujo no garantiza entrega exactamente una vez ni un orden específico para los eventos repetidos.
 
 ## Reglas de rutas y barras finales
 
