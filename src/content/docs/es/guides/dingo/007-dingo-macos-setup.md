@@ -1,6 +1,6 @@
 ---
 title: Configuración nativa de Dingo en macOS
-description: Ejecuta Dingo en el runtime de contenedores nativo de Apple y valídalo con Adder en macOS.
+description: Ejecuta Dingo en el entorno de contenedores nativo de Apple y valídalo con Adder en macOS.
 ---
 
 # Configuración nativa de Dingo en macOS
@@ -55,7 +55,7 @@ La red `preview` y la bandera `--input-chainsync-intersect-tip=true` establecen 
 
 ## Detener la configuración
 
-Cuando termine la validación, ejecute el helper de detención desde la raíz del repositorio:
+Cuando termine la validación, ejecute el script auxiliar de detención desde la raíz del repositorio:
 
 ```bash
 ./scripts/container-dingo-stop.sh
