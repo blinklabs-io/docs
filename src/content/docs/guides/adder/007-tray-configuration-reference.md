@@ -29,7 +29,7 @@ Set `auto_start` to `true` to start Adder automatically at login or reboot. Set 
 
 The setup wizard is the normal user-facing way to change this value. On the Notifications step, select or clear `Start Adder automatically on login / reboot` and complete the wizard to save the preference.
 
-The tray preference is separate from the engine's `config.yaml`. The tray saves it in `adder-tray.yaml` under the platform tray configuration directory. The complete path is `<ConfigDir>/adder-tray.yaml`. Set `ADDER_TRAY_CONFIG_DIR` to use a different configuration directory.
+The tray preference is separate from the engine's `config.yaml`. The tray saves it in the `adder-tray.yaml` file described above.
 
 ## Background activity status
 
