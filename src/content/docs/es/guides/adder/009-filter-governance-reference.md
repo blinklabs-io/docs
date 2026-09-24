@@ -57,7 +57,7 @@ El nombre abreviado del indicador omite el nombre del plugin. Las variables de e
 
 `--filter-type` pertenece al plugin de filtro `event`, por lo que usa `event` y no `cardano` en su variable de entorno y su clave YAML.
 
-La estructura de configuración utiliza una cadena para cada valor. Para indicar varias alternativas, use una lista separada por comas dentro de esa cadena:
+La estructura de configuración utiliza una cadena para cada valor. Para varias alternativas, la cadena contiene una lista separada por comas:
 
 ```yaml
 plugins:
@@ -77,13 +77,13 @@ Los siguientes ejemplos usan valores de la red como valores de muestra.
 
 #### Tipo de evento
 
-Emita únicamente transacciones:
+Este comando emite únicamente transacciones:
 
 ```bash
 adder --filter-type input.transaction
 ```
 
-Emita transacciones y bloques:
+Este comando emite transacciones y bloques:
 
 ```bash
 adder --filter-type input.transaction,input.block
@@ -91,7 +91,7 @@ adder --filter-type input.transaction,input.block
 
 #### Política de activo
 
-Emita transacciones que incluyan un activo con la política de muestra:
+Este comando emite transacciones que incluyan un activo con la política de muestra:
 
 ```bash
 adder --filter-type input.transaction \
@@ -100,7 +100,7 @@ adder --filter-type input.transaction \
 
 #### Huella digital de activo
 
-Emita transacciones que incluyan el activo de muestra:
+Este comando emite transacciones que incluyan el activo de muestra:
 
 ```bash
 adder --filter-type input.transaction \
@@ -141,14 +141,14 @@ Adder compara ambas clases de dirección con las salidas de la transacción. Tam
 
 #### Pool de stake (SPO)
 
-Emita bloques creados por el pool de muestra. Los IDs de pool aceptan bech32 (`pool1…`) o hexadecimal:
+Este comando emite bloques creados por el pool de muestra. Los IDs de pool aceptan bech32 (`pool1…`) o hexadecimal:
 
 ```bash
 adder --filter-type input.block \
   --filter-pool pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt
 ```
 
-Para varios pools, use una lista separada por comas. Adder aplica `OR` entre los IDs y permite mezclar bech32 con hexadecimal:
+Una lista separada por comas indica varios pools. Adder aplica `OR` entre los IDs y permite mezclar bech32 con hexadecimal:
 
 ```bash
 adder --filter-type input.block \
@@ -157,7 +157,7 @@ adder --filter-type input.block \
 
 #### DRep
 
-Emita eventos de gobernanza relacionados con el DRep de muestra:
+Este comando emite eventos de gobernanza relacionados con el DRep de muestra:
 
 ```bash
 adder --filter-type input.governance \
@@ -169,7 +169,7 @@ adder --filter-type input.governance \
 - **Bech32:** cualquier valor que comience por `drep`, incluidos los prefijos `drep1…` para un hash de clave y `drep_script1…` para un hash de script. Adder decodifica el valor y espera una credencial de 28 bytes. Si el payload decodificado tiene 29 bytes, Adder elimina el byte inicial como encabezado sin inspeccionarlo ni validarlo. Adder ignora los payloads de cualquier otra longitud y descarta silenciosamente ese ID del filtro.
 - **Hexadecimal:** la credencial sin procesar de 28 bytes, expresada como 56 caracteres hexadecimales. Adder no elimina ningún byte inicial del valor hexadecimal; un valor que incluya un byte de encabezado no coincide.
 
-Adder emite los IDs de DRep como bech32 de la credencial sin procesar de 28 bytes: usa el prefijo `drep` para credenciales de hash de clave y `drep_script` para credenciales de hash de script. Un `drepId` emitido por Adder se puede pasar a `--filter-drep` sin cambios.
+Adder emite los IDs de DRep como bech32 de la credencial sin procesar de 28 bytes: usa el prefijo `drep` para credenciales de hash de clave y `drep_script` para credenciales de hash de script. Adder acepta un `drepId` emitido por Adder en `--filter-drep` sin cambios.
 
 ## Evento de gobernanza
 
@@ -275,7 +275,7 @@ Adder aplica tres filtros de Cardano a los eventos `input.governance`. Adder com
   - una dirección de stake (`stake1…`) coincide con `rewardAccount` de una propuesta, las direcciones de destino de retiros de tesorería y la credencial de stake de los certificados de delegación de voto;
   - una dirección de pago (`addr1…`) coincide únicamente con las direcciones de destino de retiros de tesorería. `rewardAccount` y las credenciales de delegación de voto son credenciales de stake y Adder solo las compara con direcciones de stake.
 
-Para seguir la actividad de gobernanza de una cuenta, use su dirección de stake.
+La dirección de stake permite seguir la actividad de gobernanza de una cuenta.
 
 Adder no aplica `--filter-policy` ni `--filter-asset` a los eventos de gobernanza. Un evento `input.governance` pasa sin cambios por esos filtros.
 
