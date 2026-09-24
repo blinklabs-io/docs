@@ -59,24 +59,24 @@ Docker starts the `dingo` service first and then starts `adder` with the shared 
 
 ## Verify the connection
 
-Inspect Adder's logs to confirm the N2C connection and block event output:
+Review Adder's logs to verify the N2C connection and block event output:
 
 ```bash
 docker compose logs adder
 ```
 
-The logs should show Adder connecting through `/ipc/node.socket` and emitting block events. Rollback events also appear when Dingo reports a chain rollback.
+Review the output for Adder connecting through `/ipc/node.socket` and emitting block events. Dingo also reports rollback events when the chain rolls back.
 
-On a clean validation volume, Dingo starts at genesis. Adder therefore intersects at genesis and processes blocks from block 1 as Dingo syncs.
+A clean validation volume starts Dingo at genesis. Adder therefore intersects at genesis and processes blocks from block 1 as Dingo syncs.
 
-After Dingo has synced blocks, restart only Adder to test intersection at the active Dingo tip:
+After Dingo syncs blocks, restart only Adder to test intersection at the active Dingo tip:
 
 ```bash
 docker compose restart adder
 docker compose logs adder
 ```
 
-With `intersect-tip: true`, Adder resumes from the active Dingo tip instead of restarting from block 1.
+The `intersect-tip: true` setting makes Adder resume from the active Dingo tip instead of restarting from block 1.
 
 Search the combined service logs for operational anomalies:
 
@@ -92,4 +92,4 @@ Stop the services and remove the named validation volumes:
 docker compose down -v
 ```
 
-This command removes the `dingo-ipc` and `dingo-data` volumes, so the next stack start begins with clean validation state. Each service uses Docker's `json-file` logging driver with a maximum file size of `5m` and a maximum of two log files.
+This command removes the `dingo-ipc` and `dingo-data` volumes, so the next stack start begins with clean validation state. Docker configures each service with the `json-file` logging driver, a maximum file size of `5m`, and a maximum of two log files.
