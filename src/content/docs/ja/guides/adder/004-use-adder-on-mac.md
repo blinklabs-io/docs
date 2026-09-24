@@ -12,7 +12,7 @@ Adder は、対応する Mac のアーキテクチャごとに、署名済みで
 1. Adder のリリースページを開き、Mac のアーキテクチャに合う macOS の `.pkg` パッケージをダウンロードします。Apple silicon には `arm64`、Intel Mac には `amd64` を選択します。
 2. `.pkg` ファイルをダブルクリックして、インストーラの案内に従います。
 3. インストーラは `Adder.app` を `/Applications` に配置します。`Adder.app` には `adder-tray` GUI と `adder` CLI を同梱します。
-4. インストーラが通常の `/usr/local/bin/adder` 便利リンクを作成した場合は、`ターミナル` で `adder` を実行します。リンクを作成できない場合は、`/Applications/Adder.app/Contents/MacOS/adder` を実行します。インストーラは、別のツールが使用している既存の `/usr/local/bin/adder` リンクを上書きしません。
+4. インストーラが `/usr/local/bin/adder` の利便性リンクを作成した場合は、`ターミナル` で `adder` を実行します。リンクを作成できない場合は、`/Applications/Adder.app/Contents/MacOS/adder` を実行します。インストーラは、別のツールが使用している既存の `/usr/local/bin/adder` リンクを上書きしません。
 
 ## Adder を起動する
 
