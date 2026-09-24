@@ -28,7 +28,7 @@ description: WindowsでAdderを使用する方法。
 - `Assets`: CIP-14 asset fingerprint（`asset1...`）。
 - `Policies`: 56文字の16進数のpolicy ID。
 
-同じ target section に入力した値は代替条件として扱われます。入力済みの target section の間に表示される `OR` と `AND` で、セクション間の条件を選択します。どちらかのセクションに一致すればよい場合は `OR` を選択します。
+Adderは、同じ target section に入力した値を代替条件として扱います。入力済みの target section の間に表示される `OR` と `AND` で、セクション間の条件を選択します。どちらかのセクションに一致すればよい場合は `OR` を選択します。
 
 異なるイベント種別のセクションを `AND` で結合することはできません。`Pools`はブロック、`Wallets`・`Assets`・`Policies`はトランザクション、`DReps`はガバナンスイベントに一致します。異なるイベント種別を結合する `AND` 条件は1つのイベントでは成立しないため、ウィザードが設定を拒否します。その場合は `OR` を選択するか、対象を1つ削除します。
 
@@ -36,7 +36,7 @@ description: WindowsでAdderを使用する方法。
 
 ### 通知カテゴリを選択
 
-Notificationsステップには、設定した target section に関連する通知カテゴリだけが表示されます。表示されたカテゴリから通知するイベントを選択します。複数の target section を設定した場合は、該当するカテゴリがまとめて表示されます。
+Notificationsステップには、ウィザードが設定した target section に関連する通知カテゴリだけを表示します。表示されたカテゴリから通知するイベントを選択します。複数の target section を設定した場合は、ウィザードが該当するカテゴリをまとめて表示します。
 
 - `Wallets`: `Incoming transactions`、`Outgoing transactions`、`Token transfers`
 - `DReps`: `New governance proposals`、`Votes cast`、`Registration changes`
