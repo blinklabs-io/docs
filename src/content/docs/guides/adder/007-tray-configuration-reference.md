@@ -7,7 +7,7 @@ This reference describes the changed Adder Tray settings in `adder-tray.yaml`. T
 
 ## Configuration file location
 
-Adder Tray stores its configuration in `adder-tray.yaml` at the following platform specific path:
+Adder Tray stores its configuration in `adder-tray.yaml` at the following platform-specific path:
 
 | Platform | Configuration path |
 | --- | --- |
@@ -51,7 +51,7 @@ Use these values in the target arrays:
 - `dreps`: DRep identifiers that start with `drep1` or hexadecimal DRep IDs.
 - `pools`: Stake pool identifiers that start with `pool1` or hexadecimal pool IDs.
 - `assets`: CIP-14 asset fingerprints that start with `asset1`.
-- `policies`: 56 character hexadecimal minting policy IDs.
+- `policies`: 56-character hexadecimal minting policy IDs.
 
 ### Match modes
 
