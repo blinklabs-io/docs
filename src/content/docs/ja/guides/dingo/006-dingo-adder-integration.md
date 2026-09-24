@@ -76,7 +76,7 @@ docker compose restart adder
 docker compose logs adder
 ```
 
-`intersect-tip: true`設定により、Adderはblock 1から再開せず、アクティブなDingo tipから処理を再開します。
+`intersect-tip: true`の設定により、Adderはblock 1から再開せず、アクティブなDingo tipから処理を再開します。
 
 すべてのサービスログで運用上の異常を検索します。
 
