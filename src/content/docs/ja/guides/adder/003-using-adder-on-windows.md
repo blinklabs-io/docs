@@ -5,9 +5,17 @@ description: WindowsでAdderを使用する方法。
 
 # WindowsでAdderを使用する
 
-このガイドでは、WindowsでAdderを使用する方法を説明します。以下のセクションでは、Adderの使用例を示します。これらはAdderの機能に慣れるためのサンプルであることを覚えておいてください。Adderの真の力は、あなたの想像力によって解き放たれます。
+このガイドでは、WindowsでAdderをインストールし、トレイアプリを設定して動作を確認する手順を説明します。
 
-> このガイドでは、<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>からAdder exeをダウンロード済みであることを前提としています。exeをダウンロードしていない場合は、[クイックスタート](../002-quick-start-overview)を参照してください
+> Windows x64またはarm64向けのAdder MSIをインストール済みであることを前提とします。単体のexeを使用する場合は、[クイックスタート](../002-quick-start-overview)を参照してください。
+
+## Windows MSIをインストール
+
+1. Windowsのシステムに合うx64またはarm64のAdder MSIを選択します。
+2. MSIを実行してインストールします。MSIはCLIの`adder.exe`とトレイアプリの`adder-tray.exe`を`%ProgramFiles%\Adder`にインストールします。
+3. スタートメニューから`Adder`を選択してトレイアプリを起動します。MSIはトレイアプリのスタートメニューショートカットを作成し、`アプリの追加と削除`にもAdderを表示します。
+
+リリース用MSIは署名されています。ローカルまたはテスト用のMSIは未署名の場合があり、WindowsがSmartScreenまたは不明な発行元の警告を表示することがあります。MSIはScheduled Taskや独立した自動起動を登録しません。ログイン時の自動起動は、トレイウィザードが現在のWindowsユーザーに対して設定します。
 
 ## Adder Trayで監視対象と通知を設定
 
@@ -66,6 +74,22 @@ Notificationsステップで`Start Adder automatically on login / reboot`を有�
 
 システムトレイのAdderを右クリックして`About`を選択すると、アプリ内ウィンドウが開きます。このウィンドウには現在のAdderのバージョンが表示されます。コミットハッシュがある場合は`Version: <version> (commit: <hash>)`形式で表示され、ない場合は`Version: <version>`形式で表示されます。
 
+`Notification Rules...`を選択すると、`Wallets`、`DReps`、`Pools`、`Assets`、`Policies`の監視対象と通知カテゴリを編集できます。`Apply & Restart`を選択すると設定を保存して実行中の通知エンジンを更新します。トレイアプリ自体を再起動する必要はありません。設定の形式、コネクター、通知カテゴリの詳細は[Tray設定リファレンス](../007-tray-configuration-reference)を参照してください。
+
+重複する対象や、異なるイベント種別をまたぐ成立しない`AND`条件は適用できません。`Pools`はブロック、`Wallets`・`Assets`・`Policies`はトランザクション、`DReps`はガバナンスイベントに一致するため、必要に応じて`OR`を選択するか対象を削除します。
+
+`Recent Events`のイベントを選択すると、トランザクションまたはガバナンスイベントではトランザクションハッシュを使ったexplorerのトランザクションページを開き、ブロックイベントではブロックハッシュを使ったブロックページを開きます。リンク先はイベントのネットワークに対応します。
+
+## Windowsでの診断と再試行
+
+トレイメニューの`Show Logs`を選択するとログを確認できます。WindowsのGUIは通常のコンソールを持たないため、起動時または実行時のエラー、panic、グラフィックス初期化エラーを次のファイルに記録します。
+
+`%LOCALAPPDATA%\Adder\Logs\adder-tray.log`
+
+Windowsのログオンセッションごとに実行できるトレイアプリは1つだけです。2回目の起動がすぐ終了する場合は、既存のAdderトレイが実行中でないか確認します。
+
+`Notification Rules...`で`Apply & Restart`を選択した後に警告が表示されても、設定は保存されています。サービスの再起動またはAdder APIへの再接続が完了しない場合、ルールエディターは開いたまま入力を再び有効にします。状態と`adder-tray.log`を確認し、接続が復旧してから再度`Apply & Restart`を選択します。
+
 ## ステップ1 - Windowsでコマンドプロンプトを開く
 
 Adder exeファイルをダウンロードしたので、コマンドラインプロンプトを開く必要があります。ここで後ほど、追跡したいイベントについてAdderにフィルターとコマンドを入力します。
@@ -84,7 +108,7 @@ Adder exeファイルをダウンロードしたので、コマンドライン�
 
 ## ステップ2 - Adder exeのパスを取得
 
-次に、コマンドラインで実行できるように、ダウンロードしたAdder exeファイルのパスを取得する必要があります。
+次に、コマンドラインで実行できるようにAdder exeファイルのパスを取得します。MSIを使用した場合のCLIは`%ProgramFiles%\Adder\adder.exe`です。単体のAdder exeを使用する場合は、ダウンロードしたファイルのパスを取得します。
 
 この例では、Adder exeをデスクトップにダウンロードしたので、Adder exeを右クリックしてパスをコピーできます。
 
