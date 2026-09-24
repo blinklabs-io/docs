@@ -14,7 +14,7 @@ Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te
 1. Descarga el MSI correspondiente a la arquitectura de Windows: `x64` o `arm64`.
 2. Ejecuta el MSI y completa el asistente de instalación.
 
-El MSI de lanzamiento instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. También crea el acceso directo de la bandeja en el menú Inicio y registra Adder en `Aplicaciones y características` o `Agregar o quitar programas`.
+El MSI de lanzamiento firmado instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. También crea el acceso directo de la bandeja en el menú Inicio y registra Adder en `Aplicaciones y características` o `Agregar o quitar programas`.
 
 El MSI no registra una `Tarea programada` ni activa el inicio automático por sí mismo. Los MSI compilados localmente o de prueba pueden carecer de firma, y Windows puede mostrar una advertencia de `SmartScreen` o de editor desconocido.
 
@@ -68,7 +68,7 @@ Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro m
 
 ## Diagnóstico y reintento
 
-La GUI de Windows no tiene una consola normal. El archivo `%LOCALAPPDATA%\Adder\Logs\adder-tray.log` recoge los fallos de inicio o ejecución, incluidos los pánicos y los problemas de gráficos; use `Show Logs` para abrir la carpeta y revisar el archivo.
+La GUI de Windows no tiene una consola normal. El archivo de registro recoge los fallos de inicio o ejecución, incluidos los pánicos y los problemas de gráficos; use `Show Logs` para abrir la carpeta y revisar el archivo.
 
 Adder ejecuta una sola instancia de la bandeja por sesión de inicio de Windows. Si un segundo lanzamiento termina inmediatamente, compruebe si ya existe una instancia de la bandeja en ejecución.
 
