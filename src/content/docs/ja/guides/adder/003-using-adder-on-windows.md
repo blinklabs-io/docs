@@ -17,7 +17,7 @@ description: WindowsでAdderを使用する方法。
 
 次のいずれかの監視モードを選択します。
 
-- `Monitor Everything`を有効にすると、対応するすべてのイベントを監視し、各 target section の値を無視します。
+- `Monitor Everything`を有効にすると、対応するすべてのイベントを監視し、各対象セクションの値を無視します。
 - `Monitor Everything`を無効にする場合は、`Wallets`、`DReps`、`Pools`、`Assets`、または `Policies`の対応するセクションに、少なくとも1つの有効な値を入力します。
 
 各セクションには、次の形式の値を入力します。
@@ -28,15 +28,15 @@ description: WindowsでAdderを使用する方法。
 - `Assets`: CIP-14 asset fingerprint（`asset1...`）。
 - `Policies`: 56文字の16進数のpolicy ID。
 
-Adderは、同じ target section に入力した値を代替条件として扱います。入力済みの target section の間に表示される `OR` と `AND` で、セクション間の条件を選択します。どちらかのセクションに一致すればよい場合は `OR` を選択します。
+Adderは、同じ対象セクションに入力した値を代替条件として扱います。入力済みの対象セクションの間に表示される `OR` と `AND` で、セクション間の条件を選択します。どちらかのセクションに一致すればよい場合は `OR` を選択します。
 
-異なるイベント種別のセクションを `AND` で結合することはできません。`Pools`はブロック、`Wallets`・`Assets`・`Policies`はトランザクション、`DReps`はガバナンスイベントに一致します。異なるイベント種別を結合する `AND` 条件は1つのイベントでは成立しないため、ウィザードが設定を拒否します。その場合は `OR` を選択するか、対象を1つ削除します。
+異なるイベント種別のセクションを `AND` で結合しないでください。`Pools`はブロック、`Wallets`・`Assets`・`Policies`はトランザクション、`DReps`はガバナンスイベントに一致します。異なるイベント種別を結合する `AND` 条件は1つのイベントでは成立しないため、ウィザードが設定を拒否します。その場合は `OR` を選択するか、対象を1つ削除します。
 
 詳細は[Tray設定リファレンス](../007-tray-configuration-reference)を参照してください。
 
 ### 通知カテゴリを選択
 
-Notificationsステップには、ウィザードが設定した target section に関連する通知カテゴリだけを表示します。表示されたカテゴリから通知するイベントを選択します。複数の target section を設定した場合は、ウィザードが該当するカテゴリをまとめて表示します。
+Notificationsステップには、ウィザードが設定した対象セクションに関連する通知カテゴリだけを表示します。表示されたカテゴリから通知するイベントを選択します。複数の対象セクションを設定した場合は、ウィザードが該当するカテゴリをまとめて表示します。
 
 - `Wallets`: `Incoming transactions`、`Outgoing transactions`、`Token transfers`
 - `DReps`: `New governance proposals`、`Votes cast`、`Registration changes`
