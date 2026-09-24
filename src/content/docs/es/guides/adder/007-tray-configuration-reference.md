@@ -1,9 +1,9 @@
 ---
-title: Referencia de configuración de Tray
-description: Configure los objetivos, las notificaciones y la migración desde la configuración de filtros heredada de Adder Tray.
+title: Referencia de configuración de la bandeja
+description: Configure los objetivos y las preferencias de notificación de Adder en la bandeja de Windows.
 ---
 
-Esta referencia describe los cambios de configuración de Adder Tray en `adder-tray.yaml`. Tray usa la sección `filter` para encontrar los objetivos de las notificaciones; el motor ya no proporciona las listas de objetivos de Tray.
+Esta referencia describe la configuración de los objetivos y las preferencias de notificación de Adder, tanto durante la configuración inicial como al editar las reglas desde la bandeja. También documenta los valores persistidos en `adder-tray.yaml` y la migración desde la configuración de filtros heredada.
 
 ## Ubicación del archivo de configuración
 
@@ -38,6 +38,35 @@ Con `auto_start: true`, Windows registra Adder Tray para el usuario actual media
 ### macOS
 
 Con `auto_start: true`, macOS configura el `LaunchAgent` de Adder para cargarlo y mantenerlo activo al iniciar la sesión, y agrega la aplicación a `Login Items`. Con `auto_start: false`, macOS desactiva la carga automática del agente y quita la aplicación de `Login Items`.
+
+## Editor `Notification Rules...`
+
+Durante la configuración inicial, el asistente presenta las secciones de objetivos y las preferencias de notificación. Para editar una configuración existente, abra el menú contextual de Adder desde el icono de la bandeja y seleccione `Notification Rules...`.
+
+El editor trabaja con una copia de la configuración actual. Use `Apply & Restart` para validar y guardar los cambios, o `Cancel` para cerrar el editor y descartar los cambios no guardados.
+
+### Modos de monitoreo
+
+El editor ofrece dos modos:
+
+- `Monitor Everything (ignore per-target lists)` activa el monitoreo general e ignora los valores de `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`.
+- La configuración estándar desactiva `Monitor Everything` y usa uno o más objetivos de esas secciones.
+
+Cuando `Monitor Everything` está activo, Adder no usa las listas de objetivos. Cuando está desactivado, la configuración estándar limita las alertas a los objetivos y preferencias seleccionados.
+
+### Entrada y validación de objetivos
+
+El editor valida cada valor según su sección. Una entrada inválida muestra un error junto a la sección y no agrega el valor. Los formatos aceptados son los descritos en [Filtros de objetivos](#filtros-de-objetivos):
+
+- `Wallets`: dirección de pago o de participación que comience por `addr...` o `stake...`.
+- `DReps`: ID en bech32 con prefijo `drep1...` o valor hexadecimal.
+- `Pools`: ID en bech32 con prefijo `pool1...` o valor hexadecimal.
+- `Assets`: huella de activo CIP-14 con prefijo `asset1...`.
+- `Policies`: ID hexadecimal de exactamente 56 caracteres.
+
+Una entrada separada por comas crea varias filas. Adder recorta los espacios de cada valor, omite los elementos vacíos y rechaza los duplicados sin distinguir mayúsculas de minúsculas. Si una parte de una entrada múltiple es inválida o duplicada, el editor no agrega ninguna parte de esa entrada.
+
+El botón de eliminar de cada fila solicita confirmación en `Notification Rules...`. El asistente de configuración inicial elimina la fila directamente.
 
 ## Filtros de objetivos
 
@@ -79,7 +108,7 @@ Use estos valores en las listas de objetivos:
 
 Configure `drep_match`, `pool_match`, `asset_match` y `policy_match` como `any` o `all`. Un campo de coincidencia omitido usa `any` de forma predeterminada.
 
-Cada lista de objetivos coincide con cualquiera de sus valores. Un campo de coincidencia conecta su grupo de objetivos, cuando contiene valores, con el grupo anterior:
+Cada lista de objetivos coincide con cualquiera de sus valores mediante `OR`. Un campo de coincidencia conecta su grupo de objetivos, cuando contiene valores, con el grupo anterior:
 
 - `any` conecta los grupos con `OR`.
 - `all` conecta los grupos con `AND`.
@@ -94,6 +123,8 @@ filter:
 ```
 
 Cuando `drep_match` cambia a `all`, un evento debe coincidir con el grupo de billeteras y el grupo de DRep. Los valores dentro de cada grupo siguen usando `OR`, por lo que la expresión adopta la forma `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` cuando ambos grupos contienen varios valores. El primer grupo con valores no tiene un grupo anterior, por lo que su campo de coincidencia no tiene efecto. Adder Tray no admite un campo `wallet_match`.
+
+El editor muestra los conectores `AND` y `OR` entre grupos poblados. Las wallets, los assets y las policies coinciden con transacciones; los pools coinciden con bloques cuyo issuer corresponde al pool seguido; y los DReps coinciden con eventos de gobernanza. Una expresión `AND` que une familias incompatibles no puede coincidir con ningún evento, por lo que el editor la rechaza antes de aplicar los cambios. Use `OR` o elimine uno de los grupos.
 
 ## Preferencias de notificación
 
@@ -115,15 +146,39 @@ notify_prefs:
   "Connection issues": true
 ```
 
-El asistente de configuración muestra las categorías que corresponden a los objetivos seleccionados:
+El editor muestra cada categoría y cada casilla controla la regla correspondiente para todos los objetivos configurados:
 
-- `wallets` muestra `Incoming transactions`, `Outgoing transactions` y `Token transfers`.
-- `dreps` muestra `New governance proposals`, `Votes cast` y `Registration changes`.
-- `pools` muestra `Blocks minted`, `Pool parameter changes` y `Chain rollbacks`.
-- `assets` muestra `Asset activity`.
-- `policies` muestra `Policy activity`.
-- `monitor_everything: true` muestra `Incoming transactions`, `Blocks minted`, `Chain rollbacks` y `Votes cast`.
-- `Connection issues` permanece disponible como preferencia del estado de conexión.
+- `Incoming transactions`: transacciones entrantes para wallets seguidas.
+- `Outgoing transactions`: transacciones salientes para wallets seguidas cuando Adder puede resolver sus entradas.
+- `Token transfers`: transferencias de tokens que involucran una wallet seguida.
+- `Blocks minted`: bloques emitidos por pools seguidos en la configuración estándar. En `Monitor Everything`, controla las alertas generales de bloques.
+- `Chain rollbacks`: alertas de reorganizaciones o rollbacks de la cadena, independientemente de una identidad seguida.
+- `Pool parameter changes`: opción visible, pero Adder no emite actualmente una notificación funcional de cambios de parámetros de pool. Activarla no garantiza una alerta de ese tipo.
+- `New governance proposals`: alertas generales de propuestas de gobernanza. Una propuesta no pertenece a un DRep concreto.
+- `Votes cast`: votos de los DReps seguidos cuando coincide el ID o el hash del votante.
+- `Registration changes`: cambios de registro de los DReps seguidos cuando coincide el ID o el hash del DRep.
+- `Asset activity`: actividad de los assets seguidos.
+- `Policy activity`: actividad asociada con las policies seguidas.
+- `Connection issues`: alertas del estado de conexión. Esta categoría funciona de forma independiente y requiere activación propia.
+
+Los DReps y pools no seguidos no activan las alertas de identidad de los DReps y pools seguidos. Las propuestas son alertas generales de gobernanza, mientras que los bloques de la configuración estándar quedan limitados al issuer de un pool seguido.
+
+## Aplicar, cancelar y resolver problemas
+
+`Apply & Restart` valida la expresión completa, guarda la configuración y actualiza las reglas y el límite de notificaciones del motor activo. Adder puede reiniciar o reconectar el servicio subyacente, pero no exige cerrar y volver a abrir el proceso de la bandeja. El editor deshabilita los controles durante la aplicación y se cierra cuando la operación termina correctamente.
+
+`Cancel` descarta la copia de trabajo y conserva la configuración aplicada anteriormente. No guarda los objetivos, conectores ni preferencias modificados durante la sesión del editor.
+
+Una advertencia posterior a `Apply & Restart` indica un fallo no fatal después de guardar la configuración. La advertencia identifica si Adder no encuentra el binario, no puede registrar o reiniciar el servicio, o no puede alcanzar la API durante la reconexión. Los controles vuelven a habilitarse y permiten reintentar `Apply & Restart`. La configuración ya guardada no vuelve atrás por este tipo de fallo.
+
+## Recent Events
+
+`Recent Events` muestra los eventos recientes de la bandeja y usa la red asociada con cada evento al construir sus enlaces:
+
+- las transacciones y las acciones de gobernanza abren transacciones mediante su transaction hash;
+- los bloques abren bloques mediante su block hash.
+
+De este modo, un evento recibido de una red distinta conserva la red correcta al abrirse en el explorador.
 
 ## Agrupación de notificaciones
 
