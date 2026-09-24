@@ -16,7 +16,7 @@ The validation stack contains two services:
 - `dingo` runs `ghcr.io/blinklabs-io/dingo:0.70.9`, syncs the Cardano `preview` network through Node-to-Node (NtN) communication, and creates `/ipc/node.socket`.
 - `adder` reads `config-preview.yaml`, connects to Dingo through the Node-to-Client (N2C) protocol, and writes block and rollback events to its logs.
 
-Docker Compose mounts the named `dingo-ipc` volume at `/ipc` in both containers. This shared volume makes `/ipc/node.socket` available to Adder. The `dingo-data` volume stores Dingo data between container restarts.
+Docker Compose mounts the named `dingo-ipc` volume at `/ipc` in both containers and mounts `dingo-data` at `/data` in Dingo. The shared `dingo-ipc` volume makes `/ipc/node.socket` available to Adder, while `dingo-data` stores Dingo data between container restarts.
 
 ## Prerequisites
 
@@ -45,7 +45,7 @@ plugins:
       delay-confirmations: 0
 ```
 
-The Compose definition mounts `dingo-ipc` at `/ipc` for both services, mounts `dingo-data` at `/data` for Dingo, and supplies `config-preview.yaml` to Adder at `/config/config-preview.yaml`.
+For Adder, Compose supplies `config-preview.yaml` at `/config/config-preview.yaml`.
 
 ## Start the validation stack
 
