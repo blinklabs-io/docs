@@ -22,11 +22,11 @@ description: Lista de Comandos de Adder.
 
 ## Filtro:
 
-Consulta la [referencia de filtros y gobernanza](../009-filter-governance-reference) para ver ejemplos y el esquema detallado.
+La [referencia de filtros y gobernanza](../009-filter-governance-reference) incluye ejemplos y el esquema detallado.
 
 Los indicadores de filtro aceptan varios valores separados por comas. Adder recorta los espacios de cada valor e ignora los elementos vacíos. Dentro de un mismo indicador, los valores funcionan como alternativas: el evento debe coincidir con al menos uno. Adder combina los filtros de tipos distintos con `AND`, por lo que el evento debe cumplir todos los filtros configurados. La excepción combina `--filter-pool` y `--filter-drep` con `OR`: basta que el evento coincida con el pool o con el DRep. Adder aplica los demás filtros configurados con `AND` a esa combinación.
 
-Usa la forma larga con dos guiones, como `--filter-type`. Adder interpreta la forma con un solo guion, como `-filter-type`, como un grupo de indicadores abreviados y la rechaza.
+La configuración debe usar la forma larga con dos guiones, como `--filter-type`. Adder interpreta la forma con un solo guion, como `-filter-type`, como un grupo de indicadores abreviados y la rechaza.
 
 ### Aplicabilidad de los filtros
 
@@ -43,7 +43,7 @@ Un filtro no afecta los tipos de evento a los que no se aplica. Por ejemplo, `--
 
 ### Indicadores, variables de entorno y claves YAML
 
-Los indicadores omiten el nombre del plugin, pero las variables de entorno y las claves YAML conservan el tipo y el nombre del plugin. Usa los nombres exactos de la tabla; `FILTER_ADDRESS` y `plugins.filter.address`, entre otros nombres abreviados, no configuran estos plugins.
+Los indicadores omiten el nombre del plugin, pero las variables de entorno y las claves YAML conservan el tipo y el nombre del plugin. La configuración debe usar los nombres exactos de la tabla; `FILTER_ADDRESS` y `plugins.filter.address`, entre otros nombres abreviados, no configuran estos plugins.
 
 | Indicador | Variable de entorno | Clave YAML |
 | --- | --- | --- |
