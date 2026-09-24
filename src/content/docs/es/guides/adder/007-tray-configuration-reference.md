@@ -3,7 +3,7 @@ title: Referencia de configuración de Tray
 description: Configure los objetivos, las notificaciones y la migración desde la configuración de filtros heredada de Adder Tray.
 ---
 
-Esta referencia describe la configuración modificada de Adder Tray en `adder-tray.yaml`. Tray usa la sección `filter` para encontrar los objetivos de las notificaciones; la configuración del motor ya no proporciona las listas de objetivos de Tray.
+Esta referencia describe los cambios de configuración de Adder Tray en `adder-tray.yaml`. Tray usa la sección `filter` para encontrar los objetivos de las notificaciones; el motor ya no proporciona las listas de objetivos de Tray.
 
 ## Ubicación del archivo de configuración
 
@@ -19,7 +19,7 @@ Configure `ADDER_TRAY_CONFIG_DIR` para cambiar el directorio que contiene `adder
 
 ## Filtros de objetivos
 
-El siguiente ejemplo usa matrices de objetivos explícitos:
+Este ejemplo usa listas de objetivos explícitos:
 
 ```yaml
 filter:
@@ -43,9 +43,9 @@ filter:
   policy_match: any
 ```
 
-Configure `filter.monitor_everything` como `true` para supervisar todos los tipos de eventos compatibles. Esta configuración ignora todas las matrices de objetivos. Configúrela como `false` para encontrar objetivos seleccionados; en ese caso, debe aparecer al menos un objetivo en `wallets`, `dreps`, `pools`, `assets` o `policies`.
+Configure `filter.monitor_everything` como `true` para supervisar todos los tipos de eventos compatibles. Esta configuración ignora todas las listas de objetivos. Configure el valor como `false` para encontrar objetivos seleccionados; en ese caso, incluya al menos un objetivo en `wallets`, `dreps`, `pools`, `assets` o `policies`.
 
-Use estos valores en las matrices de objetivos:
+Use estos valores en las listas de objetivos:
 
 - `wallets`: direcciones de pago o de participación de Cardano que comienzan por `addr1` o `stake1`.
 - `dreps`: identificadores de DRep que comienzan por `drep1` o identificadores de DRep hexadecimales.
@@ -55,7 +55,7 @@ Use estos valores en las matrices de objetivos:
 
 ### Modos de coincidencia
 
-Configure `drep_match`, `pool_match`, `asset_match` y `policy_match` como `any` o `all`. Si se omite un campo de coincidencia, se resuelve como `any`.
+Configure `drep_match`, `pool_match`, `asset_match` y `policy_match` como `any` o `all`. Un campo de coincidencia omitido usa `any` de forma predeterminada.
 
 Cada matriz de objetivos coincide con cualquiera de sus valores. Un campo de coincidencia conecta su grupo de objetivos, cuando contiene valores, con el grupo anterior:
 
@@ -71,7 +71,7 @@ filter:
   drep_match: any
 ```
 
-Cuando `drep_match` cambia a `all`, un evento debe coincidir con el grupo de billeteras y el grupo de DRep. Los valores dentro de cada grupo siguen usando `OR`, por lo que la expresión se convierte en `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` cuando ambos grupos contienen varios valores. El primer grupo con valores no tiene un grupo anterior, por lo que su campo de coincidencia no tiene efecto. Adder Tray no admite un campo `wallet_match`.
+Cuando `drep_match` cambia a `all`, un evento debe coincidir con el grupo de billeteras y el grupo de DRep. Los valores dentro de cada grupo siguen usando `OR`, por lo que la expresión adopta la forma `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` cuando ambos grupos contienen varios valores. El primer grupo con valores no tiene un grupo anterior, por lo que su campo de coincidencia no tiene efecto. Adder Tray no admite un campo `wallet_match`.
 
 ## Preferencias de notificación
 
@@ -105,7 +105,7 @@ El asistente de configuración muestra las categorías que corresponden a los ob
 
 ## Agrupación de notificaciones
 
-`notify_rate_limit` establece el número máximo de notificaciones que pueden emitirse durante `notify_rate_window`. Los eventos adicionales que coincidan se combinan en una notificación al final de la ventana.
+`notify_rate_limit` establece el número máximo de notificaciones que Tray puede emitir durante `notify_rate_window`. Tray combina los eventos adicionales que coinciden en una notificación al final de la ventana.
 
 - Omita ambos campos o establezca cualquiera de ellos en `0` para usar una notificación cada cinco segundos.
 - Establezca `notify_rate_limit` en un número negativo para desactivar la agrupación y emitir de inmediato cada evento coincidente.
@@ -121,7 +121,7 @@ notify_rate_window: 5s
 
 ## Migración desde la configuración de filtros heredada
 
-Las configuraciones antiguas almacenaban los valores de objetivos de Tray en `plugins.filter.cardano`, dentro de la configuración del motor. Durante la actualización, Adder Tray importa esos valores solo cuando el nuevo `filter` de Tray no contiene una configuración de supervisión completa ni valores de objetivos. Los valores separados por comas se convierten en entradas de las matrices de objetivos correspondientes.
+Las configuraciones antiguas almacenaban los valores de objetivos de Tray en `plugins.filter.cardano`, dentro de la configuración del motor. Durante la actualización, Adder Tray importa esos valores solo cuando el nuevo `filter` de Tray no contiene una configuración de supervisión completa ni valores de objetivos. Adder Tray convierte los valores separados por comas en entradas de las listas de objetivos correspondientes.
 
 ### Antes de la migración
 
