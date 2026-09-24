@@ -71,7 +71,7 @@ filter:
   drep_match: any
 ```
 
-Changing `drep_match` to `all` requires an event to match the wallet group and the DRep group. Values inside each group still use `OR`, so the expression becomes `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` when both groups contain multiple values. The first populated group has no preceding group, so its match field has no effect. Adder Tray does not support a `wallet_match` field.
+When `drep_match` changes to `all`, an event must match the wallet group and the DRep group. Values inside each group still use `OR`, so the expression becomes `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` when both groups contain multiple values. The first populated group has no preceding group, so its match field has no effect. Adder Tray does not support a `wallet_match` field.
 
 ## Notification preferences
 
@@ -158,4 +158,4 @@ filter:
     - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ```
 
-When Adder Tray saves the new configuration, it removes the legacy `address`, `drep`, `pool`, `asset`, and `policy` keys from the engine configuration. Hand editing those legacy engine values afterward does not change tray notification matching. This migration affects tray matching only; it does not remove CLI filter options.
+When Adder Tray saves the new configuration, it removes the legacy `address`, `drep`, `pool`, `asset`, and `policy` keys from the engine configuration. Manual edits to those legacy engine values afterward do not change tray notification matching. This migration affects tray matching only; it does not remove CLI filter options.
