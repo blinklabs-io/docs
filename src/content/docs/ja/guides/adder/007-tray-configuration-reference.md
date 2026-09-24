@@ -1,9 +1,15 @@
 ---
-title: Tray 設定リファレンス
-description: Adder Tray のターゲット、通知、および従来のフィルター設定からの移行を構成します。
+title: Adder トレイ設定リファレンス
+description: Adder のトレイで監視対象と通知ルールを編集する方法。
 ---
 
 このリファレンスでは、`adder-tray.yaml` の Adder Tray 設定について説明します。Tray は `filter` セクションを使用して通知ターゲットを照合します。エンジン設定は Tray のターゲットリストを提供しません。
+
+## 通知ルールエディターを開く
+
+初回設定では、`Configure` からセットアップウィザードを開き、監視対象と通知カテゴリを設定します。セットアップ完了後、または後から設定を変更する場合は、Windows のシステムトレイで Adder を右クリックし、`Notification Rules...` を選択します。
+
+`Notification Rules` エディターでは、`Wallets`、`DReps`、`Pools`、`Assets`、`Policies` の対象リストと通知カテゴリを同じ画面で編集できます。初回設定と後続編集では同じ対象形式とマッチング規則を使用します。
 
 ## 設定ファイルの場所
 
@@ -91,6 +97,10 @@ filter:
 - `assets`: `asset1` で始まる CIP-14 アセットフィンガープリント。
 - `policies`: 56文字の16進数ミンティングポリシー ID。
 
+エディターの入力欄にカンマ区切りで複数の値を入力すると、Adder は各値を別の対象として追加します。各値の前後の空白を削除し、空の要素を無視します。不正な値が1つでも含まれる場合はインラインエラーを表示し、その入力から対象を追加しません。
+
+同じグループ内の重複は、大文字と小文字を区別せず拒否します。既存の対象との重複だけでなく、同じ入力欄にまとめて入力した値同士の重複も対象です。追加済みの行を削除する場合は、削除ボタンを選択し、確認ダイアログで削除を確定します。
+
 ### マッチモード
 
 `drep_match`、`pool_match`、`asset_match`、`policy_match` には `any` または `all` を設定します。マッチフィールドを省略すると `any` として解決されます。
@@ -110,6 +120,10 @@ filter:
 ```
 
 `drep_match` を `all` に変更すると、イベントはウォレットグループと DRep グループの両方に一致する必要があります。各グループ内では引き続き `OR` を使用するため、両方のグループに複数の値がある場合、式は `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` になります。最初に値が指定されたグループには直前のグループがないため、そのマッチフィールドは効果を持ちません。Adder Tray は `wallet_match` フィールドをサポートしません。
+
+`Notification Rules` エディターでは、値が入力されたグループの間に `AND` または `OR` コネクターを表示します。同じグループの値は常に `OR` で結合されます。`OR` はいずれかのグループへの一致を、`AND` は結合したグループの条件を同じイベントに要求します。
+
+`Pools` はブロック、`Wallets`・`Assets`・`Policies` はトランザクション、`DReps` はガバナンスのイベントファミリーに対応します。異なるイベントファミリーを `AND` で結び、どのイベントも満たせない式を作ると、エディターは適用前の検証で設定を拒否します。`OR` を選択するか、対象グループのいずれかを削除してください。
 
 ## 通知設定
 
@@ -131,15 +145,20 @@ notify_prefs:
   "Connection issues": true
 ```
 
-セットアップウィザードは、選択したターゲットに該当するカテゴリを表示します。
+`Notification Rules` エディターの各チェックボックスは、設定済みの対象に対する対応する通知ルールを有効または無効にします。通知カテゴリと現在の対象範囲は次のとおりです。
 
-- `wallets` は `Incoming transactions`、`Outgoing transactions`、`Token transfers` を表示します。
-- `dreps` は `New governance proposals`、`Votes cast`、`Registration changes` を表示します。
-- `pools` は `Blocks minted`、`Pool parameter changes`、`Chain rollbacks` を表示します。
-- `assets` は `Asset activity` を表示します。
-- `policies` は `Policy activity` を表示します。
-- `monitor_everything: true` は `Incoming transactions`、`Blocks minted`、`Chain rollbacks`、`Votes cast` を表示します。
-- `Connection issues` は接続状態の設定として常に使用できます。
+- `Incoming transactions`、`Outgoing transactions`、`Token transfers`: 追跡したウォレットに関係するトランザクション。
+- `Blocks minted`: 追跡したプールがブロックの issuer である場合のブロック通知。
+- `Chain rollbacks`: チェーンのロールバック通知。
+- `New governance proposals`: 特定の DRep に限定されない一般的なガバナンス提案通知。
+- `Votes cast`、`Registration changes`: 追跡した DRep に関係するガバナンス通知。
+- `Asset activity`: 追跡した asset fingerprint に関係するトランザクション。
+- `Policy activity`: 追跡した policy ID に関係するトランザクション。
+- `Connection issues`: 対象イベントとは別の接続状態通知。必要な場合は別に有効化します。
+
+追跡していない DRep やプールの活動は、追跡対象に対する通知になりません。`Monitor Everything (ignore per-target lists)` を有効にすると対象リストを無視し、対象に依存しないイベント通知を使用します。
+
+UI に `Pool parameter changes` が表示される場合でも、Adder は現在プールパラメーター変更イベントを生成しません。このチェックボックスを有効にしても、プールパラメーター変更の通知は生成されません。
 
 ## 通知の集約
 
@@ -156,6 +175,30 @@ notify_prefs:
 notify_rate_limit: 1
 notify_rate_window: 5s
 ```
+
+## 適用とキャンセル
+
+`Apply & Restart` を選択すると、Adder は監視対象、通知カテゴリ、通知レート制限を保存し、保存したルールとレート制限を実行中の監視エンジンに適用します。監視エンジンの再接続または再起動は行いますが、トレイプロセス自体の再起動は必要ありません。適用前に入力値の形式とマッチング式全体を検証します。
+
+`Cancel` を選択すると、エディターを開いてから行った未保存の変更を破棄します。保存済みの設定と実行中の監視エンジンは変更しません。
+
+## 適用時の警告
+
+設定を保存した後に、Adder バイナリの検出、サービスの再起動、または Adder API への再接続で問題が発生する場合があります。この場合、Adder は設定を保存したまま警告を表示し、設定を自動的に元に戻しません。`Notification Rules` エディターは開いたまま入力を再び有効にするため、問題を確認した後に `Apply & Restart` を再試行できます。
+
+## Recent Events のリンク
+
+トレイメニューの `Recent Events` からイベントを選択すると、イベントのネットワークを使用した explorer ページを開きます。トランザクションとガバナンスのイベントは transaction explorer を、ブロックのイベントは block explorer を開きます。
+
+## トラブルシューティング
+
+### 成立しない条件のエラー
+
+異なるイベントファミリーを結ぶ `AND` を確認します。`Pools` と `Wallets`、`DReps` と `Pools` などを同じイベントに要求する場合は `OR` に変更するか、対象グループのいずれかを削除します。
+
+### 適用後の警告
+
+設定が保存されていることを前提に、警告に示されたバイナリ、サービス、または API の問題を確認します。入力は再び有効になっているため、問題を解消した後に `Apply & Restart` を再試行できます。
 
 ## 従来のフィルター設定からの移行
 
