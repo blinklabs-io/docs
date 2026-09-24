@@ -74,7 +74,7 @@ Ejecuta el script de desinstalación desde una copia local del código fuente de
 ./scripts/bundle-macos-uninstall.sh
 ```
 
-El script detiene los procesos de Adder, elimina Adder de los elementos de inicio de sesión, descarga y elimina el agente de lanzamiento, elimina los paquetes de aplicación de Adder y limpia los artefactos de compilación locales. De forma predeterminada, conserva la configuración y los registros.
+El script detiene los procesos de Adder, elimina Adder de los elementos de inicio de sesión, descarga y elimina el agente de lanzamiento, elimina los paquetes de aplicación de Adder y limpia los archivos generados durante la compilación. De forma predeterminada, conserva la configuración y los registros.
 
 Para eliminar también la configuración y los registros, usa `--purge`, `--all` o `-a`:
 
