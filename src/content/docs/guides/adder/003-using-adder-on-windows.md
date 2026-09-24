@@ -32,9 +32,9 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
 
 Release MSIs carry a valid signature and install both `adder.exe` (the command line tool) and `adder-tray.exe` (the tray application) under `%ProgramFiles%\Adder`. The installer creates an `Adder` shortcut in the Windows Start Menu and adds Adder to Windows **Apps & Features** or **Add/Remove Programs**.
 
-The MSI does not register a Scheduled Task or independently enable automatic startup. The tray setup wizard owns the per-user startup setting described in [Step 4](#step-4---startup-and-background-activity).
+The MSI does not register a Scheduled Task or independently enable automatic startup. The tray setup wizard owns startup for the current Windows user, as described in [Step 4](#step-4---startup-and-background-activity).
 
-Locally built or test MSIs may be unsigned, so Windows SmartScreen or a warning that identifies the publisher as unknown may appear when they launch.
+Locally built or test MSIs may be unsigned, so Windows SmartScreen or a warning that the publisher is unknown may appear when they launch.
 
 ***
 
@@ -179,9 +179,9 @@ Select `About` to open an in-app dialog that shows the running Adder version. If
 
 ## Troubleshooting
 
-### Windows GUI startup or runtime failures
+### The Windows app fails to start or run
 
-The Windows GUI has no normal console, so it records startup failures and failures while running in `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`. This includes panic information and graphics initialization failures. Open the log folder with `Show Logs` and review the file before retrying the operation.
+The Windows GUI has no normal console, so it records startup failures and failures while running in the log file. This includes panic details and graphics initialization failures. Review the file before retrying the operation.
 
 ### A second tray launch exits immediately
 
@@ -189,7 +189,7 @@ Windows runs only one Adder tray instance per logon session. If a second launch 
 
 ### Applying notification rules shows a warning
 
-When a restart or reconnection cannot complete immediately, Adder saves the configuration, keeps the Notification Rules editor open, and re-enables its controls. Check the tray status and the log file, then select `Apply & Restart` again.
+When a restart or reconnection cannot complete immediately, Adder saves the configuration, keeps the Notification Rules editor open, and enables its controls again. Check the tray status and the log file, then select `Apply & Restart` again.
 
 
 ---
