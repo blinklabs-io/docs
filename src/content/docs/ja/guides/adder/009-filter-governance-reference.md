@@ -22,7 +22,7 @@ Adder は次のフィルターを提供します。
 | `--filter-pool` | stake pool（SPO）ID | `input.block`、`input.transaction`、`input.governance` |
 | `--filter-drep` | DRep ID（hex または bech32） | `input.transaction`、`input.governance` |
 
-フィルターが適用対象にしないイベントは、そのフィルターによる影響を受けずに通過します。たとえば、`input.block` は `--filter-policy` で除外されず、`input.governance` は `--filter-asset` で除外されません。
+Adder は、フィルターの適用対象外のイベントをそのフィルターで除外しません。たとえば、`input.block` は `--filter-policy` で除外されず、`input.governance` は `--filter-asset` で除外されません。
 
 長いフラグには二重ハイフンを使います。`--filter-type` のような長いフラグに単一ハイフンを付けた `-filter-type` を指定すると、Adder はそれを短いフラグの集合として解釈し、受け付けません。
 
@@ -91,7 +91,7 @@ adder --filter-type input.transaction \
   --filter-address addr1qyht4ja0zcn45qvyx477qlyp6j5ftu5ng0prt9608dxp6l2j2c79gy9l76sdg0xwhd7r0c0kna0tycz4y5s6mlenh8pq4jxtdy
 ```
 
-stake address を指定すると、その stake credential で構成されたアドレスと、トランザクション内の stake certificate に一致します。payment address は指定したアドレスだけに一致します。どちらもトランザクションの出力と、Kupo で解決した入力を照合します。入力の送金元を照合するには `KUPO_URL` を設定します。
+Adder は、stake address をその stake credential で構成されたアドレスと、トランザクション内の stake certificate に対して照合します。Adder は payment address を指定したアドレスだけに対して照合します。Adder はどちらもトランザクションの出力と、Kupo で解決した入力に対して照合します。入力の送金元を照合するには `KUPO_URL` を設定します。
 
 ```bash
 adder --filter-type input.transaction \
