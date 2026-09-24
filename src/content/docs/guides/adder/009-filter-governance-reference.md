@@ -9,7 +9,7 @@ This reference describes Adder filter matching, configuration names, accepted DR
 
 ## Filter behavior
 
-Each filter accepts a comma separated list of values. Adder trims whitespace around each value and ignores empty entries. Values within one filter use OR semantics: an event matches when it contains any listed value.
+Each filter accepts a comma-separated list of values. Adder trims whitespace around each value and ignores empty entries. Values within one filter use OR semantics: an event matches when it contains any listed value.
 
 Different filter kinds use AND semantics. An event must satisfy every configured filter that applies to its event type. The exception combines `--filter-pool` and `--filter-drep` with OR semantics: an event passes when it matches either the configured pool or the configured DRep. Any other configured filters still apply with AND semantics.
 
@@ -21,7 +21,7 @@ Different filter kinds use AND semantics. An event must satisfy every configured
 
 | Flag | Matches | Applies to event types |
 | --- | --- | --- |
-| `--filter-type` | Top level event type | All event types |
+| `--filter-type` | Top-level event type | All event types |
 | `--filter-address` | Payment or stake address | `input.transaction`, `input.governance` |
 | `--filter-policy` | Asset policy ID | `input.transaction` |
 | `--filter-asset` | Asset fingerprint, such as `asset1…` | `input.transaction` |
@@ -42,7 +42,7 @@ Output only transaction events:
 adder --filter-type input.transaction
 ```
 
-Output transaction and block events by providing comma separated alternatives to one flag:
+Output transaction and block events by providing comma-separated alternatives to one flag:
 
 ```bash
 adder --filter-type input.transaction,input.block
@@ -86,7 +86,7 @@ A payment address matches only that exact address. A stake address matches any a
 
 ### Multiple addresses
 
-Pass multiple addresses as comma separated alternatives. An event matches when it involves any listed address:
+Pass multiple addresses as comma-separated alternatives. An event matches when it involves any listed address:
 
 ```bash
 adder --filter-type input.transaction \
@@ -109,7 +109,7 @@ adder --filter-type input.block \
   --filter-pool pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt
 ```
 
-Pass multiple pool IDs as comma separated alternatives. The list can mix bech32 and hexadecimal forms:
+Pass multiple pool IDs as comma-separated alternatives. The list can mix bech32 and hexadecimal forms:
 
 ```bash
 adder --filter-type input.block \
@@ -140,7 +140,7 @@ The command line uses shortened filter flags. Environment variables and configur
 
 `--filter-type` belongs to the separate `event` filter plugin, so its environment variable and configuration key use `event` rather than `cardano`.
 
-The equivalent YAML configuration has one string value for each filter. Use a comma separated list within a value when a filter needs multiple alternatives:
+The equivalent YAML configuration has one string value for each filter. Use a comma-separated list within a value when a filter needs multiple alternatives:
 
 ```yaml
 plugins:
@@ -158,14 +158,14 @@ plugins:
 
 `--filter-drep` accepts these forms:
 
-- **Bech32:** Values beginning with `drep` use either the `drep1...` key hash prefix or the `drep_script1...` script hash prefix. Adder decodes the value and expects a 28 byte credential hash. If the decoded payload has 29 bytes, Adder removes the leading byte as a header without inspecting or validating it. Adder ignores payloads with any other length and drops those identifiers from the filter.
-- **Hexadecimal:** Values contain the raw 28 byte credential hash as 56 hexadecimal characters. Adder performs no header removal for hexadecimal input, so a value that includes a header byte does not match.
+- **Bech32:** Values beginning with `drep` use either the `drep1...` key-hash prefix or the `drep_script1...` script-hash prefix. Adder decodes the value and expects a 28-byte credential hash. If the decoded payload has 29 bytes, Adder removes the leading byte as a header without inspecting or validating it. Adder ignores payloads with any other length and drops those identifiers from the filter.
+- **Hexadecimal:** Values contain the raw 28-byte credential hash as 56 hexadecimal characters. Adder performs no header removal for hexadecimal input, so a value that includes a header byte does not match.
 
 Adder emits DRep IDs as bech32 encodings of the raw 28 byte credential hash, using `drep` for key hash credentials and `drep_script` for script hash credentials. A `drepId` value emitted by Adder can be passed to `--filter-drep` unchanged.
 
 ## Governance events
 
-The chainsync input emits an `input.governance` event for each transaction that contains Conway era on chain governance data. One transaction produces one governance event, and that event collects all governance data in the transaction.
+The chainsync input emits an `input.governance` event for each transaction that contains Conway era on-chain governance data. One transaction produces one governance event, and that event collects all governance data in the transaction.
 
 ### When it fires
 
@@ -173,7 +173,7 @@ Adder emits an `input.governance` event when a transaction contains at least one
 
 - One or more proposal procedures, which introduce governance actions.
 - One or more voting procedures, which record votes on governance actions.
-- One or more governance certificates: DRep registration, update, or retirement; vote delegation; or Constitutional Committee hot key authorization or cold key resignation.
+- One or more governance certificates: DRep registration, update, or retirement; vote delegation; or Constitutional Committee hot-key authorization or cold-key resignation.
 
 A transaction with no governance data does not produce an `input.governance` event. Adder emits the governance event in addition to the regular `input.transaction` event for the same transaction.
 
@@ -211,8 +211,8 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `deposit` | number | Deposit in lovelace locked for the proposal |
 | `rewardAccount` | string | Stake or reward address to which the deposit returns |
 | `actionType` | string | One of `ParameterChange`, `HardForkInitiation`, `TreasuryWithdrawal`, `NoConfidence`, `UpdateCommittee`, `NewConstitution`, `Info` |
-| `actionData` | object | Action specific data; the object contains exactly one field keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, `newConstitution`, `updateCommittee`, `hardForkInitiation`, `noConfidence`, or `info` |
-| `anchor` | object | Optional `{ "url", "dataHash" }` object that points to off chain metadata |
+| `actionData` | object | Action-specific data; the object contains exactly one field keyed by the action, such as `parameterChange`, `treasuryWithdrawal`, `newConstitution`, `updateCommittee`, `hardForkInitiation`, `noConfidence`, or `info` |
+| `anchor` | object | Optional `{ "url", "dataHash" }` object that points to off-chain metadata |
 
 #### `votingProcedures[]`
 
@@ -224,7 +224,7 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `govActionTxId` | string | Transaction ID of the governance action receiving the vote |
 | `govActionIndex` | number | Governance action index within that transaction |
 | `vote` | string | One of `Yes`, `No`, `Abstain` |
-| `anchor` | object | Optional `{ "url", "dataHash" }` vote rationale metadata |
+| `anchor` | object | Optional `{ "url", "dataHash" }` vote-rationale metadata |
 
 #### `drepCertificates[]`
 
