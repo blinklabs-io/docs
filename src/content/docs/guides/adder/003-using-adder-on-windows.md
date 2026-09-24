@@ -138,6 +138,21 @@ Click `Finish Setup`.
 
 ***
 
+### Step 4 - Startup and Background Activity
+
+Use the `Start Adder automatically on login / reboot` checkbox to enable or disable Adder startup for the current Windows user. Windows stores this choice in the current user's startup registration. The tray starts the Adder engine as a detached, windowless process, and this autostart behavior does not require administrator elevation from the installer.
+
+The background activity status shows one of these states:
+
+- `Background Activity: Registered & Running (io.blinklabs.adder)` means that startup is registered and the Adder engine is running.
+- `Background Activity: Registered (io.blinklabs.adder)` means that startup is registered but the engine is not running.
+- `Background Activity: Not registered` means that startup is disabled.
+- `Background Activity: Status unknown` means that Adder could not determine the startup status.
+
+Select `Open Login Items Settings...` to open the Windows startup settings and review Adder's startup registration.
+
+***
+
 ### Congratulations! Adder will now alert you when an event that you have selected to track occurs.
 
 ***
@@ -148,6 +163,8 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Select `About` to open an in-app dialog with the running Adder version. When commit metadata is available, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays `Version: <version>`.
 
 
 ---
