@@ -159,3 +159,13 @@ Malformed events and unknown event types produce errors instead of runtime crash
 ### TLS certificate errors
 Install or trust the certificate authority that issued the receiving service certificate. Use `--output-webhook-tls-skip-verify` only for a controlled test with a self signed certificate; it disables certificate verification and does not repair an invalid certificate or hostname. Do not use it as a general certificate fix.
 After correcting the endpoint, credentials, payload format, or certificate, repeat the manual `POST` test and then run Adder with `--logging-level debug` to confirm successful delivery.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

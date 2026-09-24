@@ -236,3 +236,13 @@ Revise el productor de eventos cuando aparezca un error de payload, contexto o t
 | :--- | :--- | :--- |
 | `invalid intersect point format: expected '<slot>.<hash>'` | `input/chainsync` | Use `--input-chainsync-intersect-point` con el formato `<slot_integer>.<block_hex_hash>`. |
 | `failed to process plugin config` | `internal/config` / `plugin` | Compare los tipos y valores de las claves con las opciones del plugin. |
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

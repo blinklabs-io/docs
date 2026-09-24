@@ -65,3 +65,14 @@ La ruta devuelve datos de eventos como `text/event-stream` o `application/json`,
 - Las rutas raíz aceptan `/ping/` y `/healthcheck/` además de las rutas documentadas.
 - Las rutas FCM y QR aceptan una barra final opcional además de las rutas documentadas.
 - La interfaz usa `/swagger/` con la barra final. La integración usa `/events` como está documentado; esta referencia no define una variante `/events/`.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

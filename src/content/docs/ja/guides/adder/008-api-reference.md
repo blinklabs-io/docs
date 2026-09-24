@@ -66,3 +66,14 @@ SSEは`text/event-stream`を使用し、WebSocket接続はWebSocketセッショ�
 - FCMとQRコードのルートは、記載したパスに加えて任意の末尾スラッシュを受け付けます。
 - `/events`はルート直下に登録されており、ここでは`/events/`を別のパスとして定義しません。
 - Swagger UIには`/swagger/`を使用し、末尾のスラッシュを省略しないでください。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

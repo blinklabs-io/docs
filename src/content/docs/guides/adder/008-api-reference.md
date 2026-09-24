@@ -65,3 +65,13 @@ The route returns event data as `text/event-stream` or `application/json`, depen
 - The root routes accept `/ping/` and `/healthcheck/` in addition to their documented paths.
 - The FCM and QR routes accept an optional trailing slash as well as the documented paths.
 - Use `/swagger/` with its trailing slash. Use `/events` as documented; this reference does not define an `/events/` variant.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
