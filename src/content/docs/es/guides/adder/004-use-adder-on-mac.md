@@ -64,7 +64,7 @@ Para crear un paquete de aplicación local con metadatos explícitos de versión
 VERSION=1.2.3 COMMIT_HASH=abc1234 make bundle-macos
 ```
 
-El script de creación del paquete pasa `VERSION` a las compilaciones de `adder` y `adder-tray` y almacena el valor original en los metadatos `AdderGitVersion` del paquete. Los programas resultantes usan `VERSION` y `COMMIT_HASH`, por lo que el diálogo About puede mostrar los valores seleccionados.
+El script de creación del paquete pasa `VERSION` a las compilaciones de `adder` y `adder-tray` y almacena el valor original en los metadatos del paquete. Los programas resultantes usan `VERSION` y `COMMIT_HASH`, por lo que el diálogo About puede mostrar los valores seleccionados.
 
 ## Desinstalar desde un checkout del código fuente
 
