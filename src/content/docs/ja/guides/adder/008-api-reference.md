@@ -53,7 +53,7 @@ Adderのルートは2つのパス階層に分かれます。
 
 ### イベントをストリーミングする
 
-`GET /events`でイベントストリームを開きます。サーバーは WebSocket 接続を要求するクライアントには WebSocket を返し、それ以外のクライアントには SSE ストリームを返します。ルートは `/events` です。
+`GET /events`でイベントストリームを開きます。サーバーは WebSocket 接続を要求するクライアントとの WebSocket 接続を確立します。それ以外のクライアントには SSE ストリームを返します。ルートは `/events` です。
 
 各イベントは次の基本フィールドを持つ JSON オブジェクトです。
 
@@ -69,11 +69,11 @@ SSE クライアントは `data` フィールドからイベントを読み取�
 このルートは次の任意クエリーパラメーターを受け付けます。
 
 - `types`: 対象にするイベント種別をカンマ区切りで指定します。`types` を省略すると、すべてのイベント種別を受け取ります。例: `types=input.block,input.transaction`
-- `replay`: 接続時にリングバッファ内の最近のイベントを再生するか指定する boolean（真偽値）です。既定値は `true` です。
+- `replay`: 接続時にリングバッファ内の最近のイベントを再生するか指定する `boolean`（真偽値）です。既定値は `true` です。
   - `true` は `types` フィルターに一致する最近のバッファーイベントを先に送り、その後に新しいイベントを送ります。
   - `false` は履歴を送らず、新しいイベントから開始します。
 
-既定の replay を使う SSE 接続は次の URL を使用します。
+既定の `replay` を使う SSE 接続は次の URL を使用します。
 
 ```text
 https://<host>:<port>/events
@@ -85,7 +85,7 @@ https://<host>:<port>/events
 https://<host>:<port>/events?replay=false
 ```
 
-既定の replay を使う WebSocket 接続は次の URL を使用します。
+既定の `replay` を使う WebSocket 接続は次の URL を使用します。
 
 ```text
 ws://<host>:<port>/events
@@ -105,7 +105,7 @@ ws://<host>:<port>/events?types=input.block,input.transaction&replay=false
 
 #### Adder Tray の再接続
 
-Adder Tray は、初回接続に `/events?replay=false` を使います。接続成功後に再接続する場合は `/events?replay=true` を使い、切断中に発生したバッファーイベントを取得します。この手順は Adder Tray が採用する戦略であり、すべてのクライアントに必須の規則ではありません。再接続時に `replay=true` を使うクライアントは、すでに処理したイベントや重複を適切に扱えるようにしてください。
+Adder Tray は、初回接続に `/events?replay=false` を使います。接続成功後に再接続する場合は `/events?replay=true` を使います。これにより、切断中に発生したバッファーイベントを取得します。この手順は Adder Tray が採用する戦略であり、すべてのクライアントに必須の規則ではありません。再接続時に `replay=true` を使うクライアントは、すでに処理したイベントや重複を適切に扱えるようにしてください。
 
 ## パスと末尾スラッシュ
 
