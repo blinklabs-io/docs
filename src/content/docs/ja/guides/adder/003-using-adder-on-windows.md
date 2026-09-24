@@ -36,8 +36,9 @@ Adderは、同じ対象セクションに入力した値を代替条件として
 
 ### 通知カテゴリを選択
 
-Notificationsステップには、ウィザードが設定した対象セクションに関連する通知カテゴリだけを表示します。表示されたカテゴリから通知するイベントを選択します。複数の対象セクションを設定した場合は、ウィザードが該当するカテゴリをまとめて表示します。
+Notificationsステップでは、`Monitor Everything`を有効にすると基本的なイベント通知カテゴリを表示し、個別の監視対象を設定すると対象セクションに関連する通知カテゴリを表示します。表示されたカテゴリから通知するイベントを選択します。複数の対象セクションを設定した場合は、ウィザードが該当するカテゴリをまとめて表示します。
 
+- `Monitor Everything`: `Blocks minted`、`Chain rollbacks`、`Incoming transactions`、`Votes cast`
 - `Wallets`: `Incoming transactions`、`Outgoing transactions`、`Token transfers`
 - `DReps`: `New governance proposals`、`Votes cast`、`Registration changes`
 - `Pools`: `Blocks minted`、`Pool parameter changes`、`Chain rollbacks`
