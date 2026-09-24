@@ -30,6 +30,12 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+Release MSIs are signed and install both `adder.exe` (the command-line application) and `adder-tray.exe` (the tray application) under `%ProgramFiles%\Adder`. The installer creates an `Adder` shortcut in the Windows Start Menu and adds Adder to Windows **Apps & Features** or **Add/Remove Programs**.
+
+The MSI does not register a Scheduled Task or independently enable automatic startup. The tray setup wizard owns the per-user startup setting described in [Step 4](#step-4---startup-and-background-activity).
+
+Locally built or test MSIs may be unsigned, so Windows SmartScreen or an unknown-publisher warning may appear when they launch.
+
 ***
 
 ### Step 2 - Launch Adder
@@ -112,7 +118,7 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Adder presents alert categories relevant to the selected target groups. Select the categories that should produce desktop alerts. Enable `Notify on connection issues` separately when connection status alerts are required.
+Adder scopes event alerts to the selected target groups. Select the categories that should produce desktop alerts. Enable `Notify on connection issues` separately when connection status alerts are required.
 
 Open `Advanced — Rate Limiting` to control the maximum notifications per window and the window duration. Leave a field blank to use its default; the defaults are one notification per five seconds. Enter a negative limit to disable notification coalescing. Enter a window value using Go duration syntax, such as `5s`, `30s`, or `1m`.
 
@@ -139,8 +145,7 @@ Click `Finish Setup`.
 ***
 
 ### Step 4 - Startup and Background Activity
-
-Select the `Start Adder automatically on login / reboot` checkbox to start Adder automatically for the current Windows user. Clear the checkbox to disable automatic startup. Windows stores this choice in the current user's startup registration. The tray runs the Adder engine in the background without opening a window, and the installer does not need administrator elevation for this setting.
+Select the `Start Adder automatically on login / reboot` checkbox to start Adder automatically for the current Windows user. Clear the checkbox to disable automatic startup. The tray wizard stores this choice in the current user's startup registration. The tray runs the Adder engine in the background without opening a window, and the installer does not need administrator elevation for this setting.
 
 The background activity status shows one of these states:
 
@@ -164,7 +169,27 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+Select `Notification Rules...` to edit monitoring targets and notification categories. Select `Apply & Restart` to save the changes and apply them to the running monitoring engine without relaunching the tray. See the [tray configuration reference](../007-tray-configuration-reference) for target formats and connector behavior.
+
+Select `Recent Events` to review recent notifications. Transaction and governance entries open transaction explorer pages, while block entries open block explorer pages. Adder uses the event's network when it builds each link. When the tray reconnects, it requests replayed events from `/events?replay=` and avoids adding duplicate entries to the list.
+
+Select `Show Logs` to open the log folder. Windows stores tray diagnostics in `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`.
+
 Select `About` to open an in-app dialog that shows the running Adder version. If Adder includes commit metadata, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays `Version: <version>`.
+
+## Troubleshooting
+
+### Windows GUI startup or runtime failures
+
+The Windows GUI has no normal console, so it records startup and runtime failures in `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`. This includes panic information and graphics initialization failures. Open the log folder with `Show Logs` and review the file before retrying the operation.
+
+### A second tray launch exits immediately
+
+Windows runs only one Adder tray instance per logon session. If a second launch exits immediately, check whether the existing Adder tray instance is already running in the system tray.
+
+### Applying notification rules shows a warning
+
+When a restart or reconnection cannot complete immediately, Adder saves the configuration, keeps the Notification Rules editor open, and re-enables its controls. Check the tray status and `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`, then select `Apply & Restart` again.
 
 
 ---
