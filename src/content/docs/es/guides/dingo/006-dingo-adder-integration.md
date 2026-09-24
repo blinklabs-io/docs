@@ -49,13 +49,13 @@ Para Adder, Compose proporciona `config-preview.yaml` en `/config/config-preview
 
 ## Inicia la pila de validación
 
-Inicia y construye ambos contenedores en segundo plano:
+Construye e inicia ambos contenedores en segundo plano:
 
 ```bash
 docker compose up --build -d
 ```
 
-Docker inicia primero el servicio `dingo` y después inicia `adder` con el volumen del socket compartido.
+Docker inicia primero el servicio `dingo` y después el servicio `adder` con el volumen del socket compartido.
 
 ## Verifica la conexión
 
