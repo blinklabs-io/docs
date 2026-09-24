@@ -52,17 +52,11 @@ El editor ofrece dos modos:
 - `Monitor Everything (ignore per-target lists)` activa el monitoreo general e ignora los valores de `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`.
 - La configuración estándar desactiva `Monitor Everything` y usa uno o más objetivos de esas secciones.
 
-Cuando `Monitor Everything` está activo, Adder no usa las listas de objetivos. Cuando está desactivado, la configuración estándar limita las alertas a los objetivos y preferencias seleccionados.
+El editor conserva el modo seleccionado junto con las listas de objetivos. La configuración estándar limita las alertas a los objetivos y preferencias seleccionados.
 
 ### Entrada y validación de objetivos
 
-El editor valida cada valor según su sección. Una entrada inválida muestra un error junto a la sección y no agrega el valor. Los formatos aceptados son los descritos en [Filtros de objetivos](#filtros-de-objetivos):
-
-- `Wallets`: dirección de pago o de participación que comience por `addr...` o `stake...`.
-- `DReps`: ID en bech32 con prefijo `drep1...` o valor hexadecimal.
-- `Pools`: ID en bech32 con prefijo `pool1...` o valor hexadecimal.
-- `Assets`: huella de activo CIP-14 con prefijo `asset1...`.
-- `Policies`: ID hexadecimal de exactamente 56 caracteres.
+El editor valida cada valor según su sección. Una entrada inválida muestra un error junto a la sección y no agrega el valor. Consulte los formatos aceptados en [Filtros de objetivos](#filtros-de-objetivos).
 
 Una entrada separada por comas crea varias filas. Adder recorta los espacios de cada valor, omite los elementos vacíos y rechaza los duplicados sin distinguir mayúsculas de minúsculas. Si una parte de una entrada múltiple es inválida o duplicada, el editor no agrega ninguna parte de esa entrada.
 
@@ -98,10 +92,10 @@ Configure `filter.monitor_everything` como `true` para supervisar todos los tipo
 
 Use estos valores en las listas de objetivos:
 
-- `wallets`: direcciones de pago o de participación de Cardano que comienzan por `addr1` o `stake1`.
+- `wallets`: direcciones de pago o de participación de Cardano que comienzan por `addr...` o `stake...`.
 - `dreps`: identificadores de DRep que comienzan por `drep1` o identificadores de DRep hexadecimales.
-- `pools`: identificadores de grupos de participación que comienzan por `pool1` o identificadores de grupo hexadecimales.
-- `assets`: huellas digitales de activos CIP-14 que comienzan por `asset1`.
+- `pools`: identificadores de grupos de participación que comienzan por `pool1...` o identificadores de grupo hexadecimales.
+- `assets`: huellas digitales de activos CIP-14 que comienzan por `asset1...`.
 - `policies`: identificadores hexadecimales de políticas de acuñación de 56 caracteres.
 
 ### Modos de coincidencia
