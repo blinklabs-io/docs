@@ -89,7 +89,7 @@ For this example, we will enter a Pool ID and a DRep ID that we want to follow.
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Values within one target section act as alternatives. The visible `OR` and `AND` controls join populated target sections. Select `OR` when either section can produce the matching event. Do not select an `AND` combination across block targets (`Pools`), transaction targets (`Wallets`, `Assets`, or `Policies`), and governance targets (`DReps`), because no single event can satisfy that combination; the wizard rejects it.
+Values within one target section act as alternatives. The visible `OR` and `AND` controls join populated target sections. Select `OR` when either section can produce the matching event. Do not use `AND` between different event families. `Pools` match blocks, `Wallets`, `Assets`, and `Policies` match transactions, and `DReps` match governance events. No single event can satisfy an `AND` between these families, and the wizard rejects such a configuration.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
@@ -114,7 +114,7 @@ Adder is already configured to provide desktop notifications. You can select oth
 ### Step 3.4 - Event Alerts
 Adder presents alert categories relevant to the selected target groups. Select the categories that should produce desktop alerts. Enable `Notify on connection issues` separately when connection status alerts are required.
 
-Open `Advanced — Rate Limiting` to control the maximum notifications per window and the window duration. Leave a field blank to use its default; the defaults are one notification per five seconds. Enter a negative limit to disable notification coalescing. Enter the window with Go duration syntax, such as `5s`, `30s`, or `1m`.
+Open `Advanced — Rate Limiting` to control the maximum notifications per window and the window duration. Leave a field blank to use its default; the defaults are one notification per five seconds. Enter a negative limit to disable notification coalescing. Enter a window value using Go duration syntax, such as `5s`, `30s`, or `1m`.
 
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
