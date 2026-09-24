@@ -7,7 +7,7 @@ description: Valida Adder con Dingo en la red Cardano preview mediante Docker Co
 
 ## Descripción general
 
-Esta guía explica cómo validar el flujo de eventos de Adder con un nodo Dingo en la red Cardano `preview`. Docker Compose inicia ambos servicios y los conecta mediante un socket UNIX compartido.
+Esta guía describe la validación del flujo de eventos de Adder con un nodo Dingo en la red Cardano `preview`. Docker Compose inicia ambos servicios y los conecta mediante un socket UNIX compartido.
 
 ## Arquitectura
 
@@ -65,7 +65,7 @@ Revisa los registros de Adder para verificar la conexión N2C y la salida de eve
 docker compose logs adder
 ```
 
-Revisa que la salida muestre que Adder se conecta mediante `/ipc/node.socket` y emite eventos de bloques. Dingo también informa eventos de retroceso cuando la cadena retrocede.
+Comprueba que la salida muestre que Adder se conecta mediante `/ipc/node.socket` y emite eventos de bloques. Dingo también informa eventos de retroceso cuando la cadena retrocede.
 
 Un volumen de validación limpio inicia Dingo desde el génesis. Por tanto, Adder realiza la intersección en el génesis y procesa los bloques desde el bloque 1 mientras Dingo sincroniza.
 
