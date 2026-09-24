@@ -87,7 +87,7 @@ Each event contains a JSON object with these fields:
 
 The contents of `context` and `payload` vary by event type.
 
-For a client that reconnects after a disconnect, request `replay=false` on the first connection and `replay=true` on subsequent connections. Adder Tray uses this live first, replay on reconnect strategy to recover buffered events produced during an outage. This strategy remains optional for other consumers.
+For a client that reconnects after a disconnect, request `replay=false` on the first connection and `replay=true` on subsequent connections. Adder Tray uses this live first, replay on reconnect strategy to recover events that the pipeline sends during an outage while they remain in the buffer. This strategy remains optional for other consumers.
 
 A consumer that requests replay after reconnecting should handle duplicate or already seen events. The stream does not promise exactly once delivery because replay can include events the consumer already processed, and the tray delivers events without blocking when its event channel is full.
 
