@@ -57,7 +57,7 @@ Use estos valores en las listas de objetivos:
 
 Configure `drep_match`, `pool_match`, `asset_match` y `policy_match` como `any` o `all`. Un campo de coincidencia omitido usa `any` de forma predeterminada.
 
-Cada matriz de objetivos coincide con cualquiera de sus valores. Un campo de coincidencia conecta su grupo de objetivos, cuando contiene valores, con el grupo anterior:
+Cada lista de objetivos coincide con cualquiera de sus valores. Un campo de coincidencia conecta su grupo de objetivos, cuando contiene valores, con el grupo anterior:
 
 - `any` conecta los grupos con `OR`.
 - `all` conecta los grupos con `AND`.
