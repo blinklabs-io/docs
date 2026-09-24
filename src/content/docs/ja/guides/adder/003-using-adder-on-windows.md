@@ -51,20 +51,20 @@ Notificationsステップでは、`Monitor Everything`を有効にすると基�
 
 ### 自動起動とバックグラウンド動作
 
-Notificationsステップで`Start Adder automatically on login / reboot`を有効にすると、現在のWindowsユーザーのログインまたは再起動後にAdderを自動的に起動します。自動起動を無効にするには、このチェックボックスをオフにします。この設定は現在のユーザーのスタートアップ登録を使用し、管理者権限を必要としません。トレイはAdderエンジンをウィンドウを表示せずにバックグラウンドで起動します。
+Notificationsステップで`Start Adder automatically on login / reboot`を有効にすると、現在のWindowsユーザーのログインまたは再起動後にAdderを自動的に起動します。自動起動を無効にするには、このチェックボックスをオフにします。Windowsはこの設定を現在のユーザーのスタートアップに登録します。管理者権限は必要ありません。トレイはAdderエンジンをウィンドウを表示せずにバックグラウンドで起動します。
 
 `Background Activity`には、次のいずれかの状態が表示されます。
 
 - `Background Activity: Registered & Running (io.blinklabs.adder)`: 自動起動が登録され、Adderエンジンが実行中です。
 - `Background Activity: Registered (io.blinklabs.adder)`: 自動起動は登録されていますが、Adderエンジンは実行されていません。
 - `Background Activity: Not registered`: 自動起動は無効です。
-- `Background Activity: Status unknown`: Adderは自動起動の状態を確認できませんでした。
+- `Background Activity: Status unknown`: Adderは自動起動の状態を確認できません。
 
 `Open Login Items Settings...`を選択すると、Windowsのスタートアップ設定が開き、Adderの自動起動登録を確認できます。
 
 ## Trayメニュー
 
-システムトレイのAdderを右クリックして`About`を選択すると、アプリ内ウィンドウが開きます。このウィンドウには現在のAdderのバージョンが表示されます。コミット情報が利用できる場合は`Version: <version> (commit: <hash>)`形式で表示され、利用できない場合は`Version: <version>`形式で表示されます。
+システムトレイのAdderを右クリックして`About`を選択すると、アプリ内ウィンドウが開きます。このウィンドウには現在のAdderのバージョンが表示されます。コミットハッシュがある場合は`Version: <version> (commit: <hash>)`形式で表示され、ない場合は`Version: <version>`形式で表示されます。
 
 ## ステップ1 - Windowsでコマンドプロンプトを開く
 
