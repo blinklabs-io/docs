@@ -11,7 +11,7 @@ Adder se distribuye como un paquete macOS `.pkg` firmado y notarizado para cada 
 
 1. Abre la página de versiones de Adder y descarga el paquete macOS `.pkg` que corresponda a la arquitectura del Mac: `arm64` para Apple Silicon o `amd64` para Mac Intel.
 2. Haz doble clic en el archivo `.pkg` y sigue las indicaciones del instalador.
-3. El instalador coloca `Adder.app` en `/Applications`. La aplicación incluye la interfaz gráfica `adder-tray` y la CLI `adder`.
+3. El instalador coloca `Adder.app` en `/Applications`. La aplicación incluye la interfaz gráfica `adder-tray` y la herramienta de línea de comandos `adder`.
 4. Ejecuta `adder` desde Terminal cuando el instalador cree el enlace de conveniencia normal `/usr/local/bin/adder`. Si el instalador no puede crear ese enlace, ejecuta `/Applications/Adder.app/Contents/MacOS/adder`. El instalador no reemplaza un enlace existente y no relacionado en `/usr/local/bin/adder`.
 
 ## Abrir Adder
@@ -44,4 +44,4 @@ ARCH=arm64 make pkg-macos-adhoc
 ARCH=amd64 make pkg-macos-adhoc
 ```
 
-Los paquetes de lanzamiento usan firma, notarización y stapling de lanzamiento cuando las credenciales están disponibles. El destino `pkg-macos-adhoc` establece `ADHOC=1`, firma la aplicación para las notificaciones locales, pero deja el `.pkg` sin firma y sin notarización. Gatekeeper puede rechazar los paquetes locales sin firma y con firma ad hoc.
+Los paquetes de lanzamiento usan firma, notarización y un comprobante de notarización cuando las credenciales están disponibles. El destino `pkg-macos-adhoc` establece `ADHOC=1`, firma la aplicación para las notificaciones locales, pero deja el `.pkg` sin firma y sin notarización. Gatekeeper puede rechazar los paquetes locales sin firma y con firma ad hoc.
