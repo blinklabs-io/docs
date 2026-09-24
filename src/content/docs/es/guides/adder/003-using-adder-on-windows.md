@@ -45,6 +45,29 @@ Ahora que tenemos la ruta del exe de Adder, escribe la ruta o pegala si copiaste
 
 Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos rastrear cierta informacion y elegir la forma en que somos notificados.
 
+## Configurar Adder Tray
+
+En el asistente de configuración, seleccione un modo de monitoreo:
+
+- Active `Monitor Everything` para monitorear todos los eventos compatibles. Esta opción ignora las listas de las secciones de destino.
+- Desactive `Monitor Everything` y agregue al menos un valor válido en `Wallets`, `DReps`, `Pools`, `Assets` o `Policies`.
+
+Introduzca los valores con el formato aceptado por cada sección:
+
+- `Wallets`: una dirección de pago o de participación que comience por `addr1...` o `stake1...`.
+- `DReps`: un ID de DRep con prefijo `drep1...` o un valor hexadecimal.
+- `Pools`: un ID de pool con prefijo `pool1...` o un valor hexadecimal.
+- `Assets`: una huella digital de activo CIP-14 con prefijo `asset1...`.
+- `Policies`: un ID de política hexadecimal de 56 caracteres.
+
+Los valores de una misma sección funcionan como alternativas. Los controles `OR` y `AND` combinan las secciones de destino que contienen valores. Use `OR` cuando cualquiera de las secciones pueda producir el evento correspondiente. No use `AND` entre familias de eventos incompatibles: `Pools` coincide con bloques, `Wallets`, `Assets` y `Policies` coinciden con transacciones, y `DReps` coincide con eventos de gobernanza. El asistente rechaza una combinación `AND` que no pueda coincidir con ningún evento.
+
+En la pantalla `Notifications`, seleccione las categorías de alertas relevantes para los grupos de destino configurados. La opción `Notify on connection issues` se selecciona por separado para recibir alertas sobre problemas de conexión.
+
+Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y `Window duration`. La duración acepta valores como `5s`, `30s` o `1m`. Si deja los campos vacíos, Adder usa el valor predeterminado de una notificación cada cinco segundos. Introduzca un límite negativo para desactivar por completo la agrupación de notificaciones.
+
+Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer las opciones disponibles de destinos y notificaciones.
+
 <br />
 
 
