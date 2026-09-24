@@ -51,9 +51,9 @@ El cliente reemplaza `{token}` en `/v1/fcm/{token}` por el valor del token guard
 
 ### Transmitir eventos
 
-La integración usa `GET /events` para abrir una transmisión de eventos. El servidor usa WebSocket cuando el cliente solicita una actualización a WebSocket; si no, usa Server-Sent Events (SSE).
+La integración usa `GET /events` para abrir una transmisión que permanece disponible mientras el cliente recibe eventos nuevos.
 
-Cada evento llega como un objeto JSON con estos campos:
+El servidor entrega cada evento como un objeto JSON con estos campos:
 
 - `type`: tipo del evento, como `input.block` o `input.transaction`.
 - `timestamp`: marca de tiempo del evento.
@@ -64,7 +64,7 @@ Con SSE, el servidor envía cada objeto JSON en un mensaje `data`. Con WebSocket
 
 #### Parámetros de consulta
 
-- `types`: parámetro opcional que acepta una lista de tipos separada por comas. Por ejemplo, `types=input.block,input.transaction` limita la transmisión a esos tipos. Si se omite, la transmisión incluye todos los tipos de eventos.
+- `types`: parámetro opcional que acepta una lista de tipos separada por comas. Por ejemplo, `types=input.block,input.transaction` limita la transmisión a esos tipos. Cuando el cliente no incluye este parámetro, la transmisión incluye todos los tipos de eventos.
 - `replay`: parámetro booleano opcional que usa `true` de forma predeterminada.
   - `replay=true` envía primero los eventos recientes del búfer que cumplen el filtro `types` y después los eventos nuevos.
   - `replay=false` omite el contenido anterior del búfer y comienza directamente con los eventos nuevos.
@@ -96,8 +96,6 @@ WebSocket en modo solo en vivo:
 ```text
 ws://localhost:8080/events?replay=false
 ```
-
-Al omitir `replay`, el cliente recibe primero los eventos recientes que coinciden con el filtro y después los eventos nuevos. Los ejemplos con `replay=false` comienzan directamente con los eventos nuevos.
 
 #### Reconexión
 
