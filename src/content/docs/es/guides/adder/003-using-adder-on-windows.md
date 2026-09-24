@@ -68,6 +68,25 @@ Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y 
 
 Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer las opciones disponibles de destinos y notificaciones.
 
+### Paso 4 - Inicio automático y actividad en segundo plano
+
+Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. Windows guarda esta opción en el registro de inicio del usuario actual. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
+
+El estado de actividad en segundo plano muestra uno de los siguientes valores:
+
+- `Background Activity: Registered & Running (io.blinklabs.adder)`: el inicio automático está registrado y el motor de Adder está en ejecución.
+- `Background Activity: Registered (io.blinklabs.adder)`: el inicio automático está registrado, pero el motor no está en ejecución.
+- `Background Activity: Not registered`: el inicio automático está desactivado.
+- `Background Activity: Status unknown`: Adder no pudo determinar el estado del inicio automático.
+
+Seleccione `Open Login Items Settings...` para abrir la configuración de aplicaciones de inicio de Windows y revisar el registro de inicio de Adder.
+
+## Menú de la bandeja
+
+Haga clic con el botón derecho en Adder desde la bandeja del sistema para abrir el menú y ajustar la configuración de la aplicación.
+
+Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro muestra la versión en ejecución y, cuando está disponible, el commit correspondiente con el formato `Version: <version> (commit: <hash>)`. Si no hay información del commit, muestra `Version: <version>`.
+
 <br />
 
 
