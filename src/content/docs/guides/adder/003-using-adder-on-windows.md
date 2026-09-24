@@ -171,7 +171,7 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 
 Select `Notification Rules...` to edit monitoring targets and notification categories. Select `Apply & Restart` to save the changes and apply them to the running monitoring engine without relaunching the tray. See the [tray configuration reference](../007-tray-configuration-reference) for target formats and connector behavior.
 
-Select `Recent Events` to review recent notifications. Transaction and governance entries open transaction explorer pages, while block entries open block explorer pages. Adder uses the event's network when it builds each link. When the tray reconnects, it requests replayed events from `/events?replay=` and avoids adding duplicate entries to the list.
+Select `Recent Events` to review recent notifications. Transaction and governance entries open transaction explorer pages, while block entries open block explorer pages. Adder uses the event's network when it builds each link. When the tray reconnects, it requests replayed events from `/events?replay=true` and avoids adding duplicate entries to the list.
 
 Select `Show Logs` to open the log folder. Windows stores tray diagnostics in `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`.
 
