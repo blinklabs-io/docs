@@ -102,7 +102,7 @@ ws://localhost:8080/events?replay=false
 Adder Tray aplica una estrategia específica para mantener su transmisión:
 
 1. La primera conexión usa `/events?replay=false` para comenzar con eventos en vivo.
-2. Después de establecer una conexión correctamente, una reconexión usa `/events?replay=true` para recuperar eventos emitidos mientras la bandeja estaba desconectada.
+2. Después de establecer una conexión correctamente, una reconexión usa `/events?replay=true` para recuperar los eventos que Adder produjo mientras la bandeja estaba desconectada.
 
 Este patrón pertenece a Adder Tray y no obliga a otros consumidores a usar los mismos valores. Un consumidor que solicite una repetición después de reconectarse debe tolerar eventos repetidos o eventos que ya haya procesado. El flujo no garantiza entrega exactamente una vez ni un orden específico para los eventos repetidos.
 
