@@ -15,7 +15,7 @@ Adder Tray は、プラットフォームに応じた次のパスに `adder-tray
 | Windows | `%APPDATA%\Adder\adder-tray.yaml`、または `APPDATA` が設定されていない場合は `%USERPROFILE%\AppData\Roaming\Adder\adder-tray.yaml` |
 | Linux | `$XDG_CONFIG_HOME/adder/adder-tray.yaml`、または `XDG_CONFIG_HOME` が設定されていない場合は `$HOME/.config/adder/adder-tray.yaml` |
 
-`ADDER_TRAY_CONFIG_DIR` を設定すると、`adder-tray.yaml` を含むディレクトリを上書きできます。上書き値には、置き換えるファイル名ではなくディレクトリを指定します。
+`ADDER_TRAY_CONFIG_DIR` を設定すると、`adder-tray.yaml` を保存するディレクトリを変更できます。上書き値には、置き換えるファイル名ではなくディレクトリを指定します。
 
 ## ターゲットフィルター
 
@@ -105,7 +105,7 @@ notify_prefs:
 
 ## 通知の集約
 
-`notify_rate_limit` は、`notify_rate_window` の期間内に発生できる通知の最大数を設定します。上限を超えた一致イベントは、期間の終了時に1件の通知へまとめられます。
+`notify_rate_limit` は、`notify_rate_window` の期間中に発生する通知の最大数を設定します。上限を超えた一致イベントは、期間の終了時に1件へまとめられます。
 
 - 両方のフィールドを省略するか、いずれかのフィールドを `0` に設定すると、5秒ごとに1件の通知を使用します。
 - `notify_rate_limit` に負の数を設定すると集約を無効にし、一致したイベントごとに即時通知を発生させます。
@@ -121,7 +121,7 @@ notify_rate_window: 5s
 
 ## 従来のフィルター設定からの移行
 
-以前の設定では、エンジン設定の `plugins.filter.cardano` に Tray のターゲット値を保存していました。アップグレード時に、新しい Tray の `filter` に Monitor Everything の設定もターゲット値もない場合だけ、Adder Tray はその値をインポートします。カンマ区切りの値は、対応するターゲット配列の項目になります。
+以前の設定では、エンジン設定の `plugins.filter.cardano` に Tray のターゲット値を保存していました。アップグレード時に、新しい Tray の `filter` に `monitor_everything` の設定もターゲット値もない場合に限り、Adder Tray はその値をインポートします。カンマ区切りの値は、対応するターゲット配列の項目になります。
 
 ### 移行前
 
