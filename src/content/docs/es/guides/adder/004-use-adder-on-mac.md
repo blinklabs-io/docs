@@ -5,7 +5,7 @@ description: Cómo usar Adder en Mac.
 
 # Usar en Mac
 
-Adder se distribuye como un paquete macOS `.pkg` firmado y notarizado para cada arquitectura compatible.
+Adder distribuye un paquete macOS `.pkg` con firma y notarización para cada arquitectura compatible.
 
 ## Instalar Adder
 
