@@ -17,6 +17,44 @@ Adder Tray は、プラットフォームに応じた次のパスに `adder-tray
 
 `ADDER_TRAY_CONFIG_DIR` を設定すると、`adder-tray.yaml` を保存するディレクトリを変更できます。上書き値には、置き換えるファイル名ではなくディレクトリを指定します。
 
+## 自動起動設定
+
+`adder-tray.yaml` の `auto_start` は、Adderをユーザーのログイン時または再起動時に自動起動するかどうかを指定します。
+
+```yaml
+auto_start: true
+```
+
+- `true`: Adderの自動起動を有効にします。
+- `false`: Adderの自動起動を無効にします。
+
+セットアップウィザードの `Start Adder automatically on login / reboot` を選択すると `auto_start` を有効にし、選択を解除すると無効にします。ウィザードはこの選択を `adder-tray.yaml` に保存します。
+
+`adder-tray.yaml` はAdder Tray専用の設定ファイルです。Adderエンジンの設定ファイルとは別に保存します。
+
+## セットアップウィザードの起動状態
+
+セットアップウィザードは、バックグラウンドでの起動登録と実行状態を次のいずれかで表示します。
+
+| 表示 | 意味 |
+| --- | --- |
+| `Background Activity: Registered & Running (io.blinklabs.adder)` | 起動登録があり、Adderが実行中です。 |
+| `Background Activity: Registered (io.blinklabs.adder)` | 起動登録はありますが、Adderは実行されていません。 |
+| `Background Activity: Not registered` | 起動登録がありません。 |
+| `Background Activity: Status unknown` | 状態を確認できませんでした。 |
+
+## プラットフォームごとの自動起動
+
+### Windows
+
+`auto_start` を有効にすると、Adder Trayを現在のユーザーのWindowsログオン時のスタートアップに登録します。ログオン時にトレイが起動し、Adderエンジンをウィンドウを表示せずに起動します。無効にすると、この自動起動登録を使用しません。
+
+### macOS
+
+`auto_start` を有効にすると、Adderはユーザーの `LaunchAgent` に起動時の設定を登録し、macOSの `Login Items` に追加します。これにより、ログイン時にAdderのバックグラウンド処理とメニューバーのトレイを起動します。
+
+無効にすると、`LaunchAgent` の自動起動を無効にし、`Login Items` からAdderを削除します。
+
 ## ターゲットフィルター
 
 次の例では、明示的なターゲット配列を使用します。
