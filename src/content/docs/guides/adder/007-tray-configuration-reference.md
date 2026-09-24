@@ -17,6 +17,41 @@ Adder Tray stores its configuration in `adder-tray.yaml` at the following platfo
 
 Set `ADDER_TRAY_CONFIG_DIR` to override the directory that contains `adder-tray.yaml`. The override value names the directory, not a replacement filename.
 
+## Automatic startup
+
+The tray stores the automatic startup preference in the `auto_start` YAML field:
+
+```yaml
+auto_start: true
+```
+
+Set `auto_start` to `true` to start Adder automatically at login or reboot. Set it to `false` to disable automatic startup at login or reboot.
+
+The setup wizard is the normal user-facing way to change this value. On the Notifications step, select or clear `Start Adder automatically on login / reboot` and complete the wizard to save the preference.
+
+The tray preference is separate from the engine's `config.yaml`. The tray saves it in `adder-tray.yaml` under the platform tray configuration directory. The complete path is `<ConfigDir>/adder-tray.yaml`. Set `ADDER_TRAY_CONFIG_DIR` to use a different configuration directory.
+
+## Background activity status
+
+The setup wizard reports the tray's background activity status:
+
+- **Registered & Running**: Adder has a startup registration and the background activity is running.
+- **Registered**: Adder has a startup registration, but the background activity is not running.
+- **Not registered**: Adder has no startup registration.
+- **Status unknown**: The wizard could not determine the registration or running state.
+
+Registration and running are separate states. A registered tray can remain inactive until it starts, while a running tray has an active background process.
+
+## Platform behavior
+
+### Windows
+
+When `auto_start` is `true`, Adder registers the tray to start for the current Windows user at login. The registration applies to that user and does not require administrator elevation. When `auto_start` is `false`, Adder does not register the tray for automatic login startup.
+
+### macOS
+
+When `auto_start` is `true`, Adder configures its LaunchAgent to run when the user logs in and to remain available, and adds Adder to macOS Login Items. When `auto_start` is `false`, Adder disables those automatic startup behaviors and removes the corresponding Login Items entry.
+
 ## Target filters
 
 The following example uses explicit target arrays:
