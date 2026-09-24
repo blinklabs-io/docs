@@ -36,7 +36,7 @@ ARCH=arm64 make pkg-macos
 ARCH=amd64 make pkg-macos
 ```
 
-For local testing with working app notifications, build an ad hoc signed app package:
+For local testing, use the ad hoc target to sign the app bundle and enable app notifications:
 
 ```bash
 make pkg-macos-adhoc
