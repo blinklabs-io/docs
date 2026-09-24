@@ -56,7 +56,7 @@ An open TCP port does not verify the Cardano protocol or network magic. Review t
 ## 2. Configuration problems
 Adder resolves a setting in this order:
 1. An explicitly supplied CLI flag.
-2. The value in the YAML file supplied with `--config`.
+2. The value in the YAML file named by `--config`.
 3. The supported environment variable for that setting.
 4. The built in default.
 For example, set the chainsync network through a supported environment variable:
@@ -151,11 +151,11 @@ The webhook options are:
 Adder retries a failed webhook delivery up to three times. The first retry waits one second, each subsequent delay doubles, and the delay stops increasing at 30 seconds. These retry values are built in; the webhook output does not register CLI flags for changing the retry count or initial backoff.
 The webhook plugin reports these errors through its error path and the CLI logs them as pipeline errors:
 - The destination cannot be reached or returns a non `2xx` status.
-- The webhook URL cannot create a request.
+- Adder cannot create a request from the webhook URL.
 - The selected format cannot serialize the event.
 - An event has a missing or malformed payload or context.
 - The event type is unknown.
-Malformed events and unknown event types produce errors instead of unsafe type assertion failures. A shutdown signal interrupts a pending retry delay, so stopping Adder does not wait for the full backoff period.
+Malformed events and unknown event types produce errors instead of runtime crashes. A shutdown signal interrupts a pending retry delay, so stopping Adder does not wait for the full backoff period.
 ### TLS certificate errors
 Install or trust the certificate authority that issued the receiving service certificate. Use `--output-webhook-tls-skip-verify` only for a controlled test with a self signed certificate; it disables certificate verification and does not repair an invalid certificate or hostname. Do not use it as a general certificate fix.
 After correcting the endpoint, credentials, payload format, or certificate, repeat the manual `POST` test and then run Adder with `--logging-level debug` to confirm successful delivery.
