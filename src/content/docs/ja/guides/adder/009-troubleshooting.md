@@ -94,7 +94,7 @@ Adderは同じ設定を複数の方法で指定すると、次の順序で値を
 
 ### B. YAMLファイルが見つからない、または値が不正
 
-**症状**: `failed to read configuration file`または`yaml: unmarshal errors`が表示されます。
+**症状**: Adderは`failed to read configuration file`または`yaml: unmarshal errors`を記録します。
 
 **対処**:
 
@@ -166,7 +166,7 @@ Adderは異なる種類のフィルター（`type`と`address`など）をAND条
 
 ### B. FCM配信の失敗
 
-**症状**: `failed to send message to token...`がエラーログに表示されます。
+**症状**: Adderはエラーログに`failed to send message to token...`を記録します。
 
 **原因**: FCMトークンの期限切れ、登録解除、またはFirebaseサービスへの接続失敗が発生しています。
 
@@ -215,7 +215,7 @@ curl -H "Content-Type: application/json" \
 
 ### B. Webhookの再試行とタイムアウト
 
-**症状**: Webhook配信が遅延するか、配信失敗のエラーが記録されます。
+**症状**: Webhook配信が遅延するか、Adderは配信失敗のエラーを記録します。
 
 **原因**: Webhookサーバーの応答が遅い、停止している、または`2xx`以外のステータスを返しています。各HTTPリクエストは5秒でタイムアウトします。
 
@@ -237,7 +237,7 @@ Webhook処理はイベントの内容を検証します。
 
 ### D. TLS証明書の問題
 
-**症状**: `x509: certificate signed by unknown authority`が表示されます。
+**症状**: Adderは`x509: certificate signed by unknown authority`を記録します。
 
 **対処**:
 
@@ -257,7 +257,7 @@ Webhook処理はイベントの内容を検証します。
 | `failed to parse credential file` | サービスアカウントJSONの構文または形式が不正です。 | 認証情報JSONの形式を検証します。 |
 | `failed to process plugin config` | プラグイン設定のキーまたは値の型が不正です。 | 使用するプラグインのオプション形式と設定値の型を照合します。 |
 
-問題を切り分ける際は、まず接続を確認し、次に設定、フィルター、出力プラグインの順に追加します。`--logging-level=debug`を指定すると、接続と配信の詳細ログを確認できます。
+問題を切り分ける際は、まず接続を確認し、次に設定、フィルター、出力プラグインの順に追加します。対象の診断手順を再実行し、Adderと出力先が正常に動作することを確認します。
 
 ---
 
