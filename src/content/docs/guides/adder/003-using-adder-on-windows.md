@@ -70,7 +70,18 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
+Choose one monitoring mode:
+
+- Enable `Monitor Everything` to monitor all supported events. This option ignores every value in the target sections.
+- Leave `Monitor Everything` disabled and enter at least one value in the appropriate `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` section.
+
+Enter the target value in the form accepted by its section:
+
+- `Wallets`: a payment address or stake address.
+- `DReps`: a bech32 or hexadecimal DRep ID.
+- `Pools`: a bech32 or hexadecimal pool ID.
+- `Assets`: a CIP-14 asset fingerprint.
+- `Policies`: a 56-character hexadecimal policy ID.
 
 For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
 
@@ -78,11 +89,13 @@ For this example, we will enter a Pool ID and a DRep ID that we want to follow.
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
+Values within one target section act as alternatives. The visible `OR` and `AND` controls join populated target sections. Select `OR` when either section can produce the matching event. Do not select an `AND` combination across block targets (`Pools`), transaction targets (`Wallets`, `Assets`, or `Policies`), and governance targets (`DReps`), because no single event can satisfy that combination; the wizard rejects it.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+See the [tray configuration reference](../007-tray-configuration-reference) for the available target and notification settings.
 
 ***
 
@@ -99,7 +112,10 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Select the checkboxes for the events for which you would like to receive a desktop alert.
+Adder presents alert categories relevant to the selected target groups. Select the categories that should produce desktop alerts. Enable `Notify on connection issues` separately when connection status alerts are required.
+
+Open `Advanced — Rate Limiting` to control the maximum notifications per window and the window duration. Leave either field blank to use the default of one notification per five seconds. Enter a negative limit to disable notification coalescing. Enter the window with Go duration syntax, such as `5s`, `30s`, or `1m`.
+
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
