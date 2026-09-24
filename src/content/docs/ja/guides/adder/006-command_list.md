@@ -90,9 +90,9 @@ description: Adderコマンドのリスト。
 | `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
 | `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
 
-CLI フラグはプラグイン名を省略しますが、環境変数と YAML キーにはプラグイン名が必要です。`FILTER_ADDRESS` や `plugins.filter.address` のような省略名は認識されません。long flag には必ず二重ハイフン（`--filter-...`）を使用してください。単一ハイフン（`-filter-...`）は使用できません。
+CLI フラグはプラグイン名を省略しますが、環境変数と YAML キーにはプラグイン名が必要です。Adder は `FILTER_ADDRESS` や `plugins.filter.address` のような省略名を認識しません。長形式フラグには必ず二重ハイフン（`--filter-...`）を使用してください。単一ハイフン（`-filter-...`）は使用できません。
 
-同じフィルターに複数の値を指定する場合は、値をカンマで区切ります。値は前後の空白を取り除いて比較し、空の要素は無視します。同じフィルター内の複数値は OR で結合します。異なるフィルターは AND で結合しますが、`--filter-pool` と `--filter-drep` の組み合わせだけは OR で結合します。この組み合わせに他のフィルターを加えた場合、他のフィルターは AND で適用されます。
+同じフィルターに複数の値を指定する場合は、値をカンマで区切ります。Adder は各値の前後の空白を取り除いて比較し、空の要素を無視します。同じフィルター内の複数値は OR で結合します。Adder は異なるフィルターを AND で結合しますが、`--filter-pool` と `--filter-drep` の組み合わせだけは OR で結合します。この組み合わせに他のフィルターを加えた場合、Adder は他のフィルターを AND で適用します。
 
 
 ***
