@@ -1,9 +1,23 @@
 ---
-title: Tray configuration reference
-description: Configure Adder Tray targets, notifications, and migration from legacy filter settings.
+title: Adder Tray configuration reference
+description: Configure Adder Tray monitoring targets, notification preferences, and tray editor behavior.
 ---
 
-This reference describes the changed Adder Tray settings in `adder-tray.yaml`. The tray uses the `filter` section to match notification targets; the engine configuration no longer supplies the tray target lists.
+This reference describes the Adder Tray settings in `adder-tray.yaml` and the `Notification Rules...` editor. The tray uses the `filter` section to match notification targets; the engine configuration no longer supplies the tray target lists.
+
+## Open the Notification Rules editor
+
+During first run, the setup wizard provides the monitoring target and notification controls. After setup completes:
+
+1. Open the Adder menu from the system tray.
+2. Select `Notification Rules...`.
+
+The editor loads the saved targets and preferences into a working copy. It does not save changes until `Apply & Restart` is selected.
+
+The editor supports two monitoring modes:
+
+- `Monitor Everything (ignore per-target lists)` monitors supported event types without using the `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` values.
+- Standard monitoring uses one or more values in the target groups and evaluates the configured target expression.
 
 ## Configuration file location
 
@@ -88,6 +102,10 @@ Use these values in the target arrays:
 - `assets`: CIP-14 asset fingerprints that start with `asset1`.
 - `policies`: 56-character hexadecimal minting policy IDs.
 
+In the `Notification Rules...` editor, enter target values in the matching `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` section. Comma separated input creates multiple rows. The editor trims surrounding whitespace and ignores empty comma items. It validates every value before adding any row from the submission, shows invalid values inline, and rejects the submission when a value fails validation. It rejects a value that already exists in the same group, including case-only duplicates and duplicates within one submission.
+
+Select a row's remove button to delete it. The editor asks for confirmation before it removes the row.
+
 ### Match modes
 
 Set `drep_match`, `pool_match`, `asset_match`, and `policy_match` to `any` or `all`. An omitted match field resolves to `any`.
@@ -107,6 +125,8 @@ filter:
 ```
 
 When `drep_match` changes to `all`, an event must match the wallet group and the DRep group. Values inside each group still use `OR`, so the expression becomes `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` when both groups contain multiple values. The first populated group has no preceding group, so its match field has no effect. Adder Tray does not support a `wallet_match` field.
+
+The editor displays `AND` or `OR` connectors between populated groups. `Pools` match block events, `Wallets`, `Assets`, and `Policies` match transaction events, and `DReps` match governance events. An `AND` across incompatible event families can match no single event, so the editor rejects that expression before applying it. Select `OR` or remove a target group to correct it.
 
 ## Notification preferences
 
@@ -138,6 +158,18 @@ The setup wizard shows the categories that apply to the selected targets:
 - `monitor_everything: true` shows `Incoming transactions`, `Blocks minted`, `Chain rollbacks`, and `Votes cast`.
 - `Connection issues` remains available as a connection status preference.
 
+The standalone `Notification Rules...` editor shows one checkbox for every category in `notify_prefs`. Each checkbox enables or disables that category's notification rules across the configured targets. Current target scoping works as follows:
+
+- `Incoming transactions`, `Outgoing transactions`, and `Token transfers` use followed wallets.
+- `Blocks minted` uses followed pool issuers. An unrelated pool does not trigger a followed pool alert.
+- `New governance proposals` reports proposals as general governance alerts and does not require a followed DRep.
+- `Votes cast` and `Registration changes` use followed DReps. An unrelated DRep does not trigger a followed DRep alert.
+- `Asset activity` uses followed asset fingerprints, and `Policy activity` uses followed policy IDs.
+- `Chain rollbacks` and `Connection issues` operate independently of followed target identities.
+- `Pool parameter changes` remains visible as a preference, but Adder does not currently emit a working pool parameter notification. Enabling it does not create pool parameter alerts.
+
+`Monitor Everything` ignores the target lists and uses broad event rules. Standard monitoring applies the followed identity scope described above.
+
 ## Notification coalescing
 
 `notify_rate_limit` sets the maximum number of notifications that can fire during `notify_rate_window`. Additional matching events combine into one notification at the end of the window.
@@ -153,6 +185,20 @@ For example:
 notify_rate_limit: 1
 notify_rate_window: 5s
 ```
+
+## Apply or cancel editor changes
+
+Before applying, the editor validates the complete target expression. If every possible `AND` term spans incompatible event families, the editor keeps the window open and shows a validation message instead of restarting Adder with silent monitoring.
+
+Select `Apply & Restart` to save the engine and tray configuration, restart or reconnect the managed Adder engine as needed, and hot swap the notification rules and rate limit in the running tray. The tray process does not require a relaunch. Select `Cancel` to close the editor and discard the working copy without saving it.
+
+### Handle a soft apply failure
+
+Adder persists the configuration before it performs binary, service, and API reconnect work. If a post save operation fails, the warning identifies the binary, service, or API problem, and the saved configuration remains in place. The editor stays open with its inputs enabled again so `Apply & Restart` can be selected for another attempt. If the service did not restart, restart Adder manually before retrying.
+
+## Review Recent Events
+
+Select `Recent Events` from the tray menu to open an event in an explorer. Transaction and governance events use their transaction hash. Block events use their block hash. Adder selects the explorer base URL from the network recorded on each event, so each link opens on the event's network.
 
 ## Migration from legacy filter settings
 
