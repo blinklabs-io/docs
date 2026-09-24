@@ -118,7 +118,7 @@ filter:
 
 Cuando `drep_match` cambia a `all`, un evento debe coincidir con el grupo de billeteras y el grupo de DRep. Los valores dentro de cada grupo siguen usando `OR`, por lo que la expresión adopta la forma `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` cuando ambos grupos contienen varios valores. El primer grupo con valores no tiene un grupo anterior, por lo que su campo de coincidencia no tiene efecto. Adder Tray no admite un campo `wallet_match`.
 
-El editor muestra los conectores `AND` y `OR` entre grupos poblados. Las wallets, los assets y las policies coinciden con transacciones; los pools coinciden con bloques cuyo issuer corresponde al pool seguido; y los DReps coinciden con eventos de gobernanza. Una expresión `AND` que une familias incompatibles no puede coincidir con ningún evento, por lo que el editor la rechaza antes de aplicar los cambios. Use `OR` o elimine uno de los grupos.
+El editor muestra los conectores `AND` y `OR` entre grupos poblados. Las wallets, los assets y las policies coinciden con transacciones; los pools coinciden con bloques cuyo emisor corresponde al pool seguido; y los DReps coinciden con eventos de gobernanza. Una expresión `AND` que une familias incompatibles no puede coincidir con ningún evento, por lo que el editor la rechaza antes de aplicar los cambios. Use `OR` o elimine uno de los grupos.
 
 ## Preferencias de notificación
 
@@ -155,15 +155,15 @@ El editor muestra cada categoría y cada casilla controla la regla correspondien
 - `Policy activity`: actividad asociada con las policies seguidas.
 - `Connection issues`: alertas del estado de conexión. Esta categoría funciona de forma independiente y requiere activación propia.
 
-Los DReps y pools no seguidos no activan las alertas de identidad de los DReps y pools seguidos. Las propuestas son alertas generales de gobernanza, mientras que los bloques de la configuración estándar quedan limitados al issuer de un pool seguido.
+Los DReps y pools no seguidos no activan las alertas de identidad de los DReps y pools seguidos. Las propuestas son alertas generales de gobernanza, mientras que los bloques de la configuración estándar quedan limitados al emisor de un pool seguido.
 
 ## Aplicar, cancelar y resolver problemas
 
-`Apply & Restart` valida la expresión completa, guarda la configuración y actualiza las reglas y el límite de notificaciones del motor activo. Adder puede reiniciar o reconectar el servicio subyacente, pero no exige cerrar y volver a abrir el proceso de la bandeja. El editor deshabilita los controles durante la aplicación y se cierra cuando la operación termina correctamente.
+`Apply & Restart` valida la expresión completa, guarda la configuración y actualiza las reglas y el límite de notificaciones del motor activo. Adder puede reiniciar o reconectar el servicio subyacente, pero no exige cerrar y volver a abrir el proceso de la bandeja. El editor deshabilita los controles durante la aplicación y Adder cierra el editor cuando la operación termina correctamente.
 
 `Cancel` descarta la copia de trabajo y conserva la configuración aplicada anteriormente. No guarda los objetivos, conectores ni preferencias modificados durante la sesión del editor.
 
-Una advertencia posterior a `Apply & Restart` indica un fallo no fatal después de guardar la configuración. La advertencia identifica si Adder no encuentra el binario, no puede registrar o reiniciar el servicio, o no puede alcanzar la API durante la reconexión. Los controles vuelven a habilitarse y permiten reintentar `Apply & Restart`. La configuración ya guardada no vuelve atrás por este tipo de fallo.
+Una advertencia posterior a `Apply & Restart` indica un fallo no fatal después de guardar la configuración. La advertencia identifica si Adder no encuentra el binario, no puede registrar o reiniciar el servicio, o no puede alcanzar la API durante la reconexión. El editor vuelve a habilitar los controles y permite reintentar `Apply & Restart`. Adder no revierte la configuración ya guardada por este tipo de fallo.
 
 ## Recent Events
 
