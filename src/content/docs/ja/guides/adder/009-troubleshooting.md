@@ -202,7 +202,7 @@ Webhook出力プラグインは次のCLIオプションを登録します。
 | `--output-webhook-password` | Basic認証のパスワード | 空 |
 | `--output-webhook-tls-skip-verify` | TLS証明書の検証をスキップ | `false` |
 
- Basic認証を使用する場合は、`--output-webhook-username`と`--output-webhook-password`を両方指定します。自己署名証明書を使う検証環境で証明書検証を無効にする場合は、`--output-webhook-tls-skip-verify`を指定します。
+Basic認証を使用する場合は、`--output-webhook-username`と`--output-webhook-password`を両方指定します。自己署名証明書を使う検証環境で証明書検証を無効にする場合は、`--output-webhook-tls-skip-verify`を指定します。
 
 配信先を手動で確認するには、次のコマンドを実行します。
 
