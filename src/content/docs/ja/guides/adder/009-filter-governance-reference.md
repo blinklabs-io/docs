@@ -24,7 +24,7 @@ Adder は次のフィルターを提供します。
 
 フィルターが適用対象にしないイベントは、そのフィルターによる影響を受けずに通過します。たとえば、`input.block` は `--filter-policy` で除外されず、`input.governance` は `--filter-asset` で除外されません。
 
-長いフラグには二重ハイフンを使います。`--filter-type` のような長いフラグに単一ハイフンを付けた `-filter-type` は、短いフラグの集合として解釈されて拒否されます。
+長いフラグには二重ハイフンを使います。`--filter-type` のような長いフラグに単一ハイフンを付けた `-filter-type` を指定すると、Adder はそれを短いフラグの集合として解釈し、受け付けません。
 
 ### 値の指定と組み合わせ
 
@@ -201,7 +201,7 @@ chainsync input は、Conway era のオンチェーンガバナンスデータ�
 
 ### `payload`
 
-`payload` には常に `blockHash` が入り、空でないガバナンス配列が最大 5 種類入ります。各配列は空の場合に省略します。`transactionCbor` は、chainsync input に `--input-chainsync-include-cbor` を指定した場合だけ入ります。
+`payload` には常に `blockHash` が入り、空でないガバナンス配列が最大 5 種類入ります。Adder は空の配列を省略します。Adder は chainsync input に `--input-chainsync-include-cbor` を指定した場合だけ `transactionCbor` を含めます。
 
 | フィールド | 型 | 説明 |
 | --- | --- | --- |
