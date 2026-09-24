@@ -22,6 +22,40 @@ description: Lista de Comandos de Adder.
 
 ## Filtro:
 
+Consulta la [referencia de filtros y gobernanza](../009-filter-governance-reference) para ver ejemplos y el esquema detallado.
+
+Los indicadores de filtro aceptan varios valores separados por comas. Adder recorta los espacios de cada valor e ignora los elementos vacíos. Dentro de un mismo indicador, los valores funcionan como alternativas: el evento debe coincidir con al menos uno. Los filtros de tipos distintos se combinan con `AND`, por lo que el evento debe cumplir todos los filtros configurados. La excepción combina `--filter-pool` y `--filter-drep` con `OR`: basta que el evento coincida con el pool o con el DRep. Los demás filtros configurados siguen aplicándose con `AND` a esa combinación.
+
+Usa la forma larga con dos guiones, como `--filter-type`. La forma con un solo guion, como `-filter-type`, se interpreta como un grupo de indicadores abreviados y se rechaza.
+
+### Aplicabilidad de los filtros
+
+| Indicador | Filtra por | Tipos de evento aplicables |
+| --- | --- | --- |
+| `--filter-type` | Tipo de evento de nivel superior | Todos |
+| `--filter-address` | Dirección de pago o de stake | `input.transaction`, `input.governance` |
+| `--filter-policy` | ID de política del activo | `input.transaction` |
+| `--filter-asset` | Huella digital del activo (`asset1…`) | `input.transaction` |
+| `--filter-pool` | ID del pool de stake (SPO) | `input.block`, `input.transaction`, `input.governance` |
+| `--filter-drep` | ID de DRep, en hexadecimal o bech32 | `input.transaction`, `input.governance` |
+
+Un filtro no afecta los tipos de evento a los que no se aplica. Por ejemplo, `--filter-policy` no elimina eventos `input.block`, y `--filter-asset` no elimina eventos `input.governance`.
+
+### Indicadores, variables de entorno y claves YAML
+
+Los indicadores omiten el nombre del plugin, pero las variables de entorno y las claves YAML conservan el tipo y el nombre del plugin. Usa los nombres exactos de la tabla; `FILTER_ADDRESS` y `plugins.filter.address`, entre otros nombres abreviados, no configuran estos plugins.
+
+| Indicador | Variable de entorno | Clave YAML |
+| --- | --- | --- |
+| `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+| `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+| `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+| `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+| `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+| `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
+
+`--filter-type` usa el plugin de filtro `event`, mientras que los demás indicadores de esta tabla usan el plugin `cardano`.
+
 ```text
   --filter-address string
 ```
@@ -284,6 +318,7 @@ description: Lista de Comandos de Adder.
 
 > especifica la ruta al archivo de cuenta de servicio
 > Cuando se selecciona `--output push`, `--output-push-serviceAccountFilePath` debe especificar una ruta no vacía. El JSON de cuenta de servicio indicado debe incluir `project_id` como una cadena no vacía. La configuración falla cuando falta `project_id`, no es una cadena o está vacío.
+> Cada solicitud HTTP a FCM finaliza como máximo en 10 segundos. Los fallos de credenciales o token, y los fallos al crear o enviar un mensaje, llegan al canal de errores del pipeline de Adder y la CLI los registra; Adder no los muestra como entregas exitosas silenciosas.
 <br />
 
 ```text
