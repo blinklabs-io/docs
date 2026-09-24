@@ -54,7 +54,7 @@ Reemplace `{token}` en `/v1/fcm/{token}` por el valor del token guardado:
 Use `GET /events` para abrir una transmisión de eventos. El servidor actualiza la conexión a WebSocket cuando el cliente solicita ese protocolo; de lo contrario, usa SSE. La ruta acepta estos parámetros de consulta opcionales:
 
 - `types`: Lista separada por comas de los tipos de eventos que se incluirán, como `input.block` o `input.transaction`.
-- `replay`: Valor booleano que indica si el servidor reproduce los eventos retenidos recientemente cuando se abre la conexión. La API establece este valor en `true` de forma predeterminada.
+- `replay`: Valor booleano que indica si el servidor reproduce los eventos retenidos recientemente cuando el cliente abre la conexión. La API establece este valor en `true` de forma predeterminada.
 
 La ruta devuelve datos de eventos como `text/event-stream` o `application/json`, según el modo de conexión.
 
