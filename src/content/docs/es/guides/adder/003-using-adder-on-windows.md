@@ -62,9 +62,9 @@ Introduzca los valores con el formato aceptado por cada sección:
 
 Los valores de una misma sección funcionan como alternativas. Los controles `OR` y `AND` combinan las secciones de destino que contienen valores. Use `OR` cuando cualquiera de las secciones pueda producir el evento correspondiente. No use `AND` entre familias de eventos incompatibles: `Pools` coincide con bloques, `Wallets`, `Assets` y `Policies` coinciden con transacciones, y `DReps` coincide con eventos de gobernanza. El asistente rechaza una combinación `AND` que no pueda coincidir con ningún evento.
 
-En la pantalla `Notifications`, seleccione las categorías de alertas relevantes para los grupos de destino configurados. La opción `Notify on connection issues` se selecciona por separado para recibir alertas sobre problemas de conexión.
+En la pantalla `Notifications`, seleccione las categorías de alertas relevantes para los grupos de destino configurados. Seleccione `Notify on connection issues` por separado para recibir alertas sobre problemas de conexión.
 
-Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y `Window duration`. La duración acepta valores como `5s`, `30s` o `1m`. Si deja los campos vacíos, Adder usa el valor predeterminado de una notificación cada cinco segundos. Introduzca un límite negativo para desactivar por completo la agrupación de notificaciones.
+Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y `Window duration`. La duración acepta valores como `5s`, `30s` o `1m`. Los campos vacíos usan el valor predeterminado de una notificación cada cinco segundos. Introduzca un límite negativo para desactivar por completo la agrupación de notificaciones.
 
 Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer las opciones disponibles de destinos y notificaciones.
 
