@@ -41,7 +41,7 @@ description: AppleのネイティブコンテナランタイムでDingoを実行
 
 ## Adderをネイティブ実行する
 
-Dingoが待機中になったことをヘルパーが報告したら、リポジトリのルートからAdderを実行します。
+Dingoが接続を受け付けていることをヘルパーが報告したら、リポジトリのルートからAdderを実行します。
 
 ```bash
 go run ./cmd/adder --input chainsync \
