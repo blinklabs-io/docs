@@ -54,14 +54,14 @@ Replace `{token}` in `/v1/fcm/{token}` with the stored token value:
 Use `GET /events` to open an event stream. The server upgrades the connection to WebSocket when the client requests that protocol; otherwise, the server uses SSE. The route accepts these optional query parameters:
 
 - `types`: A comma separated list of event types to include, such as `input.block` or `input.transaction`.
-- `replay`: A Boolean value that controls whether the server replays recent events from the ring buffer when the connection opens. The API defaults this value to `true`.
+- `replay`: A Boolean value that controls whether the server replays recently retained events when the connection opens. The API defaults this value to `true`.
 
-The API describes event responses as `text/event-stream` or `application/json`, depending on the connection mode.
+The route returns event data as `text/event-stream` or `application/json`, depending on the connection mode.
 
 ## Path and slash rules
 
 - Keep health and event routes at the root. Do not prepend `/v1` to `/ping`, `/healthcheck`, or `/events`.
-- Keep FCM and QR routes under `/v1`. `/fcm` without `/v1` is not the documented token route.
+- Use `/v1` for FCM and QR routes.
 - The root routes accept `/ping/` and `/healthcheck/` in addition to their documented paths.
 - The FCM and QR routes accept an optional trailing slash as well as the documented paths.
 - Use `/swagger/` with its trailing slash. Use `/events` as documented; this reference does not define an `/events/` variant.
