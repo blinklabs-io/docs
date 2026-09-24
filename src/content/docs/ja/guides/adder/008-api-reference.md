@@ -23,7 +23,7 @@ Adderのルートは2つのパス階層に分かれます。
 | `GET` | `/ping` | APIサーバーの疎通を確認します。 | プレーンテキスト`pong`を`200 OK`で返します。 |
 | `GET` | `/healthcheck` | 実行中のパイプラインと登録済みヘルスチェッカーの状態を確認します。 | 正常時は`{"failed":false}`のJSONを`200 OK`で返します。ヘルスチェッカーが異常を検出すると、`{"failed":true,"reason":"pipeline is not running"}`のJSONを`503 Service Unavailable`で返します。 |
 | `GET` | `/events` | パイプラインイベントをリアルタイムでストリーミングします。 | サーバーはクライアントの要求に応じてWebSocketにアップグレードし、それ以外ではServer-Sent Events（SSE）でイベントを配信します。接続成功時のステータスは`200 OK`です。 |
-| `POST` | `/v1/fcm` | FCMトークンを保存します。 | JSONリクエストを受け取り、保存後に`201 Created`を返します。不正なJSONまたは`fcmToken`の欠落には`400 Bad Request`を返します。トークンストアを取得できない場合は`500 Internal Server Error`を返します。 |
+| `POST` | `/v1/fcm` | FCMトークンを保存します。 | JSONリクエストを受け取り、保存後に`201 Created`を返します。不正なJSON、`fcmToken`の欠落、または空の`fcmToken`には`400 Bad Request`を返します。トークンストアを取得できない場合は`500 Internal Server Error`を返します。 |
 | `GET` | `/v1/fcm/{token}` | トークン値で保存済みFCMトークンを取得します。 | トークンをJSONで`200 OK`として返します。トークンが存在しない場合は`404 Not Found`、トークンストアを取得できない場合は`500 Internal Server Error`を返します。 |
 | `DELETE` | `/v1/fcm/{token}` | トークン値で保存済みFCMトークンを削除します。 | 削除後に`204 No Content`を返します。トークンが存在しない場合は`404 Not Found`、トークンストアを取得できない場合は`500 Internal Server Error`を返します。 |
 | `GET` | `/v1/qrcode` | ローカルAPIのFCMエンドポイント用QRコード設定ページを生成します。 | インタラクティブなHTMLページを`200 OK`で返します。 |
@@ -39,17 +39,17 @@ Adderのルートは2つのパス階層に分かれます。
 {"fcmToken":"example-device-token"}
 ```
 
-トークンを保存すると`201 Created`を返します。JSONをデコードできない場合、または`fcmToken`が空の場合は、`400 Bad Request`とエラーJSONを返します。
+トークンを保存すると`201 Created`を返します。JSONをデコードできない場合、`fcmToken`がない場合、または`fcmToken`が空の場合は、`400 Bad Request`とエラーJSONを返します。
 
 ### FCMトークンを取得または削除する
 
-保存済みトークンの値を`/v1/fcm/{token}`の`{token}`に指定します。
+保存済みトークンの値を、`/v1/fcm/{token}`の`{token}`に指定します。
 
 - `GET`は`{"fcmToken":"example-device-token"}`形式のJSONを`200 OK`で返します。
 - `DELETE`はトークンを削除し、`204 No Content`を返します。
 - トークンが存在しない場合、どちらのメソッドも`404 Not Found`を返します。
 
-削除ルートも`/v1/fcm/{token}`です。ルート直下の`/fcm/{token}`は使用しません。
+削除にも`/v1/fcm/{token}`を使用します。ルート直下の`/fcm/{token}`は使用しません。
 
 ### イベントをストリーミングする
 
@@ -58,7 +58,7 @@ Adderのルートは2つのパス階層に分かれます。
 - `types`: 対象にするイベント種別をカンマ区切りで指定します。例: `input.block`、`input.transaction`
 - `replay`: 接続時にリングバッファ内の最近のイベントを再生するか指定します。デフォルトは`true`です。
 
-SSEでは`text/event-stream`を返し、WebSocket接続ではWebSocketセッションを確立します。
+SSEは`text/event-stream`を使用し、WebSocket接続はWebSocketセッションを確立します。
 
 ## パスと末尾スラッシュ
 
