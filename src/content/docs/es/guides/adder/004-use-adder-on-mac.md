@@ -66,9 +66,9 @@ VERSION=1.2.3 COMMIT_HASH=abc1234 make bundle-macos
 
 El script de creación del paquete pasa `VERSION` a las compilaciones de `adder` y `adder-tray` y almacena el valor original en los metadatos del paquete. Los programas resultantes usan `VERSION` y `COMMIT_HASH`, por lo que el diálogo About puede mostrar los valores seleccionados.
 
-## Desinstalar desde un checkout del código fuente
+## Desinstalar desde una copia local del código fuente
 
-Ejecuta el script de desinstalación desde el checkout del código fuente de Adder:
+Ejecuta el script de desinstalación desde una copia local del código fuente de Adder:
 
 ```bash
 ./scripts/bundle-macos-uninstall.sh
@@ -82,7 +82,7 @@ Para eliminar también la configuración y los registros, usa `--purge`, `--all`
 ./scripts/bundle-macos-uninstall.sh --purge
 ```
 
-Este procedimiento desde el checkout también elimina el estado del elemento de inicio de sesión y del agente de lanzamiento; quitar manualmente un paquete instalado no ejecuta esa limpieza. El script no elimina el enlace de conveniencia `/usr/local/bin/adder`. El instalador crea ese enlace cuando puede y no reemplaza un enlace existente y no relacionado, por lo que el enlace debe gestionarse por separado cuando apunta a una instalación de Adder que ya no existe.
+Quitar manualmente un paquete instalado no elimina el elemento de inicio de sesión ni el agente de lanzamiento. El script no elimina el enlace de conveniencia `/usr/local/bin/adder`. El instalador crea ese enlace cuando puede y no reemplaza un enlace existente y no relacionado, por lo que el enlace debe gestionarse por separado cuando apunta a una instalación de Adder que ya no existe.
 
 
 ---
