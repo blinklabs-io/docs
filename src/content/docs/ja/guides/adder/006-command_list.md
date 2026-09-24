@@ -75,6 +75,26 @@ description: Adderコマンドのリスト。
 >
 >
 
+フィルターの詳細な適用範囲とガバナンスイベントの照合項目は、[フィルターとガバナンスの詳細リファレンス](../009-filter-governance-reference)を参照してください。
+
+### フィルターの指定名と結合規則
+
+フィルターの CLI フラグ、環境変数、YAML キーは次のように対応します。
+
+| CLI フラグ | 環境変数 | YAML キー |
+| --- | --- | --- |
+| `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+| `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+| `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+| `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+| `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+| `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
+
+CLI フラグはプラグイン名を省略しますが、環境変数と YAML キーにはプラグイン名が必要です。`FILTER_ADDRESS` や `plugins.filter.address` のような省略名は認識されません。long flag には必ず二重ハイフン（`--filter-...`）を使用してください。単一ハイフン（`-filter-...`）は使用できません。
+
+同じフィルターに複数の値を指定する場合は、値をカンマで区切ります。値は前後の空白を取り除いて比較し、空の要素は無視します。同じフィルター内の複数値は OR で結合します。異なるフィルターは AND で結合しますが、`--filter-pool` と `--filter-drep` の組み合わせだけは OR で結合します。この組み合わせに他のフィルターを加えた場合、他のフィルターは AND で適用されます。
+
+
 ***
 
 ## 入力：
