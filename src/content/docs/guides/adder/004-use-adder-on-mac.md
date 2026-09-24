@@ -24,7 +24,7 @@ The first-run tray wizard handles startup and login registration. The package do
 ### Configure startup on macOS
 
 1. In the tray wizard, select `Start Adder automatically on login / reboot` to enable automatic startup, or clear it to disable automatic startup.
-2. Check the background activity status shown by the wizard. The status reports whether the macOS service remains registered or currently runs.
+2. Check the background activity status shown by the wizard. The status reports whether the macOS service is registered or running.
 3. Select `Open Login Items Settings...` to open `System Settings > General > Login Items & Extensions > Open at Login / App Background Activity`.
 
 The wizard applies the startup choice and keeps the macOS launch agent and Login Item synchronized.
@@ -64,7 +64,7 @@ To build a local app bundle with explicit version and commit metadata, pass `VER
 VERSION=1.2.3 COMMIT_HASH=abc1234 make bundle-macos
 ```
 
-The bundle script passes `VERSION` to the `adder` and `adder-tray` builds and stores the original value in the bundle's `AdderGitVersion` metadata. The build applies `VERSION` and `COMMIT_HASH` to those programs, so the About dialog can display the selected values.
+The bundle script passes `VERSION` to the `adder` and `adder-tray` builds and stores the original value in the bundle's `AdderGitVersion` metadata. The resulting programs use `VERSION` and `COMMIT_HASH`, so the About dialog can display the selected values.
 
 ## Uninstall from a source checkout
 
