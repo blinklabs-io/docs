@@ -24,7 +24,7 @@ Esta referencia explica cómo Adder selecciona eventos, cómo expresa los filtro
 
 Un filtro que no corresponde al tipo de evento deja pasar ese evento sin cambios. Por ejemplo, `--filter-policy` no elimina eventos `input.block`, y `--filter-asset` no elimina eventos `input.governance`.
 
-Los indicadores largos requieren dos guiones, como `--filter-type`. La forma de un solo guion, `-filter-type`, se interpreta como un grupo de indicadores abreviados y Adder la rechaza.
+Los indicadores largos requieren dos guiones, como `--filter-type`. Adder interpreta la forma de un solo guion, `-filter-type`, como un grupo de indicadores abreviados y la rechaza.
 
 ### Valores múltiples y combinación de filtros
 
@@ -44,7 +44,7 @@ Los eventos `input.block` se comparan únicamente con `--filter-pool`, porque `-
 
 ### Mapeo de CLI, entorno y YAML
 
-El nombre abreviado del indicador omite el nombre del plugin. Las variables de entorno y las claves de configuración conservan el tipo y el nombre del plugin; por tanto, no se debe reutilizar el nombre abreviado del indicador como nombre de entorno o configuración. Por ejemplo, `FILTER_ADDRESS` no configura `--filter-address`.
+El nombre abreviado del indicador omite el nombre del plugin. Las variables de entorno y las claves de configuración conservan el tipo y el nombre del plugin; por tanto, el nombre abreviado del indicador no funciona como nombre de entorno o configuración. Por ejemplo, `FILTER_ADDRESS` no configura `--filter-address`.
 
 | Indicador | Variable de entorno | Clave de configuración |
 | --- | --- | --- |
@@ -199,7 +199,7 @@ El objeto `context` identifica la transacción y su posición en la cadena:
 
 ### `payload`
 
-El objeto `payload` siempre contiene `blockHash`. También puede contener `transactionCbor` cuando la entrada se ejecuta con `--input-chainsync-include-cbor`. Adder omite cada uno de los cinco arrays de gobernanza cuando está vacío.
+El objeto `payload` siempre contiene `blockHash`. Adder incluye `transactionCbor` cuando ejecuta la entrada con `--input-chainsync-include-cbor` y omite cada uno de los cinco arrays de gobernanza cuando está vacío.
 
 | Campo | Tipo | Descripción |
 | --- | --- | --- |
@@ -267,7 +267,7 @@ El objeto `payload` siempre contiene `blockHash`. También puede contener `trans
 
 ## Filtrado de eventos de gobernanza
 
-Tres filtros de Cardano se aplican a los eventos `input.governance`. Adder compara cada filtro con las referencias de datos correspondientes del evento.
+Adder aplica tres filtros de Cardano a los eventos `input.governance`. Adder compara cada filtro con las referencias de datos correspondientes del evento.
 
 - **`--filter-drep`** compara los certificados del DRep, los certificados de delegación de voto que delegan en el DRep y los procedimientos de voto cuyo votante es el DRep.
 - **`--filter-pool`** compara los procedimientos de voto emitidos por el pool como SPO y los certificados de delegación de voto que contienen el hash de la clave del pool.
@@ -277,7 +277,7 @@ Tres filtros de Cardano se aplican a los eventos `input.governance`. Adder compa
 
 Para seguir la actividad de gobernanza de una cuenta, use su dirección de stake.
 
-`--filter-policy` y `--filter-asset` no se aplican a los eventos de gobernanza. Un evento `input.governance` pasa sin cambios por esos filtros.
+Adder no aplica `--filter-policy` ni `--filter-asset` a los eventos de gobernanza. Un evento `input.governance` pasa sin cambios por esos filtros.
 
 Este ejemplo emite únicamente eventos de gobernanza relacionados con el DRep de muestra:
 
