@@ -1,3 +1,8 @@
+# ---
+# title: Guía de resolución de problemas de Adder
+# description: Procedimientos para diagnosticar conexiones, configuración, filtros, FCM y webhooks de Adder.
+# ---
+
 # Guía de resolución de problemas de Adder
 
 ## Descripción general
@@ -135,7 +140,7 @@ echo -n "2dd15e0efd5c07b6bfbc0cf7fb2f767a50e189d7bfa50e1ef0b87abc" | wc -c
 
 **Síntoma:** El plugin `push` registra `failed to get token` o `failed to read credential file`.
 
-**Causa habitual:** El archivo JSON de la cuenta de servicio no existe, no se puede leer o no contiene credenciales válidas de Google.
+**Causa habitual:** La cuenta que ejecuta Adder no encuentra el archivo JSON de la cuenta de servicio, no puede leerlo o no contiene credenciales válidas de Google.
 
 **Resolución:**
 
@@ -225,13 +230,9 @@ Adder informa como errores las cargas `nil`, los contextos ausentes o incompatib
 
 Revise el productor de eventos cuando aparezca un error de payload, contexto o tipo de evento. Durante el apagado, Adder interrumpe la espera de un reintento en curso, detiene el plugin y evita que el proceso quede esperando al siguiente intervalo.
 
-## 6. Referencia rápida de errores
+## 6. Referencia rápida de errores adicionales
 
 | Mensaje | Componente | Diagnóstico |
 | :--- | :--- | :--- |
-| `failed to read credential file: open ...: no such file or directory` | `output/push` | Compruebe la ruta configurada en `--output-push-serviceAccountFilePath`. |
-| `failed to get token: oauth2: cannot fetch token` | `output/push` | Compruebe la conectividad de red y el estado de las credenciales de la cuenta de servicio. |
 | `invalid intersect point format: expected '<slot>.<hash>'` | `input/chainsync` | Use `--input-chainsync-intersect-point` con el formato `<slot_integer>.<block_hex_hash>`. |
-| `server returned status: 500` | `output/webhook` | Revise los registros del servidor webhook y confirme que el endpoint devuelve un estado `2xx`. |
-| `failed to parse credential file` | `output/push` / `internal/config` | Valide la sintaxis y el formato JSON de las credenciales. |
 | `failed to process plugin config` | `internal/config` / `plugin` | Compare los tipos y valores de las claves con las opciones del plugin. |
