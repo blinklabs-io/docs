@@ -85,7 +85,7 @@ Seleccione `Open Login Items Settings...` para abrir la configuración de aplica
 
 Haga clic con el botón derecho en Adder desde la bandeja del sistema para abrir el menú y ajustar la configuración de la aplicación.
 
-Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro muestra la versión en ejecución y, cuando está disponible, el hash del commit correspondiente con el formato `Version: <version> (commit: <hash>)`. Si no hay información del commit, muestra `Version: <version>`.
+Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro muestra la versión que está en ejecución y, si está disponible, el hash del commit con el formato `Version: <version> (commit: <hash>)`. Si no hay información del commit, muestra `Version: <version>`.
 
 <br />
 
