@@ -12,7 +12,7 @@ During first run, the setup wizard provides the monitoring target and notificati
 1. Open the Adder menu from the system tray.
 2. Select `Notification Rules...`.
 
-The editor loads the saved targets and preferences into a working copy. The editor saves changes only when the `Apply & Restart` button receives a selection.
+The editor loads the saved targets and preferences into a working copy. Select `Apply & Restart` to save changes.
 
 The editor supports two monitoring modes:
 
@@ -102,7 +102,7 @@ Use these values in the target arrays:
 - `assets`: CIP-14 asset fingerprints that start with `asset1`.
 - `policies`: 56-character hexadecimal minting policy IDs.
 
-In the `Notification Rules...` editor, enter target values in the matching `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` section. Comma separated input creates multiple rows. The editor trims surrounding whitespace and ignores empty comma items. It validates every value before adding any row from the submission, shows invalid values inline, and rejects the submission when a value fails validation. It rejects a value that already exists in the same group, including case-only duplicates and duplicates within one submission.
+In the `Notification Rules...` editor, enter target values in the matching `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` section. Comma-separated input creates multiple rows. The editor trims surrounding whitespace and ignores empty comma items. It validates every value before adding any row from the submission, shows invalid values inline, and rejects the submission when a value fails validation. It rejects a value that already exists in the same group, including case-only duplicates and duplicates within one submission.
 
 Select a row's remove button to delete it. The editor asks for confirmation before it removes the row.
 
@@ -192,7 +192,7 @@ Select `Apply & Restart` to save the engine and tray configuration, restart or r
 
 ### Handle a soft apply failure
 
-Adder persists the configuration before it performs binary, service, and API reconnect work. If a post save operation fails, the warning identifies the binary, service, or API problem, and the saved configuration remains in place. The editor stays open and re enables its inputs, so another `Apply & Restart` attempt remains available. If the service did not restart, restart Adder manually before retrying.
+Adder persists the configuration before it performs binary, service, and API reconnect work. If a post-save operation fails, the warning identifies the binary, service, or API problem, and the saved configuration remains in place. The editor stays open and re-enables its inputs, so another `Apply & Restart` attempt remains available. If the service did not restart, restart Adder manually before retrying.
 
 ## Review Recent Events
 
