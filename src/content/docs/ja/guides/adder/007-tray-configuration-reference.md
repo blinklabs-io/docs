@@ -1,0 +1,161 @@
+---
+title: Tray 設定リファレンス
+description: Adder Tray のターゲット、通知、および従来のフィルター設定からの移行を構成します。
+---
+
+このリファレンスでは、`adder-tray.yaml` の Adder Tray 設定について説明します。Tray は `filter` セクションを使用して通知ターゲットを照合します。エンジン設定は Tray のターゲットリストを提供しません。
+
+## 設定ファイルの場所
+
+Adder Tray は、プラットフォームに応じた次のパスに `adder-tray.yaml` を保存します。
+
+| プラットフォーム | 設定パス |
+| --- | --- |
+| macOS | `$HOME/Library/Application Support/Adder/adder-tray.yaml` |
+| Windows | `%APPDATA%\Adder\adder-tray.yaml`、または `APPDATA` が設定されていない場合は `%USERPROFILE%\AppData\Roaming\Adder\adder-tray.yaml` |
+| Linux | `$XDG_CONFIG_HOME/adder/adder-tray.yaml`、または `XDG_CONFIG_HOME` が設定されていない場合は `$HOME/.config/adder/adder-tray.yaml` |
+
+`ADDER_TRAY_CONFIG_DIR` を設定すると、`adder-tray.yaml` を含むディレクトリを上書きできます。上書き値には、置き換えるファイル名ではなくディレクトリを指定します。
+
+## ターゲットフィルター
+
+次の例では、明示的なターゲット配列を使用します。
+
+```yaml
+filter:
+  monitor_everything: false
+  wallets:
+    - addr1...
+    - stake1...
+  dreps:
+    - drep1...
+    - deadbeef
+  pools:
+    - pool1...
+    - 0123456789abcdef
+  assets:
+    - asset1...
+  policies:
+    - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  drep_match: any
+  pool_match: all
+  asset_match: any
+  policy_match: any
+```
+
+`filter.monitor_everything` を `true` に設定すると、サポートされているすべてのイベント種別を監視します。この設定はすべてのターゲット配列を無視します。選択したターゲットだけを照合する場合は `false` に設定し、その場合は `wallets`、`dreps`、`pools`、`assets`、`policies` のいずれかに少なくとも1つのターゲットを指定します。
+
+ターゲット配列には、次の値を使用します。
+
+- `wallets`: `addr1` または `stake1` で始まる Cardano の支払いアドレスまたはステークアドレス。
+- `dreps`: `drep1` で始まる DRep 識別子、または16進数の DRep ID。
+- `pools`: `pool1` で始まるステークプール識別子、または16進数のプール ID。
+- `assets`: `asset1` で始まる CIP-14 アセットフィンガープリント。
+- `policies`: 56文字の16進数ミンティングポリシー ID。
+
+### マッチモード
+
+`drep_match`、`pool_match`、`asset_match`、`policy_match` には `any` または `all` を設定します。マッチフィールドを省略すると `any` として解決されます。
+
+各ターゲット配列は、その配列内のいずれか1つの値に一致します。マッチフィールドは、値が指定されたターゲットグループを、直前に値が指定されたグループに結合します。
+
+- `any` はグループを `OR` で結合します。
+- `all` はグループを `AND` で結合します。
+
+たとえば、次のフィルターは、選択したウォレットイベントまたは選択した DRep イベントに一致します。
+
+```yaml
+filter:
+  wallets: [addr1...]
+  dreps: [drep1...]
+  drep_match: any
+```
+
+`drep_match` を `all` に変更すると、イベントはウォレットグループと DRep グループの両方に一致する必要があります。各グループ内では引き続き `OR` を使用するため、両方のグループに複数の値がある場合、式は `(wallet 1 OR wallet 2) AND (DRep 1 OR DRep 2)` になります。最初に値が指定されたグループには直前のグループがないため、そのマッチフィールドは効果を持ちません。Adder Tray は `wallet_match` フィールドをサポートしません。
+
+## 通知設定
+
+`notify_prefs` は、サポートされている各アラートカテゴリを `true` または `false` に対応付けます。次の YAML マップキーをそのまま使用します。
+
+```yaml
+notify_prefs:
+  "Incoming transactions": true
+  "Outgoing transactions": true
+  "Token transfers": true
+  "Blocks minted": true
+  "Chain rollbacks": true
+  "Pool parameter changes": true
+  "New governance proposals": true
+  "Votes cast": true
+  "Registration changes": true
+  "Asset activity": true
+  "Policy activity": true
+  "Connection issues": true
+```
+
+セットアップウィザードは、選択したターゲットに該当するカテゴリを表示します。
+
+- `wallets` は `Incoming transactions`、`Outgoing transactions`、`Token transfers` を表示します。
+- `dreps` は `New governance proposals`、`Votes cast`、`Registration changes` を表示します。
+- `pools` は `Blocks minted`、`Pool parameter changes`、`Chain rollbacks` を表示します。
+- `assets` は `Asset activity` を表示します。
+- `policies` は `Policy activity` を表示します。
+- `monitor_everything: true` は `Incoming transactions`、`Blocks minted`、`Chain rollbacks`、`Votes cast` を表示します。
+- `Connection issues` は接続状態の設定として常に使用できます。
+
+## 通知の集約
+
+`notify_rate_limit` は、`notify_rate_window` の期間内に発生できる通知の最大数を設定します。上限を超えた一致イベントは、期間の終了時に1件の通知へまとめられます。
+
+- 両方のフィールドを省略するか、いずれかのフィールドを `0` に設定すると、5秒ごとに1件の通知を使用します。
+- `notify_rate_limit` に負の数を設定すると集約を無効にし、一致したイベントごとに即時通知を発生させます。
+- `notify_rate_window` には、`5s`、`30s`、`1m` などの正の期間文字列を設定します。
+- セットアップウィザードは同じ期間形式を受け付け、0以下の期間を拒否します。
+
+例:
+
+```yaml
+notify_rate_limit: 1
+notify_rate_window: 5s
+```
+
+## 従来のフィルター設定からの移行
+
+以前の設定では、エンジン設定の `plugins.filter.cardano` に Tray のターゲット値を保存していました。アップグレード時に、新しい Tray の `filter` に Monitor Everything の設定もターゲット値もない場合だけ、Adder Tray はその値をインポートします。カンマ区切りの値は、対応するターゲット配列の項目になります。
+
+### 移行前
+
+```yaml
+plugins:
+  filter:
+    cardano:
+      address: addr1...,stake1...
+      drep: drep1...,deadbeef
+      pool: pool1...,0123456789abcdef
+      asset: asset1...
+      policy: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+### 移行後
+
+Adder Tray は、インポートしたターゲットを `adder-tray.yaml` に保存します。
+
+```yaml
+filter:
+  monitor_everything: false
+  wallets:
+    - addr1...
+    - stake1...
+  dreps:
+    - drep1...
+    - deadbeef
+  pools:
+    - pool1...
+    - 0123456789abcdef
+  assets:
+    - asset1...
+  policies:
+    - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+Adder Tray が新しい設定を保存すると、エンジン設定から従来の `address`、`drep`、`pool`、`asset`、`policy` キーを削除します。その後に従来のエンジン値を手動で編集しても、Tray の通知照合は変わりません。
