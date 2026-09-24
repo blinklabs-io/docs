@@ -1,7 +1,7 @@
-# ---
-# title: Guía de resolución de problemas de Adder
-# description: Procedimientos para diagnosticar conexiones, configuración, filtros, FCM y webhooks de Adder.
-# ---
+---
+title: Guía de resolución de problemas de Adder
+description: Procedimientos para diagnosticar conexiones, configuración, filtros, FCM y webhooks de Adder.
+---
 
 # Guía de resolución de problemas de Adder
 
