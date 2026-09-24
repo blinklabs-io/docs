@@ -49,6 +49,23 @@ Notificationsステップでは、`Monitor Everything`を有効にすると基�
 
 通知の頻度を変更するには、`Advanced — Rate Limiting`を開きます。`Max notifications per window`にウィンドウごとの最大通知数を入力し、`Window duration`に`5s`、`30s`、`1m`などの期間を入力します。両方を空欄にすると、デフォルトの1通知/5秒を使用します。最大通知数に負の値を入力すると、通知のまとめ処理を無効にします。
 
+### 自動起動とバックグラウンド動作
+
+Notificationsステップで`Start Adder automatically on login / reboot`を有効にすると、現在のWindowsユーザーのログインまたは再起動後にAdderを自動的に起動します。自動起動を無効にするには、このチェックボックスをオフにします。この設定は現在のユーザーのスタートアップ登録を使用し、管理者権限を必要としません。トレイはAdderエンジンをウィンドウを表示せずにバックグラウンドで起動します。
+
+`Background Activity`には、次のいずれかの状態が表示されます。
+
+- `Background Activity: Registered & Running (io.blinklabs.adder)`: 自動起動が登録され、Adderエンジンが実行中です。
+- `Background Activity: Registered (io.blinklabs.adder)`: 自動起動は登録されていますが、Adderエンジンは実行されていません。
+- `Background Activity: Not registered`: 自動起動は無効です。
+- `Background Activity: Status unknown`: Adderは自動起動の状態を確認できませんでした。
+
+`Open Login Items Settings...`を選択すると、Windowsのスタートアップ設定が開き、Adderの自動起動登録を確認できます。
+
+## Trayメニュー
+
+システムトレイのAdderを右クリックして`About`を選択すると、アプリ内ウィンドウが開きます。このウィンドウには現在のAdderのバージョンが表示されます。コミット情報が利用できる場合は`Version: <version> (commit: <hash>)`形式で表示され、利用できない場合は`Version: <version>`形式で表示されます。
+
 ## ステップ1 - Windowsでコマンドプロンプトを開く
 
 Adder exeファイルをダウンロードしたので、コマンドラインプロンプトを開く必要があります。ここで後ほど、追跡したいイベントについてAdderにフィルターとコマンドを入力します。
