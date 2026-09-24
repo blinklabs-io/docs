@@ -7,7 +7,7 @@ description: Como usar Adder en Windows.
 
 Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te mostraremos ejemplos de como usar Adder. Recuerda que estos son ejemplos para familiarizarte con el tipo de cosas que Adder es capaz de hacer. El verdadero poder de Adder puede ser desbloqueado por tu imaginacion.
 
-> Nota: esta guía asume que se ha descargado el instalador `.msi` de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si no se ha descargado el instalador, consulta [Inicio Rápido](../002-quick-start-overview).
+> Nota: descarga el instalador `.msi` de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si falta el instalador, consulta [Inicio Rápido](../002-quick-start-overview).
 
 ## Paso 1 - Instalar Adder en Windows
 
@@ -16,7 +16,7 @@ Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te
 
 El MSI de lanzamiento instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. También crea el acceso directo de la bandeja en el menú Inicio y registra Adder en `Aplicaciones y características` o `Agregar o quitar programas`.
 
-El MSI no registra una `Tarea programada` ni activa el inicio automático por sí mismo. Los MSI compilados localmente o de prueba pueden no estar firmados y mostrar una advertencia de `SmartScreen` o de editor desconocido.
+El MSI no registra una `Tarea programada` ni activa el inicio automático por sí mismo. Los MSI compilados localmente o de prueba pueden carecer de firma, y Windows puede mostrar una advertencia de `SmartScreen` o de editor desconocido.
 
 ## Paso 2 - Configurar Adder Tray
 
@@ -41,9 +41,9 @@ Abra `Advanced — Rate Limiting` para definir `Max notifications per window` y 
 
 Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer las opciones disponibles de destinos y notificaciones.
 
-### Paso 4 - Inicio automático y actividad en segundo plano
+### Paso 3 - Inicio automático y actividad en segundo plano
 
-Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. Esta opción se registra solo para el usuario actual de Windows; el MSI no la activa de forma independiente. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
+Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. La bandeja registra esta opción solo para el usuario actual de Windows; el MSI no la activa de forma independiente. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
 
 El estado de actividad en segundo plano muestra uno de los siguientes valores:
 
@@ -58,7 +58,7 @@ Seleccione `Open Login Items Settings...` para abrir la configuración de aplica
 
 Haga clic con el botón derecho en Adder desde la bandeja del sistema para abrir el menú y ajustar la configuración de la aplicación.
 
-Seleccione [Notification Rules...](../007-tray-configuration-reference) para editar los objetivos de monitoreo y las categorías de notificación. `Apply & Restart` guarda los cambios y reinicia el motor necesario sin reiniciar la bandeja. Consulte la [referencia de configuración de la bandeja](../007-tray-configuration-reference) para conocer los formatos y conectores disponibles.
+Seleccione [Notification Rules...](../007-tray-configuration-reference) para editar los objetivos de monitoreo y las categorías de notificación. `Apply & Restart` guarda los cambios y reinicia el motor necesario sin reiniciar la bandeja.
 
 Seleccione `Recent Events` para consultar los eventos recientes. Las entradas de transacción y gobernanza abren la transacción en el explorador; las entradas de bloque abren el bloque. Cada enlace usa la red del evento.
 
@@ -68,11 +68,11 @@ Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro m
 
 ## Diagnóstico y reintento
 
-La GUI de Windows no tiene una consola normal. Los fallos de inicio o ejecución, incluidos los pánicos y los problemas de gráficos, se registran en `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`; use `Show Logs` para abrir la carpeta y revisar el archivo.
+La GUI de Windows no tiene una consola normal. El archivo `%LOCALAPPDATA%\Adder\Logs\adder-tray.log` recoge los fallos de inicio o ejecución, incluidos los pánicos y los problemas de gráficos; use `Show Logs` para abrir la carpeta y revisar el archivo.
 
 Adder ejecuta una sola instancia de la bandeja por sesión de inicio de Windows. Si un segundo lanzamiento termina inmediatamente, compruebe si ya existe una instancia de la bandeja en ejecución.
 
-Si aparece un aviso al aplicar la configuración, la configuración ya quedó guardada. El editor permanece abierto y sus controles vuelven a habilitarse cuando falla de forma recuperable el reinicio o la reconexión. Revise el estado o los registros y vuelva a aplicar la configuración.
+Si aparece un aviso al aplicar la configuración, Adder ya guardó la configuración. El editor permanece abierto y la aplicación vuelve a habilitar sus controles si el reinicio o la reconexión falla de forma recuperable. Revise el estado o los registros y vuelva a aplicar la configuración.
 
 <br />
 
