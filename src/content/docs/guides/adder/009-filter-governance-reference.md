@@ -161,7 +161,7 @@ plugins:
 - **Bech32:** Values beginning with `drep` use either the `drep1...` key-hash prefix or the `drep_script1...` script-hash prefix. Adder decodes the value and expects a 28-byte credential hash. If the decoded payload has 29 bytes, Adder removes the leading byte as a header without inspecting or validating it. Adder ignores payloads with any other length and drops those identifiers from the filter.
 - **Hexadecimal:** Values contain the raw 28-byte credential hash as 56 hexadecimal characters. Adder performs no header removal for hexadecimal input, so a value that includes a header byte does not match.
 
-Adder emits DRep IDs as bech32 encodings of the raw 28 byte credential hash, using `drep` for key hash credentials and `drep_script` for script hash credentials. A `drepId` value emitted by Adder can be passed to `--filter-drep` unchanged.
+Adder emits DRep IDs as bech32 encodings of the raw 28-byte credential hash, using `drep` for key-hash credentials and `drep_script` for script-hash credentials. A `drepId` value emitted by Adder can be passed to `--filter-drep` unchanged.
 
 ## Governance events
 
@@ -201,7 +201,7 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `votingProcedures` | array | Votes cast in the transaction |
 | `drepCertificates` | array | DRep registration, update, or retirement certificates |
 | `voteDelegationCertificates` | array | Vote delegation certificates |
-| `committeeCertificates` | array | Constitutional Committee hot key authorization or cold key resignation certificates |
+| `committeeCertificates` | array | Constitutional Committee hot-key authorization or cold-key resignation certificates |
 
 #### `proposalProcedures[]`
 
@@ -245,7 +245,7 @@ The `payload` object always contains `blockHash`. It can contain `transactionCbo
 | `drepType` | string | One of `KeyHash`, `ScriptHash`, `Abstain`, `NoConfidence` |
 | `drepHash` | string | DRep credential hash in hexadecimal form; Adder includes it for `KeyHash` and `ScriptHash` |
 | `drepId` | string | DRep ID in bech32 form; Adder includes it for `KeyHash` and `ScriptHash` |
-| `poolKeyHash` | string | Pool key hash in hexadecimal form; Adder includes it for the combined stake and vote delegation types |
+| `poolKeyHash` | string | Pool-key hash in hexadecimal form; Adder includes it for the combined stake and vote-delegation types |
 | `deposit` | number | Deposit in lovelace; Adder includes it for the registration delegation types |
 
 #### `committeeCertificates[]`
@@ -264,8 +264,8 @@ Three Cardano filters apply to `input.governance` events. An event matches a fil
 - **`--filter-drep`** matches DRep certificates, vote delegation certificates that delegate to the DRep, and voting procedures where the DRep casts the vote.
 - **`--filter-pool`** matches voting procedures cast by the pool as an SPO and vote delegation certificates that reference the pool key hash.
 - **`--filter-address`** matches different governance fields according to the address type:
-  - A **stake address** (`stake1...`) matches a proposal `rewardAccount`, treasury withdrawal destination addresses, and the stake credential in vote delegation certificates.
-  - A **payment address** (`addr1...`) matches treasury withdrawal destination addresses only. Reward accounts and vote delegation credentials are stake credentials, so Adder compares them only with stake addresses.
+  - A **stake address** (`stake1...`) matches a proposal `rewardAccount`, treasury-withdrawal destination addresses, and the stake credential in vote-delegation certificates.
+  - A **payment address** (`addr1...`) matches treasury-withdrawal destination addresses only. Reward accounts and vote-delegation credentials are stake credentials, so Adder compares them only with stake addresses.
 
 Use a stake address to follow an account's governance activity.
 
