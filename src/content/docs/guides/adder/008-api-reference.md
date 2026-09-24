@@ -55,7 +55,7 @@ Use `GET /events` to open an event stream. The server upgrades the connection to
 
 The route accepts these optional query parameters:
 
-- `types`: A comma separated list of event types to include, such as `input.block` or `input.transaction`. Omit this parameter to receive all event types.
+- `types`: A comma-separated list of event types to include, such as `input.block` or `input.transaction`. Omit this parameter to receive all event types.
 - `replay`: A Boolean value that controls whether the server sends recent buffered events when the connection opens. The API defaults this value to `true`.
 
 The server applies the `types` filter to buffered and live events. With `replay=true`, the server sends recent buffered events that match the filter before continuing with live events. With `replay=false`, the server skips the buffered history and starts with live delivery.
@@ -89,7 +89,7 @@ The contents of `context` and `payload` vary by event type.
 
 For a client that reconnects after a disconnect, request `replay=false` on the first connection and `replay=true` on subsequent connections. Adder Tray uses this live first, replay on reconnect strategy to recover events that the pipeline sends during an outage while they remain in the buffer. This strategy remains optional for other consumers.
 
-A consumer that requests replay after reconnecting should handle duplicate or already seen events. The stream does not promise exactly once delivery because replay can include events the consumer already processed, and the tray delivers events without blocking when its event channel is full.
+A consumer that requests replay after reconnecting should handle duplicate or already processed events. The stream does not promise exactly-once delivery because replay can include events the consumer already processed, and the tray delivers events without blocking when its event channel is full.
 
 
 ## Path and slash rules
