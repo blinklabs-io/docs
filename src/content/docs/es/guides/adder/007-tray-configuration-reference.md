@@ -24,14 +24,12 @@ auto_start: true
 
 El asistente de configuración ofrece esta opción con la etiqueta `Start Adder automatically on login / reboot`. Esta es la forma normal de cambiar el valor; al guardar la configuración, el asistente persiste la selección en `adder-tray.yaml`.
 
-El asistente muestra el estado en `Background Activity`:
+El asistente muestra uno de estos estados:
 
-- `Registered & Running`: el sistema tiene registrado el inicio de Adder y el proceso está activo.
-- `Registered`: el sistema tiene registrado el inicio, pero el proceso no está activo.
-- `Not registered`: el sistema no tiene registrado el inicio automático.
-- `Status unknown`: Adder Tray no pudo determinar el estado.
-
-El estado `Registered` no garantiza que el proceso esté ejecutándose. `Registered & Running` confirma ambas condiciones.
+- `Background Activity: Registered & Running (io.blinklabs.adder)`: el sistema registra el inicio de Adder y el proceso está activo.
+- `Background Activity: Registered (io.blinklabs.adder)`: el sistema registra el inicio, pero el proceso no está activo.
+- `Background Activity: Not registered`: el sistema no registra el inicio automático.
+- `Background Activity: Status unknown`: Adder Tray no pudo determinar el estado.
 
 ### Windows
 
