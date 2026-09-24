@@ -19,7 +19,7 @@ Adder Tray guarda la opción de inicio automático como un booleano YAML en `aut
 auto_start: true
 ```
 
-- `true` solicita que Adder Tray se inicie automáticamente al iniciar sesión o reiniciar el equipo.
+- `true` activa el inicio automático de Adder Tray al iniciar sesión o reiniciar el equipo.
 - `false` desactiva el inicio automático.
 
 El asistente de configuración ofrece esta opción con la etiqueta `Start Adder automatically on login / reboot`. Esta es la forma normal de cambiar el valor; al guardar la configuración, el asistente persiste la selección en `adder-tray.yaml`.
@@ -37,7 +37,7 @@ Con `auto_start: true`, Windows registra Adder Tray para el usuario actual media
 
 ### macOS
 
-Con `auto_start: true`, macOS configura el `LaunchAgent` de Adder para iniciarlo al cargar la sesión y agrega la aplicación a `Login Items`. Con `auto_start: false`, macOS desactiva el inicio automático del agente y quita la aplicación de `Login Items`.
+Con `auto_start: true`, macOS configura el `LaunchAgent` de Adder para cargarlo y mantenerlo activo al iniciar la sesión, y agrega la aplicación a `Login Items`. Con `auto_start: false`, macOS desactiva la carga automática del agente y quita la aplicación de `Login Items`.
 
 ## Filtros de objetivos
 
