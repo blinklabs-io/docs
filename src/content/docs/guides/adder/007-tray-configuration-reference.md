@@ -12,7 +12,7 @@ During first run, the setup wizard provides the monitoring target and notificati
 1. Open the Adder menu from the system tray.
 2. Select `Notification Rules...`.
 
-The editor loads the saved targets and preferences into a working copy. It does not save changes until `Apply & Restart` is selected.
+The editor loads the saved targets and preferences into a working copy. The editor saves changes only when the `Apply & Restart` button receives a selection.
 
 The editor supports two monitoring modes:
 
@@ -168,8 +168,6 @@ The standalone `Notification Rules...` editor shows one checkbox for every categ
 - `Chain rollbacks` and `Connection issues` operate independently of followed target identities.
 - `Pool parameter changes` remains visible as a preference, but Adder does not currently emit a working pool parameter notification. Enabling it does not create pool parameter alerts.
 
-`Monitor Everything` ignores the target lists and uses broad event rules. Standard monitoring applies the followed identity scope described above.
-
 ## Notification coalescing
 
 `notify_rate_limit` sets the maximum number of notifications that can fire during `notify_rate_window`. Additional matching events combine into one notification at the end of the window.
@@ -194,7 +192,7 @@ Select `Apply & Restart` to save the engine and tray configuration, restart or r
 
 ### Handle a soft apply failure
 
-Adder persists the configuration before it performs binary, service, and API reconnect work. If a post save operation fails, the warning identifies the binary, service, or API problem, and the saved configuration remains in place. The editor stays open with its inputs enabled again so `Apply & Restart` can be selected for another attempt. If the service did not restart, restart Adder manually before retrying.
+Adder persists the configuration before it performs binary, service, and API reconnect work. If a post save operation fails, the warning identifies the binary, service, or API problem, and the saved configuration remains in place. The editor stays open and re enables its inputs, so another `Apply & Restart` attempt remains available. If the service did not restart, restart Adder manually before retrying.
 
 ## Review Recent Events
 
