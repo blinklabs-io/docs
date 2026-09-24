@@ -19,7 +19,7 @@ Adder Tray は、プラットフォームに応じた次のパスに `adder-tray
 
 ## 自動起動設定
 
-`adder-tray.yaml` の `auto_start` は、Adderをユーザーのログイン時または再起動時に自動起動するかどうかを指定します。
+`adder-tray.yaml` の `auto_start` は、Adderをログイン時または再起動時に自動起動するかどうかを指定します。
 
 ```yaml
 auto_start: true
@@ -28,7 +28,7 @@ auto_start: true
 - `true`: Adderの自動起動を有効にします。
 - `false`: Adderの自動起動を無効にします。
 
-セットアップウィザードの `Start Adder automatically on login / reboot` を選択すると `auto_start` を有効にし、選択を解除すると無効にします。ウィザードはこの選択を `adder-tray.yaml` に保存します。
+セットアップウィザードで `Start Adder automatically on login / reboot` を選択すると `auto_start` を有効にし、チェックを外すと無効にします。ウィザードはこの設定を `adder-tray.yaml` に保存します。
 
 `adder-tray.yaml` はAdder Tray専用の設定ファイルです。Adderエンジンの設定ファイルとは別に保存します。
 
@@ -47,7 +47,7 @@ auto_start: true
 
 ### Windows
 
-`auto_start` を有効にすると、Adder Trayを現在のユーザーのWindowsログオン時のスタートアップに登録します。ログオン時にトレイが起動し、Adderエンジンをウィンドウを表示せずに起動します。無効にすると、この自動起動登録を使用しません。
+`auto_start` を有効にすると、Adder Trayを現在のユーザーのWindowsログオン時のスタートアップに登録します。ログオン時にトレイが起動し、Adderエンジンをウィンドウなしで起動します。無効にすると、この自動起動登録を使用しません。
 
 ### macOS
 
