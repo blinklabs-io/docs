@@ -51,7 +51,7 @@ Notificationsステップでは、`Monitor Everything`を有効にすると基�
 
 ### 自動起動とバックグラウンド動作
 
-Notificationsステップで`Start Adder automatically on login / reboot`を有効にすると、現在のWindowsユーザーのログインまたは再起動後にAdderを自動的に起動します。自動起動を無効にするには、このチェックボックスをオフにします。Windowsはこの設定を現在のユーザーのスタートアップに登録します。管理者権限は必要ありません。トレイはAdderエンジンをウィンドウを表示せずにバックグラウンドで起動します。
+Notificationsステップで`Start Adder automatically on login / reboot`を有効にすると、現在のWindowsユーザーがログインしたとき、またはWindowsを再起動したあとにAdderを自動的に起動します。自動起動を無効にするには、このチェックボックスをオフにします。Windowsはこの設定を現在のユーザーのスタートアップに登録します。管理者権限は必要ありません。トレイはAdderエンジンをウィンドウを表示せずにバックグラウンドで起動します。
 
 `Background Activity`には、次のいずれかの状態が表示されます。
 
@@ -60,7 +60,7 @@ Notificationsステップで`Start Adder automatically on login / reboot`を有�
 - `Background Activity: Not registered`: 自動起動は無効です。
 - `Background Activity: Status unknown`: Adderは自動起動の状態を確認できません。
 
-`Open Login Items Settings...`を選択すると、Windowsのスタートアップ設定が開き、Adderの自動起動登録を確認できます。
+`Open Login Items Settings...`を選択するとWindowsのスタートアップ設定が開き、Adderの自動起動登録を確認できます。
 
 ## Trayメニュー
 
