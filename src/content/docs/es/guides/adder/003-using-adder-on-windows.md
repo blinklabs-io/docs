@@ -70,7 +70,7 @@ Consulte la [referencia de configuración de la bandeja](../007-tray-configurati
 
 ### Paso 4 - Inicio automático y actividad en segundo plano
 
-Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. Windows guarda esta opción en el registro de inicio del usuario actual. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
+Seleccione la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente con la cuenta de Windows actual. Desmarque la casilla para desactivar el inicio automático. Esta opción se registra solo para el usuario actual de Windows. La bandeja inicia el motor de Adder en segundo plano, sin abrir una ventana y sin requerir elevación de privilegios.
 
 El estado de actividad en segundo plano muestra uno de los siguientes valores:
 
@@ -85,7 +85,7 @@ Seleccione `Open Login Items Settings...` para abrir la configuración de aplica
 
 Haga clic con el botón derecho en Adder desde la bandeja del sistema para abrir el menú y ajustar la configuración de la aplicación.
 
-Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro muestra la versión en ejecución y, cuando está disponible, el commit correspondiente con el formato `Version: <version> (commit: <hash>)`. Si no hay información del commit, muestra `Version: <version>`.
+Seleccione `About` para abrir un cuadro de diálogo dentro de Adder. El cuadro muestra la versión en ejecución y, cuando está disponible, el hash del commit correspondiente con el formato `Version: <version> (commit: <hash>)`. Si no hay información del commit, muestra `Version: <version>`.
 
 <br />
 
