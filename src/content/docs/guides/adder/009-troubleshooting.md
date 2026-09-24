@@ -129,16 +129,16 @@ The server returns `204 No Content` when it removes an existing token and `404 N
 ### Verify the receiving endpoint
 Verify that the receiving service accepts an HTTP `POST` with JSON before diagnosing Adder delivery:
 ```bash
-curl -i -X POST 'https://your-webhook-host.example/events' \
+curl -i -X POST 'https://webhook-host.example/events' \
   -H 'Content-Type: application/json' \
   -d '{"type":"input.rollback","payload":{"blockHash":"test-hash","slotNumber":1}}'
 ```
-The receiving service should return a `2xx` status. A connection error, an invalid URL, or any non `2xx` status causes webhook delivery to fail.
+Require the receiving service to return a `2xx` status. A connection error, an invalid URL, or any non `2xx` status causes webhook delivery to fail.
 Configure the webhook output with the registered options:
 ```bash
 ./adder \
   --output webhook \
-  --output-webhook-url 'https://your-webhook-host.example/events' \
+  --output-webhook-url 'https://webhook-host.example/events' \
   --output-webhook-format adder \
   --logging-level debug
 ```
