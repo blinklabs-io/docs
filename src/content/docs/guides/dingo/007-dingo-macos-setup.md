@@ -7,7 +7,7 @@ description: Run Dingo in Apple's native container runtime and validate it with 
 
 ## Overview
 
-This guide describes how to run Dingo in Apple's native container runtime and run Adder natively on macOS against Dingo's published UNIX socket. The helper scripts manage the container and socket lifecycle for a `preview` network validation run.
+This guide covers running Dingo in Apple's native container runtime and running Adder natively on macOS against Dingo's published UNIX socket. The helper scripts manage the container and socket lifecycle for a `preview` network validation run.
 
 ## Prerequisites
 
@@ -21,7 +21,7 @@ Run the commands in this guide from the Adder repository root. The guide does no
 
 ## Connection topology
 
-The setup uses this connection path:
+Use this connection path:
 
 1. Dingo runs inside the Linux container virtual machine and creates `/ipc/node.socket`.
 2. Apple container publishes that socket to the macOS host at `~/dingo-ipc/node.socket`.
@@ -41,7 +41,7 @@ The helper waits for the host socket before it completes and prints the Adder co
 
 ## Run Adder natively
 
-After the start helper reports that Dingo is listening, run Adder from the repository root:
+After the helper reports that Dingo is listening, run Adder from the repository root:
 
 ```bash
 go run ./cmd/adder --input chainsync \
