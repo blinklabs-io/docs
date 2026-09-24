@@ -12,7 +12,7 @@ Adder ships as a signed and notarized macOS `.pkg` package for each supported Ma
 1. Open the Adder release page and download the macOS `.pkg` package that matches the Mac architecture: `arm64` for Apple silicon or `amd64` for Intel Macs.
 2. Double-click the `.pkg` file and follow the package installer prompts.
 3. The installer places `Adder.app` in `/Applications`. The app includes the `adder-tray` GUI and the `adder` CLI.
-4. Run `adder` from Terminal when the installer creates the normal `/usr/local/bin/adder` convenience link. If that link cannot be created, run `/Applications/Adder.app/Contents/MacOS/adder` instead. The installer does not replace an unrelated existing `/usr/local/bin/adder` link.
+4. Run `adder` from Terminal when the installer creates the normal `/usr/local/bin/adder` convenience link. If the installer cannot create that link, run `/Applications/Adder.app/Contents/MacOS/adder` instead. The installer does not replace an unrelated existing `/usr/local/bin/adder` link.
 
 ## Launch Adder
 
@@ -44,4 +44,4 @@ ARCH=arm64 make pkg-macos-adhoc
 ARCH=amd64 make pkg-macos-adhoc
 ```
 
-Release packages use release signing, notarization, and stapling when the release credentials are available. The `pkg-macos-adhoc` target sets `ADHOC=1`, which signs the app bundle for local notifications but leaves the `.pkg` unsigned and not notarized. Local unsigned and ad hoc packages are not expected to pass Gatekeeper.
+Release packages use release signing, notarization, and stapling when the release credentials are available. The `pkg-macos-adhoc` target sets `ADHOC=1`, which signs the app bundle for local notifications but leaves the `.pkg` unsigned and not notarized. Gatekeeper may reject local unsigned and ad hoc packages.
