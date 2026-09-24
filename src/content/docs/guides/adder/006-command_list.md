@@ -68,7 +68,7 @@ See the [filter and governance reference](../009-filter-governance-reference) fo
   
 > specifies event type to filter on
 >
-> Adder accepts comma-separated values for each filter. Values within one flag are alternatives. Adder trims surrounding whitespace and ignores empty entries. Different filter kinds use AND, except `--filter-pool` combined with `--filter-drep`, which uses OR. Use the double-dash form for long filter flags; the single-dash form, such as `-filter-type`, is not supported.
+> Adder accepts comma-separated values for each filter. Values within one flag are alternatives. Adder trims surrounding whitespace and ignores empty entries. Different filter kinds use AND, except `--filter-pool` combined with `--filter-drep`, which uses OR. Use two hyphens for long filter flags. Adder rejects the single-dash form, such as `-filter-type`.
 >
 > Filter flags use shortened names, but environment variables and YAML keys include the filter plugin name. `FILTER_ADDRESS` and `plugins.filter.address`, for example, do not configure the address filter.
 >
@@ -301,7 +301,7 @@ See the [filter and governance reference](../009-filter-governance-reference) fo
 >
 > The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
 >
-> FCM HTTP send attempts time out after 10 seconds. Invalid service-account credentials fail configuration; access-token, message-creation, and send failures go to Adder's pipeline error logging instead of being treated as successful delivery.
+> FCM HTTP send attempts time out after 10 seconds. Invalid service-account credentials fail configuration. After startup, Adder sends access-token, message-creation, and send failures to pipeline error logging instead of marking delivery successful.
 >
 <br />
 
