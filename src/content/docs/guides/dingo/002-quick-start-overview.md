@@ -121,6 +121,17 @@ maxNtCConns: 100
 # Per-IP NtC connection limit. Dingo ignores non-positive values.
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP
 maxNtCConnectionsPerIP: 5
+# Genesis bootstrap. These settings apply only during from-origin sync while
+# Genesis selection is active.
+genesisBootstrap:
+  enabled: true
+  # Enable Genesis Limit on Patience.
+  limitOnPatienceEnabled: true
+  # 0 selects the default per-peer allowance of 1000 tokens.
+  limitOnPatienceCapacity: 0
+  # 0 selects the default rate of 5 tokens per second.
+  limitOnPatienceRate: 0
+
 
 # Storage
 barkBaseUrl: ""
