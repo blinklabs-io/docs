@@ -31,14 +31,6 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 
 ```
-> 📝 The Genesis Limit on Patience settings apply only while Genesis selection is active during from-origin sync. A capacity of `0` uses `1000` tokens per peer, and a rate of `0` uses `5` tokens per second.
-
-| YAML key | CLI flag | Environment variable |
-| --- | --- | --- |
-| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` |
-| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` |
-| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` |
-
 mkdir -p ~/dingo
 cd ~/dingo
 wget https://github.com/blinklabs-io/dingo/releases/download/v0.72.0/dingo-v0.72.0-linux-amd64.tar.gz -O - | tar -xz
