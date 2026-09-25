@@ -147,7 +147,6 @@ EOF
 
 | YAMLキー | CLIフラグ | 環境変数 |
 | --- | --- | --- |
-| `genesisBootstrap.enabled` | `--genesis-bootstrap-enabled` | `DINGO_GENESIS_BOOTSTRAP_ENABLED` |
 | `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` |
 | `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` |
 | `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` |
