@@ -103,6 +103,13 @@ mithril:
   # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
   # pinnedDigest: ""
 
+# Genesis bootstrap. Estos ajustes se aplican solo durante la selección Genesis al sincronizar desde el origen.
+genesisBootstrap:
+  enabled: true
+  limitOnPatienceEnabled: true
+  limitOnPatienceCapacity: 0
+  limitOnPatienceRate: 0
+
 # Network
 # Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
 maxNtCConns: 100
@@ -131,6 +138,14 @@ barkPort: 0
 storageMode: "core"
 EOF
 ```
+
+Los ajustes de Genesis Limit on Patience solo actúan mientras la selección Genesis está activa durante una sincronización desde el origen. El valor `0` selecciona el valor predeterminado: `1000` tokens de capacidad por par y `5` tokens por segundo.
+
+| Clave YAML | Alias de CLI | Variable de entorno | Alcance y valor predeterminado |
+| --- | --- | --- | --- |
+| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` | Activa el límite durante la selección Genesis; predeterminado: `true`. |
+| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` | Capacidad de tokens por par; `0` usa `1000` tokens. |
+| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` | Tasa de tokens por segundo; `0` usa `5` tokens por segundo. |
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
