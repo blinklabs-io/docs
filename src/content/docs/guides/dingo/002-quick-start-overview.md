@@ -132,7 +132,6 @@ genesisBootstrap:
   # 0 selects the default rate of 5 tokens per second.
   limitOnPatienceRate: 0
 
-
 # Storage
 barkBaseUrl: ""
 barkPort: 0
