@@ -9,7 +9,7 @@ description: Notas de la versión de gOuroboros
 
 ☑️ La lista siguiente permite ver las notas de la versión completas.
 
- - Versión: v0.207.4 - *[Ver notas de la versión](../v0-207-4)*
+- Versión: v0.207.4 - *[Ver notas de la versión](../v0-207-4)*
  - Versión: v0.207.3 - *[Ver notas de la versión](../v0-207-3)*
 - Versión: v0.207.2 - *[Ver notas de la versión](../v0-207-2)*
 - Versión: v0.207.1 - *[Ver notas de la versión](../v0-207-1)*
