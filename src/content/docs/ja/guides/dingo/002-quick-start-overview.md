@@ -117,6 +117,17 @@ maxNtCConnectionsPerIP: 5
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
+# Genesis bootstrap
+genesisBootstrap:
+  # originからの同期でGenesisモードを有効にします（既定値: true）。
+  enabled: true
+  # Genesis選択中のLimit on Patienceを有効にします（既定値: true）。
+  limitOnPatienceEnabled: true
+  # ピアごとのトークン許容量。0は既定値の1000トークンを使用します。
+  limitOnPatienceCapacity: 0
+  # 1秒あたりのトークン数。0は既定値の5トークン/秒を使用します。
+  limitOnPatienceRate: 0
+
 # API and Bark
 barkBaseUrl: ""
 barkPort: 0
@@ -131,6 +142,15 @@ midnight:
 
 EOF
 ```
+
+> 📝 `genesisBootstrap` の設定は、`origin` から同期を開始し、Genesis選択が有効な間だけ適用されます。`limitOnPatienceCapacity` はピアごとのトークン許容量、`limitOnPatienceRate` は1秒あたりのトークン数です。両方を `0` にすると、それぞれ既定値の `1000` トークンと `5` トークン/秒を使用します。
+
+| YAMLキー | CLIフラグ | 環境変数 |
+| --- | --- | --- |
+| `genesisBootstrap.enabled` | `--genesis-bootstrap-enabled` | `DINGO_GENESIS_BOOTSTRAP_ENABLED` |
+| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` |
+| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` |
+| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` |
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
