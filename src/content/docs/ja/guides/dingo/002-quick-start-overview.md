@@ -123,9 +123,9 @@ genesisBootstrap:
   enabled: true
   # Genesis選択中のLimit on Patienceを有効にします（既定値: true）。
   limitOnPatienceEnabled: true
-  # ピアごとのトークン許容量。0は既定値の1000トークンを使用します。
+  # ピアごとのトークン許容量。
   limitOnPatienceCapacity: 0
-  # 1秒あたりのトークン数。0は既定値の5トークン/秒を使用します。
+  # 1秒あたりのトークン数。
   limitOnPatienceRate: 0
 
 # API and Bark
@@ -143,7 +143,7 @@ midnight:
 EOF
 ```
 
-> 📝 `genesisBootstrap` の設定は、`origin` から同期を開始し、Genesis選択が有効な間だけ適用されます。`limitOnPatienceCapacity` はピアごとのトークン許容量、`limitOnPatienceRate` は1秒あたりのトークン数です。両方を `0` にすると、それぞれ既定値の `1000` トークンと `5` トークン/秒を使用します。
+> 📝 Dingoは、`origin` から同期を開始し、Genesis選択が有効な間だけ`genesisBootstrap`の設定を適用します。`limitOnPatienceCapacity` はピアごとのトークン許容量、`limitOnPatienceRate` は1秒あたりのトークン数です。両方を `0` にすると、それぞれ既定値の `1000` トークンと `5` トークン/秒を使用します。
 
 | YAMLキー | CLIフラグ | 環境変数 |
 | --- | --- | --- |
