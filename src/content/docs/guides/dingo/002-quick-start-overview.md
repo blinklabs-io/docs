@@ -140,7 +140,7 @@ storageMode: "core"
 EOF
 ```
 
-> 📝 The Genesis Limit on Patience settings apply only while Genesis selection is active during from-origin sync. A capacity of `0` uses `1000` tokens per peer, and a rate of `0` uses `5` tokens per second.
+> 📝 The Genesis Limit on Patience settings apply only while Genesis selection is active during from-origin sync.
 
 | YAML key | CLI flag | Environment variable |
 | --- | --- | --- |
