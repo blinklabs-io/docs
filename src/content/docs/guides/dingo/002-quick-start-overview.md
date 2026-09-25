@@ -140,6 +140,14 @@ storageMode: "core"
 EOF
 ```
 
+> 📝 The Genesis Limit on Patience settings apply only while Genesis selection is active during from-origin sync. A capacity of `0` uses `1000` tokens per peer, and a rate of `0` uses `5` tokens per second.
+
+| YAML key | CLI flag | Environment variable |
+| --- | --- | --- |
+| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` |
+| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` |
+| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` |
+
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
 > 📝 `healthPort` uses `--health-port` or `DINGO_HEALTH_PORT`; set `healthPort: 0` to disable the health listener. `healthReadyGapSlots` uses `--health-ready-gap-slots` or `DINGO_HEALTH_READY_GAP_SLOTS`.
