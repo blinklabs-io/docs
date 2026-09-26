@@ -103,12 +103,6 @@ mithril:
   # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
   # pinnedDigest: ""
 
-# Arranque de Genesis (`genesisBootstrap`). Dingo aplica estos ajustes solo durante la selección Genesis al sincronizar desde el origen.
-genesisBootstrap:
-  enabled: true
-  limitOnPatienceEnabled: true
-  limitOnPatienceCapacity: 0
-  limitOnPatienceRate: 0
 
 # Network
 # Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
