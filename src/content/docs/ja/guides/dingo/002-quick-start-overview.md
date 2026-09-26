@@ -143,13 +143,6 @@ midnight:
 EOF
 ```
 
-> 📝 Dingoは`origin`から同期を開始し、Genesis選択が有効な間だけ`genesisBootstrap`の設定を適用します。`limitOnPatienceEnabled` の既定値は `true` です。`limitOnPatienceCapacity` は各ピアに許可するトークン数、`limitOnPatienceRate` は1秒あたりに許可するトークン数です。両方を `0` にすると、それぞれ既定値の `1000` トークンと `5` トークン/秒を使用します。
-
-| YAMLキー | CLIフラグ | 環境変数 |
-| --- | --- | --- |
-| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` |
-| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` |
-| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` |
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
