@@ -28,12 +28,12 @@ In this guide, we will walk you through downloading the Dingo binary and all the
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
-⚠️ Adjust the version and architecture to match your system.
+⚠️ The example uses `v0.73.0`; adjust the version and architecture to match your system.
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.72.0/dingo-v0.72.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.0/dingo-v0.73.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
