@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.72.0/dingo-v0.72.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.0/dingo-v0.73.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
