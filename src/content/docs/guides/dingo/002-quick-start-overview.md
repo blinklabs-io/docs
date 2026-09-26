@@ -140,13 +140,6 @@ storageMode: "core"
 EOF
 ```
 
-> 📝 The Genesis Limit on Patience settings apply only while Genesis selection is active during from-origin sync.
-
-| YAML key | CLI flag | Environment variable |
-| --- | --- | --- |
-| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` |
-| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` |
-| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` |
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
