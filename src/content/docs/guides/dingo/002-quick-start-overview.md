@@ -28,7 +28,7 @@ In this guide, we will walk you through downloading the Dingo binary and all the
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
-⚠️ Adjust the version to `v0.73.0` and architecture to match your system.
+⚠️ Adjust the version and architecture to match your system.
 
 ```
 mkdir -p ~/dingo
