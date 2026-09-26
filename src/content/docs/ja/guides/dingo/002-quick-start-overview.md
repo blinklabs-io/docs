@@ -117,7 +117,6 @@ maxNtCConnectionsPerIP: 5
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
-
 # API and Bark
 barkBaseUrl: ""
 barkPort: 0
