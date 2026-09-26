@@ -139,13 +139,6 @@ storageMode: "core"
 EOF
 ```
 
-Durante una sincronización desde el origen, Dingo aplica los ajustes de Genesis Limit on Patience solo mientras la selección Genesis está activa. El valor `0` en `limitOnPatienceCapacity` selecciona `1000` tokens por par, y el valor `0` en `limitOnPatienceRate` selecciona `5` tokens por segundo.
-
-| Clave YAML | Alias de CLI | Variable de entorno | Aplicación y valor predeterminado |
-| --- | --- | --- | --- |
-| `genesisBootstrap.limitOnPatienceEnabled` | `--genesis-bootstrap-limit-on-patience-enabled` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_ENABLED` | Este ajuste activa el límite durante la selección Genesis; predeterminado: `true`. |
-| `genesisBootstrap.limitOnPatienceCapacity` | `--genesis-bootstrap-limit-on-patience-capacity` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_CAPACITY` | Capacidad de tokens por par; `0` usa `1000` tokens. |
-| `genesisBootstrap.limitOnPatienceRate` | `--genesis-bootstrap-limit-on-patience-rate` | `DINGO_GENESIS_BOOTSTRAP_LIMIT_ON_PATIENCE_RATE` | Tasa de tokens por segundo; `0` usa `5` tokens por segundo. |
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
