@@ -30,6 +30,12 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+Release MSIs carry a valid signature and install both `adder.exe` (the command line tool) and `adder-tray.exe` (the tray application) under `%ProgramFiles%\Adder`. The installer creates an `Adder` shortcut in the Windows Start Menu and adds Adder to Windows **Apps & Features** or **Add/Remove Programs**.
+
+The MSI does not register a Scheduled Task or independently enable automatic startup. The tray setup wizard owns startup for the current Windows user, as described in [Step 4](#step-4---startup-and-background-activity).
+
+Locally built or test MSIs may be unsigned, so Windows SmartScreen or a warning that the publisher is unknown may appear when they launch.
+
 ***
 
 ### Step 2 - Launch Adder
@@ -70,7 +76,18 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
+Select one monitoring mode:
+
+- Enable `Monitor Everything` to monitor all supported events. This option ignores all values in the target sections.
+- Disable `Monitor Everything` and enter at least one value in the appropriate `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` section.
+
+Enter the target value in the form accepted by its section:
+
+- `Wallets`: a payment address or stake address.
+- `DReps`: a bech32 or hexadecimal DRep ID.
+- `Pools`: a bech32 or hexadecimal pool ID.
+- `Assets`: a CIP-14 asset fingerprint.
+- `Policies`: a 56-character hexadecimal policy ID.
 
 For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
 
@@ -78,11 +95,13 @@ For this example, we will enter a Pool ID and a DRep ID that we want to follow.
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
+Values within one target section act as alternatives. The visible `OR` and `AND` controls join populated target sections. Select `OR` when either section can produce the matching event. Do not use `AND` between different event families. `Pools` match blocks, `Wallets`, `Assets`, and `Policies` match transactions, and `DReps` match governance events. No single event can satisfy an `AND` between these families, and the wizard rejects such a configuration.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+See the [tray configuration reference](../007-tray-configuration-reference) for the available target and notification settings.
 
 ***
 
@@ -99,7 +118,10 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Select the checkboxes for the events for which you would like to receive a desktop alert.
+Adder scopes event alerts to the selected target groups. Select the categories that should produce desktop alerts. Enable `Notify on connection issues` separately when connection status alerts are required.
+
+Open `Advanced — Rate Limiting` to control the maximum notifications per window and the window duration. Leave a field blank to use its default; the defaults are one notification per five seconds. Enter a negative limit to disable notification coalescing. Enter a window value using Go duration syntax, such as `5s`, `30s`, or `1m`.
+
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -122,6 +144,20 @@ Click `Finish Setup`.
 
 ***
 
+### Step 4 - Startup and Background Activity
+Select the `Start Adder automatically on login / reboot` checkbox to start Adder automatically for the current Windows user. Clear the checkbox to disable automatic startup. The tray wizard stores this choice in the current user's startup registration. The tray runs the Adder engine in the background without opening a window, and the installer does not need administrator elevation for this setting.
+
+The background activity status shows one of these states:
+
+- `Background Activity: Registered & Running (io.blinklabs.adder)` means that startup is registered and the Adder engine is running.
+- `Background Activity: Registered (io.blinklabs.adder)` means that startup is registered but the engine is not running.
+- `Background Activity: Not registered` means that startup is disabled.
+- `Background Activity: Status unknown` means that Adder could not determine the startup status.
+
+Select `Open Login Items Settings...` to open the Windows startup settings and review Adder's startup registration.
+
+***
+
 ### Congratulations! Adder will now alert you when an event that you have selected to track occurs.
 
 ***
@@ -132,3 +168,36 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Select `Notification Rules...` to edit monitoring targets and notification categories. Select `Apply & Restart` to save the changes and apply them to the running monitoring engine without relaunching the tray. See the [tray configuration reference](../007-tray-configuration-reference) for target formats and connector behavior.
+
+Select `Recent Events` to review recent notifications. Transaction and governance entries open transaction explorer pages, while block entries open block explorer pages. Adder uses the event's network when it builds each link. When the tray reconnects, it requests replayed events from `/events?replay=true` and avoids adding duplicate entries to the list.
+
+Select `Show Logs` to open the log folder. Windows stores tray diagnostics in `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`.
+
+Select `About` to open an in-app dialog that shows the running Adder version. If Adder includes commit metadata, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays `Version: <version>`.
+
+## Troubleshooting
+
+### The Windows app fails to start or run
+
+The Windows GUI has no normal console, so it records startup failures and failures while running in the log file. This includes panic details and graphics initialization failures. Review the file before retrying the operation.
+
+### A second tray launch exits immediately
+
+Windows runs only one Adder tray instance per logon session. If a second launch exits immediately, check whether the existing Adder tray instance is already running in the system tray.
+
+### Applying notification rules shows a warning
+
+When a restart or reconnection cannot complete immediately, Adder saves the configuration, keeps the Notification Rules editor open, and enables its controls again. Check the tray status and the log file, then select `Apply & Restart` again.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

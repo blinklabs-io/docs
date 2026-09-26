@@ -22,6 +22,8 @@ description: List of Adder Commands.
 
 ## Filter:
 
+See the [filter and governance reference](../009-filter-governance-reference) for detailed filter applicability and governance event matching.
+
 ```
   --filter-address string
 ```
@@ -66,7 +68,18 @@ description: List of Adder Commands.
   
 > specifies event type to filter on
 >
-> For `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep`, and `--filter-type`, Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
+> Adder accepts comma-separated values for each filter. Values within one flag act as alternatives. Adder trims surrounding whitespace and ignores empty entries. Adder combines different filter kinds with AND, except `--filter-pool` combined with `--filter-drep`, which uses OR. Use two hyphens for long filter flags. Adder rejects the single-dash form, such as `-filter-type`.
+>
+> Filter flags use shortened names. Adder requires the filter plugin name in environment variables and YAML keys, so `FILTER_ADDRESS` and `plugins.filter.address`, for example, do not configure the address filter.
+>
+> | Flag | Environment variable | YAML key |
+> | --- | --- | --- |
+> | `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+> | `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+> | `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+> | `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+> | `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+> | `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
 > 
 > **Event Types:**
 > 1. `input.block` - A new block was observed.
@@ -287,6 +300,8 @@ description: List of Adder Commands.
 > specifies the path to the service account file. This value must be non-empty when using `--output push`.
 >
 > The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
+>
+> FCM HTTP send attempts time out after 10 seconds. Invalid service-account credentials fail configuration. After startup, Adder logs access token, message creation, and send failures through its pipeline error channel instead of marking delivery successful.
 >
 <br />
 
