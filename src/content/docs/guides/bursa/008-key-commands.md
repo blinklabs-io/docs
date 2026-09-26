@@ -56,6 +56,16 @@ Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 
 ***
 
+### Signing Key File Format
+
+When Bursa exports a signing key derived from an HD path, it writes an extended Ed25519-BIP32 envelope. Root, account, payment, stake, governance, policy, multisig, and Calidus signing files use envelope types such as `*_ExtendedSigningKeyShelley_ed25519_bip32` and 128-byte CBOR beginning with `5880`. Legacy non-extended files use 32-byte CBOR beginning with `5820`.
+
+Pool-cold signing files are the exception. Fresh exports use a standard, non-extended Ed25519 envelope with type `StakePoolSigningKey_ed25519`; the matching verification envelope uses type `StakePoolVerificationKey_ed25519`. Bursa accepts the legacy `StakePoolSigningKeyShelley_ed25519` and `StakePoolVerificationKeyShelley_ed25519` types when loading and leaves those files unchanged. The pool-cold signing seed produces the exported verification key as the standard Ed25519 identity used by pool registration and operational certificates. The optional extended pool-cold representation preserves that same identity.
+
+Bursa loads key inputs only from regular files. On Unix, it rejects symlinked inputs; on Windows, it rejects reparse-point inputs. Bursa limits key-file input to its supported maximum and rejects oversized files before processing. Secret-key files (`.skey`) must have owner-only access: Unix permissions cannot include group or other bits, and Windows files must use a restrictive DACL scoped to the owner. Bursa applies this permission check only when it loads secret material; it rejects insecure files with `ErrInsecureFileMode`. When a directory contains only `.skey` files that fail this permission check, Bursa reports that permission reason for the directory. Public artifacts such as `.vkey` files and operational certificates remain readable through the public-key loading path and do not use this secret-key permission check.
+
+Do not repair legacy HD-derived signing files that declare a non-extended type by changing only the `type` field; Bursa does not rewrite them automatically. Regenerate the signing and verification files together from the original mnemonic, then compare the resulting address, key hash, or other existing identity before signing.
+
 <a name="root"></a>
 
 #### Root Key
@@ -200,6 +210,10 @@ Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_v
 ./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
 
+### VRF and KES Key Validation
+
+Bursa validates VRF and KES material before exporting or loading it. A VRF verification key must have the expected length. VRF signing material must use an accepted seed or seed-plus-public-key form, and its embedded public key must match the seed when that form is used. A KES verification key must have the expected length. A KES signing key must use Cardano KES depth and the expected secret-key size. Bursa rejects malformed lengths, a mismatched VRF seed and public key, invalid KES depth, and invalid KES secret size instead of producing an envelope.
+
 ***
 
 <a name="drep"></a>
@@ -270,10 +284,22 @@ Explore other Bursa Commands
 > **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
-> 7. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 3. [kes-agent](../003-commands#kes-agent)  &emsp;&nbsp;&nbsp; - Commands for running the KES agent
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
+> 7. [address](../007-address-commands) - Commands for working with Cardano addresses
+> 8. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

@@ -16,7 +16,8 @@ Podemos usar Bursa para crear hashes para metadatos o `anchor-data`, usados a me
 
 #### Metadata
 Los comandos de hash de metadatos se usan para el registro de metadatos de pool y DRep.
-El hash se calcula a partir de la representación JSON canónica.
+El comando `bursa hash metadata <file>` valida el archivo como JSON y calcula el hash Blake2b-256 usando los bytes exactos que lee del archivo.
+Las diferencias de formato, como los espacios en blanco o el orden de los campos, pueden producir hashes distintos aunque el JSON sea semánticamente equivalente. Si un flujo de trabajo requiere JSON canónico, escriba esa representación en el archivo antes de calcular el hash y alojarlo.
 
 **Tipos de metadatos soportados:**
   - pool: Metadatos de registro de pool
@@ -44,10 +45,22 @@ Explora otros comandos de Bursa
 > **Categorías de comandos de Bursa**
 > 1. [wallet](../003-commands) &nbsp; - Comandos para generar billetera y los archivos necesarios para administrar una billetera de Cardano
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Comandos para ejecutar la API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
-> 4. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
-> 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
+> 3. [kes-agent](../003-commands#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
+> 5. [hash](#hash)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
+> 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

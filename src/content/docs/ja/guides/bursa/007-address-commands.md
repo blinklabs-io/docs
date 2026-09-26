@@ -18,6 +18,7 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 > - Byron/ブートストラップアドレス (レガシー)
 
 ### アドレスの作成
+有効なネットワーク値は `mainnet`、`preprod`、`preview` です。対象のAPIリクエスト（`POST /api/script/create`、`POST /api/script/address`、`POST /api/address/build`）では `testnet` を使用できず、指定するとHTTP 400のバリデーションエラーになります。
 - ベースアドレス (支払い + ステーク認証情報)
 ```bash
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
@@ -57,10 +58,22 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](../003-commands) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](#address) - Cardanoアドレスを操作するコマンド
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](#address) - Cardanoアドレスを操作するコマンド
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

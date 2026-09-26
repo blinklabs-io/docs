@@ -67,7 +67,23 @@ These Bursa commands can be used for generating various Cardano certificates.
 
 The `op-cert` command can be used to generate an operational certificate, aka `node.cert`, linking a KES key to a pool cold key. Stake Pools need to create a new node.cert when rotating their KES key. So SPOs can use Bursa to create a new `node.cert` with their new kes.vkey, cold key and kes period.
 
-🔁 Output format is compatible with cardano-cli operational certificates.
+When `--out` is supplied, Bursa writes a `cardano-cli` compatible JSON text envelope:
+
+```json
+{
+    "type": "NodeOperationalCertificate",
+    "description": "Operational Certificate",
+    "cborHex": "<hex>"
+}
+```
+
+The hex encoded `cborHex` value represents the canonical two element CBOR structure:
+
+```text
+[[kes_vkey, counter, kes_period, signature], cold_vkey]
+```
+
+The outer array has two elements: the four element certificate tuple and the 32 byte `cold_vkey`. Bursa derives this cold verification key from the supplied 32 byte seed or 64 byte Ed25519 private key and includes it for verification and round tripping.
 
 > **Required inputs:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; KES verification key file (bech32 or hex format) <br>
@@ -78,8 +94,6 @@ The `op-cert` command can be used to generate an operational certificate, aka `n
 ✅ The counter value must be incremented each time a new operational certificate
 is created, if and only if, you minted a block with old KES key. The KES period is the current slot divided by the slots per KES
 period (typically 129600 slots = ~36 hours on mainnet).
-
-Output format of `node.cert` is compatible with cardano-cli operational certificates. 
 
 To create `node.cert` we can run the following command.
 
@@ -102,7 +116,7 @@ The pool registration certificate registers a new stake pool or updates an exist
 > -  `--vrf-vkey`        VRF verification key file
 > -  `--pledge`          Pledge amount in lovelace
 > -  `--cost`            Fixed cost per epoch in lovelace
-> -  `--margin`          Pool margin (0.0 to 1.0)
+> -  `--margin`          Pool margin must be finite and fall within the inclusive range `0.0` to `1.0`. Bursa rejects negative values, values greater than `1`, `NaN`, and positive or negative infinity before generating the pool-registration certificate.
 > -  `--reward-account`  Reward account address (bech32 stake address)
 
 >Optional inputs:
@@ -342,10 +356,22 @@ Explore other Bursa Commands
 > **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 3. [kes-agent](../003-commands#kes-agent)  &emsp;&nbsp;&nbsp; - Commands for running the KES agent daemon
+> 4. [cert](#cert)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
+> 7. [address](../007-address-commands) - Commands for working with Cardano addresses
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

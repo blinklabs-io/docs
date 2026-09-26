@@ -67,7 +67,23 @@ Estos comandos de Bursa se pueden usar para generar varios certificados de Carda
 
 El comando `op-cert` se puede usar para generar un certificado operacional, también conocido como `node.cert`, que vincula una clave KES a una clave fría del pool. Los stake pools necesitan crear un nuevo `node.cert` al rotar su clave KES. Así que los SPOs pueden usar Bursa para crear un nuevo `node.cert` con su nueva `kes.vkey`, clave fría y período KES.
 
-El formato de salida es compatible con los certificados operacionales de cardano-cli.
+Al proporcionar `--out`, Bursa escribe un sobre de texto JSON compatible con `cardano-cli`:
+
+```json
+{
+    "type": "NodeOperationalCertificate",
+    "description": "Operational Certificate",
+    "cborHex": "<hex>"
+}
+```
+
+El valor `cborHex` codificado en hexadecimal representa la estructura CBOR canónica de dos elementos:
+
+```text
+[[kes_vkey, counter, kes_period, signature], cold_vkey]
+```
+
+El arreglo externo contiene dos elementos: la tupla del certificado de cuatro elementos y el `cold_vkey` de 32 bytes. Bursa deriva esta clave de verificación fría a partir de la semilla de 32 bytes o de la clave privada Ed25519 de 64 bytes proporcionada, y la incluye para la verificación y para permitir la conversión de ida y vuelta.
 
 > **Entradas requeridas:** <br>
 >   `--kes-vkey` &emsp; &nbsp; &nbsp; Archivo de clave de verificación KES (formato bech32 o hex) <br>
@@ -76,8 +92,6 @@ El formato de salida es compatible con los certificados operacionales de cardano
 >   `--kes-period` &emsp; Período KES en el momento de la creación del certificado
 
 El valor del contador debe incrementarse cada vez que se crea un nuevo certificado operacional, si y solo si has minado un bloque con la clave KES anterior. El período KES es el slot actual dividido por los slots por período KES (típicamente 129600 slots = ~36 horas en mainnet).
-
-El formato de salida de `node.cert` es compatible con los certificados operacionales de cardano-cli.
 
 Para crear `node.cert` podemos ejecutar el siguiente comando.
 
@@ -100,7 +114,7 @@ El certificado de registro de pool registra un nuevo stake pool o actualiza un r
 > -  `--vrf-vkey`        Archivo de clave de verificación VRF
 > -  `--pledge`          Cantidad de pledge en lovelace
 > -  `--cost`            Costo fijo por época en lovelace
-> -  `--margin`          Margen del pool (0.0 a 1.0)
+> -  `--margin`          Margen del pool: debe ser un valor finito entre `0.0` y `1.0`, ambos inclusive. Bursa rechaza los valores negativos, los mayores que `1.0`, `NaN` y los infinitos positivos o negativos, muestra el error `pool margin must be a finite value between 0.0 and 1.0` y no genera el certificado.
 > -  `--reward-account`  Dirección de cuenta de recompensa (dirección de stake bech32)
 
 >Entradas opcionales:
@@ -340,10 +354,22 @@ Explora otros comandos de Bursa
 > **Categorías de comandos de Bursa**
 > 1. [wallet](../003-commands) &nbsp; - Comandos para generar billetera y los archivos necesarios para administrar una billetera de Cardano
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Comandos para ejecutar la API
-> 3. [cert](#cert)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
-> 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
+> 3. [kes-agent](../003-commands#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 4. [cert](#cert)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
+> 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
