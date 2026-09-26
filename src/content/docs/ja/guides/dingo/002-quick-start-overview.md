@@ -117,16 +117,6 @@ maxNtCConnectionsPerIP: 5
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
-# Genesis bootstrap
-genesisBootstrap:
-  # originからの同期でGenesisモードを有効にします（既定値: true）。
-  enabled: true
-  # Genesis選択が有効な間、Limit on Patienceを有効にします。
-  limitOnPatienceEnabled: true
-  # Genesis選択中の各ピアに許可するトークン数。
-  limitOnPatienceCapacity: 0
-  # Genesis選択中に許可する1秒あたりのトークン数。
-  limitOnPatienceRate: 0
 
 # API and Bark
 barkBaseUrl: ""
