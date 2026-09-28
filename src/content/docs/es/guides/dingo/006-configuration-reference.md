@@ -53,4 +53,4 @@ plugins:
         vacuumIntervalSeconds: 86400
 ```
 
-El valor se expresa en segundos. Si se omite o se establece en `0`, Dingo desactiva el `full VACUUM` periódico. Un valor positivo activa el mantenimiento con el intervalo especificado. Una operación `full VACUUM` puede pausar las escrituras de SQLite.
+Dingo expresa el valor en segundos. Si la configuración no incluye esta clave o asigna `0`, Dingo desactiva el `full VACUUM` periódico. Un valor positivo activa el mantenimiento con el intervalo especificado. Una operación `full VACUUM` puede pausar las escrituras de SQLite.
