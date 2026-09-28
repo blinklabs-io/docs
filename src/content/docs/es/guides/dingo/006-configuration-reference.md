@@ -40,6 +40,16 @@ La siguiente tabla enumera los límites de configuración disponibles:
 
 Durante el inicio, cuando ambos valores son positivos, Dingo exige `maxBatchBytes >= maxEntryBytes`. Una configuración que haga que `maxBatchBytes` sea menor que `maxEntryBytes` no puede iniciar.
 
+## Controles de forjado de bloques endosadores de Leios
+
+Estos parámetros controlan la selección y el tamaño de los bloques endosadores de Leios.
+
+| Clave YAML | Propósito | Valor predeterminado | Variable de entorno | Opción de CLI | Comportamiento del valor cero |
+| --- | --- | --- | --- | --- | --- |
+| `forgeEbSelectionReserve` | Reserva tiempo del slot para ensamblar el bloque de ranking después de seleccionar el bloque endosador de Leios. | `300ms` | `DINGO_FORGE_EB_SELECTION_RESERVE` | `--forge-eb-selection-reserve` | Un valor de `0` o negativo usa `300ms`. |
+| `forgeEbMaxTxRefs` | Limita las referencias de transacciones en un bloque endosador de Leios forjado. | `20000` | `DINGO_FORGE_EB_MAX_TX_REFS` | `--forge-eb-max-tx-refs` | Un `0` explícito desactiva el límite. |
+| `forgeEbMaxBytes` | Limita el total de bytes de transacciones referenciadas en un bloque endosador de Leios forjado. | `25165824` bytes (`24 MiB`) | `DINGO_FORGE_EB_MAX_BYTES` | `--forge-eb-max-bytes` | Un `0` explícito desactiva el límite. |
+
 ## Mantenimiento de SQLite
 
 Configure `vacuumIntervalSeconds` únicamente en el proveedor de metadatos SQLite:
