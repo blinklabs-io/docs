@@ -62,7 +62,9 @@ Bootstrapping peers are good for when your node has had an extended outage, you'
 ***
 
 <h3 id="advertise">Advertise Flag</h3>
-Advertise will tell your peers "hey I have this really good peer, you should try to connect to them" which can give that relay more inbound connections. 
+Advertise will tell your peers "hey I have this really good peer, you should try to connect to them" which can give that relay more inbound connections.  
+
+<br>
 
 Could be used for situations like unregistered relays.
 
@@ -74,13 +76,66 @@ You can have multiple access points within Local Roots. Why would you want to us
 ***
 
 <h3 id="trustable">Trustable</h3>
-Trustable peers are composed by the bootstrap peers and the trustable local root peers. By default local root peers are not trustable.
+Trustable peers are composed by the bootstrap peers and the trustable local root peers. By default local root peers are not trustable.  
+
+<br>
 
 Your own Relays and BP should be set to `"trustable": true`
 
 ***
 
 ## Relay Sample Topology File
+For a typical 2 relay and BP setup, for the topology on your relay use:
+
+- Use 2 Access Points under local roots so we can advertise our relays while hiding our BP
+- Set "advertise": false, on BP Access Point since we want to keep private.
+- Since 1 additional Relays, (2 relays in total) we set "valency": 1, if we had 2 additional Relays (3 relays in total), we would set "valency": 2, and so on.
+- Set our Relays to "trustable": true, so we can sync if we get too far off the tip.
+- Set Public Roots blank by using "publicRoots": []
+
+> In the sample below change "relay2.Address" and "blockProducerAddress" to your relay and BP address and change "port": 3001 to the port you use.
+
+```
+{
+  "bootstrapPeers": [
+    {
+      "address": "preview-node.play.dev.cardano.org",
+      "port": 3001
+    }
+  ],
+  "localRoots": [
+    {
+      "accessPoints": [
+        {
+          "address": "relay2.Address",
+          "port": 3001
+        }
+      ],
+      "advertise": true,
+      "valency": 1,
+      "trustable": true
+    },
+    {
+      "accessPoints": [
+        {
+          "address": "blockProducerAddress",
+          "port": 3001
+        }
+      ],
+      "advertise": false,
+      "valency": 1,
+      "trustable": true
+    }
+  ],
+  "publicRoots": [
+    {
+      "accessPoints": [],
+      "advertise": false
+    }
+  ],
+  "useLedgerAfterSlot": 119231973
+}
+```
 
 ## BP Sample Topology File
 For a block producer node we only want it to connect to our relays. To do this we use the following confiuration:
