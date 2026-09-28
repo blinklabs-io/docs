@@ -8,9 +8,6 @@ description: Find Dingo documentation for node operators, application developers
 Dingo is Blink Labs' Cardano node implementation written in Go. These guides
 are organized by what you want to do.
 
-> Dingo is under active development. Use it on Preview, Preprod, or private
-> devnets; current releases are not intended for mainnet operation.
-
 ## I operate a Dingo node
 
 - [Quick start](/guides/dingo/002-quick-start-overview/) — download Dingo and

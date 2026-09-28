@@ -7,8 +7,6 @@ description: ノード運用者、アプリ開発者、コントリビュータ�
 
 DingoはBlink LabsがGoで実装したCardanoノードです。目的に合ったガイドを選んでください。
 
-> Dingoは現在も開発中です。現行リリースはPreview、Preprod、またはプライベートDevNetで使用してください。メインネット運用には対応していません。
-
 ## ノードを運用する
 
 - [クイックスタート](/ja/guides/dingo/002-quick-start-overview/) — Dingoを入手し、Previewノードを起動します。

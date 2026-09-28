@@ -7,8 +7,6 @@ description: Documentación de Dingo para operadores de nodos, desarrolladores d
 
 Dingo es la implementación de un nodo de Cardano en Go de Blink Labs. Elige la guía según lo que quieras hacer.
 
-> Dingo sigue en desarrollo activo. Las versiones actuales están destinadas a Preview, Preprod o redes privadas de desarrollo; no están preparadas para operar en mainnet.
-
 ## Opero un nodo Dingo
 
 - [Inicio rápido](/es/guides/dingo/002-quick-start-overview/) — descarga Dingo e inicia un nodo Preview.
