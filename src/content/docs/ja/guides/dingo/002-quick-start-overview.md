@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.73.3）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.73.4）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73.3-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.4/dingo-v0.73.4-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -51,6 +51,8 @@ wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
 dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`変数は自動的にホームディレクトリのパスに展開されます：
+
+設定項目の詳細は[設定リファレンス](../006-configuration-reference)を参照してください。
 
 ```
 cat <<EOF > ~/dingo/dingo.yaml
