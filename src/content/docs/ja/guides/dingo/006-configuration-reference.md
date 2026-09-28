@@ -40,7 +40,7 @@ node-parity from-genesis --koios-allow-private-addresses
 | `tokenRegistry.maxAcceptedEntries` | `0` は `50000` を使用 | `DINGO_TOKEN_REGISTRY_MAX_ACCEPTED_ENTRIES` | `--token-registry-max-accepted-entries` |
 | `tokenRegistry.maxBatchBytes` | `0` は `64 MB` を使用 | `DINGO_TOKEN_REGISTRY_MAX_BATCH_BYTES` | `--token-registry-max-batch-bytes` |
 
-`maxEntryBytes` も設定する場合、両方の値が `0` より大きいとき、起動時に `maxBatchBytes >= maxEntryBytes` を満たす必要があります。`maxBatchBytes` が `maxEntryBytes` より小さい設定は起動時に拒否されます。
+`maxEntryBytes` も設定する場合、両方の値が `0` より大きいとき、起動時に `maxBatchBytes >= maxEntryBytes` を満たす必要があります。Dingoは起動時に、`maxBatchBytes` が `maxEntryBytes` より小さい設定を拒否します。
 
 ## SQLiteメタデータのVACUUM
 
