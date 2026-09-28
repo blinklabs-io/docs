@@ -46,7 +46,7 @@ Configure the following settings to control Leios endorser-block selection and s
 | --- | --- | --- | --- | --- | --- |
 | `forgeEbSelectionReserve` | Reserves slot time for ranking-block assembly after Leios endorser-block selection. | `300ms` | `DINGO_FORGE_EB_SELECTION_RESERVE` | `--forge-eb-selection-reserve` | `0` or a negative value uses `300ms`. |
 | `forgeEbMaxTxRefs` | Limits transaction references in a forged Leios endorser block. | `20000` | `DINGO_FORGE_EB_MAX_TX_REFS` | `--forge-eb-max-tx-refs` | An explicit `0` disables the cap. |
-| `forgeEbMaxBytes` | Limits total referenced transaction bytes in a forged Leios endorser block. | `25165824` bytes (`24 MiB`) | `DINGO_FORGE_EB_MAX_BYTES` | `--forge-eb-max-bytes` | An explicit `0` disables the cap. |
+| `forgeEbMaxBytes` | Limits the total bytes of referenced transactions in a forged Leios endorser block. | `25165824` bytes (`24 MiB`) | `DINGO_FORGE_EB_MAX_BYTES` | `--forge-eb-max-bytes` | An explicit `0` disables the cap. |
 
 ## SQLite metadata maintenance
 
