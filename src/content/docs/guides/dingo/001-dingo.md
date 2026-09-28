@@ -12,6 +12,8 @@ are organized by what you want to do.
 
 - [Quick start](/guides/dingo/002-quick-start-overview/) — download Dingo and
   start a Preview node.
+- [Run Dingo in a container](/guides/dingo/008-docker/) — use the published
+  image, persist node data, and check container health.
 - [Configuration and storage modes](/guides/dingo/005-node-configuration/) —
   choose a relay, block producer, or API node and configure providers.
 - [Download the Dingo v0.73.3 example configuration](/downloads/dingo/v0.73.3/dingo.yaml).
