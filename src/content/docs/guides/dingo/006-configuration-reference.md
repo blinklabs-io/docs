@@ -38,6 +38,16 @@ Configure these limits under `tokenRegistry`. A value of `0` selects the built-i
 
 When configuration sets both bounds to positive values, `tokenRegistry.maxBatchBytes` must be greater than or equal to `tokenRegistry.maxEntryBytes`. Dingo rejects the configuration during startup when `maxBatchBytes` is smaller than `maxEntryBytes`.
 
+## Leios endorser-block forging controls
+
+These settings control Leios endorser-block selection and size.
+
+| YAML key | Purpose | Default | Environment variable | CLI flag | Zero-value behavior |
+| --- | --- | --- | --- | --- | --- |
+| `forgeEbSelectionReserve` | Reserves slot time for ranking-block assembly after Leios endorser-block selection. | `300ms` | `DINGO_FORGE_EB_SELECTION_RESERVE` | `--forge-eb-selection-reserve` | `0` or a negative value uses `300ms`. |
+| `forgeEbMaxTxRefs` | Limits transaction references in a forged Leios endorser block. | `20000` | `DINGO_FORGE_EB_MAX_TX_REFS` | `--forge-eb-max-tx-refs` | An explicit `0` disables the cap. |
+| `forgeEbMaxBytes` | Limits total referenced transaction bytes in a forged Leios endorser block. | `25165824` bytes (`24 MiB`) | `DINGO_FORGE_EB_MAX_BYTES` | `--forge-eb-max-bytes` | An explicit `0` disables the cap. |
+
 ## SQLite metadata maintenance
 
 Set `plugins.storage.metadata.config.vacuumIntervalSeconds` for the SQLite metadata provider:
