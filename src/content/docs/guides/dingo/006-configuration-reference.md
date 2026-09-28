@@ -17,7 +17,7 @@ Set the option only when the Koios endpoint is an intentionally local or private
 | --- | --- | --- | --- |
 | `koiosParity.allowPrivateAddresses` | `DINGO_KOIOS_PARITY_ALLOW_PRIVATE_ADDRESSES` | `--koios-parity-allow-private-addresses` | `false` |
 
-The standalone parity command uses a separate flag:
+The standalone `node-parity from-genesis` command accepts this separate flag:
 
 ```text
 node-parity from-genesis --koios-allow-private-addresses
@@ -51,4 +51,4 @@ plugins:
         vacuumIntervalSeconds: 86400
 ```
 
-The value is an interval in seconds. Omission or `0` disables periodic full `VACUUM`. A positive value enables it; full `VACUUM` can pause SQLite writers, so configure an interval only when that pause is acceptable.
+Set the interval in seconds. Omission or `0` disables periodic full `VACUUM`. A positive value enables it; full `VACUUM` can pause SQLite writers, so configure an interval only when that pause is acceptable.
