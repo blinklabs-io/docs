@@ -19,11 +19,14 @@ DingoはBlink LabsがGoで実装したCardanoノードです。目的に合っ�
 ## アプリケーションを接続する
 
 - [APIとアーカイブサービス（英語）](/guides/dingo/006-apis-and-archive/) — APIの選択、アクセス制御、Barkアーカイブを確認します。
+- [Blockfrost APIクライアントの構築（英語）](/guides/dingo/009-build-blockfrost-client/) — Dingoの互換APIにアプリケーションを接続します。
+- [UTxO RPCを使うウォレットフロントエンドの構築（英語）](/guides/dingo/010-build-utxorpc-frontend/) — UTxOの照会とトランザクション送信を行います。
+- [ガバナンスダッシュボードの構築（英語）](/guides/dingo/011-build-governance-dashboard/) — インデックス済みメタデータの選択肢と制約を確認します。
 - [Cardano CLIでDingoを使う](/ja/guides/dingo/004-using-dingo-with-cardano-cli/) — node-to-client接続でノードを照会します。
 
 ## Dingoに貢献する
 
-[Dingoリポジトリ](https://github.com/blinklabs-io/dingo)にはGoソース、サンプル、開発者向けドキュメントがあります。[開発ガイド](https://github.com/blinklabs-io/dingo/blob/main/docs/development.md)、[アーキテクチャ](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md)、[データベース設計](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md)から始めてください。
+[Dingoリポジトリ](https://github.com/blinklabs-io/dingo)にはGoソースと開発者向けドキュメントがあります。[開発ガイド](https://github.com/blinklabs-io/dingo/blob/main/docs/development.md)、[アーキテクチャ](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md)、[データベース設計](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md)から始めてください。GoライブラリAPIのリファレンスは[pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo)で確認できます。
 
 上の設定ファイルはDingo v0.73.3用です。[リリースノート](/ja/guides/dingo/releases/001-release-notes/)にはバージョン間の変更が記載されています。
 

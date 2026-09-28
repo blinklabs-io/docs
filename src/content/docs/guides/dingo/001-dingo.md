@@ -28,16 +28,24 @@ are organized by what you want to do.
 
 - [API and archive services](/guides/dingo/006-apis-and-archive/) — choose an
   API, configure access, and understand Bark archive nodes.
+- [Build a Blockfrost API client](/guides/dingo/009-build-blockfrost-client/) —
+  connect an explorer or service through Dingo's Blockfrost-compatible API.
+- [Build a wallet frontend with UTxO RPC](/guides/dingo/010-build-utxorpc-frontend/)
+  — query wallet UTxOs and submit transactions through Dingo.
+- [Build a governance dashboard](/guides/dingo/011-build-governance-dashboard/)
+  — understand the tradeoffs of reading indexed governance metadata.
 - [Use Dingo with Cardano CLI](/guides/dingo/004-using-dingo-with-cardano-cli/)
   — query a running node over node-to-client.
 
 ## I contribute to Dingo
 
 The [Dingo repository](https://github.com/blinklabs-io/dingo) contains the Go
-source, examples, and contributor documentation. Start with its
+source and contributor documentation. Start with its
 [development guide](https://github.com/blinklabs-io/dingo/blob/main/docs/development.md),
 [architecture](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md),
 and [database design](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md).
+For Go library API documentation, see
+[pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo).
 
 See the [release notes](/guides/dingo/releases/001-release-notes/) for changes
 between versions. The configuration download above is for Dingo v0.73.3.
