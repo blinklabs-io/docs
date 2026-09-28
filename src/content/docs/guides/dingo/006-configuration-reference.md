@@ -52,3 +52,13 @@ plugins:
 ```
 
 Set the interval in seconds. Omission or `0` disables periodic full `VACUUM`. A positive value enables it; full `VACUUM` can pause SQLite writers, so configure an interval only when that pause is acceptable.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

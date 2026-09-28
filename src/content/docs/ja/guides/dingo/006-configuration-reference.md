@@ -58,3 +58,14 @@ plugins:
 値は秒数で指定します。設定を省略するか `0` を指定すると、定期的な完全 `VACUUM` を無効にします。正の値を指定すると、その間隔で完全 `VACUUM` を実行します。完全 `VACUUM` はSQLiteの書き込みを一時停止する場合があるため、停止を許容できる間隔を設定してください。
 
 この設定には、追加のCLIフラグや環境変数の別名はありません。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
