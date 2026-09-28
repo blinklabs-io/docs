@@ -40,7 +40,7 @@ When configuration sets both bounds to positive values, `tokenRegistry.maxBatchB
 
 ## Leios endorser-block forging controls
 
-These settings control Leios endorser-block selection and size.
+Configure the following settings to control Leios endorser-block selection and size.
 
 | YAML key | Purpose | Default | Environment variable | CLI flag | Zero-value behavior |
 | --- | --- | --- | --- | --- | --- |
