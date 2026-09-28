@@ -1,18 +1,29 @@
 ---
 title: Dingo
-description: Dingoの紹介。
+description: ノード運用者、アプリ開発者、コントリビューター向けのDingoドキュメント。
 ---
 
-![dingo-logo](/dingo-logo-250.png)
+![Dingoロゴ](/dingo-logo-250.png)
 
-Dingoは、Go言語で書かれたCardanoブロックチェーンデータノードであり、Ouroboros Network Node-to-Nodeミニプロトコルファミリーを使用して、Cardanoブロックチェーン上のネットワーク通信に積極的に参加します。
+DingoはBlink LabsがGoで実装したCardanoノードです。目的に合ったガイドを選んでください。
 
-⚠️ これは開発中のプロジェクトであり、現在活発に開発が進められています
+> Dingoは現在も開発中です。現行リリースはPreview、Preprod、またはプライベートDevNetで使用してください。メインネット運用には対応していません。
 
-<br>
+## ノードを運用する
 
-## Dingoの使い方
+- [クイックスタート](/ja/guides/dingo/002-quick-start-overview/) — Dingoを入手し、Previewノードを起動します。
+- [設定とストレージモード](/guides/dingo/005-node-configuration/) — リレー、ブロックプロデューサー、APIノードの設定を確認します。
+- [ブートストラップとデータ管理](/guides/dingo/007-bootstrap-and-data-maintenance/) — Mithrilとローカルデータの管理について説明します。
+- [サービスとして起動](/ja/guides/dingo/003-create-start-up-service/)、[Grafanaで監視](https://docs.blinklabs.io/guides/dingo/spo-guides/008-grafana-dashboard/)。
+- [ステークプール運用ガイド](https://docs.blinklabs.io/guides/dingo/spo-guides/001-spo-guide/) — テストネットのブロックプロデューサーを設定します。
 
-このガイドでは、Dingoバイナリの取得、Cardano設定ファイルのダウンロード、およびMithrilスナップショットを使用したDingoノードのブートストラップ方法について説明します。また、Cardano CLIを使用してDingoノードと対話する方法も探ります。このガイドでは、Cardano PreviewネットワークでDingoノードを実行します。
+## アプリケーションを接続する
 
-✅ [クイックスタート](../002-quick-start-overview)ガイドから始めましょう。
+- [APIとアーカイブサービス](/guides/dingo/006-apis-and-archive/) — APIの選択、アクセス制御、Barkアーカイブを確認します。
+- [Cardano CLIでDingoを使う](/ja/guides/dingo/004-using-dingo-with-cardano-cli/) — node-to-client接続でノードを照会します。
+
+## Dingoに貢献する
+
+[Dingoリポジトリ](https://github.com/blinklabs-io/dingo)にはGoソース、サンプル、開発者向けドキュメントがあります。[開発ガイド](https://github.com/blinklabs-io/dingo/blob/main/docs/development.md)、[アーキテクチャ](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md)、[データベース設計](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md)から始めてください。
+
+正確な設定値については、実行するDingoと同じリリースの[設定例](https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example)を参照してください。[リリースノート](/guides/dingo/releases/001-release-notes/)にはバージョン間の変更が記載されています。
