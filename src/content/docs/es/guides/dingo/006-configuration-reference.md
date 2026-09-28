@@ -42,7 +42,7 @@ Durante el inicio, cuando ambos valores son positivos, Dingo exige `maxBatchByte
 
 ## Controles de forjado de bloques endosadores de Leios
 
-Estos parámetros controlan la selección y el tamaño de los bloques endosadores de Leios.
+Los siguientes parámetros controlan la selección y el tamaño de los bloques endosadores de Leios.
 
 | Clave YAML | Propósito | Valor predeterminado | Variable de entorno | Opción de CLI | Comportamiento del valor cero |
 | --- | --- | --- | --- | --- | --- |
