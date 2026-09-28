@@ -15,7 +15,7 @@ In this example we will use Adder to send us a Telegram notification, when there
 
 ***
 
-> ✅ For this guide we assume you have already downloaded the Adder exe and have opened a command prompt. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
+> ✅ For this guide we assume you have already downloaded the Adder binary. If not see our [Quick Start](../../005-use-adder-on-linux) guide.
 
 ***
 
@@ -226,17 +226,16 @@ For us to get a notification in our preferred Telegram channel, we need to tell 
 
 To get Telegram notifications when a action occurs by a DRep, we will run the following command in our command prompt:
 
-> ⚠️ Please adjust the path to your Adder exe. In this example it's on the Desktop for user richm.\
-> Also adjust the DRep id, $TELEGRAM_TOKEN, and $CHAT_ID.
+> ⚠️ Please adjust the DRep id, $TELEGRAM_TOKEN, and $CHAT_ID below.
 
 ```
-"C:\Users\richm\Desktop\adder.exe" --filter-type input.governance --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc --output telegram --output-telegram-bot-token $TELEGRAM_TOKEN --output-telegram-chat-id $CHAT_ID
+./adder --filter-type input.governance --filter-drep drep1yg8vjs7ute7z7vyd8yez5tgjey6043djjfh8d3n7sjev35g064xxc --output telegram --output-telegram-bot-token $TELEGRAM_TOKEN --output-telegram-chat-id $CHAT_ID
 ```
 
 
 ### Congratulations!
 
-Now you can minimize the window and let Adder run in the background. Anytime an action occurs with our DRep we will get an Alert in Telegram.
+Anytime an action occurs with our DRep we will get an Alert in Telegram.
 
 ***
 

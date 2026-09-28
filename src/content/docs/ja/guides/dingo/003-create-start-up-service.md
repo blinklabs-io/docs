@@ -104,12 +104,28 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # `true` はローカル開発・テスト専用で、HTTP とローカルまたはプライベートな宛先を許可します。
+  allowInsecureHttp: false
+  # `allowInsecureHttp` は `--mithril-allow-insecure-http` / `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` で上書きできます。
+  # `pinnedDigest` は任意です。v1 ではスナップショットのダイジェスト、v2 では Cardano データベースアーティファクトのハッシュを指定します。
+  # この指定は新しいデータベースの初回ブートストラップにのみ使用します。
+  # pinnedDigest: \"\"
+
+> 📝 既定では、Mithril は HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp: true` はローカル開発またはテストでのみ使用する明示的な例外であり、本番環境では有効にしないでください。
 
 # Network
+# ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
+healthPort: 12799
+# readiness の許容 tip gap（スロット数）。`--health-ready-gap-slots` / `DINGO_HEALTH_READY_GAP_SLOTS` で変更できます。
+healthReadyGapSlots: 1000
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+# NtC 接続の上限は合計 100、送信元 IP ごとに 5 です。`--max-ntc-conns` / `DINGO_MAX_NTC_CONNS` と `--max-ntc-connections-per-ip` / `DINGO_MAX_NTC_CONNECTIONS_PER_IP` でも設定できます。
+# 値が 0 以下の場合は無視され、既定値が使用されます。
+maxNtCConns: 100
+maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
@@ -121,6 +137,7 @@ barkPort: 0
 # `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
 databaseLifecycle:
   # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
+  # プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできないため、`snapshotEnabled` を無効にしてください。
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
   snapshotDir: \"$HOME/dingo/snapshots\"
@@ -158,6 +175,17 @@ plugins:
       config:
         port: 9090
 midnight:
+  # Midnight のインデックス作成と gRPC 提供は別々に制御します。gRPC 提供には API ストレージモード、`serverEnabled: true`、0 以外の `port` が必要です。
+  # `serverEnabled` が `false` の場合はリスナーを起動しません。
+  serverEnabled: false
+  # `reflectionEnabled` は gRPC のサービス検出を個別に有効化する設定です。`serverEnabled: true` が必要です。
+  reflectionEnabled: false
+  # ループバック以外で TLS なしの接続を許可します。リモートの平文接続には `allowInsecureRemote: true` または TLS が必要です。
+  allowInsecureRemote: false
+  # gRPC の待ち受けポートです。`serverEnabled` が `true` の場合は 0 以外にします。
+  port: 50051
+  # gRPC の待ち受けアドレスです。省略または空欄の場合の既定値はループバック（`127.0.0.1`）です。
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
 
@@ -165,7 +193,8 @@ midnight:
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
-> 📝 停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできませんが、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
+> 📝 core ストレージモードでは、`consumed_utxo_prune_floor` より前の消費済み UTxO 行を保持処理がすでに削除しているため、その下限より古い truncate 対象を指定すると、Dingo は変更を加える前に要求を拒否します。下限と同じ対象は指定できます。API ストレージモードではこの判定を行わず、動作は変わりません。巻き戻しが古すぎる場合は、より浅い対象を選ぶか、完全に同期したピアのスナップショットから復旧してください。
 
 ***
 
@@ -232,6 +261,15 @@ sudo systemctl start dingo.service
 <br>
 
 ## ステップ6 - ステータスの確認
+ポート `12799` のヘルスエンドポイントを確認します：
+
+```bash
+curl -i http://127.0.0.1:12799/health
+curl -i http://127.0.0.1:12799/healthz
+curl -i http://127.0.0.1:12799/readyz
+```
+
+`/health` と `/healthz` は liveness（生存確認）プローブです。`/readyz` は readiness（準備完了確認）プローブで、tip gap が不明、または `healthReadyGapSlots` を超える場合は未準備になります。Mithril のブートストラップ中もこれらのプローブを利用できます。
 
 サービスが実行中であることを確認します：
 
@@ -256,3 +294,14 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 ### おめでとうございます。Dingoのスタートアップサービスを設定しました！
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

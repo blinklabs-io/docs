@@ -4,16 +4,16 @@ description: Choose a Dingo node role and find the matching configuration option
 ---
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
-and start a node. This page explains the main configuration choices; the
-versioned [`dingo.yaml.example`](https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example)
-is the reference for every available field.
+and start a node. This page explains the main configuration choices. The
+[example configuration for Dingo v0.73.3](/downloads/dingo/v0.73.3/dingo.yaml)
+is available as a download from this site; use it with that release only.
 
 ## Choose a node role
 
 | Role | Storage mode | Block production | Use |
 | --- | --- | --- | --- |
 | Relay | `core` | Off | Follow and validate the chain, serve node-to-node and node-to-client connections. |
-| Block producer | `core` | On, with pool keys and an operational certificate | Follow the chain and forge blocks when elected. Use the [SPO guides](../SPO%20Guides/001-spo-guide/). |
+| Block producer | `core` | On, with pool keys and an operational certificate | Follow the chain and forge blocks when elected. Use the [SPO guides](../SPO%20Guides/000-spo-guide/). |
 | API node | `api` | Off | Keep historical transaction data and serve configured Blockfrost, Mesh, or UTxO RPC APIs. |
 
 `core` is the default storage mode and stores the data needed for consensus.
@@ -23,7 +23,7 @@ listener. Storage mode does not enable block production.
 
 Dingo block production is intended for test networks and private devnets in
 current releases. Follow the pool key and certificate guidance in the [SPO
-guides](../SPO%20Guides/001-spo-guide/); do not use a mainnet
+guides](../SPO%20Guides/000-spo-guide/); do not use a mainnet
 configuration as a signal that mainnet production is supported.
 
 ## Configure Dingo
@@ -37,15 +37,15 @@ configuration:
 ./dingo --network preview
 ```
 
-For a persistent or non-default setup, create a `dingo.yaml` from the
-[example configuration](https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example)
-and pass it with `--config`. Use the example from the release that matches
-your binary; configuration options and defaults can change between releases.
+For a persistent or non-default setup, save the downloaded file as
+`dingo.yaml` and pass it with `--config`. Configuration options and defaults
+can change between releases.
 
 Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
-provider name. Environment variables use the
+provider name. The example file documents the providers and options available
+in Dingo v0.73.3. Environment variables use the
 `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` form. For example, the current
 example shows the supported blob and metadata providers and their options.
 

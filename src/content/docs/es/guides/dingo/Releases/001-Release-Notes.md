@@ -1,0 +1,44 @@
+---
+title: Últimas versiones
+description: Notas de la versión de Dingo
+---
+
+## Mantener el nodo Dingo actualizado proporciona acceso a las últimas mejoras de rendimiento, nuevas funciones y correcciones importantes.
+
+<br>
+
+Cada versión enlaza a las notas completas. La versión más reciente aparece primero.
+
+- Versión: v0.73.3 - *[Ver las notas de la versión](../v0-73-3)*
+- Versión: v0.73.2 - *[Ver las notas de la versión](../v0-73-2)*
+- Versión: v0.73.1 - *[Ver las notas de la versión](../v0-73-1)*
+- Versión: v0.73.0 - *[Ver las notas de la versión](../v0-73-0)*
+- Versión: v0.72.0 - *[Ver las notas de la versión](../v0-72-0)*
+- Versión: v0.71.1 - *[Ver las notas de la versión](../v0-71-1)*
+- Versión: v0.71.0 - *[Ver las notas de la versión](../v0-71-0)*
+- Versión: v0.70.16 - *[Ver las notas de la versión](../v0-70-16)*
+- Versión: v0.70.15 - *[Ver las notas de la versión](../v0-70-15)*
+- Versión: v0.70.14 - *[Ver las notas de la versión](../v0-70-14)*
+- Versión: v0.70.13 - *[Ver las notas de la versión](../v0-70-13)*
+- Versión: v0.70.12 - *[Ver las notas de la versión](../v0-70-12)*
+- Versión: v0.70.11 - *[Ver las notas de la versión](../v0-70-11)*
+- Versión: v0.70.10 - *[Ver las notas de la versión](../v0-70-10)*
+- Versión: v0.70.9 - *[Ver las notas de la versión](../v0-70-9)*
+- Versión: v0.70.8 - *[Ver las notas de la versión](../v0-70-8)*
+- Versión: v0.70.6 - *[Ver las notas de la versión](../v0-70-6)*
+- Versión: v0.70.5 - *[Ver las notas de la versión](../v0-70-5)*
+- Versión: v0.70.4 - *[Ver las notas de la versión](../v0-70-4)*
+- Versión: v0.70.3 - *[Ver las notas de la versión](../v0-70-3)*
+- Versión: v0.70.2 - *[Ver las notas de la versión](../v0-70-2)*
+- Versión: v0.70.1 - *[Ver las notas de la versión](../v0-70-1)*
+- Versión: v0.70.0 - *[Ver las notas de la versión](../v0-70-0)*
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

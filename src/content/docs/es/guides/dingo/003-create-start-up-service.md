@@ -100,10 +100,20 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Mithril exige HTTPS y destinos públicos por defecto.
+  # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; la configuración de producción mantiene este valor en false.
+  # CLI: --mithril-allow-insecure-http | Variable de entorno: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
+  allowInsecureHttp: false
+  # Identidad opcional del artefacto de Mithril para un arranque nuevo.
+  # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
+  # Dingo solo usa este valor para un arranque nuevo; no lo usa para una base de datos completa ni para cambiar una importación interrumpida.
+  # pinnedDigest: \"\"
 
 # Lifecycle de base de datos
 databaseLifecycle:
   # Captura snapshots automáticos al cierre de cada epoch.
+  # Dingo no admite capturas automáticas cuando el proveedor principal de blobs es `badger`, `s3` o `gcs`.
+  # Desactiva las capturas automáticas o usa un proveedor principal compatible.
   # Default: false
   # CLI: --db-snapshot-enabled
   snapshotEnabled: false
@@ -130,6 +140,18 @@ databaseLifecycle:
 # Network
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
+# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
+# CLI: `--max-ntc-conns` | Variable de entorno: `DINGO_MAX_NTC_CONNS`
+maxNtCConns: 100
+# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
+# CLI: `--max-ntc-connections-per-ip` | Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`
+maxNtCConnectionsPerIP: 5
+# Puerto del listener de salud. `0` deshabilita el listener.
+# CLI: --health-port | Variable de entorno: DINGO_HEALTH_PORT
+healthPort: 12799
+# Brecha máxima del tip para indicar que el nodo está listo, en slots.
+# CLI: --health-ready-gap-slots | Variable de entorno: DINGO_HEALTH_READY_GAP_SLOTS
+healthReadyGapSlots: 1000
 debugPort: 0
 network: \"preview\"
 privateBindAddr: \"127.0.0.1\"
@@ -146,11 +168,13 @@ EOF"
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
 
-> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`.
+> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`. No habilites `databaseLifecycle.snapshotEnabled` para capturas automáticas cuando `badger`, `s3` o `gcs` sea el proveedor principal de blobs. Las operaciones manuales `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles.
 
 > 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
 
-> 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
+> 📝 En el modo de almacenamiento `core`, Dingo rechaza antes de cualquier mutación una solicitud de truncate anterior al límite persistido `consumed_utxo_prune_floor`, porque Dingo ya ha podado las filas de UTxO consumidas por debajo de ese límite. Un objetivo exactamente en el límite sí se permite y el modo de almacenamiento `api` no cambia. Si el retroceso solicitado es demasiado antiguo, selecciona un objetivo menos profundo o recupera el nodo desde un snapshot de un peer completamente sincronizado.
+
+> 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `CreateSnapshot`, `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
 
 > 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
 
@@ -171,12 +195,24 @@ plugins:
       config:
         port: 9090
 midnight:
+  # Habilita el servidor gRPC de Midnight. Predeterminado: false.
+  serverEnabled: false
+  # Expone el descubrimiento del servicio gRPC. Requiere `serverEnabled`. Predeterminado: false.
+  reflectionEnabled: false
+  # Permite conexiones sin cifrar en una dirección remota. Predeterminado: false.
+  allowInsecureRemote: false
+  # Puerto de escucha gRPC. Debe ser distinto de `0` cuando `serverEnabled` es `true`.
+  port: 50051
+  # Dirección de escucha gRPC. Por defecto, las conexiones sin cifrar solo usan loopback.
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
 
 Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+
+> 📝 La indexación de Midnight requiere `enabled: true` y el modo de almacenamiento `api`; el servidor gRPC es un control independiente y requiere `serverEnabled: true` y un `port` distinto de `0`. Con `serverEnabled: false`, Dingo mantiene desactivada la escucha. `reflectionEnabled` requiere el servidor. Dingo usa `127.0.0.1` por defecto y convierte un valor vacío de `host` en loopback. Una conexión sin cifrar a un host no local requiere `allowInsecureRemote: true`, salvo que TLS proteja la escucha.
 
 ***
 
@@ -262,8 +298,29 @@ Para ver los registros recientes si hay un error:
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
+Comprueba las sondas de salud en el puerto `12799`:
+
+```bash
+curl -f http://127.0.0.1:12799/health
+curl -f http://127.0.0.1:12799/healthz
+curl -f http://127.0.0.1:12799/readyz
+```
+
+`/health` y `/healthz` confirman que el proceso está activo. `/readyz` comprueba la disponibilidad: el nodo no está listo cuando el sistema no conoce la brecha hasta el tip o cuando la brecha supera `healthReadyGapSlots`. Dingo sirve estas sondas también durante el arranque de Mithril.
+
 ***
 
 <br>
 
 ### ¡Felicidades, has configurado un servicio de inicio para Dingo!
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

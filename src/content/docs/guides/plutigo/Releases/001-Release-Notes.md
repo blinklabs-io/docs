@@ -9,9 +9,29 @@ description: Plutigo Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.7.2 - *[View Release Notes](../v0-7-2)*
+- Version: v0.7.1 - *[View Release Notes](../v0-7-1)*
+- Version: v0.7.0 - *[View Release Notes](../v0-7-0)*
+- Version: v0.6.2 - *[View Release Notes](../v0-6-2)*
+- Version: v0.6.1 - *[View Release Notes](../v0-6-1)*
+- Version: v0.6.0 - *[View Release Notes](../v0-6-0)*
+- Version: v0.5.1 - *[View Release Notes](../v0-5-1)*
+- Version: v0.5.0 - *[View Release Notes](../v0-5-0)*
+- Version: v0.4.0 - *[View Release Notes](../v0-4-0)*
 - Version: v0.3.0 - *[View Release Notes](../v0-3-0)*
 - Version: v0.2.0 - *[View Release Notes](../v0-2-0)*
 - Version: v0.1.17 - *[View Release Notes](../v0-1-17)*
 - Version: v0.1.15 - *[View Release Notes](../v0-1-15)*
 - Version: v0.1.14 - *[View Release Notes](../v0-1-14)*
 - Version: v0.1.13 - *[View Release Notes](../v0-1-13)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

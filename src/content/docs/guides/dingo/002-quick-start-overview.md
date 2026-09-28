@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -100,25 +100,39 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap only.
+  # Mithril v1 uses a snapshot digest; Mithril v2 uses a Cardano database artifact hash.
+  # pinnedDigest: ""
 
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+healthPort: 12799
+healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
+# Total NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS
+maxNtCConns: 100
+# Per-IP NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP
+maxNtCConnectionsPerIP: 5
 
 # Storage
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
+
 EOF
 ```
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
+
+> 📝 `healthPort` uses `--health-port` or `DINGO_HEALTH_PORT`; set `healthPort: 0` to disable the health listener. `healthReadyGapSlots` uses `--health-ready-gap-slots` or `DINGO_HEALTH_READY_GAP_SLOTS`.
 
 > 📝 Bark now derives its near tip safety window from the current ledger state. Do not look for or set a manual `barkSecurityWindow` value in this configuration.
 
@@ -126,6 +140,19 @@ EOF
 
 ```yaml
 midnight:
+  # Enable the Midnight gRPC server independently of Midnight indexing.
+  # Default: false.
+  serverEnabled: false
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
+  reflectionEnabled: false
+  # Permit plaintext listening on a non-loopback host. A configured TLS
+  # certificate and key allow remote TLS exposure without this setting.
+  # Default: false.
+  allowInsecureRemote: false
+  # Must be nonzero when serverEnabled is true. Default: 50051.
+  port: 50051
+  # Defaults to loopback; an empty value also uses 127.0.0.1.
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 storageMode: "api"
 plugins:
@@ -143,6 +170,8 @@ plugins:
       config:
         port: 9090
 ```
+
+> 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
@@ -184,6 +213,8 @@ Run the following command from your `~/dingo` directory:
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
+
+> 📝 Check `http://127.0.0.1:12799/health` or `http://127.0.0.1:12799/healthz` for liveness and `http://127.0.0.1:12799/readyz` for readiness. The `/readyz` check reports unready while the tip gap is unknown or outside `healthReadyGapSlots`. The container health check uses `/health`, not the metrics endpoint. The health listener remains available while `dingo mithril sync` runs.
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
@@ -227,3 +258,14 @@ Using a systemd service automatically starts Dingo when your system boots and re
 ### Congratulations! Your Dingo node is now running.
 
 [Learn how to interact with Dingo using the Cardano CLI](../004-using-dingo-with-cardano-cli).
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

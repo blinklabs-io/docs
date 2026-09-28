@@ -40,10 +40,18 @@ dingo database truncate --slot 12345678
 ```
 
 `snapshot` requires a destination directory that does not already exist.
+Before restoring, move the existing configured data directory aside; the
+configured path must be absent or empty. A restore into a populated directory
+fails.
 `truncate` accepts exactly one target: `--slot`, `--hash`, or
 `--block-number`. It removes blocks and metadata after that point so the node
 can resync from the new tip. Check `dingo database --help` for all options
-before running a recovery operation.
+before running a recovery operation. Dingo refuses a target before the recorded
+Mithril trust boundary because the required UTxO history is not available
+locally before that point. Truncation can also fail when the database no longer
+retains consumed-UTxO history needed for the target. If local history is
+insufficient, use a database snapshot from a fully synced peer that retains
+the required history.
 
 ## History expiry and archives
 
@@ -52,8 +60,6 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-and download host allowlists in the
-[versioned Dingo configuration example](https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example).
-
-For Badger storage tuning and garbage collection, see the
-[Dingo Badger GC notes](https://github.com/blinklabs-io/dingo/blob/main/docs/badger-gc.md).
+and download host allowlists in the Dingo v0.73.3
+[example configuration](/downloads/dingo/v0.73.3/dingo.yaml). Use it with that
+release only; configuration options can change between versions.

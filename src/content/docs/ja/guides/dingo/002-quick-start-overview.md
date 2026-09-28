@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.69.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.73.3）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -48,7 +48,7 @@ wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、config.json）が組み込まれています。これらを別途ダウンロードする必要はありません。
+Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
 dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`変数は自動的にホームディレクトリのパスに展開されます：
 
@@ -96,6 +96,7 @@ plugins:
 # Mithril
 mithril:
   aggregatorUrl: ""
+  # pinnedDigest: ""
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
@@ -103,10 +104,16 @@ mithril:
 # Network
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+# `healthPort` は `--health-port` CLI フラグまたは `DINGO_HEALTH_PORT` 環境変数で設定できます。`healthPort: 0` にするとリスナーを無効にします。
+healthPort: 12799
+# `healthReadyGapSlots` は `--health-ready-gap-slots` CLI フラグまたは `DINGO_HEALTH_READY_GAP_SLOTS` 環境変数で設定できます。
+healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
+maxNtCConns: 100
+maxNtCConnectionsPerIP: 5
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -115,13 +122,27 @@ barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
 midnight:
+  serverEnabled: false
+  reflectionEnabled: false
+  allowInsecureRemote: false
+  port: 50051
+  host: "127.0.0.1"
   authTokenPolicyId: ""
+
 EOF
 ```
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
+> 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
+
+> 📝 `skipRewardLiveStakeBackfillCheck` は高度な診断用オプションです。既定値は `false` なので、通常の起動ではこの値を使用してください。`true` にすると高コストな `reward_live_stake` 起動時整合性スキャンだけを省略します。Dingoは`StaleConsensusStakeSnapshotsExist` によるコンセンサスステークスナップショットの来歴チェックを常に実行し、必要な場合は起動を拒否します。
+
 > 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
+
+> 💡 Midnight gRPC サーバーには `storageMode: "api"`、`midnight.serverEnabled: true`、および `midnight.port` の `0` 以外の値が必要です。インデックス作成とサーバー公開は別々に制御されます。`midnight.reflectionEnabled` は `midnight.serverEnabled` が `true` の場合にのみ有効で、`midnight.serverEnabled` が `false` の場合はリスナーも無効です。
+
+> 📝 `midnight.host` の既定値は `"127.0.0.1"` です。`midnight.host: ""` もループバックを使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。
 
 > 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
 
@@ -177,6 +198,8 @@ Dingoは次の処理を行います：
 
 > 📝 このステップをスキップした場合、Dingoは起動時にgenesisから同期するため、はるかに長い時間がかかります。
 
+> 📝 Dingoはポート `12799` でヘルスプローブを提供します。`/health` と `/healthz` は稼働確認に、`/readyz` はレディネス確認に使用します。先端とのギャップを取得できない場合、または `healthReadyGapSlots` の設定値を超えた場合、`/readyz` は未準備を示します。ヘルスプローブは Mithril のブートストラップ中も利用できます。コンテナのヘルスチェックは `/metrics` ではなく `/health` を使用します。
+
 ***
 
 <br>
@@ -206,3 +229,14 @@ cd ~/dingo
 ### おめでとうございます。Dingoノードを使用する準備が整いました！
 
 [Cardano CLIを使用してDingoと対話する方法を学ぶ](../004-using-dingo-with-cardano-cli)。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

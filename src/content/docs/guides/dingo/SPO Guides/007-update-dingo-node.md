@@ -11,7 +11,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 ```
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -27,17 +27,17 @@ sudo systemctl stop dingo
 ## Step 3 - Copy Dingo Binary to `/usr/local/bin/`
 
 ```
-sudo cp ~/dingo/dingo /usr/local/bin/
+sudo cp $DINGO_HOME/dingo /usr/local/bin/
 ```
 
-Verify it has been copied by `which dingo`
+Verify it has been copied by `which dingo`.
 
 ***
 
 ## Step 4 - Check for Configuration File Updates
-Check to make sure no config updates are required.
+Check whether any configuration updates are required.
 
-Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release Notes</a> and the [Quick Start](../../002-quick-start-overview) guide.
+Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-release-notes/" target="_blank"> Dingo Release Notes</a>.
 
 > 💡 To view and edit `dingo.yaml` file run:
 >
@@ -49,12 +49,12 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 ***
 
 ## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
-Since Dingo is under active development it is recommended during upgrading to delete database and start fresh.
+Since Dingo is under active development, it is recommended during upgrades to delete database and start fresh.
 
 ### Step 5.1 - Delete the `.dingo` Database
 > 💡 To view hidden files and double-check path run:
 > ```
-> cd ~/dingo
+> cd $DINGO_HOME
 > ls -a
 > ```
 >
@@ -62,14 +62,14 @@ Since Dingo is under active development it is recommended during upgrading to de
 
 Delete the `.dingo` database directory by running:
 ```
-cd ~/dingo
+cd $DINGO_HOME
 rm -r .dingo
 ```
 
 ### Step 5.2 - Mithril Sync
 Dingo has a built-in Mithril client that downloads and loads a snapshot automatically. This saves hours of sync time compared to replaying the chain from genesis.
 
-Run the following command from your `~/dingo` directory:
+Run the following command from your `$DINGO_HOME` directory:
 ```
 dingo sync --mithril
 ```
@@ -78,14 +78,14 @@ Dingo will:
 2. Verify the certificate chain
 3. Load the snapshot into the database
 
-This takes approximately 20-30 minutes depending on your system and network speed.
+This process takes approximately 20-30 minutes, depending on your system and network speed.
 
 > 📝 If you skip this step, Dingo will sync from genesis when started, which takes significantly longer.
 
 ### Step 5.3 - Start Dingo
 Once the Mithril snapshot has finished loading, start the node:
 ```
-cd ~/dingo
+cd $DINGO_HOME
 sudo systemctl start dingo
 ```
 ***
@@ -113,3 +113,14 @@ To see recent logs if there is an error:
 ```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

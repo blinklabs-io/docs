@@ -17,11 +17,12 @@ are organized by what you want to do.
   start a Preview node.
 - [Configuration and storage modes](/guides/dingo/005-node-configuration/) —
   choose a relay, block producer, or API node and configure providers.
+- [Download the Dingo v0.73.3 example configuration](/downloads/dingo/v0.73.3/dingo.yaml).
 - [Bootstrap and data maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/)
   — use Mithril and manage local node data.
 - [Run Dingo as a service](/guides/dingo/003-create-start-up-service/) and
   [monitor it with Grafana](../SPO%20Guides/008-grafana-dashboard/).
-- [Stake pool operator guides](../SPO%20Guides/001-spo-guide/) —
+- [Stake pool operator guides](../SPO%20Guides/000-spo-guide/) —
   configure and operate a testnet block producer.
 
 ## I connect an application
@@ -39,8 +40,5 @@ source, examples, and contributor documentation. Start with its
 [architecture](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md),
 and [database design](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md).
 
-For exact, release-specific settings, use the
-[configuration example](https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example)
-from the same Dingo version you run. See the
-[release notes](/guides/dingo/releases/001-release-notes/) for changes between
-versions.
+See the [release notes](/guides/dingo/releases/001-release-notes/) for changes
+between versions. The configuration download above is for Dingo v0.73.3.

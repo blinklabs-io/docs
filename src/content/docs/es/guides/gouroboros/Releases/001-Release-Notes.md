@@ -9,6 +9,65 @@ description: Notas de la versión de gOuroboros
 
 ☑️ La lista siguiente permite ver las notas de la versión completas.
 
+- Versión: v0.208.1 - *[Ver notas de la versión](../v0-208-1)*
+- Versión: v0.208.0 - *[Ver notas de la versión](../v0-208-0)*
+- Versión: v0.207.5 - *[Ver notas de la versión](../v0-207-5)*
+- Versión: v0.207.4 - *[Ver notas de la versión](../v0-207-4)*
+- Versión: v0.207.3 - *[Ver notas de la versión](../v0-207-3)*
+- Versión: v0.207.2 - *[Ver notas de la versión](../v0-207-2)*
+- Versión: v0.207.1 - *[Ver notas de la versión](../v0-207-1)*
+- Versión: v0.207.0 - *[Ver notas de la versión](../v0-207-0)*
+- Versión: v0.206.2 - *[Ver notas de la versión](../v0-206-2)*
+- Versión: v0.206.1 - *[Ver notas de la versión](../v0-206-1)*
+- Versión: v0.206.0 - *[Ver notas de la versión](../v0-206-0)*
+- Versión: v0.205.7 - *[Ver notas de la versión](../v0-205-7)*
+- Versión: v0.205.6 - *[Ver notas de la versión](../v0-205-6)*
+- Versión: v0.205.5 - *[Ver notas de la versión](../v0-205-5)*
+- Versión: v0.205.4 - *[Ver notas de la versión](../v0-205-4)*
+- Versión: v0.205.3 - *[Ver notas de la versión](../v0-205-3)*
+- Versión: v0.205.2 - *[Ver notas de la versión](../v0-205-2)*
+- Versión: v0.205.1 - *[Ver notas de la versión](../v0-205-1)*
+- Versión: v0.205.0 - *[Ver notas de la versión](../v0-205-0)*
+- Versión: v0.204.7 - *[Ver notas de la versión](../v0-204-7)*
+- Versión: v0.204.6 - *[Ver notas de la versión](../v0-204-6)*
+- Versión: v0.204.5 - *[Ver notas de la versión](../v0-204-5)*
+- Versión: v0.204.4 - *[Ver notas de la versión](../v0-204-4)*
+- Versión: v0.204.3 - *[Ver notas de la versión](../v0-204-3)*
+- Versión: v0.204.2 - *[Ver notas de la versión](../v0-204-2)*
+- Versión: v0.204.1 - *[Ver notas de la versión](../v0-204-1)*
+- Versión: v0.204.0 - *[Ver notas de la versión](../v0-204-0)*
+- Versión: v0.203.0 - *[Ver notas de la versión](../v0-203-0)*
+- Versión: v0.202.10 - *[Ver notas de la versión](../v0-202-10)*
+- Versión: v0.202.9 - *[Ver notas de la versión](../v0-202-9)*
+- Versión: v0.202.8 - *[Ver notas de la versión](../v0-202-8)*
+- Versión: v0.202.7 - *[Ver notas de la versión](../v0-202-7)*
+- Versión: v0.202.6 - *[Ver notas de la versión](../v0-202-6)*
+- Versión: v0.202.5 - *[Ver notas de la versión](../v0-202-5)*
+- Versión: v0.202.4 - *[Ver notas de la versión](../v0-202-4)*
+- Versión: v0.202.3 - *[Ver notas de la versión](../v0-202-3)*
+- Versión: v0.202.2 - *[Ver notas de la versión](../v0-202-2)*
+- Versión: v0.202.1 - *[Ver notas de la versión](../v0-202-1)*
+- Versión: v0.202.0 - *[Ver notas de la versión](../v0-202-0)*
+- Versión: v0.201.1 - *[Ver notas de la versión](../v0-201-1)*
+- Versión: v0.201.0 - *[Ver notas de la versión](../v0-201-0)*
+- Versión: v0.200.0 - *[Ver notas de la versión](../v0-200-0)*
+- Versión: v0.199.0 - *[Ver notas de la versión](../v0-199-0)*
+- Versión: v0.198.0 - *[Ver notas de la versión](../v0-198-0)*
+- Versión: v0.197.0 - *[Ver notas de la versión](../v0-197-0)*
+- Versión: v0.196.0 - *[Ver notas de la versión](../v0-196-0)*
+- Versión: v0.195.0 - *[Ver notas de la versión](../v0-195-0)*
+- Versión: v0.194.0 - *[Ver notas de la versión](../v0-194-0)*
 - Versión: v0.193.3 - *[Ver notas de la versión](../v0-193-3)*
 - Versión: v0.193.2 - *[Ver notas de la versión](../v0-193-2)*
 - Versión: v0.193.1 - *[Ver notas de la versión](../v0-193-1)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

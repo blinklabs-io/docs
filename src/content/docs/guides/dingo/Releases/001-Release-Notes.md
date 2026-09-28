@@ -9,6 +9,34 @@ description: Dingo Release Notes
 
 ☑️ Select a version below to view the full release notes. The latest release appears first.
 
+- Version: v0.73.3 - *[View Release Notes](../v0-73-3)*
+- Version: v0.73.2 - *[View Release Notes](../v0-73-2)*
+- Version: v0.73.1 - *[View Release Notes](../v0-73-1)*
+- Version: v0.73.0 - *[View Release Notes](../v0-73-0)*
+- Version: v0.72.0 - *[View Release Notes](../v0-72-0)*
+- Version: v0.71.1 - *[View Release Notes](../v0-71-1)*
+- Version: v0.71.0 - *[View Release Notes](../v0-71-0)*
+
+- Version: v0.70.16 - *[View Release Notes](../v0-70-16)*
+
+- Version: v0.70.15 - *[View Release Notes](../v0-70-15)*
+
+- Version: v0.70.14 - *[View Release Notes](../v0-70-14)*
+- Version: v0.70.13 - *[View Release Notes](../v0-70-13)*
+- Version: v0.70.12 - *[View Release Notes](../v0-70-12)*
+- Version: v0.70.11 - *[View Release Notes](../v0-70-11)*
+- Version: v0.70.10 - *[View Release Notes](../v0-70-10)*
+- Version: v0.70.9 - *[View Release Notes](../v0-70-9)*
+- Version: v0.70.8 - *[View Release Notes](../v0-70-8)*
+- Version: v0.70.7 - *[View Release Notes](../v0-70-7)*
+- Version: v0.70.6 - *[View Release Notes](../v0-70-6)*
+- Version: v0.70.5 - *[View Release Notes](../v0-70-5)*
+- Version: v0.70.4 - *[View Release Notes](../v0-70-4)*
+- Version: v0.70.3 - *[View Release Notes](../v0-70-3)*
+- Version: v0.70.2 - *[View Release Notes](../v0-70-2)*
+- Version: v0.70.1 - *[View Release Notes](../v0-70-1)*
+- Version: v0.70.0 - *[View Release Notes](../v0-70-0)*
+
 - Version: v0.69.0 - *[View Release Notes](../v0-69-0)*
 
 - Version: v0.68.0 - *[View Release Notes](../v0-68-0)*
@@ -88,3 +116,14 @@ description: Dingo Release Notes
 - Version: v0.46.2 - *[View Release Notes](../v0-46-2)*
 - Version: v0.46.1 - *[View Release Notes](../v0-46-1)*
 - Version: v0.39.1 - *[View Release Notes](../v0-39-1)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

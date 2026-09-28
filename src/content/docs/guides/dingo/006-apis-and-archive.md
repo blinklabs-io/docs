@@ -33,8 +33,9 @@ plugins:
         port: 9090
 ```
 
-The complete, version-specific provider options are in the
-[Dingo configuration example](https://github.com/blinklabs-io/dingo/blob/main/dingo.yaml.example).
+The example configuration for Dingo v0.73.3 is available as a
+[download from this site](/downloads/dingo/v0.73.3/dingo.yaml). Use it with
+that release only; provider options can change between versions.
 
 ## Secure API access
 

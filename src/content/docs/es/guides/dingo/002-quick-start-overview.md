@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.69.0/dingo-v0.69.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -48,7 +48,7 @@ Puedes verificar que el binario funciona ejecutando:
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis, config.json) para preview, preprod y mainnet. No necesitas descargarlas por separado.
+Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
 Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expandirá automáticamente a la ruta de tu directorio de inicio:
 
@@ -100,16 +100,30 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
+  # pinnedDigest: ""
 
 # Network
+# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
+maxNtCConns: 100
+# Alias de CLI: `--max-ntc-conns`. Variable de entorno: `DINGO_MAX_NTC_CONNS`.
+# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
+maxNtCConnectionsPerIP: 5
+# Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
 bindAddr: "0.0.0.0"
 metricsPort: 12798
+# Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
+# `healthPort: 0` desactiva el listener de salud.
+healthPort: 12799
+# Alias de CLI: `--health-ready-gap-slots`. Variable de entorno: `DINGO_HEALTH_READY_GAP_SLOTS`.
+healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
+
 
 # Storage
 barkBaseUrl: ""
@@ -124,6 +138,11 @@ EOF
 
 ```yaml
 midnight:
+  serverEnabled: false
+  reflectionEnabled: false
+  allowInsecureRemote: false
+  port: 50051
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 storageMode: "api"
 plugins:
@@ -143,6 +162,8 @@ plugins:
 ```
 
 > 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+
+> 📝 Para que Midnight sirva por gRPC, configure `storageMode: "api"`, `midnight.serverEnabled: true` y un valor distinto de `0` en `midnight.port`. La indexación y el servicio son controles independientes. `midnight.reflectionEnabled` está deshabilitado de forma predeterminada; `midnight.reflectionEnabled: true` activa la reflexión y requiere `midnight.serverEnabled: true`. Dingo mantiene el servidor gRPC deshabilitado cuando `midnight.serverEnabled` es `false`. `127.0.0.1` es el host predeterminado, incluso cuando `midnight.host` está vacío. Dingo limita el texto plano a direcciones de loopback; para exponer el servicio en una dirección que no sea de loopback, active `midnight.allowInsecureRemote: true` para texto plano o configure `tlsCertFilePath` y `tlsKeyFilePath` para TLS.
 
 > 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
 
@@ -185,6 +206,8 @@ cd ~/dingo
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
+> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando la brecha de slots respecto a la punta de la red está disponible y no supera `healthReadyGapSlots`; informa que no está listo cuando la brecha no se conoce o supera ese límite. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
+
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada
 2. Verificará la cadena de certificados
@@ -207,6 +230,8 @@ cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
 
+> 📝 La comprobación de salud del contenedor usa `/health` en el puerto `12799`, no `/metrics`.
+
 Deberías ver la salida del registro mostrando el nodo conectándose a los pares y sincronizando los bloques restantes para alcanzar la punta de la cadena.
 
 ***
@@ -223,3 +248,14 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 ### ¡Felicidades, estás listo para comenzar a usar el nodo Dingo!
 
 [Aprende cómo interactuar con Dingo usando la CLI de Cardano](../004-using-dingo-with-cardano-cli).
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

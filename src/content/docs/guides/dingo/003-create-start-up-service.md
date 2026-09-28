@@ -108,12 +108,29 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
+  # CLI: --mithril-allow-insecure-http; environment: DINGO_MITHRIL_ALLOW_INSECURE_HTTP.
+  # When true, Dingo permits HTTP and local or private destinations for local development or testing only.
+  allowInsecureHttp: false
+  # Optional exact artifact identity for a fresh bootstrap:
+  # v1 snapshot digest or v2 Cardano database artifact hash.
+  # pinnedDigest: "<digest>"
 
 # Network
+# Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
+# Set healthPort to 0 to disable the health listener.
+healthPort: 12799
+# CLI: --health-ready-gap-slots; environment: DINGO_HEALTH_READY_GAP_SLOTS.
+healthReadyGapSlots: 1000
 bindAddr: \"0.0.0.0\"
 metricsPort: 12798
 debugPort: 0
 network: \"preview\"
+# Total NtC admission limit. Default: 100. Non-positive values are ignored.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS.
+maxNtCConns: 100
+# Per-IP NtC admission limit. Default: 5. Non-positive values are ignored.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
+maxNtCConnectionsPerIP: 5
 privateBindAddr: \"127.0.0.1\"
 privatePort: 3002
 relayPort: 3001
@@ -125,7 +142,9 @@ barkPort: 0
 storageMode: \"core\"
 # Database lifecycle
 databaseLifecycle:
-  # Dingo captures automatic database snapshots at epoch boundaries.
+  # Automatic database snapshots run at epoch boundaries.
+  # Do not enable automatic snapshots when the primary blob provider is "badger", "s3", or "gcs".
+  # Select a local primary blob provider instead.
   # Default: false.
   snapshotEnabled: false
   # Dingo writes automatic snapshots to this local filesystem directory.
@@ -143,15 +162,19 @@ databaseLifecycle:
 EOF"
 ```
 
+> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
+
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
-> 📝 `databaseLifecycle.snapshotEnabled` controls automatic snapshots, and `dingo database snapshot|restore|truncate` handles offline maintenance. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
+> 📝 The `databaseLifecycle.snapshotEnabled` setting controls automatic epoch boundary snapshots. Manual `dingo database snapshot` and Bark `CreateSnapshot` remain available with `badger`, `s3`, or `gcs` as the primary blob provider. When Bark also serves live restore or truncate operations, set `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath`, and `tlsCertFilePath`/`tlsKeyFilePath`.
 
-> 📝 Set `databaseLifecycle.snapshotRetention` to keep only the most recent automatic snapshots. Set `databaseLifecycle.snapshotCloudDestination` to mirror each snapshot to S3 or GCS when Dingo runs with `dingo_extra_plugins`.
+> 📝 Set `databaseLifecycle.snapshotRetention` to keep only the most recent automatic snapshots. Set `databaseLifecycle.snapshotCloudDestination` to mirror each snapshot to S3 or GCS when Dingo runs with `dingo_extra_plugins`. This mirror destination is separate from the primary blob provider.
 
 > 📝 Use `dingo database snapshot`, `dingo database restore <snapshot-dir>`, and `dingo database truncate --slot <slot>`, `--hash <hash>`, or `--block-number <n>` on an offline data directory. `restore` also accepts the same cloud URI that `snapshotCloudDestination` uses and downloads it to a temporary directory before restoration.
 
 > 📝 When `barkPort` runs together with `databaseLifecycle.snapshotDir`, Bark also exposes live `Restore` and `Truncate` access.
+
+> 📝 In core storage mode, Dingo rejects an offline `dingo database truncate` target or a live Bark `Truncate` target older than `consumed_utxo_prune_floor` before any mutation because Dingo already pruned consumed UTxO history below that floor. Dingo allows a target exactly at the floor, and API storage mode remains unchanged. Choose a shallower target or recover from a fully synced peer snapshot when the requested rewind is older than the floor.
 
 ```yaml
 storageMode: "api"
@@ -170,10 +193,24 @@ plugins:
       config:
         port: 9090
 midnight:
+  # Enable the Midnight gRPC server. Default: false.
+  serverEnabled: false
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
+  reflectionEnabled: false
+  # Allow plaintext on a wildcard, hostname, or non-loopback listener. Default: false.
+  allowInsecureRemote: false
+  # gRPC listen port. Required and nonzero when serverEnabled is true.
+  port: 50051
+  # gRPC listen host. An empty host defaults to 127.0.0.1.
+  host: "127.0.0.1"
   authTokenPolicyId: ""
 ```
 
-> 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Set any listener port to `0` to disable that API.
+> 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Midnight `gRPC` serving also requires `API` storage mode, `midnight.serverEnabled: true`, and a nonzero `midnight.port`. Set any listener port to `0` to disable that API.
+
+> 📝 `midnight.serverEnabled` explicitly controls the Midnight `gRPC` server and keeps it off when false. `midnight.enabled` controls indexing separately; the server can serve persisted Midnight rows without running the indexer. `midnight.reflectionEnabled` requires `midnight.serverEnabled`.
+
+> 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. For non-loopback plaintext, set `midnight.allowInsecureRemote: true`; for remote `TLS` exposure, configure `tlsCertFilePath` and `tlsKeyFilePath` instead.
 
 > 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
 
@@ -280,6 +317,16 @@ Verify the service is running:
 sudo systemctl status dingo.service
 ```
 
+Check `/health` or `/healthz` for liveness and `/readyz` for readiness on port `12799`:
+
+```
+curl http://127.0.0.1:12799/health
+curl http://127.0.0.1:12799/healthz
+curl http://127.0.0.1:12799/readyz
+```
+
+`/health` and `/healthz` report liveness. `/readyz` reports readiness and is not ready while the tip gap is unavailable or exceeds `healthReadyGapSlots`.
+
 To follow the logs in real time:
 
 ```
@@ -297,3 +344,14 @@ sudo journalctl -u dingo -n 50 --no-pager
 <br>
 
 ### Congratulations! You have successfully set up a `systemd` service for Dingo.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
