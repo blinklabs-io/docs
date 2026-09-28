@@ -21,7 +21,7 @@ koiosParity:
 - 環境変数: `DINGO_KOIOS_PARITY_ALLOW_PRIVATE_ADDRESSES`
 - CLIフラグ: `--koios-parity-allow-private-addresses`
 
-プライベートなデプロイメントを明示的に許可する場合は、値を `true` に設定します。平文HTTPを許可する設定は別に管理されるため、HTTPの許可だけではプライベートな宛先を許可しません。
+プライベートなデプロイメントを明示的に許可する場合は、値を `true` に設定します。平文HTTPの許可は別の設定で指定するため、HTTPの許可だけではプライベートな宛先を許可しません。
 
 `node-parity` の `from-genesis` サブコマンドでは、専用のCLIフラグを使用します。
 
