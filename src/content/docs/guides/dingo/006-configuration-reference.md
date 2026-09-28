@@ -9,9 +9,9 @@ This reference covers the Dingo settings for Koios private destinations, token r
 
 ## Koios private destinations
 
-`koiosParity.allowPrivateAddresses` controls whether the Koios parity client may use private or special use destinations. The default is `false`. With the default, Dingo rejects private, loopback, link local, multicast, unspecified, and other special use destinations, including destinations reached through redirects or DNS resolution.
+`koiosParity.allowPrivateAddresses` controls whether the Koios parity client may use private or special-use destinations. The default is `false`. With the default, Dingo rejects private, loopback, link-local, multicast, unspecified, and other special-use destinations, including destinations reached through redirects or DNS resolution.
 
-Set the option only when the Koios endpoint is an intentionally local or private self hosted deployment.
+Set the option only when the Koios endpoint is an intentionally local or private self-hosted deployment.
 
 | YAML key | Environment variable | CLI flag | Default |
 | --- | --- | --- | --- |
@@ -23,11 +23,11 @@ The standalone parity command uses a separate flag:
 node-parity from-genesis --koios-allow-private-addresses
 ```
 
-The plain HTTP opt in is separate from the private address opt in. Allowing HTTP does not allow private or special use destinations by itself.
+The plain HTTP opt-in is separate from the private-address opt-in. Allowing HTTP does not allow private or special-use destinations by itself.
 
 ## Token registry limits
 
-Configure these limits under `tokenRegistry`. A value of `0` selects the built in default.
+Configure these limits under `tokenRegistry`. A value of `0` selects the built-in default.
 
 | YAML key | Default when set to `0` | Environment variable | CLI flag |
 | --- | --- | --- | --- |
@@ -36,7 +36,7 @@ Configure these limits under `tokenRegistry`. A value of `0` selects the built i
 | `tokenRegistry.maxAcceptedEntries` | `50,000` | `DINGO_TOKEN_REGISTRY_MAX_ACCEPTED_ENTRIES` | `--token-registry-max-accepted-entries` |
 | `tokenRegistry.maxBatchBytes` | `64 MB` | `DINGO_TOKEN_REGISTRY_MAX_BATCH_BYTES` | `--token-registry-max-batch-bytes` |
 
-When both bounds are configured with positive values, `tokenRegistry.maxBatchBytes` must be greater than or equal to `tokenRegistry.maxEntryBytes`. Dingo rejects the configuration during startup when `maxBatchBytes` is smaller than `maxEntryBytes`.
+When configuration sets both bounds to positive values, `tokenRegistry.maxBatchBytes` must be greater than or equal to `tokenRegistry.maxEntryBytes`. Dingo rejects the configuration during startup when `maxBatchBytes` is smaller than `maxEntryBytes`.
 
 ## SQLite metadata maintenance
 
