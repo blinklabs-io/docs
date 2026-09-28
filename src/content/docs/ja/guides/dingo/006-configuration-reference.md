@@ -42,6 +42,16 @@ node-parity from-genesis --koios-allow-private-addresses
 
 `maxEntryBytes` も設定する場合、両方の値が `0` より大きいとき、起動時に `maxBatchBytes >= maxEntryBytes` を満たす必要があります。Dingoは起動時に、`maxBatchBytes` が `maxEntryBytes` より小さい設定を拒否します。
 
+## Leiosエンドーサーブロックのフォージング設定
+
+これらの設定で、Leiosエンドーサーブロックの選択とサイズを制御します。
+
+| YAMLキー | 用途 | 既定値 | 環境変数 | CLIフラグ | `0` の動作 |
+| --- | --- | --- | --- | --- | --- |
+| `forgeEbSelectionReserve` | Leiosエンドーサーブロックの選択後に、ランキングブロックの組み立て用としてスロット時間を確保します。 | `300ms` | `DINGO_FORGE_EB_SELECTION_RESERVE` | `--forge-eb-selection-reserve` | `0` 以下を指定すると `300ms` を使用します。 |
+| `forgeEbMaxTxRefs` | フォージングするLeiosエンドーサーブロックのトランザクション参照数を制限します。 | `20000` | `DINGO_FORGE_EB_MAX_TX_REFS` | `--forge-eb-max-tx-refs` | 明示的に `0` を指定すると上限を無効にします。 |
+| `forgeEbMaxBytes` | フォージングするLeiosエンドーサーブロックが参照するトランザクションの合計バイト数を制限します。 | `25165824` bytes（`24 MiB`） | `DINGO_FORGE_EB_MAX_BYTES` | `--forge-eb-max-bytes` | 明示的に `0` を指定すると上限を無効にします。 |
+
 ## SQLiteメタデータのVACUUM
 
 `vacuumIntervalSeconds` はSQLiteメタデータプロバイダー専用の設定です。
