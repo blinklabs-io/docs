@@ -25,7 +25,7 @@ koiosParity:
 
 El valor predeterminado es `false`. Con este valor, Dingo rechaza destinos privados, de loopback, de enlace local, multicast, no especificados y otros destinos de uso especial. La protección también se aplica a los destinos obtenidos después de una redirección o de una resolución DNS.
 
-El permiso para usar HTTP plano es independiente. Activar `--koios-parity-allow-insecure-http` o su ajuste equivalente no permite automáticamente los destinos privados.
+La autorización de HTTP plano es independiente: `--koios-parity-allow-insecure-http` no habilita automáticamente los destinos privados.
 
 ## Límites de `tokenRegistry`
 
