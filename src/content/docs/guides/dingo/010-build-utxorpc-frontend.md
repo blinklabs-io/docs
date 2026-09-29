@@ -1,52 +1,199 @@
 ---
 title: Build a Wallet Frontend with UTxO RPC
-description: Use Dingo UTxO RPC to query wallet data and submit transactions from an application.
+description: Run and extend the complete Dingo and SundaeSwap V3 Preview wallet frontend project.
 ---
 
-Dingo's UTxO RPC is a query and transaction interface for applications that
-build Cardano transactions. It supports UTxO searches, transaction evaluation
-and submission, and confirmation tracking. Enable it in API storage mode:
+The downloadable bundle contains the complete SundaeSwap V3 Preview wallet
+frontend, its TypeScript source and lockfile, the Dingo configuration, and a
+Compose stack that runs it with a Preview node:
 
-```yaml
-storageMode: api
-plugins:
-  api:
-    utxorpc:
-      provider: builtin
-      config:
-        port: 9090
+[Download the Dingo application examples for v0.73.3](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.3.tar.gz)
+
+Start the Dingo node and both frontend apps:
+
+```sh
+tar -xzf dingo-application-examples-v0.73.3.tar.gz
+cd dingo-dev-guides
+cp .env.example .env
+docker compose up -d
+docker compose ps
 ```
 
-The service exposes Connect/gRPC and HTTP routes. See [Dingo APIs and archive
-services](/guides/dingo/006-apis-and-archive/) for authentication, TLS, and
-release-specific settings. Keep the listener private or place it behind a
-secured gateway.
+Wait for `dingo-sync` to complete, then open
+<http://127.0.0.1:5174> in a browser with a Preview-compatible CIP-30 wallet
+installed. Select a pool, connect the wallet, choose a direction and amount,
+build the order, review it, and approve the signature in the wallet. The app
+submits through Dingo and waits up to 120 seconds for confirmation. Signing is
+performed by the wallet; the web app and node do not handle the wallet's
+private keys.
 
-## Wallet transaction flow
+## Dingo configuration
 
-1. Connect a wallet through the browser wallet standard used by your frontend.
-   Wallet APIs provide addresses and signing; Dingo does not custody wallet
-   keys.
-2. Query the wallet's UTxOs from Dingo. Exact-address searches return outputs
-   for that serialized address; credential searches can cover multiple address
-   forms associated with a stake credential. Choose the query that matches the
-   view you are building and account for pagination or response limits.
-3. Build the transaction using the queried UTxOs and current protocol
-   parameters, then ask Dingo to evaluate it before presenting it to the user.
-4. Have the wallet review and sign the transaction. Submit the signed bytes to
-   Dingo and track confirmation using the transaction hash.
+The `dingo` and `dingo-sync` Compose services run Dingo with `-n preview` and
+share API mode, PostgreSQL metadata, and Badger block storage. The UTxO RPC
+listener the frontend uses is enabled on port `9090`:
 
-Treat wallet output as user-controlled input. Display the transaction details
-before requesting signatures, handle rejected signatures and submission errors,
-and do not claim that submission alone means a transaction has been confirmed.
+```yaml
+DINGO_STORAGE_MODE: api
+DINGO_PLUGINS_STORAGE_METADATA_PROVIDER: postgres
+DINGO_PLUGINS_STORAGE_METADATA_CONFIG_DSN: "host=postgres port=5432 user=dingo password=dingo dbname=dingo_metadata sslmode=disable TimeZone=UTC"
+DINGO_PLUGINS_STORAGE_BLOB_PROVIDER: badger
+DINGO_PLUGINS_API_UTXORPC_CONFIG_PORT: 9090
+```
 
-UTxO RPC does not replace node-to-client queries for every ledger view. For
-example, stake-address information and stake snapshots are available through
-node-to-client LocalStateQuery. If your application needs delegation or reward
-state, use the interface that serves those values rather than inferring them
-from wallet UTxOs.
+The node and frontend communicate on the Compose network. The frontend's
+`DINGO_UTXORPC_URL` targets `http://dingo:9090`; its Vite server proxies the
+UTxO RPC HTTP routes so the browser calls the frontend's same origin. The
+complete service definitions and ports are in the downloaded
+`docker-compose.yml`.
 
-Use the [Dingo Go library reference on
-pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo) for library API
-documentation. The node's UTxO RPC contract is documented with the API settings
-for the release you deploy.
+## Transaction code
+
+In `dingo-dev-guides/dingo-sundae-preview/src/sundae/swap.ts`,
+`buildSwapOrder` uses the wallet-backed Blaze provider and the Dingo query
+provider to build a V3 order, then returns a function that signs and submits
+the CBOR transaction:
+
+```ts
+import { Blaze, Core, type Wallet } from "@blaze-cardano/sdk";
+import { AssetAmount } from "@sundaeswap/asset";
+import {
+  ADA_METADATA,
+  EDatumType,
+  ESwapType,
+  TxBuilderV3,
+  type IPoolData,
+  type IPoolDataAsset,
+} from "@sundaeswap/core";
+import type { U5C } from "@utxorpc/blaze-provider";
+import { parseAssetAmount } from "./assets";
+import type { DingoSundaeQueryProvider } from "./dingoQueryProvider";
+
+export type SwapDirection = "adaToToken" | "tokenToAda";
+
+export type BuildSwapArgs = {
+  blaze: Blaze<U5C, Wallet>;
+  queryProvider: DingoSundaeQueryProvider;
+  pool: IPoolData;
+  amount: string;
+  direction: SwapDirection;
+  slippagePercent: string;
+};
+
+export type BuiltSwap = {
+  unsignedCbor: string;
+  signedCbor?: string;
+  txFee: bigint;
+  deposit: bigint;
+  scooperFee: bigint;
+  signAndSubmit(): Promise<string>;
+};
+
+export async function buildSwapOrder({
+  blaze,
+  queryProvider,
+  pool,
+  amount,
+  direction,
+  slippagePercent,
+}: BuildSwapArgs): Promise<BuiltSwap> {
+  const changeAddress = (await blaze.wallet.getChangeAddress()).toBech32();
+  const suppliedAsset = assetForDirection(pool, direction);
+  const suppliedAmount = parseAssetAmount(
+    amount,
+    suppliedAsset.decimals ?? 0,
+    labelForAsset(suppliedAsset),
+  );
+  if (suppliedAmount <= 0n) {
+    throw new Error(`Enter a positive ${labelForAsset(suppliedAsset)} amount.`);
+  }
+
+  const slippage = Number(slippagePercent) / 100;
+  if (!Number.isFinite(slippage) || slippage < 0 || slippage > 0.5) {
+    throw new Error("Slippage must be between 0 and 50 percent.");
+  }
+
+  const builder = new TxBuilderV3(blaze, queryProvider);
+  const composed = await builder.swap({
+    pool,
+    suppliedAsset: new AssetAmount(suppliedAmount, suppliedAsset),
+    swapType: {
+      type: ESwapType.MARKET,
+      slippage,
+    },
+    ownerAddress: changeAddress,
+    orderAddresses: {
+      DestinationAddress: {
+        address: changeAddress,
+        datum: {
+          type: EDatumType.NONE,
+        },
+      },
+    },
+  });
+
+  const built = await composed.build();
+  const txFee = BigInt(built.builtTx.body().fee()?.toString() ?? "0");
+
+  return {
+    unsignedCbor: built.cbor,
+    txFee,
+    deposit: composed.fees.deposit.amount,
+    scooperFee: composed.fees.scooperFee.amount,
+    async signAndSubmit() {
+      const signed = await built.sign();
+      const tx = Core.Transaction.fromCbor(Core.TxCBOR(signed.cbor));
+      const txId = await blaze.provider.postTransactionToChain(tx);
+      return txId.toString();
+    },
+  };
+}
+
+function assetForDirection(
+  pool: IPoolData,
+  direction: SwapDirection,
+): IPoolDataAsset {
+  if (!poolHasAda(pool)) {
+    throw new Error("The selected pool is not an ADA pair.");
+  }
+
+  if (direction === "adaToToken") {
+    return ADA_METADATA;
+  }
+
+  return pool.assetA.assetId === ADA_METADATA.assetId ? pool.assetB : pool.assetA;
+}
+
+function poolHasAda(pool: IPoolData): boolean {
+  return (
+    pool.assetA.assetId === ADA_METADATA.assetId ||
+    pool.assetB.assetId === ADA_METADATA.assetId
+  );
+}
+
+function labelForAsset(asset: IPoolDataAsset): string {
+  if (asset.assetId === ADA_METADATA.assetId) {
+    return "ADA";
+  }
+  return "token";
+}
+```
+
+This is the complete `src/sundae/swap.ts` module from the download. Its two
+local imports are part of that project. The download also contains the Dingo
+query provider (`src/sundae/dingoQueryProvider.ts`), network validation
+(`src/dingo/provider.ts`), CIP-30 wallet handling, UI, and pinned dependencies.
+
+To run just the frontend against a Dingo UTxO RPC listener already available on
+the local host:
+
+```sh
+cd dingo-sundae-preview
+npm ci
+DINGO_UTXORPC_URL=http://127.0.0.1:9090 npm run dev -- --host 127.0.0.1
+```
+
+The app verifies Preview network magic (`2`) and required Sundae V3 reference
+UTxOs before enabling pool operations. Keep this app on Preview: its configured
+script references and pools are Preview-specific. For Go library API
+documentation, see [pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo).
