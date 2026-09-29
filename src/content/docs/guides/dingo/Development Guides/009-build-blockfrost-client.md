@@ -10,6 +10,8 @@ stack:
 
 [Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
+The bundle is generated from the versioned [Blockfrost Explorer source on GitHub](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-blockfrost-explorer), where you can browse or copy individual files.
+
 Extract it and start the full stack:
 
 ```sh

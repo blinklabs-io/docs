@@ -9,6 +9,8 @@ Dockerfile, and the shared Compose stack with Dingo configuration.
 
 [Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
+The bundle is generated from the versioned [Gov Lens source on GitHub](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-gov-lens), where you can browse or copy individual files.
+
 Extract the bundle, set local credentials, and start the stack:
 
 ```sh
