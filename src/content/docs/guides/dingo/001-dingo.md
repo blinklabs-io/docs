@@ -28,11 +28,11 @@ are organized by what you want to do.
 
 - [API and archive services](/guides/dingo/006-apis-and-archive/) — choose an
   API, configure access, and understand Bark archive nodes.
-- [Build a Blockfrost API client](/guides/dingo/009-build-blockfrost-client/) —
+- [Build a Blockfrost API client](/guides/dingo/Development%20Guides/009-build-blockfrost-client/) —
   connect an explorer or service through Dingo's Blockfrost-compatible API.
-- [Build a wallet frontend with UTxO RPC](/guides/dingo/010-build-utxorpc-frontend/)
+- [Build a wallet frontend with UTxO RPC](/guides/dingo/Development%20Guides/010-build-utxorpc-frontend/)
   — query wallet UTxOs and submit transactions through Dingo.
-- [Build a governance dashboard](/guides/dingo/011-build-governance-dashboard/)
+- [Build a governance dashboard](/guides/dingo/Development%20Guides/011-build-governance-dashboard/)
   — understand the tradeoffs of reading indexed governance metadata.
 - [Use Dingo with Cardano CLI](/guides/dingo/004-using-dingo-with-cardano-cli/)
   — query a running node over node-to-client.

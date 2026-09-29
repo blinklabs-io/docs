@@ -19,9 +19,9 @@ Dingo es la implementación de un nodo de Cardano en Go de Blink Labs. Elige la 
 ## Conecto una aplicación
 
 - [APIs y servicios de archivo (en inglés)](/guides/dingo/006-apis-and-archive/) — elige una API, configura el acceso y conoce Bark.
-- [Crear un cliente para la API Blockfrost (en inglés)](/guides/dingo/009-build-blockfrost-client/) — conecta una aplicación con la API compatible de Dingo.
-- [Crear una interfaz de wallet con UTxO RPC (en inglés)](/guides/dingo/010-build-utxorpc-frontend/) — consulta UTxO y envía transacciones mediante Dingo.
-- [Crear un panel de gobernanza (en inglés)](/guides/dingo/011-build-governance-dashboard/) — conoce las opciones y limitaciones de los metadatos indexados.
+- [Crear un cliente para la API Blockfrost (en inglés)](/guides/dingo/Development%20Guides/009-build-blockfrost-client/) — conecta una aplicación con la API compatible de Dingo.
+- [Crear una interfaz de wallet con UTxO RPC (en inglés)](/guides/dingo/Development%20Guides/010-build-utxorpc-frontend/) — consulta UTxO y envía transacciones mediante Dingo.
+- [Crear un panel de gobernanza (en inglés)](/guides/dingo/Development%20Guides/011-build-governance-dashboard/) — conoce las opciones y limitaciones de los metadatos indexados.
 - [Usar Dingo con Cardano CLI](/es/guides/dingo/004-using-dingo-with-cardano-cli/) — consulta un nodo mediante node-to-client.
 
 ## Contribuyo a Dingo
