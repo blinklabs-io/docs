@@ -59,7 +59,7 @@ To understand how to modify and use the topology JSON file it's important to und
 - <a href="#trustable">Trustable</a> 
 
 <h3 id="local"> Local vs Public Peers</h3>
-Local Roots is designed for peers that the node should always keep as hot or warm, such as its own block producer. On the other hand, Public Roots serves as a source of fallback peers.
+Local Roots are designed for peers that the node should always keep as hot or warm, such as its own block producer. On the other hand, Public Roots serve as a source of fallback peers.
 
 ***
 
@@ -69,7 +69,7 @@ Bootstrapping peers are good for when your node has had an extended outage, you'
 ***
 
 <h3 id="advertise">Advertise Flag</h3>
-Advertise will tell your peers "hey I have this really good peer, you should try to connect to them" which can give that relay more inbound connections.  
+When `advertise` is `true`, the node may share that peer’s address through peer sharing, which can increase inbound connections to that peer.  
 
 <br>
 
@@ -78,12 +78,12 @@ Could be used for situations like unregistered relays.
 ***
 
 <h3 id="access">Access Points</h3>
-You can have multiple access points within Local Roots. Why would you want to use this? This way you can keep advertise as false for your BP while True for your relay. 
+You can have multiple access points within Local Roots. Why would you want to use this? This way you can keep advertise as false for your BP while true for your relay. 
 
 ***
 
 <h3 id="trustable">Trustable</h3>
-Trustable peers are composed by the bootstrap peers and the trustable local root peers. By default local root peers are not trustable.  
+Trustable peers consist of the bootstrap peers and the trustable local root peers. By default local root peers are not trustable.  
 
 <br>
 
@@ -94,11 +94,12 @@ Your own Relays and BP should be set to `"trustable": true`
 <h2 id="relay">Relay Sample Topology File</h2>
 For a typical 2 relay and BP setup, for the topology on your relay use:
 
-- Use 2 Access Points under local roots so we can advertise our relays while hiding our BP
+- Use 2 Access Points under local roots so we can advertise our relays while hiding our BP.
 - Set "advertise": false, on BP Access Point since we want to keep private.
-- Since 1 additional Relays, (2 relays in total) we set "valency": 1, if we had 2 additional Relays (3 relays in total), we would set "valency": 2, and so on.
-- Set our Relays to "trustable": true, so we can sync if we get too far off the tip.
-- Set Public Roots blank by using "publicRoots": []
+- Because there is one additional Relay, (2 relays in total) we set "valency": 1, if you had two additional Relays (3 relays in total), we would set "valency": 2, and so on.
+- Set your Relays to "trustable": true, so we can sync if we get too far off the tip.
+- Genesis/snapshot mode uses `peerSnapshotFile` instead of (or in addition to) bootstrap peers.
+- Leave Public Roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 
 > In the sample below change "relay2.Address" and "blockProducerAddress" to your relay and BP address and change "port": 3001 to the port you use.
 
@@ -134,6 +135,7 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
       "trustable": true
     }
   ],
+  "peerSnapshotFile": "peer-snapshot.json",
   "publicRoots": [
     {
       "accessPoints": [],
@@ -145,14 +147,14 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 ```
 
 <h2 id="bp">BP Sample Topology File</h2>
-For a block producer node we only want it to connect to our relays. To do this we use the following confiuration:
+For a block producer node we only want it to connect to our relays. To do this we use the following configuration:
 
-- Set `"bootstrapPeers": null`
+- Set `"bootstrapPeers": null`.
 - Set `"advertise": false,` since these are local root on BP and we want to keep private.
-- Set our Relays to `"trustable": true,`
-- Since in this example we use 2 Relays, we set `"valency": 2,` if we had 3 Relays it would be set to `3`.
-- Last of all we leave Public Roots blank by using `"publicRoots": []`
-- Last of all we set `"useLedgerAfterSlot": -1` so the BP doesn't try to connect to other nodes using ledger peer data.
+- Set our Relays to `"trustable": true,`.
+- Since in this example we use 2 Relays, we set `"valency": 2`, if you had three Relays set it to `3`.
+- Leave Public Roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
+- Set `"useLedgerAfterSlot": -1` so the BP doesn't try to connect to other nodes using ledger peer data.
 
 Sample BP Topology JSON FILE: 
 ```
@@ -175,7 +177,12 @@ Sample BP Topology JSON FILE:
       "valency": 2
     }
   ],
-  "publicRoots": [],
+  "publicRoots": [
+    {
+      "accessPoints": [],
+      "advertise": false
+    }
+  ],
   "useLedgerAfterSlot": -1
 }
 ```
