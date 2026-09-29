@@ -3,9 +3,11 @@ title: Topology Guide Overview
 description: SPO Guide for Dingo Pools - Overview on how to setup a Topology JSON file.
 ---
 
-While Dingo will work with the default topology file embedded it's recommended as an SPO that you use your own topology JSON file. This guide will use the default preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+Dingo works with the embedded default topology file, but as an SPO it's recommended you should use your own `topology.json`. This guide will use the preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
-Please modify according to the network you are using and to your Node structure. For this guide we will provide an overview based on the common recommendation of using a Block producer node behind two relay nodes.
+Please modify for your network and node layout. For this guide we will provide an overview based on the common recommendation of using a Block producer node behind two relay nodes.
+
+**This guide will cover:**
 
 - <a href="#default">Default Preview Topology JSON File</a>
 - <a href="#flags">Understand Topology Flags</a>
@@ -46,7 +48,7 @@ The default Preview topology JSON file looks like this:
 
 ***
 
-<h2 id="flags">Understand Topology Flags</h2>
+<h2 id="flags">Understanding Topology Flags</h2>
 
 To understand how to modify and use the topology JSON file it's important to understand:
 
