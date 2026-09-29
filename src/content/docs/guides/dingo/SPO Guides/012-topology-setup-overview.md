@@ -3,14 +3,14 @@ title: Topology Guide Overview
 description: SPO Guide for Dingo Pools - Overview on how to setup a Topology JSON file.
 ---
 
-Dingo works with the embedded default topology file, but as an SPO it's recommended you should use your own `topology.json`. This guide will use the preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+Dingo works with the embedded default topology file, but as an SPO you should use your own `topology.json`. This guide will use the preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
 Please modify for your network and node layout. For this guide we will provide an overview based on the common recommendation of using a Block producer node behind two relay nodes.
 
 **This guide will cover:**
 
 - <a href="#default">Default Preview Topology JSON File</a>
-- <a href="#flags">Understand Topology Flags</a>
+- <a href="#flags">Understanding Topology Flags</a>
 - <a href="#relay">Relay Sample Topology File</a>
 - <a href="#bp">BP Sample Topology File</a> 
 
@@ -46,6 +46,8 @@ The default Preview topology JSON file looks like this:
 }
 ```
 
+> Copy `useLedgerAfterSlot` and `bootstrapPeers` from the official topology for your network. The Preview slot above will go stale and is wrong for preprod/mainnet.
+
 ***
 
 <h2 id="flags">Understanding Topology Flags</h2>
@@ -56,10 +58,10 @@ To understand how to modify and use the topology JSON file it's important to und
 - <a href="#bootstrapping">Bootstrapping Peers</a>
 - <a href="#advertise">Advertise Flag</a>
 - <a href="#access">Access Points</a>
-- <a href="#trustable">Trustable</a> 
+- <a href="#trustable">Trustable Flag</a> 
 
 <h3 id="local"> Local vs Public Peers</h3>
-Local Roots are designed for peers that the node should always keep as hot or warm, such as its own block producer. On the other hand, Public Roots serve as a source of fallback peers.
+Local roots are designed for peers that the node should always keep as hot or warm, such as its own block producer. On the other hand, Public roots serve as a source of fallback peers.
 
 ***
 
@@ -69,21 +71,17 @@ Bootstrapping peers are good for when your node has had an extended outage, you'
 ***
 
 <h3 id="advertise">Advertise Flag</h3>
-When `advertise` is `true`, the node may share that peer’s address through peer sharing, which can increase inbound connections to that peer.  
-
-<br>
-
-Could be used for situations like unregistered relays.
+When advertise is true, the node may share that peer’s address through peer sharing. That can increase inbound connections to the advertised peer. This is useful for unregistered relays. Never advertise the block producer.
 
 ***
 
 <h3 id="access">Access Points</h3>
-You can have multiple access points within Local Roots. Why would you want to use this? This way you can keep advertise as false for your BP while true for your relay. 
+You can have multiple localRoots groups. Why would you want to use this? This way you can keep advertise as false for your BP while true for your relay. 
 
 ***
 
-<h3 id="trustable">Trustable</h3>
-Trustable peers consist of the bootstrap peers and the trustable local root peers. By default local root peers are not trustable.  
+<h3 id="trustable">Trustable Flag</h3>
+Trustable peers consist of the bootstrap peers and the trustable Local root peers. By default, Local root peers are not trustable.  
 
 <br>
 
@@ -94,12 +92,12 @@ Your own Relays and BP should be set to `"trustable": true`
 <h2 id="relay">Relay Sample Topology File</h2>
 For a typical 2 relay and BP setup, for the topology on your relay use:
 
-- Use 2 Access Points under local roots so we can advertise our relays while hiding our BP.
+- Use two localRoots groups so we can advertise our relays while hiding our BP.
 - Set "advertise": false, on BP Access Point since we want to keep private.
 - Because there is one additional Relay, (2 relays in total) we set "valency": 1, if you had two additional Relays (3 relays in total), we would set "valency": 2, and so on.
 - Set your Relays to "trustable": true, so we can sync if we get too far off the tip.
 - Genesis/snapshot mode uses `peerSnapshotFile` instead of (or in addition to) bootstrap peers.
-- Leave Public Roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
+- Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 
 > In the sample below change "relay2.Address" and "blockProducerAddress" to your relay and BP address and change "port": 3001 to the port you use.
 
@@ -153,8 +151,9 @@ For a block producer node we only want it to connect to our relays. To do this w
 - Set `"advertise": false,` since these are local root on BP and we want to keep private.
 - Set our Relays to `"trustable": true,`.
 - Since in this example we use 2 Relays, we set `"valency": 2`, if you had three Relays set it to `3`.
-- Leave Public Roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
+- Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 - Set `"useLedgerAfterSlot": -1` so the BP doesn't try to connect to other nodes using ledger peer data.
+- BP does not need peerSnapshotFile or bootstrap peers because it should not sync from the public network.
 
 Sample BP Topology JSON FILE: 
 ```
