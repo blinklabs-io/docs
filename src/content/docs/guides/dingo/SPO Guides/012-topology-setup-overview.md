@@ -1,11 +1,11 @@
 ---
 title: Topology Guide Overview
-description: SPO Guide for Dingo Pools - Overview on how to setup a Topology JSON file.
+description: SPO Guide for Dingo Pools - Overview on how to set up a Topology JSON file.
 ---
 
 Dingo works with the embedded default topology file, but as an SPO you should use your own `topology.json`. This guide will use the preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
-Please modify for your network and node layout. For this guide we will provide an overview based on the common recommendation of using a Block producer node behind two relay nodes.
+Please modify for your network and node layout. This guide uses the common layout of one block producer behind two relays.
 
 **This guide will cover:**
 
@@ -66,17 +66,17 @@ Local roots are designed for peers that the node should always keep as hot or wa
 ***
 
 <h3 id="bootstrapping">Bootstrapping Peers</h3>
-Bootstrapping peers are good for when your node has had an extended outage, you'll sync from those and trusted peers and then ledger once on tip.
+Bootstrapping peers are good for when your node has had an extended outage, the node syncs from those peers and other trustable peers, then uses ledger peers once it is on tip.
 
 ***
 
 <h3 id="advertise">Advertise Flag</h3>
-When advertise is true, the node may share that peer’s address through peer sharing. That can increase inbound connections to the advertised peer. This is useful for unregistered relays. Never advertise the block producer.
+When `advertise` is true, the node may share that peer’s address through peer sharing. That can increase inbound connections to the advertised peer. This is useful for unregistered relays. Never advertise the block producer.
 
 ***
 
 <h3 id="access">Access Points</h3>
-You can have multiple localRoots groups. Why would you want to use this? This way you can keep advertise as false for your BP while true for your relay. 
+Access points sit inside a `localRoots` group. Why would you want to use this? This way you can keep advertise as false for your BP while true for your relay. 
 
 ***
 
@@ -85,16 +85,16 @@ Trustable peers consist of the bootstrap peers and the trustable local root peer
 
 <br>
 
-Your own Relays and BP should be set to `"trustable": true`
+Your own relays and BP should be set to `"trustable": true`
 
 ***
 
 <h2 id="relay">Relay Sample Topology File</h2>
 For a typical 2 relay and BP setup, for the topology on your relay use:
 
-- Use two localRoots groups so you can advertise your other relays while hiding our BP.
+- Use two localRoots groups so you can advertise your other relays while hiding your BP.
 - Set `"advertise": false,` on the group that contains the BP, since we want to keep the BP private.
-- Because there is one additional Relay, (2 relays in total) set "valency": 1, if you had two additional Relays (3 relays in total), you would set "valency": 2, and so on.
+- Because there is one additional relay, (2 relays in total) set "valency": 1, if you had two additional relays (3 relays in total), you would set "valency": 2, and so on.
 - Set your Relays to "trustable": true, so you can sync if you get too far off the tip.
 - Genesis/snapshot mode uses `peerSnapshotFile` instead of (or in addition to) bootstrap peers.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
@@ -147,15 +147,15 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 ***
 
 <h2 id="bp">BP Sample Topology File</h2>
-For a block producer node we only want it to connect to our relays. To do this we use the following configuration:
+For a block producer node it should connect only to our relays. To do this we use the following configuration:
 
 - Set `"bootstrapPeers": null`.
-- Set `"advertise": false,` since these are local root on BP and we want to keep private.
-- Set our Relays to `"trustable": true,`.
-- Since in this example we use 2 Relays, we set `"valency": 2`, if you had three Relays set it to `3`.
+- Set `"advertise": false,` since these are local roots on BP and we want to keep private.
+- Set your Relays to `"trustable": true,`.
+- Since in this example we use 2 Relays, we set `"valency": 2`, if you had three relays set it to `3`.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 - Set `"useLedgerAfterSlot": -1` so the BP doesn't try to connect to other nodes using ledger peer data.
-- BP does not need peerSnapshotFile or bootstrap peers because it should not sync from the public network.
+- The BP does not need `peerSnapshotFile` or `bootstrapPeers` because it should not sync from the public network.
 
 Sample BP Topology JSON FILE: 
 ```
@@ -194,15 +194,16 @@ After you save each topology file, point Dingo at it, restart the node, and conf
 
 Add this to the existing `/etc/dingo/dingo.yaml` (do not overwrite the file):
 
-```bash
+```
 sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
 # Path to the topology configuration file
 topology: \"$DINGO_HOME/config/topology.json\"
 EOF"
+```
 
-> Paths based on Dingo SPO guides, adjust paths if necessary.
+> Paths follow the Dingo SPO guides; adjust them if necessary.
 >
->$DINGO_HOME expands when you run that command, the same way it does in the Dingo Node Setup guide. Use a different topology.json on the block producer and on each relay.
+> $DINGO_HOME expands when you run that command, the same way it does in the Dingo Node Setup guide. Use a different topology.json on the block producer and on each relay.
 
 ***
 
