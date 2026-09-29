@@ -11,7 +11,7 @@ DingoはBlink LabsがGoで実装したCardanoノードです。目的に合っ�
 
 - [クイックスタート](/ja/guides/dingo/002-quick-start-overview/) — Dingoを入手し、Previewノードを起動します。
 - [設定とストレージモード（英語）](/guides/dingo/005-node-configuration/) — リレー、ブロックプロデューサー、APIノードの設定を確認します。
-- [Dingo v0.73.3の設定例をダウンロード](/downloads/dingo/v0.73.3/dingo.yaml)。
+- [Dingoの設定リファレンス（英語）](/guides/dingo/009-configuration-reference/) — Dingo v0.73.4の設定と完全な設定例を確認できます。
 - [ブートストラップとデータ管理（英語）](/guides/dingo/007-bootstrap-and-data-maintenance/) — Mithrilとローカルデータの管理について説明します。
 - [サービスとして起動](/ja/guides/dingo/003-create-start-up-service/)、[Grafanaで監視](https://docs.blinklabs.io/guides/dingo/spo-guides/008-grafana-dashboard/)。
 - [ステークプール運用ガイド](https://docs.blinklabs.io/guides/dingo/spo-guides/000-spo-guide/) — テストネットのブロックプロデューサーを設定します。
@@ -28,7 +28,7 @@ DingoはBlink LabsがGoで実装したCardanoノードです。目的に合っ�
 
 [Dingoリポジトリ](https://github.com/blinklabs-io/dingo)にはGoソースと開発者向けドキュメントがあります。[開発ガイド](https://github.com/blinklabs-io/dingo/blob/main/docs/development.md)、[アーキテクチャ](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md)、[データベース設計](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md)から始めてください。GoライブラリAPIのリファレンスは[pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo)で確認できます。
 
-上の設定ファイルはDingo v0.73.3用です。[リリースノート](/ja/guides/dingo/releases/001-release-notes/)にはバージョン間の変更が記載されています。
+[リリースノート](/ja/guides/dingo/releases/001-release-notes/)にはバージョン間の変更が記載されています。
 
 ---
 

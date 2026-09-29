@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.3/dingo-v0.73.3-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.73.4/dingo-v0.73.4-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -47,6 +47,9 @@ You can verify the binary works by running:
 <br>
 
 ## Step 2 - Create dingo.yaml Configuration File
+
+For all Dingo v0.73.4 settings, defaults, and environment or command-line
+overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
 

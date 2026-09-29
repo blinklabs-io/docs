@@ -33,9 +33,10 @@ plugins:
         port: 9090
 ```
 
-The example configuration for Dingo v0.73.3 is available as a
-[download from this site](/downloads/dingo/v0.73.3/dingo.yaml). Use it with
-that release only; provider options can change between versions.
+The complete v0.73.4 configuration reference and release-matched
+[`dingo.yaml.example`](/downloads/dingo/v0.73.4/dingo.yaml.example) are
+available on this site. Use configuration files with their matching release;
+provider options can change between versions.
 
 ## Secure API access
 

@@ -11,7 +11,7 @@ Dingo es la implementación de un nodo de Cardano en Go de Blink Labs. Elige la 
 
 - [Inicio rápido](/es/guides/dingo/002-quick-start-overview/) — descarga Dingo e inicia un nodo Preview.
 - [Configuración y modos de almacenamiento (en inglés)](/guides/dingo/005-node-configuration/) — elige y configura un relay, productor de bloques o nodo de API.
-- [Descargar la configuración de ejemplo para Dingo v0.73.3](/downloads/dingo/v0.73.3/dingo.yaml).
+- [Referencia de configuración de Dingo (en inglés)](/guides/dingo/009-configuration-reference/) — configura Dingo v0.73.4 y descarga el archivo de ejemplo completo.
 - [Arranque inicial y mantenimiento de datos (en inglés)](/guides/dingo/007-bootstrap-and-data-maintenance/) — usa Mithril y administra los datos locales del nodo.
 - [Ejecutar Dingo como servicio](/es/guides/dingo/003-create-start-up-service/) y [supervisarlo con Grafana](https://docs.blinklabs.io/guides/dingo/spo-guides/008-grafana-dashboard/).
 - [Guías para operadores de pools](https://docs.blinklabs.io/guides/dingo/spo-guides/000-spo-guide/) — configura y opera un productor de bloques de testnet.
@@ -28,7 +28,7 @@ Dingo es la implementación de un nodo de Cardano en Go de Blink Labs. Elige la 
 
 El [repositorio de Dingo](https://github.com/blinklabs-io/dingo) contiene el código Go y documentación para colaboradores. Empieza por la [guía de desarrollo](https://github.com/blinklabs-io/dingo/blob/main/docs/development.md), la [arquitectura](https://github.com/blinklabs-io/dingo/blob/main/ARCHITECTURE.md) y el [diseño de la base de datos](https://github.com/blinklabs-io/dingo/blob/main/DATABASE.md). La [referencia de la biblioteca Go en pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo) documenta su API.
 
-La descarga de configuración anterior corresponde a Dingo v0.73.3. Las [notas de la versión](/es/guides/dingo/releases/001-release-notes/) describen los cambios entre versiones.
+Las [notas de la versión](/es/guides/dingo/releases/001-release-notes/) describen los cambios entre versiones.
 
 ---
 

@@ -16,7 +16,8 @@ are organized by what you want to do.
   image, persist node data, and check container health.
 - [Configuration and storage modes](/guides/dingo/005-node-configuration/) —
   choose a relay, block producer, or API node and configure providers.
-- [Download the Dingo v0.73.3 example configuration](/downloads/dingo/v0.73.3/dingo.yaml).
+- [Dingo configuration reference](/guides/dingo/009-configuration-reference/) —
+  configure Dingo v0.73.4 and download its complete example file.
 - [Bootstrap and data maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/)
   — use Mithril and manage local node data.
 - [Run Dingo as a service](/guides/dingo/003-create-start-up-service/) and
@@ -48,4 +49,4 @@ For Go library API documentation, see
 [pkg.go.dev](https://pkg.go.dev/github.com/blinklabs-io/dingo).
 
 See the [release notes](/guides/dingo/releases/001-release-notes/) for changes
-between versions. The configuration download above is for Dingo v0.73.3.
+between versions.
