@@ -4,9 +4,9 @@ description: Choose a Dingo node role and find the matching configuration option
 ---
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
-and start a node. This page explains the main configuration choices. The
+and start a node. This page explains the main configuration choices. Read the
 [complete Dingo v0.73.4 configuration reference](/guides/dingo/009-configuration-reference/)
-includes the release-matched `dingo.yaml.example` download.
+and download the release-matched [`dingo.yaml.example`](/downloads/dingo/v0.73.4/dingo.yaml.example).
 
 ## Choose a node role
 
