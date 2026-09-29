@@ -3,13 +3,18 @@ title: Topology Guide Overview
 description: SPO Guide for Dingo Pools - Overview on how to setup a Topology JSON file.
 ---
 
-While Dingo will work with the default topology file embedded it's recommended as an SPO that you use your own topology JSON file. This guide with use the default preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
+While Dingo will work with the default topology file embedded it's recommended as an SPO that you use your own topology JSON file. This guide will use the default preview network topology file as a sample. All network topology files can be found here: <a href="https://book.play.dev.cardano.org/environments.html" target="_blank">https://book.play.dev.cardano.org/environments.html</a>
 
 Please modify according to the network you are using and to your Node structure. For this guide we will provide an overview based on the common recommendation of using a Block producer node behind two relay nodes.
 
+- <a href="#default">Default Preview Topology JSON File</a>
+- <a href="#flags">Understand Topology Flags</a>
+- <a href="#relay">Relay Sample Topology File</a>
+- <a href="#bp">BP Sample Topology File</a> 
+
 ***
 
-## Default Preview Topology JSON File
+<h2 id="default">Default Preview Topology JSON File</h2>
 
 The default Preview topology JSON file looks like this:
 ```
@@ -41,7 +46,7 @@ The default Preview topology JSON file looks like this:
 
 ***
 
-## Understand Topology Flags
+<h2 id="flags">Understand Topology Flags</h2>
 
 To understand how to modify and use the topology JSON file it's important to understand:
 
@@ -84,7 +89,7 @@ Your own Relays and BP should be set to `"trustable": true`
 
 ***
 
-## Relay Sample Topology File
+<h2 id="relay">Relay Sample Topology File</h2>
 For a typical 2 relay and BP setup, for the topology on your relay use:
 
 - Use 2 Access Points under local roots so we can advertise our relays while hiding our BP
@@ -137,7 +142,7 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 }
 ```
 
-## BP Sample Topology File
+<h2 id="bp">BP Sample Topology File</h2>
 For a block producer node we only want it to connect to our relays. To do this we use the following confiuration:
 
 - Set `"bootstrapPeers": null`
