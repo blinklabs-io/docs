@@ -8,12 +8,12 @@ configuration. Download the complete project bundle, including both frontend
 applications, Gov Lens, the shared database initialization, and the Compose
 stack:
 
-[Download the Dingo application examples for v0.73.3](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.3.tar.gz)
+[Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
 Extract it and start the full stack:
 
 ```sh
-tar -xzf dingo-application-examples-v0.73.3.tar.gz
+tar -xzf dingo-application-examples-v0.73.4.tar.gz
 cd dingo-dev-guides
 cp .env.example .env
 docker compose up -d

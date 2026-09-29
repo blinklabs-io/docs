@@ -7,12 +7,12 @@ The downloadable bundle contains the complete SundaeSwap V3 Preview wallet
 frontend, its TypeScript source and lockfile, the Dingo configuration, and a
 Compose stack that runs it with a Preview node:
 
-[Download the Dingo application examples for v0.73.3](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.3.tar.gz)
+[Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
 Start the Dingo node and both frontend apps:
 
 ```sh
-tar -xzf dingo-application-examples-v0.73.3.tar.gz
+tar -xzf dingo-application-examples-v0.73.4.tar.gz
 cd dingo-dev-guides
 cp .env.example .env
 docker compose up -d

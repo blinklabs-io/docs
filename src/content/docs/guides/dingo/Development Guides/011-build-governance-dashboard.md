@@ -7,12 +7,12 @@ The download contains the complete Gov Lens app: Go server, tests, embedded
 HTML/CSS/JavaScript, SQL for a read-only database role, Postgres initialization,
 Dockerfile, and the shared Compose stack with Dingo configuration.
 
-[Download the Dingo application examples for v0.73.3](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.3.tar.gz)
+[Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
 Extract the bundle, set local credentials, and start the stack:
 
 ```sh
-tar -xzf dingo-application-examples-v0.73.3.tar.gz
+tar -xzf dingo-application-examples-v0.73.4.tar.gz
 cd dingo-dev-guides
 cp .env.example .env
 # Edit POSTGRES_PASSWORD and DINGO_GOV_LENS_PASSWORD in .env.
