@@ -81,7 +81,7 @@ You can have multiple localRoots groups. Why would you want to use this? This wa
 ***
 
 <h3 id="trustable">Trustable Flag</h3>
-Trustable peers consist of the bootstrap peers and the trustable Local root peers. By default, Local root peers are not trustable.  
+Trustable peers consist of the bootstrap peers and the trustable local root peers. By default, local root peers are not trustable.  
 
 <br>
 
@@ -92,10 +92,10 @@ Your own Relays and BP should be set to `"trustable": true`
 <h2 id="relay">Relay Sample Topology File</h2>
 For a typical 2 relay and BP setup, for the topology on your relay use:
 
-- Use two localRoots groups so we can advertise our relays while hiding our BP.
-- Set "advertise": false, on BP Access Point since we want to keep private.
-- Because there is one additional Relay, (2 relays in total) we set "valency": 1, if you had two additional Relays (3 relays in total), we would set "valency": 2, and so on.
-- Set your Relays to "trustable": true, so we can sync if we get too far off the tip.
+- Use two localRoots groups so you can advertise your other relays while hiding our BP.
+- Set `"advertise": false,` on the group that contains the BP, since we want to keep the BP private.
+- Because there is one additional Relay, (2 relays in total) set "valency": 1, if you had two additional Relays (3 relays in total), you would set "valency": 2, and so on.
+- Set your Relays to "trustable": true, so you can sync if you get too far off the tip.
 - Genesis/snapshot mode uses `peerSnapshotFile` instead of (or in addition to) bootstrap peers.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 
@@ -144,6 +144,8 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 }
 ```
 
+***
+
 <h2 id="bp">BP Sample Topology File</h2>
 For a block producer node we only want it to connect to our relays. To do this we use the following configuration:
 
@@ -185,3 +187,35 @@ Sample BP Topology JSON FILE:
   "useLedgerAfterSlot": -1
 }
 ```
+
+***
+
+After you save each topology file, point Dingo at it, restart the node, and confirm the block producer has hot connections only to your relays.
+
+Add this to the existing `/etc/dingo/dingo.yaml` (do not overwrite the file):
+
+```bash
+sudo bash -c "cat <<EOF >> /etc/dingo/dingo.yaml
+# Path to the topology configuration file
+topology: \"$DINGO_HOME/config/topology.json\"
+EOF"
+
+> Paths based on Dingo SPO guides, adjust paths if necessary.
+>
+>$DINGO_HOME expands when you run that command, the same way it does in the Dingo Node Setup guide. Use a different topology.json on the block producer and on each relay.
+
+***
+
+You can check the file with:
+```
+sudo nano /etc/dingo/dingo.yaml
+```
+
+Then restart:
+```
+sudo systemctl restart dingo
+```
+
+***
+
+### Congratulations! You now have custom topology files for your relays and block producer.
