@@ -41,9 +41,9 @@ node-parity from-genesis \
 
 | メトリクス | ラベル | 意味 |
 | --- | --- | --- |
-| `node_parity_epochs_total` | `network` | 少なくとも1つのチェックが信頼できる判定に到達したエポック数。 |
-| `node_parity_epoch_checks_incomplete_total{field}` | `network`, `field` | 信頼できる判定に到達できなかったチェック数。 |
-| `node_parity_divergence_total{field,reference="koios"}` | `network`, `field`, `reference` | DingoとKoiosの間で実際の差異を検出した回数。 |
+| `node_parity_epochs_total{network}` | `network` | 少なくとも1つのチェックが信頼できる判定に到達したエポック数。 |
+| `node_parity_epoch_checks_incomplete_total{network,field}` | `network`, `field` | 信頼できる判定に到達できなかったチェック数。 |
+| `node_parity_divergence_total{network,field,reference="koios"}` | `network`, `field`, `reference` | DingoとKoiosの間で実際の差異を検出した回数。 |
 
 実際の差異と不完全なチェックは別の状態です。`node_parity_divergence_total` はDingoの値とKoiosの値が異なる場合に増加します。`node_parity_epoch_checks_incomplete_total` はチェックを信頼できる判定まで完了できなかった場合に増加します。
 
