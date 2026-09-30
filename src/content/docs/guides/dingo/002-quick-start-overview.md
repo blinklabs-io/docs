@@ -144,9 +144,9 @@ EOF
 > PBftSignatureThreshold: 0.22
 > ```
 >
-> When `PBftSignatureThreshold` is absent, Dingo uses the Cardano node default of `0.22`. When present, the numeric threshold controls the Byron PBFT signature window and Dingo multiplies it by the Byron security parameter `k`.
+> When `PBftSignatureThreshold` is absent, Dingo uses the Cardano node default of `0.22`. When present, the value sets the Byron PBFT signature window; Dingo calculates that window by multiplying the value by the Byron security parameter `k`.
 >
-> When loading a custom Vector Conway genesis file, Dingo accepts the top-level `genDelegs` member. It also accepts the legacy `committee.quorum` member only when `committee.threshold` is present and non-null. Dingo still rejects other unknown members and duplicate JSON members.
+> Custom Vector Conway genesis files may include the top-level `genDelegs` member. Dingo accepts the legacy `committee.quorum` member only when `committee.threshold` is present and non-null. Dingo still rejects other unknown members and duplicate JSON members.
 
 ```yaml
 midnight:
