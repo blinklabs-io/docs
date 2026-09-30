@@ -24,11 +24,11 @@ node-parity from-genesis \
   --metrics-addr :9464
 ```
 
-Sustituye `preview` por `preprod` cuando corresponda. El comando sigue la cadena de Dingo desde el génesis y compara los parámetros de protocolo, la distribución de participación y el conjunto completo de UTxO con Koios.
+Sustituye `preview` por `preprod` cuando corresponda. El proceso sigue la cadena de Dingo desde el génesis y compara los parámetros de protocolo, la distribución de participación y el conjunto completo de UTxO con Koios.
 
-`--metrics-addr` es una opción explícita. Aunque su valor predeterminado es `:9464`, `from-genesis` no inicia el listener si la opción no aparece en la línea de comandos. `--metrics-addr=` desactiva el listener incluso cuando la opción se proporciona de forma explícita.
+`--metrics-addr` es una opción explícita. Aunque su valor predeterminado es `:9464`, `from-genesis` no inicia el servicio HTTP si el comando no incluye la opción. `--metrics-addr=` desactiva el servicio incluso cuando el comando incluye la opción con un valor vacío.
 
-Prometheus debe consultar `/metrics` en la dirección configurada, por ejemplo `http://<host>:9464/metrics`. Esta dirección corresponde al listener de métricas de `node-parity`; no corresponde a la opción `metricsPort` del archivo `dingo.yaml`.
+Prometheus debe consultar `/metrics` en la dirección configurada, por ejemplo `http://<host>:9464/metrics`. Esta dirección corresponde al servicio HTTP de métricas de `node-parity`; no corresponde a la opción `metricsPort` del archivo `dingo.yaml`.
 
 ## Contrato de métricas
 
@@ -49,8 +49,6 @@ Una divergencia indica que Dingo y la referencia comparada produjeron valores di
 - `NodeParityFromGenesisStalled` identifica un proceso que lleva más de dos horas activo y no ha registrado ningún epoch con un veredicto fiable ni ninguna comprobación incompleta durante las dos horas anteriores. La regla mantiene esta condición durante 15 minutos antes de alertar.
 - `NodeParityFromGenesisNotVerifying` identifica comprobaciones incompletas durante las dos horas anteriores sin ningún epoch con un veredicto fiable en el mismo periodo. La regla mantiene esta condición durante 30 minutos antes de alertar.
 - `NodeParityDivergence` alerta cuando `node_parity_divergence_total` registra una divergencia durante la última hora. `NodeParityRepeatedDivergence` identifica al menos dos divergencias en esa ventana. El texto de ambas alertas utiliza `{{ $labels.reference }}` para indicar si la referencia es `koios` o `cardano_node`.
-
-Las alertas específicas distinguen entre un replay detenido y un replay que avanza sin alcanzar veredictos fiables. Una ejecución puede registrar comprobaciones incompletas sin activar `NodeParityFromGenesisStalled`, porque esas comprobaciones demuestran actividad del proceso.
 
 ---
 
