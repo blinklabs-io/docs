@@ -138,7 +138,7 @@ EOF
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
-> 📝 Optional custom Cardano configuration: set `cardanoConfig` in `dingo.yaml` to the path of a Cardano node configuration file, or select the file with `--cardano-config <path>`. Place the optional `PBftSignatureThreshold` key in that referenced Cardano node configuration file, not in the Dingo `dingo.yaml` configuration:
+> 📝 Optional custom Cardano configuration: set `cardanoConfig` in `dingo.yaml` to the path of a Cardano node configuration file, or pass the path with `--cardano-config <path>`. Put the optional `PBftSignatureThreshold` key in that Cardano node configuration file, not in the Dingo `dingo.yaml` configuration:
 >
 > ```yaml
 > PBftSignatureThreshold: 0.22
