@@ -15,7 +15,7 @@ Esta referencia explica cómo habilitar el endpoint Prometheus de `node-parity f
 
 ## Habilitar las métricas
 
-Ejecuta `node-parity from-genesis` y proporciona explícitamente `--metrics-addr`:
+La ejecución de `node-parity from-genesis` debe incluir explícitamente `--metrics-addr`:
 
 ```bash
 node-parity from-genesis \
@@ -24,7 +24,7 @@ node-parity from-genesis \
   --metrics-addr :9464
 ```
 
-Sustituye `preview` por `preprod` cuando corresponda. El proceso sigue la cadena de Dingo desde el génesis y compara los parámetros de protocolo, la distribución de participación y el conjunto completo de UTxO con Koios.
+El valor `preview` del ejemplo corresponde a Preview; una ejecución en Preprod utiliza `--network preprod`. El proceso sigue la cadena de Dingo desde el génesis y compara los parámetros de protocolo, la distribución de participación y el conjunto completo de UTxO con Koios.
 
 `--metrics-addr` es una opción explícita. Aunque su valor predeterminado es `:9464`, `from-genesis` no inicia el servicio HTTP si el comando no incluye la opción. `--metrics-addr=` desactiva el servicio incluso cuando el comando incluye la opción con un valor vacío.
 
@@ -48,7 +48,7 @@ Una divergencia indica que Dingo y la referencia comparada produjeron valores di
 
 - `NodeParityFromGenesisStalled` identifica un proceso que lleva más de dos horas activo y no ha registrado ningún epoch con un veredicto fiable ni ninguna comprobación incompleta durante las dos horas anteriores. La regla mantiene esta condición durante 15 minutos antes de alertar.
 - `NodeParityFromGenesisNotVerifying` identifica comprobaciones incompletas durante las dos horas anteriores sin ningún epoch con un veredicto fiable en el mismo periodo. La regla mantiene esta condición durante 30 minutos antes de alertar.
-- `NodeParityDivergence` alerta cuando `node_parity_divergence_total` registra una divergencia durante la última hora. `NodeParityRepeatedDivergence` identifica al menos dos divergencias en esa ventana. El texto de ambas alertas utiliza `{{ $labels.reference }}` para indicar si la referencia es `koios` o `cardano_node`.
+- `NodeParityDivergence` alerta cuando `node_parity_divergence_total` registra una divergencia durante la última hora y mantiene esa condición durante 5 minutos. `NodeParityRepeatedDivergence` identifica al menos dos divergencias en esa ventana. El texto de ambas alertas utiliza `{{ $labels.reference }}` para indicar si la referencia es `koios` o `cardano_node`.
 
 ---
 
