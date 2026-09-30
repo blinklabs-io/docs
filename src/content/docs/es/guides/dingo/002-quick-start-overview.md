@@ -134,11 +134,9 @@ EOF
 
 ### Configuración personalizada de Cardano
 
-Si necesitas usar un archivo de configuración personalizado de Cardano, indica su ruta en `dingo.yaml` con `cardanoConfig` o usa la opción de CLI `--cardano-config`. Estos ajustes solo seleccionan el archivo de configuración de Cardano; no agregues `PBftSignatureThreshold` al ejemplo de `dingo.yaml`. Define `PBftSignatureThreshold` dentro del archivo de configuración de Cardano que Dingo carga. Esta clave es opcional: si la omites, Dingo usa el valor predeterminado `0.22`; si la defines, el valor establece la ventana de firmas PBFT de Byron y se multiplica por el parámetro de seguridad `k` de Byron.
+Para seleccionar un archivo de configuración personalizado de Cardano, configura `cardanoConfig` en `dingo.yaml` o utiliza la opción de CLI `--cardano-config`. Esta selección solo indica el archivo de configuración de Cardano; `PBftSignatureThreshold` no pertenece al ejemplo de configuración nativa de Dingo. El archivo de configuración de Cardano contiene esta clave cuando se necesita ajustar la ventana de firmas PBFT de Byron. El campo es opcional: Dingo usa el valor predeterminado `0.22` cuando el archivo lo omite y multiplica el valor configurado por el parámetro de seguridad `k` de Byron.
 
-Al cargar un archivo de génesis Conway de Vector, Dingo acepta el miembro superior `genDelegs` y el miembro heredado `committee.quorum` cuando `committee.threshold` existe y no es `null`. Dingo sigue rechazando otros miembros desconocidos y los miembros JSON duplicados.
-
-> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
+Al cargar un archivo de génesis Conway de Vector, Dingo acepta el campo superior `genDelegs` y el campo heredado `committee.quorum` cuando `committee.threshold` existe y no es `null`. Dingo sigue rechazando otros campos desconocidos y los miembros JSON duplicados.
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
