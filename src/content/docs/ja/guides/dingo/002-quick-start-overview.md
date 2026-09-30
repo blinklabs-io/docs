@@ -140,7 +140,7 @@ EOF
 cardanoConfig: "/path/to/cardano/config.json"
 ```
 
-コマンド実行時は、`--cardano-config /path/to/cardano/config.json`でも指定できます。`cardanoConfig`と`--cardano-config`はDingoが読み込むCardano node設定ファイルを選択する項目であり、`PBftSignatureThreshold`はDingoの`dingo.yaml`ではなく、参照先のCardano node設定ファイルに記述します。この項目は任意で、指定しない場合は既定値の`0.22`を使用します。
+コマンド実行時は、`--cardano-config /path/to/cardano/config.json`でも指定できます。`cardanoConfig`と`--cardano-config`は、Dingoが読み込むCardano node設定ファイルを選択します。`PBftSignatureThreshold`はDingoの`dingo.yaml`ではなく、参照先のCardano node設定ファイルに記述します。この項目は任意で、指定しない場合は既定値の`0.22`を使用します。
 
 Vector Conway genesisファイルを読み込む場合、Dingoはトップレベルの`genDelegs`を受け入れます。また、`committee.threshold`が存在し、`null`でない場合に限り、レガシー形式の`committee.quorum`を削除して読み込みます。Dingoはその他の不明なフィールドと重複したJSONメンバーを引き続き拒否します。
 
