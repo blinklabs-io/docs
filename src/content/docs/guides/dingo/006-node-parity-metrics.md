@@ -36,13 +36,13 @@ The `from-genesis` command adds the `network` label to each metric. The `network
 
 An incomplete check does not indicate a divergence. It indicates that the command could not trust the check result, while a divergence indicates that Dingo returned a different value from the Koios reference.
 
-`node_parity_divergence_total` is shared with `check` and `watch`. Those commands use `reference="cardano_node"`; `from-genesis` uses `reference="koios"`. The `from-genesis` command does not register the check and watch counters, so their absence does not indicate a healthy from-genesis run.
+The `check` and `watch` commands share `node_parity_divergence_total`. Those commands use `reference="cardano_node"`; `from-genesis` uses `reference="koios"`. The `from-genesis` command does not register the check and watch counters, so their absence does not indicate a healthy from-genesis run.
 
 ## Alerts
 
 The following alert rules apply to the from-genesis metrics:
 
-- `NodeParityFromGenesisStalled` identifies a replay that has recorded neither a completed epoch nor an incomplete check during the previous two hours. The rule waits until the process has run for more than two hours and the condition persists for 15 minutes.
+- `NodeParityFromGenesisStalled` identifies a replay that has recorded neither a trustworthy epoch verdict nor an incomplete check during the previous two hours. The rule waits until the process has run for more than two hours and the condition persists for 15 minutes.
 - `NodeParityFromGenesisNotVerifying` identifies a replay that continues to record incomplete checks but has recorded no trustworthy epoch verdict during the previous two hours. The condition must persist for 30 minutes.
 
 The shared divergence alert text reports the oracle through the `reference` label. A from-genesis divergence therefore identifies `koios`, while a `check` or `watch` divergence identifies `cardano_node`.
