@@ -132,6 +132,18 @@ midnight:
 EOF
 ```
 
+### カスタムCardano設定（任意）
+
+組み込みのネットワーク設定を使わず、独自のCardano node設定ファイルを使う場合は、Dingoの`dingo.yaml`で参照先を指定します。
+
+```yaml
+cardanoConfig: "/path/to/cardano/config.json"
+```
+
+コマンド実行時は、`--cardano-config /path/to/cardano/config.json`でも指定できます。`cardanoConfig`と`--cardano-config`はDingoが読み込むCardano node設定ファイルを選択する項目であり、`PBftSignatureThreshold`はDingoの`dingo.yaml`ではなく、参照先のCardano node設定ファイルに記述します。この項目は任意で、指定しない場合は既定値の`0.22`を使用します。
+
+Vector Conway genesisファイルを読み込む場合、トップレベルに`genDelegs`を含められます。また、`committee.threshold`が存在し、`null`でない場合に限り、レガシー形式の`committee.quorum`も含められます。その他の不明なフィールドと、重複したJSONメンバーは引き続き拒否されます。
+
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
 > 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
