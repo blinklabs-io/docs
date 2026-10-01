@@ -52,8 +52,6 @@ Dingo ships with embedded Cardano network configurations (genesis files, config.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
-See the [configuration reference](../006-configuration-reference) for configuration details.
-
 ```
 cat <<EOF > ~/dingo/dingo.yaml
 # Shared database path for the local blob and metadata stores.
