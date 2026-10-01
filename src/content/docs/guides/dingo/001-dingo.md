@@ -17,8 +17,8 @@ are organized by what you want to do.
 - [Configuration and storage modes](/guides/dingo/005-node-configuration/) —
   choose a relay, block producer, or API node and configure providers.
 - [Dingo configuration reference](/guides/dingo/009-configuration-reference/) —
-  configure Dingo v0.73.4 and review every setting.
-- [Download the Dingo v0.73.4 `dingo.yaml.example`](/downloads/dingo/v0.73.4/dingo.yaml.example).
+  configure Dingo v0.75.0 and review every setting.
+- [Download the Dingo v0.75.0 `dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.75.0/dingo.yaml.example).
 - [Bootstrap and data maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/)
   — use Mithril and manage local node data.
 - [Run Dingo as a service](/guides/dingo/003-create-start-up-service/) and
@@ -51,3 +51,14 @@ For Go library API documentation, see
 
 See the [release notes](/guides/dingo/releases/001-release-notes/) for changes
 between versions.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

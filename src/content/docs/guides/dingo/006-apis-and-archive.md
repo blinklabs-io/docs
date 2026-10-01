@@ -33,8 +33,8 @@ plugins:
         port: 9090
 ```
 
-The complete v0.73.4 configuration reference and release-matched
-[`dingo.yaml.example`](/downloads/dingo/v0.73.4/dingo.yaml.example) are
+The complete v0.75.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.75.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
@@ -67,3 +67,14 @@ maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/).
 Bark has no built-in authentication for ordinary archive traffic. Keep it on a
 trusted network. If you enable the database lifecycle service, follow the
 configuration example's mutual TLS requirements for its maintenance RPCs.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
