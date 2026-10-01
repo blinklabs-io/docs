@@ -63,3 +63,14 @@ can issue signed download URLs. Configure expiry frequency, archive storage,
 and download host allowlists in the Dingo v0.75.0
 [example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.75.0/dingo.yaml.example). Use it
 with that release only; configuration options can change between versions.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

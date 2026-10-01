@@ -52,3 +52,14 @@ example shows the supported blob and metadata providers and their options.
 The [Grafana guide](../SPO%20Guides/008-grafana-dashboard/) covers
 metrics dashboards. For deployment as a Linux service, see [Run Dingo as a
 service](/guides/dingo/003-create-start-up-service/).
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

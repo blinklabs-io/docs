@@ -41,3 +41,14 @@ The example also contains commented deployment patterns for relay, API/data,
 block producer, archive, history-expiry, and development nodes. Review the
 warnings in each pattern before enabling settings that alter consensus,
 forging, or network exposure.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
