@@ -55,6 +55,7 @@ Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis
 
 Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expandirá automáticamente a la ruta de tu directorio de inicio:
 
+
 ```bash
 cat <<EOF > ~/dingo/dingo.yaml
 # Ruta de datos compartida para los almacenes locales de blob y metadata.
