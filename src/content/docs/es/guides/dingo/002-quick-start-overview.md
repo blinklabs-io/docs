@@ -132,11 +132,6 @@ storageMode: "core"
 EOF
 ```
 
-### Configuración personalizada de Cardano
-
-Dingo selecciona un archivo de configuración personalizado de Cardano cuando `dingo.yaml` define `cardanoConfig`; la opción de CLI `--cardano-config` ofrece la misma selección. `PBftSignatureThreshold` no pertenece al ejemplo de configuración nativa de Dingo. El archivo de configuración de Cardano contiene esta clave cuando se necesita ajustar la ventana de firmas PBFT de Byron. El campo es opcional: Dingo usa el valor predeterminado `0.22` cuando el archivo lo omite y multiplica el valor configurado por el parámetro de seguridad `k` de Byron.
-
-Al cargar un archivo de génesis Conway de Vector, Dingo acepta el campo superior `genDelegs` y el campo heredado `committee.quorum` cuando `committee.threshold` existe y no es `null`. Dingo sigue rechazando otros campos desconocidos y los miembros JSON duplicados.
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
 
