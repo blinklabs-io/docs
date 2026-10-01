@@ -55,6 +55,7 @@ Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設�
 
 dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`変数は自動的にホームディレクトリのパスに展開されます：
 
+
 ```
 cat <<EOF > ~/dingo/dingo.yaml
 # Storage
