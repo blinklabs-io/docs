@@ -34,7 +34,7 @@ plugins:
 ```
 
 The complete v0.75.0 configuration reference and release-matched
-[`dingo.yaml.example`](/downloads/dingo/v0.73.4/dingo.yaml.example) are
+[`dingo.yaml.example`](/downloads/dingo/v0.75.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
