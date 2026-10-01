@@ -1,13 +1,13 @@
 ---
 title: Dingo Configuration Reference
-description: Complete, release-specific Dingo v0.73.4 configuration reference and example.
+description: Complete, release-specific Dingo v0.75.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.73.4. The complete
+This page covers the configuration shipped with Dingo v0.75.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](/downloads/dingo/v0.73.4/dingo.yaml.example).
-The same file is available in the [Dingo v0.73.4 source](https://github.com/blinklabs-io/dingo/blob/v0.73.4/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](/downloads/dingo/v0.75.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.75.0 source](https://github.com/blinklabs-io/dingo/blob/v0.75.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
