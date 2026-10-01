@@ -138,15 +138,6 @@ EOF
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
-> 📝 Optional custom Cardano configuration: set `cardanoConfig` in `dingo.yaml` to the path of a Cardano node configuration file, or pass the path with `--cardano-config <path>`. Put the optional `PBftSignatureThreshold` key in that Cardano node configuration file, not in the Dingo `dingo.yaml` configuration:
->
-> ```yaml
-> PBftSignatureThreshold: 0.22
-> ```
->
-> When `PBftSignatureThreshold` is absent, Dingo uses the Cardano node default of `0.22`. When present, the value sets the Byron PBFT signature window; Dingo calculates that window by multiplying the value by the Byron security parameter `k`.
->
-> Custom Vector Conway genesis files may include the top-level `genDelegs` member. Dingo accepts the legacy `committee.quorum` member only when `committee.threshold` is present and non-null. Dingo still rejects other unknown members and duplicate JSON members.
 
 ```yaml
 midnight:
