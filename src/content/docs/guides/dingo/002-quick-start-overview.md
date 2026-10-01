@@ -138,7 +138,6 @@ EOF
 
 > 💡 API servers stay inactive outside `storageMode: "api"`, and a port value of `0` disables that API.
 
-
 ```yaml
 midnight:
   # Enable the Midnight gRPC server independently of Midnight indexing.
