@@ -132,7 +132,6 @@ midnight:
 EOF
 ```
 
-
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
 > 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
