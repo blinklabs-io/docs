@@ -132,17 +132,6 @@ midnight:
 EOF
 ```
 
-### カスタムCardano設定（任意）
-
-組み込みのネットワーク設定を使わず、独自のCardano node設定ファイルを使う場合は、Dingoの`dingo.yaml`で参照先を指定します。
-
-```yaml
-cardanoConfig: "/path/to/cardano/config.json"
-```
-
-コマンド実行時は、`--cardano-config /path/to/cardano/config.json`でも指定できます。`cardanoConfig`と`--cardano-config`は、Dingoが読み込むCardano node設定ファイルを選択します。`PBftSignatureThreshold`はDingoの`dingo.yaml`ではなく、参照先のCardano node設定ファイルに記述します。この項目は任意で、指定しない場合は既定値の`0.22`を使用します。指定した場合、その値がByron PBFT署名ウィンドウを設定します。Dingoは、その値にByronのセキュリティパラメータ`k`を乗算してウィンドウを計算します。
-
-Vector Conway genesisファイルを読み込む場合、Dingoはトップレベルの`genDelegs`を受け入れます。また、`committee.threshold`が存在し、`null`でない場合に限り、レガシー形式の`committee.quorum`を削除して読み込みます。Dingoはその他の不明なフィールドと重複したJSONメンバーを引き続き拒否します。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
 
