@@ -8,7 +8,7 @@ image tag omits the leading `v` from the matching Dingo release tag. This
 example uses Dingo `v0.77.0`:
 
 ```sh
-docker pull ghcr.io/blinklabs-io/dingo:0.75.1
+docker pull ghcr.io/blinklabs-io/dingo:0.77.0
 ```
 
 ## Start a Preview node
