@@ -5,16 +5,35 @@ description: Configure Dingo APIs for applications and Bark for Dingo archive tr
 
 ## Application APIs
 
-Dingo's Blockfrost-compatible REST, Mesh/Rosetta REST, and UTxO RPC interfaces
-serve application clients. They require `storageMode: api`, which stores
-historical transaction data for queries. Configure each listener under
-`plugins.api`; set its port to `0` to disable it.
+Dingo's Blockfrost-compatible REST, Mesh/Rosetta REST, UTxO RPC, and
+Kupo-compatible REST interfaces serve application clients. They require
+`storageMode: api`, which stores historical transaction data for queries.
+Configure each listener under `plugins.api`; set its port to `0` to disable it.
 
 | Interface | Protocol | Default port |
 | --- | --- | ---: |
 | Blockfrost-compatible API | HTTP/REST | `3000` |
 | Mesh (Rosetta) | HTTP/REST | `8080` |
 | UTxO RPC | Connect/gRPC and HTTP | `9090` |
+| Kupo-compatible API | HTTP/REST | Disabled by default (`port: 0`); `1442` in the built-in provider configuration |
+
+Kupo uses the built-in provider. Enable it with `storageMode: api` and a
+nonzero provider port. For example:
+
+```yaml
+storageMode: api
+plugins:
+  api:
+    kupo:
+      provider: builtin
+      config:
+        port: 1442
+```
+
+The `--kupo-provider` option selects the provider from the command line. The
+YAML port key is `plugins.api.kupo.config.port`; the corresponding environment
+variable is `DINGO_PLUGINS_API_KUPO_CONFIG_PORT`. Set the port to `0` to keep
+Kupo disabled. The provider follows the node's normal start and stop lifecycle.
 
 For example, enable the built-in Blockfrost and UTxO RPC providers in
 `dingo.yaml`:
@@ -33,15 +52,16 @@ plugins:
         port: 9090
 ```
 
-The complete v0.75.1 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.75.1/dingo.yaml.example) are
+The complete v0.77.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.77.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
 ## Secure API access
 
-The `api.tls` and `api.auth` settings define shared defaults for the selected
-API providers. A provider can override either policy under its own
+The shared API bind, `api.tls`, and `api.auth` settings define defaults for the
+selected API providers, including Kupo. A provider can override either policy
+under its own
 `plugins.api.<name>.config` block. Authentication is disabled by default.
 When token authentication is enabled, send `Authorization: Bearer <token>`;
 Blockfrost clients may also use the `project_id` header. UTxO RPC's HTTP and
@@ -55,6 +75,28 @@ at startup and does not log token or key contents.
 You can also put API listeners behind a reverse proxy or API gateway. Choose
 one place to terminate TLS and authenticate requests, and configure Dingo's
 listener policy to match that deployment.
+
+## Kupo-compatible API
+
+The optional Kupo-compatible provider exposes Kupo-shaped responses for these
+route families:
+
+- Matches: `/matches`
+- Datum: `/datums/{datum_hash}`
+- Script: `/scripts/{script_hash}`
+- Checkpoints: `/checkpoints` and `/checkpoints/{slot_no}`
+- Metadata: `/metadata/{slot_no}`
+- Health: `/health`
+- Metrics: `/metrics`
+
+The provider uses the fixed global `*` pattern for match queries. Pattern
+operations do not change the indexed scope.
+
+Clients should account for these compatibility behaviors:
+
+- Requests for missing datum, script, or checkpoint resources return HTTP `404`.
+- `GET /metadata/{slot_no}` returns HTTP `400` immediately when `slot_no` is
+  beyond the newest indexed block. The request does not wait for a future block.
 
 ## Bark archive traffic
 
