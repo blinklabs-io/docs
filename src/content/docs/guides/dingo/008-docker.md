@@ -23,7 +23,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12798:12798 \
   --publish 127.0.0.1:12799:12799 \
   --volume dingo-preview-data:/data/db \
-  ghcr.io/blinklabs-io/dingo:0.75.1
+  ghcr.io/blinklabs-io/dingo:0.77.0
 ```
 
 Port `3001` accepts Ouroboros node-to-node connections. Metrics on `12798` and
@@ -42,7 +42,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-  ghcr.io/blinklabs-io/dingo:0.75.1 \
+  ghcr.io/blinklabs-io/dingo:0.77.0 \
   --config /tmp/dingo.yaml serve
 ```
 
