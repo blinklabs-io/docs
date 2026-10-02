@@ -62,8 +62,8 @@ provider options can change between versions.
 
 The shared API bind address applies to the selected API providers, including
 Kupo. The `api.tls` and `api.auth` settings define shared defaults. A provider
-can override either policy under its own `plugins.api.<name>.config` block;
-provider-specific TLS settings can override the shared TLS defaults.
+can override either policy under its own `plugins.api.<name>.config` block.
+Provider-specific TLS settings take precedence over the shared TLS defaults.
 Authentication is disabled by default.
 When token authentication is enabled, send `Authorization: Bearer <token>`;
 Blockfrost clients may also use the `project_id` header. UTxO RPC's HTTP and
@@ -91,10 +91,9 @@ for these route families:
 - Health: `/health`
 - Metrics: `/metrics`
 
-The API always uses the fixed global `*` pattern for match queries, so match
-requests use the provider's global pattern.
+The API uses the fixed global `*` pattern for all match queries.
 
-Clients should account for these compatibility behaviors:
+Compatibility behavior is as follows:
 
 - Requests for missing datum, script, or checkpoint resources return HTTP `404`.
 - `GET /metadata/{slot_no}` returns HTTP `400` immediately when `slot_no` is
