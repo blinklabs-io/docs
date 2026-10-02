@@ -5,8 +5,8 @@ description: Choose a Dingo node role and find the matching configuration option
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
 and start a node. This page explains the main configuration choices. Read the
-[complete Dingo v0.75.1 configuration reference](/guides/dingo/009-configuration-reference/)
-and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.75.1/dingo.yaml.example).
+[complete Dingo v0.77.0 configuration reference](/guides/dingo/009-configuration-reference/)
+and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.77.0/dingo.yaml.example).
 
 ## Choose a node role
 
@@ -14,12 +14,13 @@ and download the release-matched [`dingo.yaml.example`](https://raw.githubuserco
 | --- | --- | --- | --- |
 | Relay | `core` | Off | Follow and validate the chain, serve node-to-node and node-to-client connections. |
 | Block producer | `core` | On, with pool keys and an operational certificate | Follow the chain and forge blocks when elected. Use the [SPO guides](../SPO%20Guides/000-spo-guide/). |
-| API node | `api` | Off | Keep historical transaction data and serve configured Blockfrost, Mesh, or UTxO RPC APIs. |
+| API node | `api` | Off | Keep historical transaction data and serve configured Blockfrost, Mesh, or UTxO RPC APIs, or the optional built-in Kupo-compatible API. |
 
 `core` is the default storage mode and stores the data needed for consensus.
 `api` also indexes historical transaction details for query services. API
-providers require `api` mode; setting a provider port to `0` disables that
-listener. Storage mode does not enable block production.
+providers require `api` mode, including the optional built-in Kupo-compatible
+API. Setting an individual provider port to `0` disables that listener. Storage
+mode does not enable block production.
 
 Dingo block production is intended for test networks and private devnets in
 current releases. Follow the pool key and certificate guidance in the [SPO
@@ -45,7 +46,7 @@ Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
 provider name. The example file documents the providers and options available
-in Dingo v0.75.1. Environment variables use the
+in Dingo v0.77.0. Environment variables use the
 `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` form. For example, the current
 example shows the supported blob and metadata providers and their options.
 
