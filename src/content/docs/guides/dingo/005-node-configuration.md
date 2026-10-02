@@ -18,9 +18,9 @@ and download the release-matched [`dingo.yaml.example`](https://raw.githubuserco
 
 `core` is the default storage mode and stores the data needed for consensus.
 `api` also indexes historical transaction details for query services. API
-providers, including the optional built-in Kupo-compatible API, require
-`api` mode; setting a provider port to `0` disables that listener. Storage mode
-does not enable block production.
+providers require `api` mode, including the optional built-in Kupo-compatible
+API. Setting an individual provider port to `0` disables that listener. Storage
+mode does not enable block production.
 
 Dingo block production is intended for test networks and private devnets in
 current releases. Follow the pool key and certificate guidance in the [SPO
