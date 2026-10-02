@@ -78,7 +78,6 @@ You can also put API listeners behind a reverse proxy or API gateway. Choose
 one place to terminate TLS and authenticate requests, and configure Dingo's
 listener policy to match that deployment.
 
-
 ## Bark archive traffic
 
 Bark is a Dingo-to-Dingo archive protocol, separate from the application APIs.
