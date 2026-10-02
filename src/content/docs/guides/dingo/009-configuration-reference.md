@@ -40,7 +40,7 @@ for the main runtime choices.
 ### Block production
 
 Dingo v0.77.0 no longer accepts `ForgePrimaryChainTipToleranceSlots` or
-`forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or the environment.
+`forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment variables.
 Remove these settings rather than replacing them with another field.
 
 The optional `forgeAppliedTipStalenessSlots` setting remains available in YAML,
@@ -51,10 +51,10 @@ corroborated upstream target exists and ignores it when the target is unknown.
 
 ### Kupo provider
 
-The optional built-in Kupo provider belongs under `plugins.api.kupo` and
-requires `storageMode: api`. Select the provider with `--kupo-provider` when
-using the CLI. Set `plugins.api.kupo.config.port` to `0` to disable the Kupo
-listener.
+The optional Kupo provider belongs under `plugins.api.kupo`; select the built-in
+provider with `provider: "builtin"`. It requires `storageMode: api`. Select the
+provider with `--kupo-provider` when using the CLI. Set
+`plugins.api.kupo.config.port` to `0` to disable the Kupo listener.
 
 The example also contains commented deployment patterns for relay, API/data,
 block producer, archive, history-expiry, and development nodes. Review the
