@@ -14,7 +14,7 @@ and download the release-matched [`dingo.yaml.example`](https://raw.githubuserco
 | --- | --- | --- | --- |
 | Relay | `core` | Off | Follow and validate the chain, serve node-to-node and node-to-client connections. |
 | Block producer | `core` | On, with pool keys and an operational certificate | Follow the chain and forge blocks when elected. Use the [SPO guides](../SPO%20Guides/000-spo-guide/). |
-| API node | `api` | Off | Keep historical transaction data and serve configured Blockfrost, Mesh, UTxO RPC, or the optional built-in Kupo-compatible API. |
+| API node | `api` | Off | Keep historical transaction data and serve configured Blockfrost, Mesh, or UTxO RPC APIs, or the optional built-in Kupo-compatible API. |
 
 `core` is the default storage mode and stores the data needed for consensus.
 `api` also indexes historical transaction details for query services. API
