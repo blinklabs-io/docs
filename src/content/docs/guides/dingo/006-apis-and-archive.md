@@ -15,7 +15,7 @@ Configure each listener under `plugins.api`; set its port to `0` to disable it.
 | Blockfrost-compatible API | HTTP/REST | `3000` |
 | Mesh (Rosetta) | HTTP/REST | `8080` |
 | UTxO RPC | Connect/gRPC and HTTP | `9090` |
-| Kupo-compatible API | HTTP/REST | Disabled by default (`port: 0`); `1442` in the built-in provider configuration |
+| Kupo-compatible API | HTTP/REST | Default `port: 0` (disabled); built-in provider example: `1442` |
 
 Kupo uses the built-in provider. Enable it with `storageMode: api` and a
 nonzero provider port. For example:
@@ -30,10 +30,11 @@ plugins:
         port: 1442
 ```
 
-The `--kupo-provider` option selects the provider from the command line. The
-YAML port key is `plugins.api.kupo.config.port`; the corresponding environment
-variable is `DINGO_PLUGINS_API_KUPO_CONFIG_PORT`. Set the port to `0` to keep
-Kupo disabled. The provider follows the node's normal start and stop lifecycle.
+The `--kupo-provider=builtin` option selects the built-in provider from the
+command line. The YAML port key is `plugins.api.kupo.config.port`; the
+corresponding environment variable is
+`DINGO_PLUGINS_API_KUPO_CONFIG_PORT`. The provider follows the node's normal
+start and stop lifecycle.
 
 For example, enable the built-in Blockfrost and UTxO RPC providers in
 `dingo.yaml`:
@@ -59,10 +60,11 @@ provider options can change between versions.
 
 ## Secure API access
 
-The shared API bind, `api.tls`, and `api.auth` settings define defaults for the
-selected API providers, including Kupo. A provider can override either policy
-under its own
-`plugins.api.<name>.config` block. Authentication is disabled by default.
+The shared API bind address applies to the selected API providers, including
+Kupo. The `api.tls` and `api.auth` settings define shared defaults. A provider
+can override either policy under its own `plugins.api.<name>.config` block;
+provider-specific TLS settings can override the shared TLS defaults.
+Authentication is disabled by default.
 When token authentication is enabled, send `Authorization: Bearer <token>`;
 Blockfrost clients may also use the `project_id` header. UTxO RPC's HTTP and
 Connect/gRPC routes use the bearer token as well.
@@ -78,8 +80,8 @@ listener policy to match that deployment.
 
 ## Kupo-compatible API
 
-The optional Kupo-compatible provider exposes Kupo-shaped responses for these
-route families:
+The optional Kupo-compatible provider exposes Kupo v2.12-compatible responses
+for these route families:
 
 - Matches: `/matches`
 - Datum: `/datums/{datum_hash}`
@@ -89,8 +91,8 @@ route families:
 - Health: `/health`
 - Metrics: `/metrics`
 
-The provider uses the fixed global `*` pattern for match queries. Pattern
-operations do not change the indexed scope.
+The API always uses the fixed global `*` pattern for match queries, so match
+requests use the provider's global pattern.
 
 Clients should account for these compatibility behaviors:
 
