@@ -78,27 +78,6 @@ You can also put API listeners behind a reverse proxy or API gateway. Choose
 one place to terminate TLS and authenticate requests, and configure Dingo's
 listener policy to match that deployment.
 
-## Kupo-compatible API
-
-The optional Kupo-compatible provider exposes Kupo v2.12-compatible responses
-for these route families:
-
-- Matches: `/matches`
-- Datum: `/datums/{datum_hash}`
-- Script: `/scripts/{script_hash}`
-- Checkpoints: `/checkpoints` and `/checkpoints/{slot_no}`
-- Metadata: `/metadata/{slot_no}`
-- Health: `/health`
-- Metrics: `/metrics`
-
-The API uses the fixed global `*` pattern for all match queries.
-
-Compatibility behavior is as follows:
-
-- Requests for missing datum, script, or checkpoint resources return HTTP `404`.
-- `GET /metadata/{slot_no}` returns HTTP `400` immediately when `slot_no` is
-  beyond the newest indexed block. The request does not wait for a future block.
-
 ## Bark archive traffic
 
 Bark is a Dingo-to-Dingo archive protocol, separate from the application APIs.
