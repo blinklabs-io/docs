@@ -9,6 +9,19 @@ description: Notas de la versión de Dingo
 
 Cada versión enlaza a las notas completas. La versión más reciente aparece primero.
 
+- Versión: v0.77.0 - *[Ver las notas de la versión](../v0-77-0)*
+- Versión: v0.75.1 - *[Ver las notas de la versión](../v0-75-1)*
+- Versión: v0.75.0 - *[Ver las notas de la versión](../v0-75-0)*
+- Versión: v0.74.1 - *[Ver las notas de la versión](../v0-74-1)*
+- Versión: v0.74.0 - *[Ver las notas de la versión](../v0-74-0)*
+- Versión: v0.73.4 - *[Ver las notas de la versión](../v0-73-4)*
+- Versión: v0.73.3 - *[Ver las notas de la versión](../v0-73-3)*
+- Versión: v0.73.2 - *[Ver las notas de la versión](../v0-73-2)*
+- Versión: v0.73.1 - *[Ver las notas de la versión](../v0-73-1)*
+- Versión: v0.73.0 - *[Ver las notas de la versión](../v0-73-0)*
+- Versión: v0.72.0 - *[Ver las notas de la versión](../v0-72-0)*
+- Versión: v0.71.1 - *[Ver las notas de la versión](../v0-71-1)*
+- Versión: v0.71.0 - *[Ver las notas de la versión](../v0-71-0)*
 - Versión: v0.70.16 - *[Ver las notas de la versión](../v0-70-16)*
 - Versión: v0.70.15 - *[Ver las notas de la versión](../v0-70-15)*
 - Versión: v0.70.14 - *[Ver las notas de la versión](../v0-70-14)*

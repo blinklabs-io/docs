@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.70.16/dingo-v0.70.16-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.77.0/dingo-v0.77.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -48,9 +48,13 @@ Puedes verificar que el binario funciona ejecutando:
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
+Para consultar todos los ajustes de Dingo v0.77.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
+Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.77.0/dingo.yaml.example) correspondiente a esa versión como punto de partida para tu configuración.
+
 Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
 Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expandirá automáticamente a la ruta de tu directorio de inicio:
+
 
 ```bash
 cat <<EOF > ~/dingo/dingo.yaml
@@ -123,6 +127,7 @@ privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
+
 
 # Storage
 barkBaseUrl: ""
