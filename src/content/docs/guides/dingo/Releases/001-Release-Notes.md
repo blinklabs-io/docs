@@ -9,6 +9,24 @@ description: Dingo Release Notes
 
 ☑️ Select a version below to view the full release notes. The latest release appears first.
 
+- Version: v0.77.0 - *[View Release Notes](../v0-77-0)*
+- Version: v0.75.1 - *[View Release Notes](../v0-75-1)*
+- Version: v0.75.0 - *[View Release Notes](../v0-75-0)*
+- Version: v0.74.1 - *[View Release Notes](../v0-74-1)*
+- Version: v0.74.0 - *[View Release Notes](../v0-74-0)*
+- Version: v0.73.4 - *[View Release Notes](../v0-73-4)*
+- Version: v0.73.3 - *[View Release Notes](../v0-73-3)*
+- Version: v0.73.2 - *[View Release Notes](../v0-73-2)*
+- Version: v0.73.1 - *[View Release Notes](../v0-73-1)*
+- Version: v0.73.0 - *[View Release Notes](../v0-73-0)*
+- Version: v0.72.0 - *[View Release Notes](../v0-72-0)*
+- Version: v0.71.1 - *[View Release Notes](../v0-71-1)*
+- Version: v0.71.0 - *[View Release Notes](../v0-71-0)*
+
+- Version: v0.70.16 - *[View Release Notes](../v0-70-16)*
+
+- Version: v0.70.15 - *[View Release Notes](../v0-70-15)*
+
 - Version: v0.70.14 - *[View Release Notes](../v0-70-14)*
 - Version: v0.70.13 - *[View Release Notes](../v0-70-13)*
 - Version: v0.70.12 - *[View Release Notes](../v0-70-12)*

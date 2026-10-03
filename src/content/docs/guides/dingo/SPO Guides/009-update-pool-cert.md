@@ -4,7 +4,7 @@ description: SPO Guide for Dingo Pools - Update Pool Certificate.
 ---
 
 # Dingo - Updating the Pool Certificate
-Over time, you may need to update your pool certificate (`pool.cert`) to change your pledge amount, fees or relay information. This guide will walk you through the process.
+Over time, you may need to update your pool certificate (`pool.cert`) to change your pledge amount, fees, or relay information. This guide will walk you through the process.
 
 > ✅ This guide assumes you generated your original `pool.cert` by following the [Register Your Stake Pool](../005-register-pool) guide.
 > 
@@ -19,7 +19,7 @@ Update the values in your `env` file with the updated information for your pool.
 ⚠️ On an air-gapped machine
 
 ```
-sudo nano $HOME/dingo/pool-scripts/env
+sudo nano $DINGO_HOME/pool-scripts/env
 ```
 
 Sample `env` file:
@@ -34,7 +34,7 @@ RELAY1_PORT=6000
 RELAY2_HOST=55.23.123.206
 RELAY2_PORT=6000
 METADATA_URL=https://website.com/preview-pool-metadata.json
-METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
+METADATA_HASH=$(cat $DINGO_HOME/previewPoolMetaDataHash.txt)
 ```
 
 ***
@@ -43,14 +43,14 @@ METADATA_HASH=$(cat $HOME/dingo/previewPoolMetaDataHash.txt)
 The script must be executed in order to generate the new stake pool registration certificate, which will need to be submitted with a transaction.
 
 ```
-cd $HOME/dingo/pool-scripts
+cd $DINGO_HOME/pool-scripts
 ./pool-registration.sh
 ```
 
 ***
 
 ## Step 3 - Copy pool.cert to your hot environment
-Copy `pool.cert` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `pool.cert` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ***
 
@@ -63,9 +63,9 @@ currentSlot=$(cardano-cli conway query tip --testnet-magic 2 | jq -r '.slot')
 echo Current Slot: $currentSlot
 ```
 
-### Step 4.2 - Build the Transaction
+### Step 4.2 - Build the transaction
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction build \
     --tx-in $(cardano-cli query utxo --address $(cat payment.addr) --out-file /dev/stdout | jq -r 'keys[0]') \
     --change-address $(cat payment.addr) \
@@ -81,24 +81,24 @@ cardano-cli conway transaction build \
 > --tx-body-file tx.raw
 > ```
 
-### Step 4.3 - Sign the Transaction
-Copy `tx.raw` to your cold environment in your `~dingo` directory
+### Step 4.3 - Sign the transaction
+Copy `tx.raw` to your cold environment in your `$DINGO_HOME` directory.
 
 ⚠️ On an air-gapped machine
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction sign \
 --tx-body-file tx.raw \
 --signing-key-file payment.skey \
---signing-key-file $HOME/dingo/cold-keys/node.skey \
+--signing-key-file $DINGO_HOME/cold-keys/node.skey \
 --out-file tx.signed
 ```
 
 ### Step 4.4 - Submit the Transaction
-Copy `tx.signed` to the `~/dingo` directory on your hot environment (block producer or relay node).
+Copy `tx.signed` to the `$DINGO_HOME` directory on your hot environment (block producer or relay node).
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli conway transaction submit --tx-file tx.signed
 ```
 
@@ -107,4 +107,4 @@ cardano-cli conway transaction submit --tx-file tx.signed
 ## Step 5 - Verify the Registration
 Changes take effect in two epochs. After the next epoch transition, verify that your pool settings are correct.
 
-Wait a few minutes for the transaction to reach the chain, then you can use your preferred Cardano explorer to see if transaction was successful like: https://cardanoscan.io/
+Wait a few minutes for the transaction to reach the chain, then you can use your preferred Cardano explorer to verify that the transaction was successful, such as <a href="https://preview.cardanoscan.io/" target="_blank">https://preview.cardanoscan.io</a>.

@@ -12,7 +12,7 @@ Bursa can also be used to generate multi-signature scripts. The Bursa script com
 
 > **Script command types:**
 >  - **create:** Creates a new multi-signature script
->  - **validate:** Validates a script against signatures and slot
+>  - **validate:** Validates a script against vkey witnesses and slot
 >  - **address:** Generates mainnet address from script
 
 #### Create Multi-Signature Script
@@ -41,6 +41,23 @@ Bursa can also be used to generate multi-signature scripts. The Bursa script com
 ./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
 ```
 
+#### Validate Script
+
+- Validate a script with Ed25519 witnesses:
+
+```
+./bursa script validate --script script.json --public-keys abcdef1234...,1234567890... --signatures 0123abcd...,fedcba9876... --message-hex 74657874 --slot 123456789
+```
+
+- `--script` specifies the required path to the script file.
+- `--public-keys` accepts a comma-separated list of hex-encoded Ed25519 verification keys. `--signatures` accepts a comma-separated list of hex-encoded signatures. The item at position `i` in each list forms one witness, and both lists must have matching lengths.
+- Use `--message` for the signed payload as UTF-8 text or `--message-hex` for the signed payload as hex; these flags exclude each other. Default witness verification requires one of these flags when witnesses are supplied.
+- `--slot` supplies the current slot for timelock validation.
+- By default, Bursa validates each supplied witness cryptographically: it matches the Blake2b-224 hash of each verification key to the script key hash and verifies the Ed25519 signature against the supplied message. A script that requires signatures and receives no witnesses exits with a non-zero diagnostic.
+- `--structural-only` performs structural validation without verifying witnesses or signatures.
+
+The command returns JSON with `valid`, `slot`, `signatures`, `scriptHash`, and `structuralOnly` fields.
+
 ***
 
 Explore other Bursa Commands
@@ -48,10 +65,22 @@ Explore other Bursa Commands
 > **Bursa Command Categories**
 > 1. [wallet](../003-commands) &nbsp; - Commands for generating wallet and the files needed to manage a Cardano wallet
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Commands for running API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
-> 5. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
-> 6. [address](../007-address-commands) - Commands for working with Cardano addresses
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp; - Commands for running the KES agent daemon for a Cardano block producer
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Commands for generating various Cardano certificates
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Commands for generating cryptographic hashes used in Cardano
+> 6. [script](#script) &nbsp;&nbsp; - Commands for multi-signature operations
+> 7. [address](../007-address-commands) - Commands for working with Cardano addresses
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

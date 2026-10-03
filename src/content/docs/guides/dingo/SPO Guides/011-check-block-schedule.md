@@ -3,7 +3,7 @@ title: Check Block Schedule
 description: SPO Guide for Dingo Pools - How to run slot leader check to see your block schedule.
 ---
 
-You can check if you are scheduled to mint block by running the slot leader check in the `cardano-cli`.
+You can check if you are scheduled to mint a block by running the slot leader check in the `cardano-cli`.
 
 This can be done for either the current epoch or the next epoch. The next epoch's schedule becomes available once the current epoch is at least 70% complete.
 
@@ -25,9 +25,9 @@ Run the following command to check whether your pool is scheduled to mint a bloc
 > ⚠️ Adjust paths if needed
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli query leadership-schedule \
-   --genesis $HOME/dingo/config/cardano/preview/shelley-genesis.json \
+   --genesis $DINGO_HOME/config/shelley-genesis.json \
    --stake-pool-id $(cat stakepoolid.txt) \
    --vrf-signing-key-file vrf.skey \
    --testnet-magic 2 \
@@ -46,9 +46,9 @@ Run the following command to check whether your pool is scheduled to mint a bloc
 > ⚠️ Adjust paths if needed
 
 ```
-cd ~/dingo
+cd $DINGO_HOME
 cardano-cli query leadership-schedule \
-   --genesis $HOME/dingo/config/cardano/preview/shelley-genesis.json \
+   --genesis $DINGO_HOME/config/shelley-genesis.json \
    --stake-pool-id $(cat stakepoolid.txt) \
    --vrf-signing-key-file vrf.skey \
    --testnet-magic 2 \

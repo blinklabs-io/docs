@@ -12,7 +12,7 @@ Bursa también se puede usar para generar scripts multifirma. El comando `script
 
 > **Tipos de comandos de script:**
 >  - **create:** Crea un nuevo script multifirma
->  - **validate:** Valida un script contra firmas y slot
+>  - **validate:** Valida un script contra testigos de vkey y el slot
 >  - **address:** Genera una dirección de mainnet desde un script
 
 #### Crear script multifirma
@@ -41,6 +41,23 @@ Bursa también se puede usar para generar scripts multifirma. El comando `script
 ./bursa script create --required 2 --key-hashes abcdef1234567890abcdef1234567890abcdef12,abcdef1234567890abcdef1234567890abcdef13 --timelock-after 1000000
 ```
 
+#### Validar script
+
+- Validar un script con testigos de Ed25519:
+
+```bash
+./bursa script validate --script script.json --public-keys abcdef1234...,1234567890... --signatures 0123abcd...,fedcba9876... --message-hex 74657874 --slot 123456789
+```
+
+- `--script` especifica la ruta obligatoria al archivo de script.
+- `--public-keys` acepta una lista separada por comas de claves de verificación Ed25519 codificadas en hexadecimal. `--signatures` acepta una lista separada por comas de firmas codificadas en hexadecimal. El elemento de la posición `i` en cada lista forma un testigo y ambas listas deben tener la misma longitud.
+- Use `--message` para indicar el mensaje firmado como texto UTF-8 o `--message-hex` para indicarlo en hexadecimal. Estos indicadores no se pueden especificar a la vez. El modo de validación predeterminado requiere uno de estos indicadores cuando se proporcionan testigos.
+- `--slot` proporciona el valor del slot actual para validar bloqueos de tiempo.
+- De forma predeterminada, Bursa valida criptográficamente cada testigo proporcionado: compara el hash Blake2b-224 de cada clave de verificación con el hash de clave del script y verifica la firma Ed25519 con el mensaje proporcionado. Un script que requiere firmas y no recibe testigos termina con un diagnóstico distinto de cero.
+- `--structural-only` valida solo la estructura, sin verificar los testigos ni las firmas.
+
+El comando devuelve JSON con los campos `valid`, `slot`, `signatures`, `scriptHash` y `structuralOnly`.
+
 ***
 
 Explora otros comandos de Bursa
@@ -48,10 +65,22 @@ Explora otros comandos de Bursa
 > **Categorías de comandos de Bursa**
 > 1. [wallet](../003-commands) &nbsp; - Comandos para generar billetera y los archivos necesarios para administrar una billetera de Cardano
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - Comandos para ejecutar la API
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
-> 5. [script](#script) &nbsp;&nbsp; - Comandos para operaciones multifirma
-> 6. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
-> 7. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
+> 3. [kes-agent](../003-commands#kes-agent) - Comando para ejecutar el agente KES para un productor de bloques de Cardano
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - Comandos para generar varios certificados de Cardano
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Comandos para generar hashes criptográficos usados en Cardano
+> 6. [script](#script) &nbsp;&nbsp; - Comandos para operaciones multifirma
+> 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
+> 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
