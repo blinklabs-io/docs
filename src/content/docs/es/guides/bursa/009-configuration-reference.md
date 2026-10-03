@@ -7,7 +7,7 @@ description: Configura el agente KES y la API heredada de Bursa.
 
 Esta guía describe la configuración de `bursa kes-agent` y de la API heredada de Bursa. Bursa lee un archivo YAML y después aplica las variables de entorno; las variables de entorno tienen prioridad sobre los valores YAML.
 
-La [guía de línea de comandos](./003-commands) incluye los comandos disponibles de Bursa.
+La [guía de línea de comandos](../003-commands) incluye los comandos disponibles de Bursa.
 
 ## Variable de entorno de la billetera
 
