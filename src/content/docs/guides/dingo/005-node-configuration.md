@@ -5,7 +5,7 @@ description: Choose a Dingo node role and find the matching configuration option
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
 and start a node. This page explains the main configuration choices. Read the
-[complete Dingo v0.77.0 configuration reference](/guides/dingo/009-configuration-reference/)
+[complete Dingo v0.77.1 configuration reference](/guides/dingo/009-configuration-reference/)
 and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.77.0/dingo.yaml.example).
 
 ## Choose a node role
