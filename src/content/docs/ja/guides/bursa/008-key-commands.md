@@ -56,6 +56,18 @@ Bursaは、ニーモニックから個別の鍵を導出するために使用で
 
 ***
 
+### 署名鍵ファイル形式
+
+HDパスから導出した署名鍵をエクスポートすると、Bursaは拡張Ed25519-BIP32エンベロープに署名鍵を書き込みます。ルート、アカウント、ペイメント、ステーク、ガバナンス、ポリシー、マルチシグ、Calidusの署名鍵ファイルでは、`*_ExtendedSigningKeyShelley_ed25519_bip32`などのエンベロープタイプを使用し、`5880`で始まる128バイトのCBORを使用します。従来の非拡張ファイルは、`5820`で始まる32バイトのCBORを使用します。
+
+プールコールド署名ファイルは例外です。新しいエクスポートでは、署名鍵エンベロープに `StakePoolSigningKey_ed25519`、検証鍵エンベロープに `StakePoolVerificationKey_ed25519` を使用します。読み込み時は従来の `StakePoolSigningKeyShelley_ed25519` と `StakePoolVerificationKeyShelley_ed25519` も受け付けますが、Bursaはこれらのファイルを自動的に書き換えません。エクスポートされたプールコールド検証鍵は、プールコールド署名シードから導出された標準Ed25519のアイデンティティであり、運用証明書はこのアイデンティティを使用します。オプションの拡張プールコールド表現でも、同じアイデンティティが保持されます。
+
+秘密鍵ファイル（`.skey`）へのアクセスは所有者に限定します。Unixではグループまたはその他のユーザー向けの権限ビットを設定できません。Windowsでは所有者に限定した制限付きDACLが必要です。Bursaは安全でない秘密鍵ファイルを `ErrInsecureFileMode` により拒否します。ディレクトリにこの権限チェックで拒否された `.skey` ファイルしかない場合、Bursaはその権限エラーをディレクトリのエラーとして報告します。公開鍵の `.vkey` ファイルや運用証明書などの公開アーティファクトは公開鍵の読み込み経路を使用するため、この秘密鍵のアクセス権チェックの対象外です。
+
+鍵ファイルを読み込むとき、Bursaは通常ファイルだけを受け付け、UnixのシンボリックリンクとWindowsの再解析ポイントを拒否します。Bursaは鍵入力のサイズを実装がサポートする最大値以内に制限し、その値を超える鍵ファイルを処理開始前に拒否します。公開鍵ファイルは公開鍵の読み込み経路で引き続き読み込めます。Bursaは秘密鍵マテリアルを実際に読み込む場合にだけ、上記の所有者専用権限チェックを適用します。
+
+非拡張タイプを宣言する従来のHD導出署名鍵ファイルを、`type`フィールドだけ変更して修復しないでください。Bursaはこれらのファイルを自動的に書き換えません。元のニーモニックから署名鍵ファイルと検証鍵ファイルを同時に再生成し、署名前に生成されたアドレス、鍵ハッシュ、または現在使用しているその他のアイデンティティと比較してください。
+
 <a name="root"></a>
 
 ### ルートキー
@@ -176,6 +188,8 @@ VRFキーは、Praosコンセンサスプロトコルにおけるリーダー選
 ./bursa key vrf --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
 ```
 
+VRF検証鍵は期待される長さを満たす必要があります。VRF署名鍵には、シード単体またはシードと公開鍵を連結した形式を使用できます。シードと公開鍵の形式では、Bursaがシードから導出した公開鍵と埋め込まれた公開鍵を照合します。Bursaは長さが不正な鍵やシードと公開鍵が一致しない鍵を拒否し、エンベロープを生成しません。
+
 ***
 
 <a name="kes"></a>
@@ -199,6 +213,8 @@ KESキーは、Praosコンセンサスプロトコルにおけるブロック署
 ```bash
 ./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
+
+KES検証鍵は期待される長さを満たす必要があります。KES署名鍵はCardano KES depthとKES secret-key sizeの要件を満たす必要があります。Bursaは長さが不正な検証鍵、無効なKES depth、または無効なKES secret-key sizeを含む鍵を拒否し、エンベロープを生成しません。
 
 ***
 
@@ -270,10 +286,22 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](../003-commands) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
 > 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 4. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 5. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 6. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 7. [key](#key)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
+> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
+> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
+> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
+> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
+> 8. [key](#key)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
 
 ***
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

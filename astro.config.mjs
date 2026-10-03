@@ -195,6 +195,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Dingo', collapsed: true, items: [{ autogenerate: { directory: 'guides/dingo' } }] },
 						{ label: 'cardano-up', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-up' } }] },
+						{ label: 'Bursa', collapsed: true, items: [{ autogenerate: { directory: 'guides/bursa' } }] },
 						{ label: 'nview', collapsed: true, items: [{ autogenerate: { directory: 'guides/nview' } }] },
 						{ label: 'TxTop', collapsed: true, items: [{ autogenerate: { directory: 'guides/txtop' } }] },
 					],
@@ -226,7 +227,6 @@ export default defineConfig({
 				{
 					label: 'Developer libraries',
 					items: [
-						{ label: 'Bursa', collapsed: true, items: [{ autogenerate: { directory: 'guides/bursa' } }] },
 						{ label: 'gOuroboros', collapsed: true, items: [{ autogenerate: { directory: 'guides/gouroboros' } }] },
 						{ label: 'plutigo', collapsed: true, items: [{ autogenerate: { directory: 'guides/plutigo' } }] },
 					],
