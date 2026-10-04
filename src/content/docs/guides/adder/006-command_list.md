@@ -67,7 +67,7 @@ description: List of Adder Commands.
 > specifies event type to filter on
 >
 > For `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep`, and `--filter-type`, Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
-> 
+>
 > **Event Types:**
 > 1. `input.block` - A new block was observed.
 > 2. `input.rollback` -	A rollback occurred to a previous chain point.
