@@ -46,7 +46,7 @@ Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
 provider name. The example file documents the providers and options available
-in Dingo v0.77.1. Environment variables use the
+in Dingo v0.78.0. Environment variables use the
 `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` form. For example, the current
 example shows the supported blob and metadata providers and their options.
 
