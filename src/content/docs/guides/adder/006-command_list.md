@@ -22,8 +22,6 @@ description: List of Adder Commands.
 
 ## Filter:
 
-See the [filter and governance reference](../009-filter-governance-reference) for detailed filter applicability and governance event matching.
-
 ```
   --filter-address string
 ```
