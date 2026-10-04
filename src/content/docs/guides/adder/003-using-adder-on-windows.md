@@ -30,12 +30,6 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Release MSIs carry a valid signature and install both `adder.exe` (the command line tool) and `adder-tray.exe` (the tray application) under `%ProgramFiles%\Adder`. The installer creates an `Adder` shortcut in the Windows Start Menu and adds Adder to Windows **Apps & Features** or **Add/Remove Programs**.
-
-The MSI does not register a Scheduled Task or independently enable automatic startup. The tray setup wizard owns startup for the current Windows user, as described in [Step 4](#step-4---startup-and-background-activity).
-
-Locally built or test MSIs may be unsigned, so Windows SmartScreen or a warning that the publisher is unknown may appear when they launch.
-
 ***
 
 ### Step 2 - Launch Adder
@@ -76,18 +70,7 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Select one monitoring mode:
-
-- Enable `Monitor Everything` to monitor all supported events. This option ignores all values in the target sections.
-- Disable `Monitor Everything` and enter at least one value in the appropriate `Wallets`, `DReps`, `Pools`, `Assets`, or `Policies` section.
-
-Enter the target value in the form accepted by its section:
-
-- `Wallets`: a payment address or stake address.
-- `DReps`: a bech32 or hexadecimal DRep ID.
-- `Pools`: a bech32 or hexadecimal pool ID.
-- `Assets`: a CIP-14 asset fingerprint.
-- `Policies`: a 56-character hexadecimal policy ID.
+Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
 
 For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
 
@@ -95,13 +78,11 @@ For this example, we will enter a Pool ID and a DRep ID that we want to follow.
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Values within one target section act as alternatives. The visible `OR` and `AND` controls join populated target sections. Select `OR` when either section can produce the matching event. Do not use `AND` between different event families. `Pools` match blocks, `Wallets`, `Assets`, and `Policies` match transactions, and `DReps` match governance events. No single event can satisfy an `AND` between these families, and the wizard rejects such a configuration.
+Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-
-See the [tray configuration reference](../007-tray-configuration-reference) for the available target and notification settings.
 
 ***
 
