@@ -122,8 +122,6 @@ Click `Finish Setup`.
 
 ***
 
-### Step 4 - Startup and Background Activity
-
 ### Congratulations! Adder will now alert you when an event that you have selected to track occurs.
 
 ***
