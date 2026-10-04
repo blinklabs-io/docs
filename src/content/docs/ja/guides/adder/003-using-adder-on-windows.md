@@ -5,7 +5,7 @@ description: WindowsでAdderを使用する方法。
 
 # WindowsでAdderを使用する
 
-このガイドでは、WindowsでAdderをインストールし、トレイアプリを設定して動作を確認する手順を説明します。
+このガイドでは、WindowsでAdderを使用する方法を説明します。以下のセクションでは、Adderの使用例を示します。これらはAdderの機能に慣れるためのサンプルであることを覚えておいてください。Adderの真の力は、あなたの想像力によって解き放たれます。
 
 > Windows x64またはarm64向けのAdder MSIをインストール済みであることを前提とします。単体のexeを使用する場合は、[クイックスタート](../002-quick-start-overview)を参照してください。
 
