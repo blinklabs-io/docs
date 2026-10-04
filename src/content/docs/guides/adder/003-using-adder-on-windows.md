@@ -132,36 +132,3 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
-
-Select `Notification Rules...` to edit monitoring targets and notification categories. Select `Apply & Restart` to save the changes and apply them to the running monitoring engine without relaunching the tray. See the [tray configuration reference](../007-tray-configuration-reference) for target formats and connector behavior.
-
-Select `Recent Events` to review recent notifications. Transaction and governance entries open transaction explorer pages, while block entries open block explorer pages. Adder uses the event's network when it builds each link. When the tray reconnects, it requests replayed events from `/events?replay=true` and avoids adding duplicate entries to the list.
-
-Select `Show Logs` to open the log folder. Windows stores tray diagnostics in `%LOCALAPPDATA%\Adder\Logs\adder-tray.log`.
-
-Select `About` to open an in-app dialog that shows the running Adder version. If Adder includes commit metadata, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays `Version: <version>`.
-
-## Troubleshooting
-
-### The Windows app fails to start or run
-
-The Windows GUI has no normal console, so it records startup failures and failures while running in the log file. This includes panic details and graphics initialization failures. Review the file before retrying the operation.
-
-### A second tray launch exits immediately
-
-Windows runs only one Adder tray instance per logon session. If a second launch exits immediately, check whether the existing Adder tray instance is already running in the system tray.
-
-### Applying notification rules shows a warning
-
-When a restart or reconnection cannot complete immediately, Adder saves the configuration, keeps the Notification Rules editor open, and enables its controls again. Check the tray status and the log file, then select `Apply & Restart` again.
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
