@@ -287,7 +287,6 @@ description: List of Adder Commands.
 >
 > The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
 >
-> FCM HTTP send attempts time out after 10 seconds. Invalid service-account credentials fail configuration. After startup, Adder logs access token, message creation, and send failures through its pipeline error channel instead of marking delivery successful.
 >
 <br />
 
