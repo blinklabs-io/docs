@@ -66,7 +66,7 @@ description: List of Adder Commands.
   
 > specifies event type to filter on
 >
-> Adder accepts comma-separated values for each filter. Values within one flag act as alternatives. Adder trims surrounding whitespace and ignores empty entries. Adder combines different filter kinds with AND, except `--filter-pool` combined with `--filter-drep`, which uses OR. Use two hyphens for long filter flags. Adder rejects the single-dash form, such as `-filter-type`.
+> For `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep`, and `--filter-type`, Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
 >
 > Filter flags use shortened names. Adder requires the filter plugin name in environment variables and YAML keys, so `FILTER_ADDRESS` and `plugins.filter.address`, for example, do not configure the address filter.
 >
