@@ -99,10 +99,7 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Adder scopes event alerts to the selected target groups. Select the categories that should produce desktop alerts. Enable `Notify on connection issues` separately when connection status alerts are required.
-
-Open `Advanced — Rate Limiting` to control the maximum notifications per window and the window duration. Leave a field blank to use its default; the defaults are one notification per five seconds. Enter a negative limit to disable notification coalescing. Enter a window value using Go duration syntax, such as `5s`, `30s`, or `1m`.
-
+Select the checkboxes for the events for which you would like to receive a desktop alert.
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
