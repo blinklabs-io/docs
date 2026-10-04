@@ -1,6 +1,6 @@
 ---
 title: 最新リリース
-description: Adder リリースノート
+description: Adder のリリースノート
 ---
 
 ## Adder リリースノート
