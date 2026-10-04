@@ -53,7 +53,7 @@ plugins:
         port: 9090
 ```
 
-The complete v0.77.1 configuration reference and release-matched
+The complete v0.78.0 configuration reference and release-matched
 [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.77.1/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
