@@ -114,10 +114,14 @@ func PingNode(conn NodeConnection, cfg *Config) PingResult {
 }
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	var cfg Config
 	if err := envconfig.Process("cardano_node", &cfg); err != nil {
 		fmt.Printf("Config error: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	errorChan := make(chan error, 1)
@@ -125,7 +129,7 @@ func main() {
 	if err != nil {
 		close(errorChan)
 		fmt.Printf("Connection error: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 	errorHandlerDone := make(chan struct{})
 	go func() {
@@ -143,7 +147,7 @@ func main() {
 	result := PingNode(conn, &cfg)
 	if result.Error != nil {
 		fmt.Printf("Ping failed: %v\n", result.Error)
-		os.Exit(1)
+		return 1
 	}
 
 	_, _, isTcp := GetConnectionDetails(&cfg)
@@ -154,4 +158,5 @@ func main() {
 	fmt.Printf("%s Ping Results:\n", connType)
 	fmt.Printf("Connection established in: %s\n", result.ConnectionTime)
 	fmt.Printf("Protocol response time:   %s\n", result.ProtocolTime)
+	return 0
 }

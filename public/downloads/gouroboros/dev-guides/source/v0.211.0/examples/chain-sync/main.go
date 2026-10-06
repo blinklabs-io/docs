@@ -148,26 +148,24 @@ func chainSyncRollForwardHandler(
 	if block == nil {
 		return errors.New("block is nil")
 	}
-	switch blockType {
-	case ledger.BlockTypeByronEbb:
-		byronEbbBlock := block.(*ledger.ByronEpochBoundaryBlock)
+	switch block := block.(type) {
+	case *ledger.ByronEpochBoundaryBlock:
 		fmt.Printf(
 			"era = Byron (EBB), epoch = %d, slot = %d, block_no = %d, id = %s\n",
-			byronEbbBlock.BlockHeader.ConsensusData.Epoch,
-			byronEbbBlock.SlotNumber(),
-			byronEbbBlock.BlockNumber(),
-			byronEbbBlock.Hash(),
+			block.BlockHeader.ConsensusData.Epoch,
+			block.SlotNumber(),
+			block.BlockNumber(),
+			block.Hash(),
 		)
-	case ledger.BlockTypeByronMain:
-		byronBlock := block.(*ledger.ByronMainBlock)
+	case *ledger.ByronMainBlock:
 		fmt.Printf(
 			"era = Byron, epoch = %d, slot = %d, block_no = %d, id = %s\n",
-			byronBlock.BlockHeader.ConsensusData.SlotId.Epoch,
-			byronBlock.SlotNumber(),
-			byronBlock.BlockNumber(),
-			byronBlock.Hash(),
+			block.BlockHeader.ConsensusData.SlotId.Epoch,
+			block.SlotNumber(),
+			block.BlockNumber(),
+			block.Hash(),
 		)
-	default:
+	case lcommon.Block:
 		fmt.Printf(
 			"era = %s, slot = %d, block_no = %d, id = %s\n",
 			block.Era().Name,
@@ -209,9 +207,9 @@ func main() {
 
 	// Parse command-line flags
 	flag.StringVar(&cfg.StartEra, "start-era", cfg.StartEra, "era which to start chain-sync at")
-	flag.BoolVar(&cfg.Tip, "tip", false, "start chain-sync at current chain tip")
-	flag.BoolVar(&cfg.Bulk, "bulk", false, "use bulk chain-sync mode with NtN")
-	flag.BoolVar(&cfg.BlockRange, "range", false, "show start/end block of range")
+	flag.BoolVar(&cfg.Tip, "tip", cfg.Tip, "start chain-sync at current chain tip")
+	flag.BoolVar(&cfg.Bulk, "bulk", cfg.Bulk, "use bulk chain-sync mode with NtN")
+	flag.BoolVar(&cfg.BlockRange, "range", cfg.BlockRange, "show start/end block of range")
 	flag.Parse()
 
 	// Determine connection type: if Address is set, use NtN (TCP), otherwise use NtC (UNIX socket)

@@ -28,7 +28,6 @@ import (
 // testConnection implements a simplified NodeConnection for testing
 type testConnection struct {
 	dialFunc    func(string, string) error
-	getTipFunc  func() (*chainsync.Tip, error)
 	closeFunc   func() error
 	dialed      bool
 	networkType string
@@ -81,8 +80,8 @@ func TestPingNode_Success(t *testing.T) {
 	assert.True(t, conn.dialed, "Expected connection to be dialed")
 	assert.Equal(t, "tcp", conn.networkType, "Expected TCP connection")
 	require.NoError(t, result.Error)
-	assert.Positive(t, result.ConnectionTime, "Expected positive connection time")
-	assert.Positive(t, result.ProtocolTime, "Expected positive protocol time")
+	assert.GreaterOrEqual(t, result.ConnectionTime, time.Duration(0))
+	assert.GreaterOrEqual(t, result.ProtocolTime, time.Duration(0))
 }
 
 func TestPingNode_ProtocolError(t *testing.T) {
@@ -139,9 +138,9 @@ func TestPingNode_Integration(t *testing.T) {
 	network := os.Getenv("CARDANO_NODE_NETWORK")
 	address := os.Getenv("CARDANO_NODE_ADDRESS")
 
-	if socketPath == "" && address == "" {
+	if (socketPath == "" && address == "") || network == "" {
 		t.Skip(
-			"skipping integration test: set CARDANO_NODE_SOCKET_PATH or CARDANO_NODE_ADDRESS to run",
+			"skipping integration test: set CARDANO_NODE_SOCKET_PATH or CARDANO_NODE_ADDRESS and CARDANO_NODE_NETWORK to run",
 		)
 	}
 

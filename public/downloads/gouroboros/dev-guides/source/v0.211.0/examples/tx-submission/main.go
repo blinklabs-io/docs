@@ -32,8 +32,8 @@ type Config struct {
 	Magic      uint32
 	SocketPath string `split_words:"true"`
 	Network    string
-	TxFile     string
-	RawTxFile  string
+	TxFile     string `split_words:"true"`
+	RawTxFile  string `split_words:"true"`
 }
 
 // This code will be executed when run

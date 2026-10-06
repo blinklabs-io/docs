@@ -197,12 +197,7 @@ func main() {
 			}
 			var msgMetadata cip20Metadata
 			_, err := gCbor.Decode(mdCbor, &msgMetadata)
-			if err != nil {
-				// Do nothing on error
-				continue
-			}
-			// Display message if found
-			if msgMetadata.Num674.Msg != nil {
+			if err == nil && msgMetadata.Num674.Msg != nil {
 				for m, msg := range msgMetadata.Num674.Msg {
 					fmt.Printf(
 						" %-20s %s\n",

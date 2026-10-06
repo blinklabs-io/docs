@@ -5,7 +5,9 @@ description: Explore and download runnable Go examples for Cardano node protocol
 
 The gOuroboros repository includes runnable programs that demonstrate how Go
 applications connect to Cardano nodes and use Ouroboros mini-protocols. This
-page includes the examples from [gOuroboros v0.211.0](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples).
+page includes a docs snapshot based on the examples from
+[gOuroboros v0.211.0](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples),
+with corrections listed in the bundle README.
 
 [Download all examples](/downloads/gouroboros/dev-guides/gouroboros-examples-v0.211.0.tar.gz) or browse the [versioned source files on GitHub](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples).
 
