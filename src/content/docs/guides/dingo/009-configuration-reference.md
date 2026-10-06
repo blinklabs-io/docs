@@ -60,8 +60,9 @@ When `mithril.downloadMaxBytes` is `0`, Dingo uses these built-in compressed lim
 
 ### SQLite metadata storage validation
 
-When `plugins.storage.metadata.provider` is `sqlite`, or when the provider is
-omitted and defaults to `sqlite`, set a non-empty root `databasePath`. Dingo
+When `plugins.storage.metadata.provider` is `sqlite`, or when the configuration
+omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
+that is not empty. Dingo
 rejects startup when `databasePath` is empty in either case.
 
 ### Block production
