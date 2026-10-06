@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.78.0 Configuration Reference
-description: Complete, release-specific Dingo v0.78.0 configuration reference and example.
+title: Dingo v0.79.0 Configuration Reference
+description: Complete, release-specific Dingo v0.79.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.78.0. The complete
+This page covers the configuration shipped with Dingo v0.79.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.78.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.78.0 source](https://github.com/blinklabs-io/dingo/blob/v0.78.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.79.0 source](https://github.com/blinklabs-io/dingo/blob/v0.79.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -28,14 +28,42 @@ for the main runtime choices.
 | Area | Main settings | Purpose |
 | --- | --- | --- |
 | Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Select a Cardano network and locate node, topology, and data files. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing` | Configure node and private listeners, metrics, health probes, profiling, and tracing. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
-| Bootstrap and synchronization | `mithril`, `genesisBootstrap`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
+| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `genesisBootstrap`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, registry refresh, parity diagnostics, caching, and startup validation. |
+
+### LocalStateQuery snapshot lifetime
+
+| Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
+| --- | --- | --- | --- | --- | --- |
+| Maximum lifetime of an acquired ledger snapshot | `localStateQueryViewMaxLifetime` | `--local-state-query-view-max-lifetime` | `DINGO_LOCAL_STATE_QUERY_VIEW_MAX_LIFETIME` | `5m` | Use a positive duration string, such as `5m`. Dingo rejects an invalid, zero, or negative value during startup or configuration validation. After the maximum lifetime, Dingo closes the session-held ledger snapshot and the next query returns the closed-view error instead of reading live state. |
+
+### Mithril download limit
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Compressed size limit for each downloaded Mithril object | `mithril.downloadMaxBytes` | `--mithril-download-max-bytes` | `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` | `0` uses the built-in per-object compressed limits. A positive value replaces the limit for every downloaded object. Dingo rejects a negative value during startup or configuration validation. |
+
+When `mithril.downloadMaxBytes` is `0`, Dingo uses these built-in compressed limits:
+
+| Mithril object | Built-in limit |
+| --- | --- |
+| v1 | `512 GiB` |
+| v2 immutable archive | `1 GiB` |
+| v2 digest list | `256 MiB` |
+| v2 ancillary data | `64 GiB` |
+
+### SQLite metadata storage validation
+
+When `plugins.storage.metadata.provider` is `sqlite`, or when the configuration
+omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
+that is not empty. Dingo rejects startup when `databasePath` is empty in either
+case.
 
 ### Block production
 

@@ -60,9 +60,11 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-and download host allowlists in the Dingo v0.78.0
-[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.78.0/dingo.yaml.example). Use it
+and download host allowlists in the Dingo v0.79.0
+[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.0/dingo.yaml.example). Use it
 with that release only; configuration options can change between versions.
+
+Configure the compressed download limit for each Mithril object with `mithril.downloadMaxBytes` in `dingo.yaml`, `--mithril-download-max-bytes` on the command line, or `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` in the environment. Set the value to `0` to use the built-in limits. The `v1` limit is `512 GiB`; `v2` uses `1 GiB` for immutable archives, `256 MiB` for the digest list, and `64 GiB` for ancillary data. A positive byte value replaces the built-in limit for each downloaded object. A negative value is invalid and causes configuration validation to fail.
 
 
 ---
