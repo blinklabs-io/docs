@@ -5,8 +5,8 @@ description: Choose a Dingo node role and find the matching configuration option
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
 and start a node. This page explains the main configuration choices. Read the
- [complete Dingo v0.79.0 configuration reference](/guides/dingo/009-configuration-reference/)
- and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.0/dingo.yaml.example).
+[complete Dingo v0.79.0 configuration reference](/guides/dingo/009-configuration-reference/)
+and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.0/dingo.yaml.example).
 
 ## Choose a node role
 
@@ -46,10 +46,10 @@ Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
 provider name. The example file documents the providers and options available
- in Dingo v0.79.0. Set a non-empty root `databasePath` when
- `plugins.storage.metadata.provider` is `sqlite`; an unset provider defaults to
- `sqlite`, and Dingo rejects the configuration at startup if `databasePath` is
- empty. Environment variables use the
+in Dingo v0.79.0. The root `databasePath` must be non-empty when
+`plugins.storage.metadata.provider` is `sqlite`. An unset provider defaults to
+`sqlite`, and Dingo rejects the configuration at startup when `databasePath` is
+empty. Environment variables use the
 `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` form. For example, the current
 example shows the supported blob and metadata providers and their options.
 
