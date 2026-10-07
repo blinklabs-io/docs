@@ -54,6 +54,7 @@ dingo --help
 ```
 
 After a global installation, use `dingo` instead of `./dingo` in the remaining quick-start commands. For a non-global check, run:
+After a global installation, use `dingo` instead of `./dingo` in the remaining quick-start commands. To check without a global installation, run:
 
 ```
 npx @blinklabs/dingo --help
