@@ -44,7 +44,7 @@ Puedes verificar que el binario funciona ejecutando:
 
 ### Alternativa: instalar con npm
 
-Como alternativa al archivo comprimido, instala el paquete `@blinklabs/dingo` con Node.js 22 o posterior. El paquete admite Linux, FreeBSD y macOS en arquitecturas `x64`/`amd64` o `arm64`.
+Como alternativa al archivo comprimido, instala el paquete `@blinklabs/dingo`. La instalación requiere Node.js 22 o posterior. El paquete admite Linux, FreeBSD y macOS en arquitecturas `x64`/`amd64` o `arm64`.
 
 ```bash
 npm install --global @blinklabs/dingo
