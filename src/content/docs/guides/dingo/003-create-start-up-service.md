@@ -159,6 +159,11 @@ databaseLifecycle:
   # Capture an automatic snapshot every N epoch closes.
   # CLI: --db-snapshot-every-n-epochs
   snapshotEveryNEpochs: 1
+  # Maximum time a manual or automatic snapshot may hold the commit barrier after acquisition.
+  # `0s` means no bound. The value must be a nonnegative duration.
+  # CLI: --db-snapshot-max-commit-pause
+  # Environment: DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE
+  snapshotMaxCommitPause: 0s
 EOF"
 ```
 
