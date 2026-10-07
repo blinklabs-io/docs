@@ -69,7 +69,7 @@ case.
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and scope |
 | --- | --- | --- | --- | --- | --- |
-| Maximum commit pause for a snapshot | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `0s` means no bound. | Set a nonnegative duration. Dingo rejects a negative value during configuration validation. A positive duration bounds manual/offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. When the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
+| Maximum commit pause for a snapshot | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `0s` (no bound). | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual/offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
 
 ### Block production
 
