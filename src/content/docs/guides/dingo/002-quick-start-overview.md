@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.79.0/dingo-v0.79.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.79.1/dingo-v0.79.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -42,15 +42,32 @@ You can verify the binary works by running:
 ./dingo version
 ```
 
+### Alternative: Install with npm
+
+The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching native release and verifies its SHA-256 checksum.
+
+Install it globally and verify the wrapper:
+
+```
+npm install --global @blinklabs/dingo
+dingo --help
+```
+
+After a global installation, use `dingo` instead of `./dingo` in the remaining quick-start commands. For a non-global check, run:
+
+```
+npx @blinklabs/dingo --help
+```
+
 ***
 
 <br>
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.79.0 settings, defaults, and environment or command-line
+For all Dingo v0.79.1 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
