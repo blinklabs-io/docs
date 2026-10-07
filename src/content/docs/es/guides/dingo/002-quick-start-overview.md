@@ -51,7 +51,7 @@ npm install --global @blinklabs/dingo
 dingo --help
 ```
 
-El paquete descarga la versión nativa correspondiente, valida su suma de comprobación SHA-256 y la instala. Para usarlo sin una instalación global:
+El paquete descarga el binario nativo correspondiente, valida su suma de comprobación SHA-256 y lo instala de forma atómica. Para usarlo sin una instalación global:
 
 ```bash
 npx @blinklabs/dingo --help
