@@ -22,21 +22,33 @@ The site is available at `http://localhost:4321`.
 
 ## Validate a change
 
-Create the production build before opening a pull request:
+Run the documentation checks and production build before opening a pull
+request:
+
+```sh
+npm run check
+```
+
+This packages the downloadable Dingo and gOuroboros guide examples, checks the
+documentation and generated LLM files, and builds the site. The static site,
+Pagefind search index, sitemap, and LLM-friendly text files are generated in
+`dist/`.
+
+To build the site without running the documentation checks, use:
 
 ```sh
 npm run build
 ```
 
-The build generates the static site, Pagefind search index, sitemap, and
-LLM-friendly text files in `dist/`.
+The build lifecycle also packages the downloadable guide examples.
 
 ## Content structure
 
 - `src/content/docs/` contains English documentation.
 - `src/content/docs/ja/` contains Japanese translations.
 - `src/content/docs/es/` contains Spanish translations.
-- `public/` contains screenshots and other static assets.
+- `public/` contains static assets, including packaged downloadable guide
+  examples.
 - `astro.config.mjs` defines Starlight, locales, and sidebar navigation.
 
 Add product documentation under `src/content/docs/guides/<product>/`. Keep
@@ -49,7 +61,7 @@ Use focused pull requests and include:
 
 - A concise explanation of the user-facing change.
 - Updated translations when the same content exists in Japanese or Spanish.
-- A successful `npm run build`.
+- A successful `npm run check`.
 
 Report documentation issues or propose improvements in the
 [Blink Labs docs repository](https://github.com/blinklabs-io/docs/issues).
