@@ -150,10 +150,6 @@ databaseLifecycle:
   snapshotRetention: 0
   # N epoch ごとに自動スナップショットを作成します。`1` は毎回です。
   snapshotEveryNEpochs: 1
-  # スナップショットによるコミット一時停止の最長時間です。既定値の `0s` は上限なしを意味します。
-  # `--db-snapshot-max-commit-pause` / `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` で変更できます。
-  # 負の期間は設定できません。
-  snapshotMaxCommitPause: 0s
 storageMode: \"core\"
 EOF"
 ```
