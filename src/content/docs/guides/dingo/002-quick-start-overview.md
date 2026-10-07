@@ -44,9 +44,9 @@ You can verify the binary works by running:
 
 ### Alternative: Install with npm
 
-The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching native release and verifies its SHA-256 checksum.
+The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching Dingo release and verifies its SHA-256 checksum.
 
-Install it globally and verify the wrapper:
+Install it globally and verify the `dingo` command:
 
 ```
 npm install --global @blinklabs/dingo
