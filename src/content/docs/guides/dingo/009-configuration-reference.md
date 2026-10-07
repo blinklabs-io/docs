@@ -65,6 +65,12 @@ omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
 
+### Database lifecycle snapshot commit pause
+
+| Setting | YAML key | CLI flag | Environment variable | Default | Validation and scope |
+| --- | --- | --- | --- | --- | --- |
+| Maximum commit pause for a snapshot | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `0s` means no bound. | Set a nonnegative duration. Dingo rejects a negative value during configuration validation. A positive duration bounds manual/offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. When the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
+
 ### Block production
 
 Dingo v0.77.1 removes `ForgePrimaryChainTipToleranceSlots` and
