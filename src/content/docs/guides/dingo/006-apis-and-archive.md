@@ -90,7 +90,7 @@ Bark has no built-in authentication for ordinary archive traffic. Keep it on a
 trusted network. If you enable the database lifecycle service, follow the
 configuration example's mutual TLS requirements for its maintenance RPCs.
 Bark accepts signed block download URLs only when their normalized HTTPS origin
-matches the configured Bark origin or an explicitly allowed download origin.
+matches the configured normalized HTTPS origin or an explicitly allowed download origin.
 The normalized origin includes the scheme, lowercased host, and effective port.
 Bark checks redirect destinations against the same policy and rejects resolved
 private or special-use addresses. For block-download requests, Bark does not
