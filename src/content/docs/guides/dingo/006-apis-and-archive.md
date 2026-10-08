@@ -96,7 +96,7 @@ The normalized origin includes the scheme, lowercased host, and effective port.
 Bark checks redirect destinations against the same policy and rejects any
 redirect whose resolved address is private or special-use. For block-download
 requests, Bark does not use ambient HTTP proxy settings or caller-provided
-d ialers. These rules apply
+dialers. These rules apply
 only to block downloads; the separately configured Bark RPC client continues to
 handle archive RPC calls.
 
