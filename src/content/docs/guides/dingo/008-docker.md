@@ -58,11 +58,12 @@ docker stop dingo-preview
 docker start dingo-preview
 ```
 
-The image health check calls `/health`, which reports liveness and event-loop
-responsiveness. A healthy container may still be syncing. The `/readyz` endpoint
-reports readiness after the node satisfies the tip-gap and database checks; a
-block-producer deployment also requires a running forger with usable
-credentials. Use `/readyz` when deciding whether to route application traffic.
+The image health check calls `/health`, which reports liveness, including
+event-loop responsiveness. A healthy container may still be syncing. The
+`/readyz` readiness endpoint requires the node to satisfy the tip-gap and
+database checks; a block-producer deployment also requires a running forger
+with usable credentials. Use `/readyz` when deciding whether to route
+application traffic.
 See [bootstrap and data
 maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/) for Mithril
 bootstrap and database operations.
