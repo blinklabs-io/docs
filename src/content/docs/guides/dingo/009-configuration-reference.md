@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.79.0 Configuration Reference
-description: Complete, release-specific Dingo v0.79.0 configuration reference and example.
+title: Dingo v0.79.1 Configuration Reference
+description: Complete, release-specific Dingo v0.79.1 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.79.0. The complete
+This page covers the configuration shipped with Dingo v0.79.1. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.79.0 source](https://github.com/blinklabs-io/dingo/blob/v0.79.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example).
+The same file is available in the [Dingo v0.79.1 source](https://github.com/blinklabs-io/dingo/blob/v0.79.1/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -64,6 +64,12 @@ When `plugins.storage.metadata.provider` is `sqlite`, or when the configuration
 omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
+
+### Database lifecycle snapshot pause bound
+
+| Setting | YAML key | CLI flag | Environment variable | Default | Validation and scope |
+| --- | --- | --- | --- | --- | --- |
+| Snapshot commit pause bound | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `0s` (no bound). | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual and offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
 
 ### Block production
 
