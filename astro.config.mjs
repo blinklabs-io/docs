@@ -89,9 +89,8 @@ export default defineConfig({
 						},
 						{
 							label: 'APIs and transaction submission',
-							description: 'Cardano Node API, Tx Submit, Tx Submit Mirror, and Bursa',
+							description: 'Tx Submit, Tx Submit Mirror, and Bursa',
 							paths: [
-								'guides/cardano-node-api/**',
 								'guides/txsubmit/**',
 								'guides/txsubmit-api-mirror/**',
 								'guides/bursa/**',
@@ -211,7 +210,6 @@ export default defineConfig({
 					label: 'APIs and services',
 					items: [
 						{ label: 'Tx Submit API', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit' } }] },
-						{ label: 'Cardano Node API', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-node-api' } }] },
 						{ label: 'Tx Submit API Mirror', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit-api-mirror' } }] },
 						{ label: 'cDNSd', collapsed: true, items: [{ autogenerate: { directory: 'guides/cdnsd' } }] },
 						{
