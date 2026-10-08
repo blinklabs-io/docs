@@ -306,7 +306,7 @@ curl -f http://127.0.0.1:12799/healthz
 curl -f http://127.0.0.1:12799/readyz
 ```
 
-`/health` y `/healthz` usan comprobaciones de actividad, incluida la capacidad de respuesta del bucle de eventos, para confirmar que el proceso sigue respondiendo. `/readyz` exige que el nodo conozca la brecha hasta el tip, que la brecha no supere `healthReadyGapSlots` y que la base de datos esté lista. En los productores de bloques, `/readyz` también requiere que el forjador esté en ejecución y que las credenciales sean utilizables, incluido KES remoto cuando corresponda. Dingo sirve estas sondas también durante el arranque de Mithril.
+`/health` y `/healthz` usan comprobaciones de actividad, incluida la capacidad de respuesta del bucle de eventos, para confirmar que el proceso sigue respondiendo. `/readyz` exige que el nodo conozca la brecha hasta el tip, que la brecha no supere `healthReadyGapSlots` y que la base de datos esté lista. En los productores de bloques, `/readyz` también requiere que el forjador esté en ejecución, que las credenciales sean utilizables y, cuando corresponda, que KES remoto esté listo. Dingo sirve estas sondas también durante el arranque de Mithril.
 
 ***
 
