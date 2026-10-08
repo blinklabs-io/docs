@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.79.1/dingo-v0.79.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.80.0/dingo-v0.80.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -65,9 +65,9 @@ npx @blinklabs/dingo --help
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.79.1 settings, defaults, and environment or command-line
+For all Dingo v0.80.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
@@ -236,7 +236,7 @@ cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 Check `http://127.0.0.1:12799/health` or `http://127.0.0.1:12799/healthz` for liveness and `http://127.0.0.1:12799/readyz` for readiness. The `/readyz` check reports unready while the tip gap is unknown or outside `healthReadyGapSlots`. The container health check uses `/health`, not the metrics endpoint. The health listener remains available while `dingo mithril sync` runs.
+> 📝 Check `http://127.0.0.1:12799/health` or `http://127.0.0.1:12799/healthz` for liveness and `http://127.0.0.1:12799/readyz` for readiness. The `/health` and `/healthz` checks use liveness checks, including event-loop responsiveness, while `/readyz` requires the configured tip-gap condition and database readiness. For block producers, `/readyz` also requires a running forger with usable forging credentials, including remote KES readiness where applicable. The `/readyz` check reports unready while the tip gap is unknown or outside `healthReadyGapSlots`. The container health check uses `/health`, not the metrics endpoint. The health listener remains available while `dingo mithril sync` runs.
 
 > 📝 `mithril.downloadMaxTransientRetries` controls retries for transient bootstrap download failures such as TLS timeouts, HTTP 429 responses, and HTTP 5xx responses. The example uses the default value of `10`.
 
