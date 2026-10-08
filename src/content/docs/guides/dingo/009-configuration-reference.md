@@ -43,8 +43,9 @@ The `immutableDbPath` setting and the positional input to `dingo load` accept a
 local directory or a remote URL. Remote sources require an `https://` URL;
 `http://` works only for loopback hosts, and Dingo rejects non-loopback HTTP.
 Remote roots provide `tip.json` and numbered `.chunk`, `.primary`, and
-`.secondary` files as chunk triads. See the bootstrap and data maintenance
-guide for the remote source, chunk, and integrity requirements.
+`.secondary` files as chunk triads. Dingo fails when published chunk data is
+mismatched or incomplete. See the bootstrap and data maintenance guide for the
+remote source, chunk, and integrity requirements.
 
 ### LocalStateQuery snapshot lifetime
 
@@ -82,14 +83,6 @@ case.
 
 ### Block production
 
-### Shelley KES agent socket
-
-The `--shelley-kes-agent-socket` flag accepts filesystem socket paths and
-abstract socket addresses. Dingo resolves a relative filesystem path once and
-reuses the resolved path across reconnects. It preserves `@`-prefixed abstract
-addresses, rejects literal NUL-prefixed addresses when creating the client,
-and checks platform socket-length limits.
-
 Dingo v0.77.1 removes `ForgePrimaryChainTipToleranceSlots` and
 `forgePrimaryChainTipToleranceSlots` from YAML, the CLI, and environment
 variables.
@@ -100,6 +93,14 @@ Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` environment variable. Its default is
 `0`, which disables the bound. Dingo evaluates the bound only when a
 corroborated upstream target exists and ignores it when the target is unknown.
+
+#### Shelley KES agent socket
+
+The `--shelley-kes-agent-socket` flag accepts filesystem socket paths and
+abstract socket addresses. Dingo resolves a relative filesystem path once and
+reuses the resolved path across reconnects. It preserves `@`-prefixed abstract
+addresses, rejects literal NUL-prefixed addresses when creating the client,
+and checks platform socket-length limits.
 
 ### Kupo provider
 
