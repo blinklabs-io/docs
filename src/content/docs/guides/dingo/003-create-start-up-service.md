@@ -325,7 +325,7 @@ curl http://127.0.0.1:12799/healthz
 curl http://127.0.0.1:12799/readyz
 ```
 
-`/health` and `/healthz` report liveness. `/readyz` reports readiness and is not ready while the tip gap is unavailable or exceeds `healthReadyGapSlots`.
+`/health` and `/healthz` use liveness checks, including event-loop responsiveness. `/readyz` reports readiness and requires the configured tip-gap condition and database readiness. For block producers, readiness also requires a running forger and usable forging credentials, including remote KES readiness where applicable.
 
 To follow the logs in real time:
 
