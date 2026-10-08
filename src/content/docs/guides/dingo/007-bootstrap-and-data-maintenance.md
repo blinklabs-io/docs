@@ -27,6 +27,37 @@ first-run walkthrough. Snapshot size, disk use, and load time vary by network
 and grow as the chain advances; leave space for both downloaded files and the
 database during import.
 
+## Load an ImmutableDB from a local or remote source
+
+`dingo load` accepts a local ImmutableDB directory or a remote ImmutableDB
+root. Supply the source through `immutableDbPath` in the configuration,
+through `DINGO_IMMUTABLE_DB_PATH`, or as the positional input to `dingo load`.
+Use a local directory path for local data. Use an `https://` URL for a remote
+source. Dingo accepts `http://` only when the host is loopback; it rejects
+non-loopback HTTP sources.
+
+A remote root must provide `tip.json` and complete numbered chunk triads. For
+each chunk, provide matching files with the same five digit number:
+
+```text
+tip.json
+NNNNN.chunk
+NNNNN.primary
+NNNNN.secondary
+```
+
+Dingo downloads ahead into staging and ready caches under
+`<databasePath>/immutable-download/`. It stores interrupted downloads as
+`.part` files, resumes them with HTTP Range requests, and retries failed
+requests. Dingo moves complete triads to the ready cache in chunk number order
+and replays the contiguous range. It stops at the first unpublished chunk or
+after the chunk containing the slot from `tip.json`.
+
+The tip slot and block hash must match `tip.json`. If a published `.chunk`
+lacks its matching `.primary` or `.secondary`, the load fails. A hash mismatch
+in `tip.json` also fails the load. Keep every chunk in the contiguous range
+available at the remote root so the load can progress to the tip.
+
 ## Snapshot, restore, and truncate
 
 The `dingo database` commands snapshot, restore, or rewind the configured
