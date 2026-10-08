@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.79.1 Configuration Reference
-description: Complete, release-specific Dingo v0.79.1 configuration reference and example.
+title: Dingo v0.80.0 Configuration Reference
+description: Complete, release-specific Dingo v0.80.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.79.1. The complete
+This page covers the configuration shipped with Dingo v0.80.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.79.1 source](https://github.com/blinklabs-io/dingo/blob/v0.79.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.80.0 source](https://github.com/blinklabs-io/dingo/blob/v0.80.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -36,6 +36,15 @@ for the main runtime choices.
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, registry refresh, parity diagnostics, caching, and startup validation. |
+
+### ImmutableDB source
+
+The `immutableDbPath` setting and the positional input to `dingo load` accept a
+local directory or a remote URL. Remote sources require an `https://` URL;
+`http://` works only for loopback hosts, and Dingo rejects non-loopback HTTP.
+Remote roots provide `tip.json` and numbered `.chunk`, `.primary`, and
+`.secondary` files as chunk triads. See the bootstrap and data maintenance
+guide for the remote source, chunk, and integrity requirements.
 
 ### LocalStateQuery snapshot lifetime
 
@@ -72,6 +81,14 @@ case.
 | Snapshot commit pause bound | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `0s` (no bound). | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual and offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
 
 ### Block production
+
+### Shelley KES agent socket
+
+The `--shelley-kes-agent-socket` flag accepts filesystem socket paths and
+abstract socket addresses. Dingo resolves a relative filesystem path once and
+reuses the resolved path across reconnects. It preserves `@`-prefixed abstract
+addresses, rejects literal NUL-prefixed addresses when creating the client,
+and checks platform socket-length limits.
 
 Dingo v0.77.1 removes `ForgePrimaryChainTipToleranceSlots` and
 `forgePrimaryChainTipToleranceSlots` from YAML, the CLI, and environment
