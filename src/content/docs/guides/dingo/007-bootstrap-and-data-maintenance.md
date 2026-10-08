@@ -37,7 +37,7 @@ for a remote source. Dingo accepts `http://` only when the host is loopback;
 it rejects non-loopback HTTP sources.
 
 A remote root must provide `tip.json` and complete numbered chunk triads. Each
-triad must use the same five digit number for all three files:
+triad must use the same five-digit number for all three files:
 
 ```text
 tip.json
