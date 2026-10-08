@@ -50,13 +50,14 @@ Dingo downloads ahead into staging and ready caches under
 `<databasePath>/immutable-download/`. It stores interrupted downloads as
 `.part` files, resumes them with HTTP Range requests, and retries failed
 requests. Dingo moves complete triads to the ready cache in chunk number order
-and replays the contiguous range. It stops at the first unpublished chunk or
-after the chunk containing the slot in `tip.json`.
+and replays the contiguous range. It stops after the chunk containing the slot
+in `tip.json`, or earlier when it reaches the first unpublished chunk.
 
-Dingo verifies that the slot and block hash in `tip.json` match the loaded tip;
-a mismatch fails the load. If a published `.chunk` lacks its matching
-`.primary` or `.secondary`, the load also fails. Provide every published chunk
-in the contiguous range at the remote root so the load can progress to the tip.
+Dingo checks that the loaded tip's slot and block hash match the values in
+`tip.json`; a mismatch fails the load. If a published `.chunk` lacks its
+matching `.primary` or `.secondary`, the load also fails. Provide every
+published chunk in the contiguous range at the remote root so the load can
+progress to the tip.
 
 ## Snapshot, restore, and truncate
 
