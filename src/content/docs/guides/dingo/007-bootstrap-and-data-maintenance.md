@@ -30,14 +30,14 @@ database during import.
 ## Load an ImmutableDB from a local or remote source
 
 `dingo load` accepts a local ImmutableDB directory or a remote ImmutableDB
-root. Supply the source through `immutableDbPath` in the configuration,
-through `DINGO_IMMUTABLE_DB_PATH`, or as the positional input to `dingo load`.
-Use a local directory path for local data. Use an `https://` URL for a remote
-source. Dingo accepts `http://` only when the host is loopback; it rejects
-non-loopback HTTP sources.
+root. Set `immutableDbPath` in the configuration or
+`DINGO_IMMUTABLE_DB_PATH`, or pass the source as the positional input to
+`dingo load`. Use a local directory path for local data. Use an `https://` URL
+for a remote source. Dingo accepts `http://` only when the host is loopback;
+it rejects non-loopback HTTP sources.
 
-A remote root must provide `tip.json` and complete numbered chunk triads. For
-each chunk, provide matching files with the same five digit number:
+A remote root must provide `tip.json` and complete numbered chunk triads. Each
+triad must use the same five digit number for all three files:
 
 ```text
 tip.json
@@ -51,12 +51,12 @@ Dingo downloads ahead into staging and ready caches under
 `.part` files, resumes them with HTTP Range requests, and retries failed
 requests. Dingo moves complete triads to the ready cache in chunk number order
 and replays the contiguous range. It stops at the first unpublished chunk or
-after the chunk containing the slot from `tip.json`.
+after the chunk containing the slot in `tip.json`.
 
-The tip slot and block hash must match `tip.json`. If a published `.chunk`
-lacks its matching `.primary` or `.secondary`, the load fails. A hash mismatch
-in `tip.json` also fails the load. Keep every chunk in the contiguous range
-available at the remote root so the load can progress to the tip.
+Dingo verifies that the slot and block hash in `tip.json` match the loaded tip;
+a mismatch fails the load. If a published `.chunk` lacks its matching
+`.primary` or `.secondary`, the load also fails. Provide every published chunk
+in the contiguous range at the remote root so the load can progress to the tip.
 
 ## Snapshot, restore, and truncate
 
