@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.79.1）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.80.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.79.1/dingo-v0.79.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.80.0/dingo-v0.80.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -65,8 +65,8 @@ npx @blinklabs/dingo --help
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingo v0.79.1の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+Dingo v0.80.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
+同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
 
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
@@ -219,7 +219,7 @@ Dingoは次の処理を行います：
 
 > 📝 このステップをスキップした場合、Dingoは起動時にgenesisから同期するため、はるかに長い時間がかかります。
 
-> 📝 Dingoはポート `12799` でヘルスプローブを提供します。`/health` と `/healthz` は稼働確認に、`/readyz` はレディネス確認に使用します。先端とのギャップを取得できない場合、または `healthReadyGapSlots` の設定値を超えた場合、`/readyz` は未準備を示します。ヘルスプローブは Mithril のブートストラップ中も利用できます。コンテナのヘルスチェックは `/metrics` ではなく `/health` を使用します。
+> 📝 Dingoはポート `12799` でヘルスプローブを提供します。`/health` と `/healthz` はイベントループの応答性を含む稼働確認に、`/readyz` はレディネス確認に使用します。先端とのギャップを取得できない場合、または `healthReadyGapSlots` の設定値を超えた場合、`/readyz` は未準備を示します。`/readyz` はデータベースを読み取れることも必要とします。ブロックプロデューサーでは、実行中のフォージャーと使用可能な認証情報も必要です。リモートKESを使用する場合は、リモートKESの準備完了も必要です。ヘルスプローブは Mithril のブートストラップ中も利用できます。コンテナのヘルスチェックは `/metrics` ではなく `/health` を使用します。
 
 ***
 
