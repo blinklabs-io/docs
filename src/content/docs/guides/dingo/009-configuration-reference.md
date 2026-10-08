@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.79.1 Configuration Reference
-description: Complete, release-specific Dingo v0.79.1 configuration reference and example.
+title: Dingo v0.80.0 Configuration Reference
+description: Complete, release-specific Dingo v0.80.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.79.1. The complete
+This page covers the configuration shipped with Dingo v0.80.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.79.1 source](https://github.com/blinklabs-io/dingo/blob/v0.79.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.80.0 source](https://github.com/blinklabs-io/dingo/blob/v0.80.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -36,6 +36,16 @@ for the main runtime choices.
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, registry refresh, parity diagnostics, caching, and startup validation. |
+
+### ImmutableDB source
+
+The `immutableDbPath` setting and the positional input to `dingo load` accept a
+local directory or a remote URL. Remote sources require an `https://` URL;
+`http://` works only for loopback hosts, and Dingo rejects non-loopback HTTP.
+Remote roots provide `tip.json` and numbered `.chunk`, `.primary`, and
+`.secondary` files as chunk triads. Dingo rejects mismatched or incomplete
+published chunk data. See the bootstrap and data maintenance guide for the
+remote source, chunk, and integrity requirements.
 
 ### LocalStateQuery snapshot lifetime
 
@@ -83,6 +93,14 @@ Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` environment variable. Its default is
 `0`, which disables the bound. Dingo evaluates the bound only when a
 corroborated upstream target exists and ignores it when the target is unknown.
+
+#### Shelley KES agent socket
+
+The `--shelley-kes-agent-socket` flag supports filesystem socket paths and
+Linux abstract socket addresses. Dingo resolves a relative filesystem path
+once at client construction and reuses the resolved path across reconnects. It
+preserves `@`-prefixed abstract addresses, rejects literal NUL-prefixed
+addresses at client construction, and enforces platform socket-length limits.
 
 ### Kupo provider
 

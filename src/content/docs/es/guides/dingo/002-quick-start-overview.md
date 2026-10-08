@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.79.1/dingo-v0.79.1-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.80.0/dingo-v0.80.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -65,8 +65,8 @@ Después de una instalación global, usa `dingo` en lugar de `./dingo` en los pa
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Para consultar todos los ajustes de Dingo v0.79.1, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
-Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example) correspondiente a esa versión como punto de partida para tu configuración.
+Para consultar todos los ajustes de Dingo v0.80.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
+Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example) correspondiente a esa versión como punto de partida para tu configuración.
 
 Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
@@ -227,7 +227,7 @@ cd ~/dingo
 
 > 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
 
-> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando la brecha de slots respecto a la punta de la red está disponible y no supera `healthReadyGapSlots`; informa que no está listo cuando la brecha no se conoce o supera ese límite. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
+> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad y verifican que el bucle de eventos responda. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando se conoce la brecha de slots respecto a la punta de la red y no supera `healthReadyGapSlots`, la base de datos está disponible y, para los productores de bloques, el forjador está en ejecución y las credenciales se pueden usar; cuando corresponde, también requiere que KES remoto esté disponible. Informa que no está listo cuando la brecha no se conoce o supera ese límite, la base de datos no está disponible, no se cumplen los requisitos del productor de bloques o KES remoto no está disponible cuando corresponde. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
 
 Dingo:
 1. Descargará la última instantánea de Mithril para tu red configurada

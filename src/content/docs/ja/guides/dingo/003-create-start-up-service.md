@@ -269,7 +269,7 @@ curl -i http://127.0.0.1:12799/healthz
 curl -i http://127.0.0.1:12799/readyz
 ```
 
-`/health` と `/healthz` は liveness（生存確認）プローブです。`/readyz` は readiness（準備完了確認）プローブで、tip gap が不明、または `healthReadyGapSlots` を超える場合は未準備になります。Mithril のブートストラップ中もこれらのプローブを利用できます。
+`/health` と `/healthz` は、イベントループの応答性を含む liveness（生存確認）を確認します。`/readyz` は、tip gap が不明でなく、`healthReadyGapSlots` を超えず、データベースも準備完了している場合に、readiness（準備完了確認）と判定します。ブロックプロデューサーでは、forger が実行中で、認証情報が使用可能であること（該当する場合はリモート KES の準備完了を含む）も必要です。Mithril のブートストラップ中もこれらのプローブを利用できます。
 
 サービスが実行中であることを確認します：
 

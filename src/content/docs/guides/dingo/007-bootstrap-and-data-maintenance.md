@@ -27,6 +27,38 @@ first-run walkthrough. Snapshot size, disk use, and load time vary by network
 and grow as the chain advances; leave space for both downloaded files and the
 database during import.
 
+## Load an ImmutableDB from a local or remote source
+
+`dingo load` accepts a local ImmutableDB directory or a remote ImmutableDB
+root. Set `immutableDbPath` in the configuration or
+`DINGO_IMMUTABLE_DB_PATH`, or pass the source as the positional input to
+`dingo load`. Use a local directory path for local data. Use an `https://` URL
+for a remote source. Dingo accepts `http://` only when the host is loopback;
+it rejects non-loopback HTTP sources.
+
+A remote root must provide `tip.json` and complete numbered chunk triads. Each
+triad must use the same five-digit number for all three files:
+
+```text
+tip.json
+NNNNN.chunk
+NNNNN.primary
+NNNNN.secondary
+```
+
+Dingo downloads ahead into staging and ready caches under
+`<databasePath>/immutable-download/`. It stores interrupted downloads as
+`.part` files, resumes them with HTTP Range requests, and retries failed
+requests. Dingo moves complete triads to the ready cache in chunk number order
+and replays the contiguous range. It stops after the chunk containing the slot
+in `tip.json`, or earlier when it reaches the first unpublished chunk.
+
+Dingo checks that the loaded tip's slot and block hash match the values in
+`tip.json`; a mismatch fails the load. If a published `.chunk` lacks its
+matching `.primary` or `.secondary`, the load also fails. Provide every
+published chunk in the contiguous range at the remote root so the load can
+progress to the tip.
+
 ## Snapshot, restore, and truncate
 
 The `dingo database` commands snapshot, restore, or rewind the configured
@@ -60,8 +92,8 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-and download host allowlists in the Dingo v0.79.1
-[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example). Use it
+and download host allowlists in the Dingo v0.80.0
+[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example). Use it
 with that release only; configuration options can change between versions.
 
 Configure the compressed download limit for each Mithril object with `mithril.downloadMaxBytes` in `dingo.yaml`, `--mithril-download-max-bytes` on the command line, or `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` in the environment. Set the value to `0` to use the built-in limits. The `v1` limit is `512 GiB`; `v2` uses `1 GiB` for immutable archives, `256 MiB` for the digest list, and `64 GiB` for ancillary data. A positive byte value replaces the built-in limit for each downloaded object. A negative value is invalid and causes configuration validation to fail.
