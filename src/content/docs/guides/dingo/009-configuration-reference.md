@@ -43,8 +43,8 @@ The `immutableDbPath` setting and the positional input to `dingo load` accept a
 local directory or a remote URL. Remote sources require an `https://` URL;
 `http://` works only for loopback hosts, and Dingo rejects non-loopback HTTP.
 Remote roots provide `tip.json` and numbered `.chunk`, `.primary`, and
-`.secondary` files as chunk triads. Dingo fails when published chunk data is
-mismatched or incomplete. See the bootstrap and data maintenance guide for the
+`.secondary` files as chunk triads. Dingo rejects mismatched or incomplete
+published chunk data. See the bootstrap and data maintenance guide for the
 remote source, chunk, and integrity requirements.
 
 ### LocalStateQuery snapshot lifetime
@@ -96,11 +96,11 @@ corroborated upstream target exists and ignores it when the target is unknown.
 
 #### Shelley KES agent socket
 
-The `--shelley-kes-agent-socket` flag accepts filesystem socket paths and
-abstract socket addresses. Dingo resolves a relative filesystem path once and
-reuses the resolved path across reconnects. It preserves `@`-prefixed abstract
-addresses, rejects literal NUL-prefixed addresses when creating the client,
-and checks platform socket-length limits.
+The `--shelley-kes-agent-socket` flag supports filesystem socket paths and
+Linux abstract socket addresses. Dingo resolves a relative filesystem path
+once at client construction and reuses the resolved path across reconnects. It
+preserves `@`-prefixed abstract addresses, rejects literal NUL-prefixed
+addresses at client construction, and enforces platform socket-length limits.
 
 ### Kupo provider
 
