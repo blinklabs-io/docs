@@ -53,8 +53,8 @@ plugins:
         port: 9090
 ```
 
-The complete v0.79.1 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.79.1/dingo.yaml.example) are
+The complete v0.80.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
@@ -89,6 +89,14 @@ maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/).
 Bark has no built-in authentication for ordinary archive traffic. Keep it on a
 trusted network. If you enable the database lifecycle service, follow the
 configuration example's mutual TLS requirements for its maintenance RPCs.
+Bark accepts signed block download URLs only when their normalized HTTPS origin
+matches the configured Bark origin or an explicitly allowed download origin.
+The normalized origin includes the scheme, lowercased host, and effective port.
+Bark checks redirect destinations against the same policy and rejects resolved
+private or special-use addresses. For block-download requests, Bark does not
+use ambient HTTP proxy settings or caller-provided dialers. These rules apply
+only to block downloads; the separately configured Bark RPC client continues to
+handle archive RPC calls.
 
 
 ---
