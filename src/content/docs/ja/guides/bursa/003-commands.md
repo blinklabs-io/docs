@@ -63,7 +63,6 @@ http://localhost:8080/swagger/index.html
 
 ![bursa-swagger](/bursa-swagger.png)
 
-
 ループバック以外でAPIを公開する場合のTLSとBearer認証の要件は、[設定リファレンス](../009-configuration-reference)を参照してください。
 
 <a name="kes-agent"></a>
