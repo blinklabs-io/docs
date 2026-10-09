@@ -37,15 +37,6 @@ They are useful for simple payments without staking delegation.
 ./bursa address build --stake-key stake_vk1... --network mainnet --type reward
 ```
 
-#### Address Parsing API
-`POST /api/address/parse` accepts an optional `format` field in the JSON request:
-
-- Omit `format`, or set it to `text`, to submit a bech32 or base58 address.
-- Set `format` to `hex` to submit raw address bytes as hexadecimal.
-- Set `format` to `base64` to submit raw address bytes as Base64.
-
-The endpoint returns the decoded address in canonical string form. It returns HTTP 400 when `format` uses an unsupported value or when the selected format cannot decode the address input.
-
 #### Address Info
 We can use the `address info` command to display information about a Cardano address. 
 Credentials are displayed in both bech32 and hex formats. 
