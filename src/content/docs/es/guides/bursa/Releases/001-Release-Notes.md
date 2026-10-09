@@ -11,7 +11,6 @@ Cada versión enlaza a las notas completas. La versión más reciente aparece pr
 
 - Versión: v0.19.0 - *[Ver las notas de la versión](../v0-19-0)*
 
-
 ---
 
 <!-- doc-holiday-watermark -->
