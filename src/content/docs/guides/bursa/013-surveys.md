@@ -291,7 +291,6 @@ The request returns the updated survey detail. `consent` allows the wallet to fe
 
 - Invalid JSON or invalid request values return an error response.
 - A survey ID that does not exist returns a not-found error.
-- A reveal request without consent or a pasted beacon returns a consent error.
 - Survey list responses can include `partial: true` while label-17 history indexing continues. A detail request can return `503` while indexing cannot yet provide a complete result.
 - A node that is unavailable or not ready for the requested operation returns `503`. Reads require a queryable node; response, creation, and cancellation requests require a fully synced node and local signing seed.
 
