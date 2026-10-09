@@ -290,7 +290,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 `bursa key bls` は、Dijkstra時代のLeiosおよびPerasでステークプールを登録するためのBLS12-381 MinSig鍵と所有証明を生成します。このコマンドは、他の鍵コマンドで使用するニーモニックやニーモニックファイルを読み取らず、暗号学的に安全な乱数から新しい鍵の素材を生成します。
 
 ```bash
-./bursa key bls --signing-key-file /path/bls.skey
+./bursa key bls --signing-key-file /path/to/bls.skey
 ```
 
 3つの出力先を指定する例:
