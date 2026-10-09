@@ -52,7 +52,18 @@ Set environment variables before the first launch to seed the wallet configurati
 | `BURSA_LEAN` | `false` | Enables lean storage, which prunes historical chain data to reduce disk usage. |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
 
+Connector pairing requests must include an `Origin` header that matches the normalized origin for `extension_id`. For example, the wallet normalizes a bare extension ID to a `chrome-extension://` origin. A missing or non-matching `Origin` receives HTTP `403`. The Origin check supplements the pairing code and token flow; it does not replace them.
+
 The wallet persists settings configured in its interface after the first run. After the wallet stores a setting, that value takes precedence over the environment variable.
+
+### NFT media settings
+
+NFT media remains disabled by default and requires explicit opt-in when support is available. The `GET /wallet/settings/nft-media` and `PUT /wallet/settings/nft-media` endpoints expose `enabled` and `available`:
+
+- `enabled` indicates whether NFT image media is enabled. The `PUT` request accepts this value to change the setting.
+- `available` indicates whether the current build includes NFT media support.
+
+When `available` is `false`, the wallet can still show NFT and token data, but the interface does not allow image media to be enabled. In that state, `enabled` remains `false`.
 
 ## Build from source
 
