@@ -22,9 +22,9 @@ Bursa acepta `mainnet`, `preprod` y `preview` como valores de red. Las solicitud
 
 #### Análisis de dirección mediante la API
 La solicitud `POST /api/address/parse` admite el campo JSON opcional `format`:
-- Si se omite o se establece en `text`, `address` se interpreta como una dirección en texto (`bech32` o `base58`). `text` es el valor predeterminado.
-- `hex` interpreta `address` como bytes sin procesar de la dirección codificados en hexadecimal.
-- `base64` interpreta `address` como bytes sin procesar de la dirección codificados en Base64.
+- Si se omite `format` o se establece en `text`, la API interpreta `address` como una dirección en texto (`bech32` o `base58`). `text` es el valor predeterminado.
+- Con `hex`, la API interpreta `address` como bytes sin procesar de la dirección codificados en hexadecimal.
+- Con `base64`, la API interpreta `address` como bytes sin procesar de la dirección codificados en Base64.
 
 Después de decodificar `address`, la API devuelve la cadena de dirección canónica.
 
