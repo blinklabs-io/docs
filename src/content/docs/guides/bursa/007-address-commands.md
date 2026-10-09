@@ -44,7 +44,7 @@ They are useful for simple payments without staking delegation.
 - Set `format` to `hex` to submit raw address bytes as hexadecimal.
 - Set `format` to `base64` to submit raw address bytes as Base64.
 
-The endpoint returns the decoded address in canonical string form. It returns HTTP 400 when `format` has an unsupported value or the encoded address input is invalid.
+The endpoint returns the decoded address in canonical string form. It returns HTTP 400 when `format` uses an unsupported value or when the selected format cannot decode the address input.
 
 #### Address Info
 We can use the `address info` command to display information about a Cardano address. 
