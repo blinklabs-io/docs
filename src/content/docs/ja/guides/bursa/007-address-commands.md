@@ -19,7 +19,7 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 
 ### アドレスの作成
 有効なネットワーク値は `mainnet`、`preprod`、`preview` です。対象のAPIリクエスト（`POST /api/script/create`、`POST /api/script/address`、`POST /api/address/build`）では `testnet` を使用できず、指定するとHTTP 400のバリデーションエラーになります。
-- ベースアドレス (支払い + ステーク認証情報)
+ - ベースアドレス (支払い + ステーク認証情報)
 ```bash
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
 ```
