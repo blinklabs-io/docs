@@ -65,8 +65,6 @@ http://localhost:8080/swagger/index.html
 
 For non-loopback listeners, use the [configuration reference](../009-configuration-reference) to configure TLS and exactly one bearer authentication trust source.
 
-When validation capacity is busy, `POST /api/script/validate` returns HTTP status `503` (`Service Unavailable`) with the error `script validation busy`. Callers should retry the request.
-
 ***
 
 <a name="kes-agent"></a>
