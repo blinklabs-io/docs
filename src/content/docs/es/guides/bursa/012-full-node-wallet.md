@@ -52,6 +52,14 @@ Configurar las variables de entorno antes de ejecutar `bursa-wallet`:
 | `BURSA_LEAN` | `false` | Usar el perfil de almacenamiento reducido, que elimina datos históricos de la cadena para reducir el espacio en disco. |
 | `BURSA_CONNECTOR` | `false` | Activar el conector de aplicaciones descentralizadas. |
 
+El endpoint `POST /connector/pair` solo acepta solicitudes cuyo encabezado `Origin` coincide con el origen normalizado de la extensión indicado por `extension_id`. Bursa normaliza un identificador sin esquema como `chrome-extension://<extension_id>`; si el encabezado falta o contiene otro origen, el monedero rechaza la solicitud con HTTP `403`. Este requisito se suma al código de emparejamiento: el flujo sigue requiriendo el código que muestra la aplicación.
+
+### Disponibilidad de medios NFT
+
+El endpoint `GET /wallet/settings/nft-media` devuelve los campos `enabled` y `available`. El endpoint `PUT /wallet/settings/nft-media` también devuelve ambos campos después de una actualización correcta. `enabled` indica si los medios están activados y `available` indica si la compilación ofrece compatibilidad con los medios NFT.
+
+Cuando `available` es `false`, la interfaz puede seguir mostrando saldos y datos de tokens, pero no puede activar las imágenes NFT y no debe ofrecer una acción para habilitarlas. Cuando `available` es `true`, `enabled` conserva el comportamiento de activación voluntaria de los medios.
+
 Por ejemplo, iniciar el monedero en `mainnet` con la sincronización predeterminada:
 
 ```bash
