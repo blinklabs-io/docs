@@ -69,7 +69,7 @@ Cuando la API heredada escucha en una dirección que no sea de loopback, configu
 
 ### Respuesta de validación de scripts
 
-Al llamar a `POST /api/script/validate`, una respuesta HTTP `503` indica que la validación está ocupada. Reintente la solicitud.
+La respuesta HTTP `503` de `POST /api/script/validate` indica que la validación está ocupada. Reintente la solicitud.
 
 ***
 
