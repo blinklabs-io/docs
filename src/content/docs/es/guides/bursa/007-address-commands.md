@@ -21,8 +21,8 @@ Bursa se puede usar para generar direcciones de billetera de Cardano a partir de
 Bursa acepta `mainnet`, `preprod` y `preview` como valores de red. Las solicitudes de API afectadas (`POST /api/script/create`, `POST /api/script/address` y `POST /api/address/build`) rechazan `testnet` y devuelven un error de validación HTTP 400.
 
 #### Análisis de dirección mediante la API
-La solicitud `POST /api/address/parse` admite el campo JSON opcional `format`:
-- Si se omite `format` o se establece en `text`, la API interpreta `address` como una dirección en texto (`bech32` o `base58`). `text` es el valor predeterminado.
+La API admite el campo JSON opcional `format` en `POST /api/address/parse`:
+- Si la solicitud omite `format` o incluye `text`, la API interpreta `address` como una dirección en texto (`bech32` o `base58`). `text` es el valor predeterminado.
 - Con `hex`, la API interpreta `address` como bytes sin procesar de la dirección codificados en hexadecimal.
 - Con `base64`, la API interpreta `address` como bytes sin procesar de la dirección codificados en Base64.
 
