@@ -63,7 +63,7 @@ NFT media remains disabled by default and requires explicit opt-in when support 
 - `enabled` indicates whether NFT image media is enabled. The `PUT` request accepts this value to change the setting.
 - `available` indicates whether the current build includes NFT media support.
 
-When `available` is `false`, the wallet can still show NFT and token data, but the interface does not allow image media to be enabled. In that state, `enabled` remains `false`.
+When `available` is `false`, the wallet can still show NFT and token data, but the interface blocks enabling image media. In that state, `enabled` remains `false`.
 
 ## Build from source
 
