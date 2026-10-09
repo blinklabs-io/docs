@@ -290,7 +290,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 `bursa key bls` は、Dijkstra時代のLeiosおよびPerasでステークプールを登録するためのBLS12-381 MinSig鍵と所有証明を生成します。このコマンドは、他の鍵コマンドで使用するニーモニックやニーモニックファイルを読み取らず、暗号学的に安全な乱数から新しい鍵の素材を生成します。
 
 ```bash
-./bursa key bls
+./bursa key bls --signing-key-file /path/bls.skey
 ```
 
 3つの出力先を指定する例:
@@ -299,9 +299,9 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
 ```
 
-3つのフラグはすべて任意です。
+BLSコマンドでは、`--signing-key-file` が必須です。`--verification-key-file` と `--output-file` は任意です。
 
-- `--signing-key-file` は、BLS署名鍵を書き込むファイルのパスです。指定した場合、Bursaは署名鍵を`cardano-cli`互換の`BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。指定しない場合、署名用秘密鍵を表示または保存しません。
+- `--signing-key-file` は、BLS署名鍵を書き込むファイルのパスです。Bursaは署名鍵を`cardano-cli`互換の`BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
 - `--verification-key-file` は、BLS検証鍵を書き込むファイルのパスです。指定した場合、Bursaは検証鍵を`cardano-cli`互換の`BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
 - `--output-file` は、登録用JSONを書き込むファイルのパスです。省略すると、Bursaは登録用JSONを標準出力に書き込みます。
 
