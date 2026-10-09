@@ -133,21 +133,36 @@ The response extends the summary with the survey definition:
 ```json
 {
   "id": "<transaction hash>:<index>",
+  "tx_hash": "<transaction hash>",
+  "index": 0,
   "title": "Example survey",
   "description": "Survey description",
+  "owner": "<owner identifier>",
+  "owner_script": false,
   "roles": [0, 1],
   "end_epoch": 1234,
-  "mode": {
-    "sealed": false
+  "status": "open",
+  "sealed": false,
+  "questions": 1,
+  "linked_actions": [],
+  "owned": true,
+  "definition": {
+    "title": "Example survey",
+    "description": "Survey description",
+    "roles": [0, 1],
+    "end_epoch": 1234,
+    "mode": {
+      "sealed": false
+    },
+    "questions": [
+      {
+        "kind": 1,
+        "prompt": "Select one option",
+        "options": ["Yes", "No"],
+        "required": true
+      }
+    ]
   },
-  "questions": [
-    {
-      "kind": 1,
-      "prompt": "Select one option",
-      "options": ["Yes", "No"],
-      "required": true
-    }
-  ],
   "tally": {
     "roles": [],
     "excluded": []
@@ -270,7 +285,7 @@ Or provide a beacon directly:
 }
 ```
 
-The request returns the updated survey detail. `consent` allows the wallet to fetch the Drand beacon from the public relay. `beacon` supplies the reveal input without an external fetch. The request is rejected when it provides neither consent nor a beacon.
+The request returns the updated survey detail. `consent` allows the wallet to fetch the Drand beacon from the public relay. `beacon` supplies the reveal input without an external fetch. The API returns a consent error when the request provides neither consent nor a beacon.
 
 ## Errors and node state
 
@@ -279,7 +294,6 @@ The request returns the updated survey detail. `consent` allows the wallet to fe
 - A reveal request without consent or a pasted beacon returns a consent error.
 - Survey list responses can include `partial: true` while label-17 history indexing continues. A detail request can return `503` while indexing cannot yet provide a complete result.
 - A node that is unavailable or not ready for the requested operation returns `503`. Reads require a queryable node; response, creation, and cancellation requests require a fully synced node and local signing seed.
-- Response, creation, and cancellation endpoints return pending previews. The existing send confirmation endpoint, `POST /wallet/send/{id}/confirm`, signs and submits the preview.
 
 ---
 
