@@ -292,7 +292,7 @@ El comando `bursa key bls` genera material BLS12-381 MinSig criptográficamente 
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
 ```
 
-Las tres banderas de destino son opcionales:
+La bandera `--signing-key-file <ruta>` es obligatoria. Las banderas `--verification-key-file` y `--output-file` son opcionales:
 
 - `--signing-key-file` guarda la clave de firma en un sobre compatible con cardano-cli de tipo `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa nunca imprime el secreto de firma; el comando solo lo guarda cuando recibe esta bandera.
 - `--verification-key-file` guarda la clave de verificación en un sobre compatible con cardano-cli de tipo `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`.
