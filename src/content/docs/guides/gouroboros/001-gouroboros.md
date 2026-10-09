@@ -13,7 +13,7 @@ gOuroboros is a powerful and versatile framework for building Go apps that inter
 
 Remove `EnableByronSscProofHashValidation` and `EnableByronPayloadValidation` from any `common.VerifyConfig` setup. The `consensus/byron.ValidateBodyHash(block)` function and the `(*ledger/byron.ByronMainBlock).ValidateBodyProof()` method no longer accept a `VerifyConfig` argument.
 
-Byron main block decoding authenticates SSC proof hashes and delegation or update payload signatures by default. For parse only behavior, pass `common.VerifyConfig{SkipBodyHashValidation: true}` to `NewByronMainBlockFromCbor`, then perform the required validation before trusting the result.
+Byron main block decoding authenticates SSC proof hashes and delegation or update payload signatures by default. To request parse only behavior, pass `common.VerifyConfig{SkipBodyHashValidation: true}` to `NewByronMainBlockFromCbor`, then perform the desired validation before trusting the result.
 
 ### Strict CBOR and transaction input handling
 
