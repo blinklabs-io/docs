@@ -55,14 +55,14 @@ BURSA_NETWORK=preview BURSA_SYNC=mithril BURSA_LEAN=false BURSA_CONNECTOR=false 
 
 ### NFTメディアの可用性
 
-`GET /wallet/settings/nft-media`と`PUT /wallet/settings/nft-media`は、次のフィールドを返します。
+`GET /wallet/settings/nft-media`は、次のフィールドを返します。NFTメディアが利用可能な場合、`PUT /wallet/settings/nft-media`の成功レスポンスも同じフィールドを返します。
 
 | フィールド | 動作 |
 | --- | --- |
 | `enabled` | NFT画像の取得と表示を有効にするかどうかを示します。利用可能な場合でも既定では無効で、明示的に有効化する必要があります。 |
 | `available` | 実行中のビルドがNFTメディアに対応しているかどうかを示します。 |
 
-`available`が`false`の場合でも、ウォレットはNFTやトークンの情報を表示できますが、NFT画像を有効にできません。インターフェースは有効化の操作を無効にします。`available`が`true`の場合は、`enabled`を明示的に有効化したときだけNFT画像を取得して表示します。NFTメディアに対応しないビルドで設定を有効にしようとすると、設定操作は利用できません。
+`available`が`false`の場合でも、ウォレットはNFTやトークンの情報を表示できますが、NFT画像を有効にできません。インターフェースは有効化の操作を無効にします。`available`が`true`の場合は、`enabled`を明示的に有効化したときだけNFT画像を取得して表示します。
 
 ## ソースからのビルド
 
