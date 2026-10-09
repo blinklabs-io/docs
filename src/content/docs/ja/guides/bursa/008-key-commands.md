@@ -299,7 +299,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
 ```
 
-BLSコマンドでは、`--signing-key-file` が必須です。`--verification-key-file` と `--output-file` は任意です。
+`--signing-key-file` は必須です。`--verification-key-file` と `--output-file` は任意です。
 
 - `--signing-key-file` は、BLS署名鍵を書き込むファイルのパスです。Bursaは署名鍵を`cardano-cli`互換の`BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
 - `--verification-key-file` は、BLS検証鍵を書き込むファイルのパスです。指定した場合、Bursaは検証鍵を`cardano-cli`互換の`BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
