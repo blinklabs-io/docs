@@ -67,10 +67,6 @@ http://localhost:8080/swagger/index.html
 
 Cuando la API heredada escucha en una dirección que no sea de loopback, configure TLS y exactamente una fuente de confianza bearer. Consulte la [referencia de configuración](../009-configuration-reference).
 
-### Respuesta de validación de scripts
-
-Si `POST /api/script/validate` devuelve HTTP `503`, la validación está ocupada. Reintente la solicitud.
-
 ***
 
 <a name="kes-agent"></a>
