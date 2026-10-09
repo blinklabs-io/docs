@@ -289,9 +289,9 @@ Output is in bech32 format (cc_hot_xsk prefix) unless key files are specified.
 #### Dijkstra BLS Key and Registration Material
 The BLS command generates cryptographically random BLS12-381 MinSig material for Dijkstra-era Leios and Peras stake-pool registration. It does not use the mnemonic input sources described for the other key commands.
 
-Each destination flag is optional:
+The `--signing-key-file <path>` option is required. The `--verification-key-file` and `--output-file` options are optional:
 
-- `--signing-key-file` writes the signing key to the specified file. The command never prints the signing key. When the command omits this flag, it does not print or persist the signing secret.
+- `--signing-key-file <path>` writes the signing key to the specified file. The command never prints the signing key.
 - `--verification-key-file` writes the verification key to the specified file.
 - `--output-file` writes the registration JSON to the specified file. When the command omits this flag, Bursa prints the registration JSON to standard output.
 
@@ -304,7 +304,7 @@ The registration JSON contains exactly these fields:
 - `publicKey`: the 96-byte public key as a lowercase hexadecimal string.
 - `possessionProof`: the 48-byte proof of possession as a lowercase hexadecimal string.
 
-Bursa verifies the generated proof before it produces the registration output. The optional signing key file uses the cardano-cli envelope type `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. The optional verification key file uses `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa writes each generated destination file with owner-only permissions. Protect and back up the signing key file as stake-pool credential material.
+Bursa verifies the generated proof before it produces the registration output. The required signing key file uses the cardano-cli envelope type `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. The optional verification key file uses `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa writes each generated destination file with owner-only permissions. Protect and back up the signing key file as stake-pool credential material.
 
 The three destination paths must be distinct. Bursa rejects direct path collisions and paths that resolve to the same file through path normalization or symbolic links.
 
