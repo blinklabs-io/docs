@@ -11,7 +11,7 @@ gOuroboros es un framework potente y versatil para construir aplicaciones Go que
 
 La API de Byron ya no incluye los campos `EnableByronSscProofHashValidation` ni `EnableByronPayloadValidation` en `common.VerifyConfig`. Además, `consensus/byron.ValidateBodyHash` y `(*ledger/byron.ByronMainBlock).ValidateBodyProof` ya no aceptan un argumento `VerifyConfig`. Las llamadas que usen esos campos o las firmas antiguas ya no compilan y deben actualizarse.
 
-La autenticación de Byron se ejecuta de forma predeterminada. La decodificación verifica los hashes de las pruebas SSC y las firmas de los payloads de delegación y actualización; si una comprobación falla, devuelve un error. Para realizar únicamente el análisis estructural, use:
+La decodificación de Byron autentica de forma predeterminada. Verifica los hashes de las pruebas SSC y las firmas de los payloads de delegación y actualización; si una comprobación falla, devuelve un error. Para realizar únicamente el análisis estructural, use:
 
 ```go
 common.VerifyConfig{SkipBodyHashValidation: true}
@@ -21,7 +21,7 @@ Esta opción omite la validación de las pruebas del cuerpo durante la decodific
 
 ## Validación estricta de CBOR y entradas Shelley
 
-Los constructores públicos que decodifican CBOR consumen un único elemento completo. Si la entrada contiene datos CBOR adicionales al final, la decodificación devuelve un error en lugar de aceptar parcialmente la entrada.
+Los constructores públicos de CBOR consumen un único elemento completo. Si la entrada contiene datos CBOR adicionales al final, la decodificación devuelve un error en lugar de aceptar parcialmente la entrada.
 
 Las entradas de transacción Shelley también deben cumplir estas condiciones:
 
