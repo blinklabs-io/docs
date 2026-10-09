@@ -19,8 +19,9 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 
 ### アドレスの作成
 有効なネットワーク値は `mainnet`、`preprod`、`preview` です。対象のAPIリクエスト（`POST /api/script/create`、`POST /api/script/address`、`POST /api/address/build`）では `testnet` を使用できず、指定するとHTTP 400のバリデーションエラーになります。
+
 ### アドレス解析API
-`POST /api/address/parse` は、リクエストJSONの任意フィールド `format` でアドレスのエンコーディングを指定できます。
+`POST /api/address/parse` は、リクエストJSONの任意フィールド `format` でアドレスの形式を指定できます。
 
 - `format` を省略するか `text` を指定すると、`address` をテキスト形式のアドレス（bech32またはbase58）として扱います。省略時の既定値は `text` です。
 - `hex` を指定すると、`address` を16進数でエンコードした生のアドレスバイトとして扱います。
