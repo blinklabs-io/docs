@@ -12,7 +12,7 @@ Esta guía describe el flujo funcional y la API de las encuestas y sondeos `CIP-
 - Las consultas leen el historial local del nodo integrado. El monedero no contacta un servicio externo para descubrir, buscar o consultar encuestas.
 - El nodo debe estar en un estado consultable para listar encuestas, abrir detalles y revelar respuestas.
 - Las operaciones que crean transacciones necesitan un nodo completamente sincronizado y una billetera con una semilla local para firmar.
-- El nodo indexa localmente el historial de encuestas. Mientras la indexación continúa, la lista muestra los resultados encontrados hasta ese momento y la respuesta de la API incluye `partial: true`. El detalle espera a que termine la indexación.
+- El nodo indexa localmente el historial de encuestas. Mientras la indexación continúa, la lista muestra los resultados encontrados hasta ese momento y la respuesta de la API incluye `partial: true`. El detalle no devuelve datos hasta que la indexación termina.
 - La interfaz no puede responder preguntas que usan un método personalizado. Si una encuesta contiene una pregunta personalizada obligatoria, el monedero no permite responderla.
 - La encuesta identifica los roles que pueden responder. El monedero solo ofrece los roles para los que la billetera activa tiene las credenciales necesarias.
 
@@ -207,7 +207,7 @@ El identificador de la ruta determina la encuesta. La API devuelve el detalle ac
 - **Solicitud incorrecta:** el monedero rechaza un cuerpo JSON inválido o campos que no cumplen la solicitud de la ruta.
 - **Encuesta no encontrada:** el identificador no corresponde a una encuesta válida o indexada.
 - **Consentimiento requerido:** la revelación necesita `consent` cuando la solicitud no incluye una firma `beacon` pegada.
-- **Indexación en curso:** la lista puede devolver datos parciales con `partial: true`; el detalle espera a que el nodo termine de leer el historial.
+- **Indexación en curso:** la lista puede devolver datos parciales con `partial: true`; el detalle indica que la indexación continúa y no devuelve datos hasta que el nodo termina de leer el historial.
 - **Nodo no disponible o no preparado:** las rutas de lectura y revelación requieren un nodo consultable. Las rutas de respuesta, creación y cancelación requieren además un nodo completamente sincronizado y una semilla local para firmar.
 
 ---
