@@ -63,9 +63,6 @@ http://localhost:8080/swagger/index.html
 
 ![bursa-swagger](/bursa-swagger.png)
 
-### スクリプト検証の応答
-
-すべての検証枠が使用中のとき、`POST /api/script/validate` は HTTP 503 を返します。検証を再試行してください。
 
 ループバック以外でAPIを公開する場合のTLSとBearer認証の要件は、[設定リファレンス](../009-configuration-reference)を参照してください。
 
