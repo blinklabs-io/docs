@@ -17,7 +17,7 @@ Byron main block decoding authenticates SSC proof hashes and delegation or updat
 
 ### Strict CBOR and transaction input handling
 
-Public CBOR constructors reject trailing top level CBOR data and malformed headers, blocks, transactions, bodies, or outputs. Shelley transaction inputs must contain a 32 byte hash and an output index from `0` through `65535`; malformed input, trailing data, and out of range indexes return errors instead of being accepted or causing a panic. Callers that process external CBOR or constructor input must handle these errors.
+Public CBOR constructors reject trailing top level CBOR data and malformed headers, blocks, transactions, bodies, or outputs. Shelley transaction inputs must contain a 32 byte hash and an output index from `0` through `65535`; the decoder returns errors for malformed input, trailing data, and out of range indexes, and it does not panic. Callers that process external CBOR or constructor input must handle these errors.
 
 ***
 
