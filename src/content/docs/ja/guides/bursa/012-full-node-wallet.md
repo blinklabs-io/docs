@@ -45,24 +45,11 @@ bursa-wallet
 | `BURSA_LEAN` | `false` | `true`を指定すると、履歴チェーンデータを整理する省容量プロファイルを使用します。 |
 | `BURSA_CONNECTOR` | `false` | `true`を指定すると、dAppコネクターのバックエンドを有効にします。 |
 
-`BURSA_CONNECTOR=true`でコネクターを有効にする場合、`POST /connector/pair`には、`extension_id`から正規化した拡張機能のOriginと一致する`Origin`ヘッダーが必要です。Originがない場合や一致しない場合、ウォレットは`HTTP 403`を返します。このOriginの確認はペアリングコードに代わるものではなく、ペアリングコードによる確認も引き続き必要です。
-
 ```bash
 BURSA_NETWORK=preview BURSA_SYNC=mithril BURSA_LEAN=false BURSA_CONNECTOR=false bursa-wallet
 ```
 
 ウォレットは`127.0.0.1:8090`でサービスを提供します。ウォレットはインターフェースで変更した設定を初回起動後に保存し、保存済みの値を以後の環境変数より優先します。`BURSA_NETWORK`は`~/.bursa-wallet/<network>/`のデータディレクトリも決定し、ウォレットはログをその配下の`logs/bursa-wallet.log`に保存します。
-
-### NFTメディアの可用性
-
-`GET /wallet/settings/nft-media`は、次のフィールドを返します。NFTメディアが利用可能な場合、`PUT /wallet/settings/nft-media`の成功レスポンスも同じフィールドを返します。
-
-| フィールド | 動作 |
-| --- | --- |
-| `enabled` | NFT画像の取得と表示を有効にするかどうかを示します。利用可能な場合でも既定では無効で、明示的に有効化する必要があります。 |
-| `available` | 実行中のビルドがNFTメディアに対応しているかどうかを示します。 |
-
-`available`が`false`の場合でも、ウォレットはNFTやトークンの情報を表示できますが、NFT画像を有効にできません。インターフェースは有効化の操作を無効にします。`available`が`true`の場合は、`enabled`を明示的に有効化したときだけNFT画像を取得して表示します。
 
 ## ソースからのビルド
 
