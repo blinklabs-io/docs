@@ -13,7 +13,7 @@ gOuroborosは、Cardanoブロックチェーンと連携するGoアプリケー�
 
 `common.VerifyConfig` から `EnableByronSscProofHashValidation` と `EnableByronPayloadValidation` を削除しました。これらを参照するコードはコンパイルできません。
 
-`consensus/byron.ValidateBodyHash` と `(*ledger/byron.ByronMainBlock).ValidateBodyProof` は `VerifyConfig` 引数を受け取りません。以前の引数を渡す呼び出しを削除してください。Byron の証明とペイロードの認証は、デコードおよび body proof の検証でデフォルトで実行します。
+`consensus/byron.ValidateBodyHash` と `(*ledger/byron.ByronMainBlock).ValidateBodyProof` は `VerifyConfig` 引数を受け取りません。以前の引数を渡す呼び出しを削除してください。Byron の証明とペイロードの認証は、デコード時と証明検証時にデフォルトで実行します。
 
 構造だけを解析する場合は `common.VerifyConfig{SkipBodyHashValidation: true}` を指定してください。この設定は認証を省略した parse-only のデコードを行うため、デコードしたデータを信頼する前に、呼び出し側で明示的な検証を実行する必要があります。
 
