@@ -289,7 +289,7 @@ Output is in bech32 format (cc_hot_xsk prefix) unless key files are specified.
 #### Dijkstra BLS Key and Registration Material
 The BLS command generates cryptographically random BLS12-381 MinSig material for Dijkstra-era Leios and Peras stake-pool registration. It does not use the mnemonic input sources described for the other key commands.
 
-`--signing-key-file <path>` is required. The other destination flags are optional:
+The `--signing-key-file <path>` option is required. The `--verification-key-file` and `--output-file` options are optional:
 
 - `--signing-key-file <path>` writes the signing key to the specified file. The command never prints the signing key.
 - `--verification-key-file` writes the verification key to the specified file.
