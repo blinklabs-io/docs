@@ -88,12 +88,12 @@ El cliente serializa `linked` como `linked=true`; los demás parámetros usan su
   "surveys": [],
   "total": 0,
   "page": 1,
-  "count": 20,
-  "partial": false
+  "count": 1,
+  "partial": true
 }
 ```
 
-`surveys` contiene resúmenes. `total` indica cuántas encuestas coinciden antes de paginar; `page` y `count` describen la página devuelta. El campo opcional `partial` aparece como `true` mientras el nodo todavía indexa el historial. Cuando la indexación termina, la API omite el campo o lo devuelve como `false`.
+`surveys` contiene resúmenes. `total` indica cuántas encuestas coinciden antes de paginar; `page` y `count` describen la página devuelta. El campo opcional `partial` aparece como `true` mientras el nodo todavía indexa el historial y la API lo omite cuando la indexación termina.
 
 Cada resumen contiene:
 
