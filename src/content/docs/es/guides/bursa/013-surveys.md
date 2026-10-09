@@ -174,6 +174,7 @@ Envíe un objeto con:
 | `seal` | `{ round, padding_size }` | No | Configura respuestas selladas con la ronda de Drand y el tamaño de relleno. |
 
 La ruta devuelve una vista previa pendiente para confirmación. Después de confirmar, la billetera firma y envía la transacción.
+La ruta devuelve una vista previa pendiente para confirmación. Después de confirmar, el monedero firma y envía la transacción.
 
 ### Cancelar una encuesta
 
