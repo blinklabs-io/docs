@@ -9,9 +9,9 @@ gOuroboros es un framework potente y versatil para construir aplicaciones Go que
 
 ## Compatibilidad de la API de Byron
 
-La API de Byron ya no incluye los campos `EnableByronSscProofHashValidation` ni `EnableByronPayloadValidation` en `common.VerifyConfig`. Además, `consensus/byron.ValidateBodyHash` y `(*ledger/byron.ByronMainBlock).ValidateBodyProof` ya no aceptan un argumento `VerifyConfig`. Las llamadas que usen esos campos o las firmas antiguas ya no compilan y deben actualizarse.
+La API de Byron ya no incluye los campos `EnableByronSscProofHashValidation` ni `EnableByronPayloadValidation` en `common.VerifyConfig`. Además, `consensus/byron.ValidateBodyHash` y `(*ledger/byron.ByronMainBlock).ValidateBodyProof` ya no aceptan un argumento `VerifyConfig`. Las llamadas que usen esos campos o las firmas antiguas ya no compilan; el código debe reemplazarlas.
 
-La decodificación de Byron autentica de forma predeterminada. Verifica los hashes de las pruebas SSC y las firmas de los payloads de delegación y actualización; si una comprobación falla, devuelve un error. Para realizar únicamente el análisis estructural, use:
+La decodificación de Byron autentica de forma predeterminada. Verifica los hashes de las pruebas SSC y las firmas de los payloads de delegación y actualización; si una comprobación falla, devuelve un error. El código que solo necesite análisis estructural puede usar:
 
 ```go
 common.VerifyConfig{SkipBodyHashValidation: true}
@@ -29,7 +29,7 @@ Las entradas de transacción Shelley también deben cumplir estas condiciones:
 - El índice de salida debe ser un entero sin signo entre `0` y `65535`.
 - Una estructura de entrada mal formada, datos adicionales después del hash o del índice, y argumentos de constructor no válidos producen un error.
 
-`NewShelleyTransactionInput` devuelve un error cuando el hash no tiene un formato hexadecimal válido o no tiene 32 bytes. El código que use este constructor debe tratar el error antes de utilizar la entrada.
+`NewShelleyTransactionInput` devuelve un error cuando el hash no tiene un formato hexadecimal válido o no tiene 32 bytes. El código que llame a este constructor debe tratar el error antes de utilizar la entrada.
 
 ***
 
