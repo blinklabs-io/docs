@@ -52,11 +52,11 @@ Configurar las variables de entorno antes de ejecutar `bursa-wallet`:
 | `BURSA_LEAN` | `false` | Usar el perfil de almacenamiento reducido, que elimina datos históricos de la cadena para reducir el espacio en disco. |
 | `BURSA_CONNECTOR` | `false` | Activar el conector de aplicaciones descentralizadas. |
 
-El valor de `Origin` de `POST /connector/pair` debe coincidir con el origen normalizado de la extensión que identifica `extension_id`. Bursa convierte un identificador sin esquema al formato `chrome-extension://<extension_id>`. Si falta `Origin` o especifica otro origen, el monedero rechaza la solicitud con HTTP `403`. Este requisito complementa el código de emparejamiento; el flujo todavía requiere el código que muestra la aplicación.
+Para `POST /connector/pair`, el valor del encabezado `Origin` debe coincidir con el origen normalizado de la extensión asociada a `extension_id`. Bursa convierte un identificador sin esquema al formato `chrome-extension://<extension_id>`. Si falta `Origin` o especifica otro origen, el monedero rechaza la solicitud con HTTP `403`. Este requisito complementa el código de emparejamiento; el flujo todavía requiere el código que muestra la aplicación.
 
 ### Disponibilidad de medios NFT
 
-El endpoint `GET /wallet/settings/nft-media` devuelve los campos `enabled` y `available`, y `PUT /wallet/settings/nft-media` devuelve ambos campos después de una actualización correcta. `enabled` indica si los medios están activados y `available` indica si la compilación ofrece compatibilidad con los medios NFT.
+El endpoint `GET /wallet/settings/nft-media` informa los campos `enabled` y `available`. Tras una actualización correcta, `PUT /wallet/settings/nft-media` devuelve ambos campos. `enabled` indica si los medios están activados y `available` indica si la compilación ofrece compatibilidad con los medios NFT.
 
 Cuando `available` es `false`, la interfaz puede mantener visibles los saldos y los datos de tokens, pero no puede habilitar imágenes NFT en esa compilación ni debe mostrar una acción para habilitarlas. Cuando `available` es `true`, `enabled` mantiene la activación voluntaria de los medios.
 
