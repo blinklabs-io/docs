@@ -45,7 +45,7 @@ bursa-wallet
 | `BURSA_LEAN` | `false` | `true`を指定すると、履歴チェーンデータを整理する省容量プロファイルを使用します。 |
 | `BURSA_CONNECTOR` | `false` | `true`を指定すると、dAppコネクターのバックエンドを有効にします。 |
 
-`BURSA_CONNECTOR=true`でコネクターを有効にする場合、`POST /connector/pair`には、`extension_id`から正規化した拡張機能のOriginと一致する`Origin`ヘッダーが必要です。Originがない場合や一致しない場合、ウォレットは`HTTP 403`を返します。このOrigin確認はペアリングコードに代わるものではなく、ペアリングコードによる確認も引き続き必要です。
+`BURSA_CONNECTOR=true`でコネクターを有効にする場合、`POST /connector/pair`には、`extension_id`から正規化した拡張機能のOriginと一致する`Origin`ヘッダーが必要です。Originがない場合や一致しない場合、ウォレットは`HTTP 403`を返します。このOriginの確認はペアリングコードに代わるものではなく、ペアリングコードによる確認も引き続き必要です。
 
 ```bash
 BURSA_NETWORK=preview BURSA_SYNC=mithril BURSA_LEAN=false BURSA_CONNECTOR=false bursa-wallet
@@ -55,7 +55,7 @@ BURSA_NETWORK=preview BURSA_SYNC=mithril BURSA_LEAN=false BURSA_CONNECTOR=false 
 
 ### NFTメディアの可用性
 
-`GET /wallet/settings/nft-media`と`PUT /wallet/settings/nft-media`のレスポンスには、次のフィールドが含まれます。
+`GET /wallet/settings/nft-media`と`PUT /wallet/settings/nft-media`は、次のフィールドを返します。
 
 | フィールド | 動作 |
 | --- | --- |
