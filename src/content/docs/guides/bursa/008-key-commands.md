@@ -304,7 +304,7 @@ The registration JSON contains exactly these fields:
 - `publicKey`: the 96-byte public key as a lowercase hexadecimal string.
 - `possessionProof`: the 48-byte proof of possession as a lowercase hexadecimal string.
 
-Bursa verifies the generated proof before it produces the registration output. The signing key file uses the cardano-cli envelope type `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. The optional verification key file uses `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa writes each generated destination file with owner-only permissions. Protect and back up the signing key file as stake-pool credential material.
+Bursa verifies the generated proof before it produces the registration output. The required signing key file uses the cardano-cli envelope type `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. The optional verification key file uses `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`. Bursa writes each generated destination file with owner-only permissions. Protect and back up the signing key file as stake-pool credential material.
 
 The three destination paths must be distinct. Bursa rejects direct path collisions and paths that resolve to the same file through path normalization or symbolic links.
 
