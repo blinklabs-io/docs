@@ -147,8 +147,8 @@ tokenRegistry:
 ```
 
 The environment form is
-`DINGO_TOKEN_REGISTRY_HEADER_SECRETS`, using `name:value` pairs separated by commas;
-pairs. Dingo splits each pair at the first colon, so a value can contain
+`DINGO_TOKEN_REGISTRY_HEADER_SECRETS`, using `name:value` pairs separated by
+commas. Dingo splits each pair at the first colon, so a value can contain
 additional colons but cannot contain a comma. No CLI flag exists because a
 command line would expose these credentials in the process list.
 
