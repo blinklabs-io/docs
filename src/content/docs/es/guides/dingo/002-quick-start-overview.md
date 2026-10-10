@@ -67,7 +67,7 @@ El comando inicia la DevNet local con un solo nodo:
 ./dingo devnet
 ```
 
-Con una instalación global de npm, ejecuta `dingo devnet`. Sin una instalación global, usa `npx`:
+Una instalación global de npm permite ejecutar `dingo devnet`; sin una instalación global, `npx` ejecuta:
 
 ```bash
 dingo devnet
@@ -82,13 +82,13 @@ El parámetro `--data-dir` permite conservar una cadena para reutilizarla:
 ./dingo devnet --data-dir ./.dingo-devnet
 ```
 
-Vuelve a ejecutar el mismo comando para reanudar esa cadena. Restablece la cadena con:
+Al repetir este comando, Dingo reanuda esa cadena. El estado se restablece con:
 
 ```bash
 ./dingo devnet --data-dir ./.dingo-devnet --reset
 ```
 
-La primera ejecución requiere un directorio vacío. Dingo coloca un marcador antes de crear la base de datos, la configuración generada y las copias de las claves de prueba. `--reset` solo recrea las rutas que administra Dingo y conserva otros archivos del directorio. Dingo rechaza otra ejecución que use el mismo directorio, incluido un intento de restablecerlo mientras el nodo está en ejecución. Las claves incluidas y esta red son solo para pruebas locales; no deben usarse con fondos reales.
+La primera ejecución requiere un directorio vacío. Dingo coloca un marcador antes de crear la base de datos, la configuración generada y las copias de las claves de prueba. `--reset` solo recrea las rutas que administra Dingo y conserva otros archivos del directorio. Dingo rechaza otra ejecución que use el mismo directorio, incluido un intento de restablecerlo mientras el nodo está en ejecución. Estas claves y esta red solo sirven para pruebas locales; el uso con fondos reales queda excluido.
 
 ***
 
