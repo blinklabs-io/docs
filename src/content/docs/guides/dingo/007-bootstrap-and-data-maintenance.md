@@ -40,8 +40,8 @@ dingo mithril serve --config ./dingo.yaml
 Configure `mithril.server.artifactStore` before creating or serving artifacts.
 Set `mithril.server.publicBaseUrl` to a public `https://` origin; Dingo accepts
 an `http://` origin only on loopback. Set `mithril.server.port` for the serving
-port. Artifact reads are public, and the server supports HTTP range requests
-for artifact downloads.
+port. The server exposes artifact reads publicly, and clients can use HTTP range
+requests for artifact downloads.
 
 Use `mithril.server.redirectBaseUrl` to redirect archive requests to a public
 object store, `mithril.server.tlsEnabled` to enable HTTPS with the shared Dingo
