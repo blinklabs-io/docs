@@ -59,6 +59,37 @@ npx @blinklabs/dingo --help
 
 Después de una instalación global, usa `dingo` en lugar de `./dingo` en los pasos restantes.
 
+### Ejecutar una DevNet local de un solo nodo
+
+Ejecuta la DevNet local con un solo nodo:
+
+```bash
+./dingo devnet
+```
+
+Con una instalación global de npm, ejecuta `dingo devnet`. Sin una instalación global, usa `npx`:
+
+```bash
+dingo devnet
+npx @blinklabs/dingo devnet
+```
+
+De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
+
+Para conservar y reutilizar una cadena, indica un directorio de estado:
+
+```bash
+./dingo devnet --data-dir ./.dingo-devnet
+```
+
+Vuelve a ejecutar el mismo comando para reanudar esa cadena. Restablece la cadena con:
+
+```bash
+./dingo devnet --data-dir ./.dingo-devnet --reset
+```
+
+La primera ejecución requiere un directorio vacío. Dingo coloca un marcador antes de crear la base de datos, la configuración generada y las copias de las claves de prueba. `--reset` solo recrea las rutas que administra Dingo y conserva otros archivos del directorio. Dingo rechaza otra ejecución que use el mismo directorio, incluido un intento de restablecerlo mientras el nodo está en ejecución. Las claves incluidas y esta red son solo para pruebas locales; no deben usarse con fondos reales.
+
 ***
 
 <br>
