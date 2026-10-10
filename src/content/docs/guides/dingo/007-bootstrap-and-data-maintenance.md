@@ -46,7 +46,7 @@ requests for artifact downloads.
 Use `mithril.server.redirectBaseUrl` to redirect archive requests to a public
 object store, `mithril.server.tlsEnabled` to enable HTTPS with the shared Dingo
 certificate, and `mithril.server.keepSnapshots` to retain a defined number of
-newest snapshots. Enable the optional `mithril.aggregator` settings when Dingo
+newest snapshots. Enable the optional `mithril.server.aggregator` settings when Dingo
 must collect signatures and certify snapshots. Configure
 `mithril.aggregator.operatorTokenFile` for the bearer token used by registration
 and signature operations; non-loopback aggregator binds also require TLS. See
