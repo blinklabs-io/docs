@@ -114,12 +114,12 @@ Before starting the node, configure these settings:
   `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS`. This allowlist is
   separate from the DatabaseService operator allowlist.
 
-Every LifecycleService RPC requires a client certificate that the configured
-CA verifies. `GetStatus` is read-only and requires only that verified
-certificate. `Stop` requests a graceful stop, and `Restart` requests a
-graceful stop followed by a restart; both require a certificate fingerprint
-from `barkLifecycleOperatorCertificateFingerprints`. `Restart` is unsupported
-on non-Unix platforms.
+The configured CA must verify the client certificate for every LifecycleService
+RPC. `GetStatus` is read-only and needs only this verified certificate. `Stop`
+and `Restart` are destructive: `Stop` requests a graceful stop, while
+`Restart` requests a graceful stop followed by a restart. Both require a
+certificate fingerprint from `barkLifecycleOperatorCertificateFingerprints`.
+`Restart` is unsupported on non-Unix platforms.
 
 When the service is enabled and `barkHost` is empty, Bark binds to loopback by
 default. Set `barkHost`, `--bark-host`, or `DINGO_BARK_HOST` to expose it on a
