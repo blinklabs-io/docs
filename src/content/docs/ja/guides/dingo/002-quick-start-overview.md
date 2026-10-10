@@ -71,7 +71,7 @@ npx @blinklabs/dingo --help
 ./dingo devnet
 ```
 
-グローバルにnpmインストールした場合は`dingo devnet`を実行します。グローバルにインストールしない場合は、次のコマンドを使用します：
+npmパッケージをグローバルにインストールした場合は`dingo devnet`、それ以外は次のコマンドを実行します：
 
 ```
 npx @blinklabs/dingo devnet
