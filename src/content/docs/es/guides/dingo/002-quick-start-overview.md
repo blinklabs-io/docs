@@ -163,7 +163,11 @@ maxNtCConns: 100
 maxNtCConnectionsPerIP: 5
 # Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
 bindAddr: "0.0.0.0"
+# La dirección de métricas es independiente de `bindAddr` y, de forma predeterminada, usa loopback.
+# Alias de CLI: `--metrics-bind-addr`. Variable de entorno: `DINGO_METRICS_BIND_ADDR`.
+metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
+# `metricsPort: 0` desactiva el listener de métricas.
 # Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
 # `healthPort: 0` desactiva el listener de salud.
 healthPort: 12799
