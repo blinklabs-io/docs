@@ -71,7 +71,7 @@ npx @blinklabs/dingo --help
 ./dingo devnet
 ```
 
-npmパッケージをグローバルにインストールした場合は`dingo devnet`、それ以外は次のコマンドを実行します：
+npmパッケージをグローバルにインストールした場合は`dingo devnet`を、そうでない場合は次のコマンドを実行します：
 
 ```
 npx @blinklabs/dingo devnet
@@ -160,7 +160,8 @@ mithril:
 
 # Network
 bindAddr: "0.0.0.0"
-# Prometheusは`bindAddr`とは独立したアドレスを使用し、既定値はループバックです。`--metrics-bind-addr` CLIフラグまたは`DINGO_METRICS_BIND_ADDR`環境変数で上書きできます。`metricsPort: 0`にするとメトリクスリスナーを無効にします。
+# Prometheusは`bindAddr`とは独立したアドレスを使用し、既定値はループバックです。
+# `--metrics-bind-addr` CLIフラグまたは`DINGO_METRICS_BIND_ADDR`環境変数で上書きできます。`metricsPort: 0`にするとメトリクスリスナーを無効にします。
 metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
 # `healthPort` は `--health-port` CLI フラグまたは `DINGO_HEALTH_PORT` 環境変数で設定できます。`healthPort: 0` にするとリスナーを無効にします。
