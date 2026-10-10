@@ -17,8 +17,8 @@ are organized by what you want to do.
 - [Configuration and storage modes](/guides/dingo/005-node-configuration/) —
   choose a relay, block producer, or API node and configure providers.
 - [Dingo configuration reference](/guides/dingo/009-configuration-reference/) —
- configure Dingo v0.81.0 and review every setting.
-- [Download the Dingo v0.81.0 `dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example).
+  configure Dingo v0.81.1 and review every setting.
+- [Download the Dingo v0.81.1 `dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.1/dingo.yaml.example).
 - [Bootstrap and data maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/)
   — use Mithril and manage local node data.
 - [Run Dingo as a service](/guides/dingo/003-create-start-up-service/) and
