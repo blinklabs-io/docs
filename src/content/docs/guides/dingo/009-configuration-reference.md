@@ -88,7 +88,7 @@ origin.
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Artifact server port | `mithril.server.port` | `--mithril-server-port` | `DINGO_MITHRIL_SERVER_PORT` | `8081`. `dingo mithril serve` listens on this port and the root `bindAddr`. |
-| Public snapshot origin | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Empty until configured. Set an origin without credentials, a path, a query, or a fragment. HTTPS is required except for loopback HTTP. |
+| Public snapshot origin | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Required by `dingo mithril serve`. Set an origin without credentials, a path, a query, or a fragment. HTTPS is required except for loopback HTTP. |
 | Artifact store | `mithril.server.artifactStore` | `--mithril-server-artifact-store` | `DINGO_MITHRIL_SERVER_ARTIFACT_STORE` | Empty. Set a filesystem directory, `s3://bucket/prefix`, or `gcs://bucket/prefix`. The latter two require a build with `dingo_extra_plugins`. |
 | Redirect base URL | `mithril.server.redirectBaseUrl` | `--mithril-server-redirect-base-url` | `DINGO_MITHRIL_SERVER_REDIRECT_BASE_URL` | Empty. When set, archive requests redirect to this base URL plus the object key instead of streaming the object. Use it only when the remote objects are publicly readable. |
 | Snapshot retention | `mithril.server.keepSnapshots` | `--mithril-server-keep-snapshots` | `DINGO_MITHRIL_SERVER_KEEP_SNAPSHOTS` | `0` keeps every produced snapshot. A positive value retains that many newest snapshots. |
@@ -125,7 +125,7 @@ expose it on another interface.
 | Setting | YAML key | CLI flag | Environment variable | Default and requirements |
 | --- | --- | --- | --- | --- |
 | Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`, `barkClientCaFilePath`, both `tlsCertFilePath` and `tlsKeyFilePath`, and at least one `barkLifecycleOperatorCertificateFingerprints` value. |
-| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Empty by default. Each value must be the SHA 256 fingerprint of the client certificate DER bytes, encoded as hexadecimal; colons are accepted and matching ignores case. These credentials authorize `Stop` and `Restart` only. |
+| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Empty by default. Each value must be the SHA-256 fingerprint of the client certificate DER bytes, encoded as hexadecimal; colons are accepted and matching ignores case. These credentials authorize `Stop` and `Restart` only. |
 
 All lifecycle operations require a client certificate verified against
 `barkClientCaFilePath`. `Stop` and `Restart` additionally require a matching
@@ -147,7 +147,7 @@ tokenRegistry:
 ```
 
 The environment form is
-`DINGO_TOKEN_REGISTRY_HEADER_SECRETS`, using comma separated `name:value`
+`DINGO_TOKEN_REGISTRY_HEADER_SECRETS`, using `name:value` pairs separated by commas;
 pairs. Dingo splits each pair at the first colon, so a value can contain
 additional colons but cannot contain a comma. No CLI flag exists because a
 command line would expose these credentials in the process list.
