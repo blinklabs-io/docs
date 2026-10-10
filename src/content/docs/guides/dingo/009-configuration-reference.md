@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.81.0 Configuration Reference
-description: Complete, release-specific Dingo v0.81.0 configuration reference and example.
+title: Dingo v0.81.1 Configuration Reference
+description: Complete, release-specific Dingo v0.81.1 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.81.0. The complete
+This page covers the configuration shipped with Dingo v0.81.1. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.81.0 source](https://github.com/blinklabs-io/dingo/blob/v0.81.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.1/dingo.yaml.example).
+The same file is available in the [Dingo v0.81.1 source](https://github.com/blinklabs-io/dingo/blob/v0.81.1/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -33,9 +33,16 @@ for the main runtime choices.
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
-| Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
+| Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, registry refresh, parity diagnostics, caching, and startup validation. |
+
+### Ledger processing
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Ledger row batching | `ledgerApplyRowBatchingEnabled` | `--ledger-apply-row-batching-enabled` | `DINGO_LEDGER_APPLY_ROW_BATCHING_ENABLED` | `false` (off). In core storage mode, write eligible unvalidated block deltas with multi-row batching. Dingo forwards the setting to `serve` and `dingo load`; API mode already uses batching. The setting does not affect consensus. |
+| Ledger prefetch ahead | `ledgerPrefetchAheadEnabled` | `--ledger-prefetch-ahead-enabled` | `DINGO_LEDGER_PREFETCH_AHEAD_ENABLED` | `false` (off). For validated blocks, resolve the next block's input UTxOs from a read-only transaction while the current block applies. The setting does not affect consensus. |
 
 ### Metrics listener
 
