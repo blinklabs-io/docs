@@ -82,14 +82,15 @@ Without `--data-dir`, Dingo stores the configuration, test keys, and chain
 data in a private temporary directory and removes that directory when the
 process exits. Each run starts a new chain.
 
-To retain and resume a chain, set a persistent data directory:
+Set `--data-dir` to retain and resume a chain:
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet
 ```
 
-Run the same command again to resume the chain. Recreate the Dingo-managed
-state while retaining unrelated files in the directory with:
+Run the same command again to resume the chain. The `--reset` option requires
+`--data-dir` and recreates the Dingo-managed state while retaining unrelated
+files in the directory:
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet --reset
