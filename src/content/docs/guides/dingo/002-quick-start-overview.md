@@ -107,7 +107,7 @@ funds.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.81.0 settings, defaults, and environment or command-line
+For all Dingo v0.81.1 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
 Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example)
 to use as a starting point for your own settings.
