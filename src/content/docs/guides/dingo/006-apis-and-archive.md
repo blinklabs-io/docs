@@ -97,22 +97,22 @@ operations. The service is disabled by default. Enable it with
 `barkLifecycleEnabled: true`, `--bark-lifecycle-enabled`, or
 `DINGO_BARK_LIFECYCLE_ENABLED=true`.
 
-Configure all of the following settings before starting the node:
+Before starting the node, configure these settings:
 
-- Set `barkPort` to a nonzero port. The matching CLI flag is
-  `--bark-port`, and the environment variable is `DINGO_BARK_PORT`.
+- Set `barkPort` to a nonzero port with `--bark-port` or
+  `DINGO_BARK_PORT`.
 - Set `barkClientCaFilePath` to the PEM CA bundle that verifies client
-  certificates. Use `--bark-client-ca-file-path` or
-  `DINGO_BARK_CLIENT_CA_FILE_PATH` for this setting.
+  certificates with `--bark-client-ca-file-path` or
+  `DINGO_BARK_CLIENT_CA_FILE_PATH`.
 - Set both `tlsCertFilePath` and `tlsKeyFilePath` for the Bark server
-  certificate and private key. Their CLI flags are `--tls-cert-file-path` and
-  `--tls-key-file-path`; their environment variables are
-  `TLS_CERT_FILE_PATH` and `TLS_KEY_FILE_PATH`.
+  certificate and private key. Use `--tls-cert-file-path` and
+  `--tls-key-file-path`, or the environment variables `TLS_CERT_FILE_PATH`
+  and `TLS_KEY_FILE_PATH`.
 - Add one or more SHA-256 client certificate fingerprints to
-  `barkLifecycleOperatorCertificateFingerprints`. Use
+  `barkLifecycleOperatorCertificateFingerprints` with
   `--bark-lifecycle-operator-certificate-fingerprints` or
-  `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` to set the list.
-  This allowlist is separate from the DatabaseService operator allowlist.
+  `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS`. This allowlist is
+  separate from the DatabaseService operator allowlist.
 
 Every LifecycleService RPC requires a client certificate that the configured
 CA verifies. `GetStatus` is read-only and requires only that verified
