@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.80.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.81.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.80.0/dingo-v0.80.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.81.0/dingo-v0.81.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -63,10 +63,46 @@ npx @blinklabs/dingo --help
 
 <br>
 
+## ローカル単一ノードDevnetの実行
+
+設定ファイルなしでローカル単一ノードDevnetを起動します：
+
+```
+./dingo devnet
+```
+
+npmパッケージをグローバルにインストールした場合は`dingo devnet`を、そうでない場合は次のコマンドを実行します：
+
+```
+npx @blinklabs/dingo devnet
+```
+
+`--data-dir`を指定しない場合、Dingoは設定、テストキー、チェーンデータを専用の一時ディレクトリに保存し、プロセス終了時にそのディレクトリを削除します。実行するたびに新しいチェーンが開始されます。
+
+チェーンを保持して再利用するには、永続データディレクトリを指定します：
+
+```
+./dingo devnet --data-dir ./.dingo-devnet
+```
+
+同じコマンドを再度実行すると、そのチェーンを再開します。Dingoが管理する状態を再作成し、ディレクトリ内の無関係なファイルを保持するには、次のコマンドを実行します：
+
+```
+./dingo devnet --data-dir ./.dingo-devnet --reset
+```
+
+永続データディレクトリを初めて使用するときは、空のディレクトリを指定してください。Dingoは、ノードの実行中に同じディレクトリを使用する別の起動を拒否します。
+
+組み込みのキーとネットワークはローカルテスト専用です。実際の資金には使用しないでください。
+
+***
+
+<br>
+
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingo v0.80.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+Dingo v0.81.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
+同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
 
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
@@ -124,6 +160,9 @@ mithril:
 
 # Network
 bindAddr: "0.0.0.0"
+# Prometheusは`bindAddr`とは独立したアドレスを使用し、既定値はループバックです。
+# `--metrics-bind-addr` CLIフラグまたは`DINGO_METRICS_BIND_ADDR`環境変数で上書きできます。`metricsPort: 0`にするとメトリクスリスナーを無効にします。
+metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
 # `healthPort` は `--health-port` CLI フラグまたは `DINGO_HEALTH_PORT` 環境変数で設定できます。`healthPort: 0` にするとリスナーを無効にします。
 healthPort: 12799

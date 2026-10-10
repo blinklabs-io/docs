@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.80.0/dingo-v0.80.0-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.81.0/dingo-v0.81.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -59,14 +59,44 @@ npx @blinklabs/dingo --help
 
 Después de una instalación global, usa `dingo` en lugar de `./dingo` en los pasos restantes.
 
+### Ejecutar una DevNet local de un solo nodo
+
+El comando inicia la DevNet local con un solo nodo:
+
+```bash
+./dingo devnet
+```
+
+Una instalación global de npm permite ejecutar `dingo devnet`; sin una instalación global, `npx` ejecuta:
+
+```bash
+npx @blinklabs/dingo devnet
+```
+
+De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
+
+El parámetro `--data-dir` permite conservar una cadena para reutilizarla:
+
+```bash
+./dingo devnet --data-dir ./.dingo-devnet
+```
+
+Al repetir este comando, Dingo reanuda esa cadena. El estado se restablece con:
+
+```bash
+./dingo devnet --data-dir ./.dingo-devnet --reset
+```
+
+La primera ejecución requiere un directorio vacío. Dingo coloca un marcador antes de crear la base de datos, la configuración generada y las copias de las claves de prueba. `--reset` solo recrea las rutas que administra Dingo y conserva otros archivos del directorio. Dingo rechaza otra ejecución que use el mismo directorio, incluido un intento de restablecerlo mientras el nodo está en ejecución. Estas claves y esta red solo sirven para pruebas locales; el uso con fondos reales queda excluido.
+
 ***
 
 <br>
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Para consultar todos los ajustes de Dingo v0.80.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
-Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example) correspondiente a esa versión como punto de partida para tu configuración.
+Para consultar todos los ajustes de Dingo v0.81.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
+Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example) correspondiente a esa versión como punto de partida para tu configuración.
 
 Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
@@ -132,7 +162,11 @@ maxNtCConns: 100
 maxNtCConnectionsPerIP: 5
 # Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
 bindAddr: "0.0.0.0"
+# La dirección de métricas es independiente de `bindAddr` y, de forma predeterminada, usa loopback.
+# Alias de CLI: `--metrics-bind-addr`. Variable de entorno: `DINGO_METRICS_BIND_ADDR`.
+metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
+# `metricsPort: 0` desactiva el listener de métricas.
 # Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
 # `healthPort: 0` desactiva el listener de salud.
 healthPort: 12799

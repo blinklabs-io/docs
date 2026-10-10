@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.80.0/dingo-v0.80.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.81.0/dingo-v0.81.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -63,11 +63,53 @@ npx @blinklabs/dingo --help
 
 <br>
 
+## Run a Local Single-node Devnet
+
+Run a local single-node devnet with the downloaded binary:
+
+```
+./dingo devnet
+```
+
+For a global npm installation, run `dingo devnet`. Without a global
+installation, use:
+
+```
+npx @blinklabs/dingo devnet
+```
+
+Without `--data-dir`, Dingo stores the configuration, test keys, and chain
+data in a private temporary directory and removes that directory when the
+process exits. Each run starts a new chain.
+
+Set `--data-dir` to retain and resume a chain:
+
+```
+./dingo devnet --data-dir ./.dingo-devnet
+```
+
+Run the same command again to resume the chain. The `--reset` option requires
+`--data-dir` and recreates the Dingo-managed state while retaining unrelated
+files in the directory:
+
+```
+./dingo devnet --data-dir ./.dingo-devnet --reset
+```
+
+The first persistent run requires an empty directory. Dingo rejects another
+invocation that uses the same directory while the node is running. Use the
+bundled keys and network for local testing only. Never use them with real
+funds.
+
+***
+
+<br>
+
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.80.0 settings, defaults, and environment or command-line
+For all Dingo v0.81.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
@@ -128,6 +170,10 @@ mithril:
 
 # Network
 bindAddr: "0.0.0.0"
+# Prometheus uses this independent address and defaults to loopback; it does
+# not inherit bindAddr. Use --metrics-bind-addr or DINGO_METRICS_BIND_ADDR to
+# override it. Set metricsPort to 0 to disable the metrics listener.
+metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
 healthPort: 12799
 healthReadyGapSlots: 1000
