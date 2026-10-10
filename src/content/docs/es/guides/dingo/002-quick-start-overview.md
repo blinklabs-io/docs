@@ -76,7 +76,7 @@ npx @blinklabs/dingo devnet
 
 De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
 
-El parámetro `--data-dir` conserva una cadena para reutilizarla:
+El parámetro `--data-dir` permite conservar una cadena para reutilizarla:
 
 ```bash
 ./dingo devnet --data-dir ./.dingo-devnet
