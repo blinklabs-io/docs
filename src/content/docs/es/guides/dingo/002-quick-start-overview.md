@@ -70,7 +70,6 @@ El comando inicia la DevNet local con un solo nodo:
 Una instalación global de npm permite ejecutar `dingo devnet`; sin una instalación global, `npx` ejecuta:
 
 ```bash
-dingo devnet
 npx @blinklabs/dingo devnet
 ```
 
