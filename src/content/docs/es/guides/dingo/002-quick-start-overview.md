@@ -61,7 +61,7 @@ Después de una instalación global, usa `dingo` en lugar de `./dingo` en los pa
 
 ### Ejecutar una DevNet local de un solo nodo
 
-Ejecuta la DevNet local con un solo nodo:
+El comando inicia la DevNet local con un solo nodo:
 
 ```bash
 ./dingo devnet
