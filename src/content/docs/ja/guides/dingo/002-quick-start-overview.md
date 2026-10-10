@@ -101,8 +101,8 @@ npx @blinklabs/dingo devnet
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingo v0.81.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+Dingo v0.81.1の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
+同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.1/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
 
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
