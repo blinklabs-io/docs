@@ -48,7 +48,7 @@ object store, `mithril.server.tlsEnabled` to enable HTTPS with the shared Dingo
 certificate, and `mithril.server.keepSnapshots` to retain a defined number of
 newest snapshots. Enable the optional `mithril.server.aggregator` settings when Dingo
 must collect signatures and certify snapshots. Configure
-`mithril.aggregator.operatorTokenFile` for the bearer token used by registration
+`mithril.server.aggregator.operatorTokenFile` for the bearer token used by registration
 and signature operations; non-loopback aggregator binds also require TLS. See
 the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example)
 for the complete `server` and `aggregator` settings.
