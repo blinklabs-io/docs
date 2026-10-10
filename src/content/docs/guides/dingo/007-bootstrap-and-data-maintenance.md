@@ -27,6 +27,32 @@ first-run walkthrough. Snapshot size, disk use, and load time vary by network
 and grow as the chain advances; leave space for both downloaded files and the
 database during import.
 
+### Produce and serve Mithril artifacts
+
+Create a Mithril artifact from a Cardano node database, then serve the stored
+artifacts with the configured Mithril server:
+
+```sh
+dingo mithril snapshot create --db-dir <cardano-node db>
+dingo mithril serve --config ./dingo.yaml
+```
+
+Configure `mithril.server.artifactStore` before creating or serving artifacts.
+Set `mithril.server.publicBaseUrl` to a public `https://` origin; Dingo accepts
+an `http://` origin only on loopback. Set `mithril.server.port` for the serving
+port. Artifact reads are public, and the server supports HTTP range requests
+for artifact downloads.
+
+Use `mithril.server.redirectBaseUrl` to redirect archive requests to a public
+object store, `mithril.server.tlsEnabled` to enable HTTPS with the shared Dingo
+certificate, and `mithril.server.keepSnapshots` to retain a defined number of
+newest snapshots. Enable the optional `mithril.aggregator` settings when Dingo
+must collect signatures and certify snapshots. Configure
+`mithril.aggregator.operatorTokenFile` for the bearer token used by registration
+and signature operations; non-loopback aggregator binds also require TLS. See
+the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example)
+for the complete `server` and `aggregator` settings.
+
 ## Load an ImmutableDB from a local or remote source
 
 `dingo load` accepts a local ImmutableDB directory or a remote ImmutableDB
@@ -58,6 +84,14 @@ Dingo checks that the loaded tip's slot and block hash match the values in
 matching `.primary` or `.secondary`, the load also fails. Provide every
 published chunk in the contiguous range at the remote root so the load can
 progress to the tip.
+
+### Ledger-state import validation
+
+Before persisting imported ledger state, Dingo validates consensus inputs such
+as tip hash and nonce widths, certificate and stake snapshots, pool distribution
+and governance state, protocol parameters, and fee-pot relationships. If this
+preflight rejects an input, the import fails before the UTxO phase and does not
+persist partial UTxO state.
 
 ## Snapshot, restore, and truncate
 
@@ -93,7 +127,7 @@ configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
 and download host allowlists in the Dingo v0.80.0
-[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.80.0/dingo.yaml.example). Use it
+[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.0/dingo.yaml.example). Use it
 with that release only; configuration options can change between versions.
 
 Configure the compressed download limit for each Mithril object with `mithril.downloadMaxBytes` in `dingo.yaml`, `--mithril-download-max-bytes` on the command line, or `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` in the environment. Set the value to `0` to use the built-in limits. The `v1` limit is `512 GiB`; `v2` uses `1 GiB` for immutable archives, `256 MiB` for the digest list, and `64 GiB` for ancillary data. A positive byte value replaces the built-in limit for each downloaded object. A negative value is invalid and causes configuration validation to fail.
