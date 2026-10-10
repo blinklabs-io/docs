@@ -65,7 +65,7 @@ npx @blinklabs/dingo --help
 
 ## Run a Local Single-node Devnet
 
-Start a local single-node devnet without a configuration file:
+Run a local single-node devnet with the downloaded binary:
 
 ```
 ./dingo devnet
@@ -96,8 +96,8 @@ state while retaining unrelated files in the directory with:
 ```
 
 The first persistent run requires an empty directory. Dingo rejects another
-invocation that uses the same directory while the node is running. The
-bundled keys and network support local testing only; never use them with real
+invocation that uses the same directory while the node is running. Use the
+bundled keys and network for local testing only. Never use them with real
 funds.
 
 ***
