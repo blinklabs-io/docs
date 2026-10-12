@@ -43,6 +43,7 @@ for the main runtime choices.
 | --- | --- | --- | --- | --- |
 | Ledger row batching | `ledgerApplyRowBatchingEnabled` | `--ledger-apply-row-batching-enabled` | `DINGO_LEDGER_APPLY_ROW_BATCHING_ENABLED` | `false` (off). In core storage mode, Dingo applies multi-row batching to eligible unvalidated block deltas. Dingo forwards this setting to `serve` and `dingo load`; API mode already uses batching. This setting does not affect consensus. |
 | Ledger prefetch ahead | `ledgerPrefetchAheadEnabled` | `--ledger-prefetch-ahead-enabled` | `DINGO_LEDGER_PREFETCH_AHEAD_ENABLED` | `false` (off). For validated blocks, Dingo prefetches the next block's input UTxOs from a read-only transaction while the current block applies. This setting does not affect consensus. |
+| Blockfetch low watermark | `blockfetchLowWatermarkEnabled` | `--blockfetch-low-watermark-enabled` | `DINGO_BLOCKFETCH_LOW_WATERMARK_ENABLED` | `false` (off). When enabled, far-from-tip blockfetch starts after one queued `BlockfetchBatchSize` range (about 500 headers) instead of waiting for the larger `allowedQueuedHeaders` threshold. |
 
 ### Metrics listener
 
