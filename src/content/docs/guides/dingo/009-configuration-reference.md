@@ -43,7 +43,7 @@ for the main runtime choices.
 | --- | --- | --- | --- | --- |
 | Ledger row batching | `ledgerApplyRowBatchingEnabled` | `--ledger-apply-row-batching-enabled` | `DINGO_LEDGER_APPLY_ROW_BATCHING_ENABLED` | `false` (off). In core storage mode, Dingo applies multi-row batching to eligible unvalidated block deltas. Dingo forwards this setting to `serve` and `dingo load`; API mode already uses batching. This setting does not affect consensus. |
 | Ledger prefetch ahead | `ledgerPrefetchAheadEnabled` | `--ledger-prefetch-ahead-enabled` | `DINGO_LEDGER_PREFETCH_AHEAD_ENABLED` | `false` (off). For validated blocks, Dingo prefetches the next block's input UTxOs from a read-only transaction while the current block applies. This setting does not affect consensus. |
-| Blockfetch low watermark | `blockfetchLowWatermarkEnabled` | `--blockfetch-low-watermark-enabled` | `DINGO_BLOCKFETCH_LOW_WATERMARK_ENABLED` | `false` (off). When enabled while the header is far from the peer tip, Dingo starts blockfetch after one queued blockfetch header range instead of waiting for four. The header queue capacity remains unchanged, and this setting does not affect consensus. |
+| Blockfetch low watermark | `blockfetchLowWatermarkEnabled` | `--blockfetch-low-watermark-enabled` | `DINGO_BLOCKFETCH_LOW_WATERMARK_ENABLED` | `false` (off). When enabled while the header is far from the peer tip, Dingo starts blockfetch after one queued blockfetch header range instead of waiting for four. The setting leaves header queue capacity unchanged and does not affect consensus. |
 
 ### Metrics listener
 
@@ -66,7 +66,7 @@ remote source, chunk, and integrity requirements.
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
 | --- | --- | --- | --- | --- | --- |
-| Maximum lifetime of an acquired ledger snapshot | `localStateQueryViewMaxLifetime` | `--local-state-query-view-max-lifetime` | `DINGO_LOCAL_STATE_QUERY_VIEW_MAX_LIFETIME` | `5m` | Use a positive duration string, such as `5m`. Dingo rejects an invalid, zero, or negative value during startup or configuration validation. After the maximum lifetime, Dingo closes the held snapshot. The next query reopens it at the acquired point and answers from that snapshot; a tip acquire uses its snapshotted tip. If the acquired point was rolled back or pruned beyond retention, Dingo cannot reopen the snapshot and closes the connection. |
+| Maximum lifetime of an acquired ledger snapshot | `localStateQueryViewMaxLifetime` | `--local-state-query-view-max-lifetime` | `DINGO_LOCAL_STATE_QUERY_VIEW_MAX_LIFETIME` | `5m` | Use a positive duration string, such as `5m`. Dingo rejects an invalid, zero, or negative value during startup or configuration validation. After the maximum lifetime, Dingo closes the held snapshot. The next query reopens it at the acquired point and answers from that snapshot; a tip acquire uses its snapshotted tip. If a rollback removes the acquired point or retention pruning removes it, Dingo cannot reopen the snapshot and closes the connection. |
 
 ### Mithril download limit
 
