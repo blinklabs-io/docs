@@ -1,6 +1,6 @@
 ---
 title: Dingo v0.81.1 Configuration Reference
-description: Complete, release-specific Dingo v0.81.1 configuration reference and example.
+description: Complete, release-specific Dingo v0.81.2 configuration reference and example.
 ---
 
 This page covers the configuration shipped with Dingo v0.81.1. The complete
