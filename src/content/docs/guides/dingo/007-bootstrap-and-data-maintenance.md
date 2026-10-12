@@ -50,7 +50,7 @@ newest snapshots. Enable the optional `mithril.server.aggregator` settings when 
 must collect signatures and certify snapshots. Configure
 `mithril.server.aggregator.operatorTokenFile` for the bearer token used by registration
 and signature operations; non-loopback aggregator binds also require TLS. See
-  the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.3/dingo.yaml.example)
+the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.3/dingo.yaml.example)
 for the complete `server` and `aggregator` settings.
 
 ## Load an ImmutableDB from a local or remote source
@@ -126,7 +126,7 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-  and download host allowlists in the Dingo v0.81.3
+and download host allowlists in the Dingo v0.81.3
 [example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.3/dingo.yaml.example). Use it
 with that release only; configuration options can change between versions.
 
