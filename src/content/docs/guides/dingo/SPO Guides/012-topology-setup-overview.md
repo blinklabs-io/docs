@@ -95,6 +95,7 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 - Use two localRoots groups so you can advertise your other relays while hiding your BP.
 - Set `"advertise": false,` on the group that contains the BP, since we want to keep the BP private.
 - Because there is one additional relay, (2 relays in total) set "valency": 1, if you had two additional relays (3 relays in total), you would set "valency": 2, and so on.
+- Dingo accepts `hotValency` as an alias for `valency`; when both keys are present, `valency` takes precedence. For non-empty topology groups, Dingo validates `warmValency` against the number of access points.
 - Set your Relays to "trustable": true, so you can sync if you get too far off the tip.
 - Genesis/snapshot mode uses `peerSnapshotFile` instead of (or in addition to) bootstrap peers.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
@@ -220,3 +221,14 @@ sudo systemctl restart dingo
 ***
 
 ### Congratulations! You now have custom topology files for your relays and block producer.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

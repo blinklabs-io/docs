@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.81.1 Configuration Reference
-description: Complete, release-specific Dingo v0.81.1 configuration reference and example.
+title: Dingo v0.81.2 Configuration Reference
+description: Complete, release-specific Dingo v0.81.2 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.81.1. The complete
+This page covers the configuration shipped with Dingo v0.81.2. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.81.1 source](https://github.com/blinklabs-io/dingo/blob/v0.81.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.2/dingo.yaml.example).
+The same file is available in the [Dingo v0.81.2 source](https://github.com/blinklabs-io/dingo/blob/v0.81.2/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -43,6 +43,7 @@ for the main runtime choices.
 | --- | --- | --- | --- | --- |
 | Ledger row batching | `ledgerApplyRowBatchingEnabled` | `--ledger-apply-row-batching-enabled` | `DINGO_LEDGER_APPLY_ROW_BATCHING_ENABLED` | `false` (off). In core storage mode, Dingo applies multi-row batching to eligible unvalidated block deltas. Dingo forwards this setting to `serve` and `dingo load`; API mode already uses batching. This setting does not affect consensus. |
 | Ledger prefetch ahead | `ledgerPrefetchAheadEnabled` | `--ledger-prefetch-ahead-enabled` | `DINGO_LEDGER_PREFETCH_AHEAD_ENABLED` | `false` (off). For validated blocks, Dingo prefetches the next block's input UTxOs from a read-only transaction while the current block applies. This setting does not affect consensus. |
+| Blockfetch low watermark | `blockfetchLowWatermarkEnabled` | `--blockfetch-low-watermark-enabled` | `DINGO_BLOCKFETCH_LOW_WATERMARK_ENABLED` | `false` (off). When enabled, far-from-tip blockfetch starts after one queued `BlockfetchBatchSize` range (about 500 headers) rather than waiting for the larger `allowedQueuedHeaders` threshold. |
 
 ### Metrics listener
 
