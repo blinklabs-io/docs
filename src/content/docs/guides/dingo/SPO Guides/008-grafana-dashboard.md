@@ -65,6 +65,15 @@ Prometheus needs to know where to find your Dingo node. Add the following to you
     - targets: ['localhost:9100']
 ```
 
+When `metricsAuthToken` or `DINGO_METRICS_AUTH_TOKEN` is configured, add the following under the `dingo` scrape job:
+
+```yaml
+  authorization:
+    credentials_file: /run/secrets/dingo-metrics-token
+```
+
+The `credentials_file` must contain the configured token value only. Do not add a literal `Bearer ` prefix. The same token protects the Mithril metrics endpoint, so use the same Prometheus credentials configuration when scraping that endpoint. The metrics listener uses plain HTTP; place remote token traffic behind a TLS reverse proxy or an authenticated encrypted tunnel to protect it in transit.
+
 Then reload Prometheus to apply the change:
 
 ```bash
