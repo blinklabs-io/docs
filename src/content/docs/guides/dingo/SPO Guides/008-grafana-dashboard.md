@@ -202,3 +202,14 @@ All JSON files use the datasource UID `prometheus`. If your Prometheus datasourc
 
 **Dashboards not appearing after provisioning**
 Confirm `/etc/grafana/provisioning/dashboards/dingo.yaml` references the correct path. Grafana auto-reloads provisioned dashboards every 30 seconds; if it hasn't appeared after a minute, check the Grafana log (`journalctl -u grafana-server`) for errors.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
