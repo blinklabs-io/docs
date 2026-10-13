@@ -62,8 +62,8 @@ storage modes](/guides/dingo/005-node-configuration/).
 
 ### Protect published metrics
 
-Add `DINGO_METRICS_AUTH_TOKEN` to the container environment to require a Bearer
-token for the node and Mithril metrics endpoints:
+Add the following option to the `docker run` command to require a Bearer token
+for the node and Mithril metrics endpoints:
 
 ```sh
 --env DINGO_METRICS_AUTH_TOKEN='replace-with-secret' \
