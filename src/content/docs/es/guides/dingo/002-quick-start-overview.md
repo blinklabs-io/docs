@@ -75,7 +75,7 @@ npx @blinklabs/dingo devnet
 
 De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
 
-Dingo instala el faucet local con los archivos `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. En una ejecución temporal, estos archivos se encuentran dentro del directorio temporal privado y se eliminan cuando termina el proceso. Con una ejecución persistente, los archivos quedan disponibles en `<data-dir>/cardano/keys/`. El archivo `faucet.addr` recibe 900,000 ADA de prueba en el génesis (900_000_000_000 lovelace). Dingo instala las credenciales con permisos exclusivos del propietario.
+Dingo instala el faucet local con los archivos `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. En una ejecución temporal, Dingo crea estos archivos dentro del directorio temporal privado. En una ejecución persistente, Dingo los deja disponibles en `<data-dir>/cardano/keys/`. El archivo `faucet.addr` recibe 900,000 ADA de prueba en el génesis (900_000_000_000 lovelace). Dingo instala las credenciales con permisos exclusivos del propietario.
 
 El parámetro `--data-dir` permite conservar una cadena para reutilizarla:
 
@@ -89,7 +89,7 @@ Al repetir este comando, Dingo reanuda esa cadena. El estado se restablece con:
 ./dingo devnet --data-dir ./.dingo-devnet --reset
 ```
 
-Al reanudar una ejecución persistente sin `--reset`, Dingo restaura o actualiza solo las credenciales del faucet que falten y conserva las credenciales del productor, la asignación del génesis y los datos de la cadena. Usa `--reset` para recrear intencionalmente el estado administrado por Dingo.
+Al reanudar una ejecución persistente sin `--reset`, Dingo restaura y actualiza únicamente las credenciales del faucet, sin restablecer las credenciales del productor, la asignación del génesis ni los datos de la cadena. Usa `--reset` para recrear intencionalmente el estado administrado por Dingo.
 
 La primera ejecución requiere un directorio vacío. Dingo coloca un marcador antes de crear la base de datos, la configuración generada y las copias de las claves de prueba. `--reset` solo recrea las rutas que administra Dingo y conserva otros archivos del directorio. Dingo rechaza otra ejecución que use el mismo directorio, incluido un intento de restablecerlo mientras el nodo está en ejecución. Estas claves y esta red solo sirven para pruebas locales; el uso con fondos reales queda excluido.
 
