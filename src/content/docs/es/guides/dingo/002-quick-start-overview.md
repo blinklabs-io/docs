@@ -75,7 +75,7 @@ npx @blinklabs/dingo devnet
 
 De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
 
-Dingo instala el faucet local con los archivos `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. En una ejecución temporal, Dingo crea estos archivos dentro del directorio temporal privado. En una ejecución persistente, Dingo los deja disponibles en `<data-dir>/cardano/keys/`. El archivo `faucet.addr` recibe 900,000 ADA de prueba en el génesis (900_000_000_000 lovelace). Dingo instala las credenciales con permisos exclusivos del propietario.
+Dingo instala el faucet local con los archivos `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. En una ejecución temporal, Dingo crea estos archivos en `cardano/keys/` dentro del directorio temporal privado. En una ejecución persistente, Dingo los deja disponibles en `<data-dir>/cardano/keys/`. El archivo `faucet.addr` recibe 900,000 ADA de prueba en el génesis (900_000_000_000 lovelace). Dingo instala las credenciales con permisos exclusivos del propietario.
 
 El parámetro `--data-dir` permite conservar una cadena para reutilizarla:
 
