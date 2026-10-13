@@ -53,8 +53,9 @@ plugins:
         port: 9090
 ```
 
-The complete v0.82.0 configuration reference and
-release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example) are available on this site. Use configuration files with their matching release;
+The complete v0.82.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example) are
+available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
 ## Secure API access
