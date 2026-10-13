@@ -79,7 +79,7 @@ npx @blinklabs/dingo devnet
 
 `--data-dir`を指定しない場合、Dingoは設定、テストキー、チェーンデータを専用の一時ディレクトリに保存し、プロセス終了時にそのディレクトリを削除します。実行するたびに新しいチェーンが開始されます。
 
-Devnetは、ローカルテスト用のfaucet認証情報を`cardano/keys/`に配置します。配置されるファイルは次の3つです：
+Devnetは、ローカルテスト用のfaucet認証情報を`cardano/keys/`に配置します。Dingoが配置するファイルは次の3つです：
 
 - `faucet.skey`
 - `faucet.vkey`
@@ -95,7 +95,7 @@ genesis時点で、Dingoは`faucet.addr`のアドレスに900,000 test ADA（900
 ./dingo devnet --data-dir ./.dingo-devnet
 ```
 
-同じコマンドを再度実行すると、そのチェーンを再開します。`--reset`を指定しない永続Devnetの再開では、不足しているfaucet認証情報だけが復元または更新され、producer認証情報、genesisの割り当て、チェーンデータは保持されます。Dingoが管理する状態を意図的に再作成し、ディレクトリ内の無関係なファイルを保持するには、次のコマンドを実行します：
+同じコマンドを再度実行すると、そのチェーンを再開します。`--reset`を指定せずに永続Devnetを再開すると、Dingoはfaucet認証情報だけを復元または更新し、producer認証情報、genesisの割り当て、チェーンデータを保持します。Dingoが管理する状態を意図的に再作成し、ディレクトリ内の無関係なファイルを保持するには、次のコマンドを実行します：
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet --reset
