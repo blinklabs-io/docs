@@ -158,14 +158,14 @@ error.
 
 ### Token registry manifest authentication
 
-When token registry sync is enabled, Dingo requires a signed manifest URL and
+When configuration enables token registry sync, Dingo requires a signed manifest URL and
 the trusted public key used to verify it.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Signed manifest URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Empty by default. Required when token registry sync is enabled. Set an absolute HTTPS URL. |
-| Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Required when token registry sync is enabled. Set a hex encoded 32 byte Ed25519 public key. |
-| Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. When `true`, Dingo accepts a valid signed manifest with a lower sequence and replaces the stored snapshot. When `false`, Dingo rejects lower sequences. Dingo always rejects a digest change at the same sequence. |
+| Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Required when token registry sync is enabled. Set a hex-encoded 32-byte Ed25519 public key. |
+| Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. Set `true` only for an intentional publisher rollback. |
 
 If `tokenRegistry.sourceUrl` has an explicit value, Dingo also requires it to
 be an absolute HTTPS URL. Before Dingo applies a snapshot, it verifies the
