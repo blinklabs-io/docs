@@ -9,7 +9,8 @@ description: Dingo Release Notes
 
 ☑️ Select a version below to view the full release notes. The latest release appears first.
 
-- Version: v0.81.3 - *[View Release Notes](../v0-81-3)*
+ - Version: v0.82.0 - *[View Release Notes](../v0-82-0)*
+ - Version: v0.81.3 - *[View Release Notes](../v0-81-3)*
 - Version: v0.81.2 - *[View Release Notes](../v0-81-2)*
 - Version: v0.81.1 - *[View Release Notes](../v0-81-1)*
 - Version: v0.81.0 - *[View Release Notes](../v0-81-0)*
