@@ -107,10 +107,10 @@ Dingo provides `faucet.skey`, `faucet.vkey`, and `faucet.addr` in the
 `900,000` test ADA (`900_000_000_000` lovelace) at genesis for local
 transactions.
 
-- For a temporary `./dingo devnet` run, use the temporary run directory that
-  Dingo prints. Its `cardano/keys/` directory contains the faucet files until
-  the process exits.
-- For `./dingo devnet --data-dir ./.dingo-devnet`, find the files in
+- For a temporary `./dingo devnet` run, Dingo prints the temporary run
+  directory. Its `cardano/keys/` directory contains the faucet files until the
+  process exits.
+- For `./dingo devnet --data-dir ./.dingo-devnet`, Dingo stores the files in
   `./.dingo-devnet/cardano/keys/`.
 - Dingo restricts the faucet files and their directory to owner-only access.
 
