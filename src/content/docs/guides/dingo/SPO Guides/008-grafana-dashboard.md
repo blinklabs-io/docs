@@ -65,7 +65,7 @@ Prometheus needs to know where to find your Dingo node. Add the following to you
     - targets: ['localhost:9100']
 ```
 
-If the Dingo configuration sets `metricsAuthToken` or `DINGO_METRICS_AUTH_TOKEN`, add the following under the `dingo` scrape job:
+Set the token in Dingo YAML with `metricsAuthToken` or through `DINGO_METRICS_AUTH_TOKEN`; Dingo provides no CLI flag for this secret. Then add the following under the `dingo` scrape job:
 
 ```yaml
   authorization:
