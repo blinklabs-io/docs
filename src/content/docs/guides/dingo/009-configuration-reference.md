@@ -49,7 +49,7 @@ for the main runtime choices.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Metrics bind address | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. This address is independent of `bindAddr` and defaults to loopback. Set it explicitly to a wildcard or remote reachable address when a scraper runs outside the container or host. |
+| Metrics bind address | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. This address is independent of `bindAddr` and defaults to loopback. Set it explicitly to a wildcard or remotely reachable address when a scraper runs outside the container or host. |
 | Metrics authentication token | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Empty by default, which keeps metrics unauthenticated. Dingo provides no CLI flag because process arguments can be visible to other users. When set, clients must send `Authorization: Bearer <token>` to both the node metrics endpoint and the Mithril metrics endpoint. |
 | Metrics port | `metricsPort` | `--metrics-port` | — | `12798` by default. Set it to `0` to disable the Prometheus listener. |
 
@@ -158,8 +158,8 @@ error.
 
 ### Token registry manifest authentication
 
-When configuration enables token registry sync, Dingo requires a signed manifest URL and
-the trusted public key used to verify it.
+When configuration enables token registry sync, Dingo requires a signed manifest
+URL and the trusted public key used to verify it.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
