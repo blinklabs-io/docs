@@ -71,7 +71,7 @@ token for the node and Mithril metrics endpoints:
 
 Configure Prometheus with `authorization.credentials_file` containing the same
 token. See the [Grafana dashboards guide](/guides/dingo/SPO%20Guides/008-grafana-dashboard/)
-for the Prometheus configuration. The token protected listener still uses
+for the Prometheus configuration. The token-protected listener still uses
 plain HTTP, so remote transport requires a TLS reverse proxy or an
 authenticated encrypted tunnel.
 
