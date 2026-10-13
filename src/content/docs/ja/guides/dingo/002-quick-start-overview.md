@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.81.3）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.82.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.81.3/dingo-v0.81.3-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.82.0/dingo-v0.82.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -79,13 +79,23 @@ npx @blinklabs/dingo devnet
 
 `--data-dir`を指定しない場合、Dingoは設定、テストキー、チェーンデータを専用の一時ディレクトリに保存し、プロセス終了時にそのディレクトリを削除します。実行するたびに新しいチェーンが開始されます。
 
+Devnetは、ローカルテスト用のfaucet認証情報を`cardano/keys/`に配置します。配置されるファイルは次の3つです：
+
+- `faucet.skey`
+- `faucet.vkey`
+- `faucet.addr`
+
+`--data-dir`を指定しない一時実行では、これらのファイルはDingoが作成する専用の一時ディレクトリ内の`cardano/keys/`に配置され、プロセス終了時に一時ディレクトリとともに削除されます。`--data-dir ./.dingo-devnet`を指定する永続実行では、`<data-dir>/cardano/keys/`に配置されます。ファイルとディレクトリには所有者だけがアクセスできる権限が設定されます。
+
+`faucet.addr`のアドレスにはgenesis時点で900,000 test ADA（900_000_000_000 lovelace）が割り当てられます。組み込みの認証情報とネットワークはローカルテスト専用です。実際の資金には使用しないでください。
+
 チェーンを保持して再利用するには、永続データディレクトリを指定します：
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet
 ```
 
-同じコマンドを再度実行すると、そのチェーンを再開します。Dingoが管理する状態を再作成し、ディレクトリ内の無関係なファイルを保持するには、次のコマンドを実行します：
+同じコマンドを再度実行すると、そのチェーンを再開します。`--reset`を指定しない永続Devnetの再開では、不足しているfaucet認証情報だけが復元または更新され、producer認証情報、genesisの割り当て、チェーンデータは保持されます。Dingoが管理する状態を意図的に再作成し、ディレクトリ内の無関係なファイルを保持するには、次のコマンドを実行します：
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet --reset
@@ -93,7 +103,6 @@ npx @blinklabs/dingo devnet
 
 永続データディレクトリを初めて使用するときは、空のディレクトリを指定してください。Dingoは、ノードの実行中に同じディレクトリを使用する別の起動を拒否します。
 
-組み込みのキーとネットワークはローカルテスト専用です。実際の資金には使用しないでください。
 
 ***
 
@@ -101,8 +110,8 @@ npx @blinklabs/dingo devnet
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingo v0.81.3の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.3/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+Dingo v0.82.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
+同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
 
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
