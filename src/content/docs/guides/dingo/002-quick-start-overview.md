@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.81.3/dingo-v0.81.3-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.82.0/dingo-v0.82.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -101,15 +101,34 @@ invocation that uses the same directory while the node is running. Use the
 bundled keys and network for local testing only. Never use them with real
 funds.
 
+Dingo provides `faucet.skey`, `faucet.vkey`, and `faucet.addr` in the
+`cardano/keys/` directory. The bundled `faucet.addr`
+(`addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`) receives
+`900,000` test ADA (`900_000_000_000` lovelace) at genesis for local
+transactions.
+
+- For a temporary `./dingo devnet` run, use the temporary run directory that
+  Dingo prints. Its `cardano/keys/` directory contains the faucet files until
+  the process exits.
+- For `./dingo devnet --data-dir ./.dingo-devnet`, find the files in
+  `./.dingo-devnet/cardano/keys/`.
+- Dingo restricts the faucet files and their directory to owner-only access.
+
+When a persistent devnet resumes without `--reset`, Dingo restores or
+refreshes only the faucet files and rewrites the local configuration. It
+preserves producer credentials, the existing genesis allocation, and chain
+data. The bundled credentials and network are for local testing only; never
+use them with real funds.
+
 ***
 
 <br>
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.81.3 settings, defaults, and environment or command-line
+For all Dingo v0.82.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.3/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
