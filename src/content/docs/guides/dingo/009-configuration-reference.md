@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.81.3 Configuration Reference
-description: Complete, release-specific Dingo v0.81.3 configuration reference and example.
+title: Dingo v0.82.0 Configuration Reference
+description: Complete, release-specific Dingo v0.82.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.81.3. The complete
+This page covers the configuration shipped with Dingo v0.82.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.81.3/dingo.yaml.example).
-The same file is available in the [Dingo v0.81.3 source](https://github.com/blinklabs-io/dingo/blob/v0.81.3/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.82.0 source](https://github.com/blinklabs-io/dingo/blob/v0.82.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -28,14 +28,14 @@ for the main runtime choices.
 | Area | Main settings | Purpose |
 | --- | --- | --- |
 | Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Select a Cardano network and locate node, topology, and data files. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
-| Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, registry refresh, parity diagnostics, caching, and startup validation. |
+| Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
 
 ### Ledger processing
 
@@ -49,8 +49,21 @@ for the main runtime choices.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Metrics bind address | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. This address is independent of `bindAddr`. Set it explicitly to a wildcard or remote reachable address when a scraper runs outside the host. |
+| Metrics bind address | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. This address is independent of `bindAddr` and defaults to loopback. Set it explicitly to a wildcard or remote reachable address when a scraper runs outside the container or host. |
+| Metrics authentication token | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Empty by default, which keeps metrics unauthenticated. Dingo provides no CLI flag because process arguments can be visible to other users. When set, clients must send `Authorization: Bearer <token>` to both the node metrics endpoint and the Mithril metrics endpoint. |
 | Metrics port | `metricsPort` | `--metrics-port` | — | `12798` by default. Set it to `0` to disable the Prometheus listener. |
+
+The metrics listener uses plain HTTP. Protect the token with a TLS reverse
+proxy or an authenticated encrypted tunnel when traffic crosses an untrusted
+network.
+
+### Tracing
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Tracing collector endpoint | `tracingEndpoint` | `--tracing-endpoint` | `DINGO_TRACING_ENDPOINT` | Empty by default. Set an OTLP HTTP collector URL to enable tracing. When empty, the `tracing` setting controls tracing and the standard `OTEL_EXPORTER_OTLP_*` environment variables select the destination. |
+| Tracing service name | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | `dingo` by default. Sets the service name for exported traces. |
+| Tracing sample ratio | `tracingSampleRatio` | `--tracing-sample-ratio` | `DINGO_TRACING_SAMPLE_RATIO` | `1` by default. Set a value from `0` through `1`, inclusive. Dingo rejects values outside this range during configuration validation. |
 
 ### ImmutableDB source
 
