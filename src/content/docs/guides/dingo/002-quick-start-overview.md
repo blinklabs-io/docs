@@ -117,8 +117,7 @@ transactions.
 When a persistent devnet resumes without `--reset`, Dingo restores or
 refreshes only the faucet files and rewrites the local configuration. It
 preserves producer credentials, the existing genesis allocation, and chain
-data. The bundled credentials and network are for local testing only; never
-use them with real funds.
+data.
 
 ***
 
