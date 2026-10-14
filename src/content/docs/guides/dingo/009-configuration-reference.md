@@ -130,6 +130,20 @@ omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
 
+### Badger value-log garbage collection
+
+Configure these provider YAML keys under `plugins.storage.blob.config` for the
+Badger provider. These settings do not add top-level CLI flags or environment
+variables.
+
+| Setting | Provider YAML key | Default | Validation and behavior |
+| --- | --- | --- | --- |
+| Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero duration selects the `5m` default. Dingo rejects negative intervals. |
+| Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
+
+Dingo keeps value-log GC disabled in `load` mode even when the Badger provider
+configuration sets `plugins.storage.blob.config.gc` to `true`.
+
 ### Database lifecycle snapshot pause bound
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and scope |
