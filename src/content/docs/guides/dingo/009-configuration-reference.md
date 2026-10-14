@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.82.0 Configuration Reference
-description: Complete, release-specific Dingo v0.82.0 configuration reference and example.
+title: Dingo v0.83.0 Configuration Reference
+description: Complete, release-specific Dingo v0.83.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.82.0. The complete
+This page covers the configuration shipped with Dingo v0.83.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.82.0 source](https://github.com/blinklabs-io/dingo/blob/v0.82.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.83.0 source](https://github.com/blinklabs-io/dingo/blob/v0.83.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -130,6 +130,20 @@ omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
 
+### Badger value-log garbage collection
+
+Configure these provider YAML keys under `plugins.storage.blob.config` for the
+Badger provider. These settings do not add top-level CLI flags or environment
+variables.
+
+| Setting | Provider YAML key | Default | Validation and behavior |
+| --- | --- | --- | --- |
+| Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
+| Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
+
+Dingo keeps value-log GC disabled in `load` mode even when the Badger provider
+configuration sets `plugins.storage.blob.config.gc` to `true`.
+
 ### Database lifecycle snapshot pause bound
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and scope |
@@ -147,6 +161,7 @@ expose it on another interface.
 | --- | --- | --- | --- | --- |
 | Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`, `barkClientCaFilePath`, both `tlsCertFilePath` and `tlsKeyFilePath`, and at least one `barkLifecycleOperatorCertificateFingerprints` value. |
 | Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Empty by default. Each value must be the SHA-256 fingerprint of the client certificate DER bytes, encoded as hexadecimal; colons are accepted and matching ignores case. These credentials authorize `Stop` and `Restart` only. |
+| Private or special-use addresses for block downloads | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. When `true`, Dingo permits private or special-use resolved addresses for Bark block-download destinations. Dingo still checks the origin allowlist, requires HTTPS, validates redirects, and disables proxy use. This setting affects block downloads only, not Bark RPC traffic. |
 
 All lifecycle operations require a client certificate verified against
 `barkClientCaFilePath`. `Stop` and `Restart` additionally require a matching
