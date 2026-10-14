@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.82.0 Configuration Reference
-description: Complete, release-specific Dingo v0.82.0 configuration reference and example.
+title: Dingo v0.83.0 Configuration Reference
+description: Complete, release-specific Dingo v0.83.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.82.0. The complete
+This page covers the configuration shipped with Dingo v0.83.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.82.0 source](https://github.com/blinklabs-io/dingo/blob/v0.82.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.83.0 source](https://github.com/blinklabs-io/dingo/blob/v0.83.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -147,6 +147,7 @@ expose it on another interface.
 | --- | --- | --- | --- | --- |
 | Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`, `barkClientCaFilePath`, both `tlsCertFilePath` and `tlsKeyFilePath`, and at least one `barkLifecycleOperatorCertificateFingerprints` value. |
 | Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Empty by default. Each value must be the SHA-256 fingerprint of the client certificate DER bytes, encoded as hexadecimal; colons are accepted and matching ignores case. These credentials authorize `Stop` and `Restart` only. |
+| Private addresses for block downloads | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. When `true`, Dingo permits private or special-use resolved addresses for Bark block-download destinations. Dingo still checks the origin allowlist, requires HTTPS, validates redirects, and disables proxy use. This setting affects block downloads only, not Bark RPC traffic. |
 
 All lifecycle operations require a client certificate verified against
 `barkClientCaFilePath`. `Stop` and `Restart` additionally require a matching
