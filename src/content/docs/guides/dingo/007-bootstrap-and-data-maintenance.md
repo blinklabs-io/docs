@@ -126,7 +126,6 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-and download host allowlists in the Dingo v0.82.0 release
 and download host allowlists in the Dingo v0.83.0 release
 [example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.0/dingo.yaml.example). Use this example
 only with Dingo v0.83.0; configuration options can change between versions.
