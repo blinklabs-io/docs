@@ -139,9 +139,9 @@ Set `barkBlockDownloadAllowPrivateAddresses` to `true`, use
 private or special-use resolved addresses for block-download destinations
 only. This option does not disable the configured origin allowlist, the
 HTTPS-only requirement, or redirect validation. For block-download requests,
-Bark does not use ambient HTTP proxy settings or caller-provided dialers. These rules apply
-only to block downloads; the separately configured Bark RPC client continues to
-handle archive RPC calls.
+Bark does not use ambient HTTP proxy settings or caller-provided dialers. These
+rules apply only to block downloads; the separately configured Bark RPC client
+continues to handle archive RPC calls.
 
 
 ---
