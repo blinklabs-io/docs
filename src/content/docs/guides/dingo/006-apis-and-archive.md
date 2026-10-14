@@ -53,8 +53,8 @@ plugins:
         port: 9090
 ```
 
-The complete v0.82.0 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.82.0/dingo.yaml.example) are
+The complete v0.83.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
@@ -130,8 +130,16 @@ Bark accepts signed block download URLs only when their normalized HTTPS origin
 matches the configured normalized HTTPS origin or an explicitly allowed
 download origin.
 The normalized origin includes the scheme, lowercased host, and effective port.
-Bark checks redirect destinations against the same policy and rejects any
-redirect whose resolved address is private or special-use. For block-download
+Bark checks redirect destinations against the same policy. By default,
+`barkBlockDownloadAllowPrivateAddresses` is `false`, so Bark rejects any
+block-download destination whose resolved address is private or special-use.
+Set `barkBlockDownloadAllowPrivateAddresses` to `true`, use
+`--bark-block-download-allow-private-addresses`, or set
+`DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES=true` to permit
+private or special-use resolved addresses for block-download destinations
+only. This option does not disable the configured origin allowlist, the
+HTTPS-only requirement, redirect validation, or disabled ambient HTTP proxy
+behavior. For block-download
 requests, Bark does not use ambient HTTP proxy settings or caller-provided
 dialers. These rules apply
 only to block downloads; the separately configured Bark RPC client continues to
