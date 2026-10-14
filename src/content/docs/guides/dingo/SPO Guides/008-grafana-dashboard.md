@@ -26,8 +26,8 @@ Additional dashboard documentation and resources are available in the Dingo repo
 Before you begin, make sure you have:
 
 - **Grafana 12+** (tested on 12.4) — [install guide](https://grafana.com/docs/grafana/latest/setup-grafana/installation/)
-- **Prometheus** scraping your Dingo node on port `12798` (configured in step 2 below)
-- **Dingo** node with metrics enabled (default port `12798`)
+- **Prometheus** scraping your Dingo node on `localhost:12798` for local deployments (configured in step 2 below). Remote scraping requires an explicit `metricsBindAddr` or `DINGO_METRICS_BIND_ADDR` value on the Dingo node; `bindAddr` does not change metrics exposure.
+- **Dingo** node with metrics enabled (default port `12798`). The metrics listener binds to `127.0.0.1` by default.
 - **[Business Text plugin](https://grafana.com/grafana/plugins/marcusolsson-dynamictext-panel/)** — required by all dashboards for the header panel
 - **[prometheus-node-exporter](https://github.com/prometheus/node_exporter)** — required only by the Resource Usage dashboard for host-level CPU, memory, and disk metrics
 
@@ -64,6 +64,15 @@ Prometheus needs to know where to find your Dingo node. Add the following to you
   static_configs:
     - targets: ['localhost:9100']
 ```
+
+Set the token in Dingo YAML with `metricsAuthToken` or through `DINGO_METRICS_AUTH_TOKEN`; Dingo provides no CLI flag for this secret. Then add the following under the `dingo` scrape job:
+
+```yaml
+  authorization:
+    credentials_file: /run/secrets/dingo-metrics-token
+```
+
+The `credentials_file` must contain the configured token value only. Do not add a literal `Bearer ` prefix. The same token protects the Mithril metrics endpoint, so use the same Prometheus credentials configuration when scraping that endpoint. The metrics listener uses plain HTTP; place remote token traffic behind a TLS reverse proxy or an authenticated encrypted tunnel to protect it in transit.
 
 Then reload Prometheus to apply the change:
 
@@ -193,3 +202,14 @@ All JSON files use the datasource UID `prometheus`. If your Prometheus datasourc
 
 **Dashboards not appearing after provisioning**
 Confirm `/etc/grafana/provisioning/dashboards/dingo.yaml` references the correct path. Grafana auto-reloads provisioned dashboards every 30 seconds; if it hasn't appeared after a minute, check the Grafana log (`journalctl -u grafana-server`) for errors.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
