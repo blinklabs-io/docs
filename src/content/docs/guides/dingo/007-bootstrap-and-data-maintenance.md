@@ -61,8 +61,8 @@ root. Set `immutableDbPath` in the configuration or
 `dingo load`. Use a local directory path for local data. Use an `https://` URL
 for a remote source; Dingo accepts `http://` only for loopback destinations and
 rejects non-loopback HTTP sources. Dingo rejects private or special-use HTTPS
-destinations at the initial URL, after every redirect, and for every DNS answer
-returned when it connects. Remote import traffic does not use ambient HTTP
+destinations at the initial URL, after every redirect, and for every dial-time
+DNS answer. Dingo does not route remote import traffic through ambient HTTP
 proxy settings.
 
 Dingo applies aggregate limits to transfer bytes, active cache and staging
