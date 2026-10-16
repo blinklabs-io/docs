@@ -59,8 +59,18 @@ for the complete `server` and `aggregator` settings.
 root. Set `immutableDbPath` in the configuration or
 `DINGO_IMMUTABLE_DB_PATH`, or pass the source as the positional input to
 `dingo load`. Use a local directory path for local data. Use an `https://` URL
-for a remote source. Dingo accepts `http://` only when the host is loopback;
-it rejects non-loopback HTTP sources.
+for a remote source; Dingo accepts `http://` only for loopback destinations and
+rejects non-loopback HTTP sources. Dingo rejects private or special-use HTTPS
+destinations at the initial URL, after every redirect, and for every DNS answer
+returned when it connects. Remote import traffic does not use ambient HTTP
+proxy settings.
+
+Dingo derives aggregate limits for transfer bytes, active cache and staging
+data, reserved free space, and concurrency from the requested range. If an
+import exceeds an available limit or free-space reserve, Dingo fails the
+import explicitly instead of allowing unbounded resource use. Dingo cleans up
+staging files when an import fails, including failures during setup or budget
+initialization.
 
 A remote root must provide `tip.json` and complete numbered chunk triads. Each
 triad must use the same five-digit number for all three files:
