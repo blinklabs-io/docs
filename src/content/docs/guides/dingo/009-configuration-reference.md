@@ -75,10 +75,11 @@ initial URL, every redirect, and each dial-time DNS resolution. Dingo ignores
 ambient HTTP proxy settings for remote imports.
 Remote roots provide `tip.json` and numbered `.chunk`, `.primary`, and
 `.secondary` files as chunk triads. Dingo rejects mismatched or incomplete
-published chunk data. Dingo derives aggregate transfer-byte, cache and
-staging, free-space-reserve, and concurrency limits from the requested chunk
-range. The import fails explicitly when a limit or available free space is
-insufficient, and Dingo removes staging files after a failed import. See the
+published chunk data. Dingo derives aggregate limits for transfer bytes, cache
+and staging, free-space reserves, and concurrency from the requested chunk
+range. Dingo reports an error and fails the import when a limit is exceeded or
+available free space is insufficient, then removes staging files after the
+failure. See the
 bootstrap and data maintenance guide for the remote source, chunk, and
 integrity requirements.
 
