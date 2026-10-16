@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.83.0 Configuration Reference
-description: Complete, release-specific Dingo v0.83.0 configuration reference and example.
+title: Dingo v0.83.1 Configuration Reference
+description: Complete, release-specific Dingo v0.83.1 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.83.0. The complete
+This page covers the configuration shipped with Dingo v0.83.1. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.83.0 source](https://github.com/blinklabs-io/dingo/blob/v0.83.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.1/dingo.yaml.example).
+The same file is available in the [Dingo v0.83.1 source](https://github.com/blinklabs-io/dingo/blob/v0.83.1/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -70,10 +70,17 @@ network.
 The `immutableDbPath` setting and the positional input to `dingo load` accept a
 local directory or a remote URL. Remote sources require an `https://` URL;
 `http://` works only for loopback hosts, and Dingo rejects non-loopback HTTP.
+For HTTPS sources, Dingo rejects private or special-use destinations for the
+initial URL, every redirect, and each dial-time DNS resolution. Dingo ignores
+ambient HTTP proxy settings for remote imports.
 Remote roots provide `tip.json` and numbered `.chunk`, `.primary`, and
 `.secondary` files as chunk triads. Dingo rejects mismatched or incomplete
-published chunk data. See the bootstrap and data maintenance guide for the
-remote source, chunk, and integrity requirements.
+published chunk data. Dingo derives aggregate limits for transfer bytes, cache
+and staging, free-space reserves, and concurrency from the requested chunk
+range. Dingo reports an error and fails the import when a limit is exceeded or
+available free space is insufficient. It then removes staging files after the
+failure. See the bootstrap and data maintenance guide for the remote source,
+chunk, and integrity requirements.
 
 ### LocalStateQuery snapshot lifetime
 
