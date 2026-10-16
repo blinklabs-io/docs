@@ -24,7 +24,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-   ghcr.io/blinklabs-io/dingo:0.83.1
+    ghcr.io/blinklabs-io/dingo:0.83.1
 ```
 
 Port `3001` accepts Ouroboros node-to-node connections. Metrics on `12798` and
