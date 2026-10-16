@@ -65,12 +65,12 @@ destinations at the initial URL, after every redirect, and for every DNS answer
 returned when it connects. Remote import traffic does not use ambient HTTP
 proxy settings.
 
-Dingo derives aggregate limits for transfer bytes, active cache and staging
-data, reserved free space, and concurrency from the requested range. If an
-import exceeds an available limit or free-space reserve, Dingo fails the
-import explicitly instead of allowing unbounded resource use. Dingo cleans up
-staging files when an import fails, including failures during setup or budget
-initialization.
+Dingo applies aggregate limits to transfer bytes, active cache and staging
+data, reserved free space, and concurrency for the complete import based on the
+requested range. If the import exceeds an available limit or free-space
+reserve, Dingo fails it explicitly instead of allowing unbounded resource use.
+Dingo cleans up staging files when an import fails, including setup and budget
+initialization failures.
 
 A remote root must provide `tip.json` and complete numbered chunk triads. Each
 triad must use the same five-digit number for all three files:
