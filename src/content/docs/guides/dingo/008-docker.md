@@ -5,10 +5,10 @@ description: Run the published Dingo image, persist its data, and check node hea
 
 Dingo publishes container images to GitHub Container Registry. The versioned
   image tag omits the leading `v` from the matching Dingo release tag. This
-  example uses Dingo `v0.83.0`:
+  example uses Dingo `v0.83.1`:
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.83.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.83.1
 ```
 
 ## Start a Preview node
@@ -24,7 +24,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-   ghcr.io/blinklabs-io/dingo:0.83.0
+   ghcr.io/blinklabs-io/dingo:0.83.1
 ```
 
 Port `3001` accepts Ouroboros node-to-node connections. Metrics on `12798` and
@@ -46,7 +46,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-    ghcr.io/blinklabs-io/dingo:0.83.0 \
+     ghcr.io/blinklabs-io/dingo:0.83.1 \
   --config /tmp/dingo.yaml serve
 ```
 
