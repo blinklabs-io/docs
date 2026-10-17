@@ -38,9 +38,9 @@ The snapshot must meet all of the following requirements:
 Apply all of the following requirements to every relay in the populated pool list:
 
 - Give each relay a non-empty address that names either a valid DNS hostname or a non-unspecified IP address.
-- Give each relay an explicit TCP port from `1` through `65535`.
+- Allow DNS or hostname relays to omit the TCP port or set `port` to `0`; Dingo preserves them as `MultiHostName` relays for SRV resolution.
+- Require IP relays to specify a TCP port from `1` through `65535`; Dingo rejects portless and port `0` IP relays.
 
-Dingo rejects portless SRV relays and port `0`.
 
 ## Startup behavior
 
