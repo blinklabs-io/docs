@@ -22,16 +22,16 @@ Plutus V1 and V2 apply the `datum`, `redeemer`, and `scriptContext` arguments in
 
 The caller supplies the execution `budget` and `evalContext` for every version. The evaluator enforces the supplied budget, including a zero budget.
 
-## Large ledger derived data
+## Large data from ledger contexts
 
-`EvaluateContext` passes ledger derived datum, redeemer, and script context values as execution arguments. The evaluator keeps those values separate from the UPLC program term, so their Plutus data nodes do not increase the structural node count of the UPLC program.
+`EvaluateContext` passes datum, redeemer, and script context values from ledger state as execution arguments. The evaluator keeps those values separate from the UPLC program term, so their Plutus data nodes do not increase the structural node count of the UPLC program.
 
-This behavior allows evaluation of contexts that contain very large inline datums without the ledger data itself causing a structural node limit failure. V3 regression coverage includes a ledger context with more than 1,000,000 `PlutusData` nodes.
+This behavior lets the evaluator process contexts with very large inline datums without the ledger data itself causing a structural node limit failure. V3 regression coverage includes a ledger context with more than 1,000,000 `PlutusData` nodes.
 
 The trusted argument treatment applies only to the finite data values supplied through the `EvaluateContext` arguments. The evaluator still decodes and validates the UPLC program, and structural limits still apply to that program. The behavior does not make ledger data unlimited or remove execution budget enforcement.
 
 ## Input validity and errors
 
-The caller must provide finite, valid Plutus data that comes from ledger state for each data argument. The trusted argument path does not provide a way to bypass data validation.
+Each data argument must contain finite, valid Plutus data that comes from ledger state. The trusted argument path does not bypass data validation.
 
-The evaluator rejects malformed or unknown script terms that caller code constructs and returns an error instead of proceeding into evaluation. The caller should treat any such error as a rejected program or input and correct the supplied term before retrying.
+The evaluator rejects malformed or unknown script terms that caller code constructs and returns an error instead of evaluating them. Correct the supplied term before retrying after such an error.
