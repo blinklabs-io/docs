@@ -144,13 +144,13 @@ authorization must use a specific policy and asset.
 
 | Setting | YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
-| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | Set this field with `midnight.authTokenAssetName`. A configured value must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
-| Auth-token asset name | `midnight.authTokenAssetName` | Empty | Set this field with `midnight.authTokenPolicyId`. Dingo matches the configured policy ID and asset name as an exact pair. |
+| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | A configured value must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
+| Auth-token asset name | `midnight.authTokenAssetName` | Empty | Dingo uses this value with the configured policy ID when it validates an auth token. |
 
-Dingo requires both fields to be set or both fields to be empty. A partial pair
-fails configuration and startup validation. When configured, Dingo accepts an
-auth token only when both its policy ID and asset name match the configured
-values exactly.
+Operators must set both fields or leave both fields empty. A partial pair fails
+configuration and startup validation. When configured, Dingo accepts an auth
+token only when its policy ID and asset name exactly match the configured
+values.
 
 ### Badger value-log garbage collection
 
