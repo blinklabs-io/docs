@@ -7,11 +7,7 @@ description: Plutus V1からV4スクリプトを評価するEvaluateContext API�
 
 このページでは、`PlutusV1Script`、`PlutusV2Script`、`PlutusV3Script`、`PlutusV4Script` の `EvaluateContext` を使用してPlutusスクリプトを評価する方法を説明します。各メソッドは、使用した実行予算を `ExUnits` として返します。`ctx` がキャンセルされると、評価を停止します。
 
-評価対象のプログラムと台帳データには、次の規則を適用します。
-
-- `PlutusV1Script` と `PlutusV2Script` は、`datum`、`redeemer`、`scriptContext` をこの順序で受け取ります。
-- `PlutusV3Script` と `PlutusV4Script` は、`scriptContext` のみを受け取ります。redeemerは `scriptContext` に含めます。
-- 台帳から取得したデータ引数は、信頼された実行引数としてプログラムに渡します。データをUPLCプログラムのtermに埋め込まないため、大きな台帳データはUPLCプログラム自体の構造ノード数に加算されません。
+`EvaluateContext` は、台帳から取得したデータ引数を信頼された実行引数としてプログラムに渡します。データをUPLCプログラムのtermに埋め込まないため、大きな台帳データはUPLCプログラム自体の構造ノード数に加算されません。
 
 ## APIシグネチャ
 
@@ -71,7 +67,7 @@ func (s PlutusV4Script) EvaluateContext(
 
 `PlutusV4Script` は `scriptContext` をスクリプトに渡します。datumとredeemerを別の引数として渡さないでください。
 
-## 台帳データの要件
+## 台帳データの扱いと要件
 
 `datum`、`redeemer`、`scriptContext` に渡す値は、次の条件を満たす必要があります。
 
@@ -81,7 +77,7 @@ func (s PlutusV4Script) EvaluateContext(
 
 この要件は、信頼された実行引数としてデータを渡す場合にも適用します。信頼された実行引数は、任意の呼び出し側データに対する検証を無効にする機能ではありません。
 
-呼び出し側が構築した不正なtermまたは未知のtermは、評価せずにエラーとして返します。特定のエラー名やエラー文字列に依存せず、エラーを処理してください。
+呼び出し側が構築した不正なtermまたは未知のtermは、評価せずにエラーを返します。特定のエラー名やエラー文字列に依存せず、エラーを処理してください。
 
 ## プログラム検証と実行予算
 
