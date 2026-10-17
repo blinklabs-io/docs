@@ -10,7 +10,7 @@ Esta guía describe dos contratos de recursos para las integraciones con gOurobo
 
 ## Propiedad de los resultados de BlockPipeline
 
-`PipelineConfig.MaxRawCborBytes` establece el presupuesto agregado para las copias completas de CBOR de bloques que el pipeline conserva entre la entrega y la recepción del resultado. El presupuesto cubre la copia de la entrega sin procesar y el CBOR almacenado del bloque decodificado para los elementos en curso. `DefaultMaxRawCborBytes` establece el valor predeterminado en `64 MiB`, y un valor cero de `MaxRawCborBytes` selecciona ese valor predeterminado.
+`PipelineConfig.MaxRawCborBytes` establece el presupuesto agregado para las copias completas de CBOR de bloques que el pipeline conserva entre el envío y la entrega del resultado. El presupuesto cubre la copia sin procesar del envío y el CBOR almacenado del bloque decodificado para los elementos en curso. `DefaultMaxRawCborBytes` establece el valor predeterminado en `64 MiB`, y un valor cero de `MaxRawCborBytes` selecciona ese valor predeterminado.
 
 Configura el valor mediante `WithMaxRawCborBytes`:
 
@@ -20,7 +20,7 @@ blockPipeline := pipeline.NewBlockPipeline(
 )
 ```
 
-El pipeline reserva los bytes retenidos necesarios durante `Submit` y mantiene cada resultado contabilizado hasta que el consumidor lo recibe. Si un bloque no cabe en el presupuesto agregado configurado, `Submit` devuelve un error que coincide con `pipeline.ErrRawCborBudgetExceeded`. Si los consumidores no reciben y liberan los resultados, las entregas posteriores pueden permanecer sujetas a contrapresión porque los resultados retenidos continúan ocupando recursos del pipeline.
+El pipeline reserva los bytes retenidos necesarios durante `Submit` y mantiene cada resultado contabilizado hasta que el consumidor lo recibe. Si un bloque no cabe en el presupuesto agregado configurado, `Submit` devuelve un error que coincide con `pipeline.ErrRawCborBudgetExceeded`. Si los consumidores no reciben y liberan los resultados, los envíos posteriores pueden permanecer sujetos a contrapresión porque los resultados retenidos continúan ocupando recursos del pipeline.
 
 ### Consume y libera cada resultado
 
@@ -66,7 +66,7 @@ El cliente cuenta cada mensaje `MsgBlock` completo y codificado del rango:
 - `MaxRangeBytes` cuenta los bytes codificados acumulativos de esos mensajes `MsgBlock` completos.
 - `RangeTimeout` comienza cuando inicia la admisión de la solicitud. Incluye las esperas locales por capacidad en curso y por la puesta en cola de la solicitud, y el progreso de los bloques no renueva el plazo.
 
-Los contadores del rango se aplican al rango inclusivo completo, no a respuestas ni lotes individuales. El cliente comprueba los límites antes de entregar cada bloque y también comprueba el plazo durante el procesamiento terminal del rango.
+El cliente aplica los contadores al rango inclusivo completo, no a respuestas ni lotes individuales. También comprueba los límites antes de entregar cada bloque y comprueba el plazo durante el procesamiento terminal del rango.
 
 ### Errores de límite de rango
 
