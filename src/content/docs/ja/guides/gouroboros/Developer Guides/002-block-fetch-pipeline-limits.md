@@ -46,7 +46,7 @@ for item := range p.Results() {
 
 `RangeRequest.ExpectedBytes` は、range 全体のシリアライズ済みサイズ（ヘッダーを含む）に対する呼び出し側の見積もりです。この値は、複数の処理中の request に対する `MaxInFlightBytes` の受付と、Block Fetch の ingress allowance を計算します。`ExpectedBytes` は、実際に受信したブロック数やエンコード済みバイト数を制限する値ではありません。
 
-そのため、`ExpectedBytes` による in-flight admission と、`MaxBlocksPerRange`、`MaxRangeBytes`、`RangeTimeout` による range 内の累積制限および合計期限は別々に適用されます。見積もりが小さくても、range は実際のブロック数、エンコード済みサイズ、経過時間の制限を超えられません。
+そのため、`ExpectedBytes` による処理中 request の受付と、`MaxBlocksPerRange`、`MaxRangeBytes`、`RangeTimeout` による range 内の累積制限および合計期限は別々に適用されます。見積もりが小さくても、range は実際のブロック数、エンコード済みサイズ、経過時間の制限を超えられません。
 
 ### range のエラー処理
 
@@ -56,7 +56,7 @@ for item := range p.Results() {
 | --- | --- |
 | `ErrRangeBlockLimit` | range の累積ブロック数が `MaxBlocksPerRange` を超えた。 |
 | `ErrRangeByteLimit` | range の累積エンコード済み `MsgBlock` バイト数が `MaxRangeBytes` を超えた。 |
-| `ErrRangeTimeout` | admission から完了までの固定期限が経過した。 |
+| `ErrRangeTimeout` | 受付から完了までの固定期限が経過した。 |
 
 `RequestRange` は、送信後に発生した終端エラーを戻り値として返しません。クライアントは、range ごとに `RangeDoneFunc` を1回呼び出し、コールバックの `error` 引数に成功時は `nil`、失敗時は終端エラーを渡します。範囲にブロックがない場合も `RangeDoneFunc` に `ErrNoBlocks` を渡しますが、これは通常の peer 応答です。
 
