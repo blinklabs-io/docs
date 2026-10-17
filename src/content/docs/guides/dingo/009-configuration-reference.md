@@ -144,7 +144,7 @@ authorization must use a specific policy and asset.
 
 | Setting | YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
-| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | A configured value must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
+| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | The configured policy ID must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
 | Auth-token asset name | `midnight.authTokenAssetName` | Empty | Dingo uses this value with the configured policy ID when it validates an auth token. |
 
 Operators must set both fields or leave both fields empty. A partial pair fails
@@ -158,8 +158,9 @@ Configure these provider YAML keys under `plugins.storage.blob.config` for the
 Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
-The `plugins.storage.blob.config.valueThreshold` setting defaults to `1 MiB`,
-except during Core-mode `sync` and Mithril sync, when it defaults to `1 KiB`.
+Dingo uses `1 MiB` as the default for
+`plugins.storage.blob.config.valueThreshold`, except during Core-mode `sync`
+and Mithril sync, when Dingo uses `1 KiB`.
 An explicit YAML value overrides either mode default, including an explicit
 `0`.
 
