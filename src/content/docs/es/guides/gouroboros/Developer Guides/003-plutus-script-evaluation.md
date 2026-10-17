@@ -20,7 +20,7 @@ Cada método `EvaluateContext` recibe los datos del ledger del script junto con 
 
 Plutus V1 y V2 aplican los argumentos `datum`, `redeemer` y `scriptContext` en ese orden. Plutus V3 y V4 reciben `scriptContext`; el contexto contiene los datos que requieren esas versiones del script.
 
-El llamador proporciona `budget` y `evalContext` para cada versión. El evaluador aplica el `budget` proporcionado, incluido un presupuesto de cero.
+El llamador proporciona `budget` y `evalContext` para cada versión. El evaluador aplica el `budget` que recibe, incluido un presupuesto de cero.
 
 ## Datos grandes de los contextos del ledger
 
@@ -34,4 +34,4 @@ El evaluador trata como argumentos de confianza únicamente los valores de datos
 
 Cada argumento de datos debe contener datos Plutus finitos y válidos procedentes del estado del ledger. La ruta de argumentos de confianza no omite la validación de datos.
 
-El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. Corrige el término proporcionado antes de volver a intentarlo después de ese error.
+El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. El llamador debe corregir el término antes de volver a intentarlo después de ese error.
