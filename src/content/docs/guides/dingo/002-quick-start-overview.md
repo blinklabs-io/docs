@@ -260,7 +260,7 @@ plugins:
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
-> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together or leave both unset. A partial pair causes configuration and startup validation to fail. A configured policy ID must contain exactly 56 hexadecimal characters (28 decoded bytes), and matching uses the exact policy ID plus asset name.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together or leave both unset. A partial pair causes configuration and startup validation to fail. A configured policy ID must be exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID plus asset name.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
