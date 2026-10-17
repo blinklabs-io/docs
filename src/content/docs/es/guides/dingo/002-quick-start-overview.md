@@ -221,7 +221,7 @@ plugins:
         port: 9090
 ```
 
-> 📝 Configure `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` juntos o deje ambos vacíos. Si configura solo uno, la validación de la configuración falla durante el arranque y Dingo no inicia. `midnight.authTokenPolicyId` debe contener 56 caracteres hexadecimales, que representan 28 bytes. Los tokens de autenticación configurados deben coincidir exactamente con el ID de política y el nombre del activo.
+> 📝 Dingo requiere `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` juntos o ambos vacíos. Si solo uno tiene valor, la validación de la configuración falla durante el arranque y Dingo no inicia. `midnight.authTokenPolicyId` debe contener 56 caracteres hexadecimales, equivalentes a 28 bytes. Dingo acepta los tokens de autenticación configurados únicamente cuando coinciden exactamente con el ID de política y el nombre del activo.
 
 > 📝 Para que Midnight sirva por gRPC, configure `storageMode: "api"`, `midnight.serverEnabled: true` y un valor distinto de `0` en `midnight.port`. La indexación y el servicio son controles independientes. `midnight.reflectionEnabled` está deshabilitado de forma predeterminada; `midnight.reflectionEnabled: true` activa la reflexión y requiere `midnight.serverEnabled: true`. Dingo mantiene el servidor gRPC deshabilitado cuando `midnight.serverEnabled` es `false`. `127.0.0.1` es el host predeterminado, incluso cuando `midnight.host` está vacío. Dingo limita el texto plano a direcciones de loopback; para exponer el servicio en una dirección que no sea de loopback, active `midnight.allowInsecureRemote: true` para texto plano o configure `tlsCertFilePath` y `tlsKeyFilePath` para TLS.
 
