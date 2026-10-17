@@ -16,6 +16,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -37,6 +39,13 @@ type Config struct {
 }
 
 func main() {
+	if err := run(); err != nil {
+		slog.Error("adder example failed", "error", err)
+		os.Exit(1)
+	}
+}
+
+func run() (err error) {
 	cfg := Config{
 		Magic:      764824073,
 		SocketPath: "/ipc/node.socket",
@@ -70,7 +79,7 @@ func main() {
 				"addr1q93l79hdpvaeqnnmdkshmr4mpjvxnacqxs967keht465tt2dn0z9uhgereqgjsw33ka6c8tu5um7hqsnf5fd50fge9gq4lu2ql",
 			},
 		),
-		// Comment out the following line if you don't want to filter on asset fingerprints
+		// Remove the entire WithAssetFingerprints call to disable asset filtering.
 		// Filter on DJED asset https://cexplorer.io/asset/asset15f3ymkjafxxeunv5gtdl54g5qs8ty9k84tq94x
 		filter_chainsync.WithAssetFingerprints(
 			[]string{"asset15f3ymkjafxxeunv5gtdl54g5qs8ty9k84tq94x"},
@@ -90,27 +99,24 @@ func main() {
 	)
 	defer cancel()
 	if err := p.StartContext(ctx); err != nil {
-		if ctx.Err() == nil {
-			slog.Error("failed to start pipeline", "error", err)
+		if ctx.Err() != nil {
+			return nil
 		}
-		return
+		return fmt.Errorf("failed to start pipeline: %w", err)
 	}
 	defer func() {
-		if err := p.Stop(); err != nil {
-			slog.Error("failed to stop pipeline", "error", err)
-		}
+		err = errors.Join(err, p.Stop())
 	}()
 
 	for {
 		select {
 		case <-ctx.Done():
-			return
+			return nil
 		case <-p.Failed():
-			slog.Error("pipeline failed", "error", p.Failure())
-			return
+			return fmt.Errorf("pipeline failed: %w", p.Failure())
 		case err, ok := <-p.ErrorChan():
 			if !ok {
-				return
+				return p.Failure()
 			}
 			slog.Error("pipeline diagnostic", "error", err)
 		}
