@@ -7,7 +7,7 @@ description: BlockPipeline の結果所有権と Block Fetch の range 制限を
 
 ## BlockPipeline の結果所有権
 
-`BlockPipeline` は、処理済みの `BlockItem` を `Results()` または `DrainResults()` で渡します。受け取った結果の所有権は呼び出し側に移るため、各 `BlockItem` の利用が終わったら `Release()` を1回呼び出します。結果を解放しないと、保持されたブロックデータが `MaxRawCborBytes` の予算を占有し続け、後続の `Submit` が待機したり失敗したりします。
+`BlockPipeline` は、処理済みの `BlockItem` を `Results()` または `DrainResults()` で渡します。受け取った結果は呼び出し側が所有するため、各 `BlockItem` の利用が終わったら `Release()` を1回呼び出します。結果を解放しないと、保持されたブロックデータが `MaxRawCborBytes` の予算を占有し続け、後続の `Submit` が待機したり失敗したりします。
 
 `PipelineConfig.MaxRawCborBytes` と `WithMaxRawCborBytes` は、パイプラインが保持する完全なブロック CBOR コピーの合計バイト数を制限します。`MaxRawCborBytes` に `0` を指定すると、`DefaultMaxRawCborBytes` の `64 * 1024 * 1024`（64 MiB）を使用します。`Submit` は保持用の予算を確保してからブロックを受け入れ、1つのブロックの保持コピーが予算に収まらない場合は `ErrRawCborBudgetExceeded` を返します。
 
@@ -26,7 +26,7 @@ for item := range p.Results() {
 }
 ```
 
-`Release()` は複数回呼び出しても安全ですが、各結果につき1回だけ呼び出す運用にします。`Release()` は保持していた raw CBOR と decoded block を消去するため、呼び出し後に `RawCbor()` または `Block()` を使用してはいけません。
+`Release()` は複数回呼び出しても安全ですが、各結果につき1回だけ呼び出す運用にします。`Release()` は保持していた raw CBOR と decoded block を消去するため、呼び出し後の `RawCbor()` と `Block()` は使用できません。
 
 ## Block Fetch の range 制限
 
