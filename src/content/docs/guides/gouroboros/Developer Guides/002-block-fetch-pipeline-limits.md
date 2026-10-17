@@ -24,8 +24,8 @@ blockPipeline := pipeline.NewBlockPipeline(
 )
 ```
 
-The pipeline reserves the required retained bytes during `Submit`. A result
-remains charged until the consumer receives it. If a block cannot fit within
+The pipeline reserves the required retained bytes during `Submit` and keeps
+each result charged until the consumer receives it. If a block cannot fit within
 the configured aggregate budget, `Submit` returns an error that matches
 `pipeline.ErrRawCborBudgetExceeded`. If consumers do not receive and release
 results, later submissions can remain backpressured because retained results
