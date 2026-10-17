@@ -16,10 +16,17 @@ go run ./adder-publisher
 ```
 
 Run `go run ./poolid-filter` or `go run ./event-address-filter` for the filter
-programs. All three default to mainnet magic 764824073. Changing
-`CARDANO_NODE_MAGIC` alone does not replace the global genesis values; configure
-both for another network. TCP access can use `WithAddress` instead of
-`WithSocketPath`; Node-to-Node ChainSync uses bulk synchronization and should
+programs. All three default to mainnet magic 764824073. For preview, set
+`CARDANO_NODE_MAGIC=2` and point `CARDANO_NODE_SOCKET_PATH` at a preview node;
+for preprod, use magic `1` and a preprod node. ChainSync infers the status epoch
+history from these known network magic values.
+
+For a custom network, add `input_chainsync.WithEraHistory` to `inputOpts` in
+`main.go`. Pass an `input_chainsync.EraHistory` with `ByronEpochLength`,
+`ShelleyStartSlot`, `ShelleyStartEpoch`, and `ShelleyEpochLength` derived from
+that network's genesis and era boundaries. These programs parse only the two
+`CARDANO_NODE_*` environment variables, so set custom era history in source.
+TCP access can use `WithAddress` instead of `WithSocketPath`; Node-to-Node ChainSync uses bulk synchronization and should
 connect only to nodes you control.
 
 The callback logs `received event`, and the status callback logs

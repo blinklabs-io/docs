@@ -24,9 +24,17 @@ go run ./adder-publisher
 
 The three programs require a synchronized mainnet Cardano node with a local
 Unix socket. They default to `/ipc/node.socket` and mainnet magic `764824073`.
-`CARDANO_NODE_MAGIC` overrides the magic; changing it alone does not replace
-global genesis values. Configure both when adapting the programs to another
-network. For TCP access, replace `WithSocketPath` with `WithAddress` in source.
+For preview, set `CARDANO_NODE_MAGIC=2` and point `CARDANO_NODE_SOCKET_PATH` at
+a preview node. For preprod, use magic `1` and a preprod node. ChainSync infers
+its status epoch history from these known magic values.
+
+For a custom network, add `input_chainsync.WithEraHistory` to `inputOpts` in
+`main.go`. Supply an `input_chainsync.EraHistory` whose `ByronEpochLength`,
+`ShelleyStartSlot`, `ShelleyStartEpoch`, and `ShelleyEpochLength` match that
+network's genesis and era boundaries. The programs parse only the two
+`CARDANO_NODE_*` variables; configure custom era history in source.
+
+For TCP access, replace `WithSocketPath` with `WithAddress` in source.
 Node-to-Node ChainSync uses bulk synchronization; connect only to nodes you control.
 
 ## Examples
@@ -38,7 +46,9 @@ Node-to-Node ChainSync uses bulk synchronization; connect only to nodes you cont
 
 All three programs start at the current tip and enable automatic reconnection.
 They handle SIGINT/SIGTERM, observe terminal `Failed()` separately from
-recoverable `ErrorChan()` diagnostics, and call `Stop()` before returning.
+recoverable `ErrorChan()` diagnostics, and call `Stop()` before returning after
+a successful start. Startup errors return without a `Stop()` call because
+`StartContext` cleans up a failed start.
 The callback logs `received event` with an event type, and status changes log
 `chainsync status update`.
 
