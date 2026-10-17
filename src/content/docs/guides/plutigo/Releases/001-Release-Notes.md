@@ -7,7 +7,7 @@ description: Plutigo Release Notes
 
 <br>
 
-- ☑️ Select a version below to view the full release notes.
+☑️ Select a version below to view the full release notes.
 
 - Version: v0.9.7 - *[View Release Notes](../v0-9-7)*
 - Version: v0.9.4 - *[View Release Notes](../v0-9-4)*
