@@ -240,6 +240,7 @@ midnight:
   # Defaults to loopback; an empty value also uses 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 storageMode: "api"
 plugins:
   api:
@@ -259,7 +260,7 @@ plugins:
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
-> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together or leave both unset. A partial pair causes configuration and startup validation to fail. A configured policy ID must contain exactly 56 hexadecimal characters (28 decoded bytes), and matching uses the exact policy ID plus asset name.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
