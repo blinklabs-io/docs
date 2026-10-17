@@ -158,6 +158,11 @@ Configure these provider YAML keys under `plugins.storage.blob.config` for the
 Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
+The `plugins.storage.blob.config.valueThreshold` setting defaults to `1 MiB`,
+except during Core-mode `sync` and Mithril sync, when it defaults to `1 KiB`.
+An explicit YAML value overrides either mode default, including an explicit
+`0`.
+
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
