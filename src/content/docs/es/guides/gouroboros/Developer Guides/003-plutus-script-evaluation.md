@@ -28,7 +28,7 @@ El llamador proporciona `budget` y `evalContext` para cada versión. El evaluado
 
 Este comportamiento permite que el evaluador procese contextos con datums inline muy grandes sin que los propios datos del ledger provoquen un error por el límite de nodos estructurales. La cobertura de regresión de V3 incluye un contexto del ledger con más de `1,000,000` nodos de `PlutusData`.
 
-El tratamiento como argumentos de confianza se aplica únicamente a los valores de datos finitos proporcionados mediante los argumentos de `EvaluateContext`. El evaluador aún decodifica y valida el programa UPLC, y los límites estructurales siguen aplicándose a ese programa. Este comportamiento no hace ilimitados los datos del ledger ni elimina la aplicación del presupuesto de ejecución.
+El evaluador trata como argumentos de confianza únicamente los valores de datos finitos que recibe mediante los argumentos de `EvaluateContext`. El evaluador aún decodifica y valida el programa UPLC, y los límites estructurales siguen aplicándose a ese programa. Este comportamiento no hace ilimitados los datos del ledger ni elimina la aplicación del presupuesto de ejecución.
 
 ## Validez de las entradas y errores
 
