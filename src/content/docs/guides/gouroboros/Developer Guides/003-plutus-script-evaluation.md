@@ -35,3 +35,13 @@ The trusted argument treatment applies only to the finite data values supplied t
 Each data argument must contain finite, valid Plutus data that comes from ledger state. The trusted argument path does not bypass data validation.
 
 The evaluator rejects malformed or unknown script terms that caller code constructs and returns an error instead of evaluating them. Correct the supplied term before retrying after such an error.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

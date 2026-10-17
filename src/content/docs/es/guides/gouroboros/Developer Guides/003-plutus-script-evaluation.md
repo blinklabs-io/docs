@@ -35,3 +35,14 @@ El evaluador trata como argumentos de confianza únicamente los valores de datos
 Cada argumento de datos debe contener datos Plutus finitos y válidos procedentes del estado del ledger. La ruta de argumentos de confianza no omite la validación de datos.
 
 El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. El llamador debe corregir el término antes de volver a intentarlo después de ese error.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

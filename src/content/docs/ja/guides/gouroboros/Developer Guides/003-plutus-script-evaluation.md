@@ -98,3 +98,13 @@ UPLCプログラムは引き続き検証します。台帳データをUPLCプロ
 - 成功した場合、`ExUnits` に評価で使用したメモリ量とステップ数を返し、`error` は `nil` になります。
 - プログラムのデコードまたは検証、入力データの処理、スクリプトの実行、コンテキストのキャンセルで問題が発生した場合、`error` にエラーを返します。
 - 実行開始後にエラーが発生した場合、`ExUnits` にはエラーが返るまでに使用した実行量が含まれることがあります。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
