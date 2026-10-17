@@ -168,8 +168,9 @@ An explicit YAML value overrides either mode default, including an explicit
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
 
-Dingo keeps value-log GC disabled in `load` mode even when the Badger provider
-configuration sets `plugins.storage.blob.config.gc` to `true`.
+Dingo keeps value-log GC disabled in both `load` and `sync` bulk-import modes,
+even when the Badger provider configuration sets
+`plugins.storage.blob.config.gc` to `true`.
 
 ### Database lifecycle snapshot pause bound
 
