@@ -216,7 +216,7 @@ EOF
 
 > 📝 `midnight.host` の既定値は `"127.0.0.1"` です。`midnight.host: ""` もループバックを使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。
 
-> 📝 `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` は、両方を設定するか、両方とも空のままにします。一方だけを設定すると、起動時の設定検証に失敗します。`authTokenPolicyId` は56桁の16進数（デコード後28バイト）で指定してください。両方を設定した場合、認証トークンは指定したポリシーIDとアセット名の完全一致で照合されます。
+> 📝 `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` は、両方を設定するか、両方とも空のままにします。一方だけを設定すると、起動時の設定検証に失敗します。`authTokenPolicyId` には56桁の16進数（デコード後28バイト）を指定します。両方を設定した場合、Dingoは指定したポリシーIDとアセット名に完全一致する認証トークンだけを照合します。
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
