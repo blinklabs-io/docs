@@ -24,7 +24,7 @@ El pipeline reserva los bytes retenidos necesarios durante `Submit` y mantiene c
 
 ### Consume y libera cada resultado
 
-El pipeline transfiere al llamador la propiedad de cada elemento recibido desde `Results()` y de cada elemento devuelto por `DrainResults()`. Procesa el elemento antes de llamar a `Release`:
+El pipeline transfiere al llamador la propiedad de cada elemento recibido desde `Results()` y de cada elemento devuelto por `DrainResults()`. Procesa el elemento antes de llamar a `Release()`:
 
 ```go
 consume := func(item *pipeline.BlockItem) {
