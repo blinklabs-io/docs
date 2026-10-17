@@ -69,12 +69,12 @@ network.
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
 | --- | --- | --- | --- | --- | --- |
-| Enabled | `dmq.enabled` | `--dmq-enabled` | `DINGO_DMQ_ENABLED` | `false` | Enables the setting when `true`. |
-| Topic | `dmq.topic` | `--dmq-topic` | `DINGO_DMQ_TOPIC` | `mithril` | When `dmq.enabled` is `true`, the value is required and must be `mithril`. |
-| Network magic | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | Derived from the topic and Cardano network when unset. | An explicit value overrides the derived network magic. Set it when the Cardano network has no default for the topic. |
-| Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When `dmq.enabled` is `true`, the value is required and must differ from the Cardano `socketPath`. |
-| Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When `dmq.enabled` is `true`, the value must be positive and no greater than `9223372036` seconds. |
-| Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When `dmq.enabled` is `true`, the value must be positive and no greater than `8796093022207` MB. |
+| Enabled | `dmq.enabled` | `--dmq-enabled` | `DINGO_DMQ_ENABLED` | `false` | Accepts a Boolean value. |
+| Topic | `dmq.topic` | `--dmq-topic` | `DINGO_DMQ_TOPIC` | `mithril` | When enabled, Dingo requires `mithril`; no other value is valid. |
+| Network magic | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | Derived from the topic and Cardano network when unset. | Dingo uses an explicit value instead of the derived network magic. Set it when the Cardano network has no default for the topic. |
+| Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a value that differs from the Cardano `socketPath`. |
+| Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
+| Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
 
 ### ImmutableDB source
 
