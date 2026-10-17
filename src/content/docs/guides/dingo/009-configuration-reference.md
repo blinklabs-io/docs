@@ -137,6 +137,21 @@ omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
 
+### Midnight auth-token configuration
+
+Configure the Midnight auth-token fields under `midnight` when registration
+authorization must use a specific policy and asset.
+
+| Setting | YAML key | Default | Validation and behavior |
+| --- | --- | --- | --- |
+| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | Set this field with `midnight.authTokenAssetName`. A configured value must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
+| Auth-token asset name | `midnight.authTokenAssetName` | Empty | Set this field with `midnight.authTokenPolicyId`. Dingo matches the configured policy ID and asset name as an exact pair. |
+
+Dingo requires both fields to be set or both fields to be empty. A partial pair
+fails configuration and startup validation. When configured, Dingo accepts an
+auth token only when both its policy ID and asset name match the configured
+values exactly.
+
 ### Badger value-log garbage collection
 
 Configure these provider YAML keys under `plugins.storage.blob.config` for the
