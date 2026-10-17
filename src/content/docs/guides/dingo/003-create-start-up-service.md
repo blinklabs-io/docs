@@ -213,7 +213,7 @@ midnight:
 
 > 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. For non-loopback plaintext, set `midnight.allowInsecureRemote: true`; for remote `TLS` exposure, configure `tlsCertFilePath` and `tlsKeyFilePath` instead.
 
-> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together, or leave both unset. A partial pair fails configuration and startup validation. A configured policy ID must contain exactly 56 hexadecimal characters (28 decoded bytes), and matching uses the exact policy ID and asset name.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together, or leave both unset. Configuration and startup validation rejects a partial pair. A configured policy ID must contain exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID and asset name.
 
 <br>
 
