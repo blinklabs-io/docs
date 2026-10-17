@@ -211,7 +211,7 @@ midnight:
 
 Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
 
-> 📝 La configuración debe incluir `midnight.authTokenPolicyId` y `midnight.authTokenAssetName`, o dejar ambos campos vacíos. Una pareja parcial hace fallar la validación de configuración e impide el inicio. El ID de política configurado debe contener exactamente 56 caracteres hexadecimales, equivalentes a 28 bytes decodificados. La coincidencia requiere el ID de política exacto y el nombre de activo exacto.
+> 📝 La configuración debe incluir `midnight.authTokenPolicyId` y `midnight.authTokenAssetName`, o dejar ambos campos vacíos. Configurar solo uno de los campos hace fallar la validación de configuración e impide el inicio. El ID de política configurado debe contener exactamente 56 caracteres hexadecimales, equivalentes a 28 bytes decodificados. La coincidencia requiere el ID de política exacto y el nombre de activo exacto.
 
 > 📝 La indexación de Midnight requiere `enabled: true` y el modo de almacenamiento `api`; el servidor gRPC es un control independiente y requiere `serverEnabled: true` y un `port` distinto de `0`. Con `serverEnabled: false`, Dingo mantiene desactivada la escucha. `reflectionEnabled` requiere el servidor. Dingo usa `127.0.0.1` por defecto y convierte un valor vacío de `host` en loopback. Una conexión sin cifrar a un host no local requiere `allowInsecureRemote: true`, salvo que TLS proteja la escucha.
 
