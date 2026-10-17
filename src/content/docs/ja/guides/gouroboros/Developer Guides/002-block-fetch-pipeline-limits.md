@@ -40,11 +40,11 @@ for item := range p.Results() {
 
 `MaxBlocksPerRange` は、1つの range で受け入れるブロックの累積数を制限します。`MaxRangeBytes` は、同じ range で受け入れる完全なエンコード済み `MsgBlock` の累積サイズを制限します。各 `MsgBlock` を受け入れる前に両方のカウンターを確認し、ブロックを配信してもカウンターをリセットしません。
 
-`RangeTimeout` は、range の admission が始まった時点から完了するまでの固定された合計期限です。ローカルの admission とキューへの追加を待つ時間も期限に含まれ、`MsgBlock` の進行によって期限を更新しません。設定値を `0` にすると、上表の安全なデフォルト値を選択します。既知の大きな range を扱う場合は、`WithMaxBlocksPerRange`、`WithMaxRangeBytes`、`WithRangeTimeout` で明示的に上限を引き上げます。
+`RangeTimeout` は、range の受付が始まった時点から完了するまでの固定された合計期限です。ローカルの受付とキューへの追加を待つ時間も期限に含まれ、`MsgBlock` の進行によって期限を更新しません。設定値を `0` にすると、上表の安全なデフォルト値を選択します。既知の大きな range を扱う場合は、`WithMaxBlocksPerRange`、`WithMaxRangeBytes`、`WithRangeTimeout` で明示的に上限を引き上げます。
 
 ### `ExpectedBytes` との違い
 
-`RangeRequest.ExpectedBytes` は、range 全体のシリアライズ済みサイズ（ヘッダーを含む）に対する呼び出し側の見積もりです。この値は、複数の outstanding request に対する `MaxInFlightBytes` の admission と、Block Fetch の ingress allowance を計算します。`ExpectedBytes` は、実際に受信したブロック数やエンコード済みバイト数を制限する値ではありません。
+`RangeRequest.ExpectedBytes` は、range 全体のシリアライズ済みサイズ（ヘッダーを含む）に対する呼び出し側の見積もりです。この値は、複数の処理中の request に対する `MaxInFlightBytes` の受付と、Block Fetch の ingress allowance を計算します。`ExpectedBytes` は、実際に受信したブロック数やエンコード済みバイト数を制限する値ではありません。
 
 そのため、`ExpectedBytes` による in-flight admission と、`MaxBlocksPerRange`、`MaxRangeBytes`、`RangeTimeout` による range 内の累積制限および合計期限は別々に適用されます。見積もりが小さくても、range は実際のブロック数、エンコード済みサイズ、経過時間の制限を超えられません。
 
@@ -58,7 +58,7 @@ for item := range p.Results() {
 | `ErrRangeByteLimit` | range の累積エンコード済み `MsgBlock` バイト数が `MaxRangeBytes` を超えた。 |
 | `ErrRangeTimeout` | admission から完了までの固定期限が経過した。 |
 
-`RequestRange` は、送信後に発生した terminal error を戻り値として返しません。クライアントは、range ごとに `RangeDoneFunc` を1回呼び出し、コールバックの `error` 引数に成功時は `nil`、失敗時は terminal error を渡します。範囲にブロックがない場合も `RangeDoneFunc` に `ErrNoBlocks` を渡しますが、これは通常の peer 応答です。
+`RequestRange` は、送信後に発生した終端エラーを戻り値として返しません。クライアントは、range ごとに `RangeDoneFunc` を1回呼び出し、コールバックの `error` 引数に成功時は `nil`、失敗時は終端エラーを渡します。範囲にブロックがない場合も `RangeDoneFunc` に `ErrNoBlocks` を渡しますが、これは通常の peer 応答です。
 
 エラーの種類を確認するには、`errors.Is` と同じエラー値を使用します。
 
@@ -77,7 +77,7 @@ func rangeDone(ctx blockfetch.CallbackContext, err error) error {
 }
 ```
 
-`ErrRangeBlockLimit`、`ErrRangeByteLimit`、`ErrRangeTimeout` が発生すると、クライアントはその terminal error をプロトコルの `SendError` に渡して、該当する protocol を停止します。したがって、`RangeDoneFunc` はエラーを受け取りますが、同じ protocol はその後の range を処理しません。peer がプロトコルに違反した場合も、プロトコルエラーとして `SendError` が接続を停止します。
+`ErrRangeBlockLimit`、`ErrRangeByteLimit`、`ErrRangeTimeout` が発生すると、クライアントはその終端エラーをプロトコルの `SendError` に渡し、該当する protocol を停止します。したがって、`RangeDoneFunc` はエラーを受け取りますが、同じ protocol はその後の range を処理しません。peer がプロトコルに違反した場合も、プロトコルエラーとして `SendError` が接続を停止します。
 
 ## 接続全体の読み取りバッファ会計
 
