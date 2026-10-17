@@ -32,6 +32,6 @@ The trusted argument treatment applies only to the finite data values supplied t
 
 ## Input validity and errors
 
-The caller must provide finite, valid Plutus data sourced from ledger state for each data argument. The trusted argument path does not provide a way to bypass data validation.
+The caller must provide finite, valid Plutus data that comes from ledger state for each data argument. The trusted argument path does not provide a way to bypass data validation.
 
 The evaluator rejects malformed or unknown script terms that caller code constructs and returns an error instead of proceeding into evaluation. The caller should treat any such error as a rejected program or input and correct the supplied term before retrying.
