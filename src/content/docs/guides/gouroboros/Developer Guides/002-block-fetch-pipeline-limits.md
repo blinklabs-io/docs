@@ -125,6 +125,6 @@ complete `MsgBlock` responses and the actual total time for one range.
 
 Connection-wide read-buffer accounting now follows the retained capacity of
 each `bytes.Buffer` through delivery and compaction. Leftover capacity after a
-message is consumed therefore remains counted instead of being under-counted.
+message is consumed therefore remains part of the accounting instead of being omitted.
 This behavior does not add a new option or require changes to unrelated
 configuration.
