@@ -187,11 +187,12 @@ midnight:
   # gRPC の待ち受けアドレスです。省略または空欄の場合の既定値はループバック（`127.0.0.1`）です。
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 ```
 
 これらのポートは、更新後のローカル Blockfrost エクスプローラーの例に合わせた値です。これらのサービスが必要な場合にのみ有効にできます。
 
-> 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
+> 📝 `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` は、必ず両方設定するか、両方とも未設定にします。一方だけを設定した部分的な組み合わせは、設定検証と起動時の検証で拒否されます。ポリシー ID を設定する場合は、28 バイトにデコードされる56文字の16進数にします。照合には、設定したポリシー ID とアセット名の完全一致を使用します。
 
 > 📝 プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできませんが、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 > 📝 core ストレージモードでは、`consumed_utxo_prune_floor` より前の消費済み UTxO 行を保持処理がすでに削除しているため、その下限より古い truncate 対象を指定すると、Dingo は変更を加える前に要求を拒否します。下限と同じ対象は指定できます。API ストレージモードではこの判定を行わず、動作は変わりません。巻き戻しが古すぎる場合は、より浅い対象を選ぶか、完全に同期したピアのスナップショットから復旧してください。
