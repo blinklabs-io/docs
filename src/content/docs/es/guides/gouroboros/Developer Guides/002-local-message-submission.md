@@ -36,7 +36,7 @@ La protección contra repeticiones aplica los siguientes resultados:
 - Las entregas duplicadas simultáneas reciben `pcommon.AlreadyReceivedReason` después de que una sola entrega reserve el ID.
 - Un nuevo ID recibe un rechazo cuando el registro alcanza `MaxReplayEntries`.
 - Un valor de `MaxReplayEntries` menor que `1` provoca un rechazo antes de ejecutar `SubmitMessageFunc`.
-- Si `SubmitMessageFunc` rechaza la entrega, el servidor conserva la reserva y protege el ID hasta `ExpiresAt`.
+- Si `SubmitMessageFunc` rechaza la entrega, el servidor mantiene activa la reserva y protege el ID hasta `ExpiresAt`.
 - Cuando `ExpiresAt` ya pasó, el servidor elimina la reserva y permite una nueva entrega que supere la validación de autenticación y vigencia.
 
 ## Referencias
