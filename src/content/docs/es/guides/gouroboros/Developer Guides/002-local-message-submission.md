@@ -5,7 +5,7 @@ description: Configura y opera la protección contra repeticiones de mensajes au
 
 ## Descripción general
 
-gOuroboros v0.213.7 incorpora protección contra repeticiones para los mensajes autenticados de `LocalMessageSubmission`. El servidor reserva el ID de cada mensaje autenticado y vigente antes de ejecutar `SubmitMessageFunc`. Solo la primera entrega aceptada llega a `SubmitMessageFunc`; el servidor bloquea las entregas posteriores con el mismo ID mientras el mensaje no haya expirado.
+gOuroboros v0.213.7 incorpora protección contra repeticiones para los mensajes autenticados de `LocalMessageSubmission`. El servidor reserva el ID de cada mensaje autenticado y vigente antes de ejecutar `SubmitMessageFunc`. Solo la primera entrega que consigue reservar el ID llega a `SubmitMessageFunc`; las entregas posteriores con el mismo ID activo reciben `pcommon.AlreadyReceivedReason`.
 
 La reserva también coordina las entregas simultáneas cuando varias conexiones intentan enviar el mismo ID.
 
@@ -36,9 +36,12 @@ La protección contra repeticiones aplica los siguientes resultados:
 - Las entregas duplicadas simultáneas reciben `pcommon.AlreadyReceivedReason` después de que una sola entrega reserve el ID.
 - Un nuevo ID recibe un rechazo cuando el registro alcanza `MaxReplayEntries`.
 - Un valor de `MaxReplayEntries` menor que `1` provoca un rechazo antes de ejecutar `SubmitMessageFunc`.
+- Si `SubmitMessageFunc` rechaza la entrega, el servidor conserva la reserva y protege el ID hasta `ExpiresAt`.
 - Cuando `ExpiresAt` ya pasó, el servidor elimina la reserva y permite una nueva entrega que supere la validación de autenticación y vigencia.
 
 ## Referencias
 
 - [Documentación de la API de `LocalMessageSubmission`](https://pkg.go.dev/github.com/blinklabs-io/gouroboros/protocol/localmessagesubmission)
 - [gOuroboros v0.213.7](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7)
+- [Implementación de la protección contra repeticiones](https://github.com/blinklabs-io/gouroboros/pull/2748)
+- [Requisito de protección contra repeticiones](https://github.com/blinklabs-io/gouroboros/issues/2615)
