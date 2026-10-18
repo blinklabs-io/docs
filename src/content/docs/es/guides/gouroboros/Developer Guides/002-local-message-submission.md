@@ -5,7 +5,7 @@ description: Configura y opera la protección contra repeticiones de mensajes au
 
 ## Descripción general
 
-gOuroboros v0.213.7 incorpora protección contra repeticiones para los mensajes autenticados de `LocalMessageSubmission`. El servidor reserva el ID de cada mensaje autenticado y vigente antes de ejecutar `SubmitMessageFunc`. Solo la primera entrega que consigue reservar el ID llega a `SubmitMessageFunc`; las entregas posteriores con el mismo ID activo reciben `pcommon.AlreadyReceivedReason`.
+gOuroboros v0.213.7 incorpora protección contra repeticiones para los mensajes autenticados de `LocalMessageSubmission`. El servidor reserva el ID de cada mensaje autenticado y vigente antes de ejecutar `SubmitMessageFunc`. Solo la primera entrega que logra reservar el ID llega a `SubmitMessageFunc`; las entregas posteriores con el mismo ID activo reciben `pcommon.AlreadyReceivedReason`.
 
 La reserva también coordina las entregas simultáneas cuando varias conexiones intentan enviar el mismo ID.
 
