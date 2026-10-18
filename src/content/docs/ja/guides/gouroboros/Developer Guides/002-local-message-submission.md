@@ -11,6 +11,9 @@ description: gOuroboros v0.213.7におけるLocalMessageSubmissionのリプレ�
 
 詳細は[`LocalMessageSubmission` APIリファレンス](https://pkg.go.dev/github.com/blinklabs-io/gouroboros/protocol/localmessagesubmission)と、[gOuroboros v0.213.7のリリース情報](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7)を参照してください。
 
+- [PR #2748](https://github.com/blinklabs-io/gouroboros/pull/2748)
+- [Issue #2615](https://github.com/blinklabs-io/gouroboros/issues/2615)
+
 ## 設定
 
 `Config.MaxReplayEntries`は、期限切れになるまで保持する認証済みメッセージIDの最大数を指定します。`NewConfig`は既定値として`10,000`を設定します。`localmessagesubmission.WithMaxReplayEntries(...)`を使用すると、保持数を変更できます。
