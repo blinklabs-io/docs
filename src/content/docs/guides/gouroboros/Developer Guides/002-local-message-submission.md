@@ -1,3 +1,8 @@
+---
+title: LocalMessageSubmission replay protection
+description: Configure replay protection and duplicate handling for authenticated LocalMessageSubmission messages.
+---
+
 # LocalMessageSubmission Replay Protection
 
 This guide explains replay protection for the authenticated `LocalMessageSubmission` path available in gOuroboros `v0.213.7`. It covers the runtime submission sequence and the configuration required to deduplicate message IDs across connections.
