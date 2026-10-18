@@ -7,7 +7,7 @@ description: gOuroboros v0.213.7におけるLocalMessageSubmissionのリプレ�
 
 このガイドでは、gOuroboros v0.213.7で追加された認証済み`LocalMessageSubmission`メッセージのリプレイ保護について説明します。リプレイ保護は、メッセージの`ExpiresAt`が過ぎるまで、認証済みメッセージIDを保持します。
 
-有効期限内の同じメッセージIDを受信すると、最初の送信だけが`SubmitMessageFunc`に到達します。サーバーは、アプリケーションコールバックを実行する前に最初のIDを予約し、同じIDの後続送信を拒否します。
+有効期限内の同じメッセージIDを受信すると、最初に予約に成功した送信だけが`SubmitMessageFunc`に到達します。サーバーは、アプリケーションコールバックを実行する前にIDを予約し、同じIDの後続送信を拒否します。
 
 詳細は[`LocalMessageSubmission` APIリファレンス](https://pkg.go.dev/github.com/blinklabs-io/gouroboros/protocol/localmessagesubmission)と、[gOuroboros v0.213.7のリリース情報](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7)を参照してください。
 
