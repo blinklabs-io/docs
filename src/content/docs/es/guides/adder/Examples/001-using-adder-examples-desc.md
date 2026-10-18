@@ -45,3 +45,7 @@ Ahora que tenemos un resumen de los tipos de filtros y comandos que puedes usar,
 2. [Ejemplo 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Monitorear un Token y obtener una Notificacion de Escritorio
 3. [Ejemplo 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Monitorear un SPO y obtener una Alerta en Discord
 4. [Ejemplo 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Monitorear un Contrato Inteligente para un ID de Activo Especifico y obtener una Notificacion de Escritorio
+
+## Ejemplos de la biblioteca Go
+
+Los [ejemplos de la biblioteca Go](/guides/adder/library-examples/overview/) incluyen código descargable para publicar eventos, aplicar filtros y crear plugins administrados (en inglés).

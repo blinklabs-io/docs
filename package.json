@@ -11,12 +11,13 @@
     "build": "astro build",
     "package:dingo-examples": "node scripts/package-dingo-examples.mjs",
     "package:gouroboros-examples": "node scripts/package-gouroboros-examples.mjs",
-    "package:examples": "npm run package:dingo-examples && npm run package:gouroboros-examples",
+    "package:examples": "npm run package:dingo-examples && npm run package:gouroboros-examples && npm run package:adder-examples",
     "check": "npm run package:examples && npm run check:docs && npm run build && npm run check:llms",
     "check:docs": "node scripts/check-docs.mjs",
     "check:llms": "node scripts/check-llms.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "package:adder-examples": "node scripts/package-adder-examples.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",
