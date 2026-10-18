@@ -4,9 +4,7 @@ This guide explains replay protection for the authenticated `LocalMessageSubmiss
 
 ## Overview
 
-The server protects authenticated local DMQ submissions by reserving each message ID before it calls `SubmitMessageFunc`. A later submission with the same ID receives `pcommon.AlreadyReceivedReason` while the original message's `ExpiresAt` value remains active. The server calls the application callback only for the first submission.
-
-The replay state belongs to a `Config`. A mutex protects reservations, so sequential and concurrent submissions that use the same configuration share one replay cache. The server prunes expired IDs as it reserves new IDs.
+The server uses a `Config`-scoped replay cache to prevent an authenticated local DMQ message ID from being processed more than once while its original `ExpiresAt` value remains active. The server prunes expired IDs as it processes new reservations.
 
 This behavior is available in [gOuroboros `v0.213.7`](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7). The [gOuroboros API documentation](https://pkg.go.dev/github.com/blinklabs-io/gouroboros) provides the package reference.
 
