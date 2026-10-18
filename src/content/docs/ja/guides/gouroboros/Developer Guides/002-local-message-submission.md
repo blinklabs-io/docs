@@ -39,3 +39,13 @@ config := localmessagesubmission.NewConfig(
 - `MaxReplayEntries`に`1`未満の値を設定すると、サーバーは送信をアプリケーションコールバックへ渡す前に拒否します。
 
 リプレイ保護は認証と有効期限の検証を通過したメッセージに適用します。予約に成功したIDだけが`SubmitMessageFunc`へ進み、コールバックが受け付けた場合はサーバーがメッセージを受け付けます。コールバックが拒否した場合も、予約済みIDは`ExpiresAt`までリプレイ保護の対象になります。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

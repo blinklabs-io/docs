@@ -45,3 +45,13 @@ La protección contra repeticiones aplica los siguientes resultados:
 - [gOuroboros v0.213.7](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7)
 - [Implementación de la protección contra repeticiones](https://github.com/blinklabs-io/gouroboros/pull/2748)
 - [Requisito de protección contra repeticiones](https://github.com/blinklabs-io/gouroboros/issues/2615)
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

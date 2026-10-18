@@ -93,3 +93,13 @@ The server produces the following observable outcomes:
 | TTL validation or authentication failure | The server rejects the submission according to the validation or authentication result. | The callback does not run. |
 
 An expired ID can enter the cache again after the server prunes its previous reservation. A duplicate ID that remains active never reaches the application callback, regardless of whether the original callback accepted or rejected the message.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
