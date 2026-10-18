@@ -9,6 +9,8 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.213.7 (following v0.213.6) - *[View Release Notes](../v0-213-7)*
+  * Improved authenticated `LocalMessageSubmission` handling by atomically reserving message IDs before invoking `SubmitMessageFunc`, rejecting duplicates with `AlreadyReceived`, limiting replay state with `MaxReplayEntries` (default `10,000`), rejecting invalid capacities, and isolating replay state when a `Config` is reused.
 - Version: v0.213.3 - *[View Release Notes](../v0-213-3)*
 - Version: v0.213.2 - *[View Release Notes](../v0-213-2)*
 - Version: v0.213.1 - *[View Release Notes](../v0-213-1)*
