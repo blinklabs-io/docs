@@ -10,7 +10,7 @@ description: gOuroboros Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.213.7 (following v0.213.6) - *[View Release Notes](../v0-213-7)*
-  * Improved authenticated `LocalMessageSubmission` replay protection by atomically reserving each message ID before calling `SubmitMessageFunc`. Duplicate submissions now return `AlreadyReceived`; `MaxReplayEntries` bounds replay state at `10,000` by default, invalid capacities are rejected, and reused `Config` values keep separate replay state.
+  * Improved authenticated `LocalMessageSubmission` replay protection by atomically reserving each message ID before calling `SubmitMessageFunc`. Duplicate submissions receive `AlreadyReceived`; `MaxReplayEntries` bounds replay state at `10,000` by default, the submission path rejects invalid capacities, and reused `Config` values keep separate replay state.
   * Optimized long VRF replay schedules on 32-bit targets by replaying every assigned slot and every 64th offset. 64-bit targets and short schedules retain full replay, with no change to final eligibility assertions.
 - Version: v0.213.3 - *[View Release Notes](../v0-213-3)*
 - Version: v0.213.2 - *[View Release Notes](../v0-213-2)*
