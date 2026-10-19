@@ -67,3 +67,13 @@ The benchmark reports the following values for fetch, vote, serve, and apply:
 - sample count
 
 These results describe latency for each workload step. They do not report throughput or iteration timing.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
