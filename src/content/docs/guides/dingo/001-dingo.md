@@ -19,7 +19,7 @@ are organized by what you want to do.
 - [Dingo configuration reference](/guides/dingo/009-configuration-reference/) —
   configure Dingo v0.86.0 and review every setting.
 - [Download the Dingo v0.86.0 `dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example).
-- [English LeiosDB benchmark CLI reference](/guides/dingo/010-leios-db-benchmark/).
+- [English benchmark CLI reference for LeiosDB](/guides/dingo/010-leios-db-benchmark/).
 - [Bootstrap and data maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/)
   — use Mithril and manage local node data.
 - [Run Dingo as a service](/guides/dingo/003-create-start-up-service/) and
