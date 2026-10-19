@@ -46,7 +46,7 @@ You can verify the binary works by running:
 
 The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching Dingo release and verifies its SHA-256 checksum.
 
-The installer accepts only HTTPS URLs for release assets on its host allowlist. It rejects URLs with credentials or non-443 ports, and rejects redirects or DNS results that resolve to private or special-use IP addresses.
+The installer accepts only HTTPS URLs for release assets on its host allowlist. It rejects URLs that contain credentials or use non-443 ports. It also rejects redirects and DNS results that resolve to private or special-use IP addresses.
 
 Install it globally and verify the `dingo` command:
 
