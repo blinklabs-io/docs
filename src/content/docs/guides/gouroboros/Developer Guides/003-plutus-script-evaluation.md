@@ -32,7 +32,7 @@ The trusted argument treatment applies only to the finite data values supplied t
 
 ## Input validity and errors
 
-Callers must validate each trusted argument tree at its source before passing it to `EvaluateContext`. `EvaluateContext` forwards those trees to `RunContextWithTrustedDataArguments`, whose validation intentionally skips them. Callers must ensure that every tree is finite, contains valid Plutus data, and is acyclic.
+Callers must validate every trusted argument tree at its source before passing it to `EvaluateContext`. `EvaluateContext` forwards those trees to `RunContextWithTrustedDataArguments`, whose validation intentionally skips the forwarded trees. Callers must ensure that every tree is finite, contains valid Plutus data, and is acyclic.
 
 The evaluator rejects malformed or unknown script terms that caller code constructs and returns an error instead of evaluating them. Correct the supplied term before retrying after such an error.
 
