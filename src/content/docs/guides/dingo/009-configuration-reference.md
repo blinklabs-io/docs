@@ -96,9 +96,9 @@ chunk, and integrity requirements.
 
 ### Blockfrost provider
 
-The built-in Blockfrost provider listens on loopback by default. The Blockfrost
-mutation admission limits do not apply to read-only API requests, but shared API
-authentication can still apply when configured.
+The built-in Blockfrost provider listens on loopback by default. Read-only API
+requests are not subject to the Blockfrost mutation admission limits, although
+shared API authentication can still apply when configured.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
