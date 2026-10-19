@@ -94,7 +94,7 @@ plugins:
       config:
         port: 3000
         # Blockfrost uses this provider-specific host independently of bindAddr.
-        # Default: 127.0.0.1. Set host for service-network or remote access.
+        # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: \"127.0.0.1\"
         # Set authToken to protect transaction submission and evaluation mutations.
         # Authenticated mutation access on a non-loopback host requires server TLS.
@@ -199,7 +199,6 @@ plugins:
       provider: "builtin"
       config:
         port: 3000
-        host: "127.0.0.1"
     mesh:
       provider: "builtin"
       config:
