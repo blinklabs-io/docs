@@ -87,6 +87,31 @@ ledger tip. If the storage backend refuses the rewind, Dingo returns both the
 original and rewind errors, and the database requires recovery before another
 load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
+ 
+### Genesis bootstrap corroboration
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `1` by default. One independent peer must report the same recent blocks before a fast source can drive Genesis selection. Set `0` explicitly to disable the corroboration gate for an intentional single-peer or test topology. |
+
+### Blockfrost provider
+
+The built-in Blockfrost provider listens on loopback by default. Read-only API
+requests remain public and do not use the mutation admission limits.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` by default. An explicitly empty value uses the root `bindAddr`; set a host to expose the provider on another interface. |
+| Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Empty by default. Transaction submission and evaluation require this token in `project_id`, `X-Blockfrost-Project-Id`, or `Authorization: Bearer <token>`. Missing or invalid credentials return HTTP `401`. |
+| Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` by default. The value must be positive and limits transaction submission and evaluation across the provider. |
+| Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` by default. The value must be positive and no greater than `maxConcurrentMutations`; it limits work from one remote address. |
+
+When `authToken` is configured and the provider listens on a non-loopback host,
+configure server TLS through `plugins.api.blockfrost.config.tls`. Dingo
+refuses to start authenticated mutation access without server TLS. After
+authentication and before reading the request body, the provider applies both
+mutation limits. When either limit is exhausted, it returns HTTP `429` with
+`Retry-After: 1` without reading the body.
 
 ### LocalStateQuery snapshot lifetime
 
