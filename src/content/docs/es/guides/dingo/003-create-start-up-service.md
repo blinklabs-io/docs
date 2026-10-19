@@ -118,8 +118,8 @@ mithril:
   # Mithril v2 solo acepta artefactos y redirecciones desde el origen configurado de `aggregatorUrl`
   # o desde el origen oficial de Mithril en GCS: `https://storage.googleapis.com`.
   # Dingo descarta ubicaciones duplicadas, limita a 4 las ubicaciones por componente y admite como máximo 100000 archivos inmutables.
-  # Las descargas comparten un presupuesto de solicitudes y bytes con un plazo total de 24 horas.
-  # La extracción limita las entradas, los bytes expandidos y el espacio libre reservado en el sistema de archivos.
+  # Dingo aplica un presupuesto agregado de solicitudes y bytes a las descargas, con un plazo total de 24 horas.
+  # Dingo limita la extracción por número de entradas y bytes expandidos, y reserva espacio libre en el sistema de archivos.
   # Antes de extraer, Dingo verifica el manifiesto firmado del ancillary y sus rutas y hashes permitidos.
   # Los archivos ledger solo proceden del ancillary firmado; los archivos inmutables no admiten árboles ledger.
   # Identidad opcional del artefacto de Mithril para un arranque nuevo.
