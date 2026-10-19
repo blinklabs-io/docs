@@ -1,3 +1,9 @@
+   # クラウドスナップショットの認証に使う共有秘密鍵です。必要な場合に指定します。
+   # 通常ファイル、シンボリックリンクではないファイル、16 バイト以上 1 KiB 以下が必要です。
+   # Unix ではノード実行ユーザーが所有し、グループまたはその他のユーザーのアクセスを許可しないでください。
+   # Windows では現在のユーザー、またはプロセスが所属する BUILTIN\Administrators が所有する必要があります。
+   # Windows の DACL も許可された所有者およびシステムの主体だけに制限してください。
+   # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust.key"
 ---
 title: スタートアップサービスの作成
 description: Dingoのスタートアップサービスを作成する。
@@ -121,6 +127,7 @@ mithril:
   # pinnedDigest: \"\"
 
 > 📝 既定では、Mithril は HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp: true` はローカル開発またはテストでのみ使用する明示的な例外であり、本番環境では有効にしないでください。
+> 📝 Mithril v2 は、設定済みアグリゲーターのオリジンまたは公式 Mithril GCS オリジン（`https://storage.googleapis.com`）だけをアーティファクトとリダイレクト先として許可します。コンポーネントごとの重複しない場所は最大 4 件、immutable アーカイブは最大 100000 件に制限し、ダウンロード全体にリクエスト数、バイト数、24 時間の期限を適用します。展開全体にもエントリ数と展開後バイト数の上限、および空き容量の予約を適用します。署名付き ancillary マニフェストは展開前に検証し、署名で許可されたファイルと親ディレクトリだけを展開します。`allowInsecureHttp: true` はこれらの制限を解除せず、ローカル開発またはテストの HTTP とローカルまたはプライベートな宛先だけを許可する設定です。
 
 # Network
 # ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
@@ -164,6 +171,7 @@ EOF"
 ```
 
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
+> 📝 `databaseLifecycle.snapshotTrustKeyFile` を指定する場合は、通常ファイルかつ非シンボリックリンクで、サイズを 1 KiB 以下にしてください。Unix ではノード実行ユーザーが所有し、グループとその他のユーザーのアクセスを禁止する必要があります。Windows では現在のユーザー、またはプロセスが所属する `BUILTIN\Administrators` が所有し、DACL を許可された主体に制限する必要があります。要件を満たさないファイル、置換されたファイル、またはサイズ超過のファイルは拒否されます。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
 
@@ -175,6 +183,10 @@ plugins:
       provider: "builtin"
       config:
         port: 3000
+        host: "127.0.0.1"
+        authToken: ""
+        maxConcurrentMutations: 4
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: "builtin"
       config:
