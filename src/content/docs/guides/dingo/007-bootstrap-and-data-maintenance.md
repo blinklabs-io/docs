@@ -56,7 +56,7 @@ for the complete `server` and `aggregator` settings.
 Mithril v2 bootstrap accepts artifact locations and redirects only from the configured
 aggregator origin or the official `storage.googleapis.com` Mithril origin. Dingo
 retains the existing `https://` requirement and the local development exception for
-loopback destinations. Each bootstrap accounts for artifact and redirect requests
+loopback destinations. Each bootstrap applies a bootstrap-wide budget to artifact and redirect requests
 and bytes together, enforces a 24-hour download deadline, limits immutable archives
 to 100000 and deduplicates locations to at most four per artifact component. Archive
 extraction also limits entries and expanded bytes and reserves required free space;
@@ -84,8 +84,8 @@ requested range. If the import exceeds an available limit or free-space
 reserve, Dingo fails it explicitly instead of allowing unbounded resource use.
 Dingo cleans up staging files when an import fails, including setup and budget
 initialization failures.
-Dingo rewinds copied immutable blocks that trusted replay or processing did not
-leave applied to the ledger-applied tip. If the storage backend refuses that rewind,
+Dingo rewinds copied immutable blocks that trusted replay or processing left unapplied
+to the ledger-applied tip. If the storage backend refuses that rewind,
 the load reports both the original failure and the rewind failure. Recover the
 database before attempting another load; Dingo does not automatically recover every
 load failure.
