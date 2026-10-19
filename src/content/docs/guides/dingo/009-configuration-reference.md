@@ -209,7 +209,7 @@ configuration sets `plugins.storage.blob.config.gc` to `true`.
 | Snapshot trust-key file | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | Empty by default. A configured file must contain at least 16 bytes and no more than 1024 bytes, and must be a regular, non-symlink file. |
 
 Unix requires the file to belong to the current user and to grant no group or
-other access. Windows accepts the current user or `BUILTIN\\Administrators` as
+other access. Windows accepts the current user or `BUILTIN\Administrators` as
 owner when the process belongs to that group. Its DACL may contain only the
 owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
 the restricted local `Administrator` ACE when `Administrators` owns the file.
