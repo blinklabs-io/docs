@@ -51,7 +51,7 @@ npm install --global @blinklabs/dingo
 dingo --help
 ```
 
-El paquete descarga el binario nativo correspondiente, valida su suma de comprobación SHA-256 y lo instala de forma atómica. El instalador solo sigue recursos de lanzamiento aprobados mediante HTTPS. Rechaza las URL que no usan HTTPS o no están permitidas, las URL con credenciales o puertos distintos de 443 y las redirecciones o resultados de DNS que apuntan a direcciones privadas o de uso especial. Para usarlo sin una instalación global:
+El paquete descarga el binario nativo correspondiente, valida su suma de comprobación SHA-256 y lo instala de forma atómica. El instalador solo sigue recursos de lanzamiento aprobados a través de HTTPS. Rechaza las URL que no usan HTTPS o no están permitidas, las URL con credenciales o puertos diferentes de 443 y los destinos de redirección o los resultados de DNS que resuelven a direcciones privadas o de uso especial. Para usarlo sin una instalación global:
 
 ```bash
 npx @blinklabs/dingo --help
