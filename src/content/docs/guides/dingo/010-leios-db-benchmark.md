@@ -13,6 +13,12 @@ Run the benchmark with either supported entry point:
 make bench-leios-db
 ```
 
+Use the cached-read benchmark target to measure a read-through cache scenario:
+
+```sh
+make bench-leios-db-cached
+```
+
 ```sh
 go run ./cmd/leios-db-bench
 ```
@@ -33,6 +39,9 @@ The latency benchmark supports the following flags:
 | `-burst` | Enables optional burst scheduling. |
 | `-burst-size` | Configures the size of scheduled bursts. |
 | `-burst-interval` | Configures the interval between scheduled bursts. |
+| `-cached-reads` | Enables read-through caching for persisted manifest and closure reads per endorser block. |
+| `-cpuprofile` | Writes CPU profiling diagnostics. |
+| `-heapprofile` | Writes heap profiling diagnostics. |
 
 ## Removed flags
 
