@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.83.1/dingo-v0.83.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -45,6 +45,8 @@ You can verify the binary works by running:
 ### Alternative: Install with npm
 
 The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching Dingo release and verifies its SHA-256 checksum.
+
+The installer accepts only HTTPS release assets from its allowlist. It rejects URLs with credentials or non-443 ports, and rejects redirects or DNS results that resolve to private or special-use IP addresses.
 
 Install it globally and verify the `dingo` command:
 
