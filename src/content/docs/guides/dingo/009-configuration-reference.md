@@ -1,17 +1,3 @@
- 
-### SQL metadata TLS
-
-Provider-generated PostgreSQL connections use `sslMode: verify-full` by
-default, which verifies the server certificate and hostname. Provider-generated
-MySQL connections use `tls=true` when `sslMode` is unset and the host is not a
-loopback host; `localhost`, `127.0.0.1`, and `::1` remain exempt from this
-automatic remote-TLS default. An explicitly supplied `dsn` remains authoritative
-and bypasses these provider-generated defaults.
-
-MySQL snapshot and restore reject `tls=skip-verify` instead of weakening the
-connection to opportunistic TLS. Use an explicit supported mode such as
-`tls=false`, `tls=true`, or `tls=preferred` when the lifecycle operation needs a
-different setting.
 ---
 title: Dingo v0.86.0 Configuration Reference
 description: Complete, release-specific Dingo v0.86.0 configuration reference and example.
