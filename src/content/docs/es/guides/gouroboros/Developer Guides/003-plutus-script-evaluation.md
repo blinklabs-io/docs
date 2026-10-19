@@ -32,7 +32,7 @@ El evaluador trata como argumentos de confianza únicamente los valores de datos
 
 ## Validez de las entradas y errores
 
-Cada argumento de datos debe contener datos Plutus finitos y válidos procedentes del estado del ledger. La ruta de argumentos de confianza no omite la validación de datos.
+Antes de pasar cada árbol de argumentos de confianza a `EvaluateContext`, el llamador debe validarlo. `EvaluateContext` reenvía esos árboles a `RunContextWithTrustedDataArguments`, cuya validación los omite intencionadamente. Por tanto, el llamador debe garantizar en el origen que cada árbol sea finito, contenga datos Plutus válidos y no tenga ciclos.
 
 El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. El llamador debe corregir el término antes de volver a intentarlo después de ese error.
 
