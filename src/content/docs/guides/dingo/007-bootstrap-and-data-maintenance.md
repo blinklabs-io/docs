@@ -53,6 +53,19 @@ and signature operations; non-loopback aggregator binds also require TLS. See
 the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example)
 for the complete `server` and `aggregator` settings.
 
+Mithril v2 bootstrap accepts artifact locations and redirects only from the configured
+aggregator origin or the official `storage.googleapis.com` Mithril origin. Dingo
+retains the existing `https://` requirement and the local development exception for
+loopback destinations. Each bootstrap accounts for artifact and redirect requests
+and bytes together, enforces a 24-hour download deadline, limits immutable archives
+to 100000 and deduplicates locations to at most four per artifact component. Archive
+extraction also limits entries and expanded bytes and reserves required free space;
+these protections use built-in limits.
+
+Before extraction, Dingo verifies the signed ancillary manifest and its permitted
+paths and digests. Immutable archives do not provide unauthenticated ledger trees;
+Dingo restores ledger state only from the signed ancillary archive.
+
 ## Load an ImmutableDB from a local or remote source
 
 `dingo load` accepts a local ImmutableDB directory or a remote ImmutableDB
@@ -71,6 +84,11 @@ requested range. If the import exceeds an available limit or free-space
 reserve, Dingo fails it explicitly instead of allowing unbounded resource use.
 Dingo cleans up staging files when an import fails, including setup and budget
 initialization failures.
+Dingo rewinds copied immutable blocks that trusted replay or processing did not
+apply back to the ledger-applied tip. If the storage backend refuses that rewind,
+the load reports both the original failure and the rewind failure. Recover the
+database before attempting another load; Dingo does not automatically recover every
+load failure.
 
 A remote root must provide `tip.json` and complete numbered chunk triads. Each
 triad must use the same five-digit number for all three files:
@@ -119,6 +137,16 @@ dingo database truncate --slot 12345678
 Before restoring, move the existing configured data directory aside; the
 configured path must be absent or empty. A restore into a populated directory
 fails.
+For operations that authenticate snapshots, `databaseLifecycle.snapshotTrustKeyFile`
+must name a regular file, not a final-component symlink, no larger than 1024 bytes.
+On Unix, the node user must own the file and the file must grant access only to its
+owner. On Windows, the owner must be the node user or `BUILTIN\Administrators`,
+the process must belong to the administrator group when that owner applies, and
+the DACL must restrict access to the permitted trustees. Snapshot authentication
+rejects a file that fails any of these requirements.
+
+MySQL snapshot and restore reject `tls=skip-verify`. See the configuration reference
+for provider TLS defaults.
 `truncate` accepts exactly one target: `--slot`, `--hash`, or
 `--block-number`. It removes blocks and metadata after that point so the node
 can resync from the new tip. Check `dingo database --help` for all options
@@ -136,9 +164,9 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-and download host allowlists in the Dingo v0.83.1 release
-[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.1/dingo.yaml.example). Use this example
-only with Dingo v0.83.1; configuration options can change between versions.
+and download host allowlists in the Dingo v0.86.0 release
+[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example). Use this example
+only with Dingo v0.86.0; configuration options can change between versions.
 
 Configure the compressed download limit for each Mithril object with `mithril.downloadMaxBytes` in `dingo.yaml`, `--mithril-download-max-bytes` on the command line, or `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` in the environment. Set the value to `0` to use the built-in limits. The `v1` limit is `512 GiB`; `v2` uses `1 GiB` for immutable archives, `256 MiB` for the digest list, and `64 GiB` for ancillary data. A positive byte value replaces the built-in limit for each downloaded object. A negative value is invalid and causes configuration validation to fail.
 
