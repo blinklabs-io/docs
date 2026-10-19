@@ -202,6 +202,20 @@ configuration sets `plugins.storage.blob.config.gc` to `true`.
 | --- | --- | --- | --- | --- | --- |
 | Snapshot commit pause bound | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`. Set `0s` for no bound. | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual and offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
 
+### Database lifecycle snapshot trust key
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Snapshot trust-key file | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | Empty by default. A configured file must contain at least 16 bytes and no more than 1024 bytes, and must be a regular, non-symlink file. |
+
+Unix requires the file to belong to the current user and to grant no group or
+other access. Windows accepts the current user or `BUILTIN\\Administrators` as
+owner when the process belongs to that group. Its DACL may contain only the
+owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
+the restricted local `Administrator` ACE when `Administrators` owns the file.
+Dingo rejects an invalid file during snapshot authentication and during any
+lifecycle operation that needs the trust key.
+
 ### Bark remote lifecycle service
 
 The remote Bark lifecycle service is disabled by default. When enabled, it
