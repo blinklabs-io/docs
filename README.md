@@ -29,7 +29,7 @@ request:
 npm run check
 ```
 
-This packages the downloadable Dingo and gOuroboros guide examples, checks the
+This packages the downloadable Dingo, gOuroboros, and Adder guide examples, checks the
 documentation and generated LLM files, and builds the site. The static site,
 Pagefind search index, sitemap, and LLM-friendly text files are generated in
 `dist/`.

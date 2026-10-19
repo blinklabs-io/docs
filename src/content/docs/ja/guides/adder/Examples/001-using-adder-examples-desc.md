@@ -45,3 +45,7 @@ description: 一般的なAdderフィルターとコマンドの概要。
 2. [例2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - トークンを監視してデスクトップ通知を受け取る
 3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPOを監視してDiscordでアラートを受け取る
 4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+
+## Go ライブラリのサンプル
+
+Go アプリケーション開発者向けの[ライブラリサンプル](/guides/adder/library-examples/overview/)では、イベント配信、フィルター、管理プラグインのソースコードをダウンロードできます（英語）。

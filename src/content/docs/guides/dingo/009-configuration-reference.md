@@ -65,6 +65,17 @@ network.
 | Tracing service name | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | `dingo` by default. Sets the service name for exported traces. |
 | Tracing sample ratio | `tracingSampleRatio` | `--tracing-sample-ratio` | `DINGO_TRACING_SAMPLE_RATIO` | `1` by default. Set a value from `0` through `1`, inclusive. Dingo rejects values outside this range during configuration validation. |
 
+### DMQ configuration
+
+| Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
+| --- | --- | --- | --- | --- | --- |
+| Enabled | `dmq.enabled` | `--dmq-enabled` | `DINGO_DMQ_ENABLED` | `false` | Boolean value; `false` disables the setting. |
+| Topic | `dmq.topic` | `--dmq-topic` | `DINGO_DMQ_TOPIC` | `mithril` | When enabled, Dingo requires the value `mithril`; no other value is valid. |
+| Network magic | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | Derived from the topic and Cardano network when unset. | When omitted, Dingo derives the value from the topic and Cardano network. An explicit value overrides the derived value. Set it when the Cardano network has no default for the topic. |
+| Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
+| Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
+| Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
+
 ### ImmutableDB source
 
 The `immutableDbPath` setting and the positional input to `dingo load` accept a
