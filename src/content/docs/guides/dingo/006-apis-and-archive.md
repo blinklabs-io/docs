@@ -65,7 +65,7 @@ expose it on another interface. Changing this host makes an explicit exposure
 decision.
 
 Set `plugins.api.blockfrost.config.authToken` to a secret before sending
-mutation requests. An empty provider token keeps every mutation route closed.
+mutation requests. An empty `authToken` keeps every mutation route closed.
 The provider uses `4` for `maxConcurrentMutations` and `1` for
 `maxConcurrentMutationsPerClient` by default. Set both values to positive
 integers, and keep `maxConcurrentMutationsPerClient` no greater than
@@ -87,10 +87,10 @@ only when the server-wide and remote-client limits have capacity. It checks
 capacity before it reads the request body; an over-capacity request returns
 HTTP `429` with `Retry-After: 1`.
 
-When `authToken` protects mutations on a non-loopback host, configure server
-TLS through `plugins.api.blockfrost.config.tls`. Dingo rejects startup when
-authenticated mutation access would use a non-loopback host without server
-TLS. Keep the default loopback host unless external mutation access is an
+Before exposing authenticated mutations on a non-loopback host, configure
+server TLS through `plugins.api.blockfrost.config.tls`. Without server TLS,
+Dingo rejects startup for a non-loopback host with authenticated mutation
+access. Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
 
 The complete v0.83.1 configuration reference and release-matched
