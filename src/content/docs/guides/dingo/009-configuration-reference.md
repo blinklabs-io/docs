@@ -79,7 +79,13 @@ published chunk data. Dingo derives aggregate limits for transfer bytes, cache
 and staging, free-space reserves, and concurrency from the requested chunk
 range. Dingo reports an error and fails the import when a limit is exceeded or
 available free space is insufficient. It then removes staging files after the
-failure. See the bootstrap and data maintenance guide for the remote source,
+failure. For a remote import, if trusted replay or processing fails after
+copied immutable blocks advance beyond the ledger-applied tip, Dingo rewinds
+the unapplied blocks to that tip before returning the original error. Staging
+cleanup therefore does not leave unapplied immutable blocks ahead of the
+ledger tip. If the storage backend refuses the rewind, Dingo returns both the
+original and rewind errors, and the database requires recovery before another
+load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
 
 ### LocalStateQuery snapshot lifetime
