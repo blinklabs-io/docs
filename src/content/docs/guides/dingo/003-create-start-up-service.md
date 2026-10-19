@@ -98,9 +98,9 @@ plugins:
         host: \"127.0.0.1\"
         # Set authToken to protect transaction submission and evaluation mutations.
         # Authenticated mutation access on a non-loopback host requires server TLS.
-        # Global mutation admission limit. Default: 4.
+        # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
-        # Per-client mutation admission limit. Default: 1.
+        # Per-client concurrent mutation limit. Default: 1.
         maxConcurrentMutationsPerClient: 1
     mesh:
       provider: \"builtin\"
