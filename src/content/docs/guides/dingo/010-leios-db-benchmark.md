@@ -39,9 +39,9 @@ The latency benchmark supports the following flags:
 | `-burst` | Enables optional burst scheduling. |
 | `-burst-size` | Configures the size of scheduled bursts. |
 | `-burst-interval` | Configures the interval between scheduled bursts. |
-| `-cached-reads` | Enables read-through caching for persisted manifest and closure reads for each endorser block. |
-| `-cpuprofile` | Writes CPU profiling diagnostics. |
-| `-heapprofile` | Writes heap profiling diagnostics. |
+| `-cached-reads` | Enables a read-through cache for persisted manifest and closure reads for each endorser block. |
+| `-cpuprofile` | Writes CPU profile diagnostics for the benchmark. |
+| `-heapprofile` | Writes heap profile diagnostics for the benchmark. |
 
 ## Removed flags
 
