@@ -87,7 +87,7 @@ ledger tip. If the storage backend refuses the rewind, Dingo returns both the
 original and rewind errors, and the database requires recovery before another
 load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
- 
+
 ### Genesis bootstrap corroboration
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
