@@ -34,8 +34,6 @@ The latency benchmark supports the following flags:
 | `-burst-size` | Configures the size of scheduled bursts. |
 | `-burst-interval` | Configures the interval between scheduled bursts. |
 
-Do not add numeric defaults or limits to scripts unless the command version provides them separately. This reference does not define values for any flag.
-
 ## Removed flags
 
 > **Migration note:** The following throughput benchmark flags no longer exist. An invocation that passes them fails, so existing scripts must replace them with the current flags above.
