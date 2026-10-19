@@ -89,6 +89,15 @@ plugins:
       provider: \"builtin\"
       config:
         port: 0
+        # 組み込み Blockfrost は既定で `127.0.0.1` にバインドします。外部から
+        # アクセスする場合は、プロバイダー固有の `host` を明示してください。
+        host: "127.0.0.1"
+        # トランザクション送信・評価の変更系ルートには `authToken` が必要です。
+        # トークンを設定した非ループバックの待ち受けには TLS も設定してください。
+        authToken: ""
+        # 変更系ルートの既定の同時実行上限は、全体が 4、クライアントごとが 1 です。
+        maxConcurrentMutations: 4
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: \"builtin\"
       config:
