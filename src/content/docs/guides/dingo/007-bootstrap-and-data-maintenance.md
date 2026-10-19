@@ -60,7 +60,7 @@ loopback destinations. Each bootstrap accounts for artifact and redirect request
 and bytes together, enforces a 24-hour download deadline, limits immutable archives
 to 100000 and deduplicates locations to at most four per artifact component. Archive
 extraction also limits entries and expanded bytes and reserves required free space;
-these protections use built-in limits.
+Dingo applies built-in limits for these protections.
 
 Before extraction, Dingo verifies the signed ancillary manifest and its permitted
 paths and digests. Immutable archives do not provide unauthenticated ledger trees;
@@ -85,7 +85,7 @@ reserve, Dingo fails it explicitly instead of allowing unbounded resource use.
 Dingo cleans up staging files when an import fails, including setup and budget
 initialization failures.
 Dingo rewinds copied immutable blocks that trusted replay or processing did not
-apply back to the ledger-applied tip. If the storage backend refuses that rewind,
+leave applied to the ledger-applied tip. If the storage backend refuses that rewind,
 the load reports both the original failure and the rewind failure. Recover the
 database before attempting another load; Dingo does not automatically recover every
 load failure.
@@ -145,7 +145,7 @@ the process must belong to the administrator group when that owner applies, and
 the DACL must restrict access to the permitted trustees. Snapshot authentication
 rejects a file that fails any of these requirements.
 
-MySQL snapshot and restore reject `tls=skip-verify`. See the configuration reference
+MySQL snapshot and restore reject `tls=skip-verify`. See the Dingo configuration reference
 for provider TLS defaults.
 `truncate` accepts exactly one target: `--slot`, `--hash`, or
 `--block-number`. It removes blocks and metadata after that point so the node
