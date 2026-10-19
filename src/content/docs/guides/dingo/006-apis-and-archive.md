@@ -47,11 +47,51 @@ plugins:
       provider: builtin
       config:
         port: 3000
+        host: 127.0.0.1
+        authToken: "<token>"
+        maxConcurrentMutations: 4
+        maxConcurrentMutationsPerClient: 1
     utxorpc:
       provider: builtin
       config:
         port: 9090
 ```
+
+### Blockfrost mutation requests
+
+The built-in Blockfrost provider listens on `127.0.0.1` by default. It does
+not inherit the root `bindAddr`; set `plugins.api.blockfrost.config.host` to
+expose it on another interface. Changing this host makes an explicit exposure
+decision.
+
+Set `plugins.api.blockfrost.config.authToken` to a secret before sending
+mutation requests. An empty `authToken` keeps every mutation route closed.
+The provider uses `4` for `maxConcurrentMutations` and `1` for
+`maxConcurrentMutationsPerClient` by default. Set both values to positive
+integers, and set `maxConcurrentMutationsPerClient` to a value no greater than
+`maxConcurrentMutations`.
+
+The following routes require the configured mutation token:
+
+| Route | Authentication and admission behavior |
+| --- | --- |
+| `POST /api/v0/tx/submit` | Requires a valid mutation token and consumes mutation admission capacity. |
+| `POST /api/v0/utils/txs/evaluate` | Requires a valid mutation token and consumes mutation admission capacity. |
+| `POST /api/v0/utils/txs/evaluate/utxos` | Requires a valid mutation token and consumes mutation admission capacity. |
+
+Send the token in any one of these forms: `project_id: <token>`,
+`X-Blockfrost-Project-Id: <token>`, or `Authorization: Bearer <token>`. A
+missing or invalid token returns HTTP `401` with
+`WWW-Authenticate: Bearer`. After authentication, Dingo admits a request
+only when both the global and per-client mutation limits have capacity. It
+checks capacity before it reads the request body; an over-capacity request
+returns HTTP `429` with `Retry-After: 1`.
+
+When `authToken` protects mutations on a non-loopback host, configure server
+TLS through `plugins.api.blockfrost.config.tls`. Dingo rejects startup when
+authenticated mutation access would use a non-loopback host without server
+TLS. Keep the default loopback host unless external mutation access is an
+intentional deployment decision.
 
 The complete v0.83.1 configuration reference and release-matched
 [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.1/dingo.yaml.example) are
@@ -64,7 +104,11 @@ The shared API bind address applies to the selected API providers, including
 Kupo. The `api.tls` and `api.auth` settings define shared defaults. A provider
 can override either policy under its own `plugins.api.<name>.config` block.
 Provider-specific TLS settings take precedence over the shared TLS defaults.
-Authentication is disabled by default.
+Shared API authentication is disabled by default. The built-in Blockfrost
+mutation policy is separate: its mutation routes require the provider's
+`authToken`, even when shared API authentication remains disabled. The
+mutation admission limits apply only to those Blockfrost mutation routes, not
+to every route on the listener.
 When token authentication is enabled, send `Authorization: Bearer <token>`;
 Blockfrost clients may also use the `project_id` header. UTxO RPC's HTTP and
 Connect/gRPC routes use the bearer token as well.
