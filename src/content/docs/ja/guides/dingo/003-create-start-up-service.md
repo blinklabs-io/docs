@@ -151,6 +151,12 @@ databaseLifecycle:
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
   snapshotDir: \"$HOME/dingo/snapshots\"
+   # クラウドスナップショットの認証に使う共有秘密鍵です。必要な場合に指定します。
+   # 通常ファイル、シンボリックリンクではないファイル、16 バイト以上 1 KiB 以下が必要です。
+   # Unix ではノード実行ユーザーが所有し、グループまたはその他のユーザーのアクセスを許可しないでください。
+   # Windows では現在のユーザー、またはプロセスが所属する BUILTIN\Administrators が所有する必要があります。
+   # Windows の DACL も許可された所有者およびシステムの主体だけに制限してください。
+   # snapshotTrustKeyFile: \"$HOME/dingo/snapshot-trust.key\"
   # ローカル保存に加えて、スナップショットをクラウドにもミラーします。`s3://bucket/prefix` または `gcs://bucket/prefix` を指定します。
   # `dingo_extra_plugins` ビルドタグが必要です。
   snapshotCloudDestination: \"\"
