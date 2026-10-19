@@ -65,10 +65,10 @@ expose it on another interface. Changing this host makes an explicit exposure
 decision.
 
 Set `plugins.api.blockfrost.config.authToken` to a secret before sending
-mutation requests. An empty `authToken` keeps every mutation route closed.
+mutation requests. An empty provider token keeps every mutation route closed.
 The provider uses `4` for `maxConcurrentMutations` and `1` for
 `maxConcurrentMutationsPerClient` by default. Set both values to positive
-integers, and set `maxConcurrentMutationsPerClient` to a value no greater than
+integers, and keep `maxConcurrentMutationsPerClient` no greater than
 `maxConcurrentMutations`.
 
 The following routes require the configured mutation token:
@@ -82,10 +82,10 @@ The following routes require the configured mutation token:
 Send the token in any one of these forms: `project_id: <token>`,
 `X-Blockfrost-Project-Id: <token>`, or `Authorization: Bearer <token>`. A
 missing or invalid token returns HTTP `401` with
-`WWW-Authenticate: Bearer`. After authentication, Dingo admits a request
-only when both the global and per-client mutation limits have capacity. It
-checks capacity before it reads the request body; an over-capacity request
-returns HTTP `429` with `Retry-After: 1`.
+`WWW-Authenticate: Bearer`. After authentication, Dingo accepts a request
+only when the server-wide and remote-client limits have capacity. It checks
+capacity before it reads the request body; an over-capacity request returns
+HTTP `429` with `Retry-After: 1`.
 
 When `authToken` protects mutations on a non-loopback host, configure server
 TLS through `plugins.api.blockfrost.config.tls`. Dingo rejects startup when
