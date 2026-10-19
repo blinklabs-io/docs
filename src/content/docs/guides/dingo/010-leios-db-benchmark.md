@@ -3,7 +3,7 @@ title: LeiosDB benchmark CLI
 description: Run the v0.86.0 LeiosDB latency benchmark and interpret its output.
 ---
 
-The `cmd/leios-db-bench` command measures LeiosDB latency one endorser block (EB) at a time. The benchmark covers fetch, vote read, serve request reads, and apply read steps, then reports latency statistics for each step.
+The `cmd/leios-db-bench` command measures LeiosDB latency across fetch, vote read, serve request reads, and apply read steps.
 
 ## Invocation
 
