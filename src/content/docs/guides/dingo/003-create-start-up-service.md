@@ -93,6 +93,15 @@ plugins:
       provider: \"builtin\"
       config:
         port: 3000
+        # Blockfrost uses this provider-specific host independently of bindAddr.
+        # Default: 127.0.0.1. Set host for service-network or remote access.
+        host: \"127.0.0.1\"
+        # Set authToken to protect transaction submission and evaluation mutations.
+        # Authenticated mutation access on a non-loopback host requires server TLS.
+        # Global mutation admission limit. Default: 4.
+        maxConcurrentMutations: 4
+        # Per-client mutation admission limit. Default: 1.
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: \"builtin\"
       config:
@@ -150,6 +159,12 @@ databaseLifecycle:
   # Dingo writes automatic snapshots to this local filesystem directory.
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
   snapshotDir: \"$HOME/dingo/snapshots\"
+  # Optional snapshot trust key used by snapshot authentication operations.
+  # When set, this must be a regular, non-symlink file no larger than 1 KiB.
+  # Unix: the node user must own it, with no group or other permissions.
+  # Windows: the current user or BUILTIN\\Administrators must own it; the process
+  # must belong to Administrators when applicable, and the DACL must restrict access.
+  # snapshotTrustKeyFile: \"$HOME/dingo/snapshot-trust-key\"
   # Keep only the most recent automatic snapshots.
   # Default: 0.
   snapshotRetention: 0
@@ -162,7 +177,7 @@ databaseLifecycle:
 EOF"
 ```
 
-> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
+> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Mithril v2 bootstrap accepts artifact origins and redirects only from the configured aggregator or the official Mithril GCS origin (`storage.googleapis.com`), enforces aggregate download and extraction safety checks, performs signed ancillary preflight before extraction, and uses only authenticated ledger content. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
@@ -184,6 +199,7 @@ plugins:
       provider: "builtin"
       config:
         port: 3000
+        host: "127.0.0.1"
     mesh:
       provider: "builtin"
       config:
