@@ -75,7 +75,7 @@ func (s PlutusV4Script) EvaluateContext(
 - 値は有効な `data.PlutusData` であること。
 - 値は台帳から取得したデータ、または台帳状態から構築したデータであること。
 
-呼び出し側は、信頼された実行引数の各ツリーを `EvaluateContext` に渡す前に検証する必要があります。`EvaluateContext` はこれらのツリーを `RunContextWithTrustedDataArguments` に転送し、同メソッドは転送されたツリーの検証を意図的にスキップします。そのため、呼び出し側はデータの生成元で、各ツリーが有限で、有効な `data.PlutusData` であり、非循環であることを確認する必要があります。
+呼び出し側は、信頼された実行引数として渡すすべてのデータツリーを、`EvaluateContext` に渡す前に検証する必要があります。`EvaluateContext` はこれらのツリーを `RunContextWithTrustedDataArguments` に転送し、同メソッドは転送されたツリーの検証を意図的にスキップします。したがって、呼び出し側はデータの生成元で、各ツリーが有限で、有効な `data.PlutusData` であり、循環していないことを確認する必要があります。
 
 呼び出し側が構築した不正なtermまたは未知のtermは、評価を開始せずにエラーを返します。エラー処理では、特定のエラー名やエラー文字列に依存しないでください。
 
