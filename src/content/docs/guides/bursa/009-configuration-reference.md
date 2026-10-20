@@ -5,7 +5,7 @@ description: YAML and environment-variable reference for Bursa `kes-agent` and l
 
 ## Overview
 
-This guide describes Bursa signer and KES-agent configuration, including the `signer.backends` configuration for the `PKCS#11` signer backend. The backend uses a `PKCS#11` module, keeps private keys on the token, and has the token produce `Ed25519` signatures.
+This guide describes Bursa signer and KES-agent configuration, including the `signer.backends` configuration for the `pkcs11`, `nitro`, and `confidential-space` signer backends.
 
 ## Load a configuration file
 
