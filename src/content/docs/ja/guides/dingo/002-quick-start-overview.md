@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.83.1）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.85.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.84.0/dingo-v0.84.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.85.0/dingo-v0.85.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -112,8 +112,8 @@ genesis時点で、Dingoは`faucet.addr`のアドレスに900,000 test ADA（900
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingo v0.84.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+Dingo v0.85.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
+同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.85.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
 
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
@@ -199,6 +199,7 @@ midnight:
   port: 50051
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 
 EOF
 ```
@@ -215,7 +216,7 @@ EOF
 
 > 📝 `midnight.host` の既定値は `"127.0.0.1"` です。`midnight.host: ""` もループバックを使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。
 
-> 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
+> 📝 API ストレージモードで Midnight インデックスを使用する場合、`midnight.authTokenPolicyId` と `midnight.authTokenAssetName` は両方を設定するか、両方とも空のままにします。一方だけを設定すると、起動時の設定検証に失敗します。`authTokenPolicyId` には56桁の16進数（デコード後28バイト）を指定します。両方を設定した場合、Dingoは指定したポリシーIDとアセット名に完全一致する認証トークンだけを照合します。
 
 > 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
 
