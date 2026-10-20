@@ -43,7 +43,7 @@ Bursa can be used to derive individual keys from a mnemonic.
 
 Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 
-Use `--mnemonic-file seed.txt` to read the mnemonic from a file, or `--mnemonic-file -` to read it from standard input. Bursa also accepts the `MNEMONIC` environment variable and defaults to `seed.txt` when no other mnemonic source is provided. `MNEMONIC`, when set, takes precedence over `--mnemonic-file`. The `--mnemonic` argument is deprecated because process arguments are visible to other local users. For an optional derivation password, use `--password-file <path>`; `-` reads standard input, but both secrets cannot read standard input in the same command.
+Use `--mnemonic-file seed.txt` to read the mnemonic from a file, or `--mnemonic-file -` to read it from standard input. Mnemonic sources are checked in this order: deprecated `--mnemonic`, `MNEMONIC` environment variable, `--mnemonic-file`, then the default `seed.txt` file. The `--mnemonic` and `--password` arguments are deprecated because process arguments are visible to other local users; use `--mnemonic-file` and `--password-file` instead. For an optional derivation password, use `--password-file <path>`; `-` reads standard input, but both secrets cannot read standard input in the same command.
 
 The examples below write signing keys to explicit files in cardano-cli JSON envelope format. For mnemonic-derived commands, `--signing-key-file -` explicitly prints bech32 secret material to standard output instead. Omitting the signing destination is an error unless the command supports and receives only `--verification-key-file`. Root and account commands require a signing destination. Do not combine `--signing-key-file -` with `--verification-key-file`.
 

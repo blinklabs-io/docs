@@ -41,7 +41,7 @@ Bursaは、ニーモニックから個別の鍵を導出するために使用で
 
 ニーモニックから個別の鍵を導出するためのBursaコマンドラインガイド。
 
-`--mnemonic-file seed.txt` はファイルから、`--mnemonic-file -` は標準入力からニーモニックを読み取ります。`MNEMONIC` 環境変数も使用でき、他の入力がない場合は `seed.txt` を使用します。`MNEMONIC` が設定されている場合、`--mnemonic-file` より優先されます。`--mnemonic` 引数は他のローカルユーザーに見えるため非推奨です。任意の導出パスワードには `--password-file <path>` を使用してください。`-` は標準入力を読み取りますが、同じコマンドで両方の秘密情報を標準入力から読み取ることはできません。
+`--mnemonic-file seed.txt` はファイルから、`--mnemonic-file -` は標準入力からニーモニックを読み取ります。ニーモニックの入力元は、非推奨の `--mnemonic`、`MNEMONIC` 環境変数、`--mnemonic-file`、デフォルトの `seed.txt` ファイルの順で確認されます。`--mnemonic` と `--password` 引数は他のローカルユーザーに見えるため非推奨です。代わりに `--mnemonic-file` と `--password-file` を使用してください。任意の導出パスワードには `--password-file <path>` を使用してください。`-` は標準入力を読み取りますが、同じコマンドで両方の秘密情報を標準入力から読み取ることはできません。
 
 以下の例では、署名鍵を明示的なファイルにcardano-cli JSONエンベロープ形式で保存します。ニーモニックから導出するコマンドでは、`--signing-key-file -` を指定すると秘密鍵をbech32形式で標準出力に書き込みます。署名鍵の出力先を省略できるのは、そのコマンドが `--verification-key-file` のみの出力に対応し、それを指定した場合だけです。rootとaccountでは署名鍵の出力先が必須です。`--signing-key-file -` と `--verification-key-file` は併用できません。
 

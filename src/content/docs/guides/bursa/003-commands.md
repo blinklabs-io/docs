@@ -51,7 +51,7 @@ Restore an existing BIP-39 mnemonic from a protected file, then inspect the gene
 ./bursa wallet load --dir restored-wallet
 ```
 
-`--output` writes addresses and key files; without it, restoration logs addresses only. Restoration does not copy the mnemonic into the output directory. Keep mnemonic and signing-key files private and backed up securely. Unset `MNEMONIC` when using `--mnemonic-file`, because the environment variable takes precedence over the file. Use `--password-file /path/to/password.txt` if the wallet was derived with a BIP-39 password; this is a derivation password, not encryption for the output files.
+`--output` writes addresses and key files; without it, restoration logs addresses only. Restoration does not copy the mnemonic into the output directory. Keep mnemonic and signing-key files private and backed up securely. Mnemonic sources are checked in this order: deprecated `--mnemonic`, `MNEMONIC` environment variable, `--mnemonic-file`, then the default `seed.txt` file. Unset `MNEMONIC` when using `--mnemonic-file`. The `--mnemonic` and `--password` arguments are deprecated because process arguments are visible to other local users; use `--mnemonic-file` and `--password-file` instead. Use `--password-file /path/to/password.txt` if the wallet was derived with a BIP-39 password; this is a derivation password, not encryption for the output files.
 
 `wallet load` reads existing key files without deriving a new wallet. Private key hex is hidden by default; `--show-secrets` explicitly reveals it. Use `./bursa wallet restore --help` and `./bursa wallet load --help` for the available options.
 

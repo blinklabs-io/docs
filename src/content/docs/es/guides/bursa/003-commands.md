@@ -53,7 +53,7 @@ Restaura una mnemónica BIP-39 existente desde un archivo protegido e inspeccion
 ./bursa wallet load --dir restored-wallet
 ```
 
-`--output` escribe direcciones y archivos de claves; si se omite, la restauración solo registra las direcciones. No copia la mnemónica al directorio de salida. Mantén la mnemónica y las claves de firma privadas y con copias de seguridad seguras. Elimina la variable `MNEMONIC` al usar `--mnemonic-file`, porque tiene prioridad sobre el archivo. Usa `--password-file /path/to/password.txt` si la billetera se derivó con una contraseña BIP-39; es una contraseña de derivación, no cifra los archivos de salida.
+`--output` escribe direcciones y archivos de claves; si se omite, la restauración solo registra las direcciones. No copia la mnemónica al directorio de salida. Mantén la mnemónica y las claves de firma privadas y con copias de seguridad seguras. Las fuentes de mnemónica se consultan en este orden: `--mnemonic` (obsoleto), variable de entorno `MNEMONIC`, `--mnemonic-file` y archivo predeterminado `seed.txt`. Elimina `MNEMONIC` al usar `--mnemonic-file`. Los argumentos `--mnemonic` y `--password` están obsoletos porque otros usuarios locales pueden ver los argumentos del proceso; usa `--mnemonic-file` y `--password-file` en su lugar. Usa `--password-file /path/to/password.txt` si la billetera se derivó con una contraseña BIP-39; es una contraseña de derivación, no cifra los archivos de salida.
 
 `wallet load` lee archivos de claves existentes sin derivar otra billetera. El valor hexadecimal de las claves privadas se oculta por defecto; `--show-secrets` lo muestra explícitamente. Consulta las opciones con `./bursa wallet restore --help` y `./bursa wallet load --help`.
 
