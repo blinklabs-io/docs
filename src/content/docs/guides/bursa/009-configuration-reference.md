@@ -56,7 +56,7 @@ Malformed JSON or a request without `enabled` returns HTTP `400`. A successful u
 
 ## Configuration reference
 
-Add a backend entry under `signer.backends` and set its `type` to `pkcs11`. Use the following fields:
+Add a backend entry under `signer.backends` and set its `type` to the selected backend. Use the following fields:
 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
@@ -234,7 +234,6 @@ A non-loopback legacy API listener must provide both readable TLS files and exac
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
-When the Google project and resource configuration enable authenticated GCP wallet storage, Bursa uses Bearer JWT authentication and authorizes only administrator subjects listed in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`.
 When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`.
 
 ```yaml
