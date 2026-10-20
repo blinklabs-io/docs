@@ -80,8 +80,6 @@ Content-Type: application/json
 | `age.recipients` | `AGE_RECIPIENTS` | SOPS暗号化の対象にする`age` recipientを指定します。 | recipientはカンマ区切りで指定します。 |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | 暗号化しないウォレット永続化を明示的に許可します。 | SOPSマスターキーを設定しないfileストレージ、またはSQLiteストレージで必要です。この設定は暗号化なしのウォレット永続化を許可します。 |
 
-## ウォレット管理者の認証
-
 ## ビルド要件
 
 `PKCS#11`バックエンドを含めるには、`CGO`を有効にし、`pkcs11`ビルドタグを指定してBursaをコンパイルします。このビルドタグなしで設定がこのバックエンドを選択すると、Bursaは即座に失敗し、次のエラーを返します。
