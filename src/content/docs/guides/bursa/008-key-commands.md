@@ -43,14 +43,11 @@ Bursa can be used to derive individual keys from a mnemonic.
 
 Bursa Command Line Guide for Deriving Individual Keys from a Mnemonic.
 
-**The mnemonic can be provided via:**
-  1. --mnemonic flag
-  2. MNEMONIC environment variable
-  3. --mnemonic-file flag
-  4. Default file "seed.txt"
-<br>
+Use `--mnemonic-file seed.txt` to read the mnemonic from a file, or `--mnemonic-file -` to read it from standard input. Bursa also accepts the `MNEMONIC` environment variable and defaults to `seed.txt` when no other mnemonic source is provided. `MNEMONIC`, when set, takes precedence over `--mnemonic-file`. The `--mnemonic` argument is deprecated because process arguments are visible to other local users. For an optional derivation password, use `--password-file <path>`; `-` reads standard input, but both secrets cannot read standard input in the same command.
 
-> Keys are derived following Cardano CIP standards and output in bech32 format suitable for use with cardano-cli and other tools.
+The examples below write signing keys to explicit files in cardano-cli JSON envelope format. For mnemonic-derived commands, `--signing-key-file -` explicitly prints bech32 secret material to standard output instead. Omitting the signing destination is an error unless the command supports and receives only `--verification-key-file`. Root and account commands require a signing destination. Do not combine `--signing-key-file -` with `--verification-key-file`.
+
+> Keys are derived following Cardano CIP standards. File output uses cardano-cli envelopes; explicitly requested standard output uses bech32.
 > 
 > **Derivation paths by key type:**
 > -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
@@ -75,9 +72,9 @@ Do not repair legacy HD-derived signing files that declare a non-extended type b
 
 #### Root Key
 The root key is the master key from which all other keys are derived.  
-Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specified.
+With `--signing-key-file -`, standard output uses bech32 format (root_xsk prefix).
 ```
-./bursa key root --mnemonic "word1 word2 ..."
+./bursa key root --mnemonic-file seed.txt --signing-key-file root.skey
 ```
 
 **Root Key with Signing Key File Example:**
@@ -85,7 +82,7 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key root --signing-key-file /path/root.skey
+./bursa key root --mnemonic-file seed.txt --signing-key-file /path/root.skey
 ```
 
 ***
@@ -94,10 +91,10 @@ Output is in bech32 format (root_xsk prefix) unless --signing-key-file is specif
 
 #### Account Key
 The account key follows CIP-1852 path: m/1852'/1815'/account'  
-Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specified.  
+With `--signing-key-file -`, standard output uses bech32 format (acct_xsk prefix).
 
 ```
-./bursa key account --mnemonic "word1 word2 ..." --index 0
+./bursa key account --mnemonic-file seed.txt --index 0 --signing-key-file account.skey
 ```
 
 ***
@@ -106,9 +103,9 @@ Output is in bech32 format (acct_xsk prefix) unless --signing-key-file is specif
 
 #### Payment Key
 The payment key follows CIP-1852 path: m/1852'/1815'/account'/0/index  
-Output is in bech32 format (addr_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (addr_xsk prefix).
 ```
-./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key payment --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file payment.skey --verification-key-file payment.vkey
 ```
 
 ***
@@ -117,9 +114,9 @@ Output is in bech32 format (addr_xsk prefix) unless key files are specified.
 
 #### Stake Key
 The stake key follows CIP-1852 path: m/1852'/1815'/account'/2/index  
-Output is in bech32 format (stake_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (stake_xsk prefix).
 ```
-./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key stake --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file stake.skey --verification-key-file stake.vkey
 ```
 
 ***
@@ -129,9 +126,9 @@ Output is in bech32 format (stake_xsk prefix) unless key files are specified.
 #### Pool Cold Key
 The pool cold key follows CIP-1853 path: m/1853'/1815'/0'/index'  
 These keys are used as the long-term identity keys for stake pool operators.  
-Output is in bech32 format (pool_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (pool_xsk prefix).
 ```
-./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
+./bursa key pool-cold --mnemonic-file seed.txt --index 0 --signing-key-file pool-cold.skey --verification-key-file pool-cold.vkey
 ```
 
 ***
@@ -141,9 +138,9 @@ Output is in bech32 format (pool_xsk prefix) unless key files are specified.
 #### Policy Key
 The policy key follows CIP-1855 path: m/1855'/1815'/policy_ix'  
 These keys are used for native asset minting/burning policies.  
-Output is in bech32 format (policy_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (policy_xsk prefix).
 ```
-./bursa key policy --mnemonic "word1 word2 ..." --index 0
+./bursa key policy --mnemonic-file seed.txt --index 0 --signing-key-file policy.skey --verification-key-file policy.vkey
 ```
 
 ***
@@ -156,10 +153,10 @@ m/1852'/1815'/account'/0/index
 
 The key is functionally identical to the payment key but uses different bech32 prefixes (calidus_xsk/calidus_xvk) and different cardano-cli text envelope types for SPO identity purposes.  
 
-Output is in bech32 format (calidus_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (calidus_xsk prefix).
 
 ```
-./bursa key calidus --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key calidus --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file calidus.skey --verification-key-file calidus.vkey
 ```
 
 **Calidus Key with Key Files Example**
@@ -167,7 +164,7 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key calidus --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
+./bursa key calidus --mnemonic-file seed.txt --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
 ```
 
 ***
@@ -177,10 +174,10 @@ Output is in bech32 format (calidus_xsk prefix) unless key files are specified.
 #### VRF (Verifiable Random Function) Key Pair
 VRF keys are used by stake pool operators for leader election in the Praos consensus protocol. The seed is derived deterministically from the mnemonic, allowing for key recovery.
 
-Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech32 format unless key files are specified.  
+With `--signing-key-file -`, standard output includes both the signing key (`vrf_sk`) and verification key (`vrf_vk`) in bech32 format.
 
 ```
-./bursa key vrf --mnemonic "word1 word2 ..." --index 0
+./bursa key vrf --mnemonic-file seed.txt --index 0 --signing-key-file vrf.skey --verification-key-file vrf.vkey
 ```
 
 **VRF with Key Files Example**
@@ -188,7 +185,7 @@ Output includes both signing key (vrf_sk) and verification key (vrf_vk) in bech3
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key vrf --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
+./bursa key vrf --mnemonic-file seed.txt --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
 ```
 
 ***
@@ -201,10 +198,10 @@ KES keys are used by stake pool operators for block signing in the Praos consens
 This implementation uses Cardano's depth 6, providing 64 time periods.  
 The seed is derived deterministically from the mnemonic, allowing for key recovery.  
 
-Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_vk, 32 bytes) in bech32 format unless key files are specified.  
+With `--signing-key-file -`, standard output includes both the signing key (`kes_sk`, 608 bytes) and verification key (`kes_vk`, 32 bytes) in bech32 format.
 
 ```
-./bursa key kes --mnemonic "word1 word2 ..." --index 0
+./bursa key kes --mnemonic-file seed.txt --index 0 --signing-key-file kes.skey --verification-key-file kes.vkey
 ```
 
 **KES Key with Key Files Example**
@@ -212,7 +209,7 @@ Output includes both signing key (kes_sk, 608 bytes) and verification key (kes_v
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
+./bursa key kes --mnemonic-file seed.txt --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
 
 ### VRF and KES Key Validation
@@ -226,10 +223,10 @@ Bursa validates VRF and KES material before exporting or loading it. A VRF verif
 #### DRep Key
 The DRep key follows CIP-0105 path: m/1852'/1815'/account'/3/index  
 These keys are used for governance participation as a Delegated Representative.  
-Output is in bech32 format (drep_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (drep_xsk prefix).
 
 ```
-./bursa key drep --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
 ```
 
 **DRep Key with Key Files Example**
@@ -237,7 +234,7 @@ Output is in bech32 format (drep_xsk prefix) unless key files are specified.
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key drep --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
+./bursa key drep --mnemonic-file seed.txt --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
 ```
 
 ***
@@ -247,10 +244,10 @@ Output is in bech32 format (drep_xsk prefix) unless key files are specified.
 #### Constitutional Committee Cold Key
 The committee cold key follows CIP-0105 path: m/1852'/1815'/account'/4/index  
 These keys are used for Constitutional Committee membership (long-term identity).  
-Output is in bech32 format (cc_cold_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (cc_cold_xsk prefix).
 
 ```
-./bursa key committee-cold --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
 ```
 
 **Constitutional Committee Cold Key with Key Files Example**
@@ -258,7 +255,7 @@ Output is in bech32 format (cc_cold_xsk prefix) unless key files are specified.
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key committee-cold --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
+./bursa key committee-cold --mnemonic-file seed.txt --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
 ```
 
 ***
@@ -268,18 +265,18 @@ Output is in bech32 format (cc_cold_xsk prefix) unless key files are specified.
 #### Constitutional Committee Hot Key
 The committee hot key follows CIP-0105 path: m/1852'/1815'/account'/5/index  
 These keys are used for Constitutional Committee voting (operational key).  
-Output is in bech32 format (cc_hot_xsk prefix) unless key files are specified.  
+With `--signing-key-file -`, standard output uses bech32 format (cc_hot_xsk prefix).
 
 ```
-./bursa key committee-hot --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey
 ```
 
-**Constitutional Committee Cold Key with Key Files Example**
+**Constitutional Committee Hot Key with Key Files Example**
 
 > ⚠️ Please adjust path below.
 
 ```
-./bursa key committee-hot --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
+./bursa key committee-hot --mnemonic-file seed.txt --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
 ```
 
 ***
@@ -321,6 +318,9 @@ Explore other Bursa Commands
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 7. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 8. [key](#key)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
+> 9. [tx](../003-commands#tx) - Commands for signing transactions and assembling witnesses
+> 10. [sign](../003-commands#sign) - Commands for signing data with CIP-8
+> 11. [signer](../003-commands#signer) - Commands for running the remote signer service
 
 ***
 

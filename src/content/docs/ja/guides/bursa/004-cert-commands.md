@@ -361,6 +361,9 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
 > 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 9. [tx](../003-commands#tx) - オフライントランザクション操作
+> 10. [sign](../003-commands#sign) - CIP-8/CIP-30メッセージの署名と検証
+> 11. [signer](../003-commands#signer) - リモート署名サービス
 
 ***
 
