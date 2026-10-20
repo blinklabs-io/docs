@@ -10,6 +10,10 @@ description: gOuroboros Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.213.9 - *[View Release Notes](../v0-213-9)*
+- Version: v0.213.8 - *[View Release Notes](../v0-213-8)*
+- Version: v0.213.7 - *[View Release Notes](../v0-213-7)*
+- Version: v0.213.6 - *[View Release Notes](../v0-213-6)*
+- Version: v0.213.5 - *[View Release Notes](../v0-213-5)*
 - Version: v0.213.4 - *[View Release Notes](../v0-213-4)*
 - Version: v0.213.3 - *[View Release Notes](../v0-213-3)*
 - Version: v0.213.2 - *[View Release Notes](../v0-213-2)*
@@ -112,14 +116,3 @@ description: gOuroboros Release Notes
 - Version: v0.178.0 - *[View Release Notes](../v0-178-0)*
 - Version: v0.171.0 - *[View Release Notes](../v0-171-0)*
 - Version: v0.170.1 - *[View Release Notes](../v0-170-1)*
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

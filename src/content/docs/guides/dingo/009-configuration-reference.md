@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.84.0 Configuration Reference
-description: Complete, release-specific Dingo v0.84.0 configuration reference and example.
+title: Dingo v0.86.0 Configuration Reference
+description: Complete, release-specific Dingo v0.86.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.84.0. The complete
+This page covers the configuration shipped with Dingo v0.86.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.84.0 source](https://github.com/blinklabs-io/dingo/blob/v0.84.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.86.0 source](https://github.com/blinklabs-io/dingo/blob/v0.86.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -31,11 +31,11 @@ for the main runtime choices.
 | Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
-| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
+| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
-| Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
+| Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
 
 ### Ledger processing
 
@@ -90,8 +90,40 @@ published chunk data. Dingo derives aggregate limits for transfer bytes, cache
 and staging, free-space reserves, and concurrency from the requested chunk
 range. Dingo reports an error and fails the import when a limit is exceeded or
 available free space is insufficient. It then removes staging files after the
-failure. See the bootstrap and data maintenance guide for the remote source,
+failure. For a remote import, if trusted replay or processing fails after
+copied immutable blocks advance beyond the ledger-applied tip, Dingo rewinds
+the unapplied blocks to that tip before returning the original error. Staging
+cleanup therefore does not leave unapplied immutable blocks ahead of the
+ledger tip. If the storage backend refuses the rewind, Dingo returns both the
+original and rewind errors, and the database requires recovery before another
+load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
+
+### Genesis bootstrap corroboration
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `1` by default. One independent peer must report the same recent blocks before a fast source can drive Genesis selection. Set `0` explicitly to disable the corroboration gate for an intentional single-peer or test topology. |
+
+### Blockfrost provider
+
+The built-in Blockfrost provider listens on loopback by default. Read-only API
+requests are not subject to the Blockfrost mutation admission limits, although
+shared API authentication can still apply when configured.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` by default. An explicitly empty value uses the root `bindAddr`; set a host to expose the provider on another interface. |
+| Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Empty by default. Transaction submission and evaluation require this token in `project_id`, `X-Blockfrost-Project-Id`, or `Authorization: Bearer <token>`. Missing or invalid credentials return HTTP `401`. |
+| Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` by default. The value must be positive and limits transaction submission and evaluation across the provider. |
+| Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` by default. The value must be positive and no greater than `maxConcurrentMutations`; it limits work from one remote address. |
+
+When `authToken` is configured and the provider listens on a non-loopback host,
+configure server TLS through `plugins.api.blockfrost.config.tls`. Dingo
+refuses to start authenticated mutation access without server TLS. After
+authentication and before reading the request body, the provider applies both
+mutation limits. When either limit is exhausted, it returns HTTP `429` with
+`Retry-After: 1` without reading the body.
 
 ### LocalStateQuery snapshot lifetime
 
@@ -148,25 +180,75 @@ omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
 
+### SQL metadata TLS
+
+Provider-generated PostgreSQL connections use `sslMode: verify-full` by
+default, which verifies the server certificate and hostname. Provider-generated
+MySQL connections use `tls=true` when `sslMode` is unset and the host is not a
+loopback host; `localhost`, `127.0.0.1`, and `::1` remain exempt from this
+automatic remote-TLS default. An explicitly supplied `dsn` remains authoritative
+and bypasses these provider-generated defaults.
+
+MySQL snapshot and restore reject `tls=skip-verify` instead of weakening the
+connection to opportunistic TLS. Use an explicit supported mode such as
+`tls=false`, `tls=true`, or `tls=preferred` when the lifecycle operation needs a
+different setting.
+
+### Midnight auth-token configuration
+
+Configure the Midnight auth-token fields under `midnight` when registration
+authorization must use a specific policy and asset.
+
+| Setting | YAML key | Default | Validation and behavior |
+| --- | --- | --- | --- |
+| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | The configured policy ID must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
+| Auth-token asset name | `midnight.authTokenAssetName` | Empty | Dingo uses this value with the configured policy ID when it validates an auth token. |
+
+Operators must set both fields or leave both fields empty. A partial pair fails
+configuration and startup validation. When configured, Dingo accepts an auth
+token only when its policy ID and asset name exactly match the configured
+values.
+
 ### Badger value-log garbage collection
 
 Configure these provider YAML keys under `plugins.storage.blob.config` for the
 Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
+Dingo uses `1 MiB` as the default for
+`plugins.storage.blob.config.valueThreshold`, except during Core-mode `sync`
+and Mithril sync, when Dingo uses `1 KiB`.
+An explicit YAML value overrides either mode default, including an explicit
+`0`.
+
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
 
-Dingo keeps value-log GC disabled in `load` mode even when the Badger provider
-configuration sets `plugins.storage.blob.config.gc` to `true`.
+Dingo keeps value-log GC disabled in both `load` and `sync` bulk-import modes,
+even when the Badger provider configuration sets
+`plugins.storage.blob.config.gc` to `true`.
 
 ### Database lifecycle snapshot pause bound
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and scope |
 | --- | --- | --- | --- | --- | --- |
 | Snapshot commit pause bound | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`. Set `0s` for no bound. | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual and offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
+
+### Database lifecycle snapshot trust key
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Snapshot trust-key file | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | Empty by default. A configured file must contain at least 16 bytes and no more than 1024 bytes, and must be a regular, non-symlink file. |
+
+Unix requires the file to belong to the current user and to grant no group or
+other access. Windows accepts the current user or `BUILTIN\Administrators` as
+owner when the process belongs to that group. Its DACL may contain only the
+owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
+the restricted local `Administrator` ACE when `Administrators` owns the file.
+Dingo rejects an invalid file during snapshot authentication and during any
+lifecycle operation that needs the trust key.
 
 ### Bark remote lifecycle service
 
