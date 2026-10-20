@@ -50,7 +50,7 @@ El cifrado de billeteras con SOPS requiere al menos un recurso de clave maestra 
 
 ## Referencia de configuración
 
-Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11`, `nitro` o `confidential-space`, según el backend. Usa los campos siguientes:
+Una entrada de backend en `signer.backends` selecciona el backend mediante `type`. La tabla siguiente muestra los campos disponibles:
 
 | Ruta de configuración | Propósito | Validación |
 | --- | --- | --- |
@@ -96,7 +96,7 @@ Para un backend `software`/`file` configurado, Bursa rechaza el inicio cuando `s
 
 ## Almacenamiento de marcas de agua del firmante
 
-Configura `signer.watermark.type` con `postgres` para guardar de forma duradera y compartida las marcas de agua y los contadores del firmante. El almacenamiento `file` usa SQLite y también conserva los datos de forma duradera. El almacenamiento `mem` solo está disponible con `warn` u `off`. Las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
+El almacenamiento `postgres` guarda de forma duradera y compartida las marcas de agua y los contadores del firmante. Las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
 
 | Ruta de configuración | Uso | Requisito |
 | --- | --- | --- |
@@ -107,7 +107,7 @@ Configura `signer.watermark.type` con `postgres` para guardar de forma duradera 
 
 Una configuración `postgres` requiere una fuente de DSN. Si `dsn_env` nombra una variable inexistente o vacía, Bursa rechaza la configuración y no recurre a `dsn`. El rol de la base de datos debe poder crear las tablas de marcas de agua y después leerlas y escribirlas. Mantén las credenciales fuera del archivo YAML y proporciónalas mediante un gestor de secretos o el entorno.
 
-Cuando no configuras `signer.watermark.mode`, Bursa usa `enforce`. Este modo requiere un almacén durable `file` o `postgres`. Bursa convierte un modo desconocido en `enforce`, por lo que ese modo también requiere almacenamiento durable.
+Cuando `signer.watermark.mode` no tiene un valor, Bursa usa `enforce`. Este modo requiere un almacén durable `file` o `postgres`. Bursa convierte un modo desconocido en `enforce`, por lo que ese modo también requiere almacenamiento durable.
 
 ```yaml
 signer:
