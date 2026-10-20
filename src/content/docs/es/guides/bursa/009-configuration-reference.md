@@ -44,9 +44,9 @@ Configura el almacenamiento de billeteras y las claves maestras de SOPS con esta
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Define el prefijo obligatorio de los nombres de secretos que contienen las billeteras de AWS. |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Identifica la clave maestra de AWS KMS que usa SOPS para cifrar las billeteras. |
 | `age.recipients` | `AGE_RECIPIENTS` | Define los destinatarios `age` separados por comas que usa SOPS para cifrar las billeteras. |
-| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Activa explícitamente la persistencia sin cifrar. Bursa requiere esta autorización para el almacenamiento de archivos sin una clave maestra de SOPS y para el almacenamiento SQLite. |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Permite explícitamente que Bursa persista las billeteras sin cifrar. Bursa requiere esta autorización para el almacenamiento de archivos sin una clave maestra de SOPS y para el almacenamiento SQLite. |
 
-El cifrado de billeteras con SOPS requiere al menos un recurso de clave maestra configurado. Bursa rechaza un recurso de clave mal formado antes de iniciar el cifrado. La autorización `storage.allow_unencrypted_wallet_storage` permite conservar las billeteras sin cifrar.
+El cifrado de billeteras con SOPS requiere al menos un recurso de clave maestra configurado. Bursa rechaza un recurso de clave mal formado antes de iniciar el cifrado.
 
 ## Referencia de configuración
 
@@ -54,8 +54,8 @@ Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11
 
 | Ruta de configuración | Propósito | Validación |
 | --- | --- | --- |
-| `signer.backends[].type` | Selecciona el backend de firma. | Establece `pkcs11`, `nitro` o `confidential-space`. |
-| `signer.backends[].address` | Especifica el endpoint del backend `nitro` o `confidential-space`. | Usa una dirección con `http://`, `https://` o `unix:///`. |
+| `signer.backends[].type` | Selecciona el backend de firma. | Usa `pkcs11`, `nitro` o `confidential-space`. |
+| `signer.backends[].address` | Especifica el endpoint del backend `nitro` o `confidential-space`. | El backend acepta una dirección con `http://`, `https://` o `unix:///`. |
 | `signer.backends[].module` | Especifica la ruta al módulo `PKCS#11`, incluido el archivo `.so`. | Establece este campo. Bursa rechaza un valor vacío. |
 | `signer.backends[].token_label` | Selecciona el token o el slot mediante su etiqueta. | Establece este campo o `slot`. Bursa requiere al menos un campo de selección. |
 | `signer.backends[].slot` | Selecciona un slot mediante su ID de slot explícito. | Establece este campo o `token_label`. Bursa requiere al menos un campo de selección. |
@@ -63,11 +63,11 @@ Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11
 | `signer.backends[].keys[]` | Define una lista opcional de objetos permitidos del token. | Cuando aparece, incluye `name` y `type` en cada entrada. |
 | `signer.backends[].keys[].name` | Coincide con el `CKA_LABEL` del objeto del token. | Establece este campo para cada entrada de `keys`. |
 | `signer.backends[].keys[].type` | Asigna un tipo de clave de Cardano al objeto del token coincidente. | Establece este campo para cada entrada de `keys`. Usa `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool` o `policy`. |
-| `signer.backends[].root_ca_file` | Especifica el archivo PEM del certificado raíz de AWS Nitro Enclaves. | Requerido para `nitro`; usa el certificado raíz de AWS Nitro fijado por el firmante. |
-| `signer.backends[].pcrs` | Define los valores PCR esperados para `nitro`. | PCR0 (`0`) es obligatorio y no puede contener solo ceros. |
-| `signer.backends[].audience` | Define la audiencia configurada para el token de atestación de `confidential-space`. | Requerido para `confidential-space`. |
-| `signer.backends[].image_digest` | Identifica la imagen de contenedor configurada para `confidential-space`. | Requerido y debe usar el formato `sha256:<64 hex>`. |
-| `signer.backends[].jwks_url` | Especifica el endpoint de las claves de firma de tokens de `confidential-space`. | Opcional. Si no se establece, Bursa usa las claves de firma de tokens publicadas por Google. |
+| `signer.backends[].root_ca_file` | Especifica el archivo PEM del certificado raíz de AWS Nitro Enclaves. | Para `nitro`, Bursa requiere el certificado raíz de AWS Nitro fijado por el firmante. |
+| `signer.backends[].pcrs` | Define los valores PCR esperados para `nitro`. | Para `nitro`, configura PCR0 (`0`) con un valor distinto de cero. |
+| `signer.backends[].audience` | Define la audiencia configurada para el token de atestación de `confidential-space`. | Bursa requiere este valor para `confidential-space`. |
+| `signer.backends[].image_digest` | Identifica la imagen de contenedor configurada para `confidential-space`. | Bursa requiere este valor con el formato `sha256:<64 hex>`. |
+| `signer.backends[].jwks_url` | Especifica el endpoint de las claves de firma de tokens de `confidential-space`. | Bursa usa las claves de firma de tokens publicadas por Google cuando no se establece este valor opcional. |
 
 ## Requisitos de compilación
 
@@ -100,14 +100,14 @@ Configura `signer.watermark.type` con `postgres` para guardar de forma duradera 
 
 | Ruta de configuración | Uso | Requisito |
 | --- | --- | --- |
-| `signer.watermark.type` | Selecciona el almacén de marcas de agua. | Acepta `mem`, `file` o `postgres`. `file` usa un almacén durable respaldado por SQLite. `mem` solo es válido con `warn` u `off`. |
-| `signer.watermark.path` | Especifica la ruta del almacén SQLite. | Requerido cuando `signer.watermark.type` es `file`. |
+| `signer.watermark.type` | Selecciona el almacén de marcas de agua. | Bursa acepta `mem`, `file` o `postgres`. `file` usa un almacén durable respaldado por SQLite. Bursa solo permite `mem` con `warn` u `off`. |
+| `signer.watermark.path` | Especifica la ruta del almacén SQLite. | Bursa requiere este valor cuando `signer.watermark.type` es `file`. |
 | `signer.watermark.dsn` | Proporciona un DSN de PostgreSQL en texto plano. | Bursa lo usa como alternativa cuando `dsn_env` no está configurado. |
 | `signer.watermark.dsn_env` | Indica el nombre de la variable de entorno que contiene el DSN. | Bursa da prioridad a esta fuente sobre `dsn`; la variable indicada debe tener un valor no vacío. |
 
 Una configuración `postgres` requiere una fuente de DSN. Si `dsn_env` nombra una variable inexistente o vacía, Bursa rechaza la configuración y no recurre a `dsn`. El rol de la base de datos debe poder crear las tablas de marcas de agua y después leerlas y escribirlas. Mantén las credenciales fuera del archivo YAML y proporciónalas mediante un gestor de secretos o el entorno.
 
-`signer.watermark.mode` usa `enforce` cuando no se configura. En este modo, Bursa requiere un almacén durable `file` o `postgres` y rechaza `mem`. Bursa también convierte un modo desconocido en `enforce`, por lo que un modo desconocido tampoco permite `mem`.
+Cuando no configuras `signer.watermark.mode`, Bursa usa `enforce`. Este modo requiere un almacén durable `file` o `postgres`. Bursa convierte un modo desconocido en `enforce`, por lo que ese modo también requiere almacenamiento durable.
 
 ```yaml
 signer:
