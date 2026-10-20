@@ -60,9 +60,8 @@ plugins:
 ### Blockfrost mutation requests
 
 The built-in Blockfrost provider listens on `127.0.0.1` by default. It does
-not inherit the root `bindAddr`; set `plugins.api.blockfrost.config.host` to
-expose it on another interface. Changing this host makes an explicit exposure
-decision.
+not inherit the root `bindAddr` unless `plugins.api.blockfrost.config.host` is
+explicitly empty. Set a specific host to expose it on another interface.
 
 Set `plugins.api.blockfrost.config.authToken` to a secret before sending
 mutation requests. An empty `authToken` keeps every mutation route closed.
