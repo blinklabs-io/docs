@@ -35,14 +35,3 @@ El evaluador trata como argumentos de confianza únicamente los valores de datos
 Antes de pasar cada árbol de argumentos de confianza a `EvaluateContext`, el llamador debe validarlo. `EvaluateContext` reenvía esos árboles a `RunContextWithTrustedDataArguments`, cuya validación omite deliberadamente los árboles reenviados. Por ello, el llamador debe garantizar desde el origen que cada árbol sea finito, contenga datos Plutus válidos y sea acíclico.
 
 El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. El llamador debe corregir el término antes de volver a intentarlo después de ese error.
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

@@ -94,14 +94,3 @@ Las salvaguardas de rango no sustituyen `RangeRequest.ExpectedBytes` ni `MaxInFl
 
 La contabilidad del búfer de lectura de toda la conexión sigue la capacidad retenida de cada `bytes.Buffer` durante la entrega y la compactación. Por tanto, la capacidad sobrante después de consumir un mensaje permanece incluida en la contabilidad en lugar de omitirse.
 Este comportamiento no añade una opción nueva ni requiere cambios en otra configuración.
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

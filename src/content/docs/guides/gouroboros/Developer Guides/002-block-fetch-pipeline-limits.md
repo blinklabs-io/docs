@@ -128,14 +128,3 @@ each `bytes.Buffer` through delivery and compaction. Leftover capacity after a
 message is consumed therefore remains part of the accounting instead of being omitted.
 This behavior does not add a new option or require changes to unrelated
 configuration.
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

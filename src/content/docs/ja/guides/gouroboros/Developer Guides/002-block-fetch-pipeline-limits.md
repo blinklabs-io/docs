@@ -84,13 +84,3 @@ func rangeDone(ctx blockfetch.CallbackContext, err error) error {
 プロトコルがメッセージを消費した後も保持する読み取りバッファの容量を、接続全体の読み取りバッファ会計に含めます。この会計の動作は既存の接続管理に属し、新しい設定オプションではありません。
 
 詳細な API 仕様については、[gOuroboros の Go API ドキュメント](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)を参照してください。
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
