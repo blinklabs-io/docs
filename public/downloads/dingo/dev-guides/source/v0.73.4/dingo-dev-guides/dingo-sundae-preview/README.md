@@ -1,8 +1,8 @@
 # Dingo UTxO RPC and SundaeSwap V3 Preview
 
 This directory contains the complete TypeScript/Vite wallet frontend source.
-The shared Compose stack starts it at <http://127.0.0.1:5174>; see the
-bundle's root `README.md` for setup and Dingo configuration.
+Use the existing Kubernetes deployment and port-forward scripts described
+in the bundle root `README.md`, then run the frontend locally.
 
 To run this frontend locally against a Dingo UTxO RPC listener on port 9090:
 
@@ -27,6 +27,6 @@ Code tour:
 - `src/sundae/swap.ts` builds, signs, and submits the V3 order transaction.
 - `src/main.ts` connects the wallet, loads a pool, and runs the user flow.
 
-The shared stack enables UTxO RPC in Dingo's `storageMode: api` and proxies
-its HTTP routes through Vite. See the root `docker-compose.yml` for the exact
-service settings and the Dingo guide for release-specific configuration.
+The existing `k8s/dingo-values.yaml` enables UTxO RPC in Dingo's
+`storageMode: api`; the local Vite process proxies its HTTP routes through a
+loopback port-forward. See the Dingo guide for release-specific configuration.

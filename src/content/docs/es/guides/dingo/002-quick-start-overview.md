@@ -141,7 +141,7 @@ plugins:
         port: 0
 
 # Mempool
-# `plugins.mempool.config.capacity` es una anulación opcional, no un ajuste requerido.
+# plugins.mempool.config.capacity es una anulación opcional, no un ajuste requerido.
 # Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
 # Deja la clave comentada o omítela para usar el valor predeterminado del modo.
 # plugins:
@@ -155,26 +155,26 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
+  # En v1, pinnedDigest usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
   # pinnedDigest: ""
 
 # Network
 # Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
 maxNtCConns: 100
-# Alias de CLI: `--max-ntc-conns`. Variable de entorno: `DINGO_MAX_NTC_CONNS`.
+# Alias de CLI: --max-ntc-conns. Variable de entorno: DINGO_MAX_NTC_CONNS.
 # Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
 maxNtCConnectionsPerIP: 5
-# Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
+# Alias de CLI: --max-ntc-connections-per-ip. Variable de entorno: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 bindAddr: "0.0.0.0"
-# La dirección de métricas es independiente de `bindAddr` y, de forma predeterminada, usa loopback.
-# Alias de CLI: `--metrics-bind-addr`. Variable de entorno: `DINGO_METRICS_BIND_ADDR`.
+# La dirección de métricas es independiente de bindAddr y, de forma predeterminada, usa loopback.
+# Alias de CLI: --metrics-bind-addr. Variable de entorno: DINGO_METRICS_BIND_ADDR.
 metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
-# `metricsPort: 0` desactiva el listener de métricas.
-# Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
-# `healthPort: 0` desactiva el listener de salud.
+# metricsPort: 0 desactiva el listener de métricas.
+# Alias de CLI: --health-port. Variable de entorno: DINGO_HEALTH_PORT.
+# healthPort: 0 desactiva el listener de salud.
 healthPort: 12799
-# Alias de CLI: `--health-ready-gap-slots`. Variable de entorno: `DINGO_HEALTH_READY_GAP_SLOTS`.
+# Alias de CLI: --health-ready-gap-slots. Variable de entorno: DINGO_HEALTH_READY_GAP_SLOTS.
 healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"

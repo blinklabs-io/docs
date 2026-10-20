@@ -20,7 +20,7 @@ blockPipeline := pipeline.NewBlockPipeline(
 )
 ```
 
-El pipeline reserva los bytes retenidos necesarios durante `Submit` y mantiene cada resultado contabilizado hasta que el consumidor lo recibe. Si un bloque no cabe en el presupuesto agregado configurado, `Submit` devuelve un error que coincide con `pipeline.ErrRawCborBudgetExceeded`. Si los consumidores no reciben y liberan los resultados, los envíos posteriores pueden permanecer sujetos a contrapresión porque los resultados retenidos continúan ocupando recursos del pipeline.
+El pipeline reserva los bytes retenidos necesarios durante `Submit` y mantiene cada resultado contabilizado hasta que el consumidor lo recibe. Si un bloque no cabe en el presupuesto agregado configurado, `Submit` devuelve un error que coincide con `pipeline.ErrRawCborBudgetExceeded`. Recibir un resultado mediante `Results()` o `DrainResults()` libera su reserva automáticamente. Mientras los consumidores no reciban los resultados, los envíos posteriores pueden quedar sujetos a contrapresión porque los resultados no entregados siguen ocupando el presupuesto. Después de procesar cada elemento recibido, llama a `Release()` para borrar los datos que pertenecen al consumidor.
 
 ### Consume y libera cada resultado
 

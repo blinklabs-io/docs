@@ -57,39 +57,39 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 Como el servicio se ejecutará como tu usuario pero la configuración ahora está en `/etc/dingo/`, debemos asegurarnos de que las rutas de la base de datos y el socket usen rutas absolutas. Ejecuta lo siguiente para regenerar la configuración con tu `$HOME` expandido:
 
 ```bash
-sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
-databasePath: \"$HOME/dingo/.dingo\"
+sudo tee /etc/dingo/dingo.yaml > /dev/null <<EOF
+databasePath: "$HOME/dingo/.dingo"
 
 plugins:
   storage:
     blob:
-      provider: \"badger\"
+      provider: "badger"
       config:
-        # Directorio de datos opcional de Badger. Si no lo defines, `databasePath` aporta la ruta.
-        # dataDir: \"$HOME/dingo/.dingo\"
+        # Directorio de datos opcional de Badger. Si no lo defines, databasePath aporta la ruta.
+        # dataDir: "$HOME/dingo/.dingo"
     metadata:
-      provider: \"sqlite\"
+      provider: "sqlite"
       config:
-        # Directorio de datos opcional de SQLite. Si no lo defines, `databasePath` aporta la ruta.
-        # dataDir: \"$HOME/dingo/.dingo\"
+        # Directorio de datos opcional de SQLite. Si no lo defines, databasePath aporta la ruta.
+        # dataDir: "$HOME/dingo/.dingo"
   mempool:
-    provider: \"default\"
+    provider: "default"
     config:
       # Capacidad del mempool en bytes. Mantén la línea comentada para usar el valor predeterminado del modo.
       # capacity: 1048576
-      # `revalidationDeltaCap` es opcional.
+      # revalidationDeltaCap es opcional.
       # Su valor predeterminado es 64 y debe ser mayor que 0.
       # revalidationDeltaCap: 64
   api:
     blockfrost:
-      provider: \"builtin\"
+      provider: "builtin"
       config:
         port: 0
         # El servidor integrado escucha en 127.0.0.1 por defecto.
         # Establece este valor para sobrescribir el host específico del proveedor.
-        host: \"127.0.0.1\"
+        host: "127.0.0.1"
         # Las rutas de mutación requieren el token configurado; no incrustes secretos en este archivo de ejemplo.
-        authToken: \"\"
+        authToken: ""
         # La autenticación en un host que no sea loopback requiere TLS.
         # tls: true
         # Límite global de mutaciones simultáneas. Predeterminado: 4.
@@ -97,17 +97,17 @@ plugins:
         # Límite de mutaciones simultáneas por cliente. Predeterminado: 1.
         maxConcurrentMutationsPerClient: 1
     mesh:
-      provider: \"builtin\"
+      provider: "builtin"
       config:
         port: 0
     utxorpc:
-      provider: \"builtin\"
+      provider: "builtin"
       config:
         port: 0
 
 # Mithril
 mithril:
-  aggregatorUrl: \"\"
+  aggregatorUrl: ""
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
@@ -115,8 +115,8 @@ mithril:
   # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; la configuración de producción mantiene este valor en false.
   # CLI: --mithril-allow-insecure-http | Variable de entorno: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
   allowInsecureHttp: false
-  # Mithril v2 solo acepta artefactos y redirecciones desde el origen configurado de `aggregatorUrl`
-  # o desde el origen oficial de Mithril en GCS: `https://storage.googleapis.com`.
+  # Mithril v2 solo acepta artefactos y redirecciones desde el origen configurado de aggregatorUrl
+  # o desde el origen oficial de Mithril en GCS: https://storage.googleapis.com.
   # Dingo descarta ubicaciones duplicadas, limita a 4 las ubicaciones por componente y admite como máximo 100000 archivos inmutables.
   # Dingo aplica un presupuesto agregado de solicitudes y bytes a las descargas, con un plazo total de 24 horas.
   # Dingo limita la extracción por número de entradas y bytes expandidos, y reserva espacio libre en el sistema de archivos.
@@ -125,31 +125,31 @@ mithril:
   # Identidad opcional del artefacto de Mithril para un arranque nuevo.
   # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
   # Dingo solo usa este valor para un arranque nuevo; no lo usa para una base de datos completa ni para cambiar una importación interrumpida.
-  # pinnedDigest: \"\"
+  # pinnedDigest: ""
 
 # Lifecycle de base de datos
 databaseLifecycle:
   # Captura snapshots automáticos al cierre de cada epoch.
-  # Dingo no admite capturas automáticas cuando el proveedor principal de blobs es `badger`, `s3` o `gcs`.
+  # Dingo no admite capturas automáticas cuando el proveedor principal de blobs es badger, s3 o gcs.
   # Desactiva las capturas automáticas o usa un proveedor principal compatible.
   # Default: false
   # CLI: --db-snapshot-enabled
   snapshotEnabled: false
   # Directorio local donde Dingo escribe cada snapshot.
-  # Requerido cuando `snapshotEnabled` vale true.
+  # Requerido cuando snapshotEnabled vale true.
   # CLI: --db-snapshot-dir
-  snapshotDir: \"$HOME/dingo/.dingo/snapshots\"
+  snapshotDir: "$HOME/dingo/.dingo/snapshots"
   # Destino opcional en la nube para reflejar cada snapshot.
-  # Usa `s3://bucket/prefix` o `gcs://bucket/prefix`.
-  # Requiere el build tag `dingo_extra_plugins`.
+  # Usa s3://bucket/prefix o gcs://bucket/prefix.
+  # Requiere el build tag dingo_extra_plugins.
   # CLI: --db-snapshot-cloud-destination
-  snapshotCloudDestination: \"\"
+  snapshotCloudDestination: ""
   # Segmento adicional que Dingo agrega antes de cada ID de snapshot.
   # CLI: --db-snapshot-cloud-destination-prefix
-  snapshotCloudDestinationPrefix: \"\"
+  snapshotCloudDestinationPrefix: ""
   # En Linux, usa un archivo de confianza de snapshots regular, no un enlace simbólico,
   # de 1 KiB como máximo, propiedad del usuario de Dingo y sin acceso para el grupo ni para otros usuarios.
-  snapshotTrustKeyFile: \"$HOME/dingo/.dingo/snapshot-trust-key\"
+  snapshotTrustKeyFile: "$HOME/dingo/.dingo/snapshot-trust-key"
   # Número de snapshots automáticos recientes que Dingo conserva.
   # 0 conserva todos.
   # CLI: --db-snapshot-retention
@@ -159,32 +159,32 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 
 # Network
-bindAddr: \"0.0.0.0\"
+bindAddr: "0.0.0.0"
 metricsPort: 12798
 # Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
-# CLI: `--max-ntc-conns` | Variable de entorno: `DINGO_MAX_NTC_CONNS`
+# CLI: --max-ntc-conns | Variable de entorno: DINGO_MAX_NTC_CONNS
 maxNtCConns: 100
 # Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
-# CLI: `--max-ntc-connections-per-ip` | Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`
+# CLI: --max-ntc-connections-per-ip | Variable de entorno: DINGO_MAX_NTC_CONNECTIONS_PER_IP
 maxNtCConnectionsPerIP: 5
-# Puerto del listener de salud. `0` deshabilita el listener.
+# Puerto del listener de salud. 0 deshabilita el listener.
 # CLI: --health-port | Variable de entorno: DINGO_HEALTH_PORT
 healthPort: 12799
 # Brecha máxima del tip para indicar que el nodo está listo, en slots.
 # CLI: --health-ready-gap-slots | Variable de entorno: DINGO_HEALTH_READY_GAP_SLOTS
 healthReadyGapSlots: 1000
 debugPort: 0
-network: \"preview\"
-privateBindAddr: \"127.0.0.1\"
+network: "preview"
+privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
-socketPath: \"$HOME/dingo/dingo.socket\"
+socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
-barkBaseUrl: \"\"
+barkBaseUrl: ""
 barkPort: 0
-storageMode: \"core\"
-EOF"
+storageMode: "core"
+EOF
 ```
 
 > 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.

@@ -81,24 +81,17 @@ sudo ufw allow 8090/tcp
 config.yamlのサンプル:
 
 ```
-node:
-  network: mainnet
+api:
   port: 8090
-  socketPath: /home/user/cardano-my-node/db/socket
-  backends: http://tx1, http://tx2, http://tx3
+backends:
+  - http://tx1:8090/api/submit/tx
+  - http://tx2:8090/api/submit/tx
+  - http://tx3:8090/api/submit/tx
 ```
 
-✅ `BACKENDS`はCardanoトランザクション送信サービスAPIのURIをカンマ区切りで指定したリストです。
+HTTP リスナーのポートは `api.port` で設定します。最上位の YAML リスト `backends` には、トランザクション送信先の完全な URL を指定します。環境変数 `BACKENDS` では、同じ URL をカンマで区切って指定できます。このサービスは送信先の API に接続するため、Cardano ノードのソケットは不要です。
 
 ***
-
-💡 ヒント: ノードソケットのパスを見つけるには、以下のコマンドを実行してください:
-
-```
-echo $CARDANO_NODE_SOCKET_PATH
-```
-
-<br>
 
 設定ファイルや環境変数の詳細については、こちらをご覧ください: [https://github.com/blinklabs-io/tx-submit-api-mirror](https://github.com/blinklabs-io/tx-submit-api-mirror)
 

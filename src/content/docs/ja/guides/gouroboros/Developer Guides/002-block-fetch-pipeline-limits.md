@@ -7,7 +7,7 @@ description: BlockPipeline の結果所有権と Block Fetch の range 制限を
 
 ## BlockPipeline の結果所有権
 
-`BlockPipeline` は、処理済みの `BlockItem` を `Results()` または `DrainResults()` で渡します。受け取った結果は呼び出し側が所有するため、各 `BlockItem` の利用が終わったら `Release()` を1回呼び出します。結果を解放しないと、保持されたブロックデータが `MaxRawCborBytes` の予算を占有し続け、後続の `Submit` が待機したり失敗したりします。
+`BlockPipeline` は、処理済みの `BlockItem` を `Results()` または `DrainResults()` で渡します。結果を受け取ると、その結果の `MaxRawCborBytes` 予算の予約は自動的に解放されます。結果を受け取らない間は、未配信の結果が予算を占有し続けるため、後続の `Submit` が待機することがあります。受け取った結果のデータは呼び出し側が所有するため、各 `BlockItem` の利用が終わったら `Release()` を呼び出して消去します。
 
 `PipelineConfig.MaxRawCborBytes` と `WithMaxRawCborBytes` は、パイプラインが保持する完全なブロック CBOR コピーの合計バイト数を制限します。`MaxRawCborBytes` に `0` を指定すると、`DefaultMaxRawCborBytes` の `64 * 1024 * 1024`（64 MiB）を使用します。`Submit` は保持用の予算を確保してからブロックを受け入れ、1つのブロックの保持コピーが予算に収まらない場合は `ErrRawCborBudgetExceeded` を返します。
 

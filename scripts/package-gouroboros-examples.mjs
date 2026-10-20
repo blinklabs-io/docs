@@ -16,6 +16,7 @@ const archivePath = join(
 
 if (
   !existsSync(join(sourceRoot, "README.md")) ||
+  !existsSync(join(sourceRoot, "LICENSE")) ||
   !existsSync(join(sourceDirectory, "chain-sync/main.go"))
 ) {
   throw new Error(`gOuroboros example sources not found in ${sourceRoot}`);
@@ -26,7 +27,7 @@ rmSync(archivePath, { force: true });
 
 const result = spawnSync(
   "tar",
-  ["-czf", archivePath, "-C", sourceRoot, "examples", "README.md"],
+  ["-czf", archivePath, "-C", sourceRoot, "examples", "README.md", "LICENSE"],
   { stdio: "inherit" },
 );
 
