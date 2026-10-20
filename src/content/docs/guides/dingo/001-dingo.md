@@ -23,19 +23,19 @@ are organized by what you want to do.
 - [Bootstrap and data maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/)
   — use Mithril and manage local node data.
 - [Run Dingo as a service](/guides/dingo/003-create-start-up-service/) and
-  [monitor it with Grafana](../SPO%20Guides/008-grafana-dashboard/).
-- [Stake pool operator guides](../SPO%20Guides/000-spo-guide/) —
+  [monitor it with Grafana](../spo-guides/008-grafana-dashboard/).
+- [Stake pool operator guides](../spo-guides/000-spo-guide/) —
   configure and operate a testnet block producer.
 
 ## I connect an application
 
 - [API and archive services](/guides/dingo/006-apis-and-archive/) — choose an
   API, configure access, and understand Bark archive nodes.
-- [Build a Blockfrost API client](/guides/dingo/Development%20Guides/009-build-blockfrost-client/) —
+- [Build a Blockfrost API client](/guides/dingo/development-guides/009-build-blockfrost-client/) —
   connect an explorer or service through Dingo's Blockfrost-compatible API.
-- [Build a wallet frontend with UTxO RPC](/guides/dingo/Development%20Guides/010-build-utxorpc-frontend/)
+- [Build a wallet frontend with UTxO RPC](/guides/dingo/development-guides/010-build-utxorpc-frontend/)
   — query wallet UTxOs and submit transactions through Dingo.
-- [Build a governance dashboard](/guides/dingo/Development%20Guides/011-build-governance-dashboard/)
+- [Build a governance dashboard](/guides/dingo/development-guides/011-build-governance-dashboard/)
   — understand the tradeoffs of reading indexed governance metadata.
 - [Use Dingo with Cardano CLI](/guides/dingo/004-using-dingo-with-cardano-cli/)
   — query a running node over node-to-client.

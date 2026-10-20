@@ -3,49 +3,48 @@ title: Build a Governance Dashboard
 description: Run and extend the complete Go governance dashboard and its Dingo PostgreSQL configuration.
 ---
 
-The download contains the complete Gov Lens app: Go server, tests, embedded
-HTML/CSS/JavaScript, SQL for a read-only database role, Postgres initialization,
-Dockerfile, and the shared Compose stack with Dingo configuration.
+The bundle contains the complete Gov Lens Go server, tests, embedded frontend,
+read-only database grants, and existing Kubernetes values for Dingo:
 
 [Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
-The bundle is generated from the versioned [Gov Lens source on GitHub](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-gov-lens), where you can browse or copy individual files.
-
-Extract the bundle, set local credentials, and start the stack:
+Browse the [versioned Gov Lens source](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-gov-lens).
+Use Go 1.26 or later, Helm, kubectl, and a selected Kubernetes context.
+Provision a private PostgreSQL metadata database accessible to Dingo and the
+local app before deploying the node.
 
 ```sh
 tar -xzf dingo-application-examples-v0.73.4.tar.gz
-cd dingo-dev-guides
-cp .env.example .env
-# Edit POSTGRES_PASSWORD and DINGO_GOV_LENS_PASSWORD in .env.
-docker compose up -d
-docker compose ps
+cd dingo-dev-guides/dingo-gov-lens
+cp k8s/dingo-values.yaml gov-lens-values.local.yaml
 ```
 
-The Compose file starts PostgreSQL, a one-shot Dingo Mithril sync, Dingo on
-Preview, Gov Lens, the Blockfrost explorer, and the wallet frontend. PostgreSQL
-initialization creates a separate `dingo_gov_lens` role with `SELECT` access;
-the app does not connect as Dingo's database owner. Open
-<http://127.0.0.1:8088>. The stack binds services to localhost by default.
+Edit the copied values' PostgreSQL DSN for your database owner and database.
+Use a server certificate trusted by the Dingo image's system CA store and a
+matching DNS hostname. Keep credentials in your local configuration. The existing
+values pin Dingo 0.73.4, select Preview and API storage, use PostgreSQL metadata
+and Badger blocks, and disable the optional API listeners.
 
-## Dingo configuration for indexed governance data
-
-The node and sync services use `-n preview`, API storage mode, PostgreSQL
-metadata, and Badger block storage. The governance app reads metadata from that
-PostgreSQL database:
-
-```yaml
-DINGO_STORAGE_MODE: api
-DINGO_PLUGINS_STORAGE_METADATA_PROVIDER: postgres
-DINGO_PLUGINS_STORAGE_METADATA_CONFIG_DSN: "host=postgres port=5432 user=dingo password=dingo dbname=dingo_metadata sslmode=disable TimeZone=UTC"
-DINGO_PLUGINS_STORAGE_BLOB_PROVIDER: badger
+```sh
+helm upgrade --install dingo-governance oci://ghcr.io/blinklabs-io/helm-charts/charts/dingo --version 0.1.3 --namespace dingo-governance --create-namespace --values gov-lens-values.local.yaml
 ```
 
-`dingo-sync` imports the Mithril snapshot and then Dingo backfills historical
-metadata. The node can reach tip before governance history is fully indexed;
-the dashboard reports its backfill state so an empty result is not mistaken
-for proof that no votes exist. The full Dingo, Postgres, sync, and app settings
-are in the downloaded `docker-compose.yml` and `.env.example`.
+After Dingo creates its schema, edit `sql/create-readonly-user.sql` for the
+database, Dingo owner, and app password, then set POSTGRES_ADMIN_DSN for your administrator connection and run it:
+
+```sh
+psql "$POSTGRES_ADMIN_DSN" --set ON_ERROR_STOP=1 --file sql/create-readonly-user.sql
+```
+
+Gov Lens must use the separate read-only role. Run the Go app
+locally using the commands below and open <http://127.0.0.1:8088>. Historical
+backfill can continue after the node reaches tip; the dashboard reports this
+state rather than treating missing rows as proof that no governance exists.
+
+The bundle README documents the existing `scripts/e2e-kubernetes.sh` probes
+for a running Gov Lens process and a PostgreSQL pod selected explicitly by
+namespace and name. The script checks HTTP status, node settings, and governance
+row counts without deploying services.
 
 ## Go server and SQL
 
@@ -86,7 +85,7 @@ To develop the Go app against an already running compatible Postgres database:
 
 ```sh
 cd dingo-gov-lens
-export DATABASE_URL='host=127.0.0.1 port=5432 user=dingo_gov_lens password=change-me dbname=dingo_metadata sslmode=disable TimeZone=UTC'
+export DATABASE_URL='host=postgres.example.com port=5432 user=dingo_gov_lens password=change-me dbname=dingo_metadata sslmode=verify-full sslrootcert=system TimeZone=UTC'
 export ADDR=127.0.0.1:8088
 go test ./...
 go run .

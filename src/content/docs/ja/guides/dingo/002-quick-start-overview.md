@@ -132,7 +132,7 @@ plugins:
     blob:
       provider: "badger"
       config:
-        # `dataDir` は任意で、指定しなければ `databasePath` を使います。
+        # dataDir は任意で、指定しなければ databasePath を使います。
         # dataDir: "$HOME/dingo/.dingo"
         blockCacheSize: 0
         compression: false
@@ -141,12 +141,12 @@ plugins:
     metadata:
       provider: "sqlite"
       config:
-        # `dataDir` は任意で、指定しなければ `databasePath` を使います。
+        # dataDir は任意で、指定しなければ databasePath を使います。
         # dataDir: "$HOME/dingo/.dingo"
   mempool:
     provider: "default"
     config:
-      # `capacity` は任意で、コメントアウトするとモードの既定値を使います。
+      # capacity は任意で、コメントアウトするとモードの既定値を使います。
       # 既定値: 通常のモードでは 1048576 (1 MiB)、leios モードでは 26214400 (25 MiB) です。
       # capacity: 1048576
   api:
@@ -173,13 +173,13 @@ mithril:
 
 # Network
 bindAddr: "0.0.0.0"
-# Prometheusは`bindAddr`とは独立したアドレスを使用し、既定値はループバックです。
-# `--metrics-bind-addr` CLIフラグまたは`DINGO_METRICS_BIND_ADDR`環境変数で上書きできます。`metricsPort: 0`にするとメトリクスリスナーを無効にします。
+# PrometheusはbindAddrとは独立したアドレスを使用し、既定値はループバックです。
+# --metrics-bind-addr CLIフラグまたはDINGO_METRICS_BIND_ADDR環境変数で上書きできます。metricsPort: 0にするとメトリクスリスナーを無効にします。
 metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
-# `healthPort` は `--health-port` CLI フラグまたは `DINGO_HEALTH_PORT` 環境変数で設定できます。`healthPort: 0` にするとリスナーを無効にします。
+# healthPort は --health-port CLI フラグまたは DINGO_HEALTH_PORT 環境変数で設定できます。healthPort: 0 にするとリスナーを無効にします。
 healthPort: 12799
-# `healthReadyGapSlots` は `--health-ready-gap-slots` CLI フラグまたは `DINGO_HEALTH_READY_GAP_SLOTS` 環境変数で設定できます。
+# healthReadyGapSlots は --health-ready-gap-slots CLI フラグまたは DINGO_HEALTH_READY_GAP_SLOTS 環境変数で設定できます。
 healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"

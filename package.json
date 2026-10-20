@@ -13,7 +13,7 @@
     "package:gouroboros-examples": "node scripts/package-gouroboros-examples.mjs",
     "package:examples": "npm run package:dingo-examples && npm run package:gouroboros-examples && npm run package:adder-examples",
     "check": "npm run package:examples && npm run check:docs && npm run build && npm run check:llms",
-    "check:docs": "node scripts/check-docs.mjs",
+    "check:docs": "node --test scripts/check-docs.test.mjs && node scripts/check-docs.mjs",
     "check:llms": "node scripts/check-llms.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -23,6 +23,7 @@
     "@astrojs/markdown-remark": "^7.3.3",
     "@astrojs/starlight": "^0.42.6",
     "astro": "^7.4.0",
+    "github-slugger": "^2.0.0",
     "sharp": "^0.35.5",
     "starlight-llms-txt": "^0.12.0"
   }

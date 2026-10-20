@@ -1,6 +1,6 @@
 ---
 title: Bluefin
-description: Get started with Bluefin and connect applications to Cardano data services.
+description: Mine Fortuna TUNA tokens on Cardano with the self-contained Bluefin miner.
 ---
 
 ![bluefin-logo](/bluefin-logo.png)
