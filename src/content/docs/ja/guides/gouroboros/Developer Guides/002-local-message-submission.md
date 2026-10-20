@@ -16,7 +16,7 @@ description: gOuroboros v0.213.7におけるLocalMessageSubmissionのリプレ�
 
 ## 設定
 
-`Config.MaxReplayEntries`は、期限切れになるまで保持する認証済みメッセージIDの最大数を指定します。`NewConfig`は既定値として`10,000`を設定します。`localmessagesubmission.WithMaxReplayEntries(...)`を使用すると、保持数を変更できます。
+`Config.MaxReplayEntries`は、期限切れになるまで保持する認証済みメッセージIDの最大数を指定します。`NewConfig`は既定値として`10,000`を設定します。ゼロを指定した場合も、この既定値が使用されます。`localmessagesubmission.WithMaxReplayEntries(...)`を使用すると、保持数を変更できます。
 
 ```go
 config := localmessagesubmission.NewConfig(
@@ -36,7 +36,7 @@ config := localmessagesubmission.NewConfig(
 
 - 同じメッセージIDを有効期限内に再送すると、サーバーは`pcommon.AlreadyReceivedReason`で拒否します。連続した再送と、共有された`Config`を使う接続からの同時送信のどちらも同じ動作になります。
 - サーバーは、リプレイ状態から期限切れのIDを削除してから新しいIDを予約します。`MaxReplayEntries`に達した場合、期限切れのIDが削除されるまで新しいIDを拒否します。
-- `MaxReplayEntries`に`1`未満の値を設定すると、サーバーは送信をアプリケーションコールバックへ渡す前に拒否します。
+- `MaxReplayEntries`に負の値を設定すると、サーバーは送信をアプリケーションコールバックへ渡す前に拒否します。
 
 リプレイ保護は認証と有効期限の検証を通過したメッセージに適用します。予約に成功したIDだけが`SubmitMessageFunc`へ進み、コールバックが受け付けた場合はサーバーがメッセージを受け付けます。コールバックが拒否した場合も、予約済みIDは`ExpiresAt`までリプレイ保護の対象になります。
 

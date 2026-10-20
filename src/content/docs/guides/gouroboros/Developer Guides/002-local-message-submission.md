@@ -56,7 +56,7 @@ The connection setup functions in the example represent the host application's c
 - `localmessagesubmission.WithMaxReplayEntries(...)` changes the bound on retained authenticated message IDs.
 - The server removes IDs whose `ExpiresAt` value has passed while it processes a new reservation.
 - When the cache reaches its capacity, the server rejects a new message ID until an existing entry expires and the server prunes it.
-- A value below `1` is invalid. The server rejects the submission before it calls `SubmitMessageFunc`.
+- A negative value is invalid. The server rejects the submission before it calls `SubmitMessageFunc`.
 
 Capacity and invalid configuration failures do not use a separate error code. The server returns a protocol rejection with `pcommon.OtherReason` for these conditions.
 
@@ -89,7 +89,7 @@ The server produces the following observable outcomes:
 | Valid, authenticated, non-expired ID with available capacity | The server reserves the ID and processes the submission. | `SubmitMessageFunc` runs once. |
 | ID already reserved and not expired | The server rejects the submission with `pcommon.AlreadyReceivedReason`. | The callback does not run. |
 | Cache at `MaxReplayEntries` for a new ID | The server rejects the submission with `pcommon.OtherReason`. | The callback does not run. |
-| `MaxReplayEntries` below `1` | The server rejects the submission with `pcommon.OtherReason`. | The callback does not run. |
+| Negative `MaxReplayEntries` | The server rejects the submission with `pcommon.OtherReason`. | The callback does not run. |
 | TTL validation or authentication failure | The server rejects the submission according to the validation or authentication result. | The callback does not run. |
 
 An expired ID can enter the cache again after the server prunes its previous reservation. A duplicate ID that remains active never reaches the application callback, regardless of whether the original callback accepted or rejected the message.

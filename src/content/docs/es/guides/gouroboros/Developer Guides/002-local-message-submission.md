@@ -11,7 +11,7 @@ La reserva también coordina las entregas simultáneas cuando varias conexiones 
 
 ## Configuración
 
-`NewConfig` establece `MaxReplayEntries` en `10,000` de forma predeterminada. El límite controla la cantidad de IDs autenticados que el servidor conserva hasta su vencimiento. La configuración explícita usa `localmessagesubmission.WithMaxReplayEntries(10000)`:
+`NewConfig` establece `MaxReplayEntries` en `10,000` de forma predeterminada. Un valor de cero también selecciona este valor predeterminado. El límite controla la cantidad de IDs autenticados que el servidor conserva hasta su vencimiento. La configuración explícita usa `localmessagesubmission.WithMaxReplayEntries(10000)`:
 
 ```go
 config := localmessagesubmission.NewConfig(
@@ -35,7 +35,7 @@ La protección contra repeticiones aplica los siguientes resultados:
 - Una entrega duplicada secuencial recibe `pcommon.AlreadyReceivedReason` y no ejecuta `SubmitMessageFunc`.
 - Las entregas duplicadas simultáneas reciben `pcommon.AlreadyReceivedReason` después de que una sola entrega reserve el ID.
 - Un nuevo ID recibe un rechazo cuando el registro alcanza `MaxReplayEntries`.
-- Un valor de `MaxReplayEntries` menor que `1` provoca un rechazo antes de ejecutar `SubmitMessageFunc`.
+- Un valor negativo de `MaxReplayEntries` provoca un rechazo antes de ejecutar `SubmitMessageFunc`.
 - Si `SubmitMessageFunc` rechaza la entrega, el servidor mantiene activa la reserva y protege el ID hasta `ExpiresAt`.
 - Cuando `ExpiresAt` ya pasó, el servidor elimina la reserva y permite una nueva entrega que supere la validación de autenticación y vigencia.
 
