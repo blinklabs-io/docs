@@ -49,11 +49,12 @@ Content-Type: application/json
 
 ## 設定リファレンス
 
-`signer.backends`の下にバックエンドエントリを追加し、`type`を`pkcs11`に設定します。以下のフィールドを使用します。
+`signer.backends`の下にバックエンドエントリを追加し、`type`でバックエンドを選択します。以下のフィールドを使用します。
 
 | 設定パス | 目的 | 検証 |
 | --- | --- | --- |
-| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`を設定します。 |
+| `signer.backends[].address` | `nitro`または`confidential-space`バックエンドが接続するエンドポイントを指定します。 | `http://`、`https://`、または`unix:///`で始まるアドレスを設定します。 |
+| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、または`confidential-space`を設定します。 |
 | `signer.backends[].module` | `.so`ファイルを含む`PKCS#11`モジュールのパスを指定します。 | このフィールドを設定します。Bursaは空の値を拒否します。 |
 | `signer.backends[].token_label` | ラベルでトークンまたはスロットを選択します。 | このフィールドまたは`slot`を設定します。少なくとも一方の選択フィールドが必要です。 |
 | `signer.backends[].slot` | 明示的なスロットIDでスロットを選択します。 | このフィールドまたは`token_label`を設定します。少なくとも一方の選択フィールドが必要です。 |
@@ -61,6 +62,11 @@ Content-Type: application/json
 | `signer.backends[].keys[]` | トークンオブジェクトの許可リストを任意で定義します。 | 設定する場合は、すべてのエントリに`name`と`type`を指定します。 |
 | `signer.backends[].keys[].name` | トークンオブジェクトの`CKA_LABEL`と照合します。 | 各`keys`エントリにこのフィールドを設定します。 |
 | `signer.backends[].keys[].type` | 照合したトークンオブジェクトにCardano鍵タイプを割り当てます。 | 各`keys`エントリにこのフィールドを設定します。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、または`policy`を使用します。 |
+| `signer.backends[].root_ca_file` | AWS Nitro Enclavesのピン留めされたルート証明書を含むPEMファイルのパスを指定します。 | `nitro`で必須です。 |
+| `signer.backends[].pcrs` | Nitroの予想PCR値を指定します。 | `nitro`ではPCR0（キー`0`）を設定し、ゼロ以外の値にします。 |
+| `signer.backends[].audience` | Confidential Spaceの証明トークンに設定する対象者を指定します。 | `confidential-space`で必須です。 |
+| `signer.backends[].image_digest` | Confidential Spaceコンテナイメージのダイジェストを指定します。 | `confidential-space`で必須です。`sha256:`で始まる値を使用します。 |
+| `signer.backends[].jwks_url` | Confidential Spaceトークンの署名キーを取得するURLを指定します。 | 任意です。省略するとGoogleが公開するトークン署名キーを使用します。 |
 
 ## ビルド要件
 
