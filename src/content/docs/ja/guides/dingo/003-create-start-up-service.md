@@ -89,6 +89,15 @@ plugins:
       provider: \"builtin\"
       config:
         port: 0
+        # 組み込み Blockfrost は既定で `127.0.0.1` にバインドします。外部から
+        # アクセスする場合は、プロバイダー固有の `host` を明示してください。
+        host: "127.0.0.1"
+        # トランザクション送信・評価の変更系ルートには `authToken` が必要です。
+        # 空欄の場合は変更系ルートを利用できません。非ループバックでトークンを使う場合は TLS も設定してください。
+        authToken: ""
+        # 変更系ルートの既定の同時実行上限は、全体が 4、クライアントごとが 1 です。
+        maxConcurrentMutations: 4
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: \"builtin\"
       config:
@@ -112,6 +121,7 @@ mithril:
   # pinnedDigest: \"\"
 
 > 📝 既定では、Mithril は HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp: true` はローカル開発またはテストでのみ使用する明示的な例外であり、本番環境では有効にしないでください。
+> 📝 Mithril v2 は、設定済みアグリゲーターのオリジンまたは公式 Mithril GCS オリジン（`https://storage.googleapis.com`）だけをアーティファクトとリダイレクト先として許可します。コンポーネントごとの重複しない場所は最大 4 件、immutable アーカイブは最大 100000 件に制限し、ダウンロード全体にリクエスト数、バイト数、24 時間の期限を適用します。展開全体にもエントリ数と展開後バイト数の上限、および空き容量の予約を適用します。署名付き ancillary マニフェストは展開前に検証し、署名で許可されたファイルと親ディレクトリだけを展開します。`allowInsecureHttp: true` はこれらの制限を解除せず、ローカル開発またはテストの HTTP とローカルまたはプライベートな宛先だけを許可する設定です。
 
 # Network
 # ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
@@ -141,6 +151,12 @@ databaseLifecycle:
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
   snapshotDir: \"$HOME/dingo/snapshots\"
+   # クラウドスナップショットの認証に使う共有秘密鍵です。必要な場合に指定します。
+   # 通常ファイル、シンボリックリンクではないファイル、16 バイト以上 1 KiB 以下が必要です。
+   # Unix ではノード実行ユーザーが所有し、グループまたはその他のユーザーのアクセスを許可しないでください。
+   # Windows では現在のユーザー、またはプロセスが所属する BUILTIN\Administrators が所有する必要があります。
+   # Windows の DACL も許可された所有者およびシステムの主体だけに制限してください。
+   # snapshotTrustKeyFile: \"$HOME/dingo/snapshot-trust.key\"
   # ローカル保存に加えて、スナップショットをクラウドにもミラーします。`s3://bucket/prefix` または `gcs://bucket/prefix` を指定します。
   # `dingo_extra_plugins` ビルドタグが必要です。
   snapshotCloudDestination: \"\"
@@ -155,6 +171,7 @@ EOF"
 ```
 
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
+> 📝 `databaseLifecycle.snapshotTrustKeyFile` を指定する場合は、通常ファイルかつ非シンボリックリンクで、サイズを 1 KiB 以下にしてください。Unix ではノード実行ユーザーが所有し、グループとその他のユーザーのアクセスを禁止する必要があります。Windows では現在のユーザー、またはプロセスが所属する `BUILTIN\Administrators` が所有し、DACL を許可された主体に制限する必要があります。要件を満たさないファイル、置換されたファイル、またはサイズ超過のファイルは拒否されます。
 
 > 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は独立した任意の `pprof` リスナーを制御し、通常は無効のままにします。
 
@@ -166,6 +183,10 @@ plugins:
       provider: "builtin"
       config:
         port: 3000
+        host: "127.0.0.1"
+        authToken: ""
+        maxConcurrentMutations: 4
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: "builtin"
       config:
@@ -187,11 +208,12 @@ midnight:
   # gRPC の待ち受けアドレスです。省略または空欄の場合の既定値はループバック（`127.0.0.1`）です。
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 ```
 
 これらのポートは、更新後のローカル Blockfrost エクスプローラーの例に合わせた値です。これらのサービスが必要な場合にのみ有効にできます。
 
-> 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
+> 📝 `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` は、必ず両方設定するか、両方とも未設定のままにします。一方だけを設定した場合、設定検証と起動時の検証が失敗します。ポリシー ID には、デコード後に28バイトとなる56文字の16進数を指定します。照合では、設定したポリシー ID とアセット名の組み合わせを完全一致で比較します。
 
 > 📝 プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできませんが、手動の `dingo database snapshot` コマンドと Bark の `CreateSnapshot` は引き続き利用できます。停止中のデータディレクトリには `dingo database snapshot|restore|truncate` を使えます。`barkPort` と `databaseLifecycle.snapshotDir` を併用した実行中ノードでは、Bark の `DatabaseService` が `Restore` と `Truncate` をライブで実行します。これらの機能を使う場合は `barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方を設定してください。
 > 📝 core ストレージモードでは、`consumed_utxo_prune_floor` より前の消費済み UTxO 行を保持処理がすでに削除しているため、その下限より古い truncate 対象を指定すると、Dingo は変更を加える前に要求を拒否します。下限と同じ対象は指定できます。API ストレージモードではこの判定を行わず、動作は変わりません。巻き戻しが古すぎる場合は、より浅い対象を選ぶか、完全に同期したピアのスナップショットから復旧してください。

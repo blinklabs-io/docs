@@ -93,6 +93,16 @@ plugins:
       provider: \"builtin\"
       config:
         port: 3000
+        # Blockfrost uses this provider-specific host independently of bindAddr.
+        # Default: 127.0.0.1. Set host for access from a service network or a remote host.
+        host: \"127.0.0.1\"
+        # Set authToken to protect transaction submission and evaluation mutations.
+        # authToken: ""
+        # Authenticated mutation access on a non-loopback host requires server TLS.
+        # Global concurrent mutation limit. Default: 4.
+        maxConcurrentMutations: 4
+        # Per-client concurrent mutation limit. Default: 1.
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: \"builtin\"
       config:
@@ -150,6 +160,12 @@ databaseLifecycle:
   # Dingo writes automatic snapshots to this local filesystem directory.
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
   snapshotDir: \"$HOME/dingo/snapshots\"
+  # Optional snapshot trust key used by snapshot authentication operations.
+  # When set, this must be a regular, non-symlink file no larger than 1 KiB.
+  # Unix: the node user must own it, with no group or other permissions.
+  # Windows: the current user or BUILTIN\\Administrators must own it; the process
+  # must belong to Administrators when applicable, and the DACL must restrict access.
+  # snapshotTrustKeyFile: \"$HOME/dingo/snapshot-trust-key\"
   # Keep only the most recent automatic snapshots.
   # Default: 0.
   snapshotRetention: 0
@@ -162,7 +178,7 @@ databaseLifecycle:
 EOF"
 ```
 
-> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
+> 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Mithril v2 bootstrap accepts artifact origins and redirects only from the configured aggregator or the official Mithril GCS origin (`storage.googleapis.com`), enforces aggregate download and extraction safety checks, performs signed ancillary preflight before extraction, and uses only authenticated ledger content. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls a separate optional pprof listener and should stay disabled unless profiling is needed.
 
@@ -204,6 +220,7 @@ midnight:
   # gRPC listen host. An empty host defaults to 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 ```
 
 > 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Midnight `gRPC` serving also requires `API` storage mode, `midnight.serverEnabled: true`, and a nonzero `midnight.port`. Set any listener port to `0` to disable that API.
@@ -212,7 +229,7 @@ midnight:
 
 > 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. For non-loopback plaintext, set `midnight.allowInsecureRemote: true`; for remote `TLS` exposure, configure `tlsCertFilePath` and `tlsKeyFilePath` instead.
 
-> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together, or leave both unset. A partial pair causes configuration and startup validation to reject the settings. A configured policy ID must contain exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID and asset name.
 
 <br>
 
