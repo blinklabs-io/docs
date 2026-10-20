@@ -12,6 +12,9 @@ description: gOuroboros Release Notes
 - Version: v0.213.7 (following v0.213.6) - *[View Release Notes](../v0-213-7)*
   * Improved authenticated `LocalMessageSubmission` replay protection by atomically reserving each message ID before calling `SubmitMessageFunc`. Duplicate submissions receive `AlreadyReceived`; `MaxReplayEntries` bounds replay state at `10,000` by default, the submission path rejects invalid capacities, and reused `Config` values share replay state across connections, while separate `NewConfig` calls maintain separate replay state.
   * Optimized long VRF replay schedules on 32-bit targets by replaying every assigned slot and every 64th offset. 64-bit targets and short schedules retain full replay, with no change to final eligibility assertions.
+- Version: v0.213.6 - *[View Release Notes](../v0-213-6)*
+- Version: v0.213.5 - *[View Release Notes](../v0-213-5)*
+- Version: v0.213.4 - *[View Release Notes](../v0-213-4)*
 - Version: v0.213.3 - *[View Release Notes](../v0-213-3)*
 - Version: v0.213.2 - *[View Release Notes](../v0-213-2)*
 - Version: v0.213.1 - *[View Release Notes](../v0-213-1)*
@@ -113,14 +116,3 @@ description: gOuroboros Release Notes
 - Version: v0.178.0 - *[View Release Notes](../v0-178-0)*
 - Version: v0.171.0 - *[View Release Notes](../v0-171-0)*
 - Version: v0.170.1 - *[View Release Notes](../v0-170-1)*
-
-
----
-
-<!-- doc-holiday-watermark -->
-<p align="center">
-  <a href="https://doc.holiday">
-    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
-  </a>
-</p>
-<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
