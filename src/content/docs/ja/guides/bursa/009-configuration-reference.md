@@ -109,14 +109,17 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 ## 署名者のウォーターマーク
 
-`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはSQLiteの保存方法と異なり、同じコールドキーを保護する署名者レプリカで共有できます。
+`signer.watermark.type`はウォーターマークの保存先を`mem`、`file`、`postgres`から選択します。`file`はSQLiteを使用する永続ストアで、`postgres`と同じく再起動後も状態を保持します。
 
 | YAMLキー | 説明 | 要件 |
 | --- | --- | --- |
-| `signer.watermark.type` | ウォーターマークの保存先を選択します。 | PostgreSQLを使用する場合は`postgres`を設定します。 |
+| `signer.watermark.type` | ウォーターマークの保存先を選択します。 | `mem`、`file`、または`postgres`を設定します。`file`はSQLiteを使用します。 |
+| `signer.watermark.path` | `file`ストアのSQLiteファイルパスを指定します。 | `file`を使用する場合は空でないパスが必須です。 |
 | `signer.watermark.dsn` | PostgreSQLへの接続に使うDSNをプレーンテキストで指定します。 | `dsn_env`を使用しない場合のフォールバックです。 |
 | `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
+
+`mem`は`warn`または`off`でのみ使用できます。`enforce`では永続ストアが必要なため、`file`または`postgres`を設定します。`signer.watermark.mode`に不明な値を設定した場合も`enforce`として扱い、`mem`は拒否されます。
 
 `postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。両方を指定した場合は`dsn_env`を優先し、そこに指定した環境変数が空の場合はBursaが設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
