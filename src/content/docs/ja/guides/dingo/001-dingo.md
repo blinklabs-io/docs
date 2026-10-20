@@ -11,8 +11,8 @@ DingoはBlink LabsがGoで実装したCardanoノードです。目的に合っ�
 
 - [クイックスタート](/ja/guides/dingo/002-quick-start-overview/) — Dingoを入手し、Previewノードを起動します。
 - [設定とストレージモード（英語）](/guides/dingo/005-node-configuration/) — リレー、ブロックプロデューサー、APIノードの設定を確認します。
-- [Dingoの設定リファレンス（英語）](/guides/dingo/009-configuration-reference/) — Dingo v0.85.0の全設定を確認できます。
-- [Dingo v0.85.0の`dingo.yaml.example`をダウンロード](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.85.0/dingo.yaml.example)。
+- [Dingoの設定リファレンス（英語）](/guides/dingo/009-configuration-reference/) — Dingo v0.86.0の全設定を確認できます。
+- [Dingo v0.86.0の`dingo.yaml.example`をダウンロード](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example)。
 - [ブートストラップとデータ管理（英語）](/guides/dingo/007-bootstrap-and-data-maintenance/) — Mithrilとローカルデータの管理について説明します。
 - [サービスとして起動](/ja/guides/dingo/003-create-start-up-service/)、[Grafanaで監視](https://docs.blinklabs.io/guides/dingo/spo-guides/008-grafana-dashboard/)。
 - [ステークプール運用ガイド](https://docs.blinklabs.io/guides/dingo/spo-guides/000-spo-guide/) — テストネットのブロックプロデューサーを設定します。
@@ -20,6 +20,7 @@ DingoはBlink LabsがGoで実装したCardanoノードです。目的に合っ�
 ## アプリケーションを接続する
 
 - [APIとアーカイブサービス（英語）](/guides/dingo/006-apis-and-archive/) — APIの選択、アクセス制御、Barkアーカイブを確認します。
+- [LeiosDBベンチマークCLI（英語）](/guides/dingo/010-leios-db-benchmark/) — ベンチマークの使い方を確認します。
 - [Blockfrost APIクライアントの構築（英語）](/guides/dingo/Development%20Guides/009-build-blockfrost-client/) — Dingoの互換APIにアプリケーションを接続します。
 - [UTxO RPCを使うウォレットフロントエンドの構築（英語）](/guides/dingo/Development%20Guides/010-build-utxorpc-frontend/) — UTxOの照会とトランザクション送信を行います。
 - [ガバナンスダッシュボードの構築（英語）](/guides/dingo/Development%20Guides/011-build-governance-dashboard/) — インデックス済みメタデータの選択肢と制約を確認します。

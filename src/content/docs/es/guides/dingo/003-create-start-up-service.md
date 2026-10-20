@@ -85,6 +85,17 @@ plugins:
       provider: \"builtin\"
       config:
         port: 0
+        # El servidor integrado escucha en 127.0.0.1 por defecto.
+        # Establece este valor para sobrescribir el host específico del proveedor.
+        host: \"127.0.0.1\"
+        # Las rutas de mutación requieren el token configurado; no incrustes secretos en este archivo de ejemplo.
+        authToken: \"\"
+        # La autenticación en un host que no sea loopback requiere TLS.
+        # tls: true
+        # Límite global de mutaciones simultáneas. Predeterminado: 4.
+        maxConcurrentMutations: 4
+        # Límite de mutaciones simultáneas por cliente. Predeterminado: 1.
+        maxConcurrentMutationsPerClient: 1
     mesh:
       provider: \"builtin\"
       config:
@@ -104,6 +115,13 @@ mithril:
   # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; la configuración de producción mantiene este valor en false.
   # CLI: --mithril-allow-insecure-http | Variable de entorno: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
   allowInsecureHttp: false
+  # Mithril v2 solo acepta artefactos y redirecciones desde el origen configurado de `aggregatorUrl`
+  # o desde el origen oficial de Mithril en GCS: `https://storage.googleapis.com`.
+  # Dingo descarta ubicaciones duplicadas, limita a 4 las ubicaciones por componente y admite como máximo 100000 archivos inmutables.
+  # Dingo aplica un presupuesto agregado de solicitudes y bytes a las descargas, con un plazo total de 24 horas.
+  # Dingo limita la extracción por número de entradas y bytes expandidos, y reserva espacio libre en el sistema de archivos.
+  # Antes de extraer, Dingo verifica el manifiesto firmado del ancillary y sus rutas y hashes permitidos.
+  # Los archivos ledger solo proceden del ancillary firmado; los archivos inmutables no admiten árboles ledger.
   # Identidad opcional del artefacto de Mithril para un arranque nuevo.
   # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
   # Dingo solo usa este valor para un arranque nuevo; no lo usa para una base de datos completa ni para cambiar una importación interrumpida.
@@ -129,6 +147,9 @@ databaseLifecycle:
   # Segmento adicional que Dingo agrega antes de cada ID de snapshot.
   # CLI: --db-snapshot-cloud-destination-prefix
   snapshotCloudDestinationPrefix: \"\"
+  # En Linux, usa un archivo de confianza de snapshots regular, no un enlace simbólico,
+  # de 1 KiB como máximo, propiedad del usuario de Dingo y sin acceso para el grupo ni para otros usuarios.
+  snapshotTrustKeyFile: \"$HOME/dingo/.dingo/snapshot-trust-key\"
   # Número de snapshots automáticos recientes que Dingo conserva.
   # 0 conserva todos.
   # CLI: --db-snapshot-retention

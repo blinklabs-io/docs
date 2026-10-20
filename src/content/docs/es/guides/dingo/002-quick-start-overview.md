@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.85.0/dingo-v0.85.0-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -51,7 +51,7 @@ npm install --global @blinklabs/dingo
 dingo --help
 ```
 
-El paquete descarga el binario nativo correspondiente, valida su suma de comprobación SHA-256 y lo instala de forma atómica. Para usarlo sin una instalación global:
+El paquete descarga el binario nativo correspondiente, valida su suma de comprobación SHA-256 y lo instala de forma atómica. El instalador solo sigue recursos de lanzamiento aprobados a través de HTTPS. Rechaza las URL que no usan HTTPS o no están permitidas, las URL con credenciales o puertos diferentes de 443 y los destinos de redirección o los resultados de DNS que resuelven a direcciones privadas o de uso especial. Para usarlo sin una instalación global:
 
 ```bash
 npx @blinklabs/dingo --help
@@ -99,8 +99,8 @@ La primera ejecución requiere un directorio vacío. Dingo coloca un marcador an
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Para consultar todos los ajustes de Dingo v0.85.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
-Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.85.0/dingo.yaml.example) correspondiente a la versión v0.85.0 como punto de partida para tu configuración.
+Para consultar todos los ajustes de Dingo v0.86.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
+Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example) correspondiente a la versión v0.86.0 como punto de partida para tu configuración.
 
 Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
