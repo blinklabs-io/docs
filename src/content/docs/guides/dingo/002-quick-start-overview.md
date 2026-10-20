@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.83.1/dingo-v0.83.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -45,6 +45,8 @@ You can verify the binary works by running:
 ### Alternative: Install with npm
 
 The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching Dingo release and verifies its SHA-256 checksum.
+
+The installer accepts only HTTPS URLs for release assets on its host allowlist. It rejects URLs that contain credentials or use non-443 ports. It also rejects redirects and DNS results that resolve to private or special-use IP addresses.
 
 Install it globally and verify the `dingo` command:
 
@@ -125,9 +127,9 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.83.1 settings, defaults, and environment or command-line
+For all Dingo v0.86.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.83.1/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
@@ -240,6 +242,7 @@ midnight:
   # Defaults to loopback; an empty value also uses 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 storageMode: "api"
 plugins:
   api:
@@ -259,7 +262,7 @@ plugins:
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
-> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together or leave both unset. A partial pair causes configuration and startup validation to fail. A configured policy ID must be exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID and asset name.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
