@@ -63,7 +63,7 @@ Content-Type: application/json
 | `signer.backends[].keys[].name` | トークンオブジェクトの`CKA_LABEL`と照合します。 | 各`keys`エントリにこのフィールドを設定します。 |
 | `signer.backends[].keys[].type` | 照合したトークンオブジェクトにCardano鍵タイプを割り当てます。 | 各`keys`エントリにこのフィールドを設定します。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、または`policy`を使用します。 |
 | `signer.backends[].root_ca_file` | AWS Nitro Enclavesのピン留めされたルート証明書を含むPEMファイルのパスを指定します。 | `nitro`で必須です。 |
-| `signer.backends[].pcrs` | Nitroの予想PCR値を指定します。 | `nitro`ではPCR0（キー`0`）を設定し、ゼロ以外の値にします。 |
+| `signer.backends[].pcrs` | Nitroで期待するPCR値を指定します。 | `nitro`ではPCR0（キー`0`）を設定し、ゼロ以外の値にします。 |
 | `signer.backends[].audience` | Confidential Spaceの証明トークンに設定する対象者を指定します。 | `confidential-space`で必須です。 |
 | `signer.backends[].image_digest` | Confidential Spaceコンテナイメージのダイジェストを指定します。 | `confidential-space`で必須です。`sha256:`で始まる値を使用します。 |
 | `signer.backends[].jwks_url` | Confidential Spaceトークンの署名キーを取得するURLを指定します。 | 任意です。省略するとGoogleが公開するトークン署名キーを使用します。 |
@@ -77,8 +77,8 @@ Content-Type: application/json
 | `storage.backend` | `STORAGE_BACKEND` | ウォレットをAWS Secrets Managerに保存するバックエンドを選択します。 | AWS Secrets Managerを使用する場合は`aws`を設定します。 |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Managerでウォレットシークレット名に使用するプレフィックスを指定します。 | AWSウォレットストレージで必須です。 |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS暗号化に使用するAWS KMSマスターキーを指定します。 | 暗号化にはSOPSマスターキーリソースを少なくとも1つ設定します。不正なキーリソースは暗号化前に拒否されます。 |
-| `age.recipients` | `AGE_RECIPIENTS` | SOPS暗号化の対象にする`age` recipientを指定します。 | recipientはカンマ区切りで指定します。 |
-| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | 暗号化しないウォレット永続化を明示的に許可します。 | SOPSマスターキーを設定しないfileストレージ、またはSQLiteストレージで必要です。この設定は暗号化なしのウォレット永続化を許可します。 |
+| `age.recipients` | `AGE_RECIPIENTS` | SOPS暗号化の対象とする`age` recipientを指定します。 | recipientはカンマ区切りで指定します。 |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | 暗号化しないウォレット永続化を明示的に許可します。 | SOPSマスターキーがないfileストレージまたはSQLiteストレージで有効化します。ウォレットを暗号化せずに永続化します。 |
 
 ## ビルド要件
 
@@ -119,7 +119,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
 
-`mem`は`warn`または`off`でのみ使用できます。`enforce`では永続ストアが必要なため、`file`または`postgres`を設定します。`signer.watermark.mode`に不明な値を設定した場合も`enforce`として扱い、`mem`は拒否されます。
+`mem`は`warn`または`off`でのみ使用できます。`enforce`では永続ストアが必要なため、`file`または`postgres`を設定します。`signer.watermark.mode`の不明な値は`enforce`として扱うため、`mem`を拒否します。
 
 `postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。両方を指定した場合は`dsn_env`を優先し、そこに指定した環境変数が空の場合はBursaが設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
