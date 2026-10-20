@@ -68,6 +68,20 @@ Content-Type: application/json
 | `signer.backends[].image_digest` | Confidential Spaceコンテナイメージのダイジェストを指定します。 | `confidential-space`で必須です。`sha256:`で始まる値を使用します。 |
 | `signer.backends[].jwks_url` | Confidential Spaceトークンの署名キーを取得するURLを指定します。 | 任意です。省略するとGoogleが公開するトークン署名キーを使用します。 |
 
+## ウォレットストレージと暗号化
+
+ウォレットストレージとSOPS暗号化には、次の設定を使用します。
+
+| YAMLキー | 環境変数 | 説明 | 要件 |
+| --- | --- | --- | --- |
+| `storage.backend` | `STORAGE_BACKEND` | ウォレットをAWS Secrets Managerに保存するバックエンドを選択します。 | AWS Secrets Managerを使用する場合は`aws`を設定します。 |
+| `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Managerでウォレットシークレット名に使用するプレフィックスを指定します。 | AWSウォレットストレージで必須です。 |
+| `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS暗号化に使用するAWS KMSマスターキーを指定します。 | 暗号化にはSOPSマスターキーリソースを少なくとも1つ設定します。不正なキーリソースは暗号化前に拒否されます。 |
+| `age.recipients` | `AGE_RECIPIENTS` | SOPS暗号化の対象にする`age` recipientを指定します。 | recipientはカンマ区切りで指定します。 |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | 暗号化しないウォレット永続化を明示的に許可します。 | SOPSマスターキーを設定しないfileストレージ、またはSQLiteストレージで必要です。この設定は暗号化なしのウォレット永続化を許可します。 |
+
+## ウォレット管理者の認証
+
 ## ビルド要件
 
 `PKCS#11`バックエンドを含めるには、`CGO`を有効にし、`pkcs11`ビルドタグを指定してBursaをコンパイルします。このビルドタグなしで設定がこのバックエンドを選択すると、Bursaは即座に失敗し、次のエラーを返します。
