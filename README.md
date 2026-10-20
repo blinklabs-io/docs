@@ -8,7 +8,7 @@ developer tools. The production site is available at
 
 Requirements:
 
-- Node.js `^20.19.0` or `>=22.12.0`
+- Node.js `>=22.22.0`
 - npm
 
 Install dependencies and start the Astro development server:

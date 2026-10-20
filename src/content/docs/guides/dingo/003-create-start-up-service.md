@@ -220,6 +220,7 @@ midnight:
   # gRPC listen host. An empty host defaults to 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 ```
 
 > 📝 Dingo starts the Blockfrost, Mesh, and UTxO RPC listeners only in API storage mode. Midnight `gRPC` serving also requires `API` storage mode, `midnight.serverEnabled: true`, and a nonzero `midnight.port`. Set any listener port to `0` to disable that API.
@@ -228,7 +229,7 @@ midnight:
 
 > 📝 The Midnight listener defaults to `127.0.0.1` when `midnight.host` is empty. For non-loopback plaintext, set `midnight.allowInsecureRemote: true`; for remote `TLS` exposure, configure `tlsCertFilePath` and `tlsKeyFilePath` instead.
 
-> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together, or leave both unset. A partial pair causes configuration and startup validation to reject the settings. A configured policy ID must contain exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID and asset name.
 
 <br>
 
