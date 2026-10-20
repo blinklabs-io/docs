@@ -5,7 +5,7 @@ description: Bursaの署名、KESエージェント、APIのTLSおよびBearer�
 
 ## 概要
 
-このガイドでは、Bursaの署名およびKESエージェント設定、APIのTLSとBearer認証、および`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
+このガイドでは、Bursaの署名およびKESエージェント設定、APIのTLSとBearer認証、および`pkcs11`、`nitro`、`confidential-space`署名バックエンドに対応する`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。
 
 ## 設定ファイルの読み込み
 
