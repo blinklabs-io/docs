@@ -45,3 +45,8 @@ Now that we have an overview of the type of filters and commands you can use, le
 4. [Example 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Watch a Smart Contract for a Specific Asset ID and get a Desktop Notification
 5. [Example 5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - Watch a DRep and get an Alert in Telegram
 6. [Example 6](../007-example-6-watch-mempool-for-a-token) - Watch Mempool for a Transaction with a Token
+
+## Go library examples
+
+For application developers, see the [Go library examples](/guides/adder/library-examples/overview/)
+for downloadable event publishers, filters, and managed-plugin templates.
