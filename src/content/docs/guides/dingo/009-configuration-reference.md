@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.84.0 Configuration Reference
-description: Complete, release-specific Dingo v0.84.0 configuration reference and example.
+title: Dingo v0.85.0 Configuration Reference
+description: Complete, release-specific Dingo v0.85.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.84.0. The complete
+This page covers the configuration shipped with Dingo v0.85.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.84.0 source](https://github.com/blinklabs-io/dingo/blob/v0.84.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.85.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.85.0 source](https://github.com/blinklabs-io/dingo/blob/v0.85.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -35,7 +35,7 @@ for the main runtime choices.
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
-| Optional indexes and diagnostics | `midnight`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
+| Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
 
 ### Ledger processing
 
@@ -148,19 +148,41 @@ omits the provider and Dingo defaults it to `sqlite`, set a root `databasePath`
 that is not empty. Dingo rejects startup when `databasePath` is empty in either
 case.
 
+### Midnight auth-token configuration
+
+Configure the Midnight auth-token fields under `midnight` when registration
+authorization must use a specific policy and asset.
+
+| Setting | YAML key | Default | Validation and behavior |
+| --- | --- | --- | --- |
+| Auth-token policy ID | `midnight.authTokenPolicyId` | Empty | The configured policy ID must contain exactly 56 hexadecimal characters and decode to 28 bytes. |
+| Auth-token asset name | `midnight.authTokenAssetName` | Empty | Dingo uses this value with the configured policy ID when it validates an auth token. |
+
+Operators must set both fields or leave both fields empty. A partial pair fails
+configuration and startup validation. When configured, Dingo accepts an auth
+token only when its policy ID and asset name exactly match the configured
+values.
+
 ### Badger value-log garbage collection
 
 Configure these provider YAML keys under `plugins.storage.blob.config` for the
 Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
+Dingo uses `1 MiB` as the default for
+`plugins.storage.blob.config.valueThreshold`, except during Core-mode `sync`
+and Mithril sync, when Dingo uses `1 KiB`.
+An explicit YAML value overrides either mode default, including an explicit
+`0`.
+
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
 
-Dingo keeps value-log GC disabled in `load` mode even when the Badger provider
-configuration sets `plugins.storage.blob.config.gc` to `true`.
+Dingo keeps value-log GC disabled in both `load` and `sync` bulk-import modes,
+even when the Badger provider configuration sets
+`plugins.storage.blob.config.gc` to `true`.
 
 ### Database lifecycle snapshot pause bound
 
