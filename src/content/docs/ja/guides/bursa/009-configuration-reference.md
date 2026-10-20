@@ -62,11 +62,11 @@ Content-Type: application/json
 | `signer.backends[].keys[]` | トークンオブジェクトの許可リストを任意で定義します。 | 設定する場合は、すべてのエントリに`name`と`type`を指定します。 |
 | `signer.backends[].keys[].name` | トークンオブジェクトの`CKA_LABEL`と照合します。 | 各`keys`エントリにこのフィールドを設定します。 |
 | `signer.backends[].keys[].type` | 照合したトークンオブジェクトにCardano鍵タイプを割り当てます。 | 各`keys`エントリにこのフィールドを設定します。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、または`policy`を使用します。 |
-| `signer.backends[].root_ca_file` | AWS Nitro Enclavesのピン留めされたルート証明書を含むPEMファイルのパスを指定します。 | `nitro`で必須です。 |
+| `signer.backends[].root_ca_file` | AWS Nitro Enclavesで使用するピン留め済みルート証明書を含むPEMファイルのパスを指定します。 | `nitro`で必須です。 |
 | `signer.backends[].pcrs` | Nitroで期待するPCR値を指定します。 | `nitro`ではPCR0（キー`0`）を設定し、ゼロ以外の値にします。 |
 | `signer.backends[].audience` | Confidential Spaceの証明トークンに設定する対象者を指定します。 | `confidential-space`で必須です。 |
 | `signer.backends[].image_digest` | Confidential Spaceコンテナイメージのダイジェストを指定します。 | `confidential-space`で必須です。`sha256:`で始まる値を使用します。 |
-| `signer.backends[].jwks_url` | Confidential Spaceトークンの署名キーを取得するURLを指定します。 | 任意です。省略するとGoogleが公開するトークン署名キーを使用します。 |
+| `signer.backends[].jwks_url` | Confidential Spaceトークンの署名キーを取得するJWKS URLを指定します。 | 任意です。省略するとGoogleが公開するトークン署名キーを使用します。 |
 
 ## ウォレットストレージと暗号化
 
@@ -119,7 +119,7 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 | `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
 
-`mem`は`warn`または`off`でのみ使用できます。`enforce`では永続ストアが必要なため、`file`または`postgres`を設定します。`signer.watermark.mode`の不明な値は`enforce`として扱うため、`mem`を拒否します。
+`mem`は`warn`または`off`でのみ使用できます。`enforce`では永続ストアが必要なため、`file`または`postgres`を設定します。不明な`signer.watermark.mode`も`enforce`として扱い、`mem`を拒否します。
 
 `postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。両方を指定した場合は`dsn_env`を優先し、そこに指定した環境変数が空の場合はBursaが設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
