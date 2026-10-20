@@ -38,9 +38,10 @@ Cada relay del modo seleccionado debe cumplir estas condiciones:
 
 - `address` no puede estar vacío.
 - `address` debe ser un nombre de host DNS válido o una dirección IP especificada; las direcciones IP `unspecified` no son válidas.
-- `port` debe estar especificado y debe ser un puerto TCP entre `1` y `65535`.
+- Los relays cuya `address` sea un nombre de host DNS pueden omitir `port` o especificar `port: 0` para la resolución SRV.
+- Los relays cuya `address` sea una dirección IP deben especificar un puerto TCP distinto de cero entre `1` y `65535`; `port: 0` no es válido para relays IP.
 
-Los relays SRV sin puerto explícito, incluidos los relays con `port` igual a `0`, no son compatibles. Dingo detiene el inicio cuando la instantánea está mal formada o cuando incumple cualquiera de estos requisitos.
+Dingo detiene el inicio cuando la instantánea está mal formada o cuando incumple cualquiera de estos requisitos.
 
 ---
 
