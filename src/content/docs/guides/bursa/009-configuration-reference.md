@@ -56,7 +56,7 @@ Malformed JSON or a request without `enabled` returns HTTP `400`. A successful u
 
 ## Configuration reference
 
-Add a backend entry under `signer.backends` and set its `type` to the selected backend. Use the following fields:
+Add a backend entry under `signer.backends`, set its `type` to the selected backend, and configure the fields that apply to that backend:
 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
