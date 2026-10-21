@@ -34,13 +34,28 @@ Bursa persiste el ajuste de lean-node/history-expiry. `history expiry` es una op
 
 El cliente debe enviar el campo obligatorio `enabled` como un booleano JSON. El JSON no válido o la ausencia de `enabled` producen HTTP `400`. Una actualización correcta persiste el valor y devuelve los mismos campos `enabled` y `restart_required`. `restart_required` es `true` cuando el valor persistido todavía no coincide con el valor aplicado al nodo en ejecución.
 
+## Almacenamiento de billeteras y cifrado
+
+Configura el almacenamiento de billeteras y las claves maestras de SOPS con estas entradas:
+
+| Ruta de configuración | Variable de entorno | Uso y validación |
+| --- | --- | --- |
+| `storage.backend` | `STORAGE_BACKEND` | Selecciona el backend de almacenamiento de billeteras. Establece `aws` para usar AWS Secrets Manager. |
+| `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Define el prefijo obligatorio de los nombres de secretos que contienen las billeteras de AWS. |
+| `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Identifica la clave maestra de AWS KMS que usa SOPS para cifrar las billeteras. |
+| `age.recipients` | `AGE_RECIPIENTS` | Define los destinatarios `age` separados por comas que usa SOPS para cifrar las billeteras. |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Permite explícitamente que Bursa persista las billeteras sin cifrar. Bursa requiere esta autorización para el almacenamiento de archivos sin una clave maestra de SOPS y para el almacenamiento SQLite. |
+
+El cifrado de billeteras con SOPS requiere al menos un recurso de clave maestra configurado. Bursa rechaza un recurso de clave mal formado antes de iniciar el cifrado.
+
 ## Referencia de configuración
 
-Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11`. Usa los campos siguientes:
+Una entrada de backend en `signer.backends` selecciona el backend mediante `type`. La tabla siguiente muestra los campos disponibles:
 
 | Ruta de configuración | Propósito | Validación |
 | --- | --- | --- |
-| `signer.backends[].type` | Selecciona el backend de firma. | Establece el valor `pkcs11`. |
+| `signer.backends[].type` | Selecciona el backend de firma. | Usa `pkcs11`, `nitro` o `confidential-space`. |
+| `signer.backends[].address` | Especifica el endpoint del backend `nitro` o `confidential-space`. | El backend acepta una dirección con `http://`, `https://` o `unix:///`. |
 | `signer.backends[].module` | Especifica la ruta al módulo `PKCS#11`, incluido el archivo `.so`. | Establece este campo. Bursa rechaza un valor vacío. |
 | `signer.backends[].token_label` | Selecciona el token o el slot mediante su etiqueta. | Establece este campo o `slot`. Bursa requiere al menos un campo de selección. |
 | `signer.backends[].slot` | Selecciona un slot mediante su ID de slot explícito. | Establece este campo o `token_label`. Bursa requiere al menos un campo de selección. |
@@ -48,10 +63,15 @@ Agrega una entrada de backend en `signer.backends` y establece `type` en `pkcs11
 | `signer.backends[].keys[]` | Define una lista opcional de objetos permitidos del token. | Cuando aparece, incluye `name` y `type` en cada entrada. |
 | `signer.backends[].keys[].name` | Coincide con el `CKA_LABEL` del objeto del token. | Establece este campo para cada entrada de `keys`. |
 | `signer.backends[].keys[].type` | Asigna un tipo de clave de Cardano al objeto del token coincidente. | Establece este campo para cada entrada de `keys`. Usa `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool` o `policy`. |
+| `signer.backends[].root_ca_file` | Especifica el archivo PEM del certificado raíz de AWS Nitro Enclaves. | Para `nitro`, Bursa requiere el certificado raíz de AWS Nitro fijado por el firmante. |
+| `signer.backends[].pcrs` | Define los valores PCR esperados para `nitro`. | Para `nitro`, configura PCR0 (`0`) con un valor distinto de cero. |
+| `signer.backends[].audience` | Define la audiencia configurada para el token de atestación de `confidential-space`. | Bursa requiere este valor para `confidential-space`. |
+| `signer.backends[].image_digest` | Identifica la imagen de contenedor configurada para `confidential-space`. | Bursa requiere este valor con el formato `sha256:<64 hex>`. |
+| `signer.backends[].jwks_url` | Especifica el endpoint de las claves de firma de tokens de `confidential-space`. | Bursa usa las claves de firma de tokens publicadas por Google cuando no se establece este valor opcional. |
 
 ## Requisitos de compilación
 
-Una compilación de Bursa desde el código fuente requiere Go `1.26.0` o posterior. Además, compila Bursa con `CGO` habilitado y la etiqueta de compilación `pkcs11` para incluir el backend `PKCS#11`. Sin esa etiqueta, Bursa falla de inmediato cuando una configuración selecciona este backend y devuelve:
+Una compilación de Bursa desde el código fuente requiere Go `1.26.8` o posterior. Además, compila Bursa con `CGO` habilitado y la etiqueta de compilación `pkcs11` para incluir el backend `PKCS#11`. Sin esa etiqueta, Bursa falla de inmediato cuando una configuración selecciona este backend y devuelve:
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)
@@ -76,15 +96,18 @@ Para un backend `software`/`file` configurado, Bursa rechaza el inicio cuando `s
 
 ## Almacenamiento de marcas de agua del firmante
 
-Configura `signer.watermark.type` con `postgres` para guardar de forma duradera y compartida las marcas de agua y los contadores del firmante. El almacenamiento en memoria y el almacenamiento en SQLite siguen disponibles. Las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
+El almacenamiento `postgres` guarda de forma duradera y compartida las marcas de agua y los contadores del firmante. Las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
 
 | Ruta de configuración | Uso | Requisito |
 | --- | --- | --- |
-| `signer.watermark.type` | Selecciona el almacén de marcas de agua. | Establece `postgres` para usar PostgreSQL. |
+| `signer.watermark.type` | Selecciona el almacén de marcas de agua. | Bursa acepta `mem`, `file` o `postgres`. `file` usa un almacén durable respaldado por SQLite. Bursa solo permite `mem` con `warn` u `off`. |
+| `signer.watermark.path` | Especifica la ruta del almacén SQLite. | Bursa requiere este valor cuando `signer.watermark.type` es `file`. |
 | `signer.watermark.dsn` | Proporciona un DSN de PostgreSQL en texto plano. | Bursa lo usa como alternativa cuando `dsn_env` no está configurado. |
 | `signer.watermark.dsn_env` | Indica el nombre de la variable de entorno que contiene el DSN. | Bursa da prioridad a esta fuente sobre `dsn`; la variable indicada debe tener un valor no vacío. |
 
 Una configuración `postgres` requiere una fuente de DSN. Si `dsn_env` nombra una variable inexistente o vacía, Bursa rechaza la configuración y no recurre a `dsn`. El rol de la base de datos debe poder crear las tablas de marcas de agua y después leerlas y escribirlas. Mantén las credenciales fuera del archivo YAML y proporciónalas mediante un gestor de secretos o el entorno.
+
+Cuando `signer.watermark.mode` no tiene un valor, Bursa usa `enforce`. Este modo requiere un almacén durable `file` o `postgres`. Bursa convierte un modo desconocido en `enforce`, por lo que ese modo también requiere almacenamiento durable.
 
 ```yaml
 signer:
@@ -106,7 +129,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?ss
 | --- | --- |
 | `off` | Desactiva la comprobación del contador. |
 | `warn` | Registra las regresiones del contador, pero devuelve la firma. |
-| `enforce` | Requiere que `issue_counter` sea estrictamente mayor que el contador más alto almacenado para la misma clave fría. Bursa rechaza los contadores iguales o menores. |
+| `enforce` | Requiere un almacén durable `file` o `postgres`, además de que `issue_counter` sea estrictamente mayor que el contador más alto almacenado para la misma clave fría. Bursa rechaza los contadores iguales o menores. |
 
 ### Sondeos de salud y disponibilidad
 
@@ -173,13 +196,13 @@ El socket de servicio conserva la amplitud que necesita el productor, pero el so
 | `api.jwks_url` | `API_JWKS_URL` | `""` | Fuente de confianza bearer mediante un endpoint `JWKS`. La URL debe usar `https://`; HTTP solo está permitido para desarrollo en loopback. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | `""` | Restricción opcional del emisor aceptado en los tokens bearer. |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | `""` | Restricción opcional de la audiencia aceptada en los tokens bearer. |
-| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | `[]` | Lista no vacía de sujetos JWT autorizados para administrar billeteras persistidas cuando se habilita el almacenamiento GCP. |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | `[]` | Lista no vacía de sujetos JWT autorizados para administrar billeteras persistidas cuando se configura cualquier backend de almacenamiento de billeteras. |
 
 Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar si no encuentra los dos archivos TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. La configuración no debe incluir ambas fuentes. La URL `API_JWKS_URL` debe usar `https://` fuera de loopback.
 
 La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, la configuración debe incluir el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
 
-Cuando la configuración del proyecto y el recurso de Google habilita el almacenamiento de billeteras GCP con autenticación, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un encabezado `Authorization: Bearer <JWT>` válido, y el sujeto del token debe coincidir con un sujeto de la lista de administradores.
+Cuando se configura cualquier backend de almacenamiento de billeteras, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un encabezado `Authorization: Bearer <JWT>` válido, y el sujeto del token debe coincidir con un sujeto de la lista de administradores.
 
 ## Políticas de transacciones del firmante
 

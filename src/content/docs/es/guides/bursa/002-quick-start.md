@@ -52,8 +52,8 @@ Ajusta la ruta del enlace a la ruta correcta para la versión que deseas descarg
 > Consejo: Puedes descargar la última versión de Bursa desde la página <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a>.
 
 ```
-wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64.tar.gz
-tar xzf bursa-v0.15.0-linux-amd64.tar.gz
+wget -O bursa-v0.20.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.20.0/bursa-v0.20.0-linux-amd64.tar.gz
+tar xzf bursa-v0.20.0-linux-amd64.tar.gz
 ```
 
 Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos para cada arquitectura. Las descargas de CLI para Windows siguen usando archivos `.exe`, y Bursa distribuye el monedero de escritorio para Windows como un instalador `.msi` firmado y específico para cada arquitectura. El instalador MSI puede incluir el bootstrapper de WebView2 Evergreen cuando la versión incluye ese paquete opcional y el runtime no está instalado. Las descargas de CLI para macOS siguen usando archivos `.zip`, y Bursa distribuye el monedero de escritorio para macOS como un instalador `.pkg` notarizado y específico para cada arquitectura.

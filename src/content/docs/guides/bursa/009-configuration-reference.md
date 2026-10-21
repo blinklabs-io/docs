@@ -5,7 +5,7 @@ description: YAML and environment-variable reference for Bursa `kes-agent` and l
 
 ## Overview
 
-This guide describes Bursa signer and KES-agent configuration, including the `signer.backends` configuration for the `PKCS#11` signer backend. The backend uses a `PKCS#11` module, keeps private keys on the token, and has the token produce `Ed25519` signatures.
+This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, and `confidential-space` signer backends.
 
 ## Load a configuration file
 
@@ -56,11 +56,12 @@ Malformed JSON or a request without `enabled` returns HTTP `400`. A successful u
 
 ## Configuration reference
 
-Add a backend entry under `signer.backends` and set its `type` to `pkcs11`. Use the following fields:
+Add a backend entry under `signer.backends`, set its `type` to the selected backend, and configure the fields that apply to that backend:
 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
-| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`. |
+| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, or `confidential-space`. |
+| `signer.backends[].address` | Specifies the endpoint for an attested signer backend. | Set to an `http://`, `https://`, or `unix:///` endpoint. |
 | `signer.backends[].module` | Specifies the path to the `PKCS#11` module, including the `.so` file. | Set this field. Bursa rejects an empty value. |
 | `signer.backends[].token_label` | Selects the token or slot by its label. | Set this field or `slot`. Bursa requires at least one selection field. |
 | `signer.backends[].slot` | Selects a slot by its explicit slot ID. | Set this field or `token_label`. Bursa requires at least one selection field. |
@@ -68,10 +69,29 @@ Add a backend entry under `signer.backends` and set its `type` to `pkcs11`. Use 
 | `signer.backends[].keys[]` | Defines an optional allowlist of token objects. | When present, give every entry a `name` and `type`. |
 | `signer.backends[].keys[].name` | Matches the token object's `CKA_LABEL`. | Set this field for each `keys` entry. |
 | `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Set this field for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
+| `signer.backends[].root_ca_file` | Specifies the AWS Nitro Enclaves root certificate. | Required for `nitro`; use the pinned AWS Nitro root certificate. |
+| `signer.backends[].pcrs` | Specifies expected Nitro PCR index and hexadecimal value pairs. | Required for `nitro`; PCR0 must be present and nonzero. |
+| `signer.backends[].audience` | Specifies the audience that a Confidential Space attestation token must contain. | Required for `confidential-space`. |
+| `signer.backends[].image_digest` | Specifies the required Confidential Space container image digest. | Required for `confidential-space`; use a `sha256:` digest. |
+| `signer.backends[].jwks_url` | Specifies the token-signing key set for Confidential Space attestation tokens. | Optional for `confidential-space`; defaults to Google's published token-signing set. |
+
+### Wallet storage and encryption
+
+Configure wallet persistence and SOPS encryption with the following fields:
+
+| Configuration path | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `storage.backend` | `STORAGE_BACKEND` | Selects the wallet storage backend. | Set to `aws` to use AWS Secrets Manager. |
+| `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Sets the prefix for wallet secrets in AWS Secrets Manager. | Required when `storage.backend` is `aws`. |
+| `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Selects an AWS KMS master key for SOPS encryption. | Configure as one SOPS master-key resource when AWS KMS provides the encryption key. |
+| `age.recipients` | `AGE_RECIPIENTS` | Lists age recipients for SOPS encryption. | Provide recipients as a comma-separated value. |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Allows wallet persistence without encryption. | Explicitly enable this opt-in for file storage without a SOPS master key or for SQLite storage. |
+
+SOPS encryption requires at least one configured master-key resource. Bursa rejects malformed key resources before encryption starts. The unencrypted-storage opt-in permits unencrypted wallet persistence.
 
 ## Build requirements
 
-Building Bursa from source requires Go `1.26.0` or newer, in addition to `CGO` and the `pkcs11` build tag for the `PKCS#11` backend.
+Building Bursa from source requires Go `1.26.8` or newer, in addition to `CGO` and the `pkcs11` build tag for the `PKCS#11` backend.
 
 Compile Bursa with `CGO` enabled and the `pkcs11` build tag to include the `PKCS#11` backend. Without that build tag, Bursa fails fast when a configuration selects this backend and returns:
 
@@ -98,14 +118,17 @@ For a configured `software`/`file` backend, Bursa refuses startup when `signer.l
 
 ## Signer watermark
 
-Configure `signer.watermark` to store signer safety watermarks and operational certificate issue counters. The `memory` backend keeps this state in memory, `sqlite` stores it in SQLite, and `postgres` stores it in a durable PostgreSQL database that multiple signer replicas can share.
+Configure `signer.watermark` to store signer safety watermarks and operational certificate issue counters. The `mem` backend keeps this state in memory, `file` stores it in SQLite, and `postgres` stores it in a durable PostgreSQL database that multiple signer replicas can share.
 
 | Configuration path | Purpose | Default or requirement |
 | --- | --- | --- |
-| `signer.watermark.type` | Selects the watermark store. | Bursa supports `memory`, `sqlite`, and `postgres`. |
+| `signer.watermark.type` | Selects the watermark store. | Bursa supports `mem`, `file`, and `postgres`. |
+| `signer.watermark.path` | Specifies the SQLite database path for the file store. | Required when `signer.watermark.type` is `file`. |
 | `signer.watermark.dsn` | Provides the PostgreSQL connection string directly. | Acts as the fallback when `dsn_env` is not configured. |
 | `signer.watermark.dsn_env` | Names an environment variable that contains the PostgreSQL connection string. | Takes precedence over `dsn`; the named variable must contain a nonempty value or Bursa returns an error. A `postgres` store requires a DSN from this variable or from `dsn`. |
 | `signer.watermark.mode` | Controls the operational certificate issue-counter guard. | Defaults to `enforce`; set `off`, `warn`, or `enforce`. |
+
+The `mem` store is valid only with `warn` or `off`. The `enforce` mode requires durable `file` or `postgres` storage. Bursa treats an empty mode as `enforce` and coerces an unrecognized mode to `enforce`, so `mem` fails startup in either case. A `postgres` store requires `dsn` or `dsn_env`.
 
 Use the `postgres` store when signer replicas must share the same authoritative watermark and counter state. Point every replica guarding the same keys to that database. The database role must be able to create the watermark tables and read from and write to them. Keep credentials out of committed YAML, and configure verified TLS for remote database connections as appropriate for the deployment.
 
@@ -205,13 +228,13 @@ Configure the legacy API under the `api` YAML key.
 | `api.jwks_url` | `API_JWKS_URL` | Authenticate bearer tokens through a JWKS endpoint. | Use instead of `api.jwt_secret`; Bursa requires HTTPS except for loopback development. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Constrain the issuer that bearer tokens can contain. | Set to constrain the accepted issuer. |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | Constrain the audience that bearer tokens can contain. | Set to constrain the accepted audience. |
-| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | Define the non-empty JWT subject allowlist for persisted wallet administration. | When the Google project and resource configuration enable authenticated GCP wallet storage, include at least one non-empty subject. Bursa refuses startup when the list is empty or missing. |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | Defines the non-empty JWT subject allowlist for persisted wallet administration. | Whenever any wallet-storage backend is configured, include at least one non-empty subject. Bursa refuses startup when the list is empty or missing. |
 
 A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
-When the Google project and resource configuration enable authenticated GCP wallet storage, Bursa uses Bearer JWT authentication and authorizes only administrator subjects listed in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`.
+When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`.
 
 ```yaml
 api:

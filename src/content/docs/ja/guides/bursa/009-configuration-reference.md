@@ -5,7 +5,7 @@ description: Bursaの署名、KESエージェント、APIのTLSおよびBearer�
 
 ## 概要
 
-このガイドでは、Bursaの署名およびKESエージェント設定、APIのTLSとBearer認証、および`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
+このガイドでは、Bursaの署名およびKESエージェント設定、APIのTLSとBearer認証を説明します。`signer.backends`設定では、`pkcs11`、`nitro`、`confidential-space`署名バックエンドを選択できます。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。
 
 ## 設定ファイルの読み込み
 
@@ -49,11 +49,12 @@ Content-Type: application/json
 
 ## 設定リファレンス
 
-`signer.backends`の下にバックエンドエントリを追加し、`type`を`pkcs11`に設定します。以下のフィールドを使用します。
+`signer.backends`の下にバックエンドエントリを追加し、`type`でバックエンドを選択します。以下のフィールドを使用します。
 
 | 設定パス | 目的 | 検証 |
 | --- | --- | --- |
-| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`を設定します。 |
+| `signer.backends[].address` | `nitro`または`confidential-space`バックエンドが接続するエンドポイントを指定します。 | `http://`、`https://`、または`unix:///`で始まるアドレスを設定します。 |
+| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、または`confidential-space`を設定します。 |
 | `signer.backends[].module` | `.so`ファイルを含む`PKCS#11`モジュールのパスを指定します。 | このフィールドを設定します。Bursaは空の値を拒否します。 |
 | `signer.backends[].token_label` | ラベルでトークンまたはスロットを選択します。 | このフィールドまたは`slot`を設定します。少なくとも一方の選択フィールドが必要です。 |
 | `signer.backends[].slot` | 明示的なスロットIDでスロットを選択します。 | このフィールドまたは`token_label`を設定します。少なくとも一方の選択フィールドが必要です。 |
@@ -61,12 +62,29 @@ Content-Type: application/json
 | `signer.backends[].keys[]` | トークンオブジェクトの許可リストを任意で定義します。 | 設定する場合は、すべてのエントリに`name`と`type`を指定します。 |
 | `signer.backends[].keys[].name` | トークンオブジェクトの`CKA_LABEL`と照合します。 | 各`keys`エントリにこのフィールドを設定します。 |
 | `signer.backends[].keys[].type` | 照合したトークンオブジェクトにCardano鍵タイプを割り当てます。 | 各`keys`エントリにこのフィールドを設定します。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、または`policy`を使用します。 |
+| `signer.backends[].root_ca_file` | AWS Nitro Enclavesで使用するピン留め済みルート証明書を含むPEMファイルのパスを指定します。 | `nitro`で必須です。 |
+| `signer.backends[].pcrs` | Nitroで期待するPCR値を指定します。 | `nitro`ではPCR0（キー`0`）を設定し、ゼロ以外の値にします。 |
+| `signer.backends[].audience` | Confidential Spaceの証明トークンに設定する対象者を指定します。 | `confidential-space`で必須です。 |
+| `signer.backends[].image_digest` | Confidential Spaceコンテナイメージのダイジェストを指定します。 | `confidential-space`で必須です。`sha256:`で始まる値を使用します。 |
+| `signer.backends[].jwks_url` | Confidential Spaceトークンの署名キーを取得するJWKS URLを指定します。 | 任意です。省略するとGoogleが公開するトークン署名キーを使用します。 |
+
+## ウォレットストレージと暗号化
+
+ウォレットストレージとSOPS暗号化には、次の設定を使用します。
+
+| YAMLキー | 環境変数 | 説明 | 要件 |
+| --- | --- | --- | --- |
+| `storage.backend` | `STORAGE_BACKEND` | ウォレットをAWS Secrets Managerに保存するバックエンドを選択します。 | AWS Secrets Managerを使用する場合は`aws`を設定します。 |
+| `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Managerでウォレットシークレット名に使用するプレフィックスを指定します。 | AWSウォレットストレージで必須です。 |
+| `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS暗号化に使用するAWS KMSマスターキーを指定します。 | 暗号化にはSOPSマスターキーリソースを少なくとも1つ設定します。不正なキーリソースは暗号化前に拒否されます。 |
+| `age.recipients` | `AGE_RECIPIENTS` | SOPS暗号化の対象とする`age` recipientを指定します。 | recipientはカンマ区切りで指定します。 |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | 暗号化しないウォレット永続化を明示的に許可します。 | SOPSマスターキーがないfileストレージまたはSQLiteストレージで有効化します。ウォレットを暗号化せずに永続化します。 |
 
 ## ビルド要件
 
 `PKCS#11`バックエンドを含めるには、`CGO`を有効にし、`pkcs11`ビルドタグを指定してBursaをコンパイルします。このビルドタグなしで設定がこのバックエンドを選択すると、Bursaは即座に失敗し、次のエラーを返します。
 
-ソースからBursaをビルドする場合は、Go `1.26.0`以上が必要です。
+ソースからBursaをビルドする場合は、Go `1.26.8`以上が必要です。
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)
@@ -91,14 +109,17 @@ pkcs11 backend not compiled in (build with -tags pkcs11)
 
 ## 署名者のウォーターマーク
 
-`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはSQLiteの保存方法と異なり、同じコールドキーを保護する署名者レプリカで共有できます。
+`signer.watermark.type`はウォーターマークの保存先を`mem`、`file`、`postgres`から選択します。`file`はSQLiteを使用する永続ストアで、`postgres`と同じく再起動後も状態を保持します。
 
 | YAMLキー | 説明 | 要件 |
 | --- | --- | --- |
-| `signer.watermark.type` | ウォーターマークの保存先を選択します。 | PostgreSQLを使用する場合は`postgres`を設定します。 |
+| `signer.watermark.type` | ウォーターマークの保存先を選択します。 | `mem`、`file`、または`postgres`を設定します。`file`はSQLiteを使用します。 |
+| `signer.watermark.path` | `file`ストアのSQLiteファイルパスを指定します。 | `file`を使用する場合は空でないパスが必須です。 |
 | `signer.watermark.dsn` | PostgreSQLへの接続に使うDSNをプレーンテキストで指定します。 | `dsn_env`を使用しない場合のフォールバックです。 |
 | `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
 | `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
+
+`mem`は`warn`または`off`でのみ使用できます。`enforce`では永続ストアが必要なため、`file`または`postgres`を設定します。不明な`signer.watermark.mode`も`enforce`として扱い、`mem`を拒否します。
 
 `postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。両方を指定した場合は`dsn_env`を優先し、そこに指定した環境変数が空の場合はBursaが設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
 
@@ -165,7 +186,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 | `api.jwks_url` | `API_JWKS_URL` | `RS256`、`ES256`、または`EdDSA`の`Bearer`認証で使用するJWKSのURL。 | 非ループバックの待ち受けでは`api.jwt_secret`と排他的に指定。`HTTPS`が必須 |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | `Bearer`トークンの発行者を検証する制約。 | 任意 |
 | `api.jwt_audience` | `API_JWT_AUDIENCE` | `Bearer`トークンの対象者を検証する制約。 | 任意 |
-| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続ウォレットを管理できるJWT subjectの許可リスト。 | 認証付きGCPウォレットストレージでは、空でないsubjectを少なくとも1つ指定 |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続ウォレットを管理できるJWT subjectの許可リスト。 | ウォレットストレージバックエンドを設定する場合、空でないsubjectを少なくとも1つ指定 |
 
 `api.address`にループバック以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、または`Bearer`認証元を両方またはどちらも指定した場合、起動できません。
 
@@ -173,7 +194,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=req
 
 `api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、発行者または対象者による追加の制約は適用されません。
 
-認証付きGCPウォレットストレージを有効にする場合は、`api.jwt_admin_subjects`に空でない管理者subjectを少なくとも1つ指定します。リストが空または未指定の場合、Bursaは起動を拒否します。`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete`の各ルートでは、有効な`Bearer` JWTと、そのsubjectが管理者リストに含まれることの両方を要求します。
+ウォレットストレージバックエンドを設定する場合は、`api.jwt_admin_subjects`に空でない管理者subjectを少なくとも1つ指定します。リストが空または未指定の場合、Bursaは起動を拒否します。`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete`の各ルートでは、有効な`Bearer` JWTと、そのsubjectが管理者リストに含まれることの両方を要求します。
 
 ## `socket_mode`から分割設定への移行
 
