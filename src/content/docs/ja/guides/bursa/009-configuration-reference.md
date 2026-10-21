@@ -84,7 +84,7 @@ Content-Type: application/json
 
 `PKCS#11`バックエンドを含めるには、`CGO`を有効にし、`pkcs11`ビルドタグを指定してBursaをコンパイルします。このビルドタグなしで設定がこのバックエンドを選択すると、Bursaは即座に失敗し、次のエラーを返します。
 
-ソースからBursaをビルドする場合は、Go `1.26.0`以上が必要です。
+ソースからBursaをビルドする場合は、Go `1.26.8`以上が必要です。
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)

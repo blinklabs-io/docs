@@ -71,7 +71,7 @@ Una entrada de backend en `signer.backends` selecciona el backend mediante `type
 
 ## Requisitos de compilación
 
-Una compilación de Bursa desde el código fuente requiere Go `1.26.0` o posterior. Además, compila Bursa con `CGO` habilitado y la etiqueta de compilación `pkcs11` para incluir el backend `PKCS#11`. Sin esa etiqueta, Bursa falla de inmediato cuando una configuración selecciona este backend y devuelve:
+Una compilación de Bursa desde el código fuente requiere Go `1.26.8` o posterior. Además, compila Bursa con `CGO` habilitado y la etiqueta de compilación `pkcs11` para incluir el backend `PKCS#11`. Sin esa etiqueta, Bursa falla de inmediato cuando una configuración selecciona este backend y devuelve:
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)

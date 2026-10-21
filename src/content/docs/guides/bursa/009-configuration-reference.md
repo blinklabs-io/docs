@@ -91,7 +91,7 @@ SOPS encryption requires at least one configured master-key resource. Bursa reje
 
 ## Build requirements
 
-Building Bursa from source requires Go `1.26.0` or newer, in addition to `CGO` and the `pkcs11` build tag for the `PKCS#11` backend.
+Building Bursa from source requires Go `1.26.8` or newer, in addition to `CGO` and the `pkcs11` build tag for the `PKCS#11` backend.
 
 Compile Bursa with `CGO` enabled and the `pkcs11` build tag to include the `PKCS#11` backend. Without that build tag, Bursa fails fast when a configuration selects this backend and returns:
 
