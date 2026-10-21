@@ -57,118 +57,119 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 サービスはあなたのユーザーとして実行されますが、設定は`/etc/dingo/`にあるため、データベースとソケットのパスが絶対パスを使用していることを確認する必要があります。以下を実行して、`$HOME`を展開した状態で設定を再生成します：
 
 ```bash
-sudo bash -c "cat <<EOF > /etc/dingo/dingo.yaml
+sudo tee /etc/dingo/dingo.yaml > /dev/null <<EOF
 # Database
-databasePath: \"$HOME/dingo/.dingo\"
+databasePath: "$HOME/dingo/.dingo"
 
 # Plugins
 plugins:
   storage:
     blob:
-      provider: \"badger\"
+      provider: "badger"
       config:
         blockCacheSize: 0
         compression: false
-        dataDir: \"$HOME/dingo/.dingo/badger\"
+        dataDir: "$HOME/dingo/.dingo/badger"
         gc: true
         indexCacheSize: 0
     metadata:
-      provider: \"sqlite\"
+      provider: "sqlite"
       config:
-        dataDir: \"$HOME/dingo/.dingo/metadata.db\"
+        dataDir: "$HOME/dingo/.dingo/metadata.db"
   mempool:
-    provider: \"default\"
+    provider: "default"
     config:
-      # `capacity` はモードの既定値を上書きする任意の設定です。既定値は Praos モードと通常の serve モードで 1 MiB、Musashi モードで 25 MiB です。
+      # capacity はモードの既定値を上書きする任意の設定です。既定値は Praos モードと通常の serve モードで 1 MiB、Musashi モードで 25 MiB です。
       # 既定値を使うには、このキーをコメントアウトするか省略します。
       # capacity: 1048576
-      # `revalidationDeltaCap` は FIFO 再検証中に追随する変更量の上限です。既定値は 64 で、正の値でなければなりません。
+      # revalidationDeltaCap は FIFO 再検証中に追随する変更量の上限です。既定値は 64 で、正の値でなければなりません。
       # revalidationDeltaCap: 64
   api:
     blockfrost:
-      provider: \"builtin\"
+      provider: "builtin"
       config:
         port: 0
-        # 組み込み Blockfrost は既定で `127.0.0.1` にバインドします。外部から
-        # アクセスする場合は、プロバイダー固有の `host` を明示してください。
+        # 組み込み Blockfrost は既定で 127.0.0.1 にバインドします。外部から
+        # アクセスする場合は、プロバイダー固有の host を明示してください。
         host: "127.0.0.1"
-        # トランザクション送信・評価の変更系ルートには `authToken` が必要です。
+        # トランザクション送信・評価の変更系ルートには authToken が必要です。
         # 空欄の場合は変更系ルートを利用できません。非ループバックでトークンを使う場合は TLS も設定してください。
         authToken: ""
         # 変更系ルートの既定の同時実行上限は、全体が 4、クライアントごとが 1 です。
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
     mesh:
-      provider: \"builtin\"
+      provider: "builtin"
       config:
         port: 0
     utxorpc:
-      provider: \"builtin\"
+      provider: "builtin"
       config:
         port: 0
 
 # Mithril
 mithril:
-  aggregatorUrl: \"\"
+  aggregatorUrl: ""
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # `true` はローカル開発・テスト専用で、HTTP とローカルまたはプライベートな宛先を許可します。
+  # true はローカル開発・テスト専用で、HTTP とローカルまたはプライベートな宛先を許可します。
   allowInsecureHttp: false
-  # `allowInsecureHttp` は `--mithril-allow-insecure-http` / `DINGO_MITHRIL_ALLOW_INSECURE_HTTP` で上書きできます。
-  # `pinnedDigest` は任意です。v1 ではスナップショットのダイジェスト、v2 では Cardano データベースアーティファクトのハッシュを指定します。
+  # allowInsecureHttp は --mithril-allow-insecure-http / DINGO_MITHRIL_ALLOW_INSECURE_HTTP で上書きできます。
+  # pinnedDigest は任意です。v1 ではスナップショットのダイジェスト、v2 では Cardano データベースアーティファクトのハッシュを指定します。
   # この指定は新しいデータベースの初回ブートストラップにのみ使用します。
-  # pinnedDigest: \"\"
+  # pinnedDigest: ""
 
-> 📝 既定では、Mithril は HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp: true` はローカル開発またはテストでのみ使用する明示的な例外であり、本番環境では有効にしないでください。
-> 📝 Mithril v2 は、設定済みアグリゲーターのオリジンまたは公式 Mithril GCS オリジン（`https://storage.googleapis.com`）だけをアーティファクトとリダイレクト先として許可します。コンポーネントごとの重複しない場所は最大 4 件、immutable アーカイブは最大 100000 件に制限し、ダウンロード全体にリクエスト数、バイト数、24 時間の期限を適用します。展開全体にもエントリ数と展開後バイト数の上限、および空き容量の予約を適用します。署名付き ancillary マニフェストは展開前に検証し、署名で許可されたファイルと親ディレクトリだけを展開します。`allowInsecureHttp: true` はこれらの制限を解除せず、ローカル開発またはテストの HTTP とローカルまたはプライベートな宛先だけを許可する設定です。
 
 # Network
-# ヘルスチェックリスナー。`--health-port` / `DINGO_HEALTH_PORT` で変更できます。`0` を指定すると無効になります。
+# ヘルスチェックリスナー。--health-port / DINGO_HEALTH_PORT で変更できます。0 を指定すると無効になります。
 healthPort: 12799
-# readiness の許容 tip gap（スロット数）。`--health-ready-gap-slots` / `DINGO_HEALTH_READY_GAP_SLOTS` で変更できます。
+# readiness の許容 tip gap（スロット数）。--health-ready-gap-slots / DINGO_HEALTH_READY_GAP_SLOTS で変更できます。
 healthReadyGapSlots: 1000
-bindAddr: \"0.0.0.0\"
+bindAddr: "0.0.0.0"
 metricsPort: 12798
 debugPort: 0
-network: \"preview\"
-# NtC 接続の上限は合計 100、送信元 IP ごとに 5 です。`--max-ntc-conns` / `DINGO_MAX_NTC_CONNS` と `--max-ntc-connections-per-ip` / `DINGO_MAX_NTC_CONNECTIONS_PER_IP` でも設定できます。
+network: "preview"
+# NtC 接続の上限は合計 100、送信元 IP ごとに 5 です。--max-ntc-conns / DINGO_MAX_NTC_CONNS と --max-ntc-connections-per-ip / DINGO_MAX_NTC_CONNECTIONS_PER_IP でも設定できます。
 # 値が 0 以下の場合は無視され、既定値が使用されます。
 maxNtCConns: 100
 maxNtCConnectionsPerIP: 5
-privateBindAddr: \"127.0.0.1\"
+privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
-socketPath: \"$HOME/dingo/dingo.socket\"
+socketPath: "$HOME/dingo/dingo.socket"
 
 # Storage
-barkBaseUrl: \"\"
+barkBaseUrl: ""
 barkPort: 0
-# `barkPort` と `databaseLifecycle.snapshotDir` を併用する場合は、`barkClientCaFilePath` と `tlsCertFilePath` / `tlsKeyFilePath` の両方が必要です。
+# barkPort と databaseLifecycle.snapshotDir を併用する場合は、barkClientCaFilePath と tlsCertFilePath / tlsKeyFilePath の両方が必要です。
 databaseLifecycle:
-  # `snapshotEnabled` を有効にすると、エポック境界で自動スナップショットを作成します。
-  # プライマリの blob provider が `badger`、`s3`、または `gcs` の場合は自動スナップショットを有効にできないため、`snapshotEnabled` を無効にしてください。
+  # snapshotEnabled を有効にすると、エポック境界で自動スナップショットを作成します。
+  # プライマリの blob provider が badger、s3、または gcs の場合は自動スナップショットを有効にできないため、snapshotEnabled を無効にしてください。
   snapshotEnabled: false
   # 自動スナップショットの保存先です。各スナップショットは個別のサブディレクトリに書き出されます。
-  snapshotDir: \"$HOME/dingo/snapshots\"
+  snapshotDir: "$HOME/dingo/snapshots"
    # クラウドスナップショットの認証に使う共有秘密鍵です。必要な場合に指定します。
    # 通常ファイル、シンボリックリンクではないファイル、16 バイト以上 1 KiB 以下が必要です。
    # Unix ではノード実行ユーザーが所有し、グループまたはその他のユーザーのアクセスを許可しないでください。
    # Windows では現在のユーザー、またはプロセスが所属する BUILTIN\Administrators が所有する必要があります。
    # Windows の DACL も許可された所有者およびシステムの主体だけに制限してください。
-   # snapshotTrustKeyFile: \"$HOME/dingo/snapshot-trust.key\"
-  # ローカル保存に加えて、スナップショットをクラウドにもミラーします。`s3://bucket/prefix` または `gcs://bucket/prefix` を指定します。
-  # `dingo_extra_plugins` ビルドタグが必要です。
-  snapshotCloudDestination: \"\"
+   # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust.key"
+  # ローカル保存に加えて、スナップショットをクラウドにもミラーします。s3://bucket/prefix または gcs://bucket/prefix を指定します。
+  # dingo_extra_plugins ビルドタグが必要です。
+  snapshotCloudDestination: ""
   # 複数ノードで同じクラウド保存先を共有する場合の追加パスです。
-  snapshotCloudDestinationPrefix: \"\"
-  # 古い自動スナップショットの保持数です。`0` はすべて保持します。
+  snapshotCloudDestinationPrefix: ""
+  # 古い自動スナップショットの保持数です。0 はすべて保持します。
   snapshotRetention: 0
-  # N epoch ごとに自動スナップショットを作成します。`1` は毎回です。
+  # N epoch ごとに自動スナップショットを作成します。1 は毎回です。
   snapshotEveryNEpochs: 1
-storageMode: \"core\"
-EOF"
+storageMode: "core"
+EOF
 ```
+> 📝 既定では、Mithril は HTTPS と公開宛先を要求し、ローカル、プライベート、その他の非公開宛先を拒否します。`allowInsecureHttp: true` はローカル開発またはテストでのみ使用する明示的な例外であり、本番環境では有効にしないでください。
+> 📝 Mithril v2 は、設定済みアグリゲーターのオリジンまたは公式 Mithril GCS オリジン（`https://storage.googleapis.com`）だけをアーティファクトとリダイレクト先として許可します。コンポーネントごとの重複しない場所は最大 4 件、immutable アーカイブは最大 100000 件に制限し、ダウンロード全体にリクエスト数、バイト数、24 時間の期限を適用します。展開全体にもエントリ数と展開後バイト数の上限、および空き容量の予約を適用します。署名付き ancillary マニフェストは展開前に検証し、署名で許可されたファイルと親ディレクトリだけを展開します。`allowInsecureHttp: true` はこれらの制限を解除せず、ローカル開発またはテストの HTTP とローカルまたはプライベートな宛先だけを許可する設定です。
+
 
 > 📝 APIポートはAPIストレージモードでのみ有効です。`0` を設定すると、そのAPIは無効になります。
 > 📝 `databaseLifecycle.snapshotTrustKeyFile` を指定する場合は、通常ファイルかつ非シンボリックリンクで、サイズを 1 KiB 以下にしてください。Unix ではノード実行ユーザーが所有し、グループとその他のユーザーのアクセスを禁止する必要があります。Windows では現在のユーザー、またはプロセスが所属する `BUILTIN\Administrators` が所有し、DACL を許可された主体に制限する必要があります。要件を満たさないファイル、置換されたファイル、またはサイズ超過のファイルは拒否されます。

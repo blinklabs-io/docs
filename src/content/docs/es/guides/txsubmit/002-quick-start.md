@@ -79,9 +79,10 @@ sudo ufw allow 8090/tcp
 Ejemplo de config.yaml:
 
 ```
+api:
+  port: 8090
 node:
   network: mainnet
-  port: 8090
   socketPath: /home/user/cardano-my-node/db/socket
 ```
 

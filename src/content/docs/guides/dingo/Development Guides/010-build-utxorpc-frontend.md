@@ -3,51 +3,43 @@ title: Build a Wallet Frontend with UTxO RPC
 description: Run and extend the complete Dingo and SundaeSwap V3 Preview wallet frontend project.
 ---
 
-The downloadable bundle contains the complete SundaeSwap V3 Preview wallet
-frontend, its TypeScript source and lockfile, the Dingo configuration, and a
-Compose stack that runs it with a Preview node:
+The bundle contains the complete SundaeSwap V3 Preview wallet frontend,
+TypeScript source and lockfile, existing Kubernetes values, and node deployment
+and port-forward helpers:
 
 [Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
-The bundle is generated from the versioned [SundaeSwap Preview source on GitHub](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-sundae-preview), where you can browse or copy individual files.
-
-Start the Dingo node and both frontend apps:
+Browse the [versioned wallet source](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-sundae-preview).
+Use Node.js 24 or later, Helm, kubectl, and a selected Kubernetes context with
+persistent storage for Preview. Deploy the existing node values:
 
 ```sh
 tar -xzf dingo-application-examples-v0.73.4.tar.gz
-cd dingo-dev-guides
-cp .env.example .env
-docker compose up -d
-docker compose ps
+cd dingo-dev-guides/dingo-sundae-preview
+NAMESPACE=dingo-wallet RELEASE=dingo-wallet ./scripts/deploy-dingo.sh
 ```
 
-Wait for `dingo-sync` to complete, then open
-<http://127.0.0.1:5174> in a browser with a Preview-compatible CIP-30 wallet
-installed. Select a pool, connect the wallet, choose a direction and amount,
-build the order, review it, and approve the signature in the wallet. The app
-submits through Dingo and waits up to 120 seconds for confirmation. Signing is
-performed by the wallet; the web app and node do not handle the wallet's
-private keys.
+The helper uses chart 0.1.3 and the existing `k8s/dingo-values.yaml`, which
+pins Dingo 0.73.4, selects Preview, and enables UTxO RPC on port 9090 in API
+storage mode with SQLite metadata and Badger blocks. In a separate terminal,
+keep the UTxO RPC port-forward running:
 
-## Dingo configuration
-
-The `dingo` and `dingo-sync` Compose services run Dingo with `-n preview` and
-share API mode, PostgreSQL metadata, and Badger block storage. The UTxO RPC
-listener the frontend uses is enabled on port `9090`:
-
-```yaml
-DINGO_STORAGE_MODE: api
-DINGO_PLUGINS_STORAGE_METADATA_PROVIDER: postgres
-DINGO_PLUGINS_STORAGE_METADATA_CONFIG_DSN: "host=postgres port=5432 user=dingo password=dingo dbname=dingo_metadata sslmode=disable TimeZone=UTC"
-DINGO_PLUGINS_STORAGE_BLOB_PROVIDER: badger
-DINGO_PLUGINS_API_UTXORPC_CONFIG_PORT: 9090
+```sh
+NAMESPACE=dingo-wallet RELEASE=dingo-wallet ./scripts/port-forward-dingo.sh
 ```
 
-The node and frontend communicate on the Compose network. The frontend's
-`DINGO_UTXORPC_URL` targets `http://dingo:9090`; its Vite server proxies the
-UTxO RPC HTTP routes so the browser calls the frontend's same origin. The
-complete service definitions and ports are in the downloaded
-`docker-compose.yml`.
+Start the frontend locally:
+
+```sh
+npm ci
+DINGO_UTXORPC_URL=http://127.0.0.1:9090 npm run dev -- --host 127.0.0.1
+```
+
+Open <http://127.0.0.1:5174> with a Preview-compatible CIP-30 wallet after the
+node has synchronized. The app builds a V3 order, asks the wallet to sign it,
+submits through Dingo, and waits up to 120 seconds for confirmation. The wallet
+retains the private keys. Vite proxies UTxO RPC through the loopback
+port-forward so browser requests stay on the frontend's origin.
 
 ## Transaction code
 

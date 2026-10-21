@@ -27,9 +27,11 @@ blockPipeline := pipeline.NewBlockPipeline(
 The pipeline reserves the required retained bytes during `Submit` and keeps
 each result charged until the consumer receives it. If a block cannot fit within
 the configured aggregate budget, `Submit` returns an error that matches
-`pipeline.ErrRawCborBudgetExceeded`. If consumers do not receive and release
-results, later submissions can remain backpressured because retained results
-continue to occupy pipeline resources.
+`pipeline.ErrRawCborBudgetExceeded`. Receiving a result through `Results()` or
+`DrainResults()` releases its reservation automatically. Until consumers receive
+results, later submissions can remain backpressured because undelivered results
+continue to occupy the budget. Call `Release()` after processing each received
+item to clear its consumer-owned data.
 
 ### Consume and release every result
 

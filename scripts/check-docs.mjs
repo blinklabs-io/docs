@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { slug } from 'github-slugger';
 
 const root = process.cwd();
 const docsRoot = path.join(root, 'src/content/docs');
@@ -15,19 +16,17 @@ function walk(directory) {
 }
 
 function existingContentPath(basePath) {
-	const normalizedBasePath = basePath.replace(/[\\/]+$/, '');
-	const candidates = [
-		normalizedBasePath,
-		`${normalizedBasePath}.md`,
-		`${normalizedBasePath}.mdx`,
-		path.join(normalizedBasePath, 'index.md'),
-		path.join(normalizedBasePath, 'index.mdx'),
-	];
-	return candidates.some(
-		(candidate) =>
-			fs.existsSync(candidate) ||
-			contentLookup.has(path.normalize(candidate).toLowerCase()),
-	);
+	return contentLookup.has(path.normalize(basePath.replace(/[\\/]+$/, '')));
+}
+
+function contentRoutePath(file) {
+	const route = path.relative(docsRoot, file)
+		.slice(0, -path.extname(file).length)
+		.split(path.sep)
+		.map((segment) => slug(segment))
+		.join('/')
+		.replace(/(?:^|\/)index$/, '');
+	return path.join(docsRoot, route);
 }
 
 function checkFrontmatter(file, source) {
@@ -76,10 +75,7 @@ function checkLink(file, href) {
 		return;
 	}
 
-	const routeDirectory = path.join(
-		path.dirname(file),
-		path.basename(file, path.extname(file)),
-	);
+	const routeDirectory = contentRoutePath(file);
 	const target = path.resolve(routeDirectory, cleanHref);
 	if (!existingContentPath(target)) {
 		errors.push(`${file}: broken relative link ${href}`);
@@ -87,7 +83,7 @@ function checkLink(file, href) {
 }
 
 const files = walk(docsRoot).filter((file) => /\.(?:md|mdx)$/.test(file));
-contentLookup = new Set(files.map((file) => path.normalize(file).toLowerCase()));
+contentLookup = new Set(files.map(contentRoutePath));
 
 for (const file of files) {
 	const source = fs.readFileSync(file, 'utf8');

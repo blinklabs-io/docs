@@ -2,8 +2,8 @@
 
 This directory contains the complete Go server, embedded HTML/CSS/JavaScript,
 database role setup, unit tests, and container build file for the governance
-dashboard. The shared Compose stack starts it at <http://127.0.0.1:8088>; see
-the bundle root `README.md` for startup and Dingo configuration.
+dashboard. Use the existing Kubernetes values and local Go entry point described in
+the bundle root `README.md`.
 
 To run the app locally with a PostgreSQL Dingo metadata database and its
 read-only role already configured:
@@ -11,15 +11,15 @@ read-only role already configured:
 Use Go 1.26 or later.
 
 ```sh
-export DATABASE_URL='host=127.0.0.1 port=5432 user=dingo_gov_lens password=change-me dbname=dingo_metadata sslmode=disable TimeZone=UTC'
+export DATABASE_URL='host=postgres.example.com port=5432 user=dingo_gov_lens password=change-me dbname=dingo_metadata sslmode=verify-full sslrootcert=system TimeZone=UTC'
 export ADDR=127.0.0.1:8088
 go run .
 ```
 
 Run `sql/create-readonly-user.sql` as the database administrator after editing
-the role, password, database, and Dingo owner names to match your setup. The
-Compose initialization script does this automatically for the bundled local
-stack.
+the role, password, database, and Dingo owner names to match your setup. Apply the grants after Dingo creates its metadata schema. The existing
+`scripts/e2e-kubernetes.sh` checks an already running deployment using an
+explicit PostgreSQL namespace and pod.
 
 `main.go` wires HTTP routes and queries indexed governance data;
 `static/app.js` renders the dashboard and calls those routes. The SQL reads

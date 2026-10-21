@@ -23,7 +23,7 @@ persistence:
   size: 60Gi
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   sessionAffinity: ClientIP
   ports:
     private: 3002

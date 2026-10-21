@@ -147,12 +147,12 @@ plugins:
     blob:
       provider: "badger"
       config:
-        # Optional Badger data directory. When unset, `databasePath` applies.
+        # Optional Badger data directory. When unset, databasePath applies.
         # dataDir: "$HOME/dingo/.dingo/badger"
     metadata:
       provider: "sqlite"
       config:
-        # Optional SQLite data directory. When unset, `databasePath` applies.
+        # Optional SQLite data directory. When unset, databasePath applies.
         # dataDir: "$HOME/dingo/.dingo/metadata.db"
 
   api:
@@ -170,7 +170,7 @@ plugins:
         port: 0
 
 # Mempool
-# `plugins.mempool.config.capacity` is an optional override.
+# plugins.mempool.config.capacity is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
 # plugins:

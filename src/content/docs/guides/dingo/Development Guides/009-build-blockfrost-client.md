@@ -3,79 +3,40 @@ title: Build a Blockfrost API Client
 description: Download and run a complete TypeScript explorer backed by Dingo's Blockfrost-compatible API.
 ---
 
-This guide walks through the working Blockfrost explorer source and its Dingo
-configuration. Download the complete project bundle, including both frontend
-applications, Gov Lens, the shared database initialization, and the Compose
-stack:
+Download the complete TypeScript explorer, its existing Kubernetes node values,
+and the other two application projects:
 
 [Download the Dingo application examples for v0.73.4](/downloads/dingo/dev-guides/dingo-application-examples-v0.73.4.tar.gz)
 
-The bundle is generated from the versioned [Blockfrost Explorer source on GitHub](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-blockfrost-explorer), where you can browse or copy individual files.
-
-Extract it and start the full stack:
+Browse the [versioned explorer source](https://github.com/blinklabs-io/docs/tree/main/public/downloads/dingo/dev-guides/source/v0.73.4/dingo-dev-guides/dingo-blockfrost-explorer).
+Use Node.js 24 or later, Helm, kubectl, and an explicitly selected Kubernetes
+context with persistent storage available for a Preview node.
 
 ```sh
 tar -xzf dingo-application-examples-v0.73.4.tar.gz
-cd dingo-dev-guides
-cp .env.example .env
-docker compose up -d
-docker compose ps
+cd dingo-dev-guides/dingo-blockfrost-explorer
+helm upgrade --install dingo-explorer oci://ghcr.io/blinklabs-io/helm-charts/charts/dingo --version 0.1.3 --namespace dingo-explorer --create-namespace --values k8s/dingo-values.yaml
 ```
 
-The first start downloads the Dingo image and Preview snapshot. The `dingo`
-service waits for `dingo-sync` to finish the Mithril import before serving.
-Open <http://127.0.0.1:5173> when the frontend is ready. The stack binds its
-published ports to localhost by default; the sample database credentials are
-for local development only.
+The existing values pin `ghcr.io/blinklabs-io/dingo:0.73.4`, select Preview,
+enable API storage with SQLite metadata and Badger blocks, and serve Blockfrost
+on port 3000. The chart bootstraps from Mithril before serving. In a separate
+terminal, keep this loopback port-forward running:
 
-## What the Compose stack configures
-
-Both `dingo-sync` and `dingo` in the downloaded `docker-compose.yml` use
-`-n preview` and the same environment settings:
-
-```yaml
-DINGO_STORAGE_MODE: api
-DINGO_PLUGINS_STORAGE_METADATA_PROVIDER: postgres
-DINGO_PLUGINS_STORAGE_METADATA_CONFIG_DSN: "host=postgres port=5432 user=dingo password=dingo dbname=dingo_metadata sslmode=disable TimeZone=UTC"
-DINGO_PLUGINS_STORAGE_BLOB_PROVIDER: badger
-DINGO_PLUGINS_API_BLOCKFROST_CONFIG_PORT: 3000
-DINGO_PLUGINS_API_UTXORPC_CONFIG_PORT: 9090
-DINGO_PLUGINS_API_MESH_CONFIG_PORT: 8080
+```sh
+kubectl -n dingo-explorer port-forward svc/dingo-explorer 3000:3000 12798:12798 --address 127.0.0.1
 ```
 
-This selects API storage mode, keeps metadata in PostgreSQL, keeps block data
-in Badger, and enables the three application APIs used across the bundle. The
-Blockfrost explorer calls port `3000`. The full Compose service definitions,
-health checks, volumes, and port mappings are in the downloaded file.
+Start the frontend locally and open <http://127.0.0.1:5173>:
 
-The equivalent core of the Dingo YAML configuration is:
-
-```yaml
-storageMode: api
-plugins:
-  storage:
-    blob:
-      provider: badger
-    metadata:
-      provider: postgres
-      config:
-        host: postgres
-        port: 5432
-        user: dingo
-        password: dingo
-        database: dingo_metadata
-        sslMode: disable
-        timeZone: UTC
-  api:
-    blockfrost:
-      provider: builtin
-      config:
-        port: 3000
+```sh
+npm ci
+DINGO_BLOCKFROST_URL=http://127.0.0.1:3000 DINGO_METRICS_URL=http://127.0.0.1:12798 npm run dev -- --host 127.0.0.1
 ```
 
-Use the environment form in this bundle as the executable configuration. See
-[API access and Dingo configuration](/guides/dingo/006-apis-and-archive/) for
-release-specific options, authentication, and TLS.
+The full node settings are in `k8s/dingo-values.yaml`; the bundle root README
+covers the other application entry points. Use the versioned node settings with
+Dingo v0.73.4. For newer releases, consult [API access and configuration](/guides/dingo/006-apis-and-archive/).
 
 ## Follow the request from browser to node
 
@@ -140,7 +101,7 @@ renderers. Download the bundle to copy the complete files and run the app; the
 excerpts above alone are not a replacement for the project dependencies and
 HTML/CSS assets.
 
-For local frontend iteration without the shared stack, enter the project
+For local frontend iteration against an existing node, enter the project
 directory, install its locked dependencies, and point the Vite proxy at a
 running Dingo API:
 
