@@ -73,7 +73,7 @@ Run a local single-node devnet with the downloaded binary:
 ./dingo devnet
 ```
 
-> 📝 Dingo-generated devnet configuration sets `bindAddr` to `127.0.0.1`, so generated devnet APIs and listeners are available only on the local machine by default. Change the generated configuration deliberately if remote access is required.
+> 📝 Dingo-generated devnet configuration sets `bindAddr` to `127.0.0.1`, so the local machine serves generated devnet APIs and listeners by default. Change the generated configuration deliberately if remote access is required.
 
 For a global npm installation, run `dingo devnet`. Without a global
 installation, use:
