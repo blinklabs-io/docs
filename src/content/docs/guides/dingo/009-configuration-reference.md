@@ -310,7 +310,7 @@ either budget cannot cover the batch, Dingo refuses the whole request with
 
 File-backed inputs provide alternatives to literal values. Dingo applies the
 same CLI, environment, YAML, and built-in default precedence described above.
-Within one source, set either the literal form or the file form, not both.
+Dingo rejects a source that sets both the literal form and the file form.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
@@ -324,13 +324,12 @@ Every file-backed value must meet these requirements:
 
 - The path must identify a regular file. Dingo rejects directories, devices,
   and other non-regular paths.
-- The file can contain at most `64 KiB`. Dingo strips trailing `CR` and `LF`
-  characters, then rejects empty or whitespace-only content.
+- Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
+  and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix
   files can allow owner and group access but cannot allow access to other
-  users. Windows files can allow the owner and the permitted administrator
-  identities.
-- Errors identify the value or path but never include the file contents.
+  users. Windows ACLs can allow only the owner, Administrators, and SYSTEM.
+- Dingo identifies the value or path in errors but never includes file contents.
 
 ### Token registry manifest authentication
 
