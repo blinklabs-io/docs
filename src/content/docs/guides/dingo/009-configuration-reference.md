@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.87.0 Configuration Reference
-description: Complete, release-specific Dingo v0.87.0 configuration reference and example.
+title: Dingo v0.87.1 Configuration Reference
+description: Complete, release-specific Dingo v0.87.1 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.87.0. The complete
+This page covers the configuration shipped with Dingo v0.87.1. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.87.0 source](https://github.com/blinklabs-io/dingo/blob/v0.87.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example).
+The same file is available in the [Dingo v0.87.1 source](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -281,6 +281,7 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
+| Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` for Core storage during `sync`; `128 MiB` for all other storage and run mode combinations when omitted or set to `0` | Set a byte count. Zero or omission selects the built-in default, and an explicit value overrides it. No top-level CLI flag or environment variable exists. |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
 
