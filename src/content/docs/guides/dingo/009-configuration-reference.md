@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.86.0 Configuration Reference
-description: Complete, release-specific Dingo v0.86.0 configuration reference and example.
+title: Dingo v0.87.0 Configuration Reference
+description: Complete, release-specific Dingo v0.87.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.86.0. The complete
+This page covers the configuration shipped with Dingo v0.87.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.86.0 source](https://github.com/blinklabs-io/dingo/blob/v0.86.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.87.0 source](https://github.com/blinklabs-io/dingo/blob/v0.87.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -31,11 +31,23 @@ for the main runtime choices.
 | Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
+| Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
 | Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
+
+### Consensus provider
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. |
+
+Dingo records the selected provider's database identity in the data directory.
+When the stored identity differs from the selected provider identity, Dingo
+rejects startup. Dingo accepts an unmarked database only with the built-in
+Praos provider identity `praos/v1`, then records that identity for later checks.
 
 ### Ledger processing
 
@@ -75,6 +87,18 @@ network.
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
+| N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` by default. Dingo serves local clients only until a nonzero peer port is configured. |
+| IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` by default. When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. An empty value disables the IPv4 listener. |
+| IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` by default. When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. An empty value disables the IPv6 listener. |
+| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset by default. When set, the path must contain no `..` traversal, identify an existing regular file, and name the DMQ peers to dial. |
+| Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` by default. The value cannot exceed `dmq.maxPeers`; `0` allows no required peers. |
+| Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` by default. The value limits held peer connections and must be at least `dmq.minPeers`; `0` allows no peers when `minPeers` is also `0`. |
+
+Dingo validates these six peer settings when DMQ starts, but the current DMQ
+stack does not activate a peer listener or dialer. With `dmq.n2nPort: 0`, Dingo
+skips listener address validation. With a nonzero port, at least one listener
+address must be set and each configured address must use its matching IP
+version.
 
 ### ImmutableDB source
 
@@ -270,6 +294,43 @@ mTLS but does not require that allowlist. DatabaseService operator
 credentials remain separate and do not grant lifecycle access. `Restart` is
 available on Unix platforms; other platforms return an unsupported operation
 error.
+
+### Bark archive lookup budgets
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` when set to `0`. The budget covers all anonymous `ArchiveService` callers. Dingo rejects negative values. |
+| Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
+
+Dingo charges the full `FetchBlock` reference batch against both budgets. When
+either budget cannot cover the batch, Dingo refuses the whole request with
+`RESOURCE_EXHAUSTED` before it performs archive or cloud lookups.
+
+### File-backed secret and parity inputs
+
+File-backed inputs provide alternatives to literal values. Dingo applies the
+same CLI, environment, YAML, and built-in default precedence described above.
+Within one source, set either the literal form or the file form, not both.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. Use instead of `koiosParity.apiKey`, `--koios-parity-api-key`, or `DINGO_KOIOS_PARITY_API_KEY`. Dingo reads the file as the API key string. |
+| Generic plugin configuration field file | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Use instead of `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo reads the file as a plain string and does not parse its contents as YAML. |
+| `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
+| `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
+| `node-parity from-genesis` Koios API key file | — | `--koios-api-key-file` | — | Use instead of `--koios-api-key`. The file supplies the API key used for the Koios request. |
+
+Every file-backed value must meet these requirements:
+
+- The path must identify a regular file. Dingo rejects directories, devices,
+  and other non-regular paths.
+- The file can contain at most `64 KiB`. Dingo strips trailing `CR` and `LF`
+  characters, then rejects empty or whitespace-only content.
+- File permissions or ACLs must satisfy the platform security policy. Unix
+  files can allow owner and group access but cannot allow access to other
+  users. Windows files can allow the owner and the permitted administrator
+  identities.
+- Errors identify the value or path but never include the file contents.
 
 ### Token registry manifest authentication
 
