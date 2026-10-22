@@ -55,7 +55,7 @@ Praos provider identity `praos/v1`, then records that identity for later checks.
 | --- | --- | --- | --- | --- |
 | Ledger row batching | `ledgerApplyRowBatchingEnabled` | `--ledger-apply-row-batching-enabled` | `DINGO_LEDGER_APPLY_ROW_BATCHING_ENABLED` | `false` (off). In core storage mode, Dingo applies multi-row batching to eligible unvalidated block deltas. Dingo forwards this setting to `serve` and `dingo load`; API mode already uses batching. This setting does not affect consensus. |
 | Ledger prefetch ahead | `ledgerPrefetchAheadEnabled` | `--ledger-prefetch-ahead-enabled` | `DINGO_LEDGER_PREFETCH_AHEAD_ENABLED` | `true` (enabled). For validated blocks, Dingo prefetches the next block's input UTxOs from a read-only transaction while the current block applies. Disabling this setting also disables validation ahead. This setting does not affect consensus. |
-| Ledger validation ahead | `ledgerValidateAheadEnabled` | `--ledger-validate-ahead-enabled` | `DINGO_LEDGER_VALIDATE_AHEAD_ENABLED` | `true` (enabled). Dingo verifies witness signatures for validated blocks in an apply chunk before the serial apply step uses them. This setting requires `ledgerPrefetchAheadEnabled`; disabling prefetch also disables validation ahead. This setting does not affect consensus. |
+| Ledger validation ahead | `ledgerValidateAheadEnabled` | `--ledger-validate-ahead-enabled` | `DINGO_LEDGER_VALIDATE_AHEAD_ENABLED` | `true` (enabled). Dingo verifies witness signatures for validated blocks before block application uses them. This setting requires `ledgerPrefetchAheadEnabled`; disabling prefetch also disables validation ahead. This setting does not affect consensus. |
 | Blockfetch low watermark | `blockfetchLowWatermarkEnabled` | `--blockfetch-low-watermark-enabled` | `DINGO_BLOCKFETCH_LOW_WATERMARK_ENABLED` | `false` (off). When enabled while the header is far from the peer tip, Dingo starts blockfetch after one queued blockfetch header range instead of waiting for four. The setting leaves header queue capacity unchanged and does not affect consensus. |
 
 ### Metrics listener
@@ -91,7 +91,7 @@ network.
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N port. A nonzero value does not activate peer listening or dialing in the current DMQ stack. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
 | IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. |
-| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When configuration sets this field, the path must contain no `..` traversal and identify an existing regular file. Dingo loads and validates the file before opening the DMQ socket, then logs the number of distinct peers. |
+| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When configuration sets this field, the path must contain no `..` traversal and identify an existing regular file. Dingo loads and validates the file before opening the DMQ socket. |
 | Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no required peers. The current DMQ stack does not enforce the minimum peer count. |
 | Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no peers when `minPeers` is also `0`. The current DMQ stack does not enforce the maximum peer count. |
 
@@ -100,8 +100,8 @@ Dingo skips listener address validation. When `dmq.n2nPort` is nonzero, each
 configured listener address must use its matching IP version. The peer manager
 and transport do not use the topology file for dialing yet.
 
-When configuration sets `dmq.topologyFile`, Dingo applies these topology rules before it
-opens the DMQ socket:
+When configuration sets `dmq.topologyFile`, Dingo applies these topology rules
+before it opens the DMQ socket:
 
 - The file must be a JSON object no larger than `10 MiB`. Dingo rejects malformed
   JSON, JSON `null`, and object keys that differ only by case.
@@ -187,7 +187,7 @@ mutation limits. When either limit is exhausted, it returns HTTP `429` with
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Managed Mithril synchronization | `mithril.enabled` | `--mithril-enabled` | — | `false` (off). In `serve` with core storage, Dingo can synchronize from a certified Mithril v2 tip and falls back to Ouroboros synchronization when managed Mithril synchronization fails. Manual Mithril synchronization commands work regardless of this setting. |
-| Mithril artifact backend | `mithril.backend` | `--mithril-backend` | — | `v2` (empty also selects `v2`). Dingo rejects `v1`. The v2 backend uses incremental Cardano database artifacts, requires verified ancillary ledger state and immutable digests during bootstrap, and treats the v2 artifact layout as authoritative. |
+| Mithril artifact backend | `mithril.backend` | `--mithril-backend` | — | `v2` (empty also selects `v2`). Dingo rejects `v1` and v1 CLI paths. The v2 backend uses incremental Cardano database artifacts, requires verified ancillary ledger state and immutable digests during bootstrap, and treats the v2 artifact layout as authoritative. |
 | Mithril pinned digest | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Empty by default. When set for a fresh bootstrap, the value must identify a v2 Cardano database artifact. Dingo rejects v1 snapshot pins and digests. |
 
 ### Mithril download limit
