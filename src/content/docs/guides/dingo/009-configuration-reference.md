@@ -281,7 +281,7 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
-| Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; `128 MiB` for all other storage and run mode combinations when configuration omits the setting or sets it to `0` | Set a byte count. Configuration uses the built-in default when it omits this setting or sets it to `0`; an explicit value overrides that default. No top-level CLI flag or environment variable exists. |
+| Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; all other storage and run mode combinations use `128 MiB` when configuration omits this setting or sets it to `0` | Set a byte count. An explicit value overrides the built-in default. No top-level CLI flag or environment variable exists. |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
 
