@@ -73,7 +73,7 @@ Una instalación global de npm permite ejecutar `dingo devnet`; sin una instalac
 npx @blinklabs/dingo devnet
 ```
 
-Dingo genera la configuración de la DevNet y asigna `127.0.0.1` a `bindAddr`; por ello, las API y los listeners generados de la DevNet solo aceptan conexiones locales. Una reconfiguración deliberada permite conexiones remotas.
+Dingo genera la configuración de la DevNet con `bindAddr: 127.0.0.1`; por ello, las API y los listeners generados solo aceptan conexiones locales. Una reconfiguración deliberada permite conexiones remotas.
 
 De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
 
