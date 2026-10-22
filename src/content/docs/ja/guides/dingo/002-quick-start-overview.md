@@ -28,12 +28,12 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.86.0）とアーキテクチャを調整してください。
+⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.87.0）とアーキテクチャを調整してください。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.0/dingo-v0.87.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 以下を実行してバイナリが動作することを確認できます：
@@ -72,6 +72,8 @@ npx @blinklabs/dingo --help
 ```
 ./dingo devnet
 ```
+
+> 📝 Dingoが生成するDevnet設定の`bindAddr`は`127.0.0.1`です。そのため、DevnetのAPIとリスナーはデフォルトでローカル接続だけを受け付けます。リモートアクセスを有効にする場合は、生成された設定を明示的に変更してください。
 
 npmパッケージをグローバルにインストールした場合は`dingo devnet`を、そうでない場合は次のコマンドを実行します：
 
@@ -114,8 +116,8 @@ genesis時点で、Dingoは`faucet.addr`のアドレスに900,000 test ADA（900
 
 ## ステップ2 - dingo.yaml設定ファイルの作成
 
-Dingo v0.86.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+Dingo v0.87.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
+同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
 
 Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
 
