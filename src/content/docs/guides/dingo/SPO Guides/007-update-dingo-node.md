@@ -51,6 +51,8 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 ## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
 Since Dingo is under active development, it is recommended during upgrades to delete database and start fresh.
 
+> ⚠️ **Musashi v0.87.0 requirement:** The `rc-2026w42` respin replaces the bundled Byron and Shelley genesis hashes, so the existing Musashi chain database cannot be reused. Delete the configured database and resynchronize from a fresh Mithril snapshot or from genesis. This reset is mandatory for Musashi; the generic recommendation above remains optional for other networks.
+
 ### Step 5.1 - Delete the `.dingo` Database
 > 💡 To view hidden files and double-check path run:
 > ```
