@@ -96,8 +96,8 @@ network.
 
 Dingo validates these six peer settings when DMQ starts, but the current DMQ
 stack does not activate a peer listener or dialer. With `dmq.n2nPort: 0`, Dingo
-skips listener address validation. With a nonzero port, each configured listener
-address must use its matching IP version.
+skips listener address validation. When `dmq.n2nPort` is nonzero, each configured
+listener address must use its matching IP version.
 
 ### ImmutableDB source
 
