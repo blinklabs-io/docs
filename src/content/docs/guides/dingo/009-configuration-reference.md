@@ -150,6 +150,12 @@ chunk, and integrity requirements.
 | --- | --- | --- | --- | --- |
 | Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `1` by default. One independent peer must report the same recent blocks before a fast source can drive Genesis selection. Set `0` explicitly to disable the corroboration gate for an intentional single-peer or test topology. |
 
+For Musashi, a Cardano node configuration with `ConsensusMode: PraosMode`
+disables Genesis chain selection, even when `genesisBootstrap` is enabled and
+the node starts from origin without an intersection point. Dingo follows the
+Cardano configuration in this case instead of applying Genesis density,
+corroboration, or patience selection.
+
 ### Blockfrost provider
 
 The built-in Blockfrost provider listens on loopback by default. Read-only API
