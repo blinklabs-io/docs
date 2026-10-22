@@ -184,6 +184,14 @@ mutation limits. When either limit is exhausted, it returns HTTP `429` with
 
 ### Mithril download limit
 
+### Mithril synchronization and backend
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Managed Mithril synchronization | `mithril.enabled` | `--mithril-enabled` | — | `false` (off). In `serve` with core storage, Dingo can synchronize from a certified Mithril v2 tip and falls back to Ouroboros synchronization when managed Mithril synchronization fails. Manual Mithril synchronization commands work regardless of this setting. |
+| Mithril artifact backend | `mithril.backend` | `--mithril-backend` | — | `v2` (empty also selects `v2`). Dingo rejects `v1`. The v2 backend uses incremental Cardano database artifacts, requires verified ancillary ledger state and immutable digests during bootstrap, and treats the v2 artifact layout as authoritative. |
+| Mithril pinned digest | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Empty by default. When set for a fresh bootstrap, the value must identify a v2 Cardano database artifact. v1 snapshot pins and digests are rejected. |
+
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Compressed size limit for each downloaded Mithril object | `mithril.downloadMaxBytes` | `--mithril-download-max-bytes` | `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` | `0` uses the built-in per-object compressed limits. A positive value replaces the limit for every downloaded object. Dingo rejects a negative value during startup or configuration validation. |
