@@ -91,14 +91,35 @@ network.
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N port. A nonzero value does not activate peer listening or dialing in the current DMQ stack. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
 | IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. |
-| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When set, the path must contain no `..` traversal and identify an existing regular file. The current DMQ stack does not use the file to dial peers. |
+| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When set, the path must contain no `..` traversal and identify an existing regular file. Dingo loads and validates the file before it opens the DMQ socket, then logs the number of distinct peers. The peer manager and transport do not use the loaded peers for dialing yet. |
 | Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no required peers. The current DMQ stack does not enforce the minimum peer count. |
 | Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no peers when `minPeers` is also `0`. The current DMQ stack does not enforce the maximum peer count. |
 
-Dingo validates these six peer settings when DMQ starts, but the current DMQ
-stack does not activate a peer listener or dialer. With `dmq.n2nPort: 0`, Dingo
-skips listener address validation. When `dmq.n2nPort` is nonzero, each configured
-listener address must use its matching IP version.
+Dingo validates these six peer settings when DMQ starts. With `dmq.n2nPort: 0`,
+Dingo skips listener address validation. When `dmq.n2nPort` is nonzero, each
+configured listener address must use its matching IP version. The peer manager
+and transport do not use the topology file for dialing yet.
+
+When `dmq.topologyFile` is set, Dingo applies these topology rules before it
+opens the DMQ socket:
+
+- The file must be a JSON object no larger than `10 MiB`. Dingo rejects malformed
+  JSON, JSON `null`, and object keys that differ only by case.
+- Each `localRoots` or `publicRoots` access point must have a nonempty host and a
+  port from `1` through `65535`. Dingo trims host whitespace and IPv6 brackets.
+- A root uses `valency`, or `hotValency` as an alias when `valency` is absent.
+  `valency` takes precedence when both appear. `warmValency` defaults to
+  `valency` and must be greater than or equal to it. A valency may exceed the
+  number of access points.
+- Dingo counts each distinct host and port once. Hostname comparison ignores
+  case and a trailing dot; Dingo canonicalizes IP literals without resolving
+  hostnames.
+- Dingo warns when `bootstrapPeers` or `peerSnapshotFile` has a configured
+  value, then ignores both fields. Dingo also ignores `useLedgerAfterSlot`.
+
+Dingo logs the distinct peer count after loading the file and warns when the
+topology names no peers. An invalid topology causes startup to fail before the
+DMQ socket opens.
 
 ### ImmutableDB source
 
