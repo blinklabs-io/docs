@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.0/dingo-v0.87.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -73,6 +73,8 @@ Una instalación global de npm permite ejecutar `dingo devnet`; sin una instalac
 npx @blinklabs/dingo devnet
 ```
 
+Dingo genera la configuración de la DevNet con `bindAddr` establecido en `127.0.0.1`; por ello, las API y los listeners generados de la DevNet solo aceptan conexiones locales, salvo que se reconfigure de forma deliberada.
+
 De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
 
 Dingo instala el faucet local con los archivos `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. En una ejecución temporal, Dingo crea estos archivos en `cardano/keys/` dentro del directorio temporal privado. En una ejecución persistente, Dingo los deja disponibles en `<data-dir>/cardano/keys/`. El archivo `faucet.addr` recibe 900,000 ADA de prueba en el génesis (900_000_000_000 lovelace). Dingo instala las credenciales con permisos exclusivos del propietario.
@@ -99,8 +101,8 @@ La primera ejecución requiere un directorio vacío. Dingo coloca un marcador an
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Para consultar todos los ajustes de Dingo v0.86.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
-Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.86.0/dingo.yaml.example) correspondiente a la versión v0.86.0 como punto de partida para tu configuración.
+Para consultar todos los ajustes de Dingo v0.87.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
+Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example) correspondiente a la versión v0.87.0 como punto de partida para tu configuración.
 
 Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
