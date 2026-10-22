@@ -90,7 +90,7 @@ network.
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | Dingo serves local clients only until a nonzero peer port is configured. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. An empty value disables the IPv4 listener. |
 | IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. An empty value disables the IPv6 listener. |
-| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When set, the path must contain no `..` traversal and identify an existing regular file. The current DMQ stack does not consume it for peer dialing. |
+| DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When set, the path must contain no `..` traversal and identify an existing regular file. The current DMQ stack does not use the file to dial peers. |
 | Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | The value cannot exceed `dmq.maxPeers`; `0` allows no required peers. |
 | Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | The value limits held peer connections and must be at least `dmq.minPeers`; `0` allows no peers when `minPeers` is also `0`. |
 
