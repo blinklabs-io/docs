@@ -43,6 +43,7 @@ Despues de iniciar Adder, la aplicacion aparece en la bandeja del sistema.
 
 > Si no aparece la pantalla de configuracion **Welcome**, abre la bandeja del sistema, haz clic derecho en Adder y selecciona **Configure** para abrir el asistente de configuracion.
 
+Ahora estamos listos para revisar algunos [ejemplos](../examples/001-using-adder-examples-desc) sobre la utilidad y el poder de Adder!
 
 
 ---
