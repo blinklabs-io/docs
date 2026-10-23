@@ -233,17 +233,6 @@ description: Lista de Comandos de Adder.
 
 ***
 
-## Logging:
-
-```text
-  --logging-level string
-```
-
-> nivel de logging (debug, info, warn, error) (predeterminado "info")
-<br />
-
-***
-
 ## Salida:
 
 ```text
@@ -259,6 +248,19 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica el formato de salida: text (legible por humanos, predeterminado) o json (parseable por máquina) (predeterminado "text")
+<br />
+
+```text
+  --output-log-level string
+```
+
+> establece el umbral de logging de `output.log`; acepta `debug`, `info`, `warn` o `error` (predeterminado `info`). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El mismo umbral controla los diagnósticos de Adder en `stderr`, incluso cuando se selecciona otro plugin de salida.
+>
+> Equivalente YAML: `plugins.output.log.level`.
+>
+> Equivalente de entorno: `OUTPUT_LOG_LEVEL`.
+>
+> Se eliminaron la configuración YAML de nivel superior `logging.level` y `LOGGING_LEVEL`: la antigua bandera `--logging-level` y la clave YAML se rechazan, y la antigua variable de entorno se ignora.
 <br />
 
 ```text
