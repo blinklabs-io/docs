@@ -20,8 +20,8 @@ Adder Tray is a packaged desktop application that runs in the system tray and pr
   - Notification permissions
   - Background service management
 - Simplified configuration:
-  - Users select targets (addresses, stake keys, pool IDs, DReps, etc.)
-  - Adder Tray applies predefined notification type
+  - Users select monitoring targets for Wallets, DReps, and Pools, with optional Assets and Policies.
+  - Adder Tray presents notification options based on the selected monitoring targets.
 - No YAML or CLI required — ideal for non‑technical users.
 
 ### Use Cases: 
