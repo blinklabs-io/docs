@@ -70,12 +70,13 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Add one or more values in the applicable target sections:
+Add one or more values to each applicable target section:
 
 - `Watch Wallet` for wallet addresses.
 - `Track DRep` for DRep IDs.
 - `Monitor Pool` for Pool IDs.
-- Use the optional `Follow Asset` section for asset fingerprints and the `Follow Policy` section for policy IDs when those target types are needed.
+- Use the optional `Follow Asset` section for asset fingerprints when needed.
+- Use the optional `Follow Policy` section for policy IDs when needed.
 
 <img src="/adder-windows-config-pool-id-drep-id.webp"
      alt="adder-windows-config-pool-id-drep-id"
