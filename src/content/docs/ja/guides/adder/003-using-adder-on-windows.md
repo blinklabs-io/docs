@@ -41,7 +41,7 @@ Windows用のMSIインストーラーをダウンロードします。
 
 ### ステップ2.2 - `Adder`を検索
 
-Adderアプリを検索して開きます。
+Adderアプリを検索して起動します。
 
 ![adder-windows-search-adder-app](/adder-windows-search-adder-app.webp)
 
