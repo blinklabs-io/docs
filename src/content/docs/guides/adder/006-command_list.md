@@ -239,15 +239,6 @@ description: List of Adder Commands.
 
 ## Logging:
 
-```
-  --logging-level string
-```
-  
-> logging level (debug, info, warn, error) (default "info")
-<br />
-
-***
-
 ## Output:
 
 ```
