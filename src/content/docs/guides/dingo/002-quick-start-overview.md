@@ -13,7 +13,7 @@ A Cardano blockchain node written in Go which actively participates in network c
 
 ***
 
-In this guide, we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
+This guide covers downloading the Dingo binary and every step needed to run a Dingo node on the Cardano Preview network.
 
 <br>
 
@@ -340,7 +340,7 @@ You should see log output showing the node connecting to peers and syncing the r
 #### Interested in running Dingo as a systemd service?
 
 Using a systemd service automatically starts Dingo when your system boots and restarts it if it exits unexpectedly.
-[See our guide on how to create a startup service for Dingo](../003-create-start-up-service).
+[See the guide on creating a startup service for Dingo](../003-create-start-up-service).
 
 ***
 

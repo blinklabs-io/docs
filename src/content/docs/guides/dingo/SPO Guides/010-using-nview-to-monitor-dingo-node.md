@@ -26,7 +26,7 @@ wget -O - https://github.com/blinklabs-io/nview/releases/download/v0.15.0/nview-
 
 ## Step 2 - Change Permissions
 
-For this example, we named the binary file `nview` and saved it to our `$DINGO_HOME` directory. 
+This example names the binary file `nview` and saves it to the `$DINGO_HOME` directory. 
 
 To make the binary executable, run:
 
@@ -60,4 +60,4 @@ cd $DINGO_HOME
 
 Running `nview` against a Dingo Node works out of the box with the default node configuration. However, if you need to make changes, you can run nview with a configuration file. 
 
-Want to customize the `nview` configuration? See our guide on using an [nview configuration file](../../../nview/003-using-config-file).
+Want to customize the `nview` configuration? See the guide on using an [nview configuration file](../../../nview/003-using-config-file).

@@ -13,13 +13,13 @@ A Cardano blockchain node written in Go which actively participates in network c
 
 ***
 
-In this guide, we will walk you through setting up a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the Dingo node when the computer reboots. To get started follow the steps below.
+This guide sets up a `systemd` service. Using a `systemd` service to run a Dingo Node maximizes the uptime by automatically restarting the Dingo node when the computer reboots. To get started follow the steps below.
 
 <br>
 
 ✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
 
-> ⚠️ For this guide we assume you have already completed the [Quick Start](../002-quick-start-overview) guide.
+> ⚠️ This guide assumes you have already completed the [Quick Start](../002-quick-start-overview) guide.
 
 ***
 
@@ -27,7 +27,7 @@ In this guide, we will walk you through setting up a `systemd` service. Using a 
 
 ## Step 1 - Move the Dingo Binary and Configuration
 
-We will move the Dingo binary to `/usr/local/bin/` and the configuration to `/etc/dingo/` so they are accessible system-wide.
+Move the Dingo binary to `/usr/local/bin/` and the configuration to `/etc/dingo/` so they are accessible system-wide.
 
 <br>
 
@@ -54,7 +54,7 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 
 ## Step 2 - Update Paths in `dingo.yaml`
 
-Since the service will run as your user but the config is now in `/etc/dingo/`, we need to make sure the database and socket paths use absolute paths. Run the following to regenerate the config with your `$HOME` expanded:
+Since the service will run as your user but the config is now in `/etc/dingo/`, the database and socket paths must be absolute. Run the following to regenerate the config with your `$HOME` expanded:
 
 ```
 sudo tee /etc/dingo/dingo.yaml > /dev/null <<EOF
@@ -251,7 +251,7 @@ network: mainnet
 
 ***
 
-You can view and verify our `dingo.yaml` file by running:
+You can view and verify your `dingo.yaml` file by running:
 
 ```
 cd /etc/dingo/
@@ -304,7 +304,7 @@ ENDFILE
 
 ***
 
-We can view and verify our `dingo.service` file by running:
+You can view and verify your `dingo.service` file by running:
 
 ```
 sudo nano /etc/systemd/system/dingo.service
