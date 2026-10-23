@@ -254,7 +254,7 @@ description: Lista de Comandos de Adder.
   --output-log-level string
 ```
 
-> establece el umbral de logging de `output.log`; acepta `debug`, `info`, `warn` o `error` (predeterminado `info`). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El mismo umbral controla los diagnósticos de Adder en `stderr`, incluso cuando Adder usa otro plugin de salida.
+> establece el umbral de registro de `output.log`; acepta `debug`, `info`, `warn` o `error` (predeterminado `info`). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El mismo umbral controla los diagnósticos de Adder en `stderr`, incluso cuando Adder usa otro plugin de salida.
 >
 > Equivalente YAML: `plugins.output.log.level`.
 >
