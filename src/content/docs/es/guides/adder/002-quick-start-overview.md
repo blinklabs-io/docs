@@ -15,7 +15,7 @@ Basicamente, Adder te permite rastrear eventos que te importan, y puedes recibir
 
 Para comenzar sigue los pasos a continuacion
 
-## Paso 1 - Descargar exe desde Blinklabs
+## Paso 1 - Descargar el instalador MSI desde Blinklabs
 
 Primero comienza yendo a <a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a> y desplazate hacia abajo hasta Adder
 
@@ -27,9 +27,9 @@ Para este ejemplo, seleccionamos Windows x64. Por favor selecciona tu sistema op
 
 ![adder-operating-system](/adder-operating-system.png)
 
-## Paso 3 Descargar Archivo Ejecutable
+## Paso 3 - Descargar el instalador MSI
 
-Descarga el archivo ejecutable a tu ubicacion o ruta preferida.
+Descarga el instalador `.msi` para Windows x64 a tu ubicacion o ruta preferida. Abre el instalador para instalar Adder y consulta la [guia de instalacion de Adder en Windows](./003-using-adder-on-windows) para completar la instalacion y abrir Adder.
 
 ![adder-download](/adder-download.png)
 
