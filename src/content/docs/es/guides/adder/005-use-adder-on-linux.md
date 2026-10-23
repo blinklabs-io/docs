@@ -11,7 +11,7 @@ Puedes descargar la última versión de Adder desde la página <a href="https://
 Descargaremos el binario de Adder ejecutando el siguiente comando. Ajusta el enlace de descarga a la versión más actual.
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0.39.1-linux-amd64.tar.gz -O - | tar -xz
+ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.46.0/adder-v0.46.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
