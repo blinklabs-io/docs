@@ -126,9 +126,9 @@ description: List of Adder Commands.
   
 > start syncing at the specified chain point(s) in '<slot>.<hash>' format
 >
-> Adder trims surrounding whitespace from comma-separated entries and ignores empty entries.
+> Adder trims whitespace from each comma-separated entry and ignores empty entries.
 >
-> If trimming leaves no entries, Adder follows the configured `--input-chainsync-intersect-tip` behavior. Adder reports malformed non-empty entries in `'<slot>.<hash>'` format as errors.
+> If the value contains only whitespace or empty entries after trimming, Adder follows the configured `--input-chainsync-intersect-tip` behavior. Adder reports malformed non-empty `<slot>.<hash>` entries as errors.
 >
 <br />
 
