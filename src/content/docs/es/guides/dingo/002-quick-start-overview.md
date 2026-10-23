@@ -13,7 +13,7 @@ Un nodo de datos de la blockchain Cardano escrito en Go que participa activament
 
 ***
 
-En esta guía te guiaremos a través de la descarga del binario de Dingo y todos los pasos necesarios para ejecutar el nodo Dingo en la red Cardano Preview. Para comenzar, sigue los pasos a continuación.
+Esta guía cubre la descarga del binario de Dingo y todos los pasos necesarios para ejecutar un nodo Dingo en la red Cardano Preview.
 
 <br>
 
@@ -235,7 +235,7 @@ plugins:
 
 ## Paso 3 - Abrir Puertos
 
-Cubriremos cómo agregar reglas de firewall UFW para los puertos que Dingo necesita.
+Esta sección agrega reglas de firewall UFW para los puertos que Dingo necesita.
 
 > 💡 Consejo: UFW significa Uncomplicated Firewall y se usa para administrar reglas de firewall iptables (netfilter).
 
@@ -301,7 +301,7 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 <br>
 
 ### ¿Interesado en usar un servicio systemd para ejecutar un nodo Dingo y maximizar el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia?
-[Consulta nuestra guía sobre cómo crear un servicio de inicio para Dingo](../003-create-start-up-service).
+[Consulta la guía sobre cómo crear un servicio de inicio para Dingo](../003-create-start-up-service).
 
 ***
 
