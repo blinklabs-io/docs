@@ -11,7 +11,7 @@ description: WindowsでAdderを使用する方法。
 
 ## ステップ1 - Adderインストーラーをダウンロード
 
-Windows x64またはWindows arm64用のMSIインストーラーを選択します。
+Windows用のMSIインストーラーをダウンロードします。
 
 ![adder-windows-release-download](/adder-windows-release-download.webp)
 
