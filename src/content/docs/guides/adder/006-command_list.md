@@ -248,7 +248,7 @@ description: List of Adder Commands.
   --output string
 ```
   
-> output plugin to use, 'list' to show available (default "log")
+ > output plugin to use, `notify-json` for notification NDJSON, or `list` to show available (default "log")
 >
 <br />
 
@@ -263,7 +263,9 @@ description: List of Adder Commands.
   --output-notify-json-config string
 ```
   
-> path to the versioned notification JSON configuration used by `notify-json`
+ > path to the versioned notification JSON configuration used by `notify-json`
+ >
+ > required when `--output notify-json` is selected
 <br />
 
 ```
