@@ -376,7 +376,7 @@ description: Lista de Comandos de Adder.
 
 - `schemaVersion`: versión del esquema; debe ser `1`.
 - `network.name`: nombre de red; admite `mainnet`, `preprod` o `preview`.
-- `network.customAddress` y `network.customPort`: par opcional para un nodo personalizado. Cuando se especifica `customAddress`, `customPort` debe estar entre `1` y `65535`; no se puede especificar `customPort` sin `customAddress`.
+- La configuración puede incluir `network.customAddress` y `network.customPort` como par para un nodo personalizado. Si incluye `customAddress`, debe establecer `customPort` entre `1` y `65535`; no puede establecer `customPort` sin `customAddress`.
 - `monitor.everything`: indica si se supervisan todos los objetivos.
 - `monitor.wallets`, `monitor.dreps`, `monitor.pools`, `monitor.assets` y `monitor.policies`: listas opcionales de objetivos de wallets, DReps, pools, assets y políticas.
 - `monitor.drepMatch`, `monitor.poolMatch`, `monitor.assetMatch` y `monitor.policyMatch`: modos de coincidencia opcionales; cada valor debe ser `any` o `all`.
@@ -387,7 +387,7 @@ description: Lista de Comandos de Adder.
 
 La validación rechaza campos desconocidos y archivos con más de un valor JSON. La configuración debe usar `schemaVersion` `1`, incluir al menos un objetivo o activar `monitor.everything`, y activar al menos una categoría de `alerts`. Cada objetivo debe tener un identificador válido para su tipo: una dirección de wallet, un ID de DRep, un ID de pool, una huella de asset o un ID de política.
 
-Al iniciar, `notify-json` requiere la entrada `chainsync`. `network.name` debe coincidir con `--input-chainsync-network`. Si se configura un nodo personalizado, su dirección y puerto también deben coincidir con `--input-chainsync-address`.
+Al iniciar, `notify-json` requiere la entrada `chainsync`. `network.name` debe coincidir con `--input-chainsync-network`. Si la configuración incluye un nodo personalizado, su dirección y puerto también deben coincidir con `--input-chainsync-address`.
 
 ### Salida `notify-json`:
 
