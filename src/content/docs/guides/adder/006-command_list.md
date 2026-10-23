@@ -367,6 +367,34 @@ adder notifications validate --config <path> [--json]
 > `--config <path>` is required. Normal output reports validity and errors. `--json` emits the machine-readable validation result.
 >
 
+### Notification JSON configuration
+
+The configuration uses JSON with `schemaVersion` set to `1`. Adder rejects unknown fields and multiple JSON values in the configuration file.
+
+| Field | Description |
+| --- | --- |
+| `schemaVersion` | Required value: `1`. |
+| `network.name` | Required supported Cardano network: `mainnet`, `preprod`, or `preview`. |
+| `network.customAddress` and `network.customPort` | Optional custom node address and port. Set both fields together; `customPort` must be between `1` and `65535`. |
+| `monitor.everything` | Set to `true` to monitor all supported targets. Set this field or configure at least one target in `wallets`, `dreps`, `pools`, `assets`, or `policies`. |
+| `monitor.wallets` | Wallet addresses to monitor. |
+| `monitor.dreps` | DRep IDs to monitor. `monitor.drepMatch` accepts `any` or `all`. |
+| `monitor.pools` | Pool IDs to monitor. `monitor.poolMatch` accepts `any` or `all`. |
+| `monitor.assets` | Asset fingerprints to monitor. `monitor.assetMatch` accepts `any` or `all`. |
+| `monitor.policies` | Policy IDs to monitor. `monitor.policyMatch` accepts `any` or `all`. |
+| `alerts` | Alert categories to enable: `incomingTransactions`, `outgoingTransactions`, `tokenTransfers`, `blocksMinted`, `chainRollbacks`, `poolParameterChanges`, `governanceProposals`, `votesCast`, `registrationChanges`, `assetActivity`, `policyActivity`, and `connectionIssues`. Enable at least one category. |
+| `rateLimit.max` | Required value of `-1` to disable rate limiting, or `0` or greater. |
+| `rateLimit.windowSeconds` | Required positive duration in seconds. |
+| `connectionStaleSeconds` | Required staleness interval from `30` through `3600` seconds. |
+
+Target lists must contain valid, nonduplicate wallet addresses, DRep IDs, pool IDs, asset fingerprints, or policy IDs. The notification network must match `--input-chainsync-network`. When a custom node is configured, its address and port must match `--input-chainsync-address`. The `notify-json` output requires the `chainsync` input.
+
+### `notify-json` output
+
+The `notify-json` output writes one JSON object per line to stdout. Each record uses schema version `1`. Status records report `starting`, `connected`, or `stale` states and include a timestamp and optional message. Notification records include the rendered `ruleId`, `title`, `body`, and `eventType`, plus the batching fields `batched` and `count`.
+
+ 
+
 ***
 ## Version:
 
