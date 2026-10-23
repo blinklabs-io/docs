@@ -126,7 +126,7 @@ description: Lista de Comandos de Adder.
   --input-chainsync-intersect-point string
 ```
 
-> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'
+> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'. Adder recorta los espacios en blanco que rodean cada entrada e ignora las entradas vacías. Si después de recortar y eliminar las entradas vacías no queda ningún punto, Adder usa el comportamiento configurado en `--input-chainsync-intersect-tip`. Adder rechaza con un error las entradas no vacías que no cumplen el formato '<slot>.<hash>'.
 >
 <br />
 
