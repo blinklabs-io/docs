@@ -545,7 +545,13 @@ cardano-cli dijkstra stake-address registration-certificate \
 
 **Pool registration certificate:**
 
-Replace `<YOUR_PUBLIC_IP>` with your node's public IP (the address other nodes will use to reach it). The metadata URL comes from the `METADATA_URL` you set in Step 8. The values below set a pledge of 1,000 test ada, a fixed cost of 170 test ada and a 5% margin.
+Set `RELAY_IP` to your node's public IPv4 address, the one other nodes use to reach it. The metadata URL comes from the `METADATA_URL` you set in Step 8.
+
+```
+RELAY_IP=YOUR_PUBLIC_IP
+```
+
+Then build the certificate. The values below set a pledge of 1,000 test ada, a fixed cost of 170 test ada and a 5% margin.
 
 ```
 cardano-cli dijkstra stake-pool registration-certificate \
@@ -557,7 +563,7 @@ cardano-cli dijkstra stake-pool registration-certificate \
   --pool-margin 0.05 \
   --pool-reward-account-verification-key-file stake.vkey \
   --pool-owner-stake-verification-key-file stake.vkey \
-  --pool-relay-ipv4 <YOUR_PUBLIC_IP> \
+  --pool-relay-ipv4 "$RELAY_IP" \
   --pool-relay-port 3010 \
   --metadata-url "$METADATA_URL" \
   --metadata-hash $(cat poolMetaDataHash.txt) \
@@ -802,7 +808,13 @@ cardano-cli dijkstra node key-gen-BLS \
   --signing-key-file bls-new.skey
 ```
 
-Build the new registration certificate with the same values as in Step 9:
+Build the new registration certificate with the same values as in Step 9. In a new shell, set `RELAY_IP` and `METADATA_URL` again first:
+
+```
+RELAY_IP=YOUR_PUBLIC_IP
+METADATA_URL=https://YOUR_GITHUB_USERNAME.github.io/pool/meta.json
+```
+
 
 ```
 cardano-cli dijkstra stake-pool registration-certificate \
@@ -814,7 +826,7 @@ cardano-cli dijkstra stake-pool registration-certificate \
   --pool-margin 0.05 \
   --pool-reward-account-verification-key-file stake.vkey \
   --pool-owner-stake-verification-key-file stake.vkey \
-  --pool-relay-ipv4 <YOUR_PUBLIC_IP> \
+  --pool-relay-ipv4 "$RELAY_IP" \
   --pool-relay-port 3010 \
   --metadata-url "$METADATA_URL" \
   --metadata-hash $(cat poolMetaDataHash.txt) \
