@@ -154,13 +154,13 @@ The downloaded topology connects to the Musashi bootstrap relay and uses `peer-s
 You can also add relays of other Musashi pools as local roots. Find them on the <a href="https://kleioscan.com/#/musashi/pools" target="_blank">Kleioscan Musashi pools</a> page:
 
 <img src="/dingo-kleio-explorer-pools.png"
-     alt="dingo-kleio-explorer-pools"
+     alt="Musashi pools listed on Kleioscan"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 Click on some of your SPO friends and copy 📝 their public IPs and ports:
 
 <img src="/dingo-kleio-explorer-pool-relay-example.png"
-     alt="dingo-kleio-explorer-pool-relay-example"
+     alt="A Musashi pool's relays on Kleioscan"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 Then add them to the `localRoots` section of `topology.json`:
