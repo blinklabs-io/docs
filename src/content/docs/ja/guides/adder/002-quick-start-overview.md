@@ -15,7 +15,7 @@ Adderは、Cardanoブロックチェーンをテーリングし、ユーザー�
 
 以下の手順に従って始めましょう
 
-## ステップ1 - BlinklabsからExeをダウンロード
+## ステップ1 - BlinklabsからMSIインストーラーをダウンロード
 
 まず、<a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a>にアクセスし、Adderまでスクロールします
 
@@ -23,13 +23,13 @@ Adderは、Cardanoブロックチェーンをテーリングし、ユーザー�
 
 ## ステップ2 - オペレーティングシステムを選択
 
-この例では、Windows x64を選択しました。お使いのオペレーティングシステムを選択してください。
+この例では、Windows x64のMSIインストーラーを選択しました。お使いのオペレーティングシステムに対応するインストーラーを選択してください。
 
 ![adder-operating-system](/adder-operating-system.png)
 
-## ステップ3 - 実行ファイルをダウンロード
+## ステップ3 - MSIインストーラーを開く
 
-実行ファイルをお好みの場所またはパスにダウンロードします。
+ダウンロードした`.msi`ファイルを開いてAdderをインストールします。インストールと起動の手順は、[Windowsでの使用ガイド](003-using-adder-on-windows)を参照してください。
 
 ![adder-download](/adder-download.png)
 
