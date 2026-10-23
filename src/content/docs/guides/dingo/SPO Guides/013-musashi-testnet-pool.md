@@ -379,7 +379,11 @@ Show your payment address and copy it:
 cat payment.addr; echo
 ```
 
-Go to the <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">Musashi faucet</a>, paste your address into the first form, and submit. The faucet sends 10,000 test ada, which covers the 500 ada pool deposit, the 2 ada stake address deposit, the pledge and the fees.
+Go to the <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">Musashi faucet</a>, paste your address into the first form (`address`), tick its reCAPTCHA box, and submit. The faucet sends 10,000 test ada, which covers the 500 ada pool deposit, the 2 ada stake address deposit, the pledge and the fees.
+
+<img src="/dingo-musashi-faucet.png"
+     alt="Musashi faucet with the address form on top and the pool delegation form below"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 Confirm the test ada arrived. You should see one UTxO entry:
 
@@ -667,7 +671,7 @@ Get your pool ID in bech32 format (`pool1…`):
 cardano-cli dijkstra stake-pool id --output-bech32 --cold-verification-key-file cold.vkey
 ```
 
-Go to the <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">Musashi faucet</a>, paste your pool ID into the second form (`pool`), and submit.
+Go to the <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">Musashi faucet</a>, paste your pool ID into the second form (`pool`, the lower form in the screenshot in Step 3), tick its reCAPTCHA box, and submit.
 
 ***
 
@@ -856,6 +860,22 @@ cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKe
 ```
 
 Switch Dingo to the new key only after `bksRegisteredIn` shows the new epoch **and** the following epoch boundary has passed. Then set `leiosVoteSigningKeyFile` in `/etc/dingo/dingo.yaml` to `bls-new.skey`, make it readable only by your user (`chmod 600`), and restart Dingo with `sudo systemctl restart dingo`.
+
+***
+
+<br>
+
+### Step 17 - Monitor Your Node
+
+Dingo serves Prometheus metrics on `127.0.0.1:12798`. To chart them, follow the [Grafana dashboards guide](/guides/dingo/spo-guides/008-grafana-dashboard/) and pick `musashi` in the dashboards' network selector.
+
+To check from the command line whether your pool is voting:
+
+```
+curl -s 127.0.0.1:12798/metrics | grep -E '^dingo_metrics_leios_(committee_size|votes_not_emitted)'
+```
+
+`dingo_metrics_leios_votes_not_emitted_total` counts the endorser blocks your node did not vote on, by reason. Until your BLS key is in the on-chain stake snapshot, the count rises under `reason="no_key"`.
 
 ***
 
