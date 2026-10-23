@@ -17,7 +17,7 @@ This guide splits the setup into two sections:
 
 ## Section 1 - Dingo Node Setup
 
-✅ This guide assumes a typical Linux setup. Please adjust commands and paths as needed.
+✅ This guide assumes a typical Linux setup with `systemd`, on an x86-64 (`amd64`) or ARM64 (`aarch64`) machine. Please adjust commands and paths as needed.
 
 ***
 
@@ -53,11 +53,22 @@ mkdir -p "$DINGO_HOME"
 
 Download the latest release from the <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingo releases</a> page.
 
-⚠️ Adjust the version and architecture to match your system.
+Set the architecture for the download. Dingo publishes Linux builds for `amd64` and `arm64`:
+
+```
+case "$(uname -m)" in
+  x86_64) DINGO_ARCH=amd64 ;;
+  aarch64|arm64) DINGO_ARCH=arm64 ;;
+  *) echo "Unsupported architecture: $(uname -m)" ;;
+esac
+echo $DINGO_ARCH
+```
+
+Then download and extract the release:
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary version by running:
@@ -84,7 +95,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 <br>
 
-### Step 3 -Download the Leios Cardano-CLI binary 
+### Step 3 - Download the Leios Cardano-CLI binary
 
 Make directory and move into it:
 ```
@@ -93,17 +104,19 @@ mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
 
 Musashi needs the `cardano-cli` from the Leios prototype release that matches the network. Find the network's version in the `MinNodeVersion` field of the Musashi <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>. For example, `11.1.0.164-prototype-2026w42` matches the `rc-2026w42` release on the <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leios releases</a> page.
 
-Set the release tag, then download the archive and its checksum:
+The Leios release names its Linux builds `x86_64` and `aarch64`. Set the release tag and your architecture, then download the archive and its checksum:
 
 ```
 LEIOS_RELEASE=rc-2026w42
-wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-x86_64-linux.tar.gz
-wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-x86_64-linux.sha256
-sha256sum -c cardano-node-leios-x86_64-linux.sha256
-tar -xzf cardano-node-leios-x86_64-linux.tar.gz
+LEIOS_ARCH=$(uname -m)
+[ "$LEIOS_ARCH" = arm64 ] && LEIOS_ARCH=aarch64
+wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
+wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.sha256
+sha256sum -c cardano-node-leios-$LEIOS_ARCH-linux.sha256
+tar -xzf cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
 ```
 
-> ✅ `sha256sum` should print `cardano-node-leios-x86_64-linux.tar.gz: OK`
+> ✅ `sha256sum` should print `cardano-node-leios-x86_64-linux.tar.gz: OK` (or `aarch64` on ARM64)
 
 ***
 
