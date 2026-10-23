@@ -270,8 +270,8 @@ description: Lista de Comandos de Adder.
   --output-notify-json-config string
 ```
 
-> especifica la ruta a una configuración JSON de notificaciones versionada. La opción de salida `notify-json` utiliza esta configuración.
-> La ruta es obligatoria cuando se usa `--output notify-json`.
+> especifica la ruta a la configuración JSON versionada de notificaciones que usa `notify-json`.
+> `--output notify-json` requiere esta ruta.
 <br />
 
 ```text
