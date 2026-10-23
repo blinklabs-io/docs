@@ -237,8 +237,6 @@ description: List of Adder Commands.
 
 ***
 
-## Logging:
-
 ## Output:
 
 ```
