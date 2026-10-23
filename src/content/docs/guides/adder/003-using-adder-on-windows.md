@@ -83,7 +83,7 @@ Add one or more values in the applicable target sections:
 
 Alternatively, use the exclusive `Monitor Everything` mode to monitor all supported target types instead of entering explicit target lists. Do not combine this mode with target values.
 
-Continue to the next step. Its notification choices reflect the target types selected here.
+Continue to the next step. Adder bases its notification choices on the target types entered here or on the `Monitor Everything` mode.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
