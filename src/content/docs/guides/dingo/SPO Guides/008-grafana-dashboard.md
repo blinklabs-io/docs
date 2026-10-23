@@ -82,7 +82,7 @@ sudo systemctl reload prometheus
 
 ### 3. Add the Prometheus datasource
 
-Grafana needs a Prometheus datasource marked as the default. Skip this step if you already have one.
+Grafana needs a Prometheus datasource marked as the default. Skip this step only if your existing Prometheus datasource is already the default; otherwise add this one, or turn on **Default** for yours in **Connections → Data sources**.
 
 ```bash
 sudo tee /etc/grafana/provisioning/datasources/prometheus.yaml >/dev/null <<'EOF'
@@ -156,7 +156,7 @@ sudo systemctl reload prometheus
 
 ## Datasource
 
-All dashboards reference their Prometheus datasource with UID `default`, Grafana's built-in alias for whichever datasource is marked as default. As long as your Prometheus datasource is the default (or your only one), the dashboards find it without any UID changes.
+All dashboards reference their Prometheus datasource with UID `default`, Grafana's built-in alias for whichever datasource is marked as default. As long as your Prometheus datasource is marked as the default, the dashboards find it without any UID changes.
 
 ## Template variables
 
