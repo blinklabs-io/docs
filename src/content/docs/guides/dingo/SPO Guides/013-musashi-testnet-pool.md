@@ -149,7 +149,7 @@ wget https://book.play.dev.cardano.org/environments-pre/leios/peer-snapshot.json
 
 The downloaded topology connects to the Musashi bootstrap relay and uses `peer-snapshot.json` to find more peers, which is enough to sync.
 
-> 💡 Tip: Cardano Configuration Files can be found at <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">https://book.play.dev.cardano.org/adv-musashi.html</a>
+> 💡 Tip: The Musashi configuration files are listed on the <a href="https://book.play.dev.cardano.org/adv-musashi.html" target="_blank">Musashi environment page</a>.
 
 **Optional: add peers you know**
 
@@ -376,7 +376,7 @@ cardano-cli dijkstra address build \
 Show your payment address and copy it:
 
 ```
-cat payment.addr
+cat payment.addr; echo
 ```
 
 Go to the <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" target="_blank">Musashi faucet</a>, paste your address into the first form, and submit. The faucet sends 10,000 test ada, which covers the 500 ada pool deposit, the 2 ada stake address deposit, the pledge and the fees.
@@ -515,7 +515,7 @@ Check that the hosted file has the same hash as your local file. The two command
 
 ```
 cardano-cli dijkstra stake-pool metadata-hash --pool-metadata-file <(curl -s -L "$METADATA_URL")
-cat poolMetaDataHash.txt
+cat poolMetaDataHash.txt; echo
 ```
 
 > ⚠️ Upload the file exactly as `cardano-cli` hashed it. Editing it on GitHub afterwards changes the hash, so it no longer matches the hash in your registration and wallets and explorers ignore your metadata.
@@ -705,7 +705,7 @@ cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKe
   ```
   jq -r .cborHex bls.vkey | cut -c5-
   ```
-- `bksRegisteredIn` is the epoch your key was registered in. Note it: the key expires a fixed number of epochs after it (see Step 16).
+- `bksRegisteredIn` is the epoch your registration takes effect in. `cardano-cli` reports this epoch because the node does not expose the epoch the key was registered in. Note it: the key expires a fixed number of epochs after it (see Step 16).
 
 ***
 
