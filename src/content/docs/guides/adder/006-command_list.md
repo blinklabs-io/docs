@@ -250,6 +250,15 @@ description: List of Adder Commands.
 <br />
 
 ```
+  --output-log-level string
+```
+  
+> sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The threshold also filters Adder application diagnostics on stderr, even when another output plugin is selected.
+>
+> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. The former `--logging-level` flag and top-level YAML `logging.level` setting are removed and rejected; the former `LOGGING_LEVEL` environment variable is removed and ignored.
+<br />
+
+```
   --output-log-format string
 ```
   
