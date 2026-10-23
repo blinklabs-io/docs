@@ -373,11 +373,11 @@ adder notifications validate --config <path> [--json]
 
 検証では、未対応のフィールド、未対応のアラートカテゴリ、複数のJSON値を拒否します。`monitor.everything`が`false`の場合は、少なくとも1つの監視対象を指定してください。少なくとも1つのアラートカテゴリを有効にし、各ウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDには有効な識別子を指定してください。監視対象の重複や無効なマッチモードも拒否します。
 
-`notify-json`は`chainsync`入力を使用します。設定の`network.name`は`--input-chainsync-network`と一致させてください。`network.customAddress`を指定する場合は、`customAddress`と`customPort`で構成されるノードアドレスを`--input-chainsync-address`のアドレスとポートに一致させてください。
+`notify-json`は`chainsync`入力を使用します。起動時に、設定の`network.name`を`--input-chainsync-network`と一致させてください。`network.customAddress`を指定する場合は、`customAddress`と`customPort`で構成されるノードアドレスを`--input-chainsync-address`のアドレスとポートに一致させてください。
 
 ### notify-json のNDJSON出力
 
-`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`と`timestamp`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、`eventType`、`title`、`body`と、バッチ処理の`batched`、`count`を含みます。
+`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`と`timestamp`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、`eventType`、`title`、`body`、およびバッチ処理の`batched`、`count`を含みます。
 
 ***
 
