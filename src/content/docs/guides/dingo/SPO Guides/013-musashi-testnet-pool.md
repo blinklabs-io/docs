@@ -429,7 +429,7 @@ cardano-cli dijkstra node key-gen-VRF \
 
 ### Step 5 - Create BLS Keys
 
-BLS keys are the keys pools use to vote on and certify Leios endorser blocks. The pool registration certificate in Step 10 cannot be built without one.
+BLS keys are the keys pools use to vote on and certify Leios endorser blocks. The pool registration certificate in Step 9 cannot be built without one.
 
 ```
 cardano-cli dijkstra node key-gen-BLS \
@@ -533,23 +533,7 @@ cat poolMetaDataHash.txt; echo
 
 <br>
 
-### Step 9 - Apply to the Rewards Program (Optional)
-
-If you want to take part in the <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">Musashi Testnet Rewards Program</a>, apply **before** you register your pool. The program requires your Application Code in the metadata of the same transaction as your pool registration certificate.
-
-Get your pool ID for the application form:
-
-```
-cardano-cli dijkstra stake-pool id --output-bech32 --cold-verification-key-file cold.vkey
-```
-
-After you apply, you receive your Application Code by email, together with the metadata to add to the registration transaction. Save that metadata as `rewards-metadata.json` in your `keys` folder, and use the Rewards Program variant of the build command in Step 10.
-
-***
-
-<br>
-
-### Step 10 - Register Stake Address and Pool
+### Step 9 - Register Stake Address and Pool
 
 Build both the stake address and pool certificates, then submit them in a single transaction.
 
@@ -599,8 +583,6 @@ cardano-cli dijkstra transaction build \
   --out-file pool-reg-tx.raw
 ```
 
-> 💡 **Rewards Program applicants:** add `--metadata-json-file rewards-metadata.json` to the build command above, so the Application Code is in the same transaction as the pool registration certificate.
-
 Sign the transaction:
 ```
 cardano-cli dijkstra transaction sign \
@@ -621,7 +603,7 @@ cardano-cli dijkstra transaction submit \
 
 <br>
 
-### Step 11 - Delegate Stake to Your Pool
+### Step 10 - Delegate Stake to Your Pool
 
 Your pledge only counts once your own stake is delegated to your pool. Build a delegation certificate and submit it in its own transaction.
 
@@ -666,7 +648,7 @@ cardano-cli dijkstra transaction submit \
 
 <br>
 
-### Step 12 - Request Delegation from the Faucet
+### Step 11 - Request Delegation from the Faucet
 
 A 1,000 ada pledge is too small for your pool to be selected to forge blocks. The faucet can delegate about 1,000,000 test ada to your pool.
 
@@ -682,7 +664,7 @@ Go to the <a href="https://faucet.leios.play.dev.cardano.org/basic-faucet" targe
 
 <br>
 
-### Step 13 - Verify Registration
+### Step 12 - Verify Registration
 
 Capture your pool ID and stake address:
 
@@ -714,13 +696,16 @@ cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKe
   ```
   jq -r .cborHex bls.vkey | cut -c5-
   ```
-- `bksRegisteredIn` is the epoch your registration takes effect in. `cardano-cli` reports this epoch because the node does not expose the epoch the key was registered in. Note it: the key expires a fixed number of epochs after it (see Step 16).
+- `bksRegisteredIn` is the epoch your registration takes effect in. `cardano-cli` reports this epoch because the node does not expose the epoch the key was registered in. Note it: the key expires a fixed number of epochs after it (see Step 15).
+
+
+> 💡 The <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">Musashi Testnet Rewards Program</a> no longer accepts new pools. Pools already in the program report telemetry with <a href="https://metsuke-leios.play.dev.cardano.org/" target="_blank">Metsuke</a>, an agent built for the Haskell cardano-node that reads the node's Prometheus endpoint and its trace lines.
 
 ***
 
 <br>
 
-### Step 14 - Configure Dingo as a Block Producer
+### Step 13 - Configure Dingo as a Block Producer
 
 Stop the Dingo node:
 ```
@@ -755,7 +740,7 @@ shelleyVrfKey: \"$DINGO_HOME/keys/vrf.skey\"
 shelleyKesKey: \"$DINGO_HOME/keys/kes.skey\"
 shelleyOperationalCertificate: \"$DINGO_HOME/keys/node.cert\"
 
-# Leios voting: the BLS key registered with your pool in Step 10
+# Leios voting: the BLS key registered with your pool in Step 9
 leiosVoteSigningKeyFile: \"$DINGO_HOME/keys/bls.skey\"
 EOF"
 ```
@@ -772,7 +757,7 @@ cat /etc/dingo/dingo.yaml
 
 <br>
 
-### Step 15 - Start Dingo and Check Status
+### Step 14 - Start Dingo and Check Status
 
 Start the Dingo node:
 
@@ -804,7 +789,7 @@ sudo journalctl -u dingo -n 50 --no-pager
 
 <br>
 
-### Step 16 - Rotate Your BLS Key
+### Step 15 - Rotate Your BLS Key
 
 BLS keys expire. A key is valid while the current epoch is less than `bksRegisteredIn` plus the network's maximum key age, which the testnet announces. After that, your pool keeps its committee seat but cannot vote.
 
@@ -819,7 +804,7 @@ cardano-cli dijkstra node key-gen-BLS \
   --signing-key-file bls-new.skey
 ```
 
-Build the new registration certificate with the same values as in Step 10:
+Build the new registration certificate with the same values as in Step 9:
 
 ```
 cardano-cli dijkstra stake-pool registration-certificate \
@@ -870,7 +855,7 @@ Switch Dingo to the new key only after `bksRegisteredIn` shows the new epoch **a
 
 <br>
 
-### Step 17 - Monitor Your Node
+### Step 16 - Monitor Your Node
 
 Dingo serves Prometheus metrics on `127.0.0.1:12798`. To chart them, follow the [Grafana dashboards guide](/guides/dingo/spo-guides/008-grafana-dashboard/) and pick `musashi` in the dashboards' network selector.
 
