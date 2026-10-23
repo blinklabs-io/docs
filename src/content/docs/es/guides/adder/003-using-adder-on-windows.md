@@ -17,7 +17,7 @@ La forma mas sencilla de instalar Adder en Windows es usar el instalador MSI dis
 
 Selecciona el instalador correspondiente al sistema: `Windows x64` o `Windows arm64`.
 
-### Paso 1.1 - Abrir el instalador MSI
+### Paso 1.1 - Abrir el archivo MSI
 
 Al finalizar la descarga, haz clic en `Open` para abrir el archivo `.msi`.
 
@@ -38,6 +38,8 @@ Abre el menu Inicio de Windows.
 Busca `Adder` y abre la aplicacion.
 
 ![adder-windows-search-adder-app](/adder-windows-search-adder-app.webp)
+
+Despues de iniciar Adder, la aplicacion aparece en la bandeja del sistema.
 
 > Si no aparece la pantalla de configuracion **Welcome**, abre la bandeja del sistema, haz clic derecho en Adder y selecciona **Configure** para abrir el asistente de configuracion.
 
