@@ -248,6 +248,8 @@ description: Lista de Comandos de Adder.
   --output string
 ```
 
+> plugin de salida que se va a usar; `list` muestra los disponibles (predeterminado "log"). `notify-json` escribe notificaciones en formato NDJSON.
+
 <br />
 
 ```text
@@ -269,6 +271,7 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica la ruta a una configuración JSON de notificaciones versionada. La opción de salida `notify-json` utiliza esta configuración.
+> La ruta es obligatoria cuando se usa `--output notify-json`.
 <br />
 
 ```text
@@ -362,6 +365,36 @@ description: Lista de Comandos de Adder.
 >
 > La opción `--json` emite un resultado de validación legible por máquinas.
 >
+> La salida normal informa si la configuración es válida y muestra los errores.
+>
+
+***
+
+### Configuración JSON de notificaciones:
+
+`notify-json` acepta una configuración JSON con los siguientes campos:
+
+- `schemaVersion`: versión del esquema; debe ser `1`.
+- `network.name`: nombre de red; admite `mainnet`, `preprod` o `preview`.
+- `network.customAddress` y `network.customPort`: par opcional para un nodo personalizado. Cuando se especifica `customAddress`, `customPort` debe estar entre `1` y `65535`; no se puede especificar `customPort` sin `customAddress`.
+- `monitor.everything`: indica si se supervisan todos los objetivos.
+- `monitor.wallets`, `monitor.dreps`, `monitor.pools`, `monitor.assets` y `monitor.policies`: listas opcionales de objetivos de wallets, DReps, pools, assets y políticas.
+- `monitor.drepMatch`, `monitor.poolMatch`, `monitor.assetMatch` y `monitor.policyMatch`: modos de coincidencia opcionales; cada valor debe ser `any` o `all`.
+- `alerts`: mapa de categorías habilitadas. Admite `incomingTransactions`, `outgoingTransactions`, `tokenTransfers`, `blocksMinted`, `chainRollbacks`, `poolParameterChanges`, `governanceProposals`, `votesCast`, `registrationChanges`, `assetActivity`, `policyActivity` y `connectionIssues`.
+- `rateLimit.max`: máximo de notificaciones; debe ser `-1` para deshabilitar el límite o un valor igual o mayor que cero.
+- `rateLimit.windowSeconds`: duración de la ventana del límite en segundos; debe ser mayor que cero.
+- `connectionStaleSeconds`: tiempo de espera de una conexión inactiva; debe estar entre `30` y `3600` segundos.
+
+La validación rechaza campos desconocidos y archivos con más de un valor JSON. La configuración debe usar `schemaVersion` `1`, incluir al menos un objetivo o activar `monitor.everything`, y activar al menos una categoría de `alerts`. Cada objetivo debe tener un identificador válido para su tipo: una dirección de wallet, un ID de DRep, un ID de pool, una huella de asset o un ID de política.
+
+Al iniciar, `notify-json` requiere la entrada `chainsync`. `network.name` debe coincidir con `--input-chainsync-network`. Si se configura un nodo personalizado, su dirección y puerto también deben coincidir con `--input-chainsync-address`.
+
+### Salida `notify-json`:
+
+`notify-json` escribe en la salida estándar un objeto JSON por línea. Cada registro usa la versión de esquema `1`.
+
+- Los registros `status` informan los estados `starting`, `connected` y `stale`, junto con la marca de tiempo y, cuando corresponde, un mensaje.
+- Los registros `notification` incluyen la notificación renderizada mediante `title` y `body`, además de `ruleId`, `eventType` cuando existe, `batched` y `count` para describir la agrupación.
 
 ***
 
