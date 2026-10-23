@@ -3,9 +3,7 @@ title: Set Up Musashi Testnet Pool
 description: SPO Guide for Dingo Pools - How to set up a Musashi Testnet Pool.
 ---
 
-In this guide, we will walk you through how to set up a Musashi testnet pool using the Dingo node.
-
-This guide splits the setup into two sections:
+This guide sets up a Musashi testnet stake pool on a Dingo node, in two sections:
 1. **Dingo Node Setup.**
 2. **Musashi Testnet Pool Registration.**
 
@@ -25,7 +23,7 @@ This guide splits the setup into two sections:
 
 ### Step 1 - Set Up Your Environment
 
-We will create a directory for all our files related to the pool setup, and set the variables `cardano-cli` uses to reach your node.
+Create a directory for your pool files, and set the variables `cardano-cli` uses to reach your node.
 
 Add the variables to your `.bashrc` and load them:
 
@@ -333,7 +331,7 @@ The commands in this section use the `dijkstra` era. Confirm the era with the `e
 
 ### Step 1 - Create `keys` Folder
 
-We will create a `keys` folder for all our pool keys and certificate files, and move into it. Back this folder up: these keys control your pool.
+Create a `keys` folder for your pool keys and certificate files, and move into it. Back this folder up: these keys control your pool.
 
 ```
 mkdir -p "$DINGO_HOME/keys" && cd "$DINGO_HOME/keys"
