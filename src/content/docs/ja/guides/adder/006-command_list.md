@@ -377,7 +377,7 @@ adder notifications validate --config <path> [--json]
 
 ### notify-json のNDJSON出力
 
-`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`と`timestamp`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、値がある場合のみ出力される`eventType`、`title`、`body`、およびバッチ処理の`batched`、`count`を含みます。
+`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`と`timestamp`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、`eventType`（値がある場合のみ出力）、`title`、`body`、およびバッチ処理の`batched`、`count`を含みます。
 
 ***
 
