@@ -70,15 +70,20 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 ***
 
 ### Step 3.2 - Add Your Monitoring Targets
-Enter the information that you would like to monitor. For example, Wallet Address, Policy ID, Asset Fingerprint, Pool ID, and/or DRep ID.
+Add one or more values in the applicable target sections:
 
-For this example, we will enter a Pool ID and a DRep ID that we want to follow. 
+- `Watch Wallet` for wallet addresses.
+- `Track DRep` for DRep IDs.
+- `Monitor Pool` for Pool IDs.
+- Use the optional `Follow Asset` section for asset fingerprints and the `Follow Policy` section for policy IDs when those target types are needed.
 
 <img src="/adder-windows-config-pool-id-drep-id.webp"
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Select `OR` to receive an alert if either the Pool or DRep performs an event you have selected to track.
+Alternatively, use the exclusive `Monitor Everything` mode to monitor all supported target types instead of entering explicit target lists. Do not combine this mode with target values.
+
+Continue to the next step. Its notification choices reflect the target types selected here.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
