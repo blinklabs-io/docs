@@ -578,7 +578,7 @@ Update the values below with your pool's information.
 📝 **description** cannot exceed 255 characters in length.
 
 ```
-cat > leios-pool-metadata.json << EOF
+cat > meta.json << EOF
 {
 "name": "MyPoolName",
 "description": "My pool description",
@@ -595,24 +595,39 @@ Calculate the hash of your metadata file. The hash is saved to `leiosPoolMetaDat
 
 ```
 cardano-cli dijkstra stake-pool metadata-hash \
---pool-metadata-file leios-pool-metadata.json \
+--pool-metadata-file meta.json \
 --out-file leiosPoolMetaDataHash.txt
 ```
 
 ***
 
-Upload `leios-pool-metadata.json` to a public website
+Host `meta.json` on GitHub Pages
 
-Upload your `leios-pool-metadata.json` file to a website that you administer or a public Web site. For example, you can upload your pool metadata to GitHub. <a href="https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node/part-v-tips/uploading-pool-metadata-to-github" target="_blank">See Coincashew guide here for uploading to GitHub.</a> 
+The metadata URL in your pool registration can be at most 128 characters long. If you already host metadata on your own website, set `METADATA_URL` to that URL in the check below and skip the GitHub steps. Otherwise, GitHub Pages hosts it for free:
+
+1. Sign in to <a href="https://github.com" target="_blank">GitHub</a> and create a new **public** repository named `pool`.
+2. In the repository, select **Add file** → **Upload files**, upload your `meta.json`, and commit it to the `main` branch.
+3. Open **Settings** → **Pages**. Under **Build and deployment**, set **Source** to **Deploy from a branch**, choose the `main` branch and the `/ (root)` folder, and select **Save**.
+4. After a minute or two, your metadata is served at `https://YOUR_GITHUB_USERNAME.github.io/pool/meta.json`.
+
+Check that the URL works and is no longer than 128 characters:
+
+```
+METADATA_URL=https://YOUR_GITHUB_USERNAME.github.io/pool/meta.json
+curl -s -L "$METADATA_URL"
+echo -n "$METADATA_URL" | wc -c
+```
+
+> ⚠️ Upload the file exactly as `cardano-cli` hashed it. Editing it on GitHub afterwards changes the hash, so it no longer matches the hash in your registration and wallets and explorers ignore your metadata.
 
 ***
 
 Verify the metadata hashes
 First retrieve the metadata hash from your metadata JSON URL.  
 
-- Replace <https://www.METADATA-URL.com> with your actual URL from above.
+- This uses the `METADATA_URL` you set above.
 ```
-cardano-cli dijkstra stake-pool metadata-hash --pool-metadata-file <(curl -s -L <https://www.METADATA-URL.com>)
+cardano-cli dijkstra stake-pool metadata-hash --pool-metadata-file <(curl -s -L "$METADATA_URL")
 ```
 
 Verify that this hash matches the value here:
@@ -638,9 +653,9 @@ cardano-cli dijkstra stake-address registration-certificate \
 
 **Pool registration certificate:**
 - Replace `<YOUR_PUBLIC_IP>` with your node's public IP (the address other nodes will use to reach it). 
-- Also replace <https://website.com/leios-pool-metadata.json> with your URL from above.
+- The metadata URL comes from the `METADATA_URL` you set in Step 9.
 
-After replacing `<YOUR_PUBLIC_IP>` and `<https://website.com/leios-pool-metadata.json>` run:
+After replacing `<YOUR_PUBLIC_IP>`, run:
 ```
 cardano-cli dijkstra stake-pool registration-certificate \
   --cold-verification-key-file cold.vkey \
@@ -653,7 +668,7 @@ cardano-cli dijkstra stake-pool registration-certificate \
   --pool-owner-stake-verification-key-file stake.vkey \
   --pool-relay-ipv4 <YOUR_PUBLIC_IP> \
   --pool-relay-port 3010 \
-  --metadata-url <https://website.com/leios-pool-metadata.json> \
+  --metadata-url "$METADATA_URL" \
   --metadata-hash $(cat leiosPoolMetaDataHash.txt) \
   --out-file pool-reg.cert
 ```
