@@ -73,7 +73,7 @@ description: Adderコマンドのリスト。
 > 4. `input.governance` -	ガバナンス関連のイベント（CIP-1694時代）。
 > 5. `input.drep-registration` - DRepの登録イベント。
 >
-> `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`で指定するカンマ区切りの項目は、前後の空白を取り除き、空の項目を無視します。
+> `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`で指定するカンマ区切りの各項目は、前後の空白を取り除き、空の項目を無視します。
 >
 
 ***
