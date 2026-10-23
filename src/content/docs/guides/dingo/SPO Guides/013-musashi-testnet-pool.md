@@ -505,6 +505,11 @@ The metadata URL in your pool registration can be at most 128 characters long. I
 1. Sign in to <a href="https://github.com" target="_blank">GitHub</a> and create a new **public** repository named `pool`.
 2. In the repository, select **Add file** → **Upload files**, upload your `meta.json`, and commit it to the `main` branch.
 3. Open **Settings** → **Pages**. Under **Build and deployment**, set **Source** to **Deploy from a branch**, choose the `main` branch and the `/ (root)` folder, and select **Save**.
+
+   <img src="/dingo-musashi-github-pages.png"
+        alt="GitHub Pages build and deployment settings with Deploy from a branch, main and / (root) selected"
+        style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
 4. After a minute or two, your metadata is served at `https://YOUR_GITHUB_USERNAME.github.io/pool/meta.json`.
 
 Set the URL and check that it works and is no longer than 128 characters:
