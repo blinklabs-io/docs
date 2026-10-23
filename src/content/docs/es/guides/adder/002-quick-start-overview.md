@@ -29,7 +29,7 @@ Para este ejemplo, seleccionamos Windows x64. Por favor selecciona tu sistema op
 
 ## Paso 3 - Descargar el instalador `.msi`
 
-Descarga el instalador `.msi` para Windows x64 en la ubicación que prefieras. Ábrelo para instalar Adder y consulta la [guía de instalación de Adder en Windows](./003-using-adder-on-windows) para completar la instalación y abrir Adder.
+Descarga el instalador `.msi` de Windows x64 en la ubicación que prefieras. Ábrelo para instalar Adder. Consulta la [guía de instalación de Adder en Windows](./003-using-adder-on-windows) para completar la instalación y abrir Adder.
 
 ![adder-download](/adder-download.png)
 
