@@ -391,9 +391,7 @@ Target lists must contain valid, nonduplicate wallet addresses, DRep IDs, pool I
 
 ### `notify-json` output
 
-The `notify-json` output writes one JSON object per line to stdout. Each record uses schema version `1`. Status records report `starting`, `connected`, or `stale` states and include a timestamp and optional message. Notification records include the rendered `ruleId`, `title`, `body`, and `eventType`, plus the batching fields `batched` and `count`.
-
- 
+The `notify-json` output writes one JSON object per line to stdout. Each record uses schema version `1`. Status records report `starting`, `connected`, or `stale` states and include a timestamp and optional message. Notification records include `ruleId`, optional `eventType`, rendered `title` and `body`, plus the batching fields `batched` and `count`.
 
 ***
 ## Version:
