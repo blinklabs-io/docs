@@ -233,17 +233,6 @@ description: Adderコマンドのリスト。
 
 ***
 
-## ロギング：
-
-```
-  --logging-level string
-```
-
-> ロギングレベル（debug、info、warn、error）（デフォルト"info"）
-<br />
-
-***
-
 ## 出力：
 
 ```
@@ -260,6 +249,17 @@ description: Adderコマンドのリスト。
 ```
 
 > 出力フォーマットを指定：text（人間が読める形式、デフォルト）またはjson（機械が解析可能）（デフォルト"text"）
+<br />
+
+```
+  --output-log-level string
+```
+
+> `output.log`のロギングしきい値を指定します。指定できる値は`debug`、`info`、`warn`、`error`で、既定値は`info`です。
+>
+> `debug`と`info`はイベントレコードを出力し、`warn`と`error`はイベントレコードを抑制します。このしきい値は、別の出力プラグインを選択した場合でも、標準エラー出力に表示するAdderの診断ログを制御します。
+>
+> YAMLでは`plugins.output.log.level`、環境変数では`OUTPUT_LOG_LEVEL`を指定します。旧top-level YAMLの`logging.level`と`LOGGING_LEVEL`は削除されました。旧`--logging-level`フラグと旧YAMLキーは拒否され、旧環境変数は無視されます。
 <br />
 
 ```
