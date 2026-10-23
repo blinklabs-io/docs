@@ -36,3 +36,14 @@ Adderは、Cardanoブロックチェーンをテーリングし、ユーザー�
 ### おめでとうございます！Adderを使用する準備ができました！
 
 これで、Adderの使い方とその素晴らしい機能を探索する準備ができました。Adderの使い方ガイドと例を参照して、Adderを探索してください。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

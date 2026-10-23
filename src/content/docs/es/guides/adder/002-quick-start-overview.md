@@ -36,3 +36,14 @@ Descarga el instalador `.msi` de Windows x64 en la ubicación que prefieras. Áb
 ### Felicitaciones, estas listo para comenzar a usar Adder!
 
 Ahora estas listo para explorar como usar Adder y sus increibles caracteristicas. Consulta nuestras guias de uso de Adder y ejemplos para explorar Adder.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
