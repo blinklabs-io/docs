@@ -22,6 +22,8 @@ description: Lista de Comandos de Adder.
 
 ## Filtro:
 
+> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder recorta los espacios en blanco que rodean cada entrada separada por comas e ignora las entradas vacías.
+
 ```text
   --filter-address string
 ```
