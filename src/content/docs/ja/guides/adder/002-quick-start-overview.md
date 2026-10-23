@@ -27,9 +27,9 @@ Adderは、Cardanoブロックチェーンをテーリングし、ユーザー�
 
 ![adder-operating-system](/adder-operating-system.png)
 
-## ステップ3 - MSIインストーラーを開く
+## ステップ3 - MSIインストーラーを開いてAdderをインストール
 
-ダウンロードした`.msi`ファイルを開いてAdderをインストールします。インストールと起動の手順は、[Windowsでの使用ガイド](003-using-adder-on-windows)を参照してください。
+ダウンロードした`.msi`ファイルを開き、`実行`を選択してAdderをインストールします。インストールと起動の手順は、[Windowsでの使用ガイド](003-using-adder-on-windows)を参照してください。
 
 ![adder-download](/adder-download.png)
 
