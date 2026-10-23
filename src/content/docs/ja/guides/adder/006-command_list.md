@@ -362,22 +362,22 @@ adder notifications validate --config <path> [--json]
 
 ### 通知JSON設定
 
-通知JSON設定は、次のフィールドを使用します。
+通知JSON設定は、次のフィールドで構成します。
 
 - `schemaVersion`：スキーマバージョン。`1`を指定します。
-- `network`：`name`に`mainnet`、`preprod`、または`preview`を指定します。カスタムノードを使用する場合は、`customAddress`と`customPort`をペアで指定します。`customPort`は`1`から`65535`までの値を指定します。
+- `network`：`name`に`mainnet`、`preprod`、または`preview`を指定します。カスタムノードを使用する場合は、`customAddress`と`customPort`を指定します。`customAddress`を指定する場合、`customPort`は`1`から`65535`までの値を指定します。`customPort`を指定する場合は、`customAddress`も指定します。
 - `monitor`：監視対象を指定します。`everything`を`true`にするとすべてを監視します。個別に指定する場合は、`wallets`、`dreps`、`pools`、`assets`、`policies`にそれぞれウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDを指定します。`drepMatch`、`poolMatch`、`assetMatch`、`policyMatch`には任意で`any`または`all`を指定します。
 - `alerts`：有効にするアラートカテゴリを指定します。対応するカテゴリは`incomingTransactions`、`outgoingTransactions`、`tokenTransfers`、`blocksMinted`、`chainRollbacks`、`poolParameterChanges`、`governanceProposals`、`votesCast`、`registrationChanges`、`assetActivity`、`policyActivity`、`connectionIssues`です。
 - `rateLimit`：通知のレート制限を指定します。`max`には`-1`（無効）または`0`以上の値を指定し、`windowSeconds`には`0`より大きい値を指定します。
 - `connectionStaleSeconds`：チェーンイベントがない状態を stale と判定する秒数を指定します。`30`から`3600`までの値を指定します。
 
-設定では、未対応のフィールドや複数のJSON値を拒否します。`monitor.everything`が`false`の場合は、少なくとも1つの監視対象を指定してください。少なくとも1つのアラートカテゴリを有効にし、各ウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDには有効な識別子を指定してください。監視対象の重複や無効なマッチモードも拒否します。
+検証では、未対応のフィールド、未対応のアラートカテゴリ、複数のJSON値を拒否します。`monitor.everything`が`false`の場合は、少なくとも1つの監視対象を指定してください。少なくとも1つのアラートカテゴリを有効にし、各ウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDには有効な識別子を指定してください。監視対象の重複や無効なマッチモードも拒否します。
 
 `notify-json`は`chainsync`入力を使用します。設定の`network.name`は`--input-chainsync-network`と一致させてください。`network.customAddress`を指定する場合は、`customAddress`と`customPort`で構成されるノードアドレスを`--input-chainsync-address`のアドレスとポートに一致させてください。
 
 ### notify-json のNDJSON出力
 
-`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、`eventType`、`title`、`body`と、バッチ処理の`batched`、`count`を含みます。
+`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`と`timestamp`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、`eventType`、`title`、`body`と、バッチ処理の`batched`、`count`を含みます。
 
 ***
 
