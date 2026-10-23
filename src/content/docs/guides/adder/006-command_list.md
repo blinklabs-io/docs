@@ -128,7 +128,9 @@ description: List of Adder Commands.
 >
 > Adder trims whitespace from each comma-separated entry and ignores empty entries.
 >
-> If the value contains only whitespace or empty entries after trimming, Adder follows the configured `--input-chainsync-intersect-tip` behavior. Adder reports malformed non-empty `<slot>.<hash>` entries as errors.
+> If the value contains only whitespace or empty entries after trimming, Adder follows the configured `--input-chainsync-intersect-tip` behavior.
+>
+> Adder treats malformed non-empty `<slot>.<hash>` entries as errors.
 >
 <br />
 
