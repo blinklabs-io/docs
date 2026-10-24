@@ -7,7 +7,7 @@ description: SPO Guide for Dingo Pools - Grafana Dashboards.
 
 Monitoring dashboards for [Dingo](https://github.com/blinklabs-io/dingo), the Go implementation of a Cardano node developed by Blink Labs.
 
-Additional dashboard documentation and resources are available in the Dingo repository: <a href="https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards" target="_blank">https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards</a>
+The dashboard files and their README are in the <a href="https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards" target="_blank">Dingo repository</a>.
 
 ## Dashboards
 
@@ -18,8 +18,6 @@ Additional dashboard documentation and resources are available in the Dingo repo
 | **Peer Health** | `peer-health.json` | Hot/warm/cold peers, connection types, peer state timeseries, promotions/demotions, network I/O |
 | **Mempool** | `mempool.json` | Pending TXs, mempool size, TX lifecycle, CBOR cache, event bus |
 | **Resource Usage** | `resources.json` | CPU, memory, GC heatmap, disk I/O, IOPS, PSI pressure, Badger, file descriptors |
-
-`full-panel.json` contains the standalone Business Text header panel for embedding into custom dashboards.
 
 ## Prerequisites
 
@@ -38,9 +36,11 @@ Before you begin, make sure you have:
 Open a terminal on the machine running Grafana and run:
 
 ```bash
-grafana-cli plugins install marcusolsson-dynamictext-panel
+sudo grafana cli --homepath /usr/share/grafana --pluginsDir /var/lib/grafana/plugins plugins install marcusolsson-dynamictext-panel
 sudo systemctl restart grafana-server
 ```
+
+The `--homepath` and `--pluginsDir` paths are the ones the Grafana `.deb` and `.rpm` packages use. Without them, Grafana 13 stops with `Could not find config defaults`.
 
 If you are running Grafana in Docker or Kubernetes, set the environment variable instead:
 
@@ -80,7 +80,26 @@ Then reload Prometheus to apply the change:
 sudo systemctl reload prometheus
 ```
 
-### 3. Import dashboards
+### 3. Add the Prometheus datasource
+
+Grafana needs a Prometheus datasource marked as the default. Skip this step only if your existing Prometheus datasource is already the default; otherwise add this one, or turn on **Default** for yours in **Connections → Data sources**.
+
+```bash
+sudo tee /etc/grafana/provisioning/datasources/prometheus.yaml >/dev/null <<'EOF'
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    url: http://localhost:9090
+    access: proxy
+    isDefault: true
+EOF
+sudo systemctl restart grafana-server
+```
+
+Change the `url` if Prometheus runs on another host or port.
+
+### 4. Import dashboards
 
 There are two ways to get the dashboards into Grafana.
 
@@ -89,9 +108,12 @@ There are two ways to get the dashboards into Grafana.
 Provisioning automatically loads dashboards from files on disk. Grafana will pick them up on startup or within about 30 seconds if already running.
 
 ```bash
-sudo cp https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards/provisioning.yaml /etc/grafana/provisioning/dashboards/dingo.yaml
+DASH_URL=https://raw.githubusercontent.com/blinklabs-io/dingo/main/docs/dashboards
 sudo mkdir -p /var/lib/grafana/dashboards/dingo
-sudo cp https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards/*.json /var/lib/grafana/dashboards/dingo/
+sudo curl -fsSL -o /etc/grafana/provisioning/dashboards/dingo.yaml "$DASH_URL/provisioning.yaml"
+for f in node-overview block-production peer-health mempool resources; do
+  sudo curl -fsSL -o "/var/lib/grafana/dashboards/dingo/$f.json" "$DASH_URL/$f.json"
+done
 sudo chown -R grafana:grafana /var/lib/grafana/dashboards/dingo/
 sudo systemctl restart grafana-server
 ```
@@ -105,16 +127,18 @@ After restarting, go to **Dashboards → Browse** in the Grafana UI and search f
 1. Open Grafana in your browser
 2. Go to **Dashboards → New → Import**
 3. Upload each JSON file
-4. Select your Prometheus datasource when prompted
 
-### 4. Alert rules (optional)
+The dashboards use your default Prometheus datasource automatically; see [Datasource](#datasource) below.
+
+### 5. Alert rules (optional)
 
 The alert rules file is ready to use as-is — no editing required.
 
 Copy the file to your Prometheus rules directory:
 
 ```bash
-sudo cp https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards/alerts.yaml /etc/prometheus/rules/dingo.yaml
+sudo mkdir -p /etc/prometheus/rules
+sudo curl -fsSL -o /etc/prometheus/rules/dingo.yaml https://raw.githubusercontent.com/blinklabs-io/dingo/main/docs/dashboards/alerts.yaml
 ```
 
 Then add it to `prometheus.yml`:
@@ -132,7 +156,7 @@ sudo systemctl reload prometheus
 
 ## Datasource
 
-All dashboards expect a Prometheus datasource with UID `prometheus`. If your datasource has a different UID, update it before importing or recreate the datasource with UID `prometheus`.
+All dashboards reference their Prometheus datasource with UID `default`, Grafana's built-in alias for whichever datasource is marked as default. As long as your Prometheus datasource is marked as the default, the dashboards find it without any UID changes.
 
 ## Template variables
 
@@ -170,6 +194,11 @@ Some metrics only emit when their feature is active. Panels display "No data" un
 | `dingo_metrics_blockForgingLatency_seconds_bucket` | Block is forged |
 | `cardano_node_metrics_remainingKESPeriods_int` | KES key is configured |
 | `dingo_forge_tip_gap_slots` | Forging is enabled |
+| `dingo_forge_opcert_counter_loaded` | Block producer credentials are loaded |
+| `dingo_forge_opcert_counter_onchain` | Block producer credentials are loaded; `NaN` until the ledger has applied a block carrying one of the pool's operational certificates |
+| `dingo_forge_slots_per_kes_period` | Block producer credentials are loaded |
+| `dingo_forge_credentials_valid` | Block producer credentials are loaded; 0 when they could not sign at the current slot |
+| `dingo_forge_missed_leader_slots_total` | Forging is enabled; counts leader slots without an adopted block of the node's own |
 | `dingo_database_size_bytes` | Database stores are initialized |
 | `database_blob_*` | Badger blob store is active |
 
@@ -182,10 +211,10 @@ https://github.com/blinklabs-io/dingo/tree/main/docs/dashboards
   peer-health.json         Peer Health dashboard
   mempool.json             Mempool dashboard
   resources.json           Resource Usage dashboard
-  full-panel.json          Business Text header panel (standalone)
   provisioning.yaml        Grafana provisioning config
   prometheus.yaml          Prometheus scrape config snippet
   alerts.yaml              Prometheus alert rules
+  alerts_test.yaml         promtool test cases for alerts.yaml
   README.md                Source for this page
 ```
 
@@ -197,8 +226,8 @@ Install the plugin (step 1 above) and restart Grafana. If running in a managed e
 **Panels show "No data"**
 Check that Prometheus is scraping your Dingo node: open Prometheus in the browser, go to **Status → Targets**, and confirm the `dingo` job is up. Also verify the `$network` and `$instance` template variables at the top of the dashboard are set to the correct values.
 
-**Datasource UID mismatch ("datasource not found")**
-All JSON files use the datasource UID `prometheus`. If your Prometheus datasource has a different UID, either rename it to `prometheus` in **Connections → Data sources**, or do a find-and-replace of `"prometheus"` with your actual UID in the JSON files before importing.
+**Datasource not found**
+The dashboards use whichever datasource is marked as default. In **Connections → Data sources**, open your Prometheus datasource and turn on **Default**.
 
 **Dashboards not appearing after provisioning**
 Confirm `/etc/grafana/provisioning/dashboards/dingo.yaml` references the correct path. Grafana auto-reloads provisioned dashboards every 30 seconds; if it hasn't appeared after a minute, check the Grafana log (`journalctl -u grafana-server`) for errors.
