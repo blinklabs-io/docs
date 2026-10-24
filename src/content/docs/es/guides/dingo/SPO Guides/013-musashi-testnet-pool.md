@@ -79,7 +79,7 @@ Después descarga y extrae la versión:
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.86.0/dingo-v0.86.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 Verifica la versión del binario y cópialo a `/usr/local/bin/` para que sea accesible a nivel de sistema:
