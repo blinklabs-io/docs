@@ -1,154 +1,107 @@
 ---
-title: Usando Dingo con Cardano CLI
-description: Dingo - Como usar Dingo con Cardano CLI.
+title: Usar Dingo con Cardano CLI
+description: Cómo utilizar Dingo con Cardano CLI.
 ---
 
-Dingo es un nodo de datos de la blockchain Cardano escrito en Go que participa activamente en las comunicaciones de red en la blockchain Cardano utilizando la familia de mini-protocolos Node-to-Node de la Red Ouroboros.
+Dingo es un nodo de la blockchain de Cardano escrito en Go que participa activamente en las comunicaciones de la red mediante la familia de miniprotocolos Ouroboros de nodo a nodo.
 
-⚠️ Este es un trabajo en progreso y actualmente esta en desarrollo activo
+⚠️ Dingo sigue en desarrollo intensivo.
 
-<br>
+Esta guía descarga y ejecuta el binario de Cardano CLI y muestra varios comandos para comunicarse con un nodo Dingo.
 
-***
+✅ Se presupone que ya descargaste Dingo y sincronizaste la cadena. Si no es así, consulta el [inicio rápido](../002-quick-start-overview).
 
-Esta guia descarga y ejecuta el binario de Cardano CLI, y muestra algunos comandos de Cardano CLI con un nodo Dingo.
+## Paso 1 - Descargar el último binario de Cardano CLI
 
-<br>
+Abre la página de [versiones de Cardano CLI](https://github.com/IntersectMBO/cardano-cli/releases). Puedes descargar el binario y moverlo a la ubicación que prefieras, o copiar su URL y ejecutar el siguiente comando.
 
-> ✅ Esta guia asume que ya has descargado Dingo y sincronizado la cadena. Si no, consulta la guia de [Inicio Rapido](../002-quick-start-overview).
+⚠️ Este ejemplo coloca `cardano-cli` en `~/dingo`. Ajusta la URL a la versión que quieras descargar.
 
-***
-
-<br>
-
-## Paso 1 - Descargar el ultimo binario de Cardano CLI
-
-Primero comienza yendo a la pagina del repositorio de Cardano CLI <a href="https://github.com/IntersectMBO/cardano-cli/releases" target="_blank">https://github.com/IntersectMBO/cardano-cli/releases</a>.
-
-Puedes descargar el archivo binario y mover el archivo a tu ubicacion preferida o...
-
-<br>
-
-Copia la ruta al ultimo archivo binario de Cardano CLI y ejecuta el siguiente comando para descargar el archivo binario.
-
-<br>
-
-⚠️ Este ejemplo pone el binario de Cardano-cli en la carpeta `dingo`. Ajusta la ruta del enlace a la ruta correcta para la version que deseas descargar.
-
-```bash
+```
 cd ~/dingo
 wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.0.0.0/cardano-cli-11.0.0.0-x86_64-linux.tar.gz -O - | tar -xz
 ```
 
-***
+## Paso 2 - Renombrar el binario y darle permisos de ejecución
 
-<br>
-
-## Paso 2 - Renombrar Archivo y Cambiar Permisos para Cardano CLI
-
-Este ejemplo nombra el archivo binario `cardano-cli`. Para renombrar el binario, ejecuta lo siguiente:
-
-⚠️ Ajusta la ruta del archivo y el nombre del archivo si es necesario.
+Haz ejecutable el archivo:
 
 ```
-mv cardano-cli-x86_64-linux cardano-cli
+chmod +x cardano-cli-x86_64-linux
 ```
 
-<br>
-
-Para hacer el archivo ejecutable ejecuta el siguiente comando:
+Renombra el binario a `cardano-cli` y muévelo a `/usr/local/bin/`. Ajusta la ruta y el nombre de archivo si es necesario.
 
 ```
-chmod +x cardano-cli
+sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 ```
 
-***
+### ¡Enhorabuena! Ya puedes utilizar cardano-cli con el nodo Dingo.
 
-<br>
+## Paso 3 - Consultar la punta mediante Cardano CLI
 
-#### Felicidades, ahora puedes usar cardano-cli para comunicarte con el nodo.
-
-<br>
-
-## Paso 3 - Ejecutar Comando de Cardano CLI para Consultar Tip
-Ejecuta un primer comando de Cardano CLI para consultar el tip de la blockchain preview, con el nodo Dingo como fuente de los datos.
-
-Ejecuta el siguiente comando para consultar el tip:
+Consulta la punta de Preview a través del nodo Dingo:
 
 ```
 ./cardano-cli query tip \
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
-> ⚠️ Ten en cuenta que el socket-path anterior asume que descargaste Cardano CLI en tu carpeta dingo. Si pusiste el binario de cardano-cli en una ubicacion diferente, por favor ajusta la ruta. Puedes usar `realpath dingo.socket` para encontrar la ruta absoluta a tu dingo.socket.
 
-![dingo-query-tip](/dingo-query-tip.png)
+⚠️ El `--socket-path` anterior presupone que descargaste cardano-cli en `~/dingo`. Ajusta la ruta si lo instalaste en otra ubicación. Puedes obtener la ruta absoluta de `dingo.socket` con `realpath dingo.socket`.
 
+![Consulta de la punta de Dingo](/dingo-query-tip.png)
 
-***
+## Paso 4 - Variables de entorno, opcional
 
-<br>
+Puedes utilizar variables de entorno en lugar de especificar la red Cardano y el socket del nodo en cada comando.
 
-## Paso 4 - Usando Variables de Entorno (Opcional)
-En lugar de especificar la Red del Nodo Cardano y el Socket del Nodo Cardano cada vez que ejecutas un comando de cardano-cli, puedes usar variables de entorno.
+### Opción 1 - Variables para la sesión actual
 
-<br>
-
-### Configurar Variables de Entorno para la Sesion Actual (Opcion 1)
-
-Ejecuta los siguientes comandos para exportar la variable para tu sesion actual.
-
-Ruta del Socket:
+Exporta la ruta del socket:
 
 ```
 export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket
 ```
 
-Red del Nodo:
+Red del nodo:
 
 ```
 export CARDANO_NODE_NETWORK_ID=2
 ```
 
-<br>
+### Opción 2 - Variables permanentes
 
-### Configurar Variables de Entorno Permanentemente (Opcion 2)
-Para hacer una variable de entorno persistente entre sesiones, necesitas agregarla al archivo de configuracion de tu shell.
+Añádelas al archivo de configuración del shell para conservarlas entre sesiones.
 
-Ruta del Socket:
+Ruta del socket:
 
-```bash
+```
 echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
-Red del Nodo:
+Red del nodo:
 
-```bash
+```
 echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 ```
 
-***
+💡 Estos son los identificadores de red actuales:
 
-<br>
-
-> 💡 Consejo: A continuacion se muestran los IDs de Red actuales
 > ```
-> # Testnet SanchoNet
+> # SanchoNet testnet
 > export CARDANO_NODE_NETWORK_ID=4
 >
-> # Testnet Preview
+> # Preview testnet
 > export CARDANO_NODE_NETWORK_ID=2
 >
-> # Testnet Pre-produccion
+> # Pre-production testnet
 > export CARDANO_NODE_NETWORK_ID=1
 >
 > # Mainnet
 > export CARDANO_NODE_NETWORK_ID=mainnet
 > ```
 
-***
+### ¡Enhorabuena! Ya puedes utilizar el nodo Dingo con Cardano CLI.
 
-<br>
-
-### ¡Felicidades, estas listo para comenzar a usar el nodo Dingo con Cardano CLI!
-Aprende mas sobre Cardano CLI en [https://developers.cardano.org](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/)
+Consulta más información en la [documentación de Cardano CLI](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/).

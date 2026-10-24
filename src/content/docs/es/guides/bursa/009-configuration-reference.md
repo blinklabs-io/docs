@@ -1,11 +1,11 @@
 ---
 title: Referencia de configuración de Bursa
-description: Configura el agente KES y la API heredada de Bursa.
+description: Referencia de YAML y variables de entorno para los firmantes, el agente KES y la seguridad de la API heredada de Bursa.
 ---
 
 ## Descripción general
 
-Esta guía describe la configuración de `bursa kes-agent` y de la API heredada de Bursa. Bursa lee un archivo YAML y después aplica las variables de entorno; las variables de entorno tienen prioridad sobre los valores YAML.
+Esta guía describe la configuración de los firmantes, de `bursa kes-agent` y de la API heredada de Bursa. `signer.backends` admite los backends `pkcs11`, `nitro` y `confidential-space`. Bursa lee un archivo YAML y después aplica las variables de entorno; las variables de entorno tienen prioridad sobre los valores YAML.
 
 La [guía de línea de comandos](../003-commands) incluye los comandos disponibles de Bursa.
 
@@ -14,25 +14,33 @@ La [guía de línea de comandos](../003-commands) incluye los comandos disponibl
 | Variable de entorno | Valor predeterminado | Comportamiento |
 | --- | --- | --- |
 | `BURSA_CONNECTOR` | `false` | Habilita el backend del conector de dApps. |
-| `BURSA_LEAN` | `false` | Establece el valor inicial de lean-node/history-expiry solo en la primera ejecución, cuando todavía no existe un valor persistido. Una preferencia ya persistida tiene prioridad y la variable no la sobrescribe después. |
+| `BURSA_LEAN` | `false` | Establece el valor inicial de lean-node/history-expiry solo en la primera ejecución, cuando todavía no existe un valor persistido. Si no se establece `BURSA_LEAN` o su valor no se interpreta como booleano, se utiliza `false`. Una preferencia ya persistida tiene prioridad y la variable no la sobrescribe después. |
 
 ## API de configuración de history expiry
 
 Bursa persiste el ajuste de lean-node/history-expiry. `history expiry` es una opción de construcción del nodo, por lo que Bursa requiere reiniciar el nodo para aplicar un valor persistido que todavía no use.
 
-`GET /wallet/settings/history-expiry` devuelve:
+```http
+GET /wallet/settings/history-expiry
+```
+
+Devuelve:
 
 ```text
 { "enabled": boolean, "restart_required": boolean }
 ```
 
-`PUT /wallet/settings/history-expiry` requiere este cuerpo JSON:
+```http
+PUT /wallet/settings/history-expiry
+```
+
+Requiere este cuerpo JSON:
 
 ```text
 { "enabled": boolean }
 ```
 
-El cliente debe enviar el campo obligatorio `enabled` como un booleano JSON. El JSON no válido o la ausencia de `enabled` producen HTTP `400`. Una actualización correcta persiste el valor y devuelve los mismos campos `enabled` y `restart_required`. `restart_required` es `true` cuando el valor persistido todavía no coincide con el valor aplicado al nodo en ejecución.
+El cliente debe enviar el campo obligatorio `enabled` como un booleano JSON. El JSON no válido o la ausencia de `enabled` producen HTTP `400`. Una actualización correcta persiste el valor y devuelve los mismos campos `enabled` y `restart_required`. `restart_required` es `true` cuando el valor persistido todavía no coincide con el valor aplicado al nodo en ejecución. La respuesta de actualización utiliza los mismos campos que `GET`.
 
 ## Almacenamiento de billeteras y cifrado
 
@@ -66,7 +74,7 @@ Una entrada de backend en `signer.backends` selecciona el backend mediante `type
 | `signer.backends[].root_ca_file` | Especifica el archivo PEM del certificado raíz de AWS Nitro Enclaves. | Para `nitro`, Bursa requiere el certificado raíz de AWS Nitro fijado por el firmante. |
 | `signer.backends[].pcrs` | Define los valores PCR esperados para `nitro`. | Para `nitro`, configura PCR0 (`0`) con un valor distinto de cero. |
 | `signer.backends[].audience` | Define la audiencia configurada para el token de atestación de `confidential-space`. | Bursa requiere este valor para `confidential-space`. |
-| `signer.backends[].image_digest` | Identifica la imagen de contenedor configurada para `confidential-space`. | Bursa requiere este valor con el formato `sha256:<64 hex>`. |
+| `signer.backends[].image_digest` | Identifica la imagen de contenedor configurada para `confidential-space`. | Bursa requiere este valor con el formato `sha256:` seguido de 64 caracteres hexadecimales. |
 | `signer.backends[].jwks_url` | Especifica el endpoint de las claves de firma de tokens de `confidential-space`. | Bursa usa las claves de firma de tokens publicadas por Google cuando no se establece este valor opcional. |
 
 ## Requisitos de compilación
@@ -96,6 +104,8 @@ Para un backend `software`/`file` configurado, Bursa rechaza el inicio cuando `s
 
 ## Almacenamiento de marcas de agua del firmante
 
+`signer.watermark` conserva las marcas de seguridad del firmante y los contadores de emisión de certificados operativos. `mem` los mantiene en memoria; `file` los guarda en SQLite, y `postgres` en PostgreSQL durable y compartido.
+
 El almacenamiento `postgres` guarda de forma duradera y compartida las marcas de agua y los contadores del firmante. Las réplicas que protegen las mismas claves frías deben usar la misma base de datos PostgreSQL autoritativa.
 
 | Ruta de configuración | Uso | Requisito |
@@ -123,7 +133,7 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?ss
 
 ### Modo del contador de certificados operativos
 
-`signer.watermark.mode` controla la protección del contador de emisión del certificado operativo (`opcert`) por clave fría. El valor predeterminado es `enforce`.
+`signer.watermark.mode` controla la protección del contador de emisión del certificado operativo (`opcert`) por clave fría. El ajuste `mode` utiliza `enforce` de forma predeterminada.
 
 | Valor | Comportamiento |
 | --- | --- |
@@ -137,17 +147,19 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?ss
 
 Con SQLite o PostgreSQL, `/readyz` verifica que el almacén esté disponible y acepte operaciones de escritura. Devuelve HTTP `200` cuando la comprobación tiene éxito y HTTP `503` cuando el almacén no está disponible o no permite escribir. El almacenamiento en memoria no tiene una dependencia externa, por lo que `/readyz` devuelve HTTP `200` en ese modo.
 
-## Archivo de configuración de `bursa kes-agent`
+## Archivo de configuración de `kes-agent`
 
 El indicador `--config` indica el archivo YAML:
 
 ```bash
-bursa kes-agent --config /ruta/a/bursa.yaml
+bursa kes-agent --config /etc/bursa/config.yaml
 ```
 
-Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CONFIG`. Una ruta vacía carga la configuración mediante variables de entorno.
+Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CONFIG`. Si ninguna fuente proporciona una ruta, Bursa carga las variables de entorno y los valores predeterminados sin archivo YAML. El comando valida los valores antes de abrir cualquiera de los sockets Unix.
 
 ## Configuración de `kes_agent`
+
+El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT_*` correspondiente. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
 
 | Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
@@ -165,7 +177,23 @@ Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CO
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | `1m` | Intervalo del planificador como cadena de duración de Go. El valor predeterminado es `1m`. |
 | `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida. La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
 
-El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia conserva el periodo KES autorizado más alto, lo restaura después de un reinicio y rechaza una reducción del periodo. Bursa no usa una alternativa en memoria para este guardia.
+La clave de verificación fría debe proceder de `cold_vkey_file` o `cold_vkey_hex` y resolver a 32 bytes. Antes del inicio también se requieren `system_start` en RFC3339, `slot_length` positivo, `slots_per_kes_period` distinto de cero y una ruta durable `guard_file`. El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia conserva el periodo KES autorizado más alto, lo restaura después de un reinicio y rechaza una reducción del periodo. Bursa no usa una alternativa en memoria para este guardia.
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  service_socket_mode: "0660"
+  control_socket_mode: "0600"
+  cold_vkey_file: /etc/bursa/pool-cold.vkey
+  system_start: "2022-03-31T00:00:00Z"
+  slot_length: 1
+  slots_per_kes_period: 129600
+  max_kes_evolutions: 62
+  evolve_interval: 1m
+  guard_file: /var/lib/bursa/kes-period.guard
+```
 
 ### Permisos de los sockets
 
@@ -182,9 +210,11 @@ El socket de control acepta comandos que pueden generar, instalar o eliminar cla
 | `kes_agent.socket_mode` | `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` |
 | `kes_agent.socket_mode` | `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` |
 
-El socket de servicio conserva la amplitud que necesita el productor, pero el socket de control usa un modo que no concede escritura al grupo ni a otros usuarios. La migración no puede ampliar el acceso de escritura del socket de control.
+La clave antigua ya no es válida. El socket de servicio conserva la amplitud que necesita el productor, pero el socket de control usa un modo que no concede escritura al grupo ni a otros usuarios. La migración no puede ampliar el acceso de escritura del socket de control.
 
 ## Configuración de la API heredada
+
+Configura la API bajo la clave YAML `api`.
 
 | Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
@@ -203,6 +233,19 @@ Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar 
 La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, la configuración debe incluir el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
 
 Cuando se configura cualquier backend de almacenamiento de billeteras, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un encabezado `Authorization: Bearer <JWT>` válido, y el sujeto del token debe coincidir con un sujeto de la lista de administradores.
+
+```yaml
+api:
+  address: 0.0.0.0
+  port: 8080
+  tls_cert_file: /run/secrets/bursa-api-cert.pem
+  tls_key_file: /run/secrets/bursa-api-key.pem
+  jwks_url: https://identity.example.com/.well-known/jwks.json
+  jwt_issuer: https://identity.example.com
+  jwt_audience: bursa-api
+```
+
+Mantén `api.jwt_secret` en el entorno o en un secreto de despliegue, nunca en un YAML versionado.
 
 ## Políticas de transacciones del firmante
 
@@ -234,6 +277,14 @@ Los valores aceptados de `allowed_voter_kinds` son:
 Establece `allowed_drep_ids` con ID de credencial hexadecimales para limitar los votantes DRep a las credenciales indicadas. Una lista de ID DRep también deniega los votantes que no tienen un ID de credencial DRep. Bursa acepta únicamente los tipos de certificado y de votante enumerados. Si Bursa no puede decodificar el tipo de operación o los detalles necesarios para una lista permitida activa, deniega la firma.
 
 ### Política de solicitudes del firmante
+
+```yaml
+signer:
+  keys:
+    - hash: "0000000000000000000000000000000000000000000000000000000000"
+      allowed_requests:
+        - opcert
+```
 
 `signer.keys[].allowed_requests` debe incluir `opcert` para autorizar solicitudes de firma de certificados operativos. Bursa deniega estas solicitudes cuando la política de la clave no incluye `opcert`:
 

@@ -1,86 +1,95 @@
 ---
-title: BlockPipeline と Block Fetch の制限
-description: BlockPipeline の結果所有権と Block Fetch の range 制限を説明します。
+title: BlockPipeline の所有権と Block Fetch の範囲制限
+description: 保持するブロックデータの上限を設定し、BlockPipeline の結果を解放して、Go で Block Fetch の範囲制限を処理します。
 ---
 
-このページでは、`BlockPipeline` の結果を管理する方法と、Block Fetch の `RequestRange` に適用される制限を説明します。
+このガイドでは、gOuroboros を組み込む際の 2 つのリソース契約を説明します。
 
-## BlockPipeline の結果所有権
+- `BlockPipeline` は、処理中の項目が保持する完全なブロック CBOR の合計量を制限します。
+- Block Fetch は、両端を含む各範囲のブロック数、エンコード済み応答のバイト数、全処理時間を制限します。
 
-`BlockPipeline` は、処理済みの `BlockItem` を `Results()` または `DrainResults()` で渡します。結果を受け取ると、その結果の `MaxRawCborBytes` 予算の予約は自動的に解放されます。結果を受け取らない間は、未配信の結果が予算を占有し続けるため、後続の `Submit` が待機することがあります。受け取った結果のデータは呼び出し側が所有するため、各 `BlockItem` の利用が終わったら `Release()` を呼び出して消去します。
+## BlockPipeline の結果の所有権
 
-`PipelineConfig.MaxRawCborBytes` と `WithMaxRawCborBytes` は、パイプラインが保持する完全なブロック CBOR コピーの合計バイト数を制限します。`MaxRawCborBytes` に `0` を指定すると、`DefaultMaxRawCborBytes` の `64 * 1024 * 1024`（64 MiB）を使用します。`Submit` は保持用の予算を確保してからブロックを受け入れ、1つのブロックの保持コピーが予算に収まらない場合は `ErrRawCborBudgetExceeded` を返します。
+`PipelineConfig.MaxRawCborBytes` は、送信から結果の受け渡しまでに保持する完全なブロック CBOR コピーの合計予算です。処理中の項目について、送信時の生データのコピーと、デコード済みブロックが保存する CBOR の両方を含みます。`DefaultMaxRawCborBytes` は既定値を `64 MiB` に設定し、`MaxRawCborBytes` が 0 の場合はこの既定値を使用します。
 
-結果は `Results()` から受け取るか、`DrainResults()` が返すスライスから取り出した時点で呼び出し側の所有になります。`RawCbor()` または `Block()` で必要なデータを読み取った後、同じ結果に対して `Release()` を呼び出します。
+`WithMaxRawCborBytes` で設定します。
 
 ```go
-for item := range p.Results() {
+blockPipeline := pipeline.NewBlockPipeline(
+	pipeline.WithMaxRawCborBytes(128 * 1024 * 1024),
+)
+```
+
+パイプラインは `Submit` 中に必要な保持バイト数を予約し、利用側が結果を受け取るまで計上し続けます。ブロックが設定した合計予算に収まらない場合、`Submit` は `pipeline.ErrRawCborBudgetExceeded` に一致するエラーを返します。`Results()` または `DrainResults()` から結果を受け取ると、予約は自動的に解放されます。未受信の結果は予算を占有し続けるため、受信するまで後続の送信がバックプレッシャーで待機する場合があります。受信した項目の処理後は `Release()` を呼び出し、利用側が所有するデータを消去してください。
+
+### すべての結果を処理して解放する
+
+`Results()` から受信した各項目、および `DrainResults()` が返す各項目の所有権は呼び出し元に移ります。`Release` を呼ぶ前に項目を処理してください。
+
+```go
+consume := func(item *pipeline.BlockItem) {
+	// Read or process all required fields before releasing the item.
 	raw := item.RawCbor()
 	block := item.Block()
-
-	// Process raw and decoded block data.
 	_ = raw
 	_ = block
 
 	item.Release()
 }
-```
 
-`Release()` は複数回呼び出しても安全ですが、各結果につき1回だけ呼び出す運用にします。`Release()` は保持していた raw CBOR と decoded block を消去するため、呼び出し後の `RawCbor()` と `Block()` は使用できません。
+for item := range blockPipeline.Results() {
+	consume(item)
+}
 
-## Block Fetch の range 制限
-
-`blockfetch.Config` は、`Client.RequestRange` で送信する1つの range に対して、ブロック数、エンコード済みバイト数、合計実行時間の3つを制限します。これらの制限は、range 全体に対して累積して適用されます。
-
-| 設定 | 単位 | `0` の場合のデフォルト | オプション |
-| --- | --- | --- | --- |
-| `MaxBlocksPerRange` | ブロック数 | `DefaultMaxBlocksPerRange`: `2,161` | `WithMaxBlocksPerRange` |
-| `MaxRangeBytes` | 完全なエンコード済み `MsgBlock` の累積バイト数 | `DefaultMaxRangeBytes`: `214,205,235` bytes | `WithMaxRangeBytes` |
-| `RangeTimeout` | range の合計有効期間 | `DefaultRangeTimeout`: `36 hours 3 minutes` | `WithRangeTimeout` |
-
-`MaxBlocksPerRange` は、1つの range で受け入れるブロックの累積数を制限します。`MaxRangeBytes` は、同じ range で受け入れる完全なエンコード済み `MsgBlock` の累積サイズを制限します。各 `MsgBlock` を受け入れる前に両方のカウンターを確認し、ブロックを配信してもカウンターをリセットしません。
-
-`RangeTimeout` は、range の受付が始まった時点から完了するまでの固定された合計期限です。ローカルの受付とキューへの追加を待つ時間も期限に含まれ、`MsgBlock` の進行によって期限を更新しません。設定値を `0` にすると、上表の安全なデフォルト値を選択します。既知の大きな range を扱う場合は、`WithMaxBlocksPerRange`、`WithMaxRangeBytes`、`WithRangeTimeout` で明示的に上限を引き上げます。
-
-### `ExpectedBytes` との違い
-
-`RangeRequest.ExpectedBytes` は、range 全体のシリアライズ済みサイズ（ヘッダーを含む）に対する呼び出し側の見積もりです。この値は、複数の処理中の request に対する `MaxInFlightBytes` の受付と、Block Fetch の ingress allowance を計算します。`ExpectedBytes` は、実際に受信したブロック数やエンコード済みバイト数を制限する値ではありません。
-
-そのため、`ExpectedBytes` による処理中 request の受付と、`MaxBlocksPerRange`、`MaxRangeBytes`、`RangeTimeout` による range 内の累積制限および合計期限は別々に適用されます。見積もりが小さくても、range は実際のブロック数、エンコード済みサイズ、経過時間の制限を超えられません。
-
-### range のエラー処理
-
-次のエラーは、`RequestRange` の range が完了できない理由を示します。
-
-| エラー | 発生条件 |
-| --- | --- |
-| `ErrRangeBlockLimit` | range の累積ブロック数が `MaxBlocksPerRange` を超えた。 |
-| `ErrRangeByteLimit` | range の累積エンコード済み `MsgBlock` バイト数が `MaxRangeBytes` を超えた。 |
-| `ErrRangeTimeout` | 受付から完了までの固定期限が経過した。 |
-
-`RequestRange` は、送信後に発生した終端エラーを戻り値として返しません。クライアントは、range ごとに `RangeDoneFunc` を1回呼び出し、コールバックの `error` 引数に成功時は `nil`、失敗時は終端エラーを渡します。範囲にブロックがない場合も `RangeDoneFunc` に `ErrNoBlocks` を渡しますが、これは通常の peer 応答です。
-
-エラーの種類を確認するには、`errors.Is` と同じエラー値を使用します。
-
-```go
-func rangeDone(ctx blockfetch.CallbackContext, err error) error {
-	if errors.Is(err, blockfetch.ErrRangeBlockLimit) {
-		// Handle a range that exceeded MaxBlocksPerRange.
-	}
-	if errors.Is(err, blockfetch.ErrRangeByteLimit) {
-		// Handle a range that exceeded MaxRangeBytes.
-	}
-	if errors.Is(err, blockfetch.ErrRangeTimeout) {
-		// Handle a range that exceeded RangeTimeout.
-	}
-	return nil
+for _, item := range blockPipeline.DrainResults() {
+	consume(item)
 }
 ```
 
-`ErrRangeBlockLimit`、`ErrRangeByteLimit`、`ErrRangeTimeout` が発生すると、クライアントはその終端エラーをプロトコルの `SendError` に渡し、該当する protocol を停止します。したがって、`RangeDoneFunc` はエラーを受け取りますが、同じ protocol はその後の range を処理しません。peer がプロトコルに違反した場合も、プロトコルエラーとして `SendError` が接続を停止します。
+`Release()` は冪等であり、繰り返し呼んでも安全です。項目の生データとデコード済みブロックデータを消去するため、解放後に `RawCbor()` や `Block()` を呼んではいけません。通常処理、後処理、終了処理のすべてで、処理してから解放する順序を守ってください。
 
-## 接続全体の読み取りバッファ会計
+## Block Fetch の範囲保護
 
-プロトコルがメッセージを消費した後も保持する読み取りバッファの容量を、接続全体の読み取りバッファ会計に含めます。この会計の動作は既存の接続管理に属し、新しい設定オプションではありません。
+Block Fetch は、両端を含む各範囲に 3 つの累積上限を適用します。`blockfetch.Config` のフィールドを直接設定するか、対応するオプション関数を使用します。
 
-詳細な API 仕様については、[gOuroboros の Go API ドキュメント](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)を参照してください。
+| 設定フィールド | オプション | 単位 | 0 の場合 |
+| --- | --- | --- | --- |
+| `MaxBlocksPerRange` | `WithMaxBlocksPerRange` | 範囲内のブロック数 | `2,161` ブロック |
+| `MaxRangeBytes` | `WithMaxRangeBytes` | 範囲内のエンコード済みバイト数の合計 | `214,205,235` バイト |
+| `RangeTimeout` | `WithRangeTimeout` | 範囲の全処理時間 | `36 hours 3 minutes`（36 時間 3 分） |
+
+`NewConfig` はこれらの既定値を適用します。フィールドまたはオプション引数に 0 を設定すると、対応する既定値を選択します。0 は保護を無効にしません。
+
+クライアントは、範囲内の完全なエンコード済み `MsgBlock` メッセージをすべて数えます。
+
+- `MaxBlocksPerRange` は、受け入れたブロックの累積数です。
+- `MaxRangeBytes` は、それらの完全な `MsgBlock` メッセージのエンコード済みバイト数の累積です。
+- `RangeTimeout` は、リクエストの受け入れ処理開始時に始まります。処理中の容量やリクエストのキュー投入を待つローカル時間も含み、ブロックの取得が進んでも期限は延長されません。
+
+カウンターは、個別の応答やバッチではなく、両端を含む範囲全体に適用されます。クライアントは各ブロックを渡す前に上限を確認し、範囲の終了処理時にも期限を確認します。
+
+### 範囲制限のエラー
+
+上限に達すると、クライアントは次の公開センチネルエラーのいずれかをラップします。
+
+- `blockfetch.ErrRangeBlockLimit`: `MaxBlocksPerRange` を超えた場合。
+- `blockfetch.ErrRangeByteLimit`: `MaxRangeBytes` を超えた場合。
+- `blockfetch.ErrRangeTimeout`: `RangeTimeout` を超えた場合。
+
+エラー文字列を比較せず、ラップされたエラーの一致確認を使用します。
+
+```go
+if errors.Is(err, blockfetch.ErrRangeTimeout) {
+	// Retry or discard the range according to application policy.
+}
+```
+
+`Client.RequestRange` は受け入れ時の失敗を直接返し、`RangeDoneFunc` は各範囲の終了時の失敗を `error` 引数で受け取ります。同期 API やその他のコールバック方式のリクエストは、通常の戻り値または完了コールバックで該当するエラーを通知します。範囲制限の失敗はプロトコルエラーを送信し、該当する Block Fetch プロトコルを終了するため、呼び出し元はそのプロトコル上の他のリクエストの終了エラーも処理する必要があります。
+
+### 範囲制限と処理中リクエストの受け入れ
+
+範囲保護は、`RangeRequest.ExpectedBytes` や `MaxInFlightBytes` を置き換えるものではありません。`ExpectedBytes` は、ヘッダーを含む範囲のシリアライズ後サイズについての呼び出し元の見積もりです。クライアントはこの見積もりを、未完了のパイプラインリクエストを `MaxInFlightBytes` の範囲内で受け入れ、要求する受信許容量を決めるために使用します。一方、範囲保護は、完全な `MsgBlock` 応答の実際のサイズと、1 つの範囲の実際の総所要時間を計測します。
+
+## 接続の読み取りバッファーの計上
+
+接続全体の読み取りバッファーの計上は、受け渡しとコンパクションを通して各 `bytes.Buffer` が保持する容量に従います。メッセージの消費後に残る容量も、計上から除外されずに含まれます。新しいオプションは追加されず、関係のない設定を変更する必要もありません。

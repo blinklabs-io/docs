@@ -7,12 +7,16 @@ description: Cardanoで使用される暗号ハッシュを生成するための
 
 Cardanoで使用される暗号ハッシュを生成するためのBursaコマンドラインガイド。
 
+<a id="create-hashes-for-metadata-files-or-anchor-data"></a>
+
 ## メタデータファイルやアンカーデータのハッシュを作成
 Bursaを使用して、Cardanoのガバナンスやステークプール運用でよく使われるメタデータまたはanchor-dataのハッシュを作成できます。
 
 > **ハッシュの種類:**
 > - metadata - プール/DRepメタデータJSONのBlake2b-256ハッシュ <br>
 > - anchor-data - アンカーデータ(憲法、ガバナンス提案)のBlake2b-256ハッシュ
+
+<a id="metadata"></a>
 
 #### メタデータ
 hash metadataコマンドは、プールおよびDRepメタデータの登録に使用されます。
@@ -23,9 +27,11 @@ hash metadataコマンドは、プールおよびDRepメタデータの登録に
   - drep: DRep登録メタデータ
 
 **プールメタデータコマンドの例**
-```bash
+```
 ./bursa hash metadata pool-metadata.json
 ```
+
+<a id="anchor-data"></a>
 
 #### アンカーデータ
 hash anchor-dataコマンドは、Cardanoガバナンスで使用されるアンカーデータのBlake2b-256ハッシュを生成するために使用されます。
@@ -33,7 +39,7 @@ hash anchor-dataコマンドは、Cardanoガバナンスで使用されるアン
 たとえば、憲法、ガバナンス提案、その他のオンチェーンガバナンスアクションにアンカーされるドキュメント用のアンカーデータハッシュを作成したい場合があります。
 
 **anchor-dataコマンドの例**
-```bash
+```
 ./bursa hash anchor-data --file-text constitution.txt
 ```
 

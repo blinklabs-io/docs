@@ -1,32 +1,38 @@
 ---
-title: コマンドリファレンスガイド
-description: Adderコマンドのリスト。
+title: "コマンドリファレンスガイド"
+description: "Adderコマンドの一覧です。"
 ---
 
-# <ins>コマンドリスト：</ins>
+<a id="list-of-commands"></a>
+
+# <ins>コマンド一覧:</ins>
 
 <br />
 
-## 設定：
+<a id="configuration"></a>
+
+## 設定:
 
 
 ```
  --config string
 ```
 
-> 読み込む設定ファイルのパス
+> ファイルの読み込みにコンフィグする
 
-> 同じ設定が複数の方法で指定された場合、Adder は次の優先順位で適用します: CLI フラグ > YAML 設定ファイル > 環境変数。
+> 複数のメソッドで同じ設定が提供される場合、Adder はこの優先オーダーを使います: CLI フラグ > YAML 設定ファイル > 環境変数。
 
 ***
 
-## フィルター：
+<a id="filter"></a>
+
+## フィルター:
 
 ```
   --filter-address string
 ```
 
-> フィルタリングするアドレスを指定
+> フィルタリングするアドレスを指定する
 <br />
 
 
@@ -34,7 +40,7 @@ description: Adderコマンドのリスト。
   --filter-asset string
 ```
 
-> フィルタリングするアセットフィンガープリント（asset1xxx）を指定
+> アセットフィンガープリント(asset1xxx)をフィルタリングする
 <br />
 
 
@@ -42,7 +48,7 @@ description: Adderコマンドのリスト。
   --filter-drep string
 ```
 
-> フィルタリングするDRep ID（複数可、カンマ区切り、hexまたはbech32）を指定
+> DRep ID(s)をフィルタリングするように指定します(コンマ区切り、16 進数または bech32)
 <br />
 
 
@@ -50,45 +56,49 @@ description: Adderコマンドのリスト。
   --filter-policy string
 ```
 
-> フィルタリングするアセットポリシーIDを指定
+> アセットポリシー ID をフィルタリングするように指定する
 <br />
 
 ```
   --filter-pool string
 ```
 
-> フィルタリングするプールIDを指定
+> フィルタリングするプール ID を指定する
 <br />
 
 ```
   --filter-type string
 ```
 
-> フィルタリングするイベントタイプを指定
+> フィルタリングするイベントタイプを指定する
 >
-> **イベントタイプ：**
-> 1. `input.block` - 新しいブロックが観測された。
-> 2. `input.rollback` -	以前のチェーンポイントへのロールバックが発生した。
-> 3. `input.transaction` -	ブロック内でトランザクションが確認された。
-> 4. `input.governance` -	ガバナンス関連のイベント（CIP-1694時代）。
-> 5. `input.drep-registration` - DRepの登録イベント。
+> `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`、Adderはコンマ区切りのエントリーから空白を囲んで、空のエントリを無視します。
 >
->
+> **イベントの種類:**
+> 1. `input.block` - 新しいブロックが観察されました。
+> 2. `input.rollback` - 前のチェーン ポイントにロールバックが発生しました。
+> 3. `input.transaction` - トランザクションはブロックで見られた。
+> 4. `input.governance` - ガバナンス関連イベント(CIP-1694時代)。
+> 5. `input.drep-registration` - DRep登録が発生しました。
 
 ***
 
-## 入力：
+<a id="input"></a>
+
+## 入力:
 
 ```
   --input string
 ```
 
-> 使用する入力プラグイン、利用可能なものを表示するには'list'（デフォルト"chainsync"）
+> 使用するプラグインを入力します。'list' で利用可能な表示 (既定の "chainsync")
 >
-> **入力タイプ：**
-> 1. `chainsync` - NtC（node-to-client）またはNtN（node-to-node）のいずれかを使用してCardanoノードからブロックを同期する
-> 2. `mempool` - LocalTxMonitor（NtC）を介してCardanoノードのメンプールから未確認のトランザクションを読み取る
+> **入力タイプ:**
+> 1. `chainsync` - NtC(node-to-client)またはNtN(node-to-node)を使用したCardanoノードからブロックを同期
+> 2. `mempool` - LocalTxMonitor(NtC)を介してCardanoノードのmempoolから未確認のトランザクションを読み込む
 <br />
+
+<a id="input-chainsync"></a>
 
 ### input-chainsync:
 
@@ -96,72 +106,71 @@ description: Adderコマンドのリスト。
   --input-chainsync-address string
 ```
 
-> 接続するノードのTCPアドレスを'host:port'形式で指定
+> ノードの TCP アドレスを指定すると、フォーム 'host:port' に接続します。
 <br />
 
  ```
   --input-chainsync-auto-reconnect
 ```
 
-> 接続が切断された場合に自動再接続（デフォルトtrue）
+> 接続が壊れた場合の自動再接続(デフォルトtrue)
 <br />
 
 ```
   --input-chainsync-delay-confirmations uint
 ```
 
-> イベントを発行する前に必要な確認数
+> イベントを出す前に必要な確認件数
 <br />
 
 ```
   --input-chainsync-include-cbor
 ```
 
-> イベントにブロック/トランザクションの元のCBORを含める
+> イベントのブロック/トランザクションのためのオリジナルのCBORが含まれています
 <br />
 
 ```
   --input-chainsync-intersect-point string
 ```
 
-> '<slot>.<hash>'形式のチェーンポイントをカンマ区切りで指定して、その地点から同期を開始
+> '<slot>.<hash>' 形式で指定されたチェーンポイントで同期を開始します。
 >
-> 各項目の前後の空白を取り除き、空の項目を無視します。空白または空の項目だけの場合は、`--input-chainsync-intersect-tip`の設定に従います。空でない項目の形式が正しくない場合はエラーになります。
 <br />
 
 ```
   --input-chainsync-intersect-tip
 ```
 
-> チェーンの先端から同期を開始（デフォルトはチェーンジェネシス）（デフォルトtrue）
+> チェーンチップ(デフォルトはチェーンジェネシス)で同期を開始します(デフォルトはtrue)
 <br />
 
 ```
   --input-chainsync-network string
 ```
 
-> よく知られたCardanoネットワーク名を指定（デフォルト"mainnet"）
+> よく知られている Cardano ネットワーク名 (デフォルト "mainnet") を指定します。
 <br />
 
 ```
   --input-chainsync-network-magic uint
 ```
 
-> 使用するネットワークマジック値を指定、'network'を上書き
+> 使用するネットワークのマジック値を指定すると、'network' をオーバーライド
 <br />
 
 ```
   --input-chainsync-ntc-tcp
 ```
 
-> TCP経由でNtC（node-to-client）プロトコルを使用、socatなどを介してノードのUNIXソケットを公開する場合に使用
+> TCP 上で NtC (node-to-client) プロトコルを使用して、Socat または同様の方法でノードの UNIX ソケットを公開するときに使用します。
 <br />
 
 ```
   --input-chainsync-socket-path string
 ```
 
-> 接続するUNIXソケットのパスを指定
+> UNIX ソケットへのパスを指定すると、
 
 ***
 
@@ -173,201 +182,217 @@ description: Adderコマンドのリスト。
 <br />
 
 
+<a id="input-mempool"></a>
+
 ### input-mempool:
 
 ```
   --input-mempool-address string
 ```
 
-> TCPアドレス（host:port）；ntc-tcp=trueが必要
+> TCPアドレス(host:port)。 ntc-tcp=true が必要です。
 <br />
 
 ```
   --input-mempool-include-cbor
 ```
 
-> イベントにトランザクションのCBORを含める
+> イベントでトランザクションCBORを含める
 <br />
 
 ```
   --input-mempool-kupo-url string
 ```
 
-> トランザクション入力を解決するためのKupo APIのURL（例：http://localhost:1442）。Kupoは必要な出力をインデックスしている必要があります（例：`--match "*"`で実行）。そうでない場合、解決は空になります。
+> Kupo API URL はトランザクションの入力(例:http://localhost:1442)を解決します。Kupo は、必要な出力をインデックス化する必要があります(例: --match "*") で実行するか、解像度は空になります。
 <br />
 
 ```
   --input-mempool-network string
 ```
 
-> よく知られたCardanoネットワーク名（例：mainnet、preprod）（デフォルト"mainnet"）
+> よく知られている Cardano ネットワーク名 (例: mainnet, preprod) (既定の "mainnet")
 <br />
 
 ```
   --input-mempool-network-magic uint
 ```
 
-> ネットワークマジック値（ネットワーク名を上書き）
+> ネットワークの魔法の価値(ネットワーク名を上書き)
 <br />
 
 ```
   --input-mempool-ntc-tcp
 ```
 
-> TCP経由でNtCを使用（例：socat経由でソケットを公開する場合）
+> TCP 上で NtC を使う (例えば socat でソケットを露出するとき)
 <br />
 
 ```
   --input-mempool-poll-interval string
 ```
 
-> メンプールをポーリングする頻度（例：5s、1m）（デフォルト"5s"）
+> mempoolをポーリングする方法(例:5s、1m)(デフォルト「5s」)
 <br />
 
 ```
   --input-mempool-socket-path string
 ```
 
-> ノードのUNIXソケットへのパス（NtC）
+> ノードの UNIX ソケット (NtC) へのパス
 
 ***
 
-## ロギング：
+<a id="logging"></a>
+
+## ログ:
 
 ```
   --logging-level string
 ```
 
-> ロギングレベル（debug、info、warn、error）（デフォルト"info"）
+> ロギングレベル(デバッグ、情報、警告、エラー)(デフォルト「info」)
 <br />
 
 ***
 
-## 出力：
+<a id="output"></a>
+
+## 出力:
 
 ```
   --output string
 ```
 
-> 使用する出力プラグイン、利用可能なものを表示するには'list'（デフォルト"log"）
+> 利用するプラグインを出力します。'list' で利用可能な表示 (既定の "log")
 >
-> `notify-json`を指定すると、通知リクエストをNDJSONとして出力します。
 <br />
 
 ```
   --output-log-format string
 ```
 
-> 出力フォーマットを指定：text（人間が読める形式、デフォルト）またはjson（機械が解析可能）（デフォルト"text"）
+> 出力形式を指定します: テキスト (human-readable, default) または json (machine-parseable) (デフォルト "text")
 <br />
 
 ```
   --output-notify-json-config string
 ```
 
-> `notify-json`で使用するバージョン付き通知JSON設定ファイルのパスを指定
+> `notify-json`で使われるバージョン通知JSON設定へのパス
 <br />
 
 ```
   --output-notify-title string
 ```
 
-> 使用するタイトルを指定（デフォルト"Adder"）
+> 使用するタイトルを指定します (デフォルト "Adder")
 <br />
 
 ```
   --output-push-accessTokenUrl string
 ```
 
-> アクセストークンを取得するURLを指定（デフォルト`https://www.googleapis.com/auth/firebase.messaging`）
+> アクセストークンを取得する URL を指定します (デフォルト `https://www.googleapis.com/auth/firebase.messaging`)
 <br />
 
 ```
   --output-push-serviceAccountFilePath string
 ```
 
+> サービスアカウントファイルへのパスを指定します。この値は、`--output push` を使用した場合、非空でなければなりません。
+>
+> サービスアカウント JSON には、`project_id` を非空の文字列として含まなければなりません。 欠損、非文字列、または空の `project_id` 値が起動/構成障害を引き起こします。
+>
 <br />
 
 ```
   --output-telegram-bot-token string
 ```
 
-> Telegram Bot APIトークン（@BotFatherから取得）
+> Telegram Bot APIトークン(@BotFatherから)
 <br />
 
 ```
   --output-telegram-chat-id string
 ```
 
-> メッセージを送信するTelegramチャットID（ユーザー、グループ、またはチャンネル）
+> チャット ID をTelegramで送信(ユーザー、グループ、またはチャネル)
 <br />
 
 ```
   --output-telegram-disable-preview
 ```
 
-> メッセージ内のリンクプレビューを無効化
+> メッセージのリンクプレビューを無効にする
 <br />
 
 ```
   --output-telegram-parse-mode string
 ```
 
-> メッセージのパースモード（HTML、Markdown、MarkdownV2）（デフォルト"HTML"）
+> メッセージ解析モード(HTML、Markdown、MarkdownV2)(デフォルト「HTML」)
 <br />
 
 ```
   --output-webhook-format string
 ```
 
-> 使用するWebhookペイロード形式を指定（デフォルト"adder"）
+> 使用するWebhookペイロード形式を指定します(デフォルト "adder")
 <br />
 
 ```
   --output-webhook-password string
 ```
 
-> Basic認証のパスワードを指定
+> 基本的なauthのパスワードを指定する
 <br />
 
 ```
   --output-webhook-tls-skip-verify
 ```
 
-> TLS検証をスキップ（自己署名証明書用）
+> tls の検証をスキップします(自己署名されたcertsのために)
 <br />
 
 ```
   --output-webhook-url string
 ```
 
-> 使用するURLを指定（デフォルト`http://localhost:3000`）
+> 使用する URL を指定します (デフォルト `http://localhost:3000`)
 <br />
 
 ```
   --output-webhook-username string
 ```
 
-> Basic認証のユーザー名を指定
+> 基本的なauthのユーザー名を指定する
 
 ***
 
-## 通知：
+<a id="notifications"></a>
+
+## 通知:
 
 ```
 adder notifications validate --config <path> [--json]
 ```
 
+> 通知 JSON の設定を検証する
+>
+> `--config <path>`が必要です。通常の出力レポートの有効性とエラー。 `--json`は、機械で読みやすいバリデーション結果を出します。
+>
 
 ***
+<a id="version"></a>
 
-## バージョン：
+## バージョン:
 
 ```
   --version
 ```
 
-> バージョンを表示して終了
+> バージョンと終了の表示
 
 
 

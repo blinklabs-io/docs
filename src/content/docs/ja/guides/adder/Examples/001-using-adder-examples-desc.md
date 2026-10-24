@@ -1,51 +1,59 @@
 ---
-title: 例の概要
-description: 一般的なAdderフィルターとコマンドの概要。
+title: "使用例"
+description: "一般的なAdderフィルタとコマンドの概要。"
 ---
 
-# Adderの使用例
+使用例に進む前に、よく使うコマンドとフィルターを確認します。
 
-## 一般的なフィルターの概要
+> 💡 ヒント: `-h` または `--help` フラグを使用して、利用可能なすべてのコマンドのリストを得ることができます。
 
-いくつかの例を説明する前に、使用できる一般的なコマンドとフィルターについて説明します。
+<a id="filter-options"></a>
 
-> ヒント：`-h`または`-help`フラグを使用すると、利用可能なすべてのコマンドのリストを取得できます。
+### フィルター選択:
 
-### フィルターオプション：
+1. `--filter-type`(トランザクション、ブロック、ロールバック、およびガバナンスの4つのフィルタタイプがあります)
+   * [x] `--filter-type input.transaction`
+   * [x] `--filter-type input.rollback`
+   * [x] `--filter-type input.block`
+   * [x] `--filter-type input.governance`
+2. `--filter-policy xyz...`(ポリシーIDによるフィルタ)
+3. `--filter-asset asset1xyz...`(アセットIDによるフィルタ)
+4. `--filter-drep drepxyz...` (drep IDによるフィルタ)
+5. `--filter-address addr1xyz...`(ウォレットによるフィルタ受信アドレス)
+6. `--filter-address stake1xyz...`(stakeアドレスによるフィルタ)
+7. `--filter-pool poolxyz...`(ステークプールIDによるフィルタ)
 
-1. `-filter-type`（3つのフィルタータイプがあります：Transaction、Block、Rollback）
-   * [x] -filter-type chainsync.transaction
-   * [x] -filter-type chainsync.rollback
-   * [x] -filter-type chainsync.block
-2. `-filter-policy xyz...`（ポリシーIDでフィルター）
-3. `-filter-asset asset1xyz...`（アセットIDでフィルター）
-4. `-filter-address addr1xyz...`（ウォレット受取アドレスでフィルター）
-5. `-filter-address stake1xyz...`（ステークアドレスでフィルター）
-6. `-filter-pool poolxyz...`（ステークプールIDでフィルター）
+<a id="output-options"></a>
 
-### 出力オプション：
+### 出力オプション:
 
-1. -output log
-2. -output notify
-3. -output webhook
-4. -output push
+1. `--output log`
+2. `--output notify`
+3. `--output telegram`
+4. `--output webhook`
+5. `--output push`
 
-### ネットワーク変更
+<a id="change-network"></a>
 
-* -input-chainsync-network（3つのネットワークがあります：preview、preprod、mainnet）
-  * [x] -input-chainsync-network preview
-  * [x] -input-chainsync-network preprod
-  * [x] -input-chainsync-network mainnet
+### ネットワークの変更
+
+* `--input-chainsync-network`（preview、preprod、mainnet）
+  * [x] `--input-chainsync-network preview`
+  * [x] `--input-chainsync-network preprod`
+  * [x] `--input-chainsync-network mainnet`
 
 
-
-使用できるフィルターとコマンドの概要を確認したので、Adderのパワーに慣れるためにいくつかの例を見ていきましょう。
+Adderの力に精通させるためのいくつかの例を歩くと、使用できるフィルタとコマンドの種類の概要があります。
 
 1. [例1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - ウォレットを監視してデスクトップ通知を受け取る
 2. [例2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - トークンを監視してデスクトップ通知を受け取る
-3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPOを監視してDiscordでアラートを受け取る
-4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPO を監視して Discord 通知を受け取る
+4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセット ID のスマートコントラクトを監視してデスクトップ通知を受け取る
+5. [例5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - DRep を監視して Telegram 通知を受け取る
+6. [例 6](../007-example-6-watch-mempool-for-a-token) - 指定トークンを含むトランザクションをメモリプールで監視する
 
-## Go ライブラリのサンプル
+<a id="go-library-examples"></a>
 
-Go アプリケーション開発者向けの[ライブラリサンプル](/guides/adder/library-examples/overview/)では、イベント配信、フィルター、管理プラグインのソースコードをダウンロードできます（英語）。
+## Goライブラリ例
+
+アプリケーション開発者は、ダウンロード可能なイベントパブリッシャー、フィルタ、およびマネージドプラグインテンプレートの[Goライブラリ例](/ja/guides/adder/library-examples/overview/)を参照してください。

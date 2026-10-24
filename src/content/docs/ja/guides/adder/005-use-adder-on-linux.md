@@ -4,6 +4,8 @@ description: LinuxでAdderを使用する方法。
 ---
 
 
+<a id="download-adder-binary"></a>
+
 ## Adderバイナリをダウンロード
 
 最新のAdderリリースは、<a href="https://github.com/blinklabs-io/adder/releases" target="_blank">https://github.com/blinklabs-io/adder/releases</a>ページからダウンロードできます。
@@ -11,11 +13,13 @@ description: LinuxでAdderを使用する方法。
 以下のコマンドを実行してAdderバイナリをダウンロードします。ダウンロードリンクを最新バージョンに調整してください。
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0.39.1-linux-amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/blinklabs-io/adder/releases/download/v0.43.1/adder-v0.43.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
 ***
+
+<a id="run-adder-with-filters-and-commands"></a>
 
 ## フィルターとコマンドでAdderを実行
 
@@ -28,6 +32,8 @@ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0
 ![adder-linux-h-sample](/adder-linux-h-sample.png)
 
 ***
+
+<a id="congratulations"></a>
 
 ### おめでとうございます！
 

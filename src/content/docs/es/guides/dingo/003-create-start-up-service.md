@@ -1,109 +1,98 @@
 ---
-title: Crear Servicio de Inicio
-description: Crear Servicio de Inicio para Dingo.
+title: Crear un servicio de inicio
+description: Crear un servicio de inicio para Dingo.
 ---
 
 # Dingo
 
-Un nodo de datos de la blockchain Cardano escrito en Go que participa activamente en las comunicaciones de red en la blockchain Cardano utilizando la familia de mini-protocolos Node-to-Node de la Red Ouroboros.
+Dingo es un nodo de la blockchain de Cardano escrito en Go que participa activamente en las comunicaciones de la red mediante la familia de miniprotocolos Ouroboros de nodo a nodo.
 
-⚠️ Este es un trabajo en progreso y actualmente está en desarrollo activo
+⚠️ Dingo sigue en desarrollo intensivo.
 
-<br>
+Esta guía configura un servicio `systemd` que inicia automáticamente el nodo después de reiniciar el equipo para maximizar su tiempo de actividad.
 
-***
+✅ Se presupone una instalación Linux típica. Ajusta los comandos y las rutas según sea necesario.
 
-Esta guía configura un servicio `systemd`. Usar un servicio `systemd` para ejecutar un nodo Dingo maximiza el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia. Para comenzar, sigue los pasos a continuación.
+⚠️ Completa primero la [guía de inicio rápido](../002-quick-start-overview).
 
-<br>
+## Paso 1 - Mover el binario y la configuración
 
-✅ Esta guía asume una configuración típica de Linux. Por favor ajusta los comandos y rutas según sea necesario.
-
-> ✅ Para esta guía asumimos que ya has completado la guía de [inicio rápido](../002-quick-start-overview).
-
-***
-
-<br>
-
-## Paso 1 - Mover binario de Dingo y configuración
-
-Mueve el binario de Dingo a `/usr/local/bin/` y la configuración a `/etc/dingo/` para que sean accesibles a nivel de sistema.
-
-<br>
+Mueve el binario a `/usr/local/bin/` y la configuración a `/etc/dingo/` para que estén disponibles en todo el sistema.
 
 Copia el binario:
 
-```bash
+```
 sudo cp ~/dingo/dingo /usr/local/bin/
 ```
 
-> ✅ Puedes verificar que el binario fue copiado ejecutando `which dingo`
+✅ Compruébalo con `which dingo`.
 
-<br>
+Crea el directorio de configuración y copia el archivo:
 
-Crea el directorio de configuración y copia la configuración:
-
-```bash
+```
 sudo mkdir -p /etc/dingo
 sudo cp ~/dingo/dingo.yaml /etc/dingo/
 ```
 
-***
+## Paso 2 - Actualizar las rutas de dingo.yaml
 
-<br>
+El servicio se ejecuta con tu usuario, pero la configuración está ahora en `/etc/dingo/`, por lo que las rutas de la base de datos y del socket deben ser absolutas. Vuelve a generar la configuración expandiendo `$HOME`:
 
-## Paso 2 - Actualizar Rutas en dingo.yaml
-
-Como el servicio se ejecutará como tu usuario pero la configuración ahora está en `/etc/dingo/`, las rutas de la base de datos y el socket deben ser absolutas. Ejecuta lo siguiente para regenerar la configuración con tu `$HOME` expandido:
-
-```bash
+```
 sudo tee /etc/dingo/dingo.yaml > /dev/null <<EOF
+# Global data directory for both blob and metadata storage plugins.
+# Can be overridden with CARDANO_DATABASE_PATH or --data-dir.
 databasePath: "$HOME/dingo/.dingo"
 
+# Plugins
 plugins:
   storage:
     blob:
       provider: "badger"
       config:
-        # Directorio de datos opcional de Badger. Si no lo defines, databasePath aporta la ruta.
-        # dataDir: "$HOME/dingo/.dingo"
+        # Optional Badger data directory. When unset, databasePath applies.
+        dataDir: "$HOME/dingo/.dingo/badger"
+        blockCacheSize: 0
+        compression: false
+        gc: true
+        indexCacheSize: 0
     metadata:
       provider: "sqlite"
       config:
-        # Directorio de datos opcional de SQLite. Si no lo defines, databasePath aporta la ruta.
-        # dataDir: "$HOME/dingo/.dingo"
+        # Optional SQLite data directory. When unset, databasePath applies.
+        dataDir: "$HOME/dingo/.dingo/metadata.db"
   mempool:
     provider: "default"
     config:
-      # Capacidad del mempool en bytes. Mantén la línea comentada para usar el valor predeterminado del modo.
+      # capacity is an optional override, not a required setting.
+      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
+      # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
-      # revalidationDeltaCap es opcional.
-      # Su valor predeterminado es 64 y debe ser mayor que 0.
+      # revalidationDeltaCap is optional. Default: 64. The value must be positive.
       # revalidationDeltaCap: 64
   api:
     blockfrost:
       provider: "builtin"
       config:
-        port: 0
-        # El servidor integrado escucha en 127.0.0.1 por defecto.
-        # Establece este valor para sobrescribir el host específico del proveedor.
+        port: 3000
+        # Blockfrost uses this provider-specific host independently of bindAddr.
+        # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: "127.0.0.1"
-        # Las rutas de mutación requieren el token configurado; no incrustes secretos en este archivo de ejemplo.
-        authToken: ""
-        # La autenticación en un host que no sea loopback requiere TLS.
-        # tls: true
-        # Límite global de mutaciones simultáneas. Predeterminado: 4.
+        # Set authToken to protect transaction submission and evaluation mutations.
+        # authToken: ""
+        # Authenticated mutation access on a non-loopback host requires server TLS.
+        # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
-        # Límite de mutaciones simultáneas por cliente. Predeterminado: 1.
+        # Per-client concurrent mutation limit. Default: 1.
         maxConcurrentMutationsPerClient: 1
     mesh:
       provider: "builtin"
       config:
-        port: 0
+        port: 8080
     utxorpc:
       provider: "builtin"
       config:
-        port: 0
+        port: 9090
 
 # Mithril
 mithril:
@@ -111,70 +100,29 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # Mithril exige HTTPS y destinos públicos por defecto.
-  # true permite HTTP y destinos locales, privados o no públicos solo para desarrollo o pruebas locales; la configuración de producción mantiene este valor en false.
-  # CLI: --mithril-allow-insecure-http | Variable de entorno: DINGO_MITHRIL_ALLOW_INSECURE_HTTP
+  # CLI: --mithril-allow-insecure-http; environment: DINGO_MITHRIL_ALLOW_INSECURE_HTTP.
+  # When true, Dingo permits HTTP and local or private destinations for local development or testing only.
   allowInsecureHttp: false
-  # Mithril v2 solo acepta artefactos y redirecciones desde el origen configurado de aggregatorUrl
-  # o desde el origen oficial de Mithril en GCS: https://storage.googleapis.com.
-  # Dingo descarta ubicaciones duplicadas, limita a 4 las ubicaciones por componente y admite como máximo 100000 archivos inmutables.
-  # Dingo aplica un presupuesto agregado de solicitudes y bytes a las descargas, con un plazo total de 24 horas.
-  # Dingo limita la extracción por número de entradas y bytes expandidos, y reserva espacio libre en el sistema de archivos.
-  # Antes de extraer, Dingo verifica el manifiesto firmado del ancillary y sus rutas y hashes permitidos.
-  # Los archivos ledger solo proceden del ancillary firmado; los archivos inmutables no admiten árboles ledger.
-  # Identidad opcional del artefacto de Mithril para un arranque nuevo.
-  # En v1 es el digest de una instantánea; en v2 es el hash del artefacto de base de datos de Cardano.
-  # Dingo solo usa este valor para un arranque nuevo; no lo usa para una base de datos completa ni para cambiar una importación interrumpida.
-  # pinnedDigest: ""
-
-# Lifecycle de base de datos
-databaseLifecycle:
-  # Captura snapshots automáticos al cierre de cada epoch.
-  # Dingo no admite capturas automáticas cuando el proveedor principal de blobs es badger, s3 o gcs.
-  # Desactiva las capturas automáticas o usa un proveedor principal compatible.
-  # Default: false
-  # CLI: --db-snapshot-enabled
-  snapshotEnabled: false
-  # Directorio local donde Dingo escribe cada snapshot.
-  # Requerido cuando snapshotEnabled vale true.
-  # CLI: --db-snapshot-dir
-  snapshotDir: "$HOME/dingo/.dingo/snapshots"
-  # Destino opcional en la nube para reflejar cada snapshot.
-  # Usa s3://bucket/prefix o gcs://bucket/prefix.
-  # Requiere el build tag dingo_extra_plugins.
-  # CLI: --db-snapshot-cloud-destination
-  snapshotCloudDestination: ""
-  # Segmento adicional que Dingo agrega antes de cada ID de snapshot.
-  # CLI: --db-snapshot-cloud-destination-prefix
-  snapshotCloudDestinationPrefix: ""
-  # En Linux, usa un archivo de confianza de snapshots regular, no un enlace simbólico,
-  # de 1 KiB como máximo, propiedad del usuario de Dingo y sin acceso para el grupo ni para otros usuarios.
-  snapshotTrustKeyFile: "$HOME/dingo/.dingo/snapshot-trust-key"
-  # Número de snapshots automáticos recientes que Dingo conserva.
-  # 0 conserva todos.
-  # CLI: --db-snapshot-retention
-  snapshotRetention: 0
-  # Captura un snapshot automático cada N cierres de epoch.
-  # CLI: --db-snapshot-every-n-epochs
-  snapshotEveryNEpochs: 1
+  # Optional exact artifact identity for a fresh bootstrap:
+  # v1 snapshot digest or v2 Cardano database artifact hash.
+  # pinnedDigest: "<digest>"
 
 # Network
+# Health probes. CLI: --health-port; environment: DINGO_HEALTH_PORT.
+# Set healthPort to 0 to disable the health listener.
+healthPort: 12799
+# CLI: --health-ready-gap-slots; environment: DINGO_HEALTH_READY_GAP_SLOTS.
+healthReadyGapSlots: 1000
 bindAddr: "0.0.0.0"
 metricsPort: 12798
-# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
-# CLI: --max-ntc-conns | Variable de entorno: DINGO_MAX_NTC_CONNS
-maxNtCConns: 100
-# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
-# CLI: --max-ntc-connections-per-ip | Variable de entorno: DINGO_MAX_NTC_CONNECTIONS_PER_IP
-maxNtCConnectionsPerIP: 5
-# Puerto del listener de salud. 0 deshabilita el listener.
-# CLI: --health-port | Variable de entorno: DINGO_HEALTH_PORT
-healthPort: 12799
-# Brecha máxima del tip para indicar que el nodo está listo, en slots.
-# CLI: --health-ready-gap-slots | Variable de entorno: DINGO_HEALTH_READY_GAP_SLOTS
-healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
+# Total NtC admission limit. Default: 100. Non-positive values are ignored.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS.
+maxNtCConns: 100
+# Per-IP NtC admission limit. Default: 5. Non-positive values are ignored.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
+maxNtCConnectionsPerIP: 5
 privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
@@ -184,20 +132,47 @@ socketPath: "$HOME/dingo/dingo.socket"
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
+# Database lifecycle
+databaseLifecycle:
+  # Automatic database snapshots run at epoch boundaries.
+  # Do not enable automatic snapshots when the primary blob provider is "badger", "s3", or "gcs".
+  # Select a local primary blob provider instead.
+  # Default: false.
+  snapshotEnabled: false
+  # Dingo writes automatic snapshots to this local filesystem directory.
+  # Set this when snapshotEnabled is true and when Bark mounts the live service.
+  snapshotDir: "$HOME/dingo/snapshots"
+  # Optional snapshot trust key used by snapshot authentication operations.
+  # When set, this must be a regular, non-symlink file no larger than 1 KiB.
+  # Unix: the node user must own it, with no group or other permissions.
+  # Windows: the current user or BUILTIN\\Administrators must own it; the process
+  # must belong to Administrators when applicable, and the DACL must restrict access.
+  # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust-key"
+  # Keep only the most recent automatic snapshots.
+  # Default: 0.
+  snapshotRetention: 0
+  # Optional cloud mirror for snapshots.
+  # snapshotCloudDestination: ""
+  # snapshotCloudDestinationPrefix: ""
+  # Capture an automatic snapshot every N epoch closes.
+  # CLI: --db-snapshot-every-n-epochs
+  snapshotEveryNEpochs: 1
 EOF
 ```
 
-> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional e independiente y normalmente debe permanecer deshabilitado.
+📝 Mithril exige `HTTPS` de forma predeterminada y rechaza los destinos locales, privados o no públicos. El arranque Mithril v2 solo acepta orígenes de artefactos y redirecciones del agregador configurado o del origen GCS oficial de Mithril, `storage.googleapis.com`. Aplica comprobaciones agregadas de seguridad de descarga y extracción, verifica el archivo auxiliar firmado antes de extraer y utiliza únicamente contenido autenticado del ledger. Establece `mithril.allowInsecureHttp: true` solo para desarrollo o pruebas locales; no lo actives en producción.
 
-> 📝 `databaseLifecycle.snapshotRetention` conserva los snapshots automáticos más recientes. `databaseLifecycle.snapshotCloudDestination` refleja cada snapshot en S3 o GCS cuando Dingo se compila con `dingo_extra_plugins`. No habilites `databaseLifecycle.snapshotEnabled` para capturas automáticas cuando `badger`, `s3` o `gcs` sea el proveedor principal de blobs. Las operaciones manuales `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles.
+📝 Mantén `debugPort` en `0` salvo que necesites perfiles. Controla un servicio pprof opcional e independiente.
 
-> 📝 `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `dingo database truncate --hash <hash>` o `dingo database truncate --block-number <n>` trabajan sobre un directorio de datos offline. `restore` también acepta la misma URI en la nube que usa `snapshotCloudDestination` y la descarga en un directorio temporal antes de restaurarla.
+📝 `databaseLifecycle.snapshotEnabled` controla las instantáneas automáticas en los límites de época. Las instantáneas manuales mediante `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles con `badger`, `s3` o `gcs` como proveedor principal de blobs. Si Bark también sirve restauraciones o truncados en vivo, configura `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath` y `tlsCertFilePath`/`tlsKeyFilePath`.
 
-> 📝 En el modo de almacenamiento `core`, Dingo rechaza antes de cualquier mutación una solicitud de truncate anterior al límite persistido `consumed_utxo_prune_floor`, porque Dingo ya ha podado las filas de UTxO consumidas por debajo de ese límite. Un objetivo exactamente en el límite sí se permite y el modo de almacenamiento `api` no cambia. Si el retroceso solicitado es demasiado antiguo, selecciona un objetivo menos profundo o recupera el nodo desde un snapshot de un peer completamente sincronizado.
+📝 Configura `databaseLifecycle.snapshotRetention` para conservar únicamente las instantáneas automáticas más recientes. `databaseLifecycle.snapshotCloudDestination` copia cada instantánea a S3 o GCS cuando Dingo se ejecuta con `dingo_extra_plugins`. Ese destino es independiente del proveedor principal de blobs.
 
-> 📝 Cuando `barkPort` está activo junto con `databaseLifecycle.snapshotDir`, Bark también expone `CreateSnapshot`, `Restore` y `Truncate` en vivo. Dingo exige `barkClientCaFilePath` y también `tlsCertFilePath` y `tlsKeyFilePath` para montar esas RPC destructivas con autenticación.
+📝 Usa `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `--hash <hash>` o `--block-number <n>` sobre un directorio de datos sin conexión. `restore` también acepta el mismo URI de nube que `snapshotCloudDestination` y lo descarga a un directorio temporal antes de restaurarlo.
 
-> 📝 Los puertos de API solo funcionan en el modo de almacenamiento `api`. Establecer un puerto en `0` deshabilita esa API.
+📝 Cuando `barkPort` se ejecuta junto con `databaseLifecycle.snapshotDir`, Bark también expone acceso en vivo a `Restore` y `Truncate`.
+
+📝 En modo core, Dingo rechaza cualquier destino de `dingo database truncate` sin conexión o `Truncate` de Bark en vivo anterior a `consumed_utxo_prune_floor`, antes de modificar datos: el historial de UTxO consumidos por debajo de ese límite ya se ha podado. Se permite un destino exactamente en el límite; el modo API no cambia. Elige un destino menos antiguo o recupera una instantánea de un par completamente sincronizado cuando necesites retroceder más allá del límite.
 
 ```yaml
 storageMode: "api"
@@ -216,53 +191,70 @@ plugins:
       config:
         port: 9090
 midnight:
-  # Habilita el servidor gRPC de Midnight. Predeterminado: false.
+  # Enable the Midnight gRPC server. Default: false.
   serverEnabled: false
-  # Expone el descubrimiento del servicio gRPC. Requiere `serverEnabled`. Predeterminado: false.
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
   reflectionEnabled: false
-  # Permite conexiones sin cifrar en una dirección remota. Predeterminado: false.
+  # Allow plaintext on a wildcard, hostname, or non-loopback listener. Default: false.
   allowInsecureRemote: false
-  # Puerto de escucha gRPC. Debe ser distinto de `0` cuando `serverEnabled` es `true`.
+  # gRPC listen port. Required and nonzero when serverEnabled is true.
   port: 50051
-  # Dirección de escucha gRPC. Por defecto, las conexiones sin cifrar solo usan loopback.
+  # gRPC listen host. An empty host defaults to 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
   authTokenAssetName: ""
 ```
 
-Estos puertos coinciden con el ejemplo actualizado del explorador local de Blockfrost, y los operadores pueden dejarlos deshabilitados salvo que necesiten esos servicios.
+📝 Dingo inicia los servicios Blockfrost, Mesh y UTxO RPC únicamente en modo de almacenamiento API. El servicio `gRPC` de Midnight también requiere modo `API`, `midnight.serverEnabled: true` y un `midnight.port` distinto de cero. Un puerto `0` desactiva esa API.
 
-> 📝 La configuración debe incluir `midnight.authTokenPolicyId` y `midnight.authTokenAssetName`, o dejar ambos campos vacíos. Configurar solo uno de los campos hace fallar la validación de configuración e impide el inicio. El ID de política configurado debe contener exactamente 56 caracteres hexadecimales, equivalentes a 28 bytes decodificados. La coincidencia requiere el ID de política exacto y el nombre de activo exacto.
+📝 `midnight.serverEnabled` controla explícitamente el servidor `gRPC` y lo mantiene apagado cuando vale false. `midnight.enabled` controla la indexación de forma independiente: el servidor puede servir filas Midnight persistidas sin ejecutar el indexador. `midnight.reflectionEnabled` requiere `midnight.serverEnabled`.
 
-> 📝 La indexación de Midnight requiere `enabled: true` y el modo de almacenamiento `api`; el servidor gRPC es un control independiente y requiere `serverEnabled: true` y un `port` distinto de `0`. Con `serverEnabled: false`, Dingo mantiene desactivada la escucha. `reflectionEnabled` requiere el servidor. Dingo usa `127.0.0.1` por defecto y convierte un valor vacío de `host` en loopback. Una conexión sin cifrar a un host no local requiere `allowInsecureRemote: true`, salvo que TLS proteja la escucha.
+📝 Si `midnight.host` está vacío, Midnight escucha en `127.0.0.1`. Para usar texto sin cifrar fuera de loopback, establece `midnight.allowInsecureRemote: true`; para exponerlo remotamente con `TLS`, configura `tlsCertFilePath` y `tlsKeyFilePath`.
 
-***
+📝 Configura conjuntamente `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` o deja ambos sin establecer. Un par incompleto hace fallar las validaciones de configuración y de inicio. El identificador de política debe tener exactamente 56 caracteres hexadecimales, 28 bytes decodificados. La comparación utiliza el identificador y el nombre de activo exactos.
 
-<br>
+💡 `network` admite estos valores:
 
-## Paso 3 - Iniciar desde Mithril (solo primera ejecución)
+```yaml
+# Musashi (Leios) testnet
+network: musashi
 
-Antes de iniciar el servicio por primera vez, inicia la base de datos desde una instantánea de Mithril:
+# Preview testnet
+network: preview
 
-```bash
+# Pre-production testnet
+network: preprod
+
+# Mainnet - NOT CURRENTLY RECOMMENDED
+network: mainnet
+```
+
+Visualiza y verifica `dingo.yaml`:
+
+```
+cd /etc/dingo/
+sudo nano dingo.yaml
+```
+
+## Paso 3 - Arrancar desde Mithril, solo la primera vez
+
+Antes de iniciar el servicio por primera vez, prepara la base de datos desde una instantánea de Mithril:
+
+```
 dingo mithril sync --config /etc/dingo/dingo.yaml
 ```
 
-> 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
+📝 `mithril.downloadMaxTransientRetries` controla los reintentos por fallos transitorios, como tiempos de espera TLS, HTTP 429 y HTTP 5xx. El ejemplo utiliza el valor predeterminado `10`.
 
-Esto descarga y carga una instantánea, ahorrando horas de tiempo de sincronización. Consulta el [Paso 4 de la guía de inicio rápido](../002-quick-start-overview#paso-4---iniciar-desde-instantánea-de-mithril) para más detalles.
+Esto descarga y carga una instantánea y ahorra horas de sincronización. Consulta el [paso 4 del inicio rápido](../002-quick-start-overview#step-4---bootstrap-from-mithril-snapshot).
 
-> 📝 Solo necesitas hacer esto una vez. Después del inicio inicial, el servicio systemd mantendrá el nodo sincronizado.
+📝 Solo es necesario una vez. Después del arranque inicial, systemd mantiene el nodo sincronizado.
 
-***
+## Paso 4 - Crear la unidad dingo.service
 
-<br>
+Crea el archivo de servicio systemd. Sustituye `YOUR_USER` por tu nombre de usuario, que puedes consultar con `echo $USER`:
 
-## Paso 4 - Crear Archivo de Unidad dingo.service
-
-Crea el archivo de servicio systemd. Reemplaza `YOUR_USER` con tu nombre de usuario (`echo $USER`):
-
-```bash
+```
 cat <<ENDFILE | sudo tee /etc/systemd/system/dingo.service > /dev/null
 [Unit]
 Description=Dingo Node
@@ -282,13 +274,15 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-***
+Visualiza y verifica `dingo.service`:
 
-<br>
+```
+sudo nano /etc/systemd/system/dingo.service
+```
 
-## Paso 5 - Habilitar e Iniciar el Servicio
+## Paso 5 - Activar e iniciar el servicio
 
-Habilita el servicio para que se inicie en el arranque e inícialo ahora:
+Activa el inicio al arrancar el sistema e inicia el servicio ahora:
 
 ```bash
 sudo systemctl daemon-reload
@@ -296,46 +290,37 @@ sudo systemctl enable dingo.service
 sudo systemctl start dingo.service
 ```
 
-***
+## Paso 6 - Comprobar el estado
 
-<br>
+Comprueba que el servicio esté en ejecución:
 
-## Paso 6 - Verificar Estado
-
-Verifica que el servicio está ejecutándose:
-
-```bash
+```
 sudo systemctl status dingo.service
 ```
 
+Consulta `/health` o `/healthz` para comprobar la actividad y `/readyz` para comprobar la disponibilidad en el puerto `12799`:
+
+```
+curl http://127.0.0.1:12799/health
+curl http://127.0.0.1:12799/healthz
+curl http://127.0.0.1:12799/readyz
+```
+
+`/health` y `/healthz` incluyen la capacidad de respuesta del bucle de eventos. `/readyz` solo informa de disponibilidad cuando se cumplen la distancia a la punta configurada y la disponibilidad de la base de datos. Los productores también requieren un proceso de forjado activo y credenciales utilizables, incluida la disponibilidad de KES remoto cuando corresponda.
+
 Para seguir los registros en tiempo real:
 
-```bash
+```
 sudo journalctl -u dingo -f
 ```
 
-Para ver los registros recientes si hay un error:
+Para ver los registros recientes si ocurre un error:
 
-```bash
+```
 sudo journalctl -u dingo -n 50 --no-pager
 ```
 
-Comprueba las sondas de salud en el puerto `12799`:
-
-```bash
-curl -f http://127.0.0.1:12799/health
-curl -f http://127.0.0.1:12799/healthz
-curl -f http://127.0.0.1:12799/readyz
-```
-
-`/health` y `/healthz` usan comprobaciones de actividad, incluida la capacidad de respuesta del bucle de eventos, para confirmar que el proceso sigue respondiendo. `/readyz` exige que el nodo conozca la brecha hasta el tip, que la brecha no supere `healthReadyGapSlots` y que la base de datos esté lista. En los productores de bloques, `/readyz` también requiere que el forjador esté en ejecución, que las credenciales sean utilizables y, cuando corresponda, que KES remoto esté listo. Dingo sirve estas sondas también durante el arranque de Mithril.
-
-***
-
-<br>
-
-### ¡Felicidades, has configurado un servicio de inicio para Dingo!
-
+### ¡Enhorabuena! Has configurado el servicio systemd de Dingo.
 
 ---
 

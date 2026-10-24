@@ -1,25 +1,27 @@
 ---
-title: トークンを監視してデスクトップ通知を受け取る
-description: Adder例2 - トークンを監視してデスクトップ通知を受け取る。
+title: "トークンを監視し、デスクトップ通知を取得する"
+description: "Adder 例2 - トークンを見て、デスクトップ通知を取得します。"
 ---
 
-# トークンを監視してデスクトップ通知を受け取る
+この例では、Adderを使用して、追跡したい特定のトークンまたはアセットを含むトランザクションがある場合、デスクトップ通知を送信します。
 
-この例では、Adderを使用して、追跡したい特定のトークンまたはアセットを含むトランザクションがあったときにデスクトップ通知を送信します。
-
-> このガイドでは、Adder exeをダウンロード済みでコマンドプロンプトを開いていることを前提としています。まだの場合は、[クイックスタート](../../002-quick-start-overview)ガイドを参照してください。
+> ✅ このガイドでは、Adderバイナリを既にダウンロードしたと仮定しています。未ダウンロードの場合は[クイックスタート](../../005-use-adder-on-linux)ガイドを参照してください。
 
 ***
 
-まず、フォローしたいアセットを選びましょう。
+フォローしたいアセットを選ぶことで始めましょう。
 
-## ステップ1 - アセットID / フィンガープリントを取得
+<a id="step-1---get-asset-id--fingerprint"></a>
 
-監視したいトークンでフィルタリングするには、アセットID（アセットフィンガープリントとも呼ばれる）が必要です。<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>などのツールを使用して、トークン名で検索し、アセットID / アセットフィンガープリントを取得できます。
+## ステップ1 - アセット ID / フィンガープリントを取得
 
-![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
+私たちが見たいトークンでフィルタリングするには、アセット ID もアセットフィンガープリントとして知られる必要があります。 <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> などのツールを使用して、トークン名で検索してアセット ID / アセットフィンガープリントを得ることができます。
 
-アセットフィンガープリントをメモしてください。後で必要になります。この例では、以下のアセットID / アセットフィンガープリントを使用しました：
+<img src="/adder-cTOSI-cexploer.png"
+     alt="adder-cTOSI-cexploer"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+アセットフィンガープリントのメモは、後で必要です。この例では、次のアセットID/アセットフィンガープリントを使用しました。
 
 ```
 asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
@@ -27,66 +29,77 @@ asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 
 ***
 
-監視したいアセットID / フィンガープリントが取得できたので、使用するフィルターとコマンドを確認する準備ができました。この例では、以下を使用します：
+<a id="step-2---selecting-adder-commands"></a>
 
-* フィルターアセット
-* フィルタータイプ
+## ステップ2 - Adderコマンドの選択
+
+今、私たちは監視したいアセット ID / フィンガープリントを持っているので、私たちが使用するフィルタとコマンドを調べる準備ができています。 この例では、次のようになります。
+
+* アセットフィルター
+* フィルター タイプ
 * 出力
 
-## フィルターアセット
+<a id="filter-asset"></a>
 
-上記のcTOSIのアセットフィンガープリントを使用して、Adderにそのフィンガープリントを持つトランザクションを追跡させるには、以下のフィルターを使用します：
+### アセットフィルター
 
-```
--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
-```
-
-## フィルタータイプ - トランザクション
-
-この例では、cTOSIアセットID / フィンガープリントを使用してトランザクションが発生したときにアラートを受け取りたいと考えています。これを行うには、以下のフィルターを追加します：
+上記のcTOSIからアセット指紋を使用して、以下のフィルタを使用して、Adderトラックトランザクションを指紋で追跡することができます。
 
 ```
--filter-type chainsync.transaction
+--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 ```
 
-## 出力
+<a id="filter-type---transaction"></a>
 
-出力をデスクトップ通知にしたいので、cTOSIを含むトランザクションが発生したときにデスクトップ通知を受け取ります。これを行うには、以下のコマンドを追加します：
+### フィルターの種類 - トランザクション
+
+この例では、cTOSIアセットID/フィンガープリントを使用してトランザクションが発生したときにアラートを取得したいです。これを行うには、次のフィルタを追加します。
 
 ```
--output notify
+--filter-type input.transaction
 ```
 
+<a id="output"></a>
 
+### 出力
+
+出力をデスクトップ通知にしたいです。そのため、cTOSI を含むトランザクションが発生したとき、デスクトップ通知を受け取ります。これを行うには、次のコマンドを追加します。
+
+```
+--output notify
+```
 
 ***
 
-## すべてをまとめる
+<a id="step-3---putting-it-all-together"></a>
 
-TosidropトークンcTOSIを含むトランザクションがあったときにデスクトップ通知を受け取るには、コマンドプロンプトで以下のコマンドを実行します：
+## ステップ3 - すべての設定を組み合わせる
 
-> Adder exeへのパスを調整してください。この例では、ユーザーrichmのデスクトップにあります。
-
+トランザクションが Tosidrop トークン cTOSI を含むときにデスクトップ通知を取得するには、コマンドプロンプトで次のコマンドを実行します。
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction -filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 -output notify
+./adder --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --output notify
 ```
 
+<a id="congratulations"></a>
 
-### おめでとうございます！
+### おめでとうございます!
 
-これでウィンドウを最小化して、Adderをバックグラウンドで実行させることができます。cTOSIを含むトランザクションが発生するたびに、デスクトップアラートが届きます。
+トランザクションが cTOSI を含む cTOSI でデスクトップアラートが取得されます。
 
-
-![adder-desktop-alert](/adder-desktop-alert.png)
+<img src="/adder-desktop-alert-v2.png"
+     alt="adder-desktop-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
-> ヒント：`-h`または`-help`フラグを使用すると、利用可能なすべてのコマンドのリストを取得できます。
+> 💡 ヒント: `-h` または `--help` フラグを使用して、利用可能なすべてのコマンドのリストを得ることができます。
 
-他の例を参照して、Adderで何ができるかを確認し、Adderのパワーを解き放ちましょう
+Adderの他の例を見て、Adderのパワーを解除することができます
 
 1. [例1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - ウォレットを監視してデスクトップ通知を受け取る
 2. [例2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - トークンを監視してデスクトップ通知を受け取る
-3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPOを監視してDiscordでアラートを受け取る
-4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPO を監視して Discord 通知を受け取る
+4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセット ID のスマートコントラクトを監視してデスクトップ通知を受け取る
+5. [例5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - DRep を監視して Telegram 通知を受け取る
+6. [例 6](../007-example-6-watch-mempool-for-a-token) - 指定トークンを含むトランザクションをメモリプールで監視する

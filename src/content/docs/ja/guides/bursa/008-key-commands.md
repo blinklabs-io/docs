@@ -1,90 +1,71 @@
 ---
-title: 鍵コマンドラインガイド
-description: ニーモニックから個別の鍵を導出するためのBursaコマンドラインガイド。
+title: 鍵のコマンドラインガイド
+description: ニーモニックから個別の鍵を導出するための Bursa コマンドラインガイド。
 ---
 
 <a name="key"></a>
 
-## 鍵を作成
-Bursaは、ニーモニックから個別の鍵を導出するために使用できます。
+<a id="create-keys"></a>
 
-<table>
-  <tr>
-    <th colspan="3" align="left">鍵の種類:</th>
-  </tr>
-<tr>
-  <td><a href="#root">ルートキー</a></td>
-  <td><a href="#account">アカウントキー</a></td>
-  <td><a href="#payment">ペイメントキー</a></td>
-</tr>
-<tr>
-  <td><a href="#stake">ステークキー</a></td>
-  <td><a href="#pool-cold">プールコールドキー</a></td>
-  <td><a href="#policy">ポリシーキー</a></td>
-</tr>
-<tr>
-  <td><a href="#calidus">Calidusキー</a></td>
-  <td><a href="#vrf">VRFキー</a></td>
-  <td><a href="#kes">KESキーペア</a></td>
-</tr>
-<tr>
-  <td><a href="#drep">DRepキー</a></td>
-  <td><a href="#committee-cold">憲法委員会コールドキー</a></td>
-  <td><a href="#committee-hot">憲法委員会ホットキー</a></td>
-</tr>
-<tr>
-  <td><a href="#bls">Dijkstra BLSステークプール登録鍵</a></td>
-</tr>
-</table>
+## 鍵の作成
 
-***
+Bursa はニーモニックから個別の鍵を導出できます。
 
-ニーモニックから個別の鍵を導出するためのBursaコマンドラインガイド。
+| 鍵の種類 | 鍵の種類 | 鍵の種類 |
+| --- | --- | --- |
+| [ルート鍵](#root) | [アカウント鍵](#account) | [支払い鍵](#payment) |
+| [ステーク鍵](#stake) | [プールのコールド鍵](#pool-cold) | [ポリシー鍵](#policy) |
+| [Calidus 鍵](#calidus) | [VRF 鍵](#vrf) | [KES 鍵ペア](#kes) |
+| [DRep 鍵](#drep) | [憲法委員会のコールド鍵](#committee-cold) | [憲法委員会のホット鍵](#committee-hot) |
+| [Dijkstra BLS 鍵](#bls) | | |
 
-**ニーモニックは以下の方法で提供できます:**
-  1. --mnemonicフラグ
-  2. MNEMONIC環境変数
-  3. --mnemonic-fileフラグ
-  4. デフォルトファイル "seed.txt"
-<br>
+ニーモニックから個別の鍵を導出するための Bursa コマンドラインガイドです。
 
-> 鍵はCardano CIP標準に従って導出され、cardano-cliやその他のツールで使用するのに適したbech32形式で出力されます。
+**ニーモニックは次の方法で指定できます。**
+
+1. `--mnemonic` フラグ
+2. `MNEMONIC` 環境変数
+3. `--mnemonic-file` フラグ
+4. 既定のファイル `seed.txt`
+
+> 鍵は Cardano の CIP 標準に従って導出され、cardano-cli などで使用できる bech32 形式で出力されます。
 >
-> **鍵の種類別の導出パス:**
-> -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
-> -  CIP-1853: pool-cold (m/1853'/1815'/...)
-> -  CIP-1855: policy (m/1855'/1815'/...)
-> -  CIP-0105: drep, committee-cold, committee-hot (m/1852'/1815'/account'/role/...)
-> -  CIP-88/151: calidus (m/1852'/1815'/account'/0/index, SPO認証)
+> **鍵の種類ごとの導出パス:**
+> - CIP-1852: ルート、アカウント、支払い、ステーク（m/1852'/1815'/...）
+> - CIP-1853: プールのコールド鍵（m/1853'/1815'/...）
+> - CIP-1855: ポリシー（m/1855'/1815'/...）
+> - CIP-0105: DRep、委員会のコールド鍵とホット鍵（m/1852'/1815'/account'/role/...）
+> - CIP-88/151: Calidus（m/1852'/1815'/account'/0/index、SPO 認証）
 
-***
+<a id="signing-key-file-format"></a>
 
-### 署名鍵ファイル形式
+## 署名鍵ファイルの形式
 
-HDパスから導出した署名鍵をエクスポートすると、Bursaは拡張Ed25519-BIP32エンベロープに署名鍵を書き込みます。ルート、アカウント、ペイメント、ステーク、ガバナンス、ポリシー、マルチシグ、Calidusの署名鍵ファイルでは、`*_ExtendedSigningKeyShelley_ed25519_bip32`などのエンベロープタイプを使用し、`5880`で始まる128バイトのCBORを使用します。従来の非拡張ファイルは、`5820`で始まる32バイトのCBORを使用します。
+Bursa が HD パス由来の署名鍵をエクスポートする場合、拡張 Ed25519-BIP32 エンベロープを書き出します。ルート、アカウント、支払い、ステーク、ガバナンス、ポリシー、マルチシグ、Calidus の署名ファイルには、`*_ExtendedSigningKeyShelley_ed25519_bip32` などの型と、`5880` で始まる 128 バイトの CBOR を使用します。従来の非拡張ファイルは、`5820` で始まる 32 バイトの CBOR を使用します。
 
-プールコールド署名ファイルは例外です。新しいエクスポートでは、署名鍵エンベロープに `StakePoolSigningKey_ed25519`、検証鍵エンベロープに `StakePoolVerificationKey_ed25519` を使用します。読み込み時は従来の `StakePoolSigningKeyShelley_ed25519` と `StakePoolVerificationKeyShelley_ed25519` も受け付けますが、Bursaはこれらのファイルを自動的に書き換えません。エクスポートされたプールコールド検証鍵は、プールコールド署名シードから導出された標準Ed25519のアイデンティティであり、運用証明書はこのアイデンティティを使用します。オプションの拡張プールコールド表現でも、同じアイデンティティが保持されます。
+プールのコールド署名ファイルは例外です。新しいエクスポートは、型 `StakePoolSigningKey_ed25519` の標準の非拡張 Ed25519 エンベロープを使用し、対応する検証鍵には `StakePoolVerificationKey_ed25519` を使用します。読み込み時には従来の `StakePoolSigningKeyShelley_ed25519` と `StakePoolVerificationKeyShelley_ed25519` も受け入れ、ファイルは変更しません。プールのコールド署名シードは、プール登録と運用証明書で使用する標準 Ed25519 識別子としてエクスポートされた検証鍵を生成します。任意の拡張形式も、この同じプール識別子を維持します。
 
-秘密鍵ファイル（`.skey`）へのアクセスは所有者に限定します。Unixではグループまたはその他のユーザー向けの権限ビットを設定できません。Windowsでは所有者に限定した制限付きDACLが必要です。Bursaは安全でない秘密鍵ファイルを `ErrInsecureFileMode` により拒否します。ディレクトリにこの権限チェックで拒否された `.skey` ファイルしかない場合、Bursaはその権限エラーをディレクトリのエラーとして報告します。公開鍵の `.vkey` ファイルや運用証明書などの公開アーティファクトは公開鍵の読み込み経路を使用するため、この秘密鍵のアクセス権チェックの対象外です。
+Bursa は通常ファイルからのみ鍵を読み込みます。Unix ではシンボリックリンク、Windows では再解析ポイントの入力を拒否します。鍵ファイルは対応する最大サイズに制限し、大きすぎるファイルは処理前に拒否します。秘密鍵ファイル（`.skey`）は所有者のみがアクセスできる必要があります。Unix の権限にグループやその他のビットを含めることはできず、Windows では所有者に限定した DACL が必要です。この権限検査は秘密情報を読み込む場合のみ適用され、不適切なファイルには `ErrInsecureFileMode` を返します。ディレクトリ内のすべての `.skey` ファイルがこの検査に失敗する場合、その権限上の理由をディレクトリについて報告します。`.vkey` や運用証明書などの公開アーティファクトは、公開鍵読み込み経路で引き続き読み取ることができ、この秘密鍵の権限検査は適用されません。
 
-鍵ファイルを読み込むとき、Bursaは通常ファイルだけを受け付け、UnixのシンボリックリンクとWindowsの再解析ポイントを拒否します。Bursaは鍵入力のサイズを実装がサポートする最大値以内に制限し、その値を超える鍵ファイルを処理開始前に拒否します。公開鍵ファイルは公開鍵の読み込み経路で引き続き読み込めます。Bursaは秘密鍵マテリアルを実際に読み込む場合にだけ、上記の所有者専用権限チェックを適用します。
-
-非拡張タイプを宣言する従来のHD導出署名鍵ファイルを、`type`フィールドだけ変更して修復しないでください。Bursaはこれらのファイルを自動的に書き換えません。元のニーモニックから署名鍵ファイルと検証鍵ファイルを同時に再生成し、署名前に生成されたアドレス、鍵ハッシュ、または現在使用しているその他のアイデンティティと比較してください。
+非拡張型を宣言する従来の HD 由来の署名ファイルを、`type` フィールドだけ変更して修復してはいけません。Bursa はそれらを自動で書き換えません。元のニーモニックから署名鍵と検証鍵のファイルを一緒に再生成し、署名前に、得られたアドレス、鍵ハッシュ、その他の既存の識別子を比較してください。
 
 <a name="root"></a>
 
-### ルートキー
-ルートキーは、他のすべての鍵が導出されるマスターキーです。
-出力は、--signing-key-fileが指定されていない限り、bech32形式 (root_xskプレフィックス) です。
-```bash
+<a id="root-key"></a>
+
+### ルート鍵
+
+ルート鍵は、ほかのすべての鍵の導出元となるマスター鍵です。`--signing-key-file` を指定しない場合、bech32 形式（root_xsk 接頭辞）で出力します。
+
+```
 ./bursa key root --mnemonic "word1 word2 ..."
 ```
 
-**署名鍵ファイル付きルートキーの例:**
+**ルート鍵をファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key root --signing-key-file /path/root.skey
 ```
 
@@ -92,11 +73,13 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 <a name="account"></a>
 
-### アカウントキー
-アカウントキーはCIP-1852のパスに従います: m/1852'/1815'/account'
-出力は、--signing-key-fileが指定されていない限り、bech32形式 (acct_xskプレフィックス) です。
+<a id="account-key"></a>
 
-```bash
+### アカウント鍵
+
+アカウント鍵は CIP-1852 のパス m/1852'/1815'/account' に従います。`--signing-key-file` を指定しない場合、bech32 形式（acct_xsk 接頭辞）で出力します。
+
+```
 ./bursa key account --mnemonic "word1 word2 ..." --index 0
 ```
 
@@ -104,10 +87,13 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 <a name="payment"></a>
 
-### ペイメントキー
-ペイメントキーはCIP-1852のパスに従います: m/1852'/1815'/account'/0/index
-出力は、鍵ファイルが指定されていない限り、bech32形式 (addr_xskプレフィックス) です。
-```bash
+<a id="payment-key"></a>
+
+### 支払い鍵
+
+支払い鍵は CIP-1852 のパス m/1852'/1815'/account'/0/index に従います。鍵ファイルを指定しない場合、bech32 形式（addr_xsk 接頭辞）で出力します。
+
+```
 ./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
@@ -115,10 +101,13 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 <a name="stake"></a>
 
-### ステークキー
-ステークキーはCIP-1852のパスに従います: m/1852'/1815'/account'/2/index
-出力は、鍵ファイルが指定されていない限り、bech32形式 (stake_xskプレフィックス) です。
-```bash
+<a id="stake-key"></a>
+
+### ステーク鍵
+
+ステーク鍵は CIP-1852 のパス m/1852'/1815'/account'/2/index に従います。鍵ファイルを指定しない場合、bech32 形式（stake_xsk 接頭辞）で出力します。
+
+```
 ./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
@@ -126,11 +115,13 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 <a name="pool-cold"></a>
 
-### プールコールドキー
-プールコールドキーはCIP-1853のパスに従います: m/1853'/1815'/0'/index'
-これらの鍵は、ステークプールオペレーターの長期的なアイデンティティ鍵として使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (pool_xskプレフィックス) です。
-```bash
+<a id="pool-cold-key"></a>
+
+### プールのコールド鍵
+
+プールのコールド鍵は CIP-1853 のパス m/1853'/1815'/0'/index' に従い、ステークプールオペレーターの長期的な識別鍵として使用します。鍵ファイルを指定しない場合、bech32 形式（pool_xsk 接頭辞）で出力します。
+
+```
 ./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
 ```
 
@@ -138,11 +129,13 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 <a name="policy"></a>
 
-### ポリシーキー
-ポリシーキーはCIP-1855のパスに従います: m/1855'/1815'/policy_ix'
-これらの鍵は、ネイティブアセットのミント/バーンポリシーに使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (policy_xskプレフィックス) です。
-```bash
+<a id="policy-key"></a>
+
+### ポリシー鍵
+
+ポリシー鍵は CIP-1855 のパス m/1855'/1815'/policy_ix' に従い、ネイティブアセットの発行と焼却のポリシーに使用します。鍵ファイルを指定しない場合、bech32 形式（policy_xsk 接頭辞）で出力します。
+
+```
 ./bursa key policy --mnemonic "word1 word2 ..." --index 0
 ```
 
@@ -150,23 +143,21 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 <a name="calidus"></a>
 
-### Calidusキー
-CalidusキーはCIP-88/CIP-151で定義されたSPOオンチェーン認証ホットキーです。ペイメントキーと同じ導出パスを使用します:
-m/1852'/1815'/account'/0/index
+<a id="calidus-key"></a>
 
-この鍵は機能的にはペイメントキーと同一ですが、SPOアイデンティティのために異なるbech32プレフィックス (calidus_xsk/calidus_xvk) と異なるcardano-cliテキストエンベロープタイプを使用します。
+### Calidus 鍵
 
-出力は、鍵ファイルが指定されていない限り、bech32形式 (calidus_xskプレフィックス) です。
+Calidus 鍵は、CIP-88/CIP-151 が定義する SPO のオンチェーン認証用ホット鍵です。支払い鍵と同じ導出パス m/1852'/1815'/account'/0/index を使用します。機能的には支払い鍵と同じですが、SPO の識別用に異なる bech32 接頭辞（calidus_xsk/calidus_xvk）と cardano-cli テキストエンベロープ型を使用します。鍵ファイルを指定しない場合、bech32 形式（calidus_xsk 接頭辞）で出力します。
 
-```bash
+```
 ./bursa key calidus --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
-**鍵ファイル付きCalidusキーの例**
+**Calidus 鍵をファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key calidus --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
 ```
 
@@ -174,69 +165,71 @@ m/1852'/1815'/account'/0/index
 
 <a name="vrf"></a>
 
-### VRF (検証可能ランダム関数) キーペア
-VRFキーは、Praosコンセンサスプロトコルにおけるリーダー選出のためにステークプールオペレーターによって使用されます。シードはニーモニックから決定論的に導出されるため、鍵を復元できます。
+<a id="vrf-verifiable-random-function-key-pair"></a>
 
-出力には、鍵ファイルが指定されていない限り、署名鍵 (vrf_sk) と検証鍵 (vrf_vk) の両方がbech32形式で含まれます。
+### VRF（検証可能ランダム関数）鍵ペア
 
-```bash
+VRF 鍵は、Praos コンセンサスのリーダー選出でステークプールオペレーターが使用します。シードはニーモニックから決定的に導出するため、鍵を復元できます。鍵ファイルを指定しない場合、署名鍵（vrf_sk）と検証鍵（vrf_vk）の両方を bech32 形式で出力します。
+
+```
 ./bursa key vrf --mnemonic "word1 word2 ..." --index 0
 ```
 
-**鍵ファイル付きVRFの例**
+**VRF（検証可能ランダム関数）鍵ペアをファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key vrf --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
 ```
-
-VRF検証鍵は期待される長さを満たす必要があります。VRF署名鍵には、シード単体またはシードと公開鍵を連結した形式を使用できます。シードと公開鍵の形式では、Bursaがシードから導出した公開鍵と埋め込まれた公開鍵を照合します。Bursaは長さが不正な鍵やシードと公開鍵が一致しない鍵を拒否し、エンベロープを生成しません。
 
 ***
 
 <a name="kes"></a>
 
-### KESキーペア
-KESキーは、Praosコンセンサスプロトコルにおけるブロック署名のためにステークプールオペレーターによって使用されます。KESは、現在の鍵が侵害されても過去の署名は侵害されない、フォワードセキュアな署名を提供します。
+<a id="kes-key-pair"></a>
 
-この実装ではCardanoの深さ6を使用し、64の時間期間を提供します。
-シードはニーモニックから決定論的に導出されるため、鍵を復元できます。
+### KES 鍵ペア
 
-出力には、鍵ファイルが指定されていない限り、署名鍵 (kes_sk、608バイト) と検証鍵 (kes_vk、32バイト) の両方がbech32形式で含まれます。
+KES 鍵は、Praos コンセンサスでブロックに署名するために使用します。現在の鍵が漏洩しても過去の署名の安全性が損なわれない、前方安全な署名を提供します。この実装は Cardano の深さ 6 を使用し、64 期間に対応します。シードはニーモニックから決定的に導出するため、鍵を復元できます。鍵ファイルを指定しない場合、署名鍵（kes_sk、608 バイト）と検証鍵（kes_vk、32 バイト）の両方を bech32 形式で出力します。
 
-```bash
+```
 ./bursa key kes --mnemonic "word1 word2 ..." --index 0
 ```
 
-**鍵ファイル付きKESキーの例**
+**KES 鍵ペアをファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
 
-KES検証鍵は期待される長さを満たす必要があります。KES署名鍵はCardano KES depthとKES secret-key sizeの要件を満たす必要があります。Bursaは長さが不正な検証鍵、無効なKES depth、または無効なKES secret-key sizeを含む鍵を拒否し、エンベロープを生成しません。
-
 ***
+
+<a id="vrf-and-kes-key-validation"></a>
+
+### VRF と KES の鍵検証
+
+Bursa は VRF と KES の鍵データを、エクスポートまたは読み込みの前に検証します。VRF 検証鍵は所定の長さが必要です。VRF 署名データは、対応するシード形式またはシードと公開鍵の形式を使用し、後者では埋め込まれた公開鍵がシードと一致する必要があります。KES 検証鍵も所定の長さが必要で、KES 署名鍵は Cardano の KES 深さと所定の秘密鍵サイズを使用する必要があります。不正な長さ、VRF シードと公開鍵の不一致、不正な KES 深さ、秘密鍵サイズを検出すると、エンベロープを生成せず拒否します。
 
 <a name="drep"></a>
 
-### DRepキー
-DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
-これらの鍵は、Delegated Representativeとしてのガバナンス参加に使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (drep_xskプレフィックス) です。
+<a id="drep-key"></a>
 
-```bash
+### DRep 鍵
+
+DRep 鍵は CIP-0105 のパス m/1852'/1815'/account'/3/index に従い、委任代表者としてのガバナンス参加に使用します。鍵ファイルを指定しない場合、bech32 形式（drep_xsk 接頭辞）で出力します。
+
+```
 ./bursa key drep --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
-**鍵ファイル付きDRepキーの例**
+**DRep 鍵をファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key drep --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
 ```
 
@@ -244,20 +237,21 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 
 <a name="committee-cold"></a>
 
-### 憲法委員会コールドキー
-委員会コールドキーはCIP-0105のパスに従います: m/1852'/1815'/account'/4/index
-これらの鍵は、憲法委員会のメンバーシップ (長期的なアイデンティティ) に使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (cc_cold_xskプレフィックス) です。
+<a id="constitutional-committee-cold-key"></a>
 
-```bash
+### 憲法委員会のコールド鍵
+
+委員会のコールド鍵は CIP-0105 のパス m/1852'/1815'/account'/4/index に従い、憲法委員会のメンバーシップ（長期的な識別子）に使用します。鍵ファイルを指定しない場合、bech32 形式（cc_cold_xsk 接頭辞）で出力します。
+
+```
 ./bursa key committee-cold --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
-**鍵ファイル付き憲法委員会コールドキーの例**
+**憲法委員会のコールド鍵をファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key committee-cold --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
 ```
 
@@ -265,20 +259,21 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 
 <a name="committee-hot"></a>
 
-### 憲法委員会ホットキー
-委員会ホットキーはCIP-0105のパスに従います: m/1852'/1815'/account'/5/index
-これらの鍵は、憲法委員会の投票 (運用鍵) に使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (cc_hot_xskプレフィックス) です。
+<a id="constitutional-committee-hot-key"></a>
 
-```bash
+### 憲法委員会のホット鍵
+
+委員会のホット鍵は CIP-0105 のパス m/1852'/1815'/account'/5/index に従い、憲法委員会の投票（運用鍵）に使用します。鍵ファイルを指定しない場合、bech32 形式（cc_hot_xsk 接頭辞）で出力します。
+
+```
 ./bursa key committee-hot --mnemonic "word1 word2 ..." --account-index 0 --index 0
 ```
 
-**鍵ファイル付き憲法委員会ホットキーの例**
+**憲法委員会のホット鍵をファイルに出力する例**
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa key committee-hot --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
 ```
 
@@ -286,47 +281,44 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 
 <a name="bls"></a>
 
-### Dijkstra BLSステークプール登録鍵
-`bursa key bls` は、Dijkstra時代のLeiosおよびPerasでステークプールを登録するためのBLS12-381 MinSig鍵と所有証明を生成します。このコマンドは、他の鍵コマンドで使用するニーモニックやニーモニックファイルを読み取らず、暗号学的に安全な乱数から新しい鍵の素材を生成します。
+<a id="dijkstra-bls-key-and-registration-material"></a>
 
-```bash
-./bursa key bls --signing-key-file /path/to/bls.skey
-```
+### Dijkstra の BLS 鍵と登録用データ
 
-3つの出力先を指定する例:
+BLS コマンドは、Dijkstra 時代の Leios と Peras のステークプール登録に用いる、暗号学的にランダムな BLS12-381 MinSig データを生成します。ほかの鍵コマンドで説明したニーモニックの入力元は使用しません。
+
+`--signing-key-file <path>` は必須です。`--verification-key-file` と `--output-file` は任意です。
+
+- `--signing-key-file <path>` は署名鍵をファイルに書き出します。コマンドが署名鍵を表示することはありません。
+- `--verification-key-file` は検証鍵をファイルに書き出します。
+- `--output-file` は登録 JSON をファイルに書き出します。省略すると、登録 JSON を標準出力に表示します。
 
 ```bash
 ./bursa key bls --signing-key-file bls.skey --verification-key-file bls.vkey --output-file bls-registration.json
 ```
 
-`--signing-key-file` は必須です。`--verification-key-file` と `--output-file` は任意です。
+登録 JSON のフィールドは次の 2 つだけです。
 
-- `--signing-key-file` は、BLS署名鍵を書き込むファイルのパスです。Bursaは署名鍵を`cardano-cli`互換の`BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
-- `--verification-key-file` は、BLS検証鍵を書き込むファイルのパスです。指定した場合、Bursaは検証鍵を`cardano-cli`互換の`BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size`エンベロープに格納します。
-- `--output-file` は、登録用JSONを書き込むファイルのパスです。省略すると、Bursaは登録用JSONを標準出力に書き込みます。
+- `publicKey`: 96 バイトの公開鍵を小文字の 16 進数文字列で表します。
+- `possessionProof`: 48 バイトの所有証明を小文字の 16 進数文字列で表します。
 
-登録用JSONは次のフィールドを出力します。Bursaは出力前に生成した所有証明を検証します。
+Bursa は登録出力の生成前に、生成した証明を検証します。必須の署名鍵ファイルは cardano-cli エンベロープ型 `BlsSigningKey_bls12-381-BLS-Signature-Minimal-Signature-Size`、任意の検証鍵ファイルは `BlsVerificationKey_bls12-381-BLS-Signature-Minimal-Signature-Size` を使用します。すべての生成ファイルを所有者のみの権限で書き出します。署名鍵ファイルはステークプールの資格情報として保護し、バックアップしてください。
 
-- `publicKey`: 96バイトの公開鍵を表す小文字の16進数文字列
-- `possessionProof`: 48バイトの所有証明を表す小文字の16進数文字列
-
-Bursaは指定した各生成先ファイルを、所有者だけが読み書きできる権限で作成します。`--signing-key-file` のファイルはステークプールの認証情報として厳重に保護し、安全なバックアップを作成してください。
-
-`--signing-key-file`、`--verification-key-file`、`--output-file` に指定する3つのパスは、同じ生成先を指してはいけません。Bursaは正規化したパスが一致する場合や、シンボリックリンクをたどった結果が同じファイルになる場合に、パスの衝突を拒否します。
+3 つの出力先パスは異なる必要があります。直接のパス衝突や、正規化またはシンボリックリンクによって同じファイルを指すパスは拒否されます。
 
 ***
 
-その他のBursaコマンドを探索
+ほかの Bursa コマンドも参照してください。
 
-> **Bursaコマンドカテゴリ**
-> 1. [wallet](../003-commands) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
-> 2. [api](../003-commands)  &emsp;&nbsp;&nbsp; - APIを実行するコマンド
-> 3. [kes-agent](../003-commands#kes-agent) &emsp;&nbsp;&nbsp; - KESエージェントを実行するコマンド
-> 4. [cert](../004-cert-commands)   &emsp;&nbsp; - 各種Cardano証明書を生成するコマンド
-> 5. [hash](../005-hash-commands)  &nbsp;&nbsp;&nbsp; - Cardanoで使用される暗号ハッシュを生成するコマンド
-> 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
-> 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
-> 8. [key](#key)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> **Bursa のコマンド分類**
+> 1. [wallet](../003-commands) - ウォレットと、その管理に必要なファイルの生成
+> 2. [api](../003-commands) - API の実行
+> 3. [kes-agent](../003-commands#kes-agent) - KES エージェントの実行
+> 4. [cert](../004-cert-commands) - Cardano 証明書の生成
+> 5. [hash](../005-hash-commands) - Cardano の暗号学的ハッシュの生成
+> 6. [script](../006-script-commands) - マルチシグ操作
+> 7. [address](../007-address-commands) - Cardano アドレスの操作
+> 8. [key](#key) - ニーモニックから個別の鍵を導出
 
 ***
 

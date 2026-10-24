@@ -66,12 +66,14 @@ description: Lista de Comandos de Adder.
 
 > especifica el tipo de evento para filtrar
 >
+> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder elimina los espacios al principio y al final de cada entrada separada por comas e ignora las entradas vacías.
+>
 > **Tipos de Evento:**
 > 1. `input.block` - Se observó un nuevo bloque.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
-> 5. `input.drep-registration` - Adder registra un DRep.
+> 5. `input.drep-registration` - Se registró un DRep.
 >
 
 
@@ -248,6 +250,7 @@ description: Lista de Comandos de Adder.
   --output string
 ```
 
+> plugin de salida que se usará; `list` muestra los disponibles (predeterminado: "log")
 <br />
 
 ```text
@@ -258,17 +261,17 @@ description: Lista de Comandos de Adder.
 <br />
 
 ```text
-  --output-notify-title string
-```
-
-> especifica el título a usar (predeterminado "Adder")
-<br />
-
-```text
   --output-notify-json-config string
 ```
 
 > especifica la ruta a una configuración JSON de notificaciones versionada. La opción de salida `notify-json` utiliza esta configuración.
+<br />
+
+```text
+  --output-notify-title string
+```
+
+> especifica el título a usar (predeterminado "Adder")
 <br />
 
 ```text
@@ -353,12 +356,12 @@ description: Lista de Comandos de Adder.
 ## Notificaciones:
 
 ```text
-  adder notifications validate --config <path> [--json]
+adder notifications validate --config <path> [--json]
 ```
 
 > valida una configuración JSON de notificaciones.
 >
-> La opción `--config` es obligatoria y requiere la ruta del archivo.
+> La opción `--config <path>` es obligatoria y requiere la ruta del archivo.
 >
 > La opción `--json` emite un resultado de validación legible por máquinas.
 >

@@ -1,6 +1,6 @@
 ---
 title: Adder
-description: Adderの紹介。
+description: AdderでCardanoのイベントを監視し、通知を送信します。
 ---
 
 ![adder-logo](/adder-logo-with-text-horizontal.png)
@@ -12,4 +12,4 @@ Adderは、Cardanoブロックチェーンをテーリングし、ユーザー�
 ## Adderを実際にどのように使用しますか？
 簡単です。blinklabs.ioからAdder実行ファイルをダウンロードし、コンピューターでコマンドプロンプトを開きます。コマンドプロンプトで実行ファイルを呼び出し、どのCardanoブロックチェーンイベントの通知を受けたいか、どのように通知されたいかを指定します。それだけです！
 
-[クイックスタート](../002-quick-start-overview)ガイドで始めて、使い方ガイドと例でAdderができることを学びましょう
+[クイックスタート](../002-operating-mode-overview)ガイドで始めて、使い方ガイドと例でAdderができることを学びましょう
