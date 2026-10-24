@@ -13,7 +13,7 @@ A Cardano blockchain node written in Go which actively participates in network c
 
 ***
 
-In this guide, we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
+This guide covers downloading the Dingo binary and every step needed to run a Dingo node on the Cardano Preview network.
 
 <br>
 
@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.0/dingo-v0.87.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -129,9 +129,9 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.87.0 settings, defaults, and environment or command-line
+For all Dingo v0.87.1 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
@@ -340,7 +340,7 @@ You should see log output showing the node connecting to peers and syncing the r
 #### Interested in running Dingo as a systemd service?
 
 Using a systemd service automatically starts Dingo when your system boots and restarts it if it exits unexpectedly.
-[See our guide on how to create a startup service for Dingo](../003-create-start-up-service).
+[See the guide on creating a startup service for Dingo](../003-create-start-up-service).
 
 ***
 

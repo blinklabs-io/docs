@@ -22,7 +22,7 @@ description: SPO Guide for Dingo Pools.
 
 <br>
 
-There are 5 main steps that we will cover to get a Dingo Node registered and running on the Preview Network.
+Getting a Dingo node registered and running on the Preview network takes 5 main steps.
 
 - [x] 1. Dingo Node Setup and Configuration
 - [x] 2. Generate Pool Keys

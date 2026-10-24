@@ -5,7 +5,7 @@ description: SPO Guide for Dingo Pools - Generate Pool Keys.
 
 # Dingo Node - Block Production Keys
 
-We will now generate the pool keys needed for block production on the Preview network. 
+Generate the pool keys needed for block production on the Preview network. 
 
 
 | Key	| Purpose	| Where it lives
@@ -69,9 +69,9 @@ cardano-cli conway node key-gen \
 
 ## Step 4 - Find the starting KES period
 
-We need the Shelley Genesis JSON file to run our CLI command.
+The CLI command below needs the Shelley Genesis JSON file.
 
-We will create a directory to store our Cardano configuration files. For this example, we will use the following directory structure `$DINGO_HOME/config/` by running the following command:
+Create a directory for your Cardano configuration files. This example uses `$DINGO_HOME/config/`:
 
 Make directory and move into it:
 ```
@@ -88,7 +88,7 @@ wget https://book.play.dev.cardano.org/environments/preview/shelley-genesis.json
 
 ***
 
-**Now we can find the starting KES period by running:**
+**Find the starting KES period by running:**
 
 ```
 cd $DINGO_HOME

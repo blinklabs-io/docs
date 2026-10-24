@@ -13,7 +13,7 @@ Un nodo de datos de la blockchain Cardano escrito en Go que participa activament
 
 ***
 
-En esta guía te guiaremos a través de la descarga del binario de Dingo y todos los pasos necesarios para ejecutar el nodo Dingo en la red Cardano Preview. Para comenzar, sigue los pasos a continuación.
+Esta guía cubre la descarga del binario de Dingo y todos los pasos necesarios para ejecutar un nodo Dingo en la red Cardano Preview.
 
 <br>
 
@@ -33,7 +33,7 @@ Descarga la última versión desde la página de <a href="https://github.com/bli
 ```bash
 mkdir -p ~/dingo
 cd ~/dingo
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.0/dingo-v0.87.0-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Puedes verificar que el binario funciona ejecutando:
@@ -101,8 +101,8 @@ La primera ejecución requiere un directorio vacío. Dingo coloca un marcador an
 
 ## Paso 2 - Crear archivo de configuración dingo.yaml
 
-Para consultar todos los ajustes de Dingo v0.87.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
-Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example) correspondiente a la versión v0.87.0 como punto de partida para tu configuración.
+Para consultar todos los ajustes de Dingo v0.87.1, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
+Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example) correspondiente a la versión v0.87.1 como punto de partida para tu configuración.
 
 Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
 
@@ -235,7 +235,7 @@ plugins:
 
 ## Paso 3 - Abrir Puertos
 
-Cubriremos cómo agregar reglas de firewall UFW para los puertos que Dingo necesita.
+Esta sección agrega reglas de firewall UFW para los puertos que Dingo necesita.
 
 > 💡 Consejo: UFW significa Uncomplicated Firewall y se usa para administrar reglas de firewall iptables (netfilter).
 
@@ -301,7 +301,7 @@ Deberías ver la salida del registro mostrando el nodo conectándose a los pares
 <br>
 
 ### ¿Interesado en usar un servicio systemd para ejecutar un nodo Dingo y maximizar el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia?
-[Consulta nuestra guía sobre cómo crear un servicio de inicio para Dingo](../003-create-start-up-service).
+[Consulta la guía sobre cómo crear un servicio de inicio para Dingo](../003-create-start-up-service).
 
 ***
 
