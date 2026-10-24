@@ -16,7 +16,7 @@ description: Adderコマンドのリスト。
 
 > 読み込む設定ファイルのパス
 
-> 同じ設定が複数の方法で指定された場合、Adder は次の優先順位で適用します: CLI フラグ > YAML 設定ファイル > 環境変数。
+> 同じ設定が複数の方法で指定された場合、Adder は次の優先順位で適用します: CLI フラグ > 環境変数 > YAML 設定ファイル > デフォルト。
 
 ***
 
@@ -73,6 +73,7 @@ description: Adderコマンドのリスト。
 > 4. `input.governance` -	ガバナンス関連のイベント（CIP-1694時代）。
 > 5. `input.drep-registration` - DRepの登録イベント。
 >
+> `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`で指定するカンマ区切りの各項目は、前後の空白を取り除き、空の項目を無視します。
 >
 
 ***
@@ -232,17 +233,6 @@ description: Adderコマンドのリスト。
 
 ***
 
-## ロギング：
-
-```
-  --logging-level string
-```
-
-> ロギングレベル（debug、info、warn、error）（デフォルト"info"）
-<br />
-
-***
-
 ## 出力：
 
 ```
@@ -251,7 +241,7 @@ description: Adderコマンドのリスト。
 
 > 使用する出力プラグイン、利用可能なものを表示するには'list'（デフォルト"log"）
 >
-> `notify-json`を指定すると、通知リクエストをNDJSONとして出力します。
+> `notify-json`を指定すると、通知リクエストをNDJSONとして出力します。この出力を選択する場合は、`--output-notify-json-config`で設定ファイルのパスを指定する必要があります。
 <br />
 
 ```
@@ -259,6 +249,17 @@ description: Adderコマンドのリスト。
 ```
 
 > 出力フォーマットを指定：text（人間が読める形式、デフォルト）またはjson（機械が解析可能）（デフォルト"text"）
+<br />
+
+```
+  --output-log-level string
+```
+
+> `output.log`のロギングしきい値を指定します。指定できる値は`debug`、`info`、`warn`、`error`で、既定値は`info`です。
+>
+> `debug`と`info`ではイベントレコードを出力し、`warn`と`error`ではイベントレコードを抑制します。このしきい値は、別の出力プラグインを選択している場合も、標準エラー出力に出力するAdderの診断ログを制御します。
+>
+> YAMLでは`plugins.output.log.level`、環境変数では`OUTPUT_LOG_LEVEL`を指定します。AdderはYAMLのトップレベルにある`logging.level`設定と`LOGGING_LEVEL`環境変数を削除しました。Adderは旧`--logging-level`フラグと旧YAMLキーを拒否し、旧環境変数を無視します。
 <br />
 
 ```
@@ -358,6 +359,26 @@ description: Adderコマンドのリスト。
 adder notifications validate --config <path> [--json]
 ```
 
+> `--config <path>`は必須です。通常の出力では設定の有効性またはエラーを表示します。`--json`を指定すると、機械で読み取れる検証結果を出力します。
+
+### 通知JSON設定
+
+通知JSON設定は、次のフィールドで構成します。
+
+- `schemaVersion`：スキーマバージョン。`1`を指定します。
+- `network`：`name`に`mainnet`、`preprod`、または`preview`を指定します。カスタムノードを使用する場合は、`customAddress`と`customPort`を指定します。`customAddress`を指定する場合、`customPort`は`1`から`65535`までの値を指定します。`customPort`を指定する場合は、`customAddress`も指定します。
+- `monitor`：監視対象を指定します。`everything`を`true`にするとすべてを監視します。個別に指定する場合は、`wallets`、`dreps`、`pools`、`assets`、`policies`にそれぞれウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDを指定します。`drepMatch`、`poolMatch`、`assetMatch`、`policyMatch`には任意で`any`または`all`を指定します。
+- `alerts`：有効にするアラートカテゴリを指定します。対応するカテゴリは`incomingTransactions`、`outgoingTransactions`、`tokenTransfers`、`blocksMinted`、`chainRollbacks`、`poolParameterChanges`、`governanceProposals`、`votesCast`、`registrationChanges`、`assetActivity`、`policyActivity`、`connectionIssues`です。
+- `rateLimit`：通知のレート制限を指定します。`max`には`-1`（無効）または`0`以上の値を指定し、`windowSeconds`には`0`より大きい値を指定します。
+- `connectionStaleSeconds`：チェーンイベントがない状態を stale と判定する秒数を指定します。`30`から`3600`までの値を指定します。
+
+検証では、未対応のフィールド、未対応のアラートカテゴリ、複数のJSON値を拒否します。`monitor.everything`が`false`の場合は、少なくとも1つの監視対象を指定してください。少なくとも1つのアラートカテゴリを有効にし、各ウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDには有効な識別子を指定してください。監視対象の重複や無効なマッチモードも拒否します。
+
+`notify-json`は`chainsync`入力を使用します。起動時に、設定の`network.name`を`--input-chainsync-network`と一致させてください。`network.customAddress`を指定する場合は、`customAddress`と`customPort`で構成されるノードアドレスを`--input-chainsync-address`のアドレスとポートに一致させてください。
+
+### notify-json のNDJSON出力
+
+`notify-json`は、標準出力に1行1オブジェクトのJSONを出力します。すべてのレコードは`schemaVersion`に`1`と`timestamp`を含みます。状態レコードは`kind`が`status`で、`status`に`starting`、`connected`、または`stale`を含みます。通知レコードは`kind`が`notification`で、描画済みの`ruleId`、`eventType`（値がある場合のみ出力）、`title`、`body`、およびバッチ処理の`batched`、`count`を含みます。
 
 ***
 

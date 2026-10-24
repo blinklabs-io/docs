@@ -11,7 +11,7 @@ You can download the latest Adder release from the <a href="https://github.com/b
 We will download the Adder binary by running the following command. ⚠️ Adjust download link to the most current version.
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.43.1/adder-v0.43.1-linux-amd64.tar.gz -O - | tar -xz
+ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.46.0/adder-v0.46.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
@@ -37,3 +37,14 @@ Now we are ready to run Adder with filters and commands so we can track certain 
 <br />
 
 We are now ready to walk through some [examples](../examples/001-using-adder-examples-desc) on the usefulness and power 💪 of Adder!
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

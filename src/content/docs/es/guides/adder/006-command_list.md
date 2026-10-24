@@ -16,11 +16,13 @@ description: Lista de Comandos de Adder.
 
 > ruta al archivo de configuración a cargar
 
-> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: indicadores de CLI > archivo de configuración YAML > variables de entorno.
+> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: indicadores de CLI > variables de entorno > archivo de configuración YAML > valores predeterminados.
 
 ***
 
 ## Filtro:
+
+> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder recorta los espacios en blanco que rodean cada entrada separada por comas e ignora las entradas vacías.
 
 ```text
   --filter-address string
@@ -124,7 +126,7 @@ description: Lista de Comandos de Adder.
   --input-chainsync-intersect-point string
 ```
 
-> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'
+> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'. Adder recorta los espacios en blanco que rodean cada entrada e ignora las entradas vacías. Si la lista resultante queda vacía, incluso cuando el valor solo contiene espacios en blanco o separadores, Adder usa el comportamiento configurado en `--input-chainsync-intersect-tip`. Adder devuelve un error si alguna entrada no vacía no cumple el formato '<slot>.<hash>'.
 >
 <br />
 
@@ -231,22 +233,13 @@ description: Lista de Comandos de Adder.
 
 ***
 
-## Logging:
-
-```text
-  --logging-level string
-```
-
-> nivel de logging (debug, info, warn, error) (predeterminado "info")
-<br />
-
-***
-
 ## Salida:
 
 ```text
   --output string
 ```
+
+> plugin de salida que se va a usar; `list` muestra los disponibles (predeterminado "log"). `notify-json` escribe notificaciones en formato NDJSON.
 
 <br />
 
@@ -255,6 +248,19 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica el formato de salida: text (legible por humanos, predeterminado) o json (parseable por máquina) (predeterminado "text")
+<br />
+
+```text
+  --output-log-level string
+```
+
+> establece el umbral de registro de `output.log`; acepta `debug`, `info`, `warn` o `error` (predeterminado `info`). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El mismo umbral controla los diagnósticos de Adder en `stderr`, incluso cuando Adder usa otro plugin de salida.
+>
+> Equivalente YAML: `plugins.output.log.level`.
+>
+> Equivalente de entorno: `OUTPUT_LOG_LEVEL`.
+>
+> Adder eliminó la configuración YAML de nivel superior `logging.level` y la variable de entorno `LOGGING_LEVEL`: Adder rechaza la antigua bandera `--logging-level` y la clave YAML, e ignora la antigua variable de entorno.
 <br />
 
 ```text
@@ -268,7 +274,8 @@ description: Lista de Comandos de Adder.
   --output-notify-json-config string
 ```
 
-> especifica la ruta a una configuración JSON de notificaciones versionada. La opción de salida `notify-json` utiliza esta configuración.
+> especifica la ruta a la configuración JSON versionada de notificaciones que usa `notify-json`.
+> `--output notify-json` requiere esta ruta.
 <br />
 
 ```text
@@ -362,6 +369,36 @@ description: Lista de Comandos de Adder.
 >
 > La opción `--json` emite un resultado de validación legible por máquinas.
 >
+> La salida normal informa si la configuración es válida y muestra los errores.
+>
+
+***
+
+### Configuración JSON de notificaciones:
+
+`notify-json` acepta una configuración JSON con los siguientes campos:
+
+- `schemaVersion`: versión del esquema; debe ser `1`.
+- `network.name`: nombre de red; admite `mainnet`, `preprod` o `preview`.
+- La configuración puede incluir `network.customAddress` y `network.customPort` como par para un nodo personalizado. Si incluye `customAddress`, debe establecer `customPort` entre `1` y `65535`; no puede establecer `customPort` sin `customAddress`.
+- `monitor.everything`: indica si se supervisan todos los objetivos.
+- `monitor.wallets`, `monitor.dreps`, `monitor.pools`, `monitor.assets` y `monitor.policies`: listas opcionales de objetivos de wallets, DReps, pools, assets y políticas.
+- `monitor.drepMatch`, `monitor.poolMatch`, `monitor.assetMatch` y `monitor.policyMatch`: modos de coincidencia opcionales; cada valor debe ser `any` o `all`.
+- `alerts`: mapa de categorías habilitadas. Admite `incomingTransactions`, `outgoingTransactions`, `tokenTransfers`, `blocksMinted`, `chainRollbacks`, `poolParameterChanges`, `governanceProposals`, `votesCast`, `registrationChanges`, `assetActivity`, `policyActivity` y `connectionIssues`.
+- `rateLimit.max`: máximo de notificaciones; debe ser `-1` para deshabilitar el límite o un valor igual o mayor que cero.
+- `rateLimit.windowSeconds`: duración de la ventana del límite en segundos; debe ser mayor que cero.
+- `connectionStaleSeconds`: tiempo de espera de una conexión inactiva; debe estar entre `30` y `3600` segundos.
+
+La validación rechaza campos desconocidos y archivos con más de un valor JSON. La configuración debe usar `schemaVersion` `1`, incluir al menos un objetivo o activar `monitor.everything`, y activar al menos una categoría de `alerts`. Cada objetivo debe tener un identificador válido para su tipo: una dirección de wallet, un ID de DRep, un ID de pool, una huella de asset o un ID de política.
+
+Al iniciar, `notify-json` requiere la entrada `chainsync`. `network.name` debe coincidir con `--input-chainsync-network`. Si la configuración incluye un nodo personalizado, su dirección y puerto también deben coincidir con `--input-chainsync-address`.
+
+### Salida `notify-json`:
+
+`notify-json` escribe en la salida estándar un objeto JSON por línea. Cada registro usa la versión de esquema `1`.
+
+- Los registros `status` informan los estados `starting`, `connected` y `stale`, junto con la marca de tiempo y, cuando corresponde, un mensaje.
+- Los registros `notification` incluyen la notificación renderizada mediante `title` y `body`, además de `ruleId`, `eventType` cuando existe, `batched` y `count` para describir la agrupación.
 
 ***
 

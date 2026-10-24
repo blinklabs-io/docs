@@ -20,8 +20,8 @@ Adder Tray is a packaged desktop application that runs in the system tray and pr
   - Notification permissions
   - Background service management
 - Simplified configuration:
-  - Users select targets (addresses, stake keys, pool IDs, DReps, etc.)
-  - Adder Tray applies predefined notification type
+  - Users select Wallets, DReps, and Pools as monitoring targets, with optional Assets and Policies.
+  - Adder Tray uses the selected targets to determine notification options.
 - No YAML or CLI required — ideal for non‑technical users.
 
 ### Use Cases: 
@@ -83,3 +83,14 @@ The Adder command‑line binary provides full access to Adder’s event‑proces
 
 - [Linux Guide](../005-use-adder-on-linux)
 
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
