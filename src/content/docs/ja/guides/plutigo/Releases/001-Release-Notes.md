@@ -9,6 +9,7 @@ description: Plutigo リリースノート
 
 下のバージョンから各リリースノートを表示できます。
 
+- バージョン: v0.9.11 - *[リリースノートを見る](../v0-9-11)*
 - バージョン: v0.9.10 - *[リリースノートを見る](../v0-9-10)*
 - バージョン: v0.9.9 - *[リリースノートを見る](../v0-9-9)*
 - バージョン: v0.9.8 - *[リリースノートを見る](../v0-9-8)*
@@ -29,3 +30,14 @@ description: Plutigo リリースノート
 - バージョン: v0.6.0 - *[リリースノートを見る](../v0-6-0)*
 - バージョン: v0.5.1 - *[リリースノートを見る](../v0-5-1)*
 - バージョン: v0.5.0 - *[リリースノートを見る](../v0-5-0)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

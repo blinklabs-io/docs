@@ -9,6 +9,7 @@ description: Plutigo Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.9.11 - *[View Release Notes](../v0-9-11)*
 - Version: v0.9.10 - *[View Release Notes](../v0-9-10)*
 - Version: v0.9.9 - *[View Release Notes](../v0-9-9)*
 - Version: v0.9.8 - *[View Release Notes](../v0-9-8)*
@@ -37,3 +38,14 @@ description: Plutigo Release Notes
 - Version: v0.1.15 - *[View Release Notes](../v0-1-15)*
 - Version: v0.1.14 - *[View Release Notes](../v0-1-14)*
 - Version: v0.1.13 - *[View Release Notes](../v0-1-13)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

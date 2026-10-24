@@ -9,6 +9,7 @@ description: Notas de la versión de Plutigo
 
 ☑️ Selecciona una versión para ver las notas de la versión completas.
 
+- Versión: v0.9.11 - *[Ver notas de la versión](../v0-9-11)*
 - Versión: v0.9.10 - *[Ver notas de la versión](../v0-9-10)*
 - Versión: v0.9.9 - *[Ver notas de la versión](../v0-9-9)*
 - Versión: v0.9.8 - *[Ver notas de la versión](../v0-9-8)*
@@ -29,3 +30,14 @@ description: Notas de la versión de Plutigo
 - Versión: v0.6.0 - *[Ver notas de la versión](../v0-6-0)*
 - Versión: v0.5.1 - *[Ver notas de la versión](../v0-5-1)*
 - Versión: v0.5.0 - *[Ver notas de la versión](../v0-5-0)*
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
