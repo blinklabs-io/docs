@@ -7,7 +7,7 @@ description: Bursaコマンドラインガイド。
 
 Bursaは、マルチシグネチャスクリプト、ハッシュ、鍵の生成にも使用できます。これにはCardanoステークプールの運用に必要な鍵や証明書も含まれます。
 
-現在、Bursaが実行できるコマンドのカテゴリは8つあり、Cardanoユーザーにとって強力なツールとなっています。
+現在、Bursaが実行できるコマンドのカテゴリは11個あり、Cardanoユーザーにとって強力なツールとなっています。
 
 > **Bursaコマンドカテゴリ**
 > 1. [wallet](#wallet) &nbsp; - Cardanoウォレットの管理に必要なウォレットおよびファイルを生成するコマンド
@@ -18,6 +18,9 @@ Bursaは、マルチシグネチャスクリプト、ハッシュ、鍵の生成
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
 > 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 9. [tx](#tx) - オフライントランザクション操作
+> 10. [sign](#sign) - CIP-8/CIP-30メッセージの署名と検証
+> 11. [signer](#signer) - リモート署名サービス
 
 ***
 
@@ -38,6 +41,19 @@ Bursaは、マルチシグネチャスクリプト、ハッシュ、鍵の生成
 これで`dev`ディレクトリにすべてのウォレットファイルが作成されます。
 
 ![bursa-wallet-files](/bursa-wallet-files.png)
+
+### ウォレットの復元と確認
+
+保護されたファイルから既存のBIP-39ニーモニックを読み込み、生成された鍵ファイルを確認します。
+
+```sh
+./bursa wallet restore --mnemonic-file dev/seed.txt --output restored-wallet
+./bursa wallet load --dir restored-wallet
+```
+
+`--output` を指定するとアドレスと鍵ファイルを書き出し、省略するとアドレスのみをログに出力します。復元ではニーモニックを出力先にコピーしません。ニーモニックと署名鍵ファイルは非公開で安全にバックアップしてください。ニーモニックの入力元は、非推奨の `--mnemonic`、`MNEMONIC` 環境変数、`--mnemonic-file`、デフォルトの `seed.txt` ファイルの順で確認されます。`--mnemonic-file` を使う場合は `MNEMONIC` を解除してください。`--mnemonic` と `--password` 引数は他のローカルユーザーに見えるため非推奨です。代わりに `--mnemonic-file` と `--password-file` を使用してください。BIP-39パスワードを使って導出したウォレットには `--password-file /path/to/password.txt` を指定します。これは鍵の導出用パスワードであり、出力ファイルの暗号化ではありません。
+
+`wallet load` は既存の鍵ファイルを読み込み、新しいウォレットを導出しません。秘密鍵の16進数は標準では非表示で、`--show-secrets` を明示すると表示されます。各オプションは `./bursa wallet restore --help` と `./bursa wallet load --help` で確認できます。
 
 ***
 
@@ -81,6 +97,59 @@ http://localhost:8080/swagger/index.html
 
 ***
 
+<a name="tx"></a>
+
+## オフライントランザクション操作
+
+`tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。
+
+```sh
+./bursa tx decode --tx-file unsigned.tx
+./bursa tx id --tx-file unsigned.tx
+./bursa tx sign --tx-file unsigned.tx \
+  --signing-key-file dev/payment.skey --out-file signed.tx
+```
+
+複数の署名鍵を使うには `--signing-key-file` を繰り返します。別々に署名する場合は、分離したウィットネスを作成し、同じトランザクションに結合します。
+
+```sh
+./bursa tx witness --tx-file unsigned.tx \
+  --signing-key-file dev/payment.skey --out-file payment.witness
+./bursa tx assemble --tx-file unsigned.tx \
+  --witness-file payment.witness --out-file assembled.tx
+```
+
+追加のウィットネスには `--witness-file` を繰り返します。署名、ウィットネス作成、結合はJSONテキストエンベロープを `--out-file` に書き出し、省略時は標準出力に表示します。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
+
+<a name="sign"></a>
+
+## メッセージの署名と検証
+
+`sign data` はCIP-8/CIP-30 COSE署名と公開鍵をJSONで出力します。`ADDRESS_HEX` には署名鍵に対応するアドレスのバイト列を16進数で設定します（Bech32アドレス文字列ではありません）。署名後、返された `signature` と `key` の値を `SIGNATURE_HEX` と `COSE_KEY_HEX` に設定します。
+
+```sh
+./bursa sign data --address "$ADDRESS_HEX" --payload 'Hello Cardano' \
+  --signing-key-file dev/payment.skey
+./bursa sign verify --signature "$SIGNATURE_HEX" --key "$COSE_KEY_HEX" \
+  --payload 'Hello Cardano'
+```
+
+バイナリデータには `--payload` の代わりに `--payload-hex` を使います。期待するペイロードを指定した検証は、成功時に `VALID` を表示し、失敗時はエラーで終了します。
+
+<a name="signer"></a>
+
+## リモート署名サービスの起動
+
+`signer` コマンドは、カストディバックエンド、呼び出し元の権限、鍵ポリシー、二重署名防止ウォーターマークの設定に従い、認証されたリモート署名リクエストを処理します。
+
+```sh
+./bursa signer --config /path/to/signer.yaml
+```
+
+`--config` を省略すると、`BURSA_CONFIG` がYAMLファイルを選択します。認証方式を少なくとも1つ設定してください。JWT Bearer、mTLSクライアント証明書、登録鍵によるリクエスト署名に対応しています。起動前に[署名サービス運用ガイド](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md)を参照し、[設定例](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/signer.example.yaml)のカストディ、認証、TLS、呼び出し元の権限、永続ウォーターマークを調整してください。[署名サービス概要](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/README.md)にはAPI仕様とセキュリティガイドへのリンクがあります。
+
+***
+
 その他のBursaコマンドを探索
 
 > **Bursaコマンドカテゴリ**
@@ -92,6 +161,9 @@ http://localhost:8080/swagger/index.html
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
 > 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 9. [tx](#tx) - オフライントランザクション操作
+> 10. [sign](#sign) - CIP-8/CIP-30メッセージの署名と検証
+> 11. [signer](#signer) - リモート署名サービス
 
 ***
 

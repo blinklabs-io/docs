@@ -64,6 +64,9 @@ Explora otros comandos de Bursa
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 7. [address](#address) - Comandos para trabajar con direcciones de Cardano
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
+> 9. [tx](../003-commands#tx) - Operaciones de transacciones sin conexión
+> 10. [sign](../003-commands#sign) - Firma y verificación de mensajes CIP-8/CIP-30
+> 11. [signer](../003-commands#signer) - Servicio de firma remota
 
 ***
 

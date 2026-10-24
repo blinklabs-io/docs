@@ -41,14 +41,11 @@ Bursaは、ニーモニックから個別の鍵を導出するために使用で
 
 ニーモニックから個別の鍵を導出するためのBursaコマンドラインガイド。
 
-**ニーモニックは以下の方法で提供できます:**
-  1. --mnemonicフラグ
-  2. MNEMONIC環境変数
-  3. --mnemonic-fileフラグ
-  4. デフォルトファイル "seed.txt"
-<br>
+`--mnemonic-file seed.txt` はファイルから、`--mnemonic-file -` は標準入力からニーモニックを読み取ります。ニーモニックの入力元は、非推奨の `--mnemonic`、`MNEMONIC` 環境変数、`--mnemonic-file`、デフォルトの `seed.txt` ファイルの順で確認されます。`--mnemonic` と `--password` 引数は他のローカルユーザーに見えるため非推奨です。代わりに `--mnemonic-file` と `--password-file` を使用してください。任意の導出パスワードには `--password-file <path>` を使用してください。`-` は標準入力を読み取りますが、同じコマンドで両方の秘密情報を標準入力から読み取ることはできません。
 
-> 鍵はCardano CIP標準に従って導出され、cardano-cliやその他のツールで使用するのに適したbech32形式で出力されます。
+以下の例では、署名鍵を明示的なファイルにcardano-cli JSONエンベロープ形式で保存します。ニーモニックから導出するコマンドでは、`--signing-key-file -` を指定すると秘密鍵をbech32形式で標準出力に書き込みます。署名鍵の出力先を省略できるのは、そのコマンドが `--verification-key-file` のみの出力に対応し、それを指定した場合だけです。rootとaccountでは署名鍵の出力先が必須です。`--signing-key-file -` と `--verification-key-file` は併用できません。
+
+> 鍵はCardano CIP標準に従って導出されます。ファイル出力にはcardano-cliエンベロープを使用し、明示的に指定した標準出力にはbech32を使用します。
 >
 > **鍵の種類別の導出パス:**
 > -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
@@ -75,9 +72,9 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 ### ルートキー
 ルートキーは、他のすべての鍵が導出されるマスターキーです。
-出力は、--signing-key-fileが指定されていない限り、bech32形式 (root_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (root_xskプレフィックス) になります。
 ```bash
-./bursa key root --mnemonic "word1 word2 ..."
+./bursa key root --mnemonic-file seed.txt --signing-key-file root.skey
 ```
 
 **署名鍵ファイル付きルートキーの例:**
@@ -85,7 +82,7 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key root --signing-key-file /path/root.skey
+./bursa key root --mnemonic-file seed.txt --signing-key-file /path/root.skey
 ```
 
 ***
@@ -94,10 +91,10 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 ### アカウントキー
 アカウントキーはCIP-1852のパスに従います: m/1852'/1815'/account'
-出力は、--signing-key-fileが指定されていない限り、bech32形式 (acct_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (acct_xskプレフィックス) になります。
 
 ```bash
-./bursa key account --mnemonic "word1 word2 ..." --index 0
+./bursa key account --mnemonic-file seed.txt --index 0 --signing-key-file account.skey
 ```
 
 ***
@@ -106,9 +103,9 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 ### ペイメントキー
 ペイメントキーはCIP-1852のパスに従います: m/1852'/1815'/account'/0/index
-出力は、鍵ファイルが指定されていない限り、bech32形式 (addr_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (addr_xskプレフィックス) になります。
 ```bash
-./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key payment --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file payment.skey --verification-key-file payment.vkey
 ```
 
 ***
@@ -117,9 +114,9 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 
 ### ステークキー
 ステークキーはCIP-1852のパスに従います: m/1852'/1815'/account'/2/index
-出力は、鍵ファイルが指定されていない限り、bech32形式 (stake_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (stake_xskプレフィックス) になります。
 ```bash
-./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key stake --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file stake.skey --verification-key-file stake.vkey
 ```
 
 ***
@@ -129,9 +126,9 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 ### プールコールドキー
 プールコールドキーはCIP-1853のパスに従います: m/1853'/1815'/0'/index'
 これらの鍵は、ステークプールオペレーターの長期的なアイデンティティ鍵として使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (pool_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (pool_xskプレフィックス) になります。
 ```bash
-./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
+./bursa key pool-cold --mnemonic-file seed.txt --index 0 --signing-key-file pool-cold.skey --verification-key-file pool-cold.vkey
 ```
 
 ***
@@ -141,9 +138,9 @@ HDパスから導出した署名鍵をエクスポートすると、Bursaは拡�
 ### ポリシーキー
 ポリシーキーはCIP-1855のパスに従います: m/1855'/1815'/policy_ix'
 これらの鍵は、ネイティブアセットのミント/バーンポリシーに使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (policy_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (policy_xskプレフィックス) になります。
 ```bash
-./bursa key policy --mnemonic "word1 word2 ..." --index 0
+./bursa key policy --mnemonic-file seed.txt --index 0 --signing-key-file policy.skey --verification-key-file policy.vkey
 ```
 
 ***
@@ -156,10 +153,10 @@ m/1852'/1815'/account'/0/index
 
 この鍵は機能的にはペイメントキーと同一ですが、SPOアイデンティティのために異なるbech32プレフィックス (calidus_xsk/calidus_xvk) と異なるcardano-cliテキストエンベロープタイプを使用します。
 
-出力は、鍵ファイルが指定されていない限り、bech32形式 (calidus_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (calidus_xskプレフィックス) になります。
 
 ```bash
-./bursa key calidus --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key calidus --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file calidus.skey --verification-key-file calidus.vkey
 ```
 
 **鍵ファイル付きCalidusキーの例**
@@ -167,7 +164,7 @@ m/1852'/1815'/account'/0/index
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key calidus --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
+./bursa key calidus --mnemonic-file seed.txt --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
 ```
 
 ***
@@ -177,10 +174,10 @@ m/1852'/1815'/account'/0/index
 ### VRF (検証可能ランダム関数) キーペア
 VRFキーは、Praosコンセンサスプロトコルにおけるリーダー選出のためにステークプールオペレーターによって使用されます。シードはニーモニックから決定論的に導出されるため、鍵を復元できます。
 
-出力には、鍵ファイルが指定されていない限り、署名鍵 (vrf_sk) と検証鍵 (vrf_vk) の両方がbech32形式で含まれます。
+`--signing-key-file -` を指定すると、標準出力には、署名鍵 (vrf_sk) と検証鍵 (vrf_vk) の両方がbech32形式で含まれます。
 
 ```bash
-./bursa key vrf --mnemonic "word1 word2 ..." --index 0
+./bursa key vrf --mnemonic-file seed.txt --index 0 --signing-key-file vrf.skey --verification-key-file vrf.vkey
 ```
 
 **鍵ファイル付きVRFの例**
@@ -188,7 +185,7 @@ VRFキーは、Praosコンセンサスプロトコルにおけるリーダー選
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key vrf --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
+./bursa key vrf --mnemonic-file seed.txt --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
 ```
 
 VRF検証鍵は期待される長さを満たす必要があります。VRF署名鍵には、シード単体またはシードと公開鍵を連結した形式を使用できます。シードと公開鍵の形式では、Bursaがシードから導出した公開鍵と埋め込まれた公開鍵を照合します。Bursaは長さが不正な鍵やシードと公開鍵が一致しない鍵を拒否し、エンベロープを生成しません。
@@ -203,10 +200,10 @@ KESキーは、Praosコンセンサスプロトコルにおけるブロック署
 この実装ではCardanoの深さ6を使用し、64の時間期間を提供します。
 シードはニーモニックから決定論的に導出されるため、鍵を復元できます。
 
-出力には、鍵ファイルが指定されていない限り、署名鍵 (kes_sk、608バイト) と検証鍵 (kes_vk、32バイト) の両方がbech32形式で含まれます。
+`--signing-key-file -` を指定すると、標準出力には、署名鍵 (kes_sk、608バイト) と検証鍵 (kes_vk、32バイト) の両方がbech32形式で含まれます。
 
 ```bash
-./bursa key kes --mnemonic "word1 word2 ..." --index 0
+./bursa key kes --mnemonic-file seed.txt --index 0 --signing-key-file kes.skey --verification-key-file kes.vkey
 ```
 
 **鍵ファイル付きKESキーの例**
@@ -214,7 +211,7 @@ KESキーは、Praosコンセンサスプロトコルにおけるブロック署
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
+./bursa key kes --mnemonic-file seed.txt --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
 
 KES検証鍵は期待される長さを満たす必要があります。KES署名鍵はCardano KES depthとKES secret-key sizeの要件を満たす必要があります。Bursaは長さが不正な検証鍵、無効なKES depth、または無効なKES secret-key sizeを含む鍵を拒否し、エンベロープを生成しません。
@@ -226,10 +223,10 @@ KES検証鍵は期待される長さを満たす必要があります。KES署�
 ### DRepキー
 DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 これらの鍵は、Delegated Representativeとしてのガバナンス参加に使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (drep_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (drep_xskプレフィックス) になります。
 
 ```bash
-./bursa key drep --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
 ```
 
 **鍵ファイル付きDRepキーの例**
@@ -237,7 +234,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key drep --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
+./bursa key drep --mnemonic-file seed.txt --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
 ```
 
 ***
@@ -247,10 +244,10 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 ### 憲法委員会コールドキー
 委員会コールドキーはCIP-0105のパスに従います: m/1852'/1815'/account'/4/index
 これらの鍵は、憲法委員会のメンバーシップ (長期的なアイデンティティ) に使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (cc_cold_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (cc_cold_xskプレフィックス) になります。
 
 ```bash
-./bursa key committee-cold --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
 ```
 
 **鍵ファイル付き憲法委員会コールドキーの例**
@@ -258,7 +255,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key committee-cold --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
+./bursa key committee-cold --mnemonic-file seed.txt --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
 ```
 
 ***
@@ -268,10 +265,10 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 ### 憲法委員会ホットキー
 委員会ホットキーはCIP-0105のパスに従います: m/1852'/1815'/account'/5/index
 これらの鍵は、憲法委員会の投票 (運用鍵) に使用されます。
-出力は、鍵ファイルが指定されていない限り、bech32形式 (cc_hot_xskプレフィックス) です。
+`--signing-key-file -` を指定すると、標準出力はbech32形式 (cc_hot_xskプレフィックス) になります。
 
 ```bash
-./bursa key committee-hot --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey
 ```
 
 **鍵ファイル付き憲法委員会ホットキーの例**
@@ -279,7 +276,7 @@ DRepキーはCIP-0105のパスに従います: m/1852'/1815'/account'/3/index
 > ⚠️ 以下のパスを調整してください。
 
 ```bash
-./bursa key committee-hot --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
+./bursa key committee-hot --mnemonic-file seed.txt --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
 ```
 
 ***
@@ -327,6 +324,9 @@ Bursaは指定した各生成先ファイルを、所有者だけが読み書き
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - マルチシグネチャ操作用のコマンド
 > 7. [address](../007-address-commands) - Cardanoアドレスを操作するコマンド
 > 8. [key](#key)  &emsp;&nbsp;&nbsp; - ニーモニックから個別の鍵を導出するコマンド
+> 9. [tx](../003-commands#tx) - トランザクションへの署名とウィットネスの組み立て用コマンド
+> 10. [sign](../003-commands#sign) - CIP-8データ署名用コマンド
+> 11. [signer](../003-commands#signer) - リモート署名サービスを実行するコマンド
 
 ***
 
