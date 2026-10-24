@@ -25,8 +25,8 @@ Adder Trayはシステムトレイで動作するデスクトップアプリケ�
   - 通知の権限
   - バックグラウンドサービスの管理
 - 設定が簡単です。
-  - アドレス、ステーキングキー、プールID、DRepなどの対象を選択します。
-  - Adder Trayが定義済みの通知タイプを適用します。
+  - ウォレット、DRep、プールを監視対象として選択します。必要に応じてアセットやポリシーも追加できます。
+  - Adder Trayは選択した対象に基づいて通知の選択肢を決定します。
 - YAMLやCLIは不要で、技術に詳しくない利用者にも適しています。
 
 <a id="use-cases"></a>
@@ -103,3 +103,14 @@ Adder Trayはシステムトレイで動作するデスクトップアプリケ�
 ## Adder CLI / イベントモニターガイド（Linux）
 
 - [Linuxガイド](../005-use-adder-on-linux)
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

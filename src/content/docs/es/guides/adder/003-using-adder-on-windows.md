@@ -67,15 +67,21 @@ Al abrir *Adder Tray App*, verás la pantalla **Welcome**, que te guía para con
 
 ### Paso 3.2 - Añadir los objetivos de observación
 
-Introduce los datos que quieras observar: dirección de billetera, identificador de política, huella de activo, identificador de pool o identificador de DRep.
+Añade uno o varios valores en cada sección de objetivos que corresponda:
 
-En este ejemplo, introducimos un identificador de pool y otro de DRep.
+- `Watch Wallet` para direcciones de wallets.
+- `Track DRep` para IDs de DRep.
+- `Monitor Pool` para IDs de pool.
+- La sección opcional `Follow Asset` para huellas de activos, cuando las necesites.
+- La sección opcional `Follow Policy` para IDs de política, cuando los necesites.
 
 <img src="/adder-windows-config-pool-id-drep-id.webp"
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Selecciona `OR` para recibir una alerta cuando cualquiera de los dos realice un evento que hayas seleccionado.
+También puedes utilizar el modo exclusivo `Monitor Everything` para monitorizar todos los tipos de objetivos admitidos en lugar de introducir listas de objetivos explícitas. No combines este modo con valores de objetivos.
+
+Continúa al siguiente paso. Adder determina las opciones de notificación a partir de los tipos de objetivos introducidos o del modo `Monitor Everything`.
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"

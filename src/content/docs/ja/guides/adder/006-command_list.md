@@ -18,9 +18,9 @@ description: "Adderコマンドの一覧です。"
  --config string
 ```
 
-> ファイルの読み込みにコンフィグする
+> 読み込む設定ファイルへのパス
 
-> 複数のメソッドで同じ設定が提供される場合、Adder はこの優先オーダーを使います: CLI フラグ > YAML 設定ファイル > 環境変数。
+> 複数の方法で同じ設定を指定した場合、Adderは次の優先順位を使用します。CLIフラグ > 環境変数 > YAML設定ファイル > デフォルト値。
 
 ***
 
@@ -72,7 +72,7 @@ description: "Adderコマンドの一覧です。"
 
 > フィルタリングするイベントタイプを指定する
 >
-> `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`、Adderはコンマ区切りのエントリーから空白を囲んで、空のエントリを無視します。
+> `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`では、カンマ区切りの各項目の前後にある空白を除去し、空の項目を無視します。
 >
 > **イベントの種類:**
 > 1. `input.block` - 新しいブロックが観察されました。
@@ -91,7 +91,7 @@ description: "Adderコマンドの一覧です。"
   --input string
 ```
 
-> 使用するプラグインを入力します。'list' で利用可能な表示 (既定の "chainsync")
+> 使用する入力プラグインを指定します。'list'で利用可能なプラグインを表示します（デフォルトは"chainsync"）。
 >
 > **入力タイプ:**
 > 1. `chainsync` - NtC(node-to-client)またはNtN(node-to-node)を使用したCardanoノードからブロックを同期
@@ -106,7 +106,7 @@ description: "Adderコマンドの一覧です。"
   --input-chainsync-address string
 ```
 
-> ノードの TCP アドレスを指定すると、フォーム 'host:port' に接続します。
+> 接続先ノードのTCPアドレスを'host:port'形式で指定します。
 <br />
 
  ```
@@ -134,7 +134,13 @@ description: "Adderコマンドの一覧です。"
   --input-chainsync-intersect-point string
 ```
 
-> '<slot>.<hash>' 形式で指定されたチェーンポイントで同期を開始します。
+> '<slot>.<hash>'形式で指定したチェーンポイントから同期を開始します。
+>
+> カンマ区切りの各項目の前後にある空白を除去し、空の項目を無視します。
+>
+> 空白を除去した後に空白や空の項目しか残らない場合は、`--input-chainsync-intersect-tip`で設定された動作に従います。
+>
+> 空ではない`<slot>.<hash>`項目の形式が不正な場合、Adderはエラーとして扱います。
 >
 <br />
 
@@ -142,7 +148,7 @@ description: "Adderコマンドの一覧です。"
   --input-chainsync-intersect-tip
 ```
 
-> チェーンチップ(デフォルトはチェーンジェネシス)で同期を開始します(デフォルトはtrue)
+> チェーンの先端から同期を開始します（通常の開始位置はチェーンのジェネシス、デフォルトはtrue）。
 <br />
 
 ```
@@ -170,7 +176,7 @@ description: "Adderコマンドの一覧です。"
   --input-chainsync-socket-path string
 ```
 
-> UNIX ソケットへのパスを指定すると、
+> 接続先UNIXソケットへのパスを指定します。
 
 ***
 
@@ -204,7 +210,7 @@ description: "Adderコマンドの一覧です。"
   --input-mempool-kupo-url string
 ```
 
-> Kupo API URL はトランザクションの入力(例:http://localhost:1442)を解決します。Kupo は、必要な出力をインデックス化する必要があります(例: --match "*") で実行するか、解像度は空になります。
+> トランザクション入力を解決するKupo APIのURL（例：http://localhost:1442）。Kupoで必要な出力をインデックス化してください（例：--match "*"で実行）。インデックス化されていない場合、解決結果は空になります。
 <br />
 
 ```
@@ -218,7 +224,7 @@ description: "Adderコマンドの一覧です。"
   --input-mempool-network-magic uint
 ```
 
-> ネットワークの魔法の価値(ネットワーク名を上書き)
+> ネットワークマジック値（ネットワーク名より優先されます）。
 <br />
 
 ```
@@ -232,7 +238,7 @@ description: "Adderコマンドの一覧です。"
   --input-mempool-poll-interval string
 ```
 
-> mempoolをポーリングする方法(例:5s、1m)(デフォルト「5s」)
+> mempoolをポーリングする間隔（例：5s、1m。デフォルトは"5s"）。
 <br />
 
 ```
@@ -240,19 +246,6 @@ description: "Adderコマンドの一覧です。"
 ```
 
 > ノードの UNIX ソケット (NtC) へのパス
-
-***
-
-<a id="logging"></a>
-
-## ログ:
-
-```
-  --logging-level string
-```
-
-> ロギングレベル(デバッグ、情報、警告、エラー)(デフォルト「info」)
-<br />
 
 ***
 
@@ -264,8 +257,17 @@ description: "Adderコマンドの一覧です。"
   --output string
 ```
 
-> 利用するプラグインを出力します。'list' で利用可能な表示 (既定の "log")
+> 使用する出力プラグインを指定します。通知NDJSONには`notify-json`、利用可能なプラグインの表示には`list`を指定します（デフォルトは"log"）。
 >
+<br />
+
+```
+  --output-log-level string
+```
+
+> `output.log`のログ出力のしきい値を設定します。指定できる値は`debug`、`info`、`warn`、`error`です（デフォルトは"info"）。`debug`と`info`ではイベントレコードを出力し、`warn`と`error`では出力を抑制します。他の出力プラグインを選択した場合も、このしきい値によってstderrに出力するAdderアプリケーションの診断情報を絞り込みます。
+>
+> 同じ設定はYAMLの`plugins.output.log.level`または環境変数`OUTPUT_LOG_LEVEL`でも指定できます。従来の`--logging-level`フラグとトップレベルのYAML設定`logging.level`は削除されており、指定すると拒否されます。従来の環境変数`LOGGING_LEVEL`も削除されており、指定しても無視されます。
 <br />
 
 ```
@@ -279,7 +281,9 @@ description: "Adderコマンドの一覧です。"
   --output-notify-json-config string
 ```
 
-> `notify-json`で使われるバージョン通知JSON設定へのパス
+> `notify-json`が使用する、バージョン付き通知JSON設定へのパス
+>
+> `--output notify-json`を選択した場合は必須です。
 <br />
 
 ```
@@ -317,7 +321,7 @@ description: "Adderコマンドの一覧です。"
   --output-telegram-chat-id string
 ```
 
-> チャット ID をTelegramで送信(ユーザー、グループ、またはチャネル)
+> メッセージの送信先となるTelegramチャットID（ユーザー、グループ、チャネル）。
 <br />
 
 ```
@@ -380,8 +384,38 @@ adder notifications validate --config <path> [--json]
 
 > 通知 JSON の設定を検証する
 >
-> `--config <path>`が必要です。通常の出力レポートの有効性とエラー。 `--json`は、機械で読みやすいバリデーション結果を出します。
+> `--config <path>`は必須です。通常の出力では有効性とエラーを報告します。`--json`を指定すると、機械で処理できる検証結果を出力します。
 >
+
+<a id="notification-json-configuration"></a>
+
+### 通知JSON設定
+
+設定には、`schemaVersion`を`1`に設定したJSONを使用します。設定ファイルに未知のフィールドや複数のJSON値が含まれている場合、Adderは拒否します。
+
+| フィールド | 説明 |
+| --- | --- |
+| `schemaVersion` | 必須の値は`1`です。 |
+| `network.name` | サポートされるCardanoネットワーク`mainnet`、`preprod`、`preview`のいずれかを指定します。必須です。 |
+| `network.customAddress`と`network.customPort` | 任意のカスタムノードアドレスとポートです。両方を一緒に設定します。`customPort`は`1`から`65535`の範囲で指定します。 |
+| `monitor.everything` | サポートされるすべての対象を監視する場合は`true`にします。このフィールドを設定するか、`wallets`、`dreps`、`pools`、`assets`、`policies`のいずれかに少なくとも1つの対象を設定します。 |
+| `monitor.wallets` | 監視するウォレットアドレス。 |
+| `monitor.dreps` | 監視するDRep ID。`monitor.drepMatch`には`any`または`all`を指定できます。 |
+| `monitor.pools` | 監視するプールID。`monitor.poolMatch`には`any`または`all`を指定できます。 |
+| `monitor.assets` | 監視するアセットフィンガープリント。`monitor.assetMatch`には`any`または`all`を指定できます。 |
+| `monitor.policies` | 監視するポリシーID。`monitor.policyMatch`には`any`または`all`を指定できます。 |
+| `alerts` | 有効にするアラートのカテゴリ。`incomingTransactions`、`outgoingTransactions`、`tokenTransfers`、`blocksMinted`、`chainRollbacks`、`poolParameterChanges`、`governanceProposals`、`votesCast`、`registrationChanges`、`assetActivity`、`policyActivity`、`connectionIssues`を指定できます。少なくとも1つのカテゴリを有効にしてください。 |
+| `rateLimit.max` | 必須です。レート制限を無効にする場合は`-1`、それ以外の場合は`0`以上を指定します。 |
+| `rateLimit.windowSeconds` | 必須です。秒単位で正の期間を指定します。 |
+| `connectionStaleSeconds` | 必須です。接続を古いと判定する間隔を`30`から`3600`秒の範囲で指定します。 |
+
+対象リストには、有効かつ重複のないウォレットアドレス、DRep ID、プールID、アセットフィンガープリント、ポリシーIDを指定してください。通知のネットワークは`--input-chainsync-network`と一致する必要があります。カスタムノードを設定した場合、そのアドレスとポートは`--input-chainsync-address`と一致する必要があります。`notify-json`出力には`chainsync`入力が必要です。
+
+<a id="notify-json-output"></a>
+
+### `notify-json`出力
+
+`notify-json`出力は、stdoutに1行につき1つのJSONオブジェクトを書き込みます。各レコードはスキーマバージョン`1`を使用します。ステータスレコードは`starting`、`connected`、`stale`の状態を報告し、タイムスタンプと任意のメッセージを含みます。通知レコードには、`ruleId`、任意の`eventType`、描画済みの`title`と`body`、バッチ処理用フィールドの`batched`と`count`が含まれます。
 
 ***
 <a id="version"></a>
@@ -392,7 +426,7 @@ adder notifications validate --config <path> [--json]
   --version
 ```
 
-> バージョンと終了の表示
+> バージョンを表示して終了します。
 
 
 

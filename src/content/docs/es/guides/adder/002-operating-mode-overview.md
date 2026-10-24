@@ -21,8 +21,8 @@ Adder Tray es una aplicación de escritorio que se ejecuta en la bandeja del sis
   - Permisos de notificación.
   - Gestión del servicio en segundo plano.
 - Configuración simplificada:
-  - Selección de objetivos: direcciones, claves de staking, IDs de pools, DReps, etc.
-  - Adder Tray aplica el tipo de notificación predefinido.
+  - Selección de wallets, DReps y pools como objetivos de monitorización, con activos y políticas opcionales.
+  - Adder Tray determina las opciones de notificación a partir de los objetivos seleccionados.
 - No requiere YAML ni línea de comandos; es adecuado para usuarios sin conocimientos técnicos.
 
 ### Casos de uso
@@ -85,3 +85,13 @@ El binario de línea de comandos ofrece acceso completo al procesamiento de even
 ## Guías de Adder CLI / Monitor de eventos (Linux)
 
 - [Guía para Linux](../005-use-adder-on-linux)
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

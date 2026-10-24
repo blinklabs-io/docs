@@ -18,7 +18,7 @@ Windows上でAdderをインストールする最も簡単な方法は、<a href=
      alt="adder-windows-release-download"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-> お使いのシステム(Windows x64 または Windows アーム64)の適切なバージョンを選択します。
+> お使いのシステム(Windows x64 または Windows arm64)の適切なバージョンを選択します。
 
 ***
 
@@ -64,14 +64,14 @@ Adderアプリを検索して開きます。
      alt="adder-windows-search-adder-app"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
->設定 *Welcome**画面が見つからない場合は、システムトレイを開き、Adderアプリを右クリックし、**Configure**を選択して設定ウィザードを開きます。
+> **Welcome**設定画面が表示されない場合は、システムトレイを開き、Adderアプリを右クリックし、**Configure**を選択して設定ウィザードを開きます。
 
 ***
 
 <a id="step-3---configure-adder"></a>
 
 ### ステップ3 - Adderの設定
-*Adderトレイアプリを開くと、**Welcome**画面が表示されます。これにより、Adderを設定し、受信するアラートを設定することができます。
+*Adder Tray App*を開くと、**Welcome**画面が表示されます。これにより、Adderを設定し、受信するアラートを設定することができます。
 
 <img src="/adder-windows-config-welcome.webp"
      alt="adder-windows-config-welcome"
@@ -89,16 +89,22 @@ Adderアプリを検索して開きます。
 
 <a id="step-32---add-your-monitoring-targets"></a>
 
-### ステップ3.2 - あなたの監視ターゲットを追加する
-監視したい情報を入力してください。例えば、ウォレットアドレス、ポリシーID、アセット指紋、プールID、および/またはDRep ID。
+### ステップ3.2 - 監視対象を追加する
+該当する対象のセクションに、1つ以上の値を入力します。
 
-この例では、フォローしたいプールIDとDREP IDを入力します。
+- `Watch Wallet`にはウォレットアドレスを入力します。
+- `Track DRep`にはDRep IDを入力します。
+- `Monitor Pool`にはプールIDを入力します。
+- 必要に応じて、任意の`Follow Asset`セクションにアセットフィンガープリントを入力します。
+- 必要に応じて、任意の`Follow Policy`セクションにポリシーIDを入力します。
 
 <img src="/adder-windows-config-pool-id-drep-id.webp"
      alt="adder-windows-config-pool-id-drep-id"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-プールまたはDRepのいずれかがあなたが追跡するために選択したイベントを実行する場合は、`OR`を選択します。
+対象を個別に入力する代わりに、排他的な`Monitor Everything`モードを使って、サポートされるすべての種類の対象を監視できます。このモードと対象の値を併用しないでください。
+
+次のステップに進みます。Adderは、ここで入力した対象の種類、または`Monitor Everything`モードに基づいて通知の選択肢を決定します。
 
 <img src="/adder-windows-config-or.webp"
      alt="adder-windows-config-or"
@@ -159,7 +165,7 @@ Adderは、デスクトップ通知を提供するように既に設定されて
 <a id="using-the-tray-menu"></a>
 
 ## トレイメニューの利用
-最近のイベントを表示したい場合は、設定を調整したり、アプリを起動したり、アプリを再起動したり、必要に応じて、システムトレイでAdderアプリを右クリックして設定を調整することができます。
+システムトレイでAdderアプリを右クリックすると、最近のイベントの表示、設定の変更、アプリの起動や再起動などを行えます。
 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"

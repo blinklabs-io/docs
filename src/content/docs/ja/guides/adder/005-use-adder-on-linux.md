@@ -13,7 +13,7 @@ description: LinuxでAdderを使用する方法。
 以下のコマンドを実行してAdderバイナリをダウンロードします。ダウンロードリンクを最新バージョンに調整してください。
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.43.1/adder-v0.43.1-linux-amd64.tar.gz -O - | tar -xz
+ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.46.0/adder-v0.46.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
@@ -42,3 +42,14 @@ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.43.1/adder-v0
 <br />
 
 これで、Adderの有用性とパワーについて、いくつかの[例](../examples/001-using-adder-examples-desc)を見ていく準備ができました！
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
