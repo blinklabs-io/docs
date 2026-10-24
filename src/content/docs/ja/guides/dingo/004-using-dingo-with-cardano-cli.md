@@ -11,7 +11,7 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 ***
 
-このガイドでは、Cardano CLIバイナリのダウンロードと実行、およびいくつかのCardano CLIコマンドの実行方法について説明します。以下の手順に従って始めましょう。
+このガイドでは、Cardano CLIバイナリのダウンロードと実行、およびいくつかのCardano CLIコマンドの実行方法について説明します。
 
 <br>
 
@@ -71,7 +71,7 @@ chmod +x cardano-cli
 <br>
 
 ## ステップ3 - Cardano CLIコマンドを実行してTipをクエリ
-Dingoノードを使用してデータを提供し、previewブロックチェーンのTipをクエリする最初のCardano CLIコマンドを実行しましょう。
+Dingoノードを使用してデータを提供し、previewブロックチェーンのTipをクエリする最初のCardano CLIコマンドを実行します。
 
 以下のコマンドを実行してTipをクエリします：
 

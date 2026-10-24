@@ -13,7 +13,7 @@ Un nodo de datos de la blockchain Cardano escrito en Go que participa activament
 
 ***
 
-En esta guía te guiaremos a través de la configuración de un servicio `systemd`. Usar un servicio `systemd` para ejecutar un nodo Dingo maximiza el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia. Para comenzar, sigue los pasos a continuación.
+Esta guía configura un servicio `systemd`. Usar un servicio `systemd` para ejecutar un nodo Dingo maximiza el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia. Para comenzar, sigue los pasos a continuación.
 
 <br>
 
@@ -27,7 +27,7 @@ En esta guía te guiaremos a través de la configuración de un servicio `system
 
 ## Paso 1 - Mover binario de Dingo y configuración
 
-Moveremos el binario de Dingo a `/usr/local/bin/` y la configuración a `/etc/dingo/` para que sean accesibles a nivel de sistema.
+Mueve el binario de Dingo a `/usr/local/bin/` y la configuración a `/etc/dingo/` para que sean accesibles a nivel de sistema.
 
 <br>
 
@@ -54,7 +54,7 @@ sudo cp ~/dingo/dingo.yaml /etc/dingo/
 
 ## Paso 2 - Actualizar Rutas en dingo.yaml
 
-Como el servicio se ejecutará como tu usuario pero la configuración ahora está en `/etc/dingo/`, debemos asegurarnos de que las rutas de la base de datos y el socket usen rutas absolutas. Ejecuta lo siguiente para regenerar la configuración con tu `$HOME` expandido:
+Como el servicio se ejecutará como tu usuario pero la configuración ahora está en `/etc/dingo/`, las rutas de la base de datos y el socket deben ser absolutas. Ejecuta lo siguiente para regenerar la configuración con tu `$HOME` expandido:
 
 ```bash
 sudo tee /etc/dingo/dingo.yaml > /dev/null <<EOF

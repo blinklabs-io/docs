@@ -11,11 +11,11 @@ Dingo es un nodo de datos de la blockchain Cardano escrito en Go que participa a
 
 ***
 
-En esta guia te guiaremos a traves de la descarga y ejecucion del binario de Cardano CLI y la ejecucion de algunos comandos de Cardano CLI. Para comenzar, sigue los pasos a continuacion.
+Esta guia descarga y ejecuta el binario de Cardano CLI, y muestra algunos comandos de Cardano CLI con un nodo Dingo.
 
 <br>
 
-> ✅ Esta guia asume que ya has descargado Dingo y sincronizado la cadena. Si no, consulta nuestra guia de [Inicio Rapido](../002-quick-start-overview).
+> ✅ Esta guia asume que ya has descargado Dingo y sincronizado la cadena. Si no, consulta la guia de [Inicio Rapido](../002-quick-start-overview).
 
 ***
 
@@ -33,7 +33,7 @@ Copia la ruta al ultimo archivo binario de Cardano CLI y ejecuta el siguiente co
 
 <br>
 
-⚠️ Para este ejemplo ponemos el binario de Cardano-cli en nuestra carpeta `dingo`. Ajusta la ruta del enlace a la ruta correcta para la version que deseas descargar.
+⚠️ Este ejemplo pone el binario de Cardano-cli en la carpeta `dingo`. Ajusta la ruta del enlace a la ruta correcta para la version que deseas descargar.
 
 ```bash
 cd ~/dingo
@@ -46,7 +46,7 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 ## Paso 2 - Renombrar Archivo y Cambiar Permisos para Cardano CLI
 
-Para este ejemplo, nombraremos el archivo binario `cardano-cli`. Para renombrar el binario ejecutaremos lo siguiente:
+Este ejemplo nombra el archivo binario `cardano-cli`. Para renombrar el binario, ejecuta lo siguiente:
 
 ⚠️ Ajusta la ruta del archivo y el nombre del archivo si es necesario.
 
@@ -66,14 +66,14 @@ chmod +x cardano-cli
 
 <br>
 
-#### Felicidades, ahora podemos usar cardano-cli para comunicarnos con el nodo.
+#### Felicidades, ahora puedes usar cardano-cli para comunicarte con el nodo.
 
 <br>
 
 ## Paso 3 - Ejecutar Comando de Cardano CLI para Consultar Tip
-Ejecutemos nuestro primer comando de Cardano CLI para consultar el tip de la blockchain preview usando el nodo Dingo para proporcionar los datos.
+Ejecuta un primer comando de Cardano CLI para consultar el tip de la blockchain preview, con el nodo Dingo como fuente de los datos.
 
-Ejecutaremos el siguiente comando para consultar el tip:
+Ejecuta el siguiente comando para consultar el tip:
 
 ```
 ./cardano-cli query tip \
@@ -90,13 +90,13 @@ Ejecutaremos el siguiente comando para consultar el tip:
 <br>
 
 ## Paso 4 - Usando Variables de Entorno (Opcional)
-En lugar de especificar la Red del Nodo Cardano y el Socket del Nodo Cardano cada vez que ejecutamos un comando de cardano-cli, podemos usar variables de entorno.
+En lugar de especificar la Red del Nodo Cardano y el Socket del Nodo Cardano cada vez que ejecutas un comando de cardano-cli, puedes usar variables de entorno.
 
 <br>
 
 ### Configurar Variables de Entorno para la Sesion Actual (Opcion 1)
 
-Podemos ejecutar los siguientes comandos para exportar la variable para nuestra sesion actual.
+Ejecuta los siguientes comandos para exportar la variable para tu sesion actual.
 
 Ruta del Socket:
 
