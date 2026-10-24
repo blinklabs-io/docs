@@ -7,6 +7,8 @@ description: DingoのpeerSnapshotFileとピアスナップショットの起動�
 
 このページでは、`topology.json` から `cardano-node` のピアスナップショットを読み込むための `peerSnapshotFile` と、起動時に適用される検証条件を説明します。
 
+対応形式は、`NodeToClientVersion` が `23` の cardano-node の `peer-snapshot.json` です。
+
 ## `peerSnapshotFile` の設定
 
 `topology.json` の `peerSnapshotFile` に、`cardano-node` のピアスナップショットファイルを指定します。
@@ -26,6 +28,7 @@ Dingoは、スナップショットからピアを読み込む前に、次の条
 - `NodeToClientVersion` は `23` である必要があります。
 - `NetworkMagic` には値を指定します。Dingoは、設定済みのネットワークマジックと一致しない値を受け付けません。
 - `Point.blockPointHash` は、64文字の16進数で指定する必要があります。これは32バイトのハッシュに相当します。
+- `Point` には `Point.blockPointSlot` を含めます。Dingo はその値に追加の制約を課しません。
 - `bigLedgerPools` と `allLedgerPools` の一方だけに1件以上のプールを設定し、もう一方は空にします。`allLedgerPools` を使用できます。
 - 選択した各プールの `relays` リストに、1件以上のリレーを設定します。
 
@@ -34,10 +37,10 @@ Dingoは、スナップショットからピアを読み込む前に、次の条
 各リレーには、次の条件を満たす `address` を指定します。`port` はリレーの種類に応じて設定します。
 
 - `address` は空にできません。値には有効なDNSホスト名、または未指定ではないIPアドレスを指定します。
-- DNSホスト名を使用するリレーでは、SRV解決のために `port` を省略するか、`port: 0` を指定できます。
+- DNSホスト名を使用するリレーでは、SRV解決のために `port` を省略するか、`port` を `0` に設定できます。Dingo はこれらを `MultiHostName` リレーとして保持します。
 - IPアドレスを使用するリレーでは、0ではないTCPポートを `1` から `65535` の範囲で指定する必要があります。`port: 0` は拒否されます。
 
-不正な形式のスナップショットを受け付けないため、Dingoは起動に失敗します。検証に成功したスナップショットだけをピアの入力として使用します。
+Dingo は、設定済みのブートストラップピアをスナップショットのリレー接続先で置き換える前に、スナップショット全体を検証します。形式が不正であるか内容に矛盾がある場合は、リレー接続先を使用する前にノードの起動を停止し、スナップショットを黙って受け入れることはありません。
 
 ---
 

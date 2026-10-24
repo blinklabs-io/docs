@@ -1,11 +1,13 @@
 ---
 title: Tx Submit API Mirror
-description: Tx Submit API Mirrorに関するガイド。
+description: Cardanoトランザクション送信APIの互換ミラーを実行します。
 ---
 
 設定されたバックエンドの送信APIサービスにすべての受信リクエストを非同期でミラーリングする、シンプルなCardanoトランザクション送信APIサービスです。
 
 CBORエンコードされたCardanoトランザクションをペイロードボディとして受け取り、1つ以上の設定されたバックエンドトランザクション送信APIサービスに送信するシンプルなHTTP APIです。
+
+<a id="how-do-i-actually-use-tx-submit-api-mirror"></a>
 
 ## Tx Submit API Mirrorの使い方
 

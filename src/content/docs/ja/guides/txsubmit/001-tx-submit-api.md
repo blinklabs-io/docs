@@ -1,6 +1,6 @@
 ---
 title: Tx Submit API
-description: Tx Submit APIについてのガイド。
+description: Tx Submit APIのHTTPエンドポイントからCardanoトランザクションを送信します。
 ---
 
 ![txsubmit-logo](/txsubmit-logo.png)
@@ -8,6 +8,8 @@ description: Tx Submit APIについてのガイド。
 Tx Submit APIは、Go言語で書かれたCardanoトランザクション送信APIサービスです。HTTPを介してCBORエンコードされたトランザクションペイロードを受け取り、gOuroborosを使用してOuroboros NetworkのLocalTxSubmissionミニプロトコルに変換します。このプロジェクトはProject Catalyst Fund 9で資金提供されました。
 
 Tx Submit APIはHTTPを介してトランザクションを送信するため、Cardanoブロックチェーンへのトランザクション送信をより高速に行うことができます。
+
+<a id="how-do-i-actually-use-tx-submit-api"></a>
 
 ## Tx Submit APIを実際にどのように使用しますか？
 blinklabs.ioからTx Submit APIのバイナリファイルをダウンロードして、ノードサーバーに配置します。その後、サーバーのコマンドラインでTx Submit APIを実行します。設定は設定ファイルまたは環境変数を使用して行うことができます。

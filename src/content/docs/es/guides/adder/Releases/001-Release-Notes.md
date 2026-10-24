@@ -11,6 +11,11 @@ description: Notas de la versión de Adder
 
 - Versión: v0.46.0 - *[Ver notas de la versión](../v0-46-0)*
 - Versión: v0.45.0 - *[Ver notas de la versión](../v0-45-0)*
+- Versión: v0.44.0 - *[Ver notas de la versión](../v0-44-0)*
+- Versión: v0.43.1 - *[Ver notas de la versión](../v0-43-1)*
+- Versión: v0.43.0 - *[Ver notas de la versión](../v0-43-0)*
+- Versión: v0.42.0 - *[Ver notas de la versión](../v0-42-0)*
+- Versión: v0.39.1 - *[Ver notas de la versión](../v0-39-1)*
 
 ---
 

@@ -1,44 +1,47 @@
 ---
-title: SPOを監視してDiscordでアラートを受け取る
-description: Adder例3 - SPOを監視してDiscordでアラートを受け取る。
+title: "SPO を見て、Discord でアラートを取得"
+description: "Adder 例3 - SPO を見て、Discord でアラートを取得します。"
 ---
 
-# SPOを監視してDiscordでアラートを受け取る
+この例では、Adderを使用して、Webhooksを介してDiscord通知を送信し、追跡したいステークプールに変更がある場合に使用します。
 
-この例では、Adderを使用して、追跡したいステークプールに変更があったときにWebhook経由でDiscord通知を送信します。
+<a id="the-events-that-will-trigger-an-alert-are-the-following-changes-to-a-spo"></a>
 
+### アラートをトリガーするイベントは、SPO の次の変更です。
 
-### アラートをトリガーするイベントは、SPOへの以下の変更です：
+✅ ブロック 最小化 - SPO がブロックを追跡している場合
 
-ブロック生成 - 追跡しているSPOがブロックを生成した場合
+✅ Stakeの委任 - SPOが追跡していると、プールに新しい委任者が追加されました
 
-ステーク委任 - 追跡しているSPOに新しいデリゲーターがプールに追加された場合
+✅ プールの登録更新 - SPOがその登録にアイテムを変更した場合、リレー、固定料金、マージン、名前またはメタデータ
 
-プール登録更新 - SPOがリレー、固定手数料、マージン、名前、メタデータなどの登録項目を変更した場合
-
-プール引退 - SPOがステークプールを引退させた場合
-
-***
-
-> このガイドでは、Adder exeをダウンロード済みでコマンドプロンプトを開いていることを前提としています。まだの場合は、[クイックスタート](../../002-quick-start-overview)ガイドを参照してください。
+✅ プールの退職 - SPOが自分のステークプールを退職した場合
 
 ***
 
-この例で使用するフィルターとコマンドを説明する前に、追跡するプールIDとDiscordでアラートを受け取るためのWebhook URLを取得する必要があります。以下でそれらを取得する手順を説明します。
+> ✅ このガイドでは、Adderバイナリを既にダウンロードしたと仮定しています。未ダウンロードの場合は[クイックスタート](../../005-use-adder-on-linux)ガイドを参照してください。
+
+***
+
+この例では、フィルタとコマンドを破棄する前に、プール ID を追跡し、Webhook URL を取得する必要があります。Discord でアラートを受け取ります。以下の手順を通ります。
 
 <a name="step-1"></a>
 
-## ステップ1 - 追跡したいプールのプールIDを取得
+<a id="step-1---get-pool-id-for-the-pool-you-want-to-track"></a>
 
-監視したいステークプール（SPO）でフィルタリングするには、プールIDが必要です。cexplorer.ioなどのツールを使用して、プールティッカーで検索し、プールIDを取得できます。
+## ステップ1 - トラックしたいプール用のプールIDを取得する
 
-この例では、<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>でティッカー`ECP`を検索しました
+ステークプール(SPO)でフィルタリングするには、プール ID が必要です。プールティッカーで検索するために cexplorer.io などのツールを使用してプールティッカーを検索することができますので、プール ID を得ることができます。
 
-![adder-pool-id](/adder-pool-id.png)
+この例では、<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>のCティックター`ECP`を検索しました
+
+<img src="/adder-pool-id.png"
+     alt="adder-pool-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
-プールIDをメモしてください。後で必要になります。この例では：
+プール ID のメモは、後で必要です。この例では、次のようになります。
 
 ```
 pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
@@ -48,50 +51,64 @@ pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
 
 <a name="step-2"></a>
 
-## ステップ2 - Discord Webhook URLを取得
+<a id="step-2---get-discord-webhook-url"></a>
 
-Discordサーバーでアラートを受け取るには、Webhook URLが必要です。以下の手順では、Discordサーバーの好みのチャンネルでWebhookを作成する方法を説明します。
+## ステップ2 - Discord Webhook URLを取得する
 
+Discord サーバーでアラートを取得するには、webhook URL が必要です。Discord サーバーで選択したチャネルで webhook を作成する方法について説明します。
 
-<br />
-
-1 ) アラートを受け取りたいチャンネルで`チャンネルの編集`をクリック
-
-![adder-discord-edit-channel](/adder-discord-edit-channel.png)
 
 <br />
 
-2 ) `連携サービス`をクリック
+1 )あなたが警告を受信したいチャネルで`Edit Channel`をクリックします
 
-![adder-discord-integrations](/adder-discord-integrations.png)
-
-<br />
-
-3 ) `ウェブフックを作成`をクリック
-
-![adder-discord-create-webhook](/adder-discord-create-webhook.png)
+<img src="/adder-discord-edit-channel.png"
+     alt="adder-discord-edit-channel"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
-4 ) `新しいウェブフック`をクリック
+2 ) クリック `Integrations`
 
-![adder-discord-new-webhook](/adder-discord-new-webhook.png)
-
-<br />
-
-5 ) Webhookに名前を付ける
-
-![adder-discord-rename-webhook](/adder-discord-rename-webhook.png)
+<img src="/adder-discord-integrations.png"
+     alt="adder-discord-integrations"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
-6 ) `ウェブフックURLをコピー`をクリック
+3 ) クリック `Create Webhook`
 
-![adder-discord-copy-webhook-url](/adder-discord-copy-webhook-url.png)
+<img src="/adder-discord-create-webhook.png"
+     alt="adder-discord-create-webhook"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
-Webhook URLをメモしてください。後で必要になります。この例では、使用したWebhook URLは：
+4 ) クリック `New Webhook`
+
+<img src="/adder-discord-new-webhook.png"
+     alt="adder-discord-new-webhook"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+<br />
+
+5 ) Webhook の名前
+
+<img src="/adder-discord-rename-webhook.png"
+     alt="adder-discord-rename-webhook"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+<br />
+
+6 ) クリック `Copy Webhook URL`
+
+<img src="/adder-discord-copy-webhook-url.png"
+     alt="adder-discord-copy-webhook-url"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+<br />
+
+Webhook URL のメモを後で確認します。この例では、使用した Webhook URL は次のようになります。
 
 ```
 https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
@@ -99,86 +116,104 @@ https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5U
 
 ***
 
-監視したいプールIDとDiscord Webhook URLが取得できたので、使用するフィルターとコマンドを確認する準備ができました。この例では、以下を使用します：
+<a id="step-3---selecting-adder-commands"></a>
 
-* フィルタータイプ
-* フィルタープール
-* 出力Webhook
-* 出力Webhook形式
-* 出力Webhook URL
+## ステップ3 - Adderコマンドの選択
 
+これで、監視したいプール ID と、Discord webhook URL があり、使用するフィルタとコマンドを調べる準備が整いました。この例では、次のようになります。
 
-***
-
-## フィルタータイプ
-
-ブロックロールバックのアラートは不要なので、トランザクションとブロックのフィルタータイプを使用できます。2つのフィルタータイプを使用したいので、カンマで区切ります。Adderにトランザクションとブロックフィルターを使用してロールバックアラートを除外させるには、以下のフィルターを使用します：
-
-```
--filter-type chainsync.transaction,chainsync.block
-```
-
-## フィルタープール
-
-[ステップ1](#step-1)のプールIDを使用して、Adderに以下のフィルターを使用してSPOを追跡させることができます：
-
-```
--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
-```
-
-## 出力Webhook
-
-Webhookを使用したいことをAdderに知らせるコマンドを追加する必要があります。これを行うには、以下のコマンドを追加します：
-
-```
--output webhook
-```
-
-## 出力Webhook形式
-
-AdderにDiscordで通知させたいので、使用したいWebhook形式がDiscordであることをAdderに伝える必要があります。これを行うには、以下のコマンドを追加します：
-
-```
--output-webhook-format discord
-```
-
-## 出力Webhook URL
-
-好みのDiscordチャンネルで通知を受け取るには、Discord WebhookへのURLをAdderに伝える必要があります。これを行うには、[ステップ2](#step-2)のWebhook URLを使用して以下のコマンドを追加します：
-
-```
--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
-```
-
+* フィルター タイプ
+* フィルター プール
+* 出力 Webhook
+* 出力Webhookのフォーマット
+* 出力 Webhook URL
 
 
 ***
 
-## すべてをまとめる
+<a id="filter-type"></a>
 
-SPOに変更があったときにDiscord通知を受け取るには、コマンドプロンプトで以下のコマンドを実行します：
+### フィルターの種類
 
-> Adder exeへのパスを調整してください。この例では、ユーザーrichmのデスクトップにあります。\
-> また、プールIDとWebhook URLも調整してください。
+ブロックロールバックのアラートは望まないため、フィルタタイプのトランザクションとブロックを使用できます。 2つのフィルタタイプを使用してコンマでそれらを分離します。 Adderを持っているには、トランザクションとブロックフィルタを使用してロールバックアラートを除外するには、次のフィルタを使用します。
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction, chainsync.block -filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 -output webhook -output-webhook-format discord -output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+--filter-type input.transaction,input.block
 ```
 
-![adder-SPO-block-alert](/adder-SPO-block-alert.png)
+<a id="filter-pool"></a>
 
-### おめでとうございます！
+### フィルター プール
 
-これでウィンドウを最小化して、Adderをバックグラウンドで実行させることができます。プールに変更があるたびに、Discordでアラートが届きます。
+[ステップ 1](#step-1) のプール ID を使用し、次のフィルターで Adder に対象の SPO を監視させます。
+
+```
+--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
+```
+
+<a id="output-webhook"></a>
+
+### 出力 Webhook
+
+Adder に Webhook を使用するコマンドを追加する必要があります。 これを行うには、次のコマンドを追加します。
+
+```
+--output webhook
+```
+
+<a id="output-webhook-format"></a>
+
+### 出力Webhookのフォーマット
+
+Discord で通知を受け取るため、Webhook の形式として Discord を使用することを Adder に指定します。次のコマンドを追加します。
+
+```
+--output-webhook-format discord
+```
+
+<a id="output-webhook-url"></a>
+
+### 出力 Webhook URL
+
+推奨Discordチャンネルで通知を取得するには、Discord WebhookにURLをAdderに知らせる必要があります。 これを行うには、[手順 2](#step-2)からWebhook URLを使用して、次のコマンドを追加します。
+
+```
+--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+```
 
 ***
 
+<a id="step-4---putting-it-all-together"></a>
 
-> ヒント：`-h`または`-help`フラグを使用すると、利用可能なすべてのコマンドのリストを取得できます。
+## ステップ4 - すべての設定を組み合わせる
 
-他の例を参照して、Adderで何ができるかを確認し、Adderのパワーを解き放ちましょう
+変更がSPOに発生したときにDiscord通知を取得するには、コマンドプロンプトで次のコマンドを実行します。
+
+> ⚠️ プール ID と webhook URL を調整してください。
+
+```
+./adder --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+```
+
+<img src="/adder-SPO-block-alert.png"
+     alt="adder-SPO-block-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+<a id="congratulations"></a>
+
+### おめでとうございます!
+
+変更が当社のプールに発生した際は、Discord でアラートが取得されます。
+
+***
+
+> 💡 ヒント: `-h` または `--help` フラグを使用して、利用可能なすべてのコマンドのリストを得ることができます。
+
+Adderの他の例を見て、Adderのパワーを解除することができます
 
 1. [例1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - ウォレットを監視してデスクトップ通知を受け取る
 2. [例2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - トークンを監視してデスクトップ通知を受け取る
-3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPOを監視してDiscordでアラートを受け取る
-4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPO を監視して Discord 通知を受け取る
+4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセット ID のスマートコントラクトを監視してデスクトップ通知を受け取る
+5. [例5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - DRep を監視して Telegram 通知を受け取る
+6. [例 6](../007-example-6-watch-mempool-for-a-token) - 指定トークンを含むトランザクションをメモリプールで監視する

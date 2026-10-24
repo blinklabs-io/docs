@@ -3,6 +3,8 @@ title: クイックスタートガイド
 description: Bursaクイックスタート概要。
 ---
 
+<a id="bursa"></a>
+
 # Bursa
 
 Go言語で書かれたプログラマティックなCardanoウォレットで、API、CLI、ライブラリインターフェースを提供し、開発者がウォレット機能を簡単に統合できるようにします。
@@ -22,6 +24,8 @@ blinklabs.ioからBursaのCLI用のバイナリまたはアーカイブ、各プ
 ***
 
 <br>
+
+<a id="step-1---download-a-cli-binary-or-a-platform-installer-from-blinklabs"></a>
 
 ## ステップ1 - BlinklabsからCLI用のバイナリまたはアーカイブ、各プラットフォームのインストーラーをダウンロード
 <br>
@@ -53,7 +57,7 @@ LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabs�
 
 > ヒント: 最新のBursaリリースは<a href="https://github.com/blinklabs-io/bursa/releases" target="_blank">https://github.com/blinklabs-io/bursa/releases</a>ページからダウンロードできます。
 
-```bash
+```
 wget -O bursa-v0.20.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.20.0/bursa-v0.20.0-linux-amd64.tar.gz
 tar xzf bursa-v0.20.0-linux-amd64.tar.gz
 ```
@@ -66,17 +70,19 @@ LinuxとFreeBSDのCLIダウンロードにはアーキテクチャ別の`.tar.gz
 
 
 
+<a id="step-2---change-permissions-for-a-linux-or-freebsd-cli-binary"></a>
+
 ## ステップ2 - Linux/FreeBSD CLIの権限の変更
 
 <br>
 
-この手順はLinuxまたはFreeBSDのCLIアーカイブから展開したバイナリに適用します。この例では、バイナリファイルを`bursa`と名付けました。ファイルを実行可能にするには、以下のコマンドを実行します。Windowsの`.msi`またはmacOSの`.pkg`デスクトップウォレットには、このコマンドを実行しないでください。
+この手順はLinuxまたはFreeBSDのCLIアーカイブから展開したバイナリに適用します。この例では、バイナリファイルを`bursa`と名付けました。ファイルを実行可能にするには、以下のコマンドを実行します。Windowsの`.msi`またはmacOSの`.pkg`デスクトップウォレットには、このコマンドを実行しないでください。プラットフォームのインストーラーを使用し、インストーラーファイルを展開したり `chmod` を実行したりしないでください。
 
 <br>
 
 必要に応じてファイルパスとファイル名を調整してください。
 
-```bash
+```
 chmod +x bursa
 ```
 
@@ -86,15 +92,19 @@ chmod +x bursa
 
 
 
+<a id="step-3---use-the-api-locally-or-configure-remote-access"></a>
+
 ## ステップ3 - APIの接続を設定
 
 <br>
 
-APIはデフォルトで`127.0.0.1:8080`で待ち受けます。ローカルクライアントはファイアウォールでポートを開かずに接続できます。リモートアクセスが必要な場合は、YAMLの`api.address`または環境変数`API_LISTEN_ADDRESS`で非ループバックアドレスを明示的に設定してください。非ループバックで待ち受ける場合は、TLSとBearer認証を含むセキュリティ要件を適用します。設定の詳細は[設定リファレンス](../009-configuration-reference)を参照してください。
+APIはデフォルトで`127.0.0.1:8080`で待ち受けます。ローカルクライアントは `localhost:8080` に、ファイアウォールでポートを開かずに接続できます。リモートアクセスが必要な場合は、YAMLの`api.address`または環境変数`API_LISTEN_ADDRESS`で非ループバックアドレスを明示的に設定してください。非ループバックで待ち受ける場合は、TLSとBearer認証を含むセキュリティ要件を適用します。設定の詳細は[設定リファレンス](../009-configuration-reference)を参照してください。
 
 ***
 
 <br>
+
+<a id="congratulations-you-are-ready-to-start-using-bursa"></a>
 
 ### おめでとうございます！Bursaを使用する準備が整いました！
 

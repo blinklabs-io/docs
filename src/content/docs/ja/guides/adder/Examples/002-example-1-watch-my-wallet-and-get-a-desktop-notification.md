@@ -1,29 +1,34 @@
 ---
-title: ウォレットを監視してデスクトップ通知を受け取る
-description: Adder例1 - ウォレットを監視してデスクトップ通知を受け取る。
+title: "ウォレットを監視してデスクトップ通知を受け取る"
+description: "Adder 例1 - ウォレットを監視してデスクトップ通知を受け取る。"
 ---
 
-# ウォレットを監視してデスクトップ通知を受け取る
+Adder、入力フィルタ、コマンドを開く方法を歩き、ウォレットを追跡し、ウォレットに変更がある場合にデスクトップ通知を与えます。
 
-Adderを開き、フィルターとコマンドを入力して、ウォレットを追跡し、ウォレットに変更があったときにデスクトップ通知を受け取る方法を説明します。
-
-> このガイドでは、Adder exeをダウンロード済みでコマンドプロンプトを開いていることを前提としています。まだの場合は、[クイックスタート](../../002-quick-start-overview)ガイドを参照してください。
+> ✅ このガイドでは、Adderバイナリを既にダウンロードしたと仮定しています。未ダウンロードの場合は[クイックスタート](../../005-use-adder-on-linux)ガイドを参照してください。
 
 ***
 <a name="step-1"></a>
 
-## ステップ1 - ウォレットアドレスを取得
+<a id="step-1---get-wallet-address"></a>
 
-まず、ウォレットの受取アドレスまたはステーキングアドレスが必要です。受取アドレスを見つけるには、お好みのCardanoウォレットに移動します。受取タブまたはボタンを見つけて、アドレスをコピーします。後で使用するためにアドレスをメモしてください。
+## ステップ1 - ウォレットアドレスを取得する
 
-![adder-receive-address](/adder-receive-address.png)
+まず、ウォレットの受信アドレスまたはステーキングアドレスが必要です。 受信アドレスがあなたの好みのCardanoウォレットに行きます。 受信タブまたはボタンを見つけて、アドレスをコピーします。 後で使用するアドレスのメモを作成します。
 
-ステーキングアドレスを見つけるには、<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>などのツールを使用して受取アドレスを検索し、ステーキングアドレスをコピーできます
+<img src="/adder-receive-address.png"
+     alt="adder-receive-address"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-ステーキングアドレス：
-![adder-staking-address](/adder-staking-address.png)
 
-使用したいウォレットアドレスをメモしてください。後で必要になります。この例では、以下のステーキングアドレスを使用しました：
+<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>などのツールを使用して、受信アドレスを検索し、ステーキングアドレスをコピーすることができます
+
+ステーキングアドレス:
+<img src="/adder-staking-address.png"
+     alt="adder-staking-address"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+利用したいウォレットアドレスのメモを作成します。後で必要です。この例では、次のアドレスを使用します。
 
 ```
 stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
@@ -31,78 +36,86 @@ stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
 
 ***
 
-監視したいウォレットアドレスが取得できたので、使用するフィルターとコマンドを確認する準備ができました。この例では、以下を使用します：
+<a id="step-2---selecting-adder-commands"></a>
+
+## ステップ2 - Adderコマンドの選択
+今、私たちは監視したい財布アドレスを持っているので、我々は私たちが使用するフィルタとコマンドを見て準備ができています。 この例では、次のようになります。
 
 * フィルタータイプ
 * フィルターアドレス
 * 出力
 
-## フィルタータイプ
+<a id="filter-type"></a>
 
-最初に追加するフィルターはフィルタータイプです。この例では、ウォレット内でトランザクションが発生したとき、つまりアセットを送信または受信したときにアラートを受け取りたいと考えています。これを行うには、以下のフィルターを追加します：
+### フィルターの種類
 
-```
--filter-type chainsync.transaction
-```
-
-## フィルターアドレス
-
-次に、自分のウォレットアドレスだけのアラートを受け取りたいと思います。この例では、ステーキングアドレスを使用します。ステーキングアドレスだけのアラートを受け取るには、以下のフィルターを追加します：
+追加する最初のフィルタは、フィルタタイプです。この例では、トランザクションがウォレット内で発生したときにアラートを取得したいのですが、アセットを送ったり受け取ったりすることもあります。これを行うには、次のフィルタを追加します。
 
 ```
--filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
+--filter-type input.transaction
 ```
 
-## 出力
+<a id="filter-address"></a>
 
-出力をデスクトップ通知にしたいので、ウォレットでトランザクションが発生したときにデスクトップ通知を受け取ります。これを行うには、以下のコマンドを追加します：
+### フィルターアドレス
+
+次に、ウォレットアドレスのアラートを受け取りたい。この例では、当社のステークアドレスを使用します。当社のステークアドレスのアラートを取得するには、次のフィルタを追加します。
 
 ```
--output notify
+--filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta
+```
+
+<a id="output"></a>
+
+### 出力
+
+トランザクションがウォレットで発生したとき、デスクトップ通知になるように、出力をデスクトップ通知にしたいです。これを行うには、次のコマンドを追加します。
+
+```
+--output notify
 ```
 
 ***
 
-## ステップ2 - すべてをまとめる
+<a id="step-3---putting-it-all-together"></a>
 
-アセットを送信または受信したときにデスクトップアラートを受け取るためにAdderに入力するフィルターとコマンドを理解したので、コマンドプロンプトで以下のコマンドを実行します：
+## ステップ3 - すべての設定を組み合わせる
 
+アセットを送受信する際にデスクトップアラートを取得するには、Adderに入力したいフィルタとコマンドを理解し、コマンドプロンプトで次のコマンドを実行します。
 
+> ⚠️ 受信アドレスまたはstakeアドレスを[ステップ1](#step-1)から置き換えてください。
 
-> Adder exeへのパスを調整してください。この例では、ユーザーrichmのデスクトップにあります。\
-\
-また、以下のステークアドレスを[ステップ1](#step-1)の受取またはステークアドレスに置き換えてください
-
-
-Adder exeパスとウォレットアドレスを調整したら実行するコマンド：
-
+Adderバイナリパスとウォレットアドレスを調整したら実行するコマンド:
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction -filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta -output notify
+./adder --filter-type input.transaction --filter-address stake1uytyq97kc5xc6uwy9vt0xskhfaesv3q49efxgmhrengxpec3j5cta --output notify
 ```
 
-実行する最終コマンド：
-![adder-final-ex-1-command](/adder-final-ex-1-command.png)
+実行する最終コマンド:
+<img src="/adder-final-ex-1-command.png"
+     alt="adder-final-ex-1-command"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Enterキーを押してコマンドを実行したら、cmdウィンドウを最小化してバックグラウンドで実行させることができます。これで、ウォレットがアセットを送信または受信すると、デスクトップ通知が届きます。
+ウォレットがアセットを送ったり、受け取ったらデスクトップ通知が届きます。
 
-最小化：
-![adder-minimize-final-ex-1-command](/adder-minimize-final-ex-1-command.png)
+デスクトップの警告:
+<img src="/adder-desktop-alert-v2.png"
+     alt="adder-desktop-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+<a id="congratulations"></a>
 
-デスクトップアラート：
-![adder-desktop-alert](/adder-desktop-alert.png)
-
-### おめでとうございます！
+### おめでとうございます!
 
 ***
 
+> 💡 ヒント: `-h` または `--help` フラグを使用して、利用可能なすべてのコマンドのリストを得ることができます。
 
-> ヒント：`-h`または`-help`フラグを使用すると、利用可能なすべてのコマンドのリストを取得できます。
-
-他の例を参照して、Adderで何ができるかを確認し、Adderのパワーを解き放ちましょう
+Adderの他の例を見て、Adderのパワーを解除することができます
 
 1. [例1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - ウォレットを監視してデスクトップ通知を受け取る
 2. [例2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - トークンを監視してデスクトップ通知を受け取る
-3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPOを監視してDiscordでアラートを受け取る
-4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPO を監視して Discord 通知を受け取る
+4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセット ID のスマートコントラクトを監視してデスクトップ通知を受け取る
+5. [例5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - DRep を監視して Telegram 通知を受け取る
+6. [例 6](../007-example-6-watch-mempool-for-a-token) - 指定トークンを含むトランザクションをメモリプールで監視する

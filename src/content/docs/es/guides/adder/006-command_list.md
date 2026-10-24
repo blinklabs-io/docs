@@ -16,13 +16,11 @@ description: Lista de Comandos de Adder.
 
 > ruta al archivo de configuración a cargar
 
-> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: indicadores de CLI > variables de entorno > archivo de configuración YAML > valores predeterminados.
+> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: opciones de línea de comandos > variables de entorno > archivo de configuración YAML > valores predeterminados.
 
 ***
 
 ## Filtro:
-
-> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder recorta los espacios en blanco que rodean cada entrada separada por comas e ignora las entradas vacías.
 
 ```text
   --filter-address string
@@ -68,12 +66,14 @@ description: Lista de Comandos de Adder.
 
 > especifica el tipo de evento para filtrar
 >
+> Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder elimina los espacios al principio y al final de cada entrada separada por comas e ignora las entradas vacías.
+>
 > **Tipos de Evento:**
 > 1. `input.block` - Se observó un nuevo bloque.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
-> 5. `input.drep-registration` - Adder registra un DRep.
+> 5. `input.drep-registration` - Se registró un DRep.
 >
 
 
@@ -126,7 +126,13 @@ description: Lista de Comandos de Adder.
   --input-chainsync-intersect-point string
 ```
 
-> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'. Adder recorta los espacios en blanco que rodean cada entrada e ignora las entradas vacías. Si la lista resultante queda vacía, incluso cuando el valor solo contiene espacios en blanco o separadores, Adder usa el comportamiento configurado en `--input-chainsync-intersect-tip`. Adder devuelve un error si alguna entrada no vacía no cumple el formato '<slot>.<hash>'.
+> comenzar la sincronización en los puntos de cadena especificados, separados por comas, en formato '<slot>.<hash>'
+>
+> Adder elimina los espacios al principio y al final de cada entrada separada por comas e ignora las entradas vacías.
+>
+> Si el valor solo contiene espacios o entradas vacías después de quitar los espacios, Adder sigue el comportamiento configurado por `--input-chainsync-intersect-tip`.
+>
+> Las entradas `<slot>.<hash>` no vacías y mal formadas provocan errores.
 >
 <br />
 
@@ -239,8 +245,16 @@ description: Lista de Comandos de Adder.
   --output string
 ```
 
-> plugin de salida que se va a usar; `list` muestra los disponibles (predeterminado "log"). `notify-json` escribe notificaciones en formato NDJSON.
+> plugin de salida que se usará; `notify-json` emite notificaciones NDJSON y `list` muestra los disponibles (predeterminado: "log")
+<br />
 
+```text
+  --output-log-level string
+```
+
+> establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
+>
+> Puedes configurar el mismo ajuste mediante YAML `plugins.output.log.level` o la variable de entorno `OUTPUT_LOG_LEVEL`. Adder ha eliminado la opción antigua `--logging-level` y el ajuste YAML de nivel superior `logging.level`, y los rechaza si se proporcionan. También ha eliminado la variable de entorno `LOGGING_LEVEL` y la ignora.
 <br />
 
 ```text
@@ -251,16 +265,12 @@ description: Lista de Comandos de Adder.
 <br />
 
 ```text
-  --output-log-level string
+  --output-notify-json-config string
 ```
 
-> establece el umbral de registro de `output.log`; acepta `debug`, `info`, `warn` o `error` (predeterminado `info`). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El mismo umbral controla los diagnósticos de Adder en `stderr`, incluso cuando Adder usa otro plugin de salida.
+> ruta a la configuración JSON de notificaciones versionada que utiliza `notify-json`
 >
-> Equivalente YAML: `plugins.output.log.level`.
->
-> Equivalente de entorno: `OUTPUT_LOG_LEVEL`.
->
-> Adder eliminó la configuración YAML de nivel superior `logging.level` y la variable de entorno `LOGGING_LEVEL`: Adder rechaza la antigua bandera `--logging-level` y la clave YAML, e ignora la antigua variable de entorno.
+> es obligatoria cuando se selecciona `--output notify-json`
 <br />
 
 ```text
@@ -268,14 +278,6 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica el título a usar (predeterminado "Adder")
-<br />
-
-```text
-  --output-notify-json-config string
-```
-
-> especifica la ruta a la configuración JSON versionada de notificaciones que usa `notify-json`.
-> `--output notify-json` requiere esta ruta.
 <br />
 
 ```text
@@ -360,49 +362,45 @@ description: Lista de Comandos de Adder.
 ## Notificaciones:
 
 ```text
-  adder notifications validate --config <path> [--json]
+adder notifications validate --config <path> [--json]
 ```
 
 > valida una configuración JSON de notificaciones.
 >
-> La opción `--config` es obligatoria y requiere la ruta del archivo.
+> La opción `--config <path>` es obligatoria. La salida normal indica si la configuración es válida y muestra los errores.
 >
 > La opción `--json` emite un resultado de validación legible por máquinas.
 >
-> La salida normal informa si la configuración es válida y muestra los errores.
->
+
+### Configuración JSON de notificaciones
+
+La configuración utiliza JSON con `schemaVersion` establecido en `1`. Adder rechaza los campos desconocidos y los archivos de configuración que contienen varios valores JSON.
+
+| Campo | Descripción |
+| --- | --- |
+| `schemaVersion` | Valor obligatorio: `1`. |
+| `network.name` | Red Cardano admitida obligatoria: `mainnet`, `preprod` o `preview`. |
+| `network.customAddress` y `network.customPort` | Dirección y puerto de nodo personalizados opcionales. Configura ambos campos juntos; `customPort` debe estar entre `1` y `65535`. |
+| `monitor.everything` | Establécelo en `true` para monitorizar todos los objetivos admitidos. Configura este campo o al menos un objetivo en `wallets`, `dreps`, `pools`, `assets` o `policies`. |
+| `monitor.wallets` | Direcciones de wallets que se monitorizarán. |
+| `monitor.dreps` | IDs de DRep que se monitorizarán. `monitor.drepMatch` acepta `any` o `all`. |
+| `monitor.pools` | IDs de pool que se monitorizarán. `monitor.poolMatch` acepta `any` o `all`. |
+| `monitor.assets` | Huellas de activos que se monitorizarán. `monitor.assetMatch` acepta `any` o `all`. |
+| `monitor.policies` | IDs de política que se monitorizarán. `monitor.policyMatch` acepta `any` o `all`. |
+| `alerts` | Categorías de alertas que se activarán: `incomingTransactions`, `outgoingTransactions`, `tokenTransfers`, `blocksMinted`, `chainRollbacks`, `poolParameterChanges`, `governanceProposals`, `votesCast`, `registrationChanges`, `assetActivity`, `policyActivity` y `connectionIssues`. Activa al menos una categoría. |
+| `rateLimit.max` | Valor obligatorio: `-1` para desactivar el límite de frecuencia, o `0` o un valor superior. |
+| `rateLimit.windowSeconds` | Duración positiva obligatoria en segundos. |
+| `connectionStaleSeconds` | Intervalo obligatorio para considerar obsoleta la conexión, entre `30` y `3600` segundos. |
+
+Las listas de objetivos deben contener direcciones de wallets, IDs de DRep, IDs de pool, huellas de activos o IDs de política válidos y sin duplicados. La red de notificaciones debe coincidir con `--input-chainsync-network`. Si se configura un nodo personalizado, su dirección y puerto deben coincidir con `--input-chainsync-address`. La salida `notify-json` requiere la entrada `chainsync`.
+
+### Salida `notify-json`
+
+La salida `notify-json` escribe un objeto JSON por línea en stdout. Cada registro utiliza la versión de esquema `1`. Los registros de estado indican `starting`, `connected` o `stale` e incluyen una marca de tiempo y un mensaje opcional. Los registros de notificación incluyen `ruleId`, un `eventType` opcional, `title` y `body` con el texto generado, y los campos de agrupación `batched` y `count`.
 
 ***
 
-### Configuración JSON de notificaciones:
-
-`notify-json` acepta una configuración JSON con los siguientes campos:
-
-- `schemaVersion`: versión del esquema; debe ser `1`.
-- `network.name`: nombre de red; admite `mainnet`, `preprod` o `preview`.
-- La configuración puede incluir `network.customAddress` y `network.customPort` como par para un nodo personalizado. Si incluye `customAddress`, debe establecer `customPort` entre `1` y `65535`; no puede establecer `customPort` sin `customAddress`.
-- `monitor.everything`: indica si se supervisan todos los objetivos.
-- `monitor.wallets`, `monitor.dreps`, `monitor.pools`, `monitor.assets` y `monitor.policies`: listas opcionales de objetivos de wallets, DReps, pools, assets y políticas.
-- `monitor.drepMatch`, `monitor.poolMatch`, `monitor.assetMatch` y `monitor.policyMatch`: modos de coincidencia opcionales; cada valor debe ser `any` o `all`.
-- `alerts`: mapa de categorías habilitadas. Admite `incomingTransactions`, `outgoingTransactions`, `tokenTransfers`, `blocksMinted`, `chainRollbacks`, `poolParameterChanges`, `governanceProposals`, `votesCast`, `registrationChanges`, `assetActivity`, `policyActivity` y `connectionIssues`.
-- `rateLimit.max`: máximo de notificaciones; debe ser `-1` para deshabilitar el límite o un valor igual o mayor que cero.
-- `rateLimit.windowSeconds`: duración de la ventana del límite en segundos; debe ser mayor que cero.
-- `connectionStaleSeconds`: tiempo de espera de una conexión inactiva; debe estar entre `30` y `3600` segundos.
-
-La validación rechaza campos desconocidos y archivos con más de un valor JSON. La configuración debe usar `schemaVersion` `1`, incluir al menos un objetivo o activar `monitor.everything`, y activar al menos una categoría de `alerts`. Cada objetivo debe tener un identificador válido para su tipo: una dirección de wallet, un ID de DRep, un ID de pool, una huella de asset o un ID de política.
-
-Al iniciar, `notify-json` requiere la entrada `chainsync`. `network.name` debe coincidir con `--input-chainsync-network`. Si la configuración incluye un nodo personalizado, su dirección y puerto también deben coincidir con `--input-chainsync-address`.
-
-### Salida `notify-json`:
-
-`notify-json` escribe en la salida estándar un objeto JSON por línea. Cada registro usa la versión de esquema `1`.
-
-- Los registros `status` informan los estados `starting`, `connected` y `stale`, junto con la marca de tiempo y, cuando corresponde, un mensaje.
-- Los registros `notification` incluyen la notificación renderizada mediante `title` y `body`, además de `ruleId`, `eventType` cuando existe, `batched` y `count` para describir la agrupación.
-
-***
-
-## Version:
+## Versión:
 
 ```text
   --version

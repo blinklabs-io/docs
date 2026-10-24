@@ -1,50 +1,96 @@
 ---
 title: Protección contra repeticiones de LocalMessageSubmission
-description: Configura y opera la protección contra repeticiones de mensajes autenticados en LocalMessageSubmission.
+description: Configura la protección contra repeticiones y la gestión de duplicados de los mensajes autenticados de LocalMessageSubmission.
 ---
+
+# Protección contra repeticiones de LocalMessageSubmission
+
+Esta guía explica la protección contra repeticiones de la ruta autenticada `LocalMessageSubmission` disponible en gOuroboros `v0.213.7`. Describe la secuencia de envío y la configuración necesaria para deduplicar identificadores de mensajes entre conexiones.
 
 ## Descripción general
 
-gOuroboros v0.213.7 incorpora protección contra repeticiones para los mensajes autenticados de `LocalMessageSubmission`. El servidor reserva el ID de cada mensaje autenticado y vigente antes de ejecutar `SubmitMessageFunc`. Solo la primera entrega que logra reservar el ID llega a `SubmitMessageFunc`; las entregas posteriores con el mismo ID activo reciben `pcommon.AlreadyReceivedReason`.
+El servidor utiliza una caché de repeticiones asociada a `Config` para impedir que un identificador de mensaje DMQ local autenticado se procese más de una vez mientras su valor `ExpiresAt` original siga vigente. El servidor elimina los identificadores caducados al procesar nuevas reservas.
 
-La reserva también coordina las entregas simultáneas cuando varias conexiones intentan enviar el mismo ID.
+Este comportamiento está disponible en [gOuroboros `v0.213.7`](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7). Consulta la referencia de paquetes en la [documentación de la API de gOuroboros](https://pkg.go.dev/github.com/blinklabs-io/gouroboros).
 
 ## Configuración
 
-`NewConfig` establece `MaxReplayEntries` en `10,000` de forma predeterminada. Un valor de cero también selecciona este valor predeterminado. El límite controla la cantidad de IDs autenticados que el servidor conserva hasta su vencimiento. La configuración explícita usa `localmessagesubmission.WithMaxReplayEntries(10000)`:
+Crea `Config` mediante `localmessagesubmission.NewConfig` y establece explícitamente el callback del servidor, la autenticación de mensajes, la validación TTL y la capacidad de la caché:
 
 ```go
-config := localmessagesubmission.NewConfig(
-    localmessagesubmission.WithSubmitMessageFunc(submitMessage),
-    localmessagesubmission.WithMaxReplayEntries(10000),
+cfg := localmessagesubmission.NewConfig(
+	localmessagesubmission.WithSubmitMessageFunc(submitMessage),
+	localmessagesubmission.WithAuthenticator(authenticator),
+	localmessagesubmission.WithTTLValidator(ttlValidator),
+	localmessagesubmission.WithMaxReplayEntries(10000),
 )
 ```
 
-El proceso debe crear `Config` fuera del bucle que acepta conexiones y reutilizar la misma instancia para cada conexión. Esta configuración mantiene el registro de protección contra repeticiones; las llamadas independientes a `NewConfig` crean registros separados y no impiden que las conexiones reutilicen un mismo ID.
+`WithMaxReplayEntries` controla el máximo de identificadores de mensajes autenticados que conserva el servidor hasta su caducidad. No limita la concurrencia de callbacks ni el número de conexiones activas.
 
-## Uso entre conexiones
+### Compartir una configuración entre conexiones
 
-El proceso que atiende varias conexiones debe compartir una sola instancia de `Config` con cada servidor `LocalMessageSubmission`. Las copias de esa instancia comparten el estado de reservas, por lo que una entrega aceptada en una conexión impide que otra conexión ejecute `SubmitMessageFunc` con el mismo ID antes de `ExpiresAt`.
+Construye un único `Config` fuera del bucle de aceptación de conexiones y pásalo a todos los servidores `LocalMessageSubmission`. Las copias del mismo `Config` comparten el estado de repeticiones. Las llamadas independientes a `localmessagesubmission.NewConfig` crean estados independientes y no deduplican el mismo identificador entre esas configuraciones.
 
-El servidor elimina las reservas expiradas antes de comprobar la capacidad. Cuando una reserva alcanza `MaxReplayEntries`, el servidor rechaza los nuevos IDs autenticados hasta que las reservas anteriores expiren y el servidor las elimine. Una entrega cuyo ID ya está reservado continúa recibiendo `pcommon.AlreadyReceivedReason`.
+```go
+cfg := localmessagesubmission.NewConfig(
+	localmessagesubmission.WithSubmitMessageFunc(submitMessage),
+	localmessagesubmission.WithAuthenticator(authenticator),
+	localmessagesubmission.WithTTLValidator(ttlValidator),
+	localmessagesubmission.WithMaxReplayEntries(10000),
+)
 
-## Rechazos
+// Create each connection's LocalMessageSubmission server with &cfg.
+// Do not call NewConfig inside this loop.
+for {
+	conn := acceptConnection()
+	startLocalMessageSubmission(conn, &cfg)
+}
+```
 
-La protección contra repeticiones aplica los siguientes resultados:
+Las funciones de preparación de conexiones del ejemplo representan la gestión de conexiones de la aplicación anfitriona. El requisito esencial es que todos los servidores reciban el mismo valor `Config` creado antes del bucle.
 
-- Una entrega duplicada secuencial recibe `pcommon.AlreadyReceivedReason` y no ejecuta `SubmitMessageFunc`.
-- Las entregas duplicadas simultáneas reciben `pcommon.AlreadyReceivedReason` después de que una sola entrega reserve el ID.
-- Un nuevo ID recibe un rechazo cuando el registro alcanza `MaxReplayEntries`.
-- Un valor negativo de `MaxReplayEntries` provoca un rechazo antes de ejecutar `SubmitMessageFunc`.
-- Si `SubmitMessageFunc` rechaza la entrega, el servidor mantiene activa la reserva y protege el ID hasta `ExpiresAt`.
-- Cuando `ExpiresAt` ya pasó, el servidor elimina la reserva y permite una nueva entrega que supere la validación de autenticación y vigencia.
+### Capacidad y caducidad
 
-## Referencias
+- `MaxReplayEntries` utiliza `10,000` cuando vale cero o no se especifica.
+- `localmessagesubmission.WithMaxReplayEntries(...)` modifica el límite de identificadores autenticados conservados.
+- Al procesar una reserva nueva, el servidor elimina los identificadores cuyo `ExpiresAt` ya haya pasado.
+- Al alcanzar la capacidad, rechaza los identificadores nuevos hasta que caduque y elimine una entrada existente.
+- Un valor negativo no es válido. El servidor rechaza el envío antes de llamar a `SubmitMessageFunc`.
 
-- [Documentación de la API de `LocalMessageSubmission`](https://pkg.go.dev/github.com/blinklabs-io/gouroboros/protocol/localmessagesubmission)
-- [gOuroboros v0.213.7](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.213.7)
-- [Implementación de la protección contra repeticiones](https://github.com/blinklabs-io/gouroboros/pull/2748)
-- [Requisito de protección contra repeticiones](https://github.com/blinklabs-io/gouroboros/issues/2615)
+Los fallos de capacidad y configuración no utilizan un código de error independiente. En ambos casos, el servidor devuelve un rechazo de protocolo con `pcommon.OtherReason`.
+
+## Comportamiento del envío
+
+Para un envío DMQ local autenticado, el servidor sigue este orden:
+
+1. Validar el TTL del mensaje.
+2. Preparar y autenticar el mensaje.
+3. Validar de nuevo el TTL con la hora del envío.
+4. Reservar el identificador en la caché de repeticiones.
+5. Llamar a `SubmitMessageFunc` únicamente si la reserva tiene éxito.
+
+Solo entran en la caché los envíos que superan la autenticación y la validación TTL. La reserva ocurre antes de `SubmitMessageFunc`, y el mutex la hace atómica entre los envíos concurrentes que comparten configuración.
+
+### Envíos duplicados
+
+El primer envío válido reserva el identificador y puede alcanzar `SubmitMessageFunc`. Un duplicado posterior recibe `pcommon.AlreadyReceivedReason`, y el servidor no invoca el callback para ese duplicado.
+
+La misma regla se aplica a envíos concurrentes con el mismo identificador. El primero que lo reserva puede alcanzar `SubmitMessageFunc`; todos los demás reciben `pcommon.AlreadyReceivedReason` sin alcanzar el callback. Esto también se aplica entre conexiones distintas que reutilizan un único `Config`.
+
+El servidor conserva la reserva hasta que pase el `ExpiresAt` original. Si `SubmitMessageFunc` rechaza el primer envío, ese resultado no libera la reserva. Un envío posterior no puede reutilizar inmediatamente el identificador; debe esperar a su caducidad.
+
+## Comportamiento de rechazo
+
+| Condición | Resultado | Invocación del callback |
+| --- | --- | --- |
+| Identificador válido, autenticado, sin caducar y con capacidad disponible | El servidor reserva el identificador y procesa el envío. | `SubmitMessageFunc` se ejecuta una vez. |
+| Identificador reservado y sin caducar | Rechazo con `pcommon.AlreadyReceivedReason`. | No se ejecuta. |
+| Caché en `MaxReplayEntries` para un identificador nuevo | Rechazo con `pcommon.OtherReason`. | No se ejecuta. |
+| `MaxReplayEntries` negativo | Rechazo con `pcommon.OtherReason`. | No se ejecuta. |
+| Fallo de validación TTL o autenticación | Rechazo según el resultado de validación o autenticación. | No se ejecuta. |
+
+Un identificador caducado puede volver a entrar en la caché cuando el servidor elimina la reserva anterior. Un duplicado que siga vigente nunca alcanza el callback de la aplicación, independientemente de que el callback original aceptara o rechazara el mensaje.
 
 ---
 

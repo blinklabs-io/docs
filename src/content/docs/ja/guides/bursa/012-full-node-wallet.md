@@ -1,115 +1,150 @@
 ---
 title: フルノードウォレット
-description: Bursaフルノードウォレットのインストール、起動、設定、ソースビルド、パッケージング、トラブルシューティング。
+description: Bursa フルノードウォレットのインストール、設定、ビルド、問題解決を説明します。
 ---
 
-# Bursaフルノードウォレット
+<a id="bursa-full-node-wallet"></a>
 
-## 概要
+# Bursa フルノードウォレット
 
-このガイドでは、Bursaフルノードウォレットのリリース資産からのインストール、起動、実行時設定、ソースからのビルド、macOSパッケージの作成、運用上のトラブルシューティングを説明します。
+このガイドは、Bursa フルノードウォレットのインストール、起動モード、実行時設定、ソースからのビルド、macOS パッケージ作成、運用時の問題解決を扱います。
+
+<a id="install"></a>
 
 ## インストール
 
-リリースページから、`bursa-wallet-<version>-<os>-<arch>.<ext>`形式のウォレット資産をダウンロードします。
+[Bursa リリースページ](https://github.com/blinklabs-io/bursa/releases)から、対象プラットフォームのウォレットをダウンロードします。リリースファイルの名前は次の形式です。
 
-| プラットフォーム | 資産 | 動作 |
+```text
+bursa-wallet-<version>-<os>-<arch>.<ext>
+```
+
+| プラットフォーム | ファイル | インストールの動作 |
 | --- | --- | --- |
-| macOS arm64（Apple Silicon） | `.pkg` | 署名と公証を済ませています。`Bursa.app`をインストールします。 |
-| Windows amd64、arm64 | `.msi` | 署名を済ませています。 |
-| Linux amd64、arm64 | `.tar.gz` | ネイティブウィンドウを表示します。 |
-| FreeBSD amd64、arm64 | `.tar.gz` | ヘッドレスで動作します。ブラウザーでインターフェースを開きます。 |
+| macOS arm64 (Apple Silicon) | `.pkg` | Apple の署名と公証が付いたインストーラーが `Bursa.app` をインストールします。 |
+| Windows amd64 または arm64 | `.msi` | Windows の署名付きインストーラーです。 |
+| Linux amd64 または arm64 | `.tar.gz` | アーカイブを展開し、ネイティブウィンドウ版を実行します。 |
+| FreeBSD amd64 または arm64 | `.tar.gz` | アーカイブを展開し、ヘッドレス版をブラウザーで使用します。ネイティブウィンドウ版は提供されません。 |
 
-macOSの`.pkg`とWindowsの`.msi`は、それぞれ対応するプラットフォームのインストーラーとして実行します。LinuxまたはFreeBSDの`.tar.gz`は展開して使用します。FreeBSDではネイティブウィンドウを使用できません。
+Linux または FreeBSD では、展開して同梱の `bursa-wallet` を実行します。
 
-## 起動
+```bash
+tar xzf bursa-wallet-<version>-<os>-<arch>.tar.gz
+./bursa-wallet
+```
 
-macOSまたはWindowsでは、インストール後にアプリケーション一覧から`Bursa`を起動します。バイナリから起動する場合は、次のコマンドを実行します。
+<a id="run-the-wallet"></a>
+
+## ウォレットの実行
+
+macOS または Windows パッケージをインストール後、アプリケーションメニューから `Bursa` を起動するか、実行ファイルを直接実行します。
 
 ```bash
 bursa-wallet
 ```
 
-ネイティブウィンドウを使用しないビルドは、同じインターフェースを`http://127.0.0.1:8090`で提供します。ブラウザーでこのURLを開いてください。ウォレットはループバックアドレスにだけバインドします。
+デスクトップ版はネイティブウィンドウを開きます。ヘッドレス版は <http://127.0.0.1:8090> にインターフェイスを提供するので、ブラウザーで開いてください。ウォレットはループバックの `127.0.0.1:8090` にバインドします。
 
-初回起動ではノードの同期を開始します。既定では`mithril`を使用してスナップショットから同期します。ウォレットは同期の進行状況を表示し、同期中でも読み取り専用で開きます。
+初回起動時に組み込みノードを同期します。既定の `mithril` モードは、ジェネシスからチェーンを再実行せず、Mithril スナップショットからブートストラップします。データは `~/.bursa-wallet/<network>/` に保存します。
 
-## 実行時設定
+<a id="configuration"></a>
 
-環境変数を設定してから`bursa-wallet`を起動します。
+## 設定
 
-| 環境変数 | 既定値 | 動作 |
+初期設定に使用する環境変数は、初回起動前に設定します。
+
+| 変数 | 既定値 | 動作 |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Cardanoネットワークを選択し、そのネットワークのデータディレクトリを選択します。 |
-| `BURSA_SYNC` | `mithril` | `genesis`を指定すると、Mithrilスナップショットを使わずにチェーンを最初から再生します。 |
-| `BURSA_LEAN` | `false` | `true`を指定すると、履歴チェーンデータを整理する省容量プロファイルを使用します。 |
-| `BURSA_CONNECTOR` | `false` | `true`を指定すると、dAppコネクターのバックエンドを有効にします。 |
+| `BURSA_NETWORK` | `preview` | Cardano ネットワークとそのデータディレクトリを選択します。 |
+| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。 |
+| `BURSA_LEAN` | `false` | 過去のチェーンデータを削除してディスク使用量を減らす lean ストレージを有効にします。 |
+| `BURSA_CONNECTOR` | `false` | dApp コネクターバックエンドを有効にします。 |
 
-```bash
-BURSA_NETWORK=preview BURSA_SYNC=mithril BURSA_LEAN=false BURSA_CONNECTOR=false bursa-wallet
-```
+初回実行後、インターフェイスで設定した値は永続化されます。保存された設定値は、環境変数より優先されます。
 
-ウォレットは`127.0.0.1:8090`でサービスを提供します。ウォレットはインターフェースで変更した設定を初回起動後に保存し、保存済みの値を以後の環境変数より優先します。`BURSA_NETWORK`は`~/.bursa-wallet/<network>/`のデータディレクトリも決定し、ウォレットはログをその配下の`logs/bursa-wallet.log`に保存します。
+<a id="build-from-source"></a>
 
 ## ソースからのビルド
 
-### 前提条件
+Go `1.26` 以降と Node `22` をインストールし、リポジトリのルートでビルドコマンドを実行します。
 
-- Go `1.26`以降
-- Node `22`
+<a id="build-the-headless-wallet"></a>
 
-リポジトリのルートディレクトリで次のコマンドを実行します。
+### ヘッドレスウォレットのビルド
 
-### 純粋なGoのヘッドレスビルド
+Web バンドルと既定の pure-Go バイナリをビルドします。
 
 ```bash
 make wallet
 ```
 
-このターゲットはWebバンドルを作成し、`ui/bursa-wallet`に既定の純粋なGoバイナリを作成します。このバイナリはループバックでインターフェースを提供し、クロスコンパイルできます。
+出力先は `ui/bursa-wallet` です。このビルドはループバック上でインターフェイスを提供し、クロスコンパイルに対応します。
 
-### ネイティブウィンドウビルド
+<a id="build-the-native-window-wallet"></a>
+
+### ネイティブウィンドウ版のビルド
+
+ネイティブウィンドウ版をビルドします。
 
 ```bash
 make wallet-webview
 ```
 
-このターゲットはCGOと各プラットフォームのシステムWebViewを使用します。対象アーキテクチャのマシン上で、CツールチェーンとWebView開発用ヘッダーを用いてビルドしてください。クロスコンパイルには対応していません。
+CGO、C ツールチェーン、対象プラットフォームの webview 開発ヘッダーが必要です。
 
-- macOSは`WKWebView`を使用します。
-- Windowsは`WebView2`を使用します。
-- Linuxでは、`webkit2gtk`の開発用ヘッダーと、`webview`タグのビルドでトレイを表示するための`libayatana-appindicator3`ランタイムが必要です。
+- macOS: `WKWebView`
+- Windows: `WebView2`
+- Linux: ビルド用の `webkit2gtk` 開発ヘッダーと、実行時用の `libayatana-appindicator3`。`webview` タグ付きビルドでトレイを使用するには両方が必要です。
 
-Linuxで`webkit2gtk-4.1`だけをインストールしている場合、ビルド処理は`4.0`を要求するWebView部品向けに`pkg-config`互換設定を作成します。
+webview 版は異なるアーキテクチャへのコンパイルに対応しません。対象のアーキテクチャを持つマシンでビルドします。Linux では `webkit2gtk-4.1` を使用できます。上流のバインディングが `4.0` を要求する場合、Makefile が `pkg-config` シムを提供します。
 
-### macOSパッケージ
+<a id="package-for-macos"></a>
+
+### macOS パッケージの作成
+
+ローカルテスト用パッケージを作成します。
 
 ```bash
 make bundle-macos
+```
+
+このターゲットはアドホック署名の `.pkg` を作成します。署名と公証を行うリリースパッケージは次で作成します。
+
+```bash
 make pkg-macos
 ```
 
-`make bundle-macos`はローカルテスト用に署名した`.pkg`を作成します。`make pkg-macos`は署名と公証を済ませた`.pkg`を作成し、Appleのシークレットを必要とします。
+`pkg-macos` には Apple の署名および公証用の秘密情報が必要です。
+
+<a id="troubleshooting"></a>
 
 ## トラブルシューティング
 
-### 同期が遅い、または停止したように見える
+<a id="synchronization-is-slow-or-appears-stuck"></a>
 
-1. ウォレットの設定にある診断画面で、ノードの状態、ピア、同期状態を確認します。
-2. 診断画面からログをエクスポートします。
-3. 次のパスにあるログを直接確認します。
+### 同期が遅い、または停止しているように見える
 
-```text
-~/.bursa-wallet/<network>/logs/bursa-wallet.log
-```
+1. **Settings → Diagnostics** を開き、ノードの状態、ピアの状態、同期状況を確認します。
+2. 診断ログをエクスポートするか、`~/.bursa-wallet/<network>/logs/bursa-wallet.log` を直接確認します。
 
-### Linuxでウィンドウが空白になる
+<a id="the-linux-webview-window-is-blank"></a>
 
-`make wallet-webview`で作成したビルドでは、空白のウィンドウを防ぐために`webkit2gtk`が必要です。Linuxでは、`libayatana-appindicator3`も実行時に必要です。`webkit2gtk`をインストールできない場合は、`make wallet`で純粋なGoのビルドを作成し、ブラウザーで`http://127.0.0.1:8090`を開いてください。
+### Linux の webview ウィンドウが空白になる
+
+webview 版には `webkit2gtk` と開発ヘッダーをインストールします。別途、`webview` タグ付きビルドを実行する前に、実行時用の `libayatana-appindicator3` もインストールします。webview のないシステムでは、pure-Go ブラウザー版を使用してループバックアドレスを開いてください。
+
+<a id="the-wallet-uses-too-much-disk-space"></a>
 
 ### ディスク使用量が大きい
 
-初回起動時に`BURSA_LEAN=true`を設定して、履歴チェーンデータを整理する省容量プロファイルを選択します。既存のウォレットでは、設定で省容量ストレージを有効にします。
+初回実行時に lean ストレージを有効にします。
+
+```bash
+BURSA_LEAN=true bursa-wallet
+```
+
+lean ストレージは過去のチェーンデータを期限切れにして、ディスク使用量を減らします。
+
 
 ---
 

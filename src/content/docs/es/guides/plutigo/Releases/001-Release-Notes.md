@@ -13,6 +13,7 @@ description: Notas de la versión de Plutigo
 - Versión: v0.9.10 - *[Ver notas de la versión](../v0-9-10)*
 - Versión: v0.9.9 - *[Ver notas de la versión](../v0-9-9)*
 - Versión: v0.9.8 - *[Ver notas de la versión](../v0-9-8)*
+- Versión: v0.9.7 - *[Ver notas de la versión](../v0-9-7)*
 - Versión: v0.9.6 - *[Ver notas de la versión](../v0-9-6)*
 - Versión: v0.9.5 - *[Ver notas de la versión](../v0-9-5)*
 - Versión: v0.9.4 - *[Ver notas de la versión](../v0-9-4)*
@@ -30,6 +31,13 @@ description: Notas de la versión de Plutigo
 - Versión: v0.6.0 - *[Ver notas de la versión](../v0-6-0)*
 - Versión: v0.5.1 - *[Ver notas de la versión](../v0-5-1)*
 - Versión: v0.5.0 - *[Ver notas de la versión](../v0-5-0)*
+- Versión: v0.4.0 - *[Ver notas de la versión](../v0-4-0)*
+- Versión: v0.3.0 - *[Ver notas de la versión](../v0-3-0)*
+- Versión: v0.2.0 - *[Ver notas de la versión](../v0-2-0)*
+- Versión: v0.1.17 - *[Ver notas de la versión](../v0-1-17)*
+- Versión: v0.1.15 - *[Ver notas de la versión](../v0-1-15)*
+- Versión: v0.1.14 - *[Ver notas de la versión](../v0-1-14)*
+- Versión: v0.1.13 - *[Ver notas de la versión](../v0-1-13)*
 
 
 ---

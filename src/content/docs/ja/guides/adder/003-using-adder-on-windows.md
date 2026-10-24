@@ -1,61 +1,175 @@
 ---
-title: Windowsでの使用
-description: WindowsでAdderを使用する方法。
+title: "Windowsでの使用"
+description: "WindowsでAdderを使用する方法。"
 ---
 
-# WindowsでAdderを使用する
+Adderは、システムトレイで動作するパッケージ化されたデスクトップアプリケーションで、Cardanoブロックチェーンアクティビティを監視するための合理化されたユーザーフレンドリーなエクスペリエンスを提供します。
 
-このガイドでは、WindowsでAdderを使用する方法を説明します。以下のセクションでは、Adderの使用例を示します。これらはAdderの機能に慣れるためのサンプルであることを覚えておいてください。Adderの真の力は、あなたの想像力によって解き放たれます。
+<a id="install-and-configure"></a>
 
-> このガイドでは、<a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>からAdderのWindows MSIインストーラーをダウンロード済みであることを前提としています。MSIをダウンロードしていない場合は、[クイックスタート](../002-quick-start-overview)を参照してください
+## インストールと構成
 
-## ステップ1 - Adderインストーラーをダウンロード
+<a id="step-11---download-the-adder-installer"></a>
 
-Windows用のMSIインストーラーをダウンロードします。
+### ステップ1.1 - Adderインストーラをダウンロード
+Windows上でAdderをインストールする最も簡単な方法は、<a href="https://blinklabs.io/projects-open-source" target="_blank">https://blinklabs.io/projects-open-source</a>で利用可能なMSIインストーラを使用することです。 <br>
 
-![adder-windows-release-download](/adder-windows-release-download.webp)
+<img src="/adder-windows-release-download.webp"
+     alt="adder-windows-release-download"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-> 使用するシステムに適したバージョン（Windows x64またはWindows arm64）を選択してください。
-
-***
-
-### ステップ1.2 - ダウンロードが完了したら、`開く`をクリックして`.msi`ファイルを開く
-
-![adder-windows-open-msi](/adder-windows-open-msi.webp)
+> お使いのシステム(Windows x64 または Windows arm64)の適切なバージョンを選択します。
 
 ***
 
-### ステップ1.3 - 次に、`実行`をクリックしてインストールを開始する
+<a id="step-12---once-the-download-is-complete-click-open-to-open-the-msi-file"></a>
 
-![adder-windows-run-msi](/adder-windows-run-msi.webp)
-
-***
-
-## ステップ2 - Adderを起動
-
-### ステップ2.1 - Windowsのスタートメニューを開く
-
-![adder-windows-start-menu](/adder-windows-start-menu.webp)
+### ステップ1.2 - ダウンロードが完了したら、`Open`をクリックして`.msi`ファイルを開きます。
+<img src="/adder-windows-open-msi.webp"
+     alt="adder-windows-open-msi"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
-### ステップ2.2 - `Adder`を検索
+<a id="step-13---then-click-run-to-start-the-installation"></a>
 
-Adderアプリを検索して起動します。
+### ステップ1.3 - 次に、`Run`をクリックしてインストールを開始します。
+<img src="/adder-windows-run-msi.webp"
+     alt="adder-windows-run-msi"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-![adder-windows-search-adder-app](/adder-windows-search-adder-app.webp)
+***
 
-> 設定の**Welcome**画面が表示されない場合は、システムトレイを開き、Adderアプリを右クリックして**Configure**を選択し、セットアップウィザードを開きます。
+<a id="step-2---launch-adder"></a>
 
-<br />
+### ステップ2 - Adderを起動する
+
+<a id="step-21---open-the-windows-start-menu"></a>
+
+### ステップ2.1 - Windowsのスタートメニューを開きます。
+
+<img src="/adder-windows-start-menu.webp"
+     alt="adder-windows-start-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+<a id="step-22---search-for-adder"></a>
+
+### ステップ2.2 - `Adder`の検索
+Adderアプリを検索して開きます。
 
 
-> ヒント：`-h`または`--help`フラグを使用すると、利用可能なすべてのコマンドのリストを取得できます。
+<img src="/adder-windows-search-adder-app.webp"
+     alt="adder-windows-search-adder-app"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-<br />
+> **Welcome**設定画面が表示されない場合は、システムトレイを開き、Adderアプリを右クリックし、**Configure**を選択して設定ウィザードを開きます。
 
+***
 
-これで、Adderの有用性とパワーについて、いくつかの[例](../examples/001-using-adder-examples-desc)を見ていく準備ができました！
+<a id="step-3---configure-adder"></a>
+
+### ステップ3 - Adderの設定
+*Adder Tray App*を開くと、**Welcome**画面が表示されます。これにより、Adderを設定し、受信するアラートを設定することができます。
+
+<img src="/adder-windows-config-welcome.webp"
+     alt="adder-windows-config-welcome"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+<a id="step-31---select-a-cardano-network-that-you-want-to-monitor"></a>
+
+### ステップ 3.1 - 監視する Cardano ネットワークを選択します。
+<img src="/adder-windows-config-network.webp"
+     alt="adder-windows-config-network"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+***
+
+<a id="step-32---add-your-monitoring-targets"></a>
+
+### ステップ3.2 - 監視対象を追加する
+該当する対象のセクションに、1つ以上の値を入力します。
+
+- `Watch Wallet`にはウォレットアドレスを入力します。
+- `Track DRep`にはDRep IDを入力します。
+- `Monitor Pool`にはプールIDを入力します。
+- 必要に応じて、任意の`Follow Asset`セクションにアセットフィンガープリントを入力します。
+- 必要に応じて、任意の`Follow Policy`セクションにポリシーIDを入力します。
+
+<img src="/adder-windows-config-pool-id-drep-id.webp"
+     alt="adder-windows-config-pool-id-drep-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+対象を個別に入力する代わりに、排他的な`Monitor Everything`モードを使って、サポートされるすべての種類の対象を監視できます。このモードと対象の値を併用しないでください。
+
+次のステップに進みます。Adderは、ここで入力した対象の種類、または`Monitor Everything`モードに基づいて通知の選択肢を決定します。
+
+<img src="/adder-windows-config-or.webp"
+     alt="adder-windows-config-or"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+<a id="step-33---notification-output-optional"></a>
+
+### ステップ3.3 - 通知出力(オプション)
+Adderは、デスクトップ通知を提供するように既に設定されています。選択した場合には、他の通知方法を選択できます。
+<img src="/adder-windows-config-output.webp"
+     alt="adder-windows-config-output"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+**`Next Step`**をクリック
+
+***
+
+<a id="step-34---event-alerts"></a>
+
+### ステップ3.4 - イベントアラート
+デスクトップアラートを受信したいイベントのチェックボックスを選択します。
+<img src="/adder-windows-config-events.webp"
+     alt="adder-windows-config-events"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+***
+
+<a id="step-35---send-a-test-notification"></a>
+
+### ステップ3.5 - テスト通知を送信する
+
+`Test Notification`をクリックし、デスクトップアラートを受信していることを確認します。
+<img src="/adder-windows-config-send-test.webp"
+     alt="adder-windows-config-send-test"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+通知が表示された場合は、`Yes, I saw it`をクリックします。
+
+***
+
+<a id="step-36---finish-setup"></a>
+
+### ステップ3.6 - セットアップの完了
+`Finish Setup` をクリックします。
+
+***
+
+<a id="congratulations-adder-will-now-alert-you-when-an-event-that-you-have-selected-to-track-occurs"></a>
+
+### おめでとうございます!Adderは、選択したイベントが発生したときに警告します。
+
+***
+
+<a id="using-the-tray-menu"></a>
+
+## トレイメニューの利用
+システムトレイでAdderアプリを右クリックすると、最近のイベントの表示、設定の変更、アプリの起動や再起動などを行えます。
+
+<img src="/adder-windows-tray-app-menu.webp"
+     alt="adder-windows-tray-app-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 
 ---

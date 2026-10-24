@@ -1,15 +1,17 @@
 ---
-title: Configuración de la instantánea de pares
-description: Requisitos para configurar peerSnapshotFile en la topología de Dingo.
+title: Configuración de instantáneas de pares
+description: Configura y valida una referencia de instantánea de pares de Dingo.
 ---
 
-# Configuración de la instantánea de pares
+# Configuración de instantáneas de pares
 
-Esta guía describe cómo configurar una instantánea de pares de `cardano-node` en `topology.json`. Dingo obtiene la ruta de la instantánea mediante `peerSnapshotFile`.
+## Descripción general
 
-## Referenciar la instantánea desde topology.json
+Esta referencia describe `peerSnapshotFile` en `topology.json` de Dingo y las comprobaciones que debe superar la instantánea al inicio. El formato admitido es `peer-snapshot.json` de cardano-node con `NodeToClientVersion` establecido en `23`.
 
-Añade `peerSnapshotFile` a `topology.json`:
+## Configurar peerSnapshotFile
+
+Añade `peerSnapshotFile` a `topology.json` para referenciar una instantánea:
 
 ```json
 {
@@ -17,31 +19,31 @@ Añade `peerSnapshotFile` a `topology.json`:
 }
 ```
 
-Dingo resuelve una ruta relativa con respecto al archivo de topología. La instantánea debe contener el formato de instantánea de pares de `cardano-node`.
+Dingo resuelve su ruta de forma relativa al archivo `topology.json`.
 
 ## Requisitos de la instantánea
 
-Dingo valida la instantánea antes de iniciar las conexiones de salida. La configuración debe cumplir todos estos requisitos:
+Debe cumplir todos estos requisitos:
 
-- `NodeToClientVersion` debe ser `23`.
-- `NetworkMagic` debe estar especificado y coincidir con el `NetworkMagic` configurado para el nodo.
-- `Point.blockPointHash` debe contener exactamente 64 caracteres hexadecimales, que representan 32 bytes.
-- La instantánea debe tener exactamente uno de estos campos poblado: `bigLedgerPools` o `allLedgerPools`.
-- El modo seleccionado debe contener al menos un grupo.
-- Cada grupo seleccionado debe contener al menos un relay.
-
-`bigLedgerPools` y `allLedgerPools` son mutuamente excluyentes. Una instantánea que pueble ambos campos, o que no pueble ninguno, no es válida.
+- Establecer `NodeToClientVersion` en `23`.
+- Especificar `NetworkMagic` con el identificador de red configurado en el nodo.
+- Establecer `Point.blockPointHash` en exactamente 64 caracteres hexadecimales, que representan 32 bytes.
+- Incluir `Point.blockPointSlot` dentro de `Point`. Dingo no impone otra restricción a su valor.
+- Rellenar exactamente una de las listas `bigLedgerPools` o `allLedgerPools`. Dingo rechaza la instantánea si ambas están vacías o ambas contienen datos.
+- Incluir al menos un pool en la lista utilizada.
+- Incluir al menos un relay en cada pool.
 
 ## Requisitos de los relays
 
-Cada relay del modo seleccionado debe cumplir estas condiciones:
+Cada relay de la lista de pools debe cumplir estos requisitos:
 
-- `address` no puede estar vacío.
-- `address` debe ser un nombre de host DNS válido o una dirección IP especificada; las direcciones IP `unspecified` no son válidas.
-- Los relays cuya `address` sea un nombre de host DNS pueden omitir `port` o especificar `port: 0` para la resolución SRV.
-- Los relays cuya `address` sea una dirección IP deben especificar un puerto TCP distinto de cero entre `1` y `65535`; `port: 0` no es válido para relays IP.
+- Tener una dirección no vacía que sea un nombre DNS válido o una dirección IP distinta de la dirección no especificada.
+- Las entradas DNS o de nombre de host pueden omitir el puerto TCP o establecer `port` en `0`; Dingo las conserva como relays `MultiHostName` para resolución SRV.
+- Las entradas IP deben especificar un puerto TCP distinto de cero, entre `1` y `65535`. Dingo rechaza las entradas sin puerto o con `port` igual a `0`.
 
-Dingo detiene el inicio cuando la instantánea está mal formada o cuando incumple cualquiera de estos requisitos.
+## Comportamiento al inicio
+
+Dingo valida la instantánea completa antes de permitir que sus relays sustituyan los pares de arranque configurados. Si la instantánea tiene un formato incorrecto o es incoherente, detiene el inicio antes de utilizar los relays y no la acepta silenciosamente.
 
 ---
 

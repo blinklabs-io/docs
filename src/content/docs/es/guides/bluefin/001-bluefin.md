@@ -1,6 +1,6 @@
 ---
 title: Bluefin
-description: Introduccion a Bluefin.
+description: Mina tokens TUNA de Fortuna en Cardano con el minero autónomo Bluefin.
 ---
 
 ![bluefin-logo](/bluefin-logo.png)

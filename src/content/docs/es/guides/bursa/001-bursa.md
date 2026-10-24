@@ -1,6 +1,6 @@
 ---
 title: Bursa
-description: Introduccion a Bursa.
+description: Crea y gestiona wallets, direcciones, claves, hashes, certificados y scripts de Cardano con Bursa.
 ---
 
 ![bursa-logo](/bursa-logo-with-text-horizontal.png)
@@ -11,4 +11,3 @@ Una billetera programatica de Cardano, escrita en Go, que expone una API, CLI e 
 Es facil, solo descarga el archivo ejecutable de Bursa desde blinklabs.io y abre una linea de comandos en tu computadora.
 
 Comienza con nuestra guia de [Inicio Rapido](../002-quick-start)
-

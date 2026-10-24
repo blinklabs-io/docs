@@ -5,7 +5,7 @@ description: Adder Ejemplo 3 - Monitorear un SPO y obtener una Alerta en Discord
 
 # Monitorear un SPO y obtener una Alerta en Discord
 
-En este ejemplo usaremos Adder para enviarnos una notificacion de Discord via webhooks, cuando haya un cambio en el stake pool que queremos rastrear.
+En este ejemplo usaremos Adder para enviarnos una notificación de Discord via webhooks, cuando haya un cambio en el stake pool que queremos rastrear.
 
 
 ### Los eventos que activaran una alerta son los siguientes cambios a un SPO:
@@ -20,7 +20,7 @@ Retiro del Pool - si el SPO retira su stake pool
 
 ***
 
-> Para esta guia asumimos que ya has descargado el exe de Adder y has abierto una linea de comandos. Si no, consulta nuestra guia de [Inicio Rapido](../../002-quick-start-overview).
+> Para esta guia asumimos que ya has descargado el ejecutable de Adder y has abierto una línea de comandos. Si no, consulta nuestra guia de [Inicio Rapido](../../002-operating-mode-overview).
 
 ***
 
@@ -38,7 +38,7 @@ En este ejemplo buscamos el ticker `ECP` en <a href="https://www.cexplorer.io" t
 
 <br />
 
-Toma nota del ID del Pool, lo necesitaremos mas tarde. Para este ejemplo, fue:
+Toma nota del ID del Pool, lo necesitaremos más tarde. Para este ejemplo, fue:
 
 ```
 pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
@@ -55,25 +55,25 @@ Para recibir alertas en nuestro servidor de Discord necesitaremos una URL de web
 
 <br />
 
-1 ) Haz clic en `Editar Canal` en el canal donde te gustaria recibir alertas
+1 ) Haz clic en `Edit Channel` (Editar canal) en el canal donde te gustaria recibir alertas
 
 ![adder-discord-edit-channel](/adder-discord-edit-channel.png)
 
 <br />
 
-2 ) Haz clic en `Integraciones`
+2 ) Haz clic en `Integrations` (Integraciones)
 
 ![adder-discord-integrations](/adder-discord-integrations.png)
 
 <br />
 
-3 ) Haz clic en `Crear Webhook`
+3 ) Haz clic en `Create Webhook` (Crear webhook)
 
 ![adder-discord-create-webhook](/adder-discord-create-webhook.png)
 
 <br />
 
-4 ) Haz clic en `Nuevo Webhook`
+4 ) Haz clic en `New Webhook` (Nuevo webhook)
 
 ![adder-discord-new-webhook](/adder-discord-new-webhook.png)
 
@@ -85,13 +85,13 @@ Para recibir alertas en nuestro servidor de Discord necesitaremos una URL de web
 
 <br />
 
-6 ) Haz clic en `Copiar URL del Webhook`
+6 ) Haz clic en `Copy Webhook URL` (Copiar URL del webhook)
 
 ![adder-discord-copy-webhook-url](/adder-discord-copy-webhook-url.png)
 
 <br />
 
-Asegurate de tomar nota de tu URL del Webhook, la necesitaremos mas tarde. Para este ejemplo, la URL del Webhook que usamos es:
+Asegurate de tomar nota de tu URL del Webhook, la necesitaremos más tarde. Para este ejemplo, la URL del Webhook que usamos es:
 
 ```
 https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
@@ -112,10 +112,10 @@ Ahora que tenemos el id del pool que queremos monitorear y nuestra URL de webhoo
 
 ## Tipo de Filtro
 
-No queremos alertas de rollbacks de bloques, asi que podemos usar el tipo de filtro transaccion y bloque. Ya que queremos usar dos tipos de filtro, los separamos con una coma. Para que Adder excluya las alertas de rollback usando el filtro de transaccion y bloque, usaremos el siguiente filtro:
+No queremos alertas de rollbacks de bloques, así que podemos usar el tipo de filtro transacción y bloque. Ya que queremos usar dos tipos de filtro, los separamos con una coma. Para que Adder excluya las alertas de rollback usando el filtro de transacción y bloque, usaremos el siguiente filtro:
 
 ```
--filter-type chainsync.transaction,chainsync.block
+--filter-type input.transaction,input.block
 ```
 
 ## Filtro de Pool
@@ -123,7 +123,7 @@ No queremos alertas de rollbacks de bloques, asi que podemos usar el tipo de fil
 Podemos usar el id del pool del [Paso 1](#step-1) para que Adder rastree nuestro SPO usando el siguiente filtro:
 
 ```
--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
+--filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8
 ```
 
 ## Salida Webhook
@@ -131,7 +131,7 @@ Podemos usar el id del pool del [Paso 1](#step-1) para que Adder rastree nuestro
 Necesitamos agregar un comando para que Adder sepa que queremos usar un webhook. Para hacer esto agregaremos el siguiente comando:
 
 ```
--output webhook
+--output webhook
 ```
 
 ## Formato de Webhook de Salida
@@ -139,15 +139,15 @@ Necesitamos agregar un comando para que Adder sepa que queremos usar un webhook.
 Ya que queremos que Adder nos notifique en Discord, necesitamos decirle a Adder que el formato de webhook que queremos usar es Discord. Para hacer esto agregaremos el siguiente comando:
 
 ```
--output-webhook-format discord
+--output-webhook-format discord
 ```
 
 ## URL de Webhook de Salida
 
-Para recibir una notificacion en nuestro canal de Discord preferido, necesitamos decirle a Adder la URL del Webhook de Discord. Para hacer esto agregaremos el siguiente comando usando la URL del Webhook del [Paso 2](#step-2):
+Para recibir una notificación en nuestro canal de Discord preferido, necesitamos decirle a Adder la URL del Webhook de Discord. Para hacer esto agregaremos el siguiente comando usando la URL del Webhook del [Paso 2](#step-2):
 
 ```
--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+--output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
 
@@ -156,13 +156,13 @@ Para recibir una notificacion en nuestro canal de Discord preferido, necesitamos
 
 ## Poniendolo Todo Junto
 
-Para obtener notificaciones de Discord cuando ocurra un cambio en un SPO, ejecutaremos el siguiente comando en nuestra linea de comandos:
+Para obtener notificaciones de Discord cuando ocurra un cambio en un SPO, ejecutaremos el siguiente comando en nuestra línea de comandos:
 
-> Por favor ajusta la ruta a tu exe de Adder. En este ejemplo esta en el Escritorio para el usuario richm.\
-> Tambien ajusta el id del pool y la URL del webhook.
+> Ajusta la ruta al ejecutable de Adder. En este ejemplo se usa `./adder`.\
+> También ajusta el id del pool y la URL del webhook.
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction, chainsync.block -filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 -output webhook -output-webhook-format discord -output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
+./adder --filter-type input.transaction, input.block --filter-pool pool16cdtqyk0fvxzfkhjg3esjcuty4tnlpds5lj0lkmqmwdjyzaj7p8 --output webhook --output-webhook-format discord --output-webhook-url https://discord.com/api/webhooks/1342941446373773342/Wo1bXhSouY5fKdv2frsUQlOnT5UTa9heCxinN_B13AUTuaQ0IOzxzr9ZYsa4co2VN3mi
 ```
 
 ![adder-SPO-block-alert](/adder-SPO-block-alert.png)
@@ -174,11 +174,11 @@ Ahora puedes minimizar la ventana y dejar que Adder se ejecute en segundo plano.
 ***
 
 
-> CONSEJO: Puedes obtener una lista de todos los comandos disponibles usando la bandera `-h` o `-help`.
+> CONSEJO: Puedes obtener una lista de todos los comandos disponibles usando la bandera `-h` o `--help`.
 
-Consulta nuestros otros ejemplos para ver que mas puede hacer Adder y desbloquea el poder de Adder
+Consulta nuestros otros ejemplos para ver que más puede hacer Adder y desbloquea el poder de Adder
 
-1. [Ejemplo 1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - Monitorear Mi Billetera y obtener una Notificacion de Escritorio
-2. [Ejemplo 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Monitorear un Token y obtener una Notificacion de Escritorio
+1. [Ejemplo 1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - Monitorear Mi Billetera y obtener una Notificación de Escritorio
+2. [Ejemplo 2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - Monitorear un Token y obtener una Notificación de Escritorio
 3. [Ejemplo 3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - Monitorear un SPO y obtener una Alerta en Discord
-4. [Ejemplo 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Monitorear un Contrato Inteligente para un ID de Activo Especifico y obtener una Notificacion de Escritorio
+4. [Ejemplo 4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - Monitorear un Contrato Inteligente para un ID de Activo Específico y obtener una Notificación de Escritorio

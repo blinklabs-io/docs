@@ -1,6 +1,6 @@
 ---
 title: Bluefin
-description: Bluefinの紹介。
+description: 自己完結型のBluefinマイナーで、Cardano上のFortuna TUNAトークンを採掘します。
 ---
 
 ![bluefin-logo](/bluefin-logo.png)
@@ -8,6 +8,8 @@ description: Bluefinの紹介。
 Bluefinは、Goで書かれたスタンドアロンのFortuna（TUNA）マイナーです。チェーンを同期し、TUNAをマイニングし、他のインフラストラクチャなしでリモートノードにトランザクションを送信します。
 
 ***
+
+<a id="what-is-tuna-and-how-does-bluefin-work"></a>
 
 ## $TUNAとは何か、Bluefinはどのように動作するのか？
 
@@ -18,6 +20,8 @@ BluefinはパブリックCardanoノードを使用してブロックチェーン
 Fortunaについて詳しくは<a href="https://minefortuna.com/" target="_blank">minefortuna.com/</a>をご覧ください。
 
 ***
+
+<a id="how-do-i-actually-use-bluefin"></a>
 
 ## Bluefinの実際の使い方は？
 
