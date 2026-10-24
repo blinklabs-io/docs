@@ -13,14 +13,16 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 > **BursaはすべてのCIP-0019アドレスタイプをサポートしています:**
 > - ベースアドレス (支払い + ステーク認証情報)
 > - エンタープライズアドレス (支払いのみ)
-> - ポインタアドレス (支払い + ステークポインタ)
+> - ポインタアドレス (支払い + ステーKupoインタ)
 > - 報酬アドレス (ステークのみ)
 > - Byron/ブートストラップアドレス (レガシー)
+
+<a id="address-build"></a>
 
 ### アドレスの作成
 有効なネットワーク値は `mainnet`、`preprod`、`preview` です。対象のAPIリクエスト（`POST /api/script/create`、`POST /api/script/address`、`POST /api/address/build`）では `testnet` を使用できず、指定するとHTTP 400のバリデーションエラーになります。
 - ベースアドレス (支払い + ステーク認証情報)
-```bash
+```
 ./bursa address build --payment-key addr_vk1... --stake-key stake_vk1... --network mainnet
 ```
 
@@ -28,26 +30,28 @@ Bursaは、`build`コマンドを通じて支払い検証鍵からCardanoウォ�
 エンタープライズアドレスには支払い認証情報のみが含まれ、ステーク認証情報は含まれません。
 ステーキング委任のないシンプルな支払いに役立ちます。
 
-```bash
+```
 ./bursa address build --payment-key addr_vk1... --network mainnet --type enterprise
 ```
 
 - 報酬アドレス (ステークのみ)
-```bash
+```
 ./bursa address build --stake-key stake_vk1... --network mainnet --type reward
 ```
+
+<a id="address-info"></a>
 
 #### アドレス情報
 `address info`コマンドを使用してCardanoアドレスに関する情報を表示できます。
 認証情報はbech32形式とhex形式の両方で表示されます。
 
 - ベースアドレスの例:
-```bash
+```
 ./bursa address info addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer...
   ```
 
 - ステークアドレスの例:
-```bash
+```
 ./bursa address info stake1uy9ggsc9qls4pu46g9...
 ```
 

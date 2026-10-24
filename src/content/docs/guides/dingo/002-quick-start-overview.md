@@ -13,7 +13,7 @@ A Cardano blockchain node written in Go which actively participates in network c
 
 ***
 
-In this guide, we will walk you through downloading the Dingo binary and all the steps necessary to get the Dingo node running on the Cardano Preview network. To get started follow the steps below.
+This guide covers downloading the Dingo binary and every step needed to run a Dingo node on the Cardano Preview network.
 
 <br>
 
@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.84.0/dingo-v0.84.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -45,6 +45,8 @@ You can verify the binary works by running:
 ### Alternative: Install with npm
 
 The `@blinklabs/dingo` package requires Node.js 22 or later and `tar`. It supports Linux, FreeBSD, and macOS on x64/amd64 or arm64. During installation, the package downloads the matching Dingo release and verifies its SHA-256 checksum.
+
+The installer accepts only HTTPS URLs for release assets on its host allowlist. It rejects URLs that contain credentials or use non-443 ports. It also rejects redirects and DNS results that resolve to private or special-use IP addresses.
 
 Install it globally and verify the `dingo` command:
 
@@ -70,6 +72,8 @@ Run a local single-node devnet with the downloaded binary:
 ```
 ./dingo devnet
 ```
+
+> 📝 Dingo-generated devnet configuration sets `bindAddr` to `127.0.0.1`, so devnet APIs and listeners accept local connections by default. Change the generated configuration deliberately to enable remote access.
 
 For a global npm installation, run `dingo devnet`. Without a global
 installation, use:
@@ -125,9 +129,9 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.84.0 settings, defaults, and environment or command-line
+For all Dingo v0.87.1 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
@@ -145,12 +149,12 @@ plugins:
     blob:
       provider: "badger"
       config:
-        # Optional Badger data directory. When unset, `databasePath` applies.
+        # Optional Badger data directory. When unset, databasePath applies.
         # dataDir: "$HOME/dingo/.dingo/badger"
     metadata:
       provider: "sqlite"
       config:
-        # Optional SQLite data directory. When unset, `databasePath` applies.
+        # Optional SQLite data directory. When unset, databasePath applies.
         # dataDir: "$HOME/dingo/.dingo/metadata.db"
 
   api:
@@ -168,7 +172,7 @@ plugins:
         port: 0
 
 # Mempool
-# `plugins.mempool.config.capacity` is an optional override.
+# plugins.mempool.config.capacity is an optional override.
 # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
 # Leave the key commented or omit it to use the mode default.
 # plugins:
@@ -240,6 +244,7 @@ midnight:
   # Defaults to loopback; an empty value also uses 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 storageMode: "api"
 plugins:
   api:
@@ -259,7 +264,7 @@ plugins:
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
-> 📝 `midnight.authTokenPolicyId` only applies in API storage mode with Midnight indexing. Leaving it empty keeps the broader default auth token matching behavior.
+> 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together or leave both unset. A partial pair causes configuration and startup validation to fail. A configured policy ID must be exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID and asset name.
 
 > 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
 
@@ -335,7 +340,7 @@ You should see log output showing the node connecting to peers and syncing the r
 #### Interested in running Dingo as a systemd service?
 
 Using a systemd service automatically starts Dingo when your system boots and restarts it if it exits unexpectedly.
-[See our guide on how to create a startup service for Dingo](../003-create-start-up-service).
+[See the guide on creating a startup service for Dingo](../003-create-start-up-service).
 
 ***
 

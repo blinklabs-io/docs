@@ -1,20 +1,20 @@
 ---
-title: 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
-description: Adder例4 - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る。
+title: "特定資産IDのスマートコントラクトを監視し、デスクトップ通知を取得します。"
+description: "Adder 例4 - 特定アセットIDのスマートコントラクトを見て、デスクトップ通知を取得します。"
 ---
 
-# 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+この例はもう少し進んでおり、Adderを使用して、特定のアセットを追加または契約から削除されたかどうかを確認するためのスマートコントラクトを監視します。
 
-この例は少し高度で、Adderを使用してスマートコントラクトを監視し、特定のアセットがコントラクトに追加または削除されたかどうかを確認します。
-
-> この例で使用するフィルターとコマンドを説明する前に、監視したいスマートコントラクトポリシーがすでにあることを前提としています。
+> ⚠️ フィルターとコマンドを破棄する前に、この例ではすでにスマートコントラクトポリシーを提示して見たいと仮定します。
 
 
-![adder-policy-id](/adder-policy-id.png)
+<img src="/adder-policy-id.png"
+     alt="adder-policy-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
-この例では、監視するスマートコントラクトポリシーIDは：
+この例では、私たちが見ようとしているスマートコントラクトポリシーIDは以下のとおりです。
 
 ```
 c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
@@ -22,23 +22,27 @@ c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
 
 <br />
 
-> このガイドでは、Adder exeをダウンロード済みでコマンドプロンプトを開いていることを前提としています。まだの場合は、[クイックスタート](../../002-quick-start-overview)ガイドを参照してください。
+> ✅ このガイドでは、Adderバイナリを既にダウンロードしたと仮定しています。未ダウンロードの場合は[クイックスタート](../../005-use-adder-on-linux)ガイドを参照してください。
 
 
 
 ***
 
-まず、フォローしたいアセットを選びましょう。このアセットがフォローしているスマートコントラクトで使用された場合、デスクトップアラートが届きます。
+フォローしたいアセットを選ぶことで始めましょう。このアセットがスマートコントラクトで使用されている場合は、デスクトップアラートを取得します。
 
-## ステップ1 - アセットID / フィンガープリントを取得
+<a id="step-1---get-asset-id--fingerprint"></a>
 
-監視したいトークンでフィルタリングするには、アセットID（アセットフィンガープリントとも呼ばれる）が必要です。<a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a>などのツールを使用して、トークン名で検索し、アセットID / アセットフィンガープリントを取得できます。
+## ステップ1 - アセット ID / フィンガープリントを取得
 
-![adder-cTOSI-cexploer](/adder-cTOSI-cexploer.png)
+私たちが見たいトークンでフィルタリングするには、アセット ID もアセットフィンガープリントとして知られる必要があります。 <a href="https://www.cexplorer.io" target="_blank">cexplorer.io</a> などのツールを使用して、トークン名で検索してアセット ID / アセットフィンガープリントを得ることができます。
+
+<img src="/adder-cTOSI-cexploer.png"
+     alt="adder-cTOSI-cexploer"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 <br />
 
-アセットフィンガープリントをメモしてください。後で必要になります。この例では、以下のアセットID / アセットフィンガープリントを使用しました：
+アセットフィンガープリントのメモは、後で必要です。この例では、次のアセットID/アセットフィンガープリントを使用しました。
 
 ```
 asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
@@ -46,74 +50,92 @@ asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
 
 ***
 
-監視したいアセットID / アセットフィンガープリントが取得できたので、使用するフィルターとコマンドを確認する準備ができました。この例では、以下を使用します：
+<a id="step-2---selecting-adder-commands"></a>
+
+## ステップ2 - Adderコマンドの選択
+
+アセット ID / アセット フィンガープリントを監視したいので、使用するフィルターやコマンドを調べる準備が整っています。この例では、次の操作を行います。
 
 * フィルターポリシー
-* フィルターアセット
-* フィルタータイプ
+* アセットフィルター
+* フィルター タイプ
 * 出力
 
-## フィルターポリシー
+<a id="filter-policy"></a>
 
-上記のスマートコントラクトポリシーIDを使用して、Adderにこのポリシーを監視させるには、以下のフィルターを使用します：
+### フィルターポリシー
 
-```
--filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
-```
-
-## フィルターアセット
-
-上記のcTOSIのアセットフィンガープリントを使用して、Adderにそのフィンガープリントを持つトランザクションを追跡させるには、以下のフィルターを使用します：
+上記からスマートコントラクトポリシーIDを使用して、Adderに以下のフィルタを使用して、このポリシーを監視します。
 
 ```
--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
+--filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b
 ```
 
-## フィルタータイプ - トランザクション
+<a id="filter-asset"></a>
 
-この例では、スマートコントラクトでcTOSIアセットを送信または受信するトランザクションが発生したときにアラートを受け取りたいと考えています。これを行うには、以下のフィルターを追加します：
+### アセットフィルター
 
-```
--filter-type chainsync.transaction
-```
-
-## 出力
-
-出力をデスクトップ通知にしたいので、スマートコントラクトでcTOSIを含むトランザクションが発生したときにデスクトップ通知を受け取ります。これを行うには、以下のコマンドを追加します：
+上記からcTOSI用のアセットフィンガープリントを使用して、次のフィルタを使用して、Adderトラックトランザクションをフィンガープリントで追跡できます。
 
 ```
--output notify
+--filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46
+```
+
+<a id="filter-type---transaction"></a>
+
+### フィルターの種類 - トランザクション
+
+この例では、cTOSIアセットの送信または受信時に、トランザクションがスマートコントラクトで発生したときにアラートを取得したいです。 これを行うには、次のフィルタを追加します。
+
+```
+--filter-type input.transaction
+```
+
+<a id="output"></a>
+
+### 出力
+
+デスクトップ通知として出力したいです。そのため、cTOSI を含むトランザクションがスマートコントラクトで発生したとき、デスクトップ通知を受け取ります。これを行うには、次のコマンドを追加します。
+
+```
+--output notify
 ```
 
 ***
 
-## すべてをまとめる
+<a id="step-3---putting-it-all-together"></a>
 
-スマートコントラクト内でTosidropトークンcTOSIを含むトランザクションがあったときにデスクトップ通知を受け取るには、コマンドプロンプトで以下のコマンドを実行します：
+## ステップ3 - すべての設定を組み合わせる
 
-> Adder exeへのパスを調整してください。この例では、ユーザーrichmのデスクトップにあります。\
-> また、追跡したいアセットIDとポリシーIDも調整してください。
+トランザクションが Tosidrop トークン cTOSI を含むときにデスクトップ通知を取得するには、スマートコントラクト内で、コマンドプロンプトで次のコマンドを実行します。
 
+> ⚠️ 以下を追跡したいアセットIDとポリシーIDを調整してください。
 
 ```
-C:\Users\richm\Desktop\adder-v0.26.0-windows-amd64.exe -filter-type chainsync.transaction -filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 -filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b -output notify
+./adder --filter-type input.transaction --filter-asset asset1uaxup2yv695uat3chgwqtpg9xvau55pd5z6r46 --filter-policy c04e78ea267631f27975446a15d96ef1f3bbcdbf99577d3e552c663b --output notify
 ```
 
 
-### おめでとうございます！
+<a id="congratulations"></a>
 
-これでウィンドウを最小化して、Adderをバックグラウンドで実行させることができます。スマートコントラクト内でcTOSIを含むトランザクションが発生するたびに、デスクトップアラートが届きます。
+### おめでとうございます!
 
-![adder-desktop-alert](/adder-desktop-alert.png)
+スマートコントラクトでcTOSIを含むトランザクションが発生したときは、デスクトップアラートを取得します。
+
+<img src="/adder-desktop-alert-v2.png"
+     alt="adder-desktop-alert"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
 
-> ヒント：`-h`または`-help`フラグを使用すると、利用可能なすべてのコマンドのリストを取得できます。
+> 💡 ヒント: `-h` または `--help` フラグを使用して、利用可能なすべてのコマンドのリストを得ることができます。
 
-他の例を参照して、Adderで何ができるかを確認し、Adderのパワーを解き放ちましょう
+Adderの他の例を見て、Adderのパワーを解除することができます
 
 1. [例1](../002-example-1-watch-my-wallet-and-get-a-desktop-notification) - ウォレットを監視してデスクトップ通知を受け取る
 2. [例2](../003-example-2-watch-a-token-and-get-a-desktop-notification) - トークンを監視してデスクトップ通知を受け取る
-3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPOを監視してDiscordでアラートを受け取る
-4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセットIDのスマートコントラクトを監視してデスクトップ通知を受け取る
+3. [例3](../004-example-3-watch-an-spo-and-get-an-alert-in-discord) - SPO を監視して Discord 通知を受け取る
+4. [例4](../005-example-4-watch-a-smart-contract-for-a-specific-asset-id-and-get-a-desktop-notification) - 特定のアセット ID のスマートコントラクトを監視してデスクトップ通知を受け取る
+5. [例5](../006-example-5-watch-an-drep-and-get-an-alert-in-telegram) - DRep を監視して Telegram 通知を受け取る
+6. [例 6](../007-example-6-watch-mempool-for-a-token) - 指定トークンを含むトランザクションをメモリプールで監視する

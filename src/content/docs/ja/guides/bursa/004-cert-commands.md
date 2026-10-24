@@ -7,6 +7,8 @@ description: 各種Cardano証明書を生成するためのBursaコマンドラ�
 
 Bursaは、ステークプール運用、ステーク委任、Conway時代のガバナンス用の証明書を作成するために使用できます。
 
+<a id="using-bursa-to-create-certificates"></a>
+
 ## Bursaを使用して証明書を作成
 これらのBursaコマンドは、各種Cardano証明書を生成するために使用できます。
 
@@ -63,6 +65,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 ***
 <a name="op"></a>
 
+<a id="create-certificates-for-stake-pool-operation"></a>
+
 ## ステークプール運用のための証明書を作成
 
 `op-cert`コマンドは、KESキーをプールコールドキーに紐付ける運用証明書(別名`node.cert`)を生成するために使用できます。ステークプールはKESキーをローテーションする際に新しいnode.certを作成する必要があります。そのため、SPOはBursaを使用して、新しいkes.vkey、コールドキー、KES期間で新しい`node.cert`を作成できます。
@@ -97,13 +101,15 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 > ⚠️ KESおよびコールドキーへのパスを調整してください。また、以下のカウンタとKES期間も調整してください。
 
-```bash
+```
 ./bursa cert op-cert --kes-vkey /path/kes.vkey --cold-skey /path/cold.skey --counter 0 --kes-period 200 --out node.cert
 ```
 
 ***
 
 <a name="pool-registration"></a>
+
+<a id="generate-a-pool-registration-certificate"></a>
 
 ## プール登録証明書を生成
 
@@ -115,7 +121,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 > -  `--pledge`          プレッジ額(lovelace)
 > -  `--cost`            エポックごとの固定コスト(lovelace)
 > -  `--margin`          プールマージン（`0.0`以上`1.0`以下の有限値）
->    負の値、`1.0`を超える値、`NaN`、正または負の無限大は無効です。Bursaは無効な値を拒否し、`pool margin must be a finite value between 0.0 and 1.0`というエラーを表示して、証明書を生成しません。
+>    負の値、`1.0`を超える値、`NaN`、正または負の無限大は無効です。Bursa はプール登録証明書を生成する前に、これらの無効な値を拒否します。
 > -  `--reward-account`  報酬アカウントアドレス (bech32ステークアドレス)
 
 >オプションの入力:
@@ -126,7 +132,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa cert pool-registration \
     --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
     --pledge 1000000000 --cost 340000000 --margin 0.01 \
@@ -139,6 +145,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 <a name="pool-retirement"></a>
 
+<a id="generate-a-pool-retirement-certificate"></a>
+
 ## プール引退証明書を生成
 プール引退証明書は、ステークプールが指定されたエポック境界で引退することを示します。
 
@@ -149,7 +157,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 出力形式はcardano-cli証明書と互換性があります。
 
 > ⚠️ コールドキーへのパスを調整してください。
-```bash
+```
 ./bursa cert pool-retirement --cold-vkey /path/cold.vkey \
     --epoch 300 --out pool-retire.cert
 ```
@@ -157,6 +165,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 ***
 
 <a name="stake-registration"></a>
+
+<a id="create-a-stake-address-registration-certificate"></a>
 
 ## ステークアドレス登録証明書を作成
 
@@ -166,7 +176,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa cert stake-registration \
     --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
@@ -174,6 +184,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 ***
 
 <a name="stake-deregistration"></a>
+
+<a id="create-a-stake-address-deregistration-certificate"></a>
 
 ## ステークアドレス登録解除証明書を作成
 
@@ -183,7 +195,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
  ./bursa cert stake-deregistration \
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
 ```
@@ -191,6 +203,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 ***
 
 <a name="stake-delegation"></a>
+
+<a id="create-a-stake-delegation-certificate"></a>
 
 ## ステーク委任証明書を作成
 
@@ -200,7 +214,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa cert stake-delegation \
     --stake-vkey /path/stake.vkey \
     --pool-id pool1... \
@@ -210,6 +224,8 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 ***
 
 <a name="drep-registration"></a>
+
+<a id="create-a-drep-registration-certificate-conway"></a>
 
 ## DRep登録証明書を作成 (Conway)
 
@@ -223,7 +239,7 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa cert drep-registration \
     --drep-vkey /path/drep.vkey \
     --deposit 500000000 \
@@ -236,6 +252,8 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 <a name="drep-deregistration"></a>
 
+<a id="create-a-drep-deregistration-certificate-conway"></a>
+
 ## DRep登録解除証明書を作成 (Conway)
 
 この証明書はオンチェーンガバナンスからDRepを登録解除し、デポジット返金額を返却します。
@@ -244,7 +262,7 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa cert drep-deregistration \
     --drep-vkey /path/drep.vkey \
     --deposit-refund 500000000 \
@@ -254,6 +272,8 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 ***
 
 <a name="vote-delegation"></a>
+
+<a id="create-a-vote-delegation-certificate-conway"></a>
 
 ## 投票委任証明書を作成 (Conway)
 
@@ -285,16 +305,20 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 > ⚠️ 以下のパスを調整してください。
 
+<a id="delegate-to-a-specific-drep"></a>
+
 ### 特定のDRepに委任
-```bash
+```
   ./bursa cert vote-delegation \
     --stake-vkey /path/stake.vkey \
     --drep-id drep1... \
     --out vote-deleg.cert
 ```
 
+<a id="always-abstain"></a>
+
 ### 常時棄権
-```bash
+```
   ./bursa cert vote-delegation \
     --stake-vkey /path/stake.vkey \
     --always-abstain \
@@ -305,6 +329,8 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 <a name="committee-hot-auth"></a>
 
+<a id="create-a-committee-hot-key-authorization-certificate-conway"></a>
+
 ## 委員会ホットキー認証証明書を作成 (Conway)
 
 この証明書は、ガバナンス投票のために、委員会コールドキーに代わって行動するホットキーを承認します。コールドキーはオフラインのまま保持され、ホットキーがガバナンスに参加します。
@@ -313,7 +339,7 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 > ⚠️ 以下のパスを調整してください。
 
-```bash
+```
 ./bursa cert committee-hot-auth \
     --cold-vkey /path/cc-cold.vkey \
     --hot-vkey /path/cc-hot.vkey \
@@ -324,6 +350,8 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 <a name="committee-cold-resign"></a>
 
+<a id="create-a-committee-cold-key-resignation-certificate-conway"></a>
+
 ## 委員会コールドキー辞任証明書を作成 (Conway)
 
 この証明書は、コールドキーによって委員会メンバーを辞任させます。理由書を参照するために、オプションでアンカーURLとハッシュを提供できます。
@@ -332,15 +360,19 @@ lovelaceでのデポジット額が必要です。DRepメタデータ用に、�
 
 > ⚠️ 以下のパスを調整してください。
 
+<a id="resign-without-anchor"></a>
+
 ### アンカーなしで辞任
-```bash
+```
   ./bursa cert committee-cold-resign \
     --cold-vkey /path/cc-cold.vkey \
     --out cc-resign.cert
 ```
 
+<a id="resign-with-anchor-rationale"></a>
+
 ### アンカー理由書付きで辞任
-```bash
+```
   ./bursa cert committee-cold-resign \
     --cold-vkey /path/cc-cold.vkey \
     --anchor-url https://example.com/resign.json \

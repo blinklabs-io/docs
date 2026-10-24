@@ -1,6 +1,6 @@
 ---
 title: cardano-up
-description: Una guia sobre cardano-up.
+description: Instala, configura y gestiona entornos de nodos de Cardano con cardano-up.
 ---
 
 Utilidad de linea de comandos para gestionar servicios de Cardano. cardano-up te permite usar una utilidad de linea de comandos para instalar servicios de Cardano utilizando imagenes de docker.

@@ -1,6 +1,6 @@
 ---
 const locale = Astro.currentLocale ?? 'root';
-const docsHref = locale === 'root' ? '/home/' : `/${locale}/home/`;
+const docsHref = locale === 'es' || locale === 'ja' ? `/${locale}/home/` : '/home/';
 const labels = {
 	root: {
 		navigation: 'Footer navigation',

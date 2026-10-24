@@ -299,6 +299,10 @@ mobile-starlight-toc .dropdown {
   padding: 0.15rem 0.4rem;
 }
 
+.sl-markdown-content pre code {
+  padding: 0;
+}
+
 .sl-markdown-content a:not(.sl-anchor-link) {
   color: var(--bl-blue);
   text-decoration: none;

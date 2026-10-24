@@ -1,6 +1,6 @@
 ---
 title: nview
-description: Introduccion a nview.
+description: Monitoriza el estado y las métricas de un nodo local de Cardano desde tu terminal con nview.
 ---
 
 ![nview-screen](/nview-screen.png)

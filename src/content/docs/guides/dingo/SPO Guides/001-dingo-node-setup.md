@@ -10,7 +10,7 @@ description: SPO Guide for Dingo Pools - Dingo Node Setup and Configuration.
 <br>
 
 ### Step 1 - Create Working Directory
-We will create a directory for all our files related to the pool setup.
+Create a directory for your pool files.
 
 First export directory path to `.bashrc` by running:
 
@@ -45,7 +45,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 
 ```
 cd $DINGO_HOME
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.84.0/dingo-v0.84.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.0/dingo-v0.87.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 <br>
@@ -113,9 +113,9 @@ cardano-cli version
 
 <br>
 
-**We need the Shelley Genesis JSON file to run some of our CLI commands.** 
+**Some of the CLI commands need the Shelley Genesis JSON file.** 
 
-For this example, we will use the following directory structure: `$DINGO_HOME/config/`. The following command will create the directory and move into that directory:
+This example uses `$DINGO_HOME/config/`. The following command creates the directory and moves into it:
 ```
 mkdir -p "$DINGO_HOME/config" && cd "$DINGO_HOME/config"
 ```

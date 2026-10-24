@@ -10,19 +10,20 @@ Dingo es la implementación de un nodo de Cardano en Go de Blink Labs. Elige la 
 ## Opero un nodo Dingo
 
 - [Inicio rápido](/es/guides/dingo/002-quick-start-overview/) — descarga Dingo e inicia un nodo Preview.
-- [Configuración y modos de almacenamiento (en inglés)](/guides/dingo/005-node-configuration/) — elige y configura un relay, productor de bloques o nodo de API.
-- [Referencia de configuración de Dingo (en inglés)](/guides/dingo/009-configuration-reference/) — consulta todos los ajustes de Dingo v0.84.0.
-- [Descargar `dingo.yaml.example` para Dingo v0.84.0](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example).
-- [Arranque inicial y mantenimiento de datos (en inglés)](/guides/dingo/007-bootstrap-and-data-maintenance/) — usa Mithril y administra los datos locales del nodo.
-- [Ejecutar Dingo como servicio](/es/guides/dingo/003-create-start-up-service/) y [supervisarlo con Grafana](https://docs.blinklabs.io/guides/dingo/spo-guides/008-grafana-dashboard/).
-- [Guías para operadores de pools](https://docs.blinklabs.io/guides/dingo/spo-guides/000-spo-guide/) — configura y opera un productor de bloques de testnet.
+- [Configuración y modos de almacenamiento (en inglés)](/es/guides/dingo/005-node-configuration/) — elige y configura un relay, productor de bloques o nodo de API.
+- [Referencia de configuración de Dingo (en inglés)](/es/guides/dingo/009-configuration-reference/) — consulta todos los ajustes de Dingo v0.87.0.
+- [Descargar `dingo.yaml.example` para Dingo v0.87.0](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example).
+- [Referencia del benchmark de LeiosDB (en inglés)](/es/guides/dingo/010-leios-db-benchmark/).
+- [Arranque inicial y mantenimiento de datos (en inglés)](/es/guides/dingo/007-bootstrap-and-data-maintenance/) — usa Mithril y administra los datos locales del nodo.
+- [Ejecutar Dingo como servicio](/es/guides/dingo/003-create-start-up-service/) y [supervisarlo con Grafana](/es/guides/dingo/spo-guides/008-grafana-dashboard/).
+- [Guías para operadores de pools](/es/guides/dingo/spo-guides/000-spo-guide/) — configura y opera un productor de bloques de testnet.
 
 ## Conecto una aplicación
 
-- [APIs y servicios de archivo (en inglés)](/guides/dingo/006-apis-and-archive/) — elige una API, configura el acceso y conoce Bark.
-- [Crear un cliente para la API Blockfrost (en inglés)](/guides/dingo/Development%20Guides/009-build-blockfrost-client/) — conecta una aplicación con la API compatible de Dingo.
-- [Crear una interfaz de wallet con UTxO RPC (en inglés)](/guides/dingo/Development%20Guides/010-build-utxorpc-frontend/) — consulta UTxO y envía transacciones mediante Dingo.
-- [Crear un panel de gobernanza (en inglés)](/guides/dingo/Development%20Guides/011-build-governance-dashboard/) — conoce las opciones y limitaciones de los metadatos indexados.
+- [APIs y servicios de archivo (en inglés)](/es/guides/dingo/006-apis-and-archive/) — elige una API, configura el acceso y conoce Bark.
+- [Crear un cliente para la API Blockfrost (en inglés)](/es/guides/dingo/development-guides/009-build-blockfrost-client/) — conecta una aplicación con la API compatible de Dingo.
+- [Crear una interfaz de wallet con UTxO RPC (en inglés)](/es/guides/dingo/development-guides/010-build-utxorpc-frontend/) — consulta UTxO y envía transacciones mediante Dingo.
+- [Crear un panel de gobernanza (en inglés)](/es/guides/dingo/development-guides/011-build-governance-dashboard/) — conoce las opciones y limitaciones de los metadatos indexados.
 - [Usar Dingo con Cardano CLI](/es/guides/dingo/004-using-dingo-with-cardano-cli/) — consulta un nodo mediante node-to-client.
 
 ## Contribuyo a Dingo

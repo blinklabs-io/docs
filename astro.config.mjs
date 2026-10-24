@@ -9,6 +9,10 @@ export default defineConfig({
 	site: 'https://docs.blinklabs.io',
 	redirects: {
 		'/': '/home',
+		'/es/guides/adder/002-quick-start-overview': '/es/guides/adder/002-operating-mode-overview/',
+		'/ja/guides/adder/002-quick-start-overview': '/ja/guides/adder/002-operating-mode-overview/',
+		'/es/guides/cdnsd': '/es/guides/cdnsd/001-cdnsd/',
+		'/ja/guides/cdnsd': '/ja/guides/cdnsd/001-cdnsd/',
 	},
 	markdown: {
 		rehypePlugins: [optimizeDocImages],
@@ -16,6 +20,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			favicon: 'favicon.ico',
+			routeMiddleware: './src/sidebar-translations.ts',
 			customCss: [
 				'./src/styles/main.css',
 				'./src/styles/custom.css',
@@ -184,13 +189,13 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Start here',
+					label: 'Start here', translations: { es: 'Empieza aquí', ja: 'はじめに' },
 					items: [
-						{ label: 'Home', slug: 'home' },
+						{ label: 'Home', translations: { es: 'Inicio', ja: 'ホーム' }, slug: 'home' },
 					],
 				},
 				{
-					label: 'Nodes and operations',
+					label: 'Nodes and operations', translations: { es: 'Nodos y operaciones', ja: 'ノードと運用' },
 					items: [
 						{ label: 'Dingo', collapsed: true, items: [{ autogenerate: { directory: 'guides/dingo' } }] },
 						{ label: 'cardano-up', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-up' } }] },
@@ -200,30 +205,30 @@ export default defineConfig({
 					],
 				},
 				{
-					label: 'Automation',
+					label: 'Automation', translations: { es: 'Automatización', ja: '自動化' },
 					items: [
 						{ label: 'Adder', collapsed: true, items: [{ autogenerate: { directory: 'guides/adder' } }] },
 						{ label: 'Bluefin', collapsed: true, items: [{ autogenerate: { directory: 'guides/bluefin' } }] },
 					],
 				},
 				{
-					label: 'APIs and services',
+					label: 'APIs and services', translations: { es: 'APIs y servicios', ja: 'APIとサービス' },
 					items: [
 						{ label: 'Tx Submit API', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit' } }] },
 						{ label: 'Tx Submit API Mirror', collapsed: true, items: [{ autogenerate: { directory: 'guides/txsubmit-api-mirror' } }] },
 						{ label: 'cDNSd', collapsed: true, items: [{ autogenerate: { directory: 'guides/cdnsd' } }] },
 						{
-							label: 'Docker Images',
+							label: 'Docker Images', translations: { es: 'Imágenes Docker', ja: 'Dockerイメージ' },
 							collapsed: true,
 							items: [
-								{ label: 'Overview', slug: 'guides/docker-images' },
+								{ label: 'Overview', translations: { es: 'Descripción general', ja: '概要' }, slug: 'guides/docker-images' },
 								{ autogenerate: { directory: 'guides/docker-images' } },
 							],
 						},
 					],
 				},
 				{
-					label: 'Developer libraries',
+					label: 'Developer libraries', translations: { es: 'Bibliotecas de desarrollo', ja: '開発者向けライブラリ' },
 					items: [
 						{ label: 'gOuroboros', collapsed: true, items: [{ autogenerate: { directory: 'guides/gouroboros' } }] },
 						{ label: 'plutigo', collapsed: true, items: [{ autogenerate: { directory: 'guides/plutigo' } }] },

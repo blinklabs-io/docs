@@ -11,15 +11,15 @@ Puedes descargar la última versión de Adder desde la página <a href="https://
 Descargaremos el binario de Adder ejecutando el siguiente comando. Ajusta el enlace de descarga a la versión más actual.
 
 ```
-wget -c https://github.com/blinklabs-io/adder/releases/download/v0.39.1/adder-v0.39.1-linux-amd64.tar.gz -O - | tar -xz
+ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.46.0/adder-v0.46.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 
 ***
 
-## Ejecutar Adder con Filtros y Comandos
+## Ejecutar Adder con filtros y comandos
 
-Ahora podemos ejecutar Adder `./adder` con filtros y comandos. Por ejemplo, puedes obtener una lista de todos los argumentos de línea de comandos disponibles usando la bandera `-h`/`--help`.
+Ahora podemos ejecutar Adder `./adder` con filtros y comandos. Por ejemplo, puedes obtener una lista de todos los argumentos de línea de comandos disponibles usando la opción `-h`/`--help`.
 
 ```
 ./adder -h
@@ -29,10 +29,10 @@ Ahora podemos ejecutar Adder `./adder` con filtros y comandos. Por ejemplo, pued
 
 ***
 
-### Felicitaciones!
+### ¡Enhorabuena!
 
-Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos rastrear cierta informacion y elegir la forma en que somos notificados.
+Ya puedes ejecutar Adder con filtros y comandos para seguir la información que te interese y elegir cómo recibir las notificaciones.
 
 <br />
 
-Ahora estamos listos para revisar algunos [ejemplos](../examples/001-using-adder-examples-desc) sobre la utilidad y el poder de Adder!
+Consulta los [ejemplos](../examples/001-using-adder-examples-desc) para conocer las posibilidades de Adder.

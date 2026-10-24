@@ -1,143 +1,125 @@
 ---
-title: Monedero de nodo completo
-description: Instalar, ejecutar, configurar y compilar el monedero de nodo completo de Bursa.
+title: Billetera con nodo completo
+description: Instala, configura, compila y soluciona problemas de la billetera con nodo completo de Bursa.
 ---
 
-# Monedero de nodo completo de Bursa
+# Billetera con nodo completo de Bursa
 
-Esta guía describe la instalación, ejecución, configuración, compilación y resolución de problemas del monedero de nodo completo de Bursa. El monedero incluye un nodo de Cardano y ofrece una interfaz de escritorio o una interfaz accesible desde el navegador.
+Esta guía cubre la instalación, los modos de ejecución, la configuración, la compilación desde el código fuente, los paquetes macOS y la resolución de problemas de la billetera con nodo completo de Bursa.
 
-## Instalación
+## Instalar
 
-Descargar un instalador o archivo de la [página de versiones de Bursa](https://github.com/blinklabs-io/bursa/releases). Los archivos siguen este patrón de nombres:
+Descarga el archivo correspondiente a tu plataforma desde las [versiones de Bursa](https://github.com/blinklabs-io/bursa/releases). Los archivos publicados siguen este patrón de nombres:
 
 ```text
 bursa-wallet-<version>-<os>-<arch>.<ext>
 ```
 
-| Plataforma | Archivo | Comportamiento |
+| Plataforma | Archivo | Instalación |
 | --- | --- | --- |
-| macOS arm64 (Apple Silicon) | `.pkg` | Instalar `Bursa.app`. El paquete incluye firma y notarización. |
-| Windows amd64 o arm64 | `.msi` | Instalar el monedero con un paquete que incluye firma. |
-| Linux amd64 o arm64 | `.tar.gz` | Extraer el archivo para usar la ventana nativa. |
-| FreeBSD amd64 o arm64 | `.tar.gz` | Extraer el archivo y abrir la interfaz desde un navegador. Este archivo no incluye la ventana nativa. |
+| macOS arm64 (Apple Silicon) | `.pkg` | Apple firma y notariza el instalador, que instala `Bursa.app`. |
+| Windows amd64 o arm64 | `.msi` | Windows firma el instalador. |
+| Linux amd64 o arm64 | `.tar.gz` | Extrae el archivo para ejecutar la versión con ventana nativa. |
+| FreeBSD amd64 o arm64 | `.tar.gz` | Extrae el archivo y ejecuta la versión sin ventana nativa en el navegador. FreeBSD no proporciona una versión con ventana nativa. |
 
-En macOS, abrir el archivo `.pkg` y completar el instalador. En Windows, abrir el archivo `.msi` y completar el instalador. En Linux y FreeBSD, extraer el archivo y conceder permisos de ejecución al ejecutable `bursa-wallet`:
+En Linux o FreeBSD, extrae el archivo y ejecuta el programa `bursa-wallet` incluido:
 
 ```bash
 tar xzf bursa-wallet-<version>-<os>-<arch>.tar.gz
-chmod +x bursa-wallet
+./bursa-wallet
 ```
 
-## Ejecutar el monedero
+## Ejecutar la billetera
 
-Ejecutar el binario desde un terminal:
+Después de instalar el paquete macOS o Windows, abre `Bursa` desde el menú de aplicaciones, o ejecuta directamente el programa:
 
 ```bash
 bursa-wallet
 ```
 
-El archivo de escritorio abre una ventana nativa. El binario sin ventana sirve la misma interfaz en `http://127.0.0.1:8090`; abrir esa dirección en un navegador. El proceso solo escucha en la interfaz de loopback.
+La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en <http://127.0.0.1:8090>; abre esa dirección en el navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
-El primer inicio sincroniza el nodo. La configuración predeterminada usa una instantánea de Mithril para evitar reproducir la cadena desde el génesis. La pantalla de sincronización muestra el progreso mientras el nodo se pone al día.
+La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril en lugar de reproducir la cadena desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
 ## Configuración
 
-Configurar las variables de entorno antes de ejecutar `bursa-wallet`:
+Establece las variables de entorno antes de la primera ejecución para inicializar la configuración:
 
-| Variable | Valor predeterminado | Efecto operativo |
+| Variable | Valor predeterminado | Efecto |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Seleccionar la red de Cardano y el directorio de datos correspondiente. |
-| `BURSA_SYNC` | `mithril` | Usar una instantánea de Mithril para la sincronización. El valor `genesis` reproduce la cadena desde el inicio. |
-| `BURSA_LEAN` | `false` | Usar el perfil de almacenamiento reducido, que elimina datos históricos de la cadena para reducir el espacio en disco. |
-| `BURSA_CONNECTOR` | `false` | Activar el conector de aplicaciones descentralizadas. |
+| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos. |
+| `BURSA_SYNC` | `mithril` | El valor `genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. |
+| `BURSA_LEAN` | `false` | Activa el almacenamiento reducido, que poda los datos históricos de la cadena para ahorrar disco. |
+| `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
 
-Por ejemplo, iniciar el monedero en `mainnet` con la sincronización predeterminada:
-
-```bash
-BURSA_NETWORK=mainnet bursa-wallet
-```
-
-El monedero sirve la interfaz en `127.0.0.1:8090`. El monedero guarda las opciones que también se modifican desde la interfaz después del primer inicio; a partir de entonces, el valor guardado tiene prioridad sobre la variable de entorno correspondiente.
+La billetera conserva los ajustes configurados mediante su interfaz tras la primera ejecución. Cuando un ajuste ya está almacenado, tiene prioridad sobre la variable de entorno.
 
 ## Compilar desde el código fuente
 
-### Requisitos
+Instala Go `1.26` o posterior y Node `22`. Ejecuta los comandos desde la raíz del repositorio.
 
-- Go `1.26` o una versión posterior.
-- Node `22`.
-- Un árbol de código fuente de Bursa y `make`.
+### Compilar la billetera sin ventana nativa
 
-Ejecutar los comandos desde la raíz del repositorio.
-
-### Compilar el binario sin ventana nativa
-
-Ejecutar:
+Compila los recursos web y el binario predeterminado en Go puro:
 
 ```bash
 make wallet
 ```
 
-Este destino compila el paquete web y genera `ui/bursa-wallet`, un binario puro de Go que sirve la interfaz mediante loopback. Este binario admite compilación cruzada y utiliza un navegador para mostrar la interfaz.
+El comando escribe el binario en `ui/bursa-wallet`. Esta versión sirve la interfaz por loopback y admite compilación cruzada.
 
-### Compilar el binario con ventana nativa
+### Compilar la billetera con ventana nativa
 
-Ejecutar:
+Compila la versión con ventana nativa:
 
 ```bash
 make wallet-webview
 ```
 
-Esta variante requiere CGO, una cadena de herramientas de C y las cabeceras de desarrollo del webview del sistema. Usa `WKWebView` en macOS, `WebView2` en Windows y `webkit2gtk` en Linux. Compilarla en una máquina de la arquitectura de destino: esta variante no admite compilación cruzada.
+Este objetivo requiere CGO, herramientas de compilación C y las cabeceras de desarrollo de webview de la plataforma:
 
-En Linux, una compilación con la etiqueta `webview` requiere las cabeceras de desarrollo de `webkit2gtk` y que el sistema disponga de `libayatana-appindicator3` en tiempo de ejecución para ejecutarse con soporte de bandeja. Si el sistema solo ofrece `webkit2gtk-4.1`, el archivo Makefile crea la adaptación `pkg-config` necesaria para la dependencia que solicita `4.0`.
+- macOS: `WKWebView`.
+- Windows: `WebView2`.
+- Linux: cabeceras de desarrollo `webkit2gtk` para compilar y `libayatana-appindicator3` para ejecutar. Una compilación con la etiqueta `webview` necesita ambas para funcionar con soporte de bandeja.
 
-### Crear paquetes para macOS
+La versión webview no admite compilación para otra arquitectura. Compílala en una máquina con la arquitectura de destino. En Linux puede utilizar `webkit2gtk-4.1`; el Makefile proporciona una adaptación de `pkg-config` cuando el enlace del proyecto original solicita `4.0`.
 
-Para realizar pruebas locales, ejecutar:
+### Crear un paquete macOS
+
+Crea un paquete para pruebas locales:
 
 ```bash
 make bundle-macos
 ```
 
-Este destino genera un paquete `.pkg` con firma ad hoc. Para generar el paquete de distribución, ejecutar:
+Este objetivo genera un `.pkg` con firma ad hoc. Para generar el paquete de publicación firmado y notarizado:
 
 ```bash
 make pkg-macos
 ```
 
-Este destino aplica la firma y la notarización de Apple, y requiere los secretos de Apple.
+El objetivo `pkg-macos` requiere los secretos de firma y notarización de Apple.
 
-## Solución de problemas
+## Resolución de problemas
 
-### La sincronización tarda demasiado o parece detenida
+### La sincronización es lenta o parece detenida
 
-1. Abrir `Settings` → `Diagnostics` para consultar el estado del nodo, los pares y la sincronización.
-2. Exportar los registros desde la pantalla de diagnóstico.
-3. Si hace falta consultar el archivo directamente, abrir:
+1. Abre **Settings → Diagnostics** para comprobar el estado del nodo, los pares y la sincronización.
+2. Exporta los registros de diagnóstico o consulta directamente `~/.bursa-wallet/<network>/logs/bursa-wallet.log`.
 
-   ```text
-   ~/.bursa-wallet/<network>/logs/bursa-wallet.log
-   ```
+### La ventana webview de Linux está vacía
 
-### La ventana aparece en blanco en Linux
+Instala `webkit2gtk` y sus cabeceras de desarrollo para la versión webview. Instala también `libayatana-appindicator3` antes de ejecutar una compilación con la etiqueta `webview`. Si el sistema no dispone de webview, utiliza la versión de navegador en Go puro y abre la dirección de loopback.
 
-El binario con webview necesita `webkit2gtk` y sus cabeceras de desarrollo para mostrar la ventana. Además, la compilación con la etiqueta `webview` requiere que el sistema disponga de `libayatana-appindicator3` en tiempo de ejecución; esta dependencia no sustituye a `webkit2gtk` para resolver una ventana en blanco. Instalar ambas dependencias y volver a ejecutar `make wallet-webview`. Como alternativa, compilar el binario puro de Go y abrir `http://127.0.0.1:8090` en un navegador:
+### La billetera ocupa demasiado disco
 
-```bash
-make wallet
-bursa-wallet
-```
-
-### El monedero usa demasiado espacio en disco
-
-Activar el almacenamiento reducido desde `Settings` o establecer `BURSA_LEAN=true` antes del primer inicio:
+Activa el almacenamiento reducido en la primera ejecución:
 
 ```bash
 BURSA_LEAN=true bursa-wallet
 ```
 
-El perfil reducido elimina datos históricos de la cadena para limitar el uso de disco.
+Este modo hace caducar los datos históricos de la cadena y reduce el espacio ocupado en disco.
 
 ---
 

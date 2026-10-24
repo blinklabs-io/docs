@@ -26,6 +26,8 @@ Bursaは、マルチシグネチャスクリプト、ハッシュ、鍵の生成
 
 <a name="wallet"></a>
 
+<a id="use-command-line-to-create-a-wallet-and-output-wallet-files"></a>
+
 ## コマンドラインでウォレットを作成しウォレットファイルを出力
 
 コマンドラインを使用してウォレットを作成し、Cardanoウォレット管理に必要なすべてのファイルを出力できます。
@@ -59,6 +61,8 @@ Bursaは、マルチシグネチャスクリプト、ハッシュ、鍵の生成
 
 <a name="api"></a>
 
+<a id="use-command-line-to-start-api"></a>
+
 ## コマンドラインでAPIを起動
 
 APIを使用したい場合は、以下のコマンドを実行してコマンドラインから起動できます。
@@ -68,6 +72,8 @@ APIを使用したい場合は、以下のコマンドを実行してコマン�
 ```
 
 ![bursa-start-api](/bursa-start-api.png)
+
+<a id="access-api-swagger-documentation"></a>
 
 ## API Swaggerドキュメントにアクセス
 
@@ -83,6 +89,8 @@ http://localhost:8080/swagger/index.html
 
 <a name="kes-agent"></a>
 
+<a id="use-command-line-to-start-kes-agent"></a>
+
 ## コマンドラインで `kes-agent` を起動
 
 `kes-agent` は `serve-key` または `sign` モードで起動します。設定ファイルは、以下のコマンドの `--config` フラグで指定します。
@@ -93,7 +101,7 @@ http://localhost:8080/swagger/index.html
 
 `--config` にはYAML設定ファイルのパスを指定します。フラグを省略した場合は、`BURSA_CONFIG` 環境変数で設定ファイルのパスを指定できます。
 
-`kes-agent` のモード、ソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
+`kes_agent.mode` に `serve-key` または `sign` を設定します。`kes_agent` YAML のフィールドと環境変数、および必須のソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
 
 ***
 

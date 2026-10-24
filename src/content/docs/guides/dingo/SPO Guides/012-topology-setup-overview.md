@@ -93,7 +93,7 @@ Your own relays and BP should be set to `"trustable": true`
 For a typical 2 relay and BP setup, for the topology on your relay use:
 
 - Use two localRoots groups so you can advertise your other relays while hiding your BP.
-- Set `"advertise": false,` on the group that contains the BP, since we want to keep the BP private.
+- Set `"advertise": false,` on the group that contains the BP, to keep the BP private.
 - Because there is one additional relay, (2 relays in total) set "valency": 1, if you had two additional relays (3 relays in total), you would set "valency": 2, and so on.
 - Dingo accepts `hotValency` as an alias for `valency`; when both keys are present, `valency` takes precedence. For non-empty topology groups, Dingo validates `warmValency` against the number of access points.
 - Set your Relays to "trustable": true, so you can sync if you get too far off the tip.
@@ -148,12 +148,12 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 ***
 
 <h2 id="bp">BP Sample Topology File</h2>
-For a block producer node it should connect only to our relays. To do this we use the following configuration:
+A block producer should connect only to your own relays. Use the following configuration:
 
 - Set `"bootstrapPeers": null`.
-- Set `"advertise": false,` since these are local roots on BP and we want to keep private.
+- Set `"advertise": false,` since these are the BP's local roots and should stay private.
 - Set your Relays to `"trustable": true,`.
-- Since in this example we use 2 Relays, we set `"valency": 2`, if you had three relays set it to `3`.
+- This example uses 2 relays, so it sets `"valency": 2`. With three relays, set it to `3`.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 - Set `"useLedgerAfterSlot": -1` so the BP doesn't try to connect to other nodes using ledger peer data.
 - The BP does not need `peerSnapshotFile` or `bootstrapPeers` because it should not sync from the public network.

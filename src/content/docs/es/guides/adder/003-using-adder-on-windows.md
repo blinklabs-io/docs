@@ -1,60 +1,133 @@
 ---
-title: Uso en Windows
-description: Como usar Adder en Windows.
+title: Usar Adder en Windows
+description: Cómo utilizar Adder en Windows.
 ---
 
-# Usando Adder en Windows
+Adder es una aplicación de escritorio que se ejecuta en la bandeja del sistema y facilita la observación de la actividad de la blockchain de Cardano.
 
-Esta guia te mostrara como usar Adder en Windows. En las siguientes secciones te mostraremos ejemplos de como usar Adder. Recuerda que estos son ejemplos para familiarizarte con el tipo de cosas que Adder es capaz de hacer. El verdadero poder de Adder puede ser desbloqueado por tu imaginacion.
+## Instalar y configurar
 
-> Nota: esta guia asume que has descargado el exe de Adder desde <a href="https://blinklabs.io/projects-open-source" target="_blank">blinklabs.io</a>. Si no has descargado el exe, por favor consulta nuestro [Inicio Rapido](../002-quick-start-overview)
+### Paso 1.1 - Descargar el instalador de Adder
 
-## Paso 1 - Abrir una Linea de Comandos en Windows
+La forma más sencilla de instalar Adder en Windows es utilizar el instalador MSI disponible en [blinklabs.io](https://blinklabs.io/projects-open-source).
 
-Ahora que tienes el archivo exe de Adder descargado, necesitamos abrir una linea de comandos. Aqui es donde mas tarde alimentaremos a Adder con filtros y comandos para que nos notifique de los eventos que queremos rastrear.
+<img src="/adder-windows-release-download.webp"
+     alt="adder-windows-release-download"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+Selecciona la versión adecuada para tu sistema: Windows x64 o Windows arm64.
 
+### Paso 1.2 - Abrir el archivo .msi
 
-Para abrir una linea de comandos en Windows, ve a tu menu de inicio de Windows
+Cuando termine la descarga, pulsa `Open` para abrir el archivo `.msi`.
 
-![adder-windows-start-menu](/adder-windows-start-menu.webp)
+<img src="/adder-windows-open-msi.webp"
+     alt="adder-windows-open-msi"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+### Paso 1.3 - Iniciar la instalación
 
+Pulsa `Run` para iniciar la instalación.
 
-Luego escribe `cmd` en el cuadro de busqueda y haz clic en `Abrir`
+<img src="/adder-windows-run-msi.webp"
+     alt="adder-windows-run-msi"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-![adder-windows-search-cmd](/adder-windows-search-cmd.webp)
+### Paso 2 - Iniciar Adder
 
-## Paso 2 - Obtener la ruta del exe de Adder
+### Paso 2.1 - Abrir el menú Inicio de Windows
 
-A continuacion, necesitaremos obtener la ruta del archivo exe de Adder que descargamos para poder ejecutarlo en la linea de comandos.
+<img src="/adder-windows-start-menu.webp"
+     alt="adder-windows-start-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-En este ejemplo descargamos el exe de Adder en nuestro escritorio, asi que podemos hacer clic derecho en el exe de Adder y copiar la ruta.
+### Paso 2.2 - Buscar Adder
 
-Toma nota de la ruta, la necesitaremos mas adelante
+Busca la aplicación `Adder` y ábrela.
 
-![adder-exe-path](/adder-exe-path.png)
+<img src="/adder-windows-search-adder-app.webp"
+     alt="adder-windows-search-adder-app"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-## Paso 3 - Ejecutar Adder en la Linea de Comandos
+Si no aparece la pantalla de configuración **Welcome**, abre la bandeja del sistema, haz clic derecho en Adder y selecciona **Configure** para abrir el asistente.
 
-Ahora que tenemos la ruta del exe de Adder, escribe la ruta o pegala si copiaste la ruta en el paso anterior.
+### Paso 3 - Configurar Adder
 
-![adder-cmd-paste-path](/adder-cmd-paste-path.png)
+Al abrir *Adder Tray App*, verás la pantalla **Welcome**, que te guía para configurar Adder y las alertas que quieras recibir.
 
-### Felicitaciones!
+<img src="/adder-windows-config-welcome.webp"
+     alt="adder-windows-config-welcome"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Ahora estamos listos para ejecutar Adder con filtros y comandos para que podamos rastrear cierta informacion y elegir la forma en que somos notificados.
+### Paso 3.1 - Seleccionar la red Cardano que quieres observar
 
-<br />
+<img src="/adder-windows-config-network.webp"
+     alt="adder-windows-config-network"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+### Paso 3.2 - Añadir los objetivos de observación
 
-> CONSEJO: Puedes obtener una lista de todos los comandos disponibles usando la bandera `-h` o `--help`.
+Añade uno o varios valores en cada sección de objetivos que corresponda:
 
-<br />
+- `Watch Wallet` para direcciones de wallets.
+- `Track DRep` para IDs de DRep.
+- `Monitor Pool` para IDs de pool.
+- La sección opcional `Follow Asset` para huellas de activos, cuando las necesites.
+- La sección opcional `Follow Policy` para IDs de política, cuando los necesites.
 
+<img src="/adder-windows-config-pool-id-drep-id.webp"
+     alt="adder-windows-config-pool-id-drep-id"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Ahora estamos listos para revisar algunos [ejemplos](../examples/001-using-adder-examples-desc) sobre la utilidad y el poder de Adder!
+También puedes utilizar el modo exclusivo `Monitor Everything` para monitorizar todos los tipos de objetivos admitidos en lugar de introducir listas de objetivos explícitas. No combines este modo con valores de objetivos.
 
+Continúa al siguiente paso. Adder determina las opciones de notificación a partir de los tipos de objetivos introducidos o del modo `Monitor Everything`.
+
+<img src="/adder-windows-config-or.webp"
+     alt="adder-windows-config-or"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+### Paso 3.3 - Salida de notificaciones, opcional
+
+Adder ya está configurado para mostrar notificaciones de escritorio. Puedes seleccionar otros métodos si lo prefieres.
+
+<img src="/adder-windows-config-output.webp"
+     alt="adder-windows-config-output"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Pulsa `Next Step`.
+
+### Paso 3.4 - Alertas de eventos
+
+Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio.
+
+<img src="/adder-windows-config-events.webp"
+     alt="adder-windows-config-events"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+### Paso 3.5 - Enviar una notificación de prueba
+
+Pulsa `Test Notification` para confirmar que recibes las alertas de escritorio.
+
+<img src="/adder-windows-config-send-test.webp"
+     alt="adder-windows-config-send-test"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Si ves la notificación, pulsa `Yes, I saw it`.
+
+### Paso 3.6 - Terminar la configuración
+
+Pulsa `Finish Setup`.
+
+### ¡Enhorabuena! Adder te avisará cuando ocurra uno de los eventos seleccionados.
+
+## Usar el menú de la bandeja
+
+Para ver eventos recientes, ajustar la configuración o iniciar, detener o reiniciar la aplicación, haz clic derecho en Adder en la bandeja del sistema y elige la opción que necesites.
+
+<img src="/adder-windows-tray-app-menu.webp"
+     alt="adder-windows-tray-app-menu"
+     style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ---
 

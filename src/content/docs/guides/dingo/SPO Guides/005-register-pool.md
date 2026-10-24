@@ -75,7 +75,7 @@ mkdir pool-scripts
 ```
 
 ### Step 5.2 - Create an env file
-Create an environment (`env`) file for our pool in the pool-scripts folder.
+Create an environment (`env`) file for your pool in the pool-scripts folder.
 
 ✅ Update the values below with your metadata URL, relay node IP and port, pool pledge amount, cost (min pool fee), and margin.
 
@@ -266,7 +266,7 @@ shelleyOperationalCertificate: \"$DINGO_HOME/node.cert\"
 EOF"
 ```
 
-You can view and verify our `dingo.yaml` file by running:
+You can view and verify your `dingo.yaml` file by running:
 
 ```
 sudo nano /etc/dingo/dingo.yaml

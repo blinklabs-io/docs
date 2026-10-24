@@ -17,10 +17,13 @@
   "devDependencies": {
     "@types/node": "26.6.2",
     "typescript": "7.0.2",
-    "vite": "8.3.1",
+    "vite": "8.3.4",
     "vite-plugin-node-polyfills": "0.28.0"
   },
   "overrides": {
+    "@connectrpc/connect-node": {
+      "undici": "6.28.1"
+    },
     "@blaze-cardano/core": "0.9.1",
     "@blaze-cardano/data": "0.6.8",
     "@blaze-cardano/query": "0.6.2",

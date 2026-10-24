@@ -5,15 +5,15 @@ description: Choose a Dingo node role and find the matching configuration option
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
 and start a node. This page explains the main configuration choices. Read the
-  [complete Dingo v0.84.0 configuration reference](/guides/dingo/009-configuration-reference/)
- and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example).
+  [complete Dingo v0.87.0 configuration reference](/guides/dingo/009-configuration-reference/)
+ and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example).
 
 ## Choose a node role
 
 | Role | Storage mode | Block production | Use |
 | --- | --- | --- | --- |
 | Relay | `core` | Off | Follow and validate the chain, serve node-to-node and node-to-client connections. |
-| Block producer | `core` | On, with pool keys and an operational certificate | Follow the chain and forge blocks when elected. Use the [SPO guides](../SPO%20Guides/000-spo-guide/). |
+| Block producer | `core` | On, with pool keys and an operational certificate | Follow the chain and forge blocks when elected. Use the [SPO guides](../spo-guides/000-spo-guide/). |
 | API node | `api` | Off | Keep historical transaction data and serve configured Blockfrost, Mesh, or UTxO RPC APIs, or the optional built-in Kupo-compatible API. |
 
 `core` is the default storage mode and stores the data needed for consensus.
@@ -24,7 +24,7 @@ mode does not enable block production.
 
 Dingo block production is intended for test networks and private devnets in
 current releases. Follow the pool key and certificate guidance in the [SPO
-guides](../SPO%20Guides/000-spo-guide/); do not use a mainnet
+guides](../spo-guides/000-spo-guide/); do not use a mainnet
 configuration as a signal that mainnet production is supported.
 
 ## Configure Dingo
@@ -45,15 +45,15 @@ can change between releases.
 Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
-provider name. The example file documents the providers and options available
- in Dingo v0.84.0. When `plugins.storage.metadata.provider` is `sqlite`, the root
+provider name. The example file documents the providers and options for Dingo
+  v0.87.0. When `plugins.storage.metadata.provider` is `sqlite`, the root
 `databasePath` must be non-empty. If the provider is unset, it defaults to
 `sqlite`, and Dingo rejects the configuration at startup when `databasePath` is
 empty. Environment variables use the
 `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` form. For example, the current
 example shows the supported blob and metadata providers and their options.
 
-The [Grafana guide](../SPO%20Guides/008-grafana-dashboard/) covers
+The [Grafana guide](../spo-guides/008-grafana-dashboard/) covers
 metrics dashboards. For deployment as a Linux service, see [Run Dingo as a
 service](/guides/dingo/003-create-start-up-service/).
 

@@ -16,7 +16,7 @@ description: List of Adder Commands.
  
 > path to config file to load
 
-> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > YAML configuration file > environment variables.
+> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > environment variables > YAML configuration file > defaults.
 
 ***
 
@@ -126,6 +126,12 @@ description: List of Adder Commands.
   
 > start syncing at the specified chain point(s) in '<slot>.<hash>' format
 >
+> Adder trims whitespace from each comma-separated entry and ignores empty entries.
+>
+> If the value contains only whitespace or empty entries after trimming, Adder follows the configured `--input-chainsync-intersect-tip` behavior.
+>
+> Adder treats malformed non-empty `<slot>.<hash>` entries as errors.
+>
 <br />
 
 ```
@@ -231,25 +237,23 @@ description: List of Adder Commands.
 
 ***
 
-## Logging:
-
-```
-  --logging-level string
-```
-  
-> logging level (debug, info, warn, error) (default "info")
-<br />
-
-***
-
 ## Output:
 
 ```
   --output string
 ```
   
-> output plugin to use, 'list' to show available (default "log")
+> output plugin to use, `notify-json` for notification NDJSON, or `list` to show available (default "log")
 >
+<br />
+
+```
+  --output-log-level string
+```
+  
+> sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The threshold also filters Adder application diagnostics on stderr, even when another output plugin is selected.
+>
+> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder removed the old `--logging-level` flag and top-level YAML `logging.level` setting and rejects them when supplied. Adder removed the old `LOGGING_LEVEL` environment variable and ignores it.
 <br />
 
 ```
@@ -264,6 +268,8 @@ description: List of Adder Commands.
 ```
   
 > path to the versioned notification JSON configuration used by `notify-json`
+>
+> required when `--output notify-json` is selected
 <br />
 
 ```
@@ -364,6 +370,32 @@ adder notifications validate --config <path> [--json]
 >
 > `--config <path>` is required. Normal output reports validity and errors. `--json` emits the machine-readable validation result.
 >
+
+### Notification JSON configuration
+
+The configuration uses JSON with `schemaVersion` set to `1`. Adder rejects unknown fields and multiple JSON values in the configuration file.
+
+| Field | Description |
+| --- | --- |
+| `schemaVersion` | Required value: `1`. |
+| `network.name` | Required supported Cardano network: `mainnet`, `preprod`, or `preview`. |
+| `network.customAddress` and `network.customPort` | Optional custom node address and port. Set both fields together; `customPort` must be between `1` and `65535`. |
+| `monitor.everything` | Set to `true` to monitor all supported targets. Set this field or configure at least one target in `wallets`, `dreps`, `pools`, `assets`, or `policies`. |
+| `monitor.wallets` | Wallet addresses to monitor. |
+| `monitor.dreps` | DRep IDs to monitor. `monitor.drepMatch` accepts `any` or `all`. |
+| `monitor.pools` | Pool IDs to monitor. `monitor.poolMatch` accepts `any` or `all`. |
+| `monitor.assets` | Asset fingerprints to monitor. `monitor.assetMatch` accepts `any` or `all`. |
+| `monitor.policies` | Policy IDs to monitor. `monitor.policyMatch` accepts `any` or `all`. |
+| `alerts` | Alert categories to enable: `incomingTransactions`, `outgoingTransactions`, `tokenTransfers`, `blocksMinted`, `chainRollbacks`, `poolParameterChanges`, `governanceProposals`, `votesCast`, `registrationChanges`, `assetActivity`, `policyActivity`, and `connectionIssues`. Enable at least one category. |
+| `rateLimit.max` | Required value of `-1` to disable rate limiting, or `0` or greater. |
+| `rateLimit.windowSeconds` | Required positive duration in seconds. |
+| `connectionStaleSeconds` | Required staleness interval from `30` through `3600` seconds. |
+
+Target lists must contain valid, nonduplicate wallet addresses, DRep IDs, pool IDs, asset fingerprints, or policy IDs. The notification network must match `--input-chainsync-network`. When a custom node is configured, its address and port must match `--input-chainsync-address`. The `notify-json` output requires the `chainsync` input.
+
+### `notify-json` output
+
+The `notify-json` output writes one JSON object per line to stdout. Each record uses schema version `1`. Status records report `starting`, `connected`, or `stale` states and include a timestamp and optional message. Notification records include `ruleId`, optional `eventType`, rendered `title` and `body`, plus the batching fields `batched` and `count`.
 
 ***
 ## Version:

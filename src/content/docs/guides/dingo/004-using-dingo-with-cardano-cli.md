@@ -11,11 +11,11 @@ Dingo is a Cardano blockchain node written in Go which actively participates in 
 
 ***
 
-In this guide, we will walk you through downloading and running the Cardano CLI binary, then demonstrate several Cardano CLI commands. To get started follow the steps below.
+This guide downloads and runs the Cardano CLI binary, then shows several Cardano CLI commands against a Dingo node.
 
 <br>
 
-> ✅ This guide we assumes you have already downloaded Dingo and synced the blockchain. If not, see our [Quick Start](../002-quick-start-overview) guide.
+> ✅ This guide assumes you have already downloaded Dingo and synced the blockchain. If not, see the [Quick Start](../002-quick-start-overview) guide.
 
 ***
 
@@ -33,7 +33,7 @@ Copy the download URL for the latest Cardano CLI binary and run the following co
 
 <br>
 
-⚠️ For this example we place the `cardano-cli` binary in our `~/dingo` directory. Adjust the link path to the correct path for the version you want to download. 
+⚠️ This example places the `cardano-cli` binary in the `~/dingo` directory. Adjust the link path to the correct path for the version you want to download. 
 
 ```
 cd ~/dingo
@@ -54,7 +54,7 @@ chmod +x cardano-cli-x86_64-linux
 
 <br>
 
-For this example, we will rename the binary to `cardano-cli` and move it to `/usr/local/bin/`:
+Rename the binary to `cardano-cli` and move it to `/usr/local/bin/`:
 
 ⚠️ Adjust the file path and file name if needed. 
 
@@ -71,7 +71,7 @@ sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 <br>
 
 ## Step 3 - Run  Cardano CLI Command to Query Tip
-Let's run our first Cardano CLI command to query the tip of the Preview network using the Dingo node.  
+Run a first Cardano CLI command to query the tip of the Preview network through the Dingo node.  
 
 Run the following command to query the tip:
 
@@ -96,7 +96,7 @@ Instead of specifying the Cardano network and node socket each time you run a ca
 
 ### Setting Environment Variables for Current Session (Option 1)
 
-Run the following commands to export the variable for our current session.
+Run the following commands to export the variable for your current session.
 
 Socket Path:
 

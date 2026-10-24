@@ -9,6 +9,15 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.215.0 - *[View Release Notes](../v0-215-0)*
+- Version: v0.214.0 - *[View Release Notes](../v0-214-0)*
+- Version: v0.213.11 - *[View Release Notes](../v0-213-11)*
+- Version: v0.213.10 - *[View Release Notes](../v0-213-10)*
+- Version: v0.213.9 - *[View Release Notes](../v0-213-9)*
+- Version: v0.213.8 - *[View Release Notes](../v0-213-8)*
+- Version: v0.213.7 - *[View Release Notes](../v0-213-7)*
+- Version: v0.213.6 - *[View Release Notes](../v0-213-6)*
+- Version: v0.213.5 - *[View Release Notes](../v0-213-5)*
 - Version: v0.213.4 - *[View Release Notes](../v0-213-4)*
 - Version: v0.213.3 - *[View Release Notes](../v0-213-3)*
 - Version: v0.213.2 - *[View Release Notes](../v0-213-2)*

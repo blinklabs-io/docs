@@ -1,59 +1,67 @@
 ---
-title: クイックスタートガイド
-description: Dingoクイックスタート概要。
+title: "クイックスタートガイド"
+description: "Dingoクイックスタートの概要。"
 ---
+
+<a id="dingo"></a>
 
 # Dingo
 
-Dingoは、Go言語で書かれたCardanoブロックチェーンデータノードであり、Ouroboros Network Node-to-Nodeミニプロトコルファミリーを使用して、Cardanoブロックチェーン上のネットワーク通信に積極的に参加します。
+Go に書かれている Cardano ブロックチェーンノードは、ミニプロトコルの Ouroboros Network Node-to-Node-Node 家族を使用して、Cardano ブロックチェーン上のネットワーク通信に積極的に参加しています。
 
-⚠️ これは開発中のプロジェクトであり、現在活発に開発が進められています
+⚠ Dingoは進行中の作業であり、現在重大開発中です。
 
 <br>
 
 ***
 
-このガイドでは、Dingoバイナリのダウンロードと、Cardano PreviewネットワークでDingoノードを実行するために必要なすべての手順を説明します。以下の手順に従って始めましょう。
+このガイドでは、Dingoバイナリをダウンロードし、Cardanoプレビューネットワーク上でDingoノードを実行するために必要なすべてのステップについて説明します。
 
 <br>
 
-✅ このガイドは一般的なLinux環境を前提としています。必要に応じてコマンドとパスを調整してください。
+✅ このガイドは、典型的なLinuxのセットアップを想定しています。必要に応じて、コマンドとパスを調整してください。
 
 ***
 
 <br>
 
-## ステップ1 - Dingoバイナリのダウンロード
+<a id="step-1---download-dingo-binary"></a>
+
+## ステップ1 - Dingoバイナリをダウンロード
 <br>
 
-<a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新リリースをダウンロードします。
+<a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">Dingoリリース</a>ページから最新のリリースをダウンロードしてください。
 
-⚠️ お使いのシステムに合わせて、バージョン（以下の例ではv0.83.1）とアーキテクチャを調整してください。
+⚠️ バージョンとアーキテクチャを調整して、システムにマッチします。
 
 ```
 mkdir -p ~/dingo
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.84.0/dingo-v0.84.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
-以下を実行してバイナリが動作することを確認できます：
+実行中のバイナリの動作を確認することができます。
 
 ```
 ./dingo version
 ```
 
-### npmを使用する場合（代替方法）
+<a id="alternative-install-with-npm"></a>
 
-Node.js 22以降と`tar`が必要です。npmパッケージはLinux、FreeBSD、macOSのx64（amd64）またはarm64をサポートします。
+### 代替:npmでインストールする
 
-次のコマンドでグローバルインストールし、動作を確認します：
+`@blinklabs/dingo`パッケージには、Node.js 22以降と`tar`が必要です。これは、x64/amd64またはarm64上のLinux、FreeBSD、およびmacOSをサポートしています。インストール中に、パッケージは、一致するDingoリリースをダウンロードして、SHA-256チェックサムを確認します。
+
+インストーラーは、ホストの allowlist にリリースアセットの HTTPS URL のみを受け入れます。認証情報を含む URL を拒否したり、非 443 ポートを使用する URL を拒否します。また、リダイレクトや DNS の結果は、プライベートまたは特殊な IP アドレスに解決します。
+
+`dingo` コマンドをグローバルにインストールし、検証します。
 
 ```
 npm install --global @blinklabs/dingo
 dingo --help
 ```
 
-パッケージは対応するバージョンのリリースアーカイブを取得し、組み込まれたSHA-256チェックサムを検証してからネイティブバイナリをインストールします。グローバルインストールを使用する場合、以降のコマンドでは`./dingo`を`dingo`に置き換えてください。グローバルにインストールしない場合は、次のコマンドで確認できます：
+グローバルインストール後、残りのクイックスタートコマンドで `./dingo` ではなく `dingo` を使用します。グローバルインストールなしで確認するには、次のコマンドを実行します。
 
 ```
 npx @blinklabs/dingo --help
@@ -63,90 +71,173 @@ npx @blinklabs/dingo --help
 
 <br>
 
-## ローカル単一ノードDevnetの実行
+<a id="run-a-local-single-node-devnet"></a>
 
-設定ファイルなしでローカル単一ノードDevnetを起動します：
+## ローカル単一ノード Devnet を実行します。
+
+ダウンロードしたバイナリでローカルの単一ノードのdevnetを実行します。
 
 ```
 ./dingo devnet
 ```
 
-npmパッケージをグローバルにインストールした場合は`dingo devnet`を、そうでない場合は次のコマンドを実行します：
+> Dingo で生成された devnet の設定は `bindAddr` を `127.0.0.1` に設定します。そのため、devnet API とリスナーはローカル接続をデフォルトで受け入れます。生成された構成は、リモートアクセスを有効にするために意図的に変更します。
+
+グローバルな npm インストールでは、`dingo devnet` を実行します。グローバルインストールがなければ、次のようにします。
 
 ```
 npx @blinklabs/dingo devnet
 ```
 
-`--data-dir`を指定しない場合、Dingoは設定、テストキー、チェーンデータを専用の一時ディレクトリに保存し、プロセス終了時にそのディレクトリを削除します。実行するたびに新しいチェーンが開始されます。
+`--data-dir` がなければ、Dingo は、設定、テストキー、チェーンデータをプライベートな一時ディレクトリに保存し、プロセスが終了したときにそのディレクトリを削除します。各実行は新しいチェーンを開始します。
 
-Devnetは、ローカルテスト用のfaucet認証情報を`cardano/keys/`に配置します。Dingoが配置するファイルは次の3つです：
-
-- `faucet.skey`
-- `faucet.vkey`
-- `faucet.addr`
-
-一時実行では、Dingoはこれらのファイルを専用の一時ディレクトリ内の`cardano/keys/`に配置し、プロセス終了時に一時ディレクトリごと削除します。`--data-dir ./.dingo-devnet`を指定する永続実行では、Dingoは`<data-dir>/cardano/keys/`に配置します。Dingoはファイルとディレクトリに所有者だけがアクセスできる権限を設定します。
-
-genesis時点で、Dingoは`faucet.addr`のアドレスに900,000 test ADA（900_000_000_000 lovelace）を割り当てます。
-
-チェーンを保持して再利用するには、永続データディレクトリを指定します：
+`--data-dir`をチェーンを保持し、再開するように設定します。
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet
 ```
 
-同じコマンドを再度実行すると、そのチェーンを再開します。`--reset`を指定せずに永続Devnetを再開すると、Dingoはfaucet認証情報だけを復元または更新し、producer認証情報、genesisの割り当て、チェーンデータを保持します。Dingoが管理する状態を意図的に再作成し、ディレクトリ内の無関係なファイルを保持するには、次のコマンドを実行します：
+チェーンを再開するために再び同じコマンドを実行します。 `--reset`オプションは、`--data-dir`を要求し、ディレクトリに関連のないファイルを保持しながら、Dingo-managed状態を再作成します。
 
 ```
 ./dingo devnet --data-dir ./.dingo-devnet --reset
 ```
 
-永続データディレクトリを初めて使用するときは、空のディレクトリを指定してください。Dingoは、ノードの実行中に同じディレクトリを使用する別の起動を拒否します。
+最初の永続的な実行には空のディレクトリが必要です。Dingoは、ノードが実行中に同じディレクトリを使用する別の呼び出しを拒否します。束縛されたキーとネットワークを使用してローカルテストのみを実行します。実際の資金では使用しないでください。
 
-組み込みのキーとネットワークはローカルテスト専用です。実際の資金には使用しないでください。
+Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、`faucet.addr` を用意します。同梱の `faucet.addr`（`addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`）には、ローカルトランザクション用としてジェネシス時に `900,000` テスト ADA（`900_000_000_000` lovelace）が割り当てられます。
 
+- 一時的な `./dingo devnet` の操業のために、 Dingo は一時的な操業を印刷します
+  ディレクトリ。その`cardano/keys/`ディレクトリには、プロセスが終了するまでの蛇口ファイルが含まれています。
+- `./dingo devnet --data-dir ./.dingo-devnet` の場合、 Dingo はファイルを保存する
+  `./.dingo-devnet/cardano/keys/`の特長
+- Dingoは、ファセットファイルとディレクトリを所有者のみのアクセスに制限します。
+
+`--reset`なしで永続的なdevnetが再開すると、Dingoは、蛇口ファイルだけを復元または更新し、ローカル設定を書き換えます。 これにより、プロデューサーの資格情報、既存の創世記割り当て、チェーンデータが保存されます。
 
 ***
 
 <br>
 
-## ステップ2 - dingo.yaml設定ファイルの作成
+<a id="step-2---create-dingoyaml-configuration-file"></a>
 
-Dingo v0.84.0の全設定、既定値、環境変数、コマンドラインでの上書きについては、[設定リファレンス（英語）](/guides/dingo/009-configuration-reference/)を参照してください。
-同じリリースの[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example)をダウンロードして、設定の出発点として利用できます。
+## ステップ2 - dingo.yaml構成ファイルを作成する
 
-Dingoには、preview、preprod、mainnet向けのCardanoネットワーク設定（genesisファイル、`config.json`）と、`prime-testnet`向けの設定（genesisファイル、`configuration.yaml`）が組み込まれています。これらを別途ダウンロードする必要はありません。
+すべての Dingo v0.87.1 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
-dingoディレクトリに`dingo.yaml`ファイルを作成します。`$HOME`変数は自動的にホームディレクトリのパスに展開されます：
+Dingoは、プレビュー、プリプロド、メインネット用の組み込みのCardanoネットワーク構成(genesisファイル、config.json)で出荷します。 それらを別々にダウンロードする必要はありません。
 
+dingo ディレクトリに `dingo.yaml` ファイルを作成します。`$HOME` 変数は、自動的にホームディレクトリパスに展開します。
 
 ```
 cat <<EOF > ~/dingo/dingo.yaml
-# Storage
+# Shared database path for the local blob and metadata stores.
 databasePath: "$HOME/dingo/.dingo"
 
+# Storage
 plugins:
   storage:
     blob:
       provider: "badger"
       config:
-        # `dataDir` は任意で、指定しなければ `databasePath` を使います。
-        # dataDir: "$HOME/dingo/.dingo"
-        blockCacheSize: 0
-        compression: false
-        gc: true
-        indexCacheSize: 0
+        # Optional Badger data directory. When unset, databasePath applies.
+        # dataDir: "$HOME/dingo/.dingo/badger"
     metadata:
       provider: "sqlite"
       config:
-        # `dataDir` は任意で、指定しなければ `databasePath` を使います。
-        # dataDir: "$HOME/dingo/.dingo"
-  mempool:
-    provider: "default"
-    config:
-      # `capacity` は任意で、コメントアウトするとモードの既定値を使います。
-      # 既定値: 通常のモードでは 1048576 (1 MiB)、leios モードでは 26214400 (25 MiB) です。
-      # capacity: 1048576
+        # Optional SQLite data directory. When unset, databasePath applies.
+        # dataDir: "$HOME/dingo/.dingo/metadata.db"
+
+  api:
+    blockfrost:
+      provider: "builtin"
+      config:
+        port: 0
+    mesh:
+      provider: "builtin"
+      config:
+        port: 0
+    utxorpc:
+      provider: "builtin"
+      config:
+        port: 0
+
+# Mempool
+# plugins.mempool.config.capacity is an optional override.
+# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
+# Leave the key commented or omit it to use the mode default.
+# plugins:
+#   mempool:
+#     config:
+#       capacity: 1048576
+
+# Mithril
+mithril:
+  aggregatorUrl: ""
+  cleanupAfterLoad: true
+  enabled: true
+  verifyCertificates: true
+  # Optional exact artifact identity for a fresh bootstrap only.
+  # Mithril v1 uses a snapshot digest; Mithril v2 uses a Cardano database artifact hash.
+  # pinnedDigest: ""
+
+# Network
+bindAddr: "0.0.0.0"
+# Prometheus uses this independent address and defaults to loopback; it does
+# not inherit bindAddr. Use --metrics-bind-addr or DINGO_METRICS_BIND_ADDR to
+# override it. Set metricsPort to 0 to disable the metrics listener.
+metricsBindAddr: "127.0.0.1"
+metricsPort: 12798
+healthPort: 12799
+healthReadyGapSlots: 1000
+debugPort: 0
+network: "preview"
+privateBindAddr: "127.0.0.1"
+privatePort: 3002
+relayPort: 3001
+socketPath: "$HOME/dingo/dingo.socket"
+# Total NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS
+maxNtCConns: 100
+# Per-IP NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP
+maxNtCConnectionsPerIP: 5
+
+# Storage
+barkBaseUrl: ""
+barkPort: 0
+storageMode: "core"
+
+EOF
+```
+
+> `debugPort`を`0`に置き、profilingが要求されなければ残して下さい。`debugPort`は任意pprofのリスナーを制御し、`metricsPort`と別々にとどまり、`0`で無効に残ります。
+
+> `healthPort` は `--health-port` か `DINGO_HEALTH_PORT` を使用します; `healthPort: 0` を健康のリスナーを無効にするために置きました。 `healthReadyGapSlots` は `--health-ready-gap-slots` か `DINGO_HEALTH_READY_GAP_SLOTS` を使用します。
+
+> 現在、Barkは、現在のレジャー状態から近いチップ安全ウィンドウを導き出します。この設定では、マニュアル`barkSecurityWindow`値を探し、設定しないでください。
+
+> REST API サーバーは、`storageMode: "api"` の外部に非アクティブにとどまり、`0` のポート値がその API を無効にします。
+
+```yaml
+midnight:
+  # Enable the Midnight gRPC server independently of Midnight indexing.
+  # Default: false.
+  serverEnabled: false
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
+  reflectionEnabled: false
+  # Permit plaintext listening on a non-loopback host. A configured TLS
+  # certificate and key allow remote TLS exposure without this setting.
+  # Default: false.
+  allowInsecureRemote: false
+  # Must be nonzero when serverEnabled is true. Default: 50051.
+  port: 50051
+  # Defaults to loopback; an empty value also uses 127.0.0.1.
+  host: "127.0.0.1"
+  authTokenPolicyId: ""
+  authTokenAssetName: ""
+storageMode: "api"
+plugins:
   api:
     blockfrost:
       provider: "builtin"
@@ -160,83 +251,35 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
-
-# Mithril
-mithril:
-  aggregatorUrl: ""
-  # pinnedDigest: ""
-  cleanupAfterLoad: true
-  enabled: true
-  verifyCertificates: true
-
-# Network
-bindAddr: "0.0.0.0"
-# Prometheusは`bindAddr`とは独立したアドレスを使用し、既定値はループバックです。
-# `--metrics-bind-addr` CLIフラグまたは`DINGO_METRICS_BIND_ADDR`環境変数で上書きできます。`metricsPort: 0`にするとメトリクスリスナーを無効にします。
-metricsBindAddr: "127.0.0.1"
-metricsPort: 12798
-# `healthPort` は `--health-port` CLI フラグまたは `DINGO_HEALTH_PORT` 環境変数で設定できます。`healthPort: 0` にするとリスナーを無効にします。
-healthPort: 12799
-# `healthReadyGapSlots` は `--health-ready-gap-slots` CLI フラグまたは `DINGO_HEALTH_READY_GAP_SLOTS` 環境変数で設定できます。
-healthReadyGapSlots: 1000
-debugPort: 0
-network: "preview"
-privateBindAddr: "127.0.0.1"
-privatePort: 3002
-maxNtCConns: 100
-maxNtCConnectionsPerIP: 5
-relayPort: 3001
-socketPath: "$HOME/dingo/dingo.socket"
-
-# API and Bark
-barkBaseUrl: ""
-barkPort: 0
-storageMode: "core"
-midnight:
-  serverEnabled: false
-  reflectionEnabled: false
-  allowInsecureRemote: false
-  port: 50051
-  host: "127.0.0.1"
-  authTokenPolicyId: ""
-
-EOF
 ```
 
-> 📝 `debugPort` はプロファイリングが必要な場合を除き `0` のままにします。`debugPort` は任意の `pprof` リスナーを制御し、`metricsPort` とは別で、`0` のときは無効のままです。
+> `midnight.serverEnabled: false` は、ミッドナイト gRPC リスナーを無効に保ちます。`midnight.port` を単独で設定することはそれを露出しません。
 
-> 📝 `maxNtCConns` は `--max-ntc-conns` または `DINGO_MAX_NTC_CONNS` で設定でき、`maxNtCConnectionsPerIP` は `--max-ntc-connections-per-ip` または `DINGO_MAX_NTC_CONNECTIONS_PER_IP` で設定できます。既定値はそれぞれ `100` と `5` です。0以下の値は無視されます。
+> `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` を一緒に設定するか、unset を両方残します。 部分的なペアは、設定と起動の検証を失敗します。 設定されたポリシー ID は、正確に 56 個の 16 個の 16 個の 16 個の 16 個の 16 個のデコードされたバイト (28 個のデコードされたバイト) でなければなりません。 一致は、正確なポリシー ID とアセット名を使用します。
 
-> 📝 `skipRewardLiveStakeBackfillCheck` は高度な診断用オプションです。既定値は `false` なので、通常の起動ではこの値を使用してください。`true` にすると高コストな `reward_live_stake` 起動時整合性スキャンだけを省略します。Dingoは`StaleConsensusStakeSnapshotsExist` によるコンセンサスステークスナップショットの来歴チェックを常に実行し、必要な場合は起動を拒否します。
-
-> 💡 API サーバーは `storageMode: "api"` のときだけ有効です。各 API の `port` を `0` にすると、その API は無効になります。
-
-> 💡 Midnight gRPC サーバーには `storageMode: "api"`、`midnight.serverEnabled: true`、および `midnight.port` の `0` 以外の値が必要です。インデックス作成とサーバー公開は別々に制御されます。`midnight.reflectionEnabled` は `midnight.serverEnabled` が `true` の場合にのみ有効で、`midnight.serverEnabled` が `false` の場合はリスナーも無効です。
-
-> 📝 `midnight.host` の既定値は `"127.0.0.1"` です。`midnight.host: ""` もループバックを使用します。非ループバックの平文リスナーには `midnight.allowInsecureRemote: true` が必要です。TLS 証明書とキーのペアを設定すると、リモート TLS 公開を使用できます。
-
-> 📝 `midnight.authTokenPolicyId` は、API ストレージモードで Midnight インデックスを使用する場合にのみ適用されます。空のままにすると、認証トークン照合のより広い既定の動作が維持されます。
-
-> 💡 `block-cache-size`と`index-cache-size`を0に設定し、`compression: false`にすると、BadgerDBの内部キャッシュの代わりにOSのページキャッシュ（mmap）が使用されます。これによりメモリ使用量が大幅に削減されます。
-
+> `block-cache-size` と `index-cache-size` を 0 に設定すると、`compression: false` は、BadgerDB の内部キャッシュの代わりに OS ページのキャッシュ (mmap) を使用します。これによりメモリ使用量が劇的に低下します。
 
 ***
 
 <br>
 
-## ステップ3 - ポートの開放
+<a id="step-3---open-network-ports"></a>
 
-Dingoに必要なポートに対するUFWファイアウォールルールの追加方法について説明します。
+## ステップ3 - ネットワーKupoートを開く
 
-> 💡 ヒント: UFWはUncomplicated Firewallの略で、iptables（netfilter）ファイアウォールルールの管理に使用されます。
+UFWファイアウォールのルールを設定して、Dingoで必要なポートを許可します。
 
-現在開いているポートを確認するには：
+> ▷ ヒント: UFW は、未コンパイルファイアウォールの略で、iptables (netfilter) ファイアウォールのルールを管理するために使用されます。
+
+現在開いているポートを参照するには:
 
 ```
 sudo ufw status numbered
 ```
 
-#### Ouroboros Node to Node（NtN）通信用のポート3001を追加
+<a id="add-port-3001-for-ouroboros-node-to-node-ntn-communication"></a>
+
+#### Ouroboros Node-to-Node (NtN) 通信用ポート 3001 を追加
 
 ```
 sudo ufw allow 3001/tcp
@@ -246,60 +289,68 @@ sudo ufw allow 3001/tcp
 
 <br>
 
-## ステップ4 - Mithrilスナップショットからのブートストラップ
+<a id="step-4---bootstrap-from-mithril-snapshot"></a>
 
-Dingoには、スナップショットを自動的にダウンロードしてロードする組み込みのMithrilクライアントがあります。これにより、genesisからチェーンをリプレイする場合と比較して、数時間の同期時間を節約できます。
+## ステップ4 - MithrilスナップショットからBootstrap
 
-dingoディレクトリから以下のコマンドを実行します：
+Dingoは、自動的にスナップショットをダウンロードし、ロードする組み込みのMithrilクライアントを持っています。 これは、Genesisからチェーンを再生すると比較して、同期時間の時間を節約します。
+
+`~/dingo`ディレクトリから次のコマンドを実行します。
 
 ```
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 `mithril.downloadMaxTransientRetries` は、TLS タイムアウト、HTTP 429 応答、HTTP 5xx 応答などの一時的なブートストラップダウンロード障害に対する再試行回数を制御します。例では既定値の `10` を使用しています。
+> 📝 生存性は `http://127.0.0.1:12799/health` または `http://127.0.0.1:12799/healthz`、準備状態は `http://127.0.0.1:12799/readyz` で確認します。`/health` と `/healthz` は、準備状態だけでなくイベントループの応答性を含む生存性を確認します。`/readyz` には設定した先端との隔たりの条件と、データベースの準備状態を満たす必要があります。ブロックプロデューサーでは、使用可能な生成資格情報を持つブロック生成処理が動作し、該当する場合はリモート KES も準備できている必要があります。先端との隔たりが不明または `healthReadyGapSlots` の範囲外なら未準備を報告します。コンテナのヘルスチェックはメトリクスではなく `/health` を使用します。`dingo mithril sync` の実行中もヘルスリスナーは利用可能です。
 
+> リリース `mithril.downloadMaxTransientRetries` は、TLS のタイムアウト、HTTP 429 応答、HTTP 5xx 応答などのトランジェントのブートストラップのダウンロードの失敗をコントロールします。 例では、`10` のデフォルト値を使用します。
 
-Dingoは次の処理を行います：
-1. 設定したネットワークの最新Mithrilスナップショットをダウンロード
-2. 証明書チェーンを検証
-3. スナップショットをデータベースにロード
+Dingo:
+1. 設定されたネットワークで最新のMithrilスナップショットをダウンロード
+2. 証明書チェーンの確認
+3. スナップショットをデータベースにロードする
 
-これにはシステムとネットワーク速度によって、約10〜15分かかります。
+システムやネットワーク速度により約20～30分かかります。
 
-> 📝 このステップをスキップした場合、Dingoは起動時にgenesisから同期するため、はるかに長い時間がかかります。
-
-> 📝 Dingoはポート `12799` でヘルスプローブを提供します。`/health` と `/healthz` はイベントループの応答性を含む稼働確認に、`/readyz` はレディネス確認に使用します。`/readyz` は、先端とのギャップを取得でき、そのギャップが `healthReadyGapSlots` の設定値を超えていないことに加えて、データベースを読み取れることを必要とします。ブロックプロデューサーの場合は、実行中のフォージャーと使用可能な認証情報も必要です。リモートKESを使用する場合は、リモートKESが準備完了であることも必要です。ヘルスプローブは Mithril のブートストラップ中も利用できます。コンテナのヘルスチェックは `/metrics` ではなく `/health` を使用します。
+> このステップをスキップすると、 Dingo は genesis から同期します。
 
 ***
 
 <br>
 
-## ステップ5 - Dingoの起動
+<a id="step-5---start-dingo"></a>
 
-Mithrilスナップショットがロードされたら、ノードを起動します：
+## ステップ5 - Dingoを開始
+
+Mithrilのスナップショットがロードされると、ノードを開始します。
 
 ```
 cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
 
-ノードがピアに接続し、チェーン先端に到達するために残りのブロックを同期するログ出力が表示されるはずです。
+ノードがピアに接続し、残りのブロックを同期してチェーンチップに到達するログ出力が表示されます。
 
 ***
 
 <br>
 
-#### コンピューターが再起動したときにDingoノードを自動的に再起動して稼働時間を最大化するためのsystemdサービスの使用に興味がありますか？
-[Dingoのスタートアップサービスを作成する方法についてのガイドを参照してください](../003-create-start-up-service)。
+<a id="interested-in-running-dingo-as-a-systemd-service"></a>
+
+#### システムサービスとしてDingoを実行することに興味がありますか?
+
+システムサービスを利用すると、システムが起動したときに自動的に Dingo を起動し、予期しないと再起動します。 [Dingo の起動サービスを作成するガイドを参照してください](../003-create-start-up-service)。
 
 ***
 
 <br>
 
-### おめでとうございます。Dingoノードを使用する準備が整いました！
+<a id="congratulations-your-dingo-node-is-now-running"></a>
 
-[Cardano CLIを使用してDingoと対話する方法を学ぶ](../004-using-dingo-with-cardano-cli)。
+### おめでとうございます! Dingo ノードが稼働中です。
+
+[Cardano CLI](../004-using-dingo-with-cardano-cli)を使って Dingoとやり取りする方法を学びます。
 
 
 ---

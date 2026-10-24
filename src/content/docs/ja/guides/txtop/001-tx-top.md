@@ -1,6 +1,6 @@
 ---
 title: TxTop
-description: TxTopについてのガイド。
+description: TxTopのターミナルインターフェースでCardanoトランザクションの活動をリアルタイムに確認します。
 ---
 
 ![txtop-screen](/txtop-screen.png)
@@ -12,6 +12,8 @@ TxTopは、Cardano Node（cardano-node）のローカル監視ツールとして
 **現在のアイコン:**
 🏹 Dexhunter, 🚰 DripDropz, 👁️ Indigo, 🦛 JPGstore, 💧 Liqwid, 🐱 Minswap, 🅾️ Optim,
 🌈 Spectrum, 🍨 Sundae, 🦭 SealVM, 🦸 Wingriders, 🥩 Staking, 🏊 SPOs
+
+<a id="how-do-i-actually-use-txtop"></a>
 
 ## TxTopの使い方
 

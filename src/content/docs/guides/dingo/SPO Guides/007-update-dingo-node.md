@@ -11,7 +11,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 ```
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.84.0/dingo-v0.84.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.0/dingo-v0.87.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
@@ -50,6 +50,8 @@ Refer to the <a href="https://docs.blinklabs.io/guides/dingo/releases/001-releas
 
 ## Step 5 - RECOMMENDED - Remove the `.dingo` Database and Resync Mithril Snapshot
 Since Dingo is under active development, it is recommended during upgrades to delete database and start fresh.
+
+> ⚠️ **Musashi v0.87.0 requirement:** The `rc-2026w42` respin replaces the bundled Byron and Shelley genesis hashes, so Musashi cannot reuse its existing chain database. Delete the configured database and resynchronize from a fresh Mithril snapshot or from genesis. Other networks can follow the generic recommendation above, but Musashi requires this reset.
 
 ### Step 5.1 - Delete the `.dingo` Database
 > 💡 To view hidden files and double-check path run:

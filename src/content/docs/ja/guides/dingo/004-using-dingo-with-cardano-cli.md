@@ -11,7 +11,7 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 ***
 
-このガイドでは、Cardano CLIバイナリのダウンロードと実行、およびいくつかのCardano CLIコマンドの実行方法について説明します。以下の手順に従って始めましょう。
+このガイドでは、Cardano CLIバイナリのダウンロードと実行、およびいくつかのCardano CLIコマンドの実行方法について説明します。
 
 <br>
 
@@ -20,6 +20,8 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 ***
 
 <br>
+
+<a id="step-1---download-the-latest-cardano-cli-binary"></a>
 
 ## ステップ1 - 最新のCardano CLIバイナリをダウンロード
 
@@ -33,9 +35,9 @@ Dingoは、Go言語で書かれたCardanoブロックチェーンデータノー
 
 <br>
 
-⚠️ この例では、Cardano-cliバイナリを`dingo`フォルダに配置します。ダウンロードしたいバージョンに応じてリンクパスを調整してください。
+⚠️ この例では、`cardano-cli` バイナリを `~/dingo` ディレクトリに配置します。ダウンロードしたいバージョンに応じてリンクパスを調整してください。
 
-```bash
+```
 cd ~/dingo
 wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-11.0.0.0/cardano-cli-11.0.0.0-x86_64-linux.tar.gz -O - | tar -xz
 ```
@@ -44,34 +46,40 @@ wget https://github.com/IntersectMBO/cardano-cli/releases/download/cardano-cli-1
 
 <br>
 
+<a id="step-2---rename-the-cardano-cli-binary-and-set-execute-permissions"></a>
+
 ## ステップ2 - ファイル名の変更とCardano CLIの権限変更
 
-この例では、バイナリファイルを`cardano-cli`という名前にします。バイナリの名前を変更するには、以下を実行します：
-
-⚠️ 必要に応じてファイルパスとファイル名を調整してください。
+ファイルを実行可能にするには、以下のコマンドを実行します。
 
 ```
-mv cardano-cli-x86_64-linux cardano-cli
+chmod +x cardano-cli-x86_64-linux
 ```
 
 <br>
 
-ファイルを実行可能にするには、以下のコマンドを実行します：
+バイナリの名前を `cardano-cli` に変更し、`/usr/local/bin/` に移動します。
+
+⚠️ 必要に応じてファイルパスとファイル名を調整してください。
 
 ```
-chmod +x cardano-cli
+sudo mv cardano-cli-x86_64-linux /usr/local/bin/cardano-cli
 ```
 
 ***
 
 <br>
 
+<a id="congratulations-you-can-now-use-cardano-cli-to-communicate-with-your-dingo-node"></a>
+
 #### おめでとうございます。これでcardano-cliを使用してノードと通信できます。
 
 <br>
 
+<a id="step-3---run--cardano-cli-command-to-query-tip"></a>
+
 ## ステップ3 - Cardano CLIコマンドを実行してTipをクエリ
-Dingoノードを使用してデータを提供し、previewブロックチェーンのTipをクエリする最初のCardano CLIコマンドを実行しましょう。
+Dingoノードを使用してデータを提供し、previewブロックチェーンのTipをクエリする最初のCardano CLIコマンドを実行します。
 
 以下のコマンドを実行してTipをクエリします：
 
@@ -80,7 +88,7 @@ Dingoノードを使用してデータを提供し、previewブロックチェ�
 --testnet-magic 2 \
 --socket-path dingo.socket
 ```
-> ⚠️ 上記のsocket-pathは、Cardano CLIをdingoフォルダにダウンロードしたことを前提としています。cardano-cliバイナリを別の場所に配置した場合は、パスを調整してください。`realpath dingo.socket`を使用して、dingo.socketへの絶対パスを見つけることができます。
+> ⚠️ 上記の `--socket-path` は、Cardano CLI を `~/dingo` ディレクトリにダウンロードしたことを前提としています。cardano-cliバイナリを別の場所に配置した場合は、パスを調整してください。`realpath dingo.socket`を使用して、`dingo.socket` への絶対パスを見つけることができます。
 
 ![dingo-query-tip](/dingo-query-tip.png)
 
@@ -89,10 +97,14 @@ Dingoノードを使用してデータを提供し、previewブロックチェ�
 
 <br>
 
+<a id="step-4---using-environment-variables-optional"></a>
+
 ## ステップ4 - 環境変数の使用（オプション）
 cardano-cliコマンドを実行するたびにCardanoノードネットワークとCardanoノードソケットを指定する代わりに、環境変数を使用できます。
 
 <br>
+
+<a id="setting-environment-variables-for-current-session-option-1"></a>
 
 ### 現在のセッションの環境変数を設定（オプション1）
 
@@ -112,18 +124,20 @@ export CARDANO_NODE_NETWORK_ID=2
 
 <br>
 
+<a id="setting-environment-variables-permanently-option-2"></a>
+
 ### 環境変数を永続的に設定（オプション2）
 セッション間で環境変数を永続化するには、シェルの設定ファイルに追加する必要があります。
 
 ソケットパス：
 
-```bash
+```
 echo export CARDANO_NODE_SOCKET_PATH=~/dingo/dingo.socket >> ~/.bashrc
 ```
 
 ノードネットワーク：
 
-```bash
+```
 echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 ```
 
@@ -149,6 +163,8 @@ echo export CARDANO_NODE_NETWORK_ID=2 >> ~/.bashrc
 ***
 
 <br>
+
+<a id="congratulations-you-are-now-ready-to-use-your-dingo-node-with-the-cardano-cli"></a>
 
 ### おめでとうございます。Cardano CLIでDingoノードを使用する準備が整いました！
 Cardano CLIの詳細については、[https://developers.cardano.org](https://developers.cardano.org/docs/get-started/cli-operations/basic-operations/get-started/)を参照してください。

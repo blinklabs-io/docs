@@ -1,106 +1,159 @@
 ---
-title: Bursa設定リファレンス
-description: Bursaの署名、KESエージェント、APIのTLSおよびBearer認証設定を構成します。
+title: 設定リファレンス
+description: Bursa の kes-agent と従来の API のセキュリティに関する YAML と環境変数のリファレンス。
 ---
+<a id="overview"></a>
 
 ## 概要
 
-このガイドでは、Bursaの署名およびKESエージェント設定、APIのTLSとBearer認証、および`PKCS#11`署名バックエンドの`signer.backends`設定を説明します。コマンドの詳細は[コマンドラインガイド](../003-commands)を参照してください。バックエンドは`PKCS#11`モジュールを使用し、秘密鍵をトークン内に保持して、トークンで`Ed25519`署名を生成します。
+このガイドは Bursa の署名サービスと KES エージェントの設定を説明します。`signer.backends` は `pkcs11`、`nitro`、`confidential-space` の署名バックエンドに対応します。
+
+<a id="load-a-configuration-file"></a>
 
 ## 設定ファイルの読み込み
 
-`bursa kes-agent`は、`--config`で指定した任意の`YAML`ファイルを読み込みます。`--config`を指定しない場合は、`BURSA_CONFIG`の値を設定ファイルのパスとして使用します。両方を指定した場合は`--config`が優先されます。
+`kes-agent` は `--config` で YAML ファイルを指定できます。フラグを省略した場合は `BURSA_CONFIG` からパスを読みます。どちらにもパスがない場合は YAML を使わず、環境変数と組み込みの既定値を読み込みます。環境変数は対応する YAML の値を上書きします。
 
 ```bash
 bursa kes-agent --config /etc/bursa/config.yaml
 ```
 
-`YAML`の値を読み込んだ後、環境変数の値で上書きします。環境変数名は各表に記載しています。
+コマンドは、どちらの Unix ソケットを開くよりも前に設定値を検証します。使い方は CLI ガイドの [API セクション](../003-commands#api)と [kes-agent セクション](../003-commands#kes-agent)を参照してください。
 
-## ウォレット環境変数
+<a id="wallet-environment-variable"></a>
 
-| 環境変数 | デフォルト | 動作 |
+## ウォレットの環境変数
+
+| 環境変数 | 既定値 | 動作 |
 | --- | --- | --- |
-| `BURSA_CONNECTOR` | `false` | `dApp`コネクタバックエンドを有効にします。 |
-| `BURSA_LEAN` | `false` | `history-expiry`の値をまだ設定ファイルに保存していない初回起動時だけ、lean-node/history-expiryの初期値を設定します。値を設定ファイルに保存した後は、環境変数より保存済みのユーザー設定を優先します。未設定または解釈できない値には`false`を使用します。 |
+| `BURSA_CONNECTOR` | `false` | dApp コネクターバックエンドを有効にします。 |
+| `BURSA_LEAN` | `false` | 初回実行時にのみ、永続化する lean ノードの履歴期限切れ設定の初期値を指定します。未設定または真偽値として解釈できない場合は `false` です。永続化後は、この変数を設定、変更しても保存済みの選択を上書きしません。 |
 
-### history-expiry設定API
+<a id="history-expiry-api"></a>
 
-Bursaは`history-expiry`設定を永続化し、次のAPIで参照および更新できます。
+## 履歴期限切れ API
 
-#### 設定の取得
+アクセス制限のない履歴期限切れエンドポイントは、Bursa が永続化する lean ノード設定を読み取り、更新します。
+
+<a id="get-the-history-expiry-setting"></a>
+
+### 履歴期限切れ設定の取得
 
 ```http
 GET /wallet/settings/history-expiry
 ```
 
-レスポンスは`enabled`と`restart_required`の2つの`boolean`フィールドを含み、形式は`{ "enabled": boolean, "restart_required": boolean }`です。
+応答は次の形式です。
 
-#### 設定の更新
+```json
+{ "enabled": boolean, "restart_required": boolean }
+```
+
+<a id="update-the-history-expiry-setting"></a>
+
+### 履歴期限切れ設定の更新
 
 ```http
 PUT /wallet/settings/history-expiry
-Content-Type: application/json
 ```
 
-リクエスト本文は`{ "enabled": boolean }`です。`enabled`は必須のJSON `boolean`値です。不正なJSONまたは`enabled`の欠落にはHTTP `400`を返します。更新に成功すると、APIはGETと同じ`{ "enabled": boolean, "restart_required": boolean }`形式のレスポンスを返します。
+必須の `enabled` フィールドを JSON の真偽値として送信します。
 
-`history-expiry`はノード構築時に決まる設定です。実行中のノードが永続化した値をまだ適用していない場合、レスポンスの`restart_required`は`true`になります。
+```json
+{ "enabled": boolean }
+```
+
+不正な JSON または `enabled` のないリクエストには HTTP `400` を返します。更新成功時は `GET` と同じ `enabled` と `restart_required` の形式を返します。履歴期限切れ設定はノードの構築時に適用するため、稼働中のノードが永続化された設定をまだ反映しておらず再起動が必要な場合、`restart_required` は `true` になります。
+
+<a id="configuration-reference"></a>
 
 ## 設定リファレンス
 
-`signer.backends`の下にバックエンドエントリを追加し、`type`を`pkcs11`に設定します。以下のフィールドを使用します。
+`signer.backends` にバックエンドを追加し、`type` に選択した種類を指定して、そのバックエンドに適用するフィールドを設定します。
 
-| 設定パス | 目的 | 検証 |
+| 設定パス | 用途 | 検証 |
 | --- | --- | --- |
-| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`を設定します。 |
-| `signer.backends[].module` | `.so`ファイルを含む`PKCS#11`モジュールのパスを指定します。 | このフィールドを設定します。Bursaは空の値を拒否します。 |
-| `signer.backends[].token_label` | ラベルでトークンまたはスロットを選択します。 | このフィールドまたは`slot`を設定します。少なくとも一方の選択フィールドが必要です。 |
-| `signer.backends[].slot` | 明示的なスロットIDでスロットを選択します。 | このフィールドまたは`token_label`を設定します。少なくとも一方の選択フィールドが必要です。 |
-| `signer.backends[].pin_env` | ユーザーPINを格納する環境変数の名前を指定します。 | このフィールドを設定し、指定した環境変数に空でない値を設定します。Bursaはプレーンテキスト設定からPINを読み取りません。 |
-| `signer.backends[].keys[]` | トークンオブジェクトの許可リストを任意で定義します。 | 設定する場合は、すべてのエントリに`name`と`type`を指定します。 |
-| `signer.backends[].keys[].name` | トークンオブジェクトの`CKA_LABEL`と照合します。 | 各`keys`エントリにこのフィールドを設定します。 |
-| `signer.backends[].keys[].type` | 照合したトークンオブジェクトにCardano鍵タイプを割り当てます。 | 各`keys`エントリにこのフィールドを設定します。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、または`policy`を使用します。 |
+| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、`confidential-space` を指定します。 |
+| `signer.backends[].address` | アテステーション付き署名バックエンドのエンドポイントです。 | `http://`、`https://`、`unix:///` のエンドポイントを指定します。 |
+| `signer.backends[].module` | `.so` ファイルを含む `PKCS#11` モジュールのパスです。 | 必須です。空の値は拒否されます。 |
+| `signer.backends[].token_label` | ラベルでトークンまたはスロットを選択します。 | このフィールドまたは `slot` の少なくとも一方が必須です。 |
+| `signer.backends[].slot` | スロット ID を明示して選択します。 | このフィールドまたは `token_label` の少なくとも一方が必須です。 |
+| `signer.backends[].pin_env` | ユーザー PIN を格納する環境変数名です。 | 必須です。指定した環境変数に空でない値を設定します。平文の設定から PIN を読み取ることはありません。 |
+| `signer.backends[].keys[]` | トークンオブジェクトの任意の許可リストです。 | 指定する場合、各項目に `name` と `type` が必要です。 |
+| `signer.backends[].keys[].name` | トークンオブジェクトの `CKA_LABEL` と照合します。 | 各 `keys` 項目に必須です。 |
+| `signer.backends[].keys[].type` | 一致するトークンオブジェクトに Cardano の鍵の種類を割り当てます。 | 各 `keys` 項目に必須です。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、`policy` を使用します。 |
+| `signer.backends[].root_ca_file` | AWS Nitro Enclaves のルート証明書です。 | `nitro` で必須です。固定された AWS Nitro ルート証明書を使用します。 |
+| `signer.backends[].pcrs` | 期待する Nitro PCR インデックスと 16 進数値の組です。 | `nitro` で必須です。PCR0 が存在し、0 以外である必要があります。 |
+| `signer.backends[].audience` | Confidential Space アテステーショントークンに必要な audience です。 | `confidential-space` で必須です。 |
+| `signer.backends[].image_digest` | 必要な Confidential Space コンテナイメージのダイジェストです。 | `confidential-space` で必須です。`sha256:` ダイジェストを使用します。 |
+| `signer.backends[].jwks_url` | Confidential Space アテステーショントークンの署名鍵セットです。 | `confidential-space` で任意です。既定では Google の公開トークン署名セットを使用します。 |
+
+<a id="wallet-storage-and-encryption"></a>
+
+### ウォレットの保存と暗号化
+
+次のフィールドでウォレットの永続化と SOPS 暗号化を設定します。
+
+| 設定パス | 環境変数 | 用途 | 既定値または要件 |
+| --- | --- | --- | --- |
+| `storage.backend` | `STORAGE_BACKEND` | ウォレットのストレージバックエンドを選択します。 | AWS Secrets Manager を使用するには `aws` を指定します。 |
+| `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Manager 内のウォレット秘密情報の接頭辞です。 | `storage.backend` が `aws` の場合は必須です。 |
+| `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS 暗号化に使用する AWS KMS マスター鍵を選択します。 | AWS KMS が暗号鍵を提供する場合、SOPS のマスター鍵リソースの 1 つとして設定します。 |
+| `age.recipients` | `AGE_RECIPIENTS` | SOPS 暗号化の age 受信者一覧です。 | カンマ区切りで指定します。 |
+| `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | ウォレットを暗号化せずに保存することを許可します。 | SOPS マスター鍵なしのファイル保存、または SQLite 保存では明示的に有効にします。 |
+
+SOPS 暗号化には、少なくとも 1 つのマスター鍵リソースの設定が必要です。不正な鍵リソースは暗号化の開始前に拒否されます。暗号化なしの保存を明示的に許可すると、ウォレットを暗号化せずに永続化できます。
+
+<a id="build-requirements"></a>
 
 ## ビルド要件
 
-`PKCS#11`バックエンドを含めるには、`CGO`を有効にし、`pkcs11`ビルドタグを指定してBursaをコンパイルします。このビルドタグなしで設定がこのバックエンドを選択すると、Bursaは即座に失敗し、次のエラーを返します。
+ソースから Bursa をビルドするには Go `1.26.8` 以降が必要です。`PKCS#11` バックエンドには、さらに `CGO` と `pkcs11` ビルドタグが必要です。
 
-ソースからBursaをビルドする場合は、Go `1.26.0`以上が必要です。
+`PKCS#11` バックエンドを含めるには `CGO` を有効にし、`pkcs11` ビルドタグでコンパイルします。このタグなしで設定からバックエンドを選択すると、直ちに次のエラーを返して失敗します。
 
 ```text
 pkcs11 backend not compiled in (build with -tags pkcs11)
 ```
 
-デフォルトビルドでは`PKCS#11`サポートを暗黙的に有効にしません。
+既定のビルドで `PKCS#11` のサポートが暗黙に有効になることはありません。
+
+<a id="signing-constraints"></a>
 
 ## 署名の制約
 
-`PKCS#11`バックエンドは秘密鍵をトークン内に保持し、トークンに`Ed25519`署名の生成を依頼します。このバックエンドは`CIP-8`の`COSE`署名をサポートしません。`PKCS#11`鍵を使用する`CIP-8`リクエストに対して、Bursaは`CodeUnsupported`を返します。
+`PKCS#11` バックエンドは秘密鍵をトークン上に保持し、トークンに `Ed25519` 署名の生成を要求します。`CIP-8` の `COSE` 署名はこのバックエンドに対応しません。`PKCS#11` 鍵を使用する `CIP-8` リクエストには `CodeUnsupported` を返します。
 
-## 署名者の起動時安全性
+<a id="signer-startup-safety"></a>
 
-`software`/`file`署名バックエンドは、プレーンテキストの秘密鍵素材をプロセスメモリに読み込みます。署名者がローカルマシンの外部で待ち受ける場合、Bursaはこのバックエンドを保護します。
+## 署名サービスの起動時の安全性
 
-| 設定パス | 環境変数 | デフォルト | 動作 |
+`software`/`file` 署名バックエンドは、平文の秘密鍵をプロセスメモリに読み込みます。ローカルマシン以外で待ち受ける署名サービスでは、次の保護が適用されます。
+
+| 設定パス | 環境変数 | 既定値 | 動作 |
 | --- | --- | --- | --- |
-| `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | ループバック以外の署名者リスナーで`software`/`file`バックエンドを使用することを明示的に許可します。 |
-| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | 署名者リスナーがループバックアドレスを使用するかどうかを決定します。 |
+| `signer.allow_insecure_file_backend` | `SIGNER_ALLOW_INSECURE_FILE_BACKEND` | `false` | `software`/`file` バックエンドを非ループバックの署名リスナーで明示的に許可します。 |
+| `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | 署名リスナーがループバックを使用するかどうかを決めます。 |
 
-`software`/`file`バックエンドを設定すると、`signer.listen_address`がループバック以外の場合に、`signer.allow_insecure_file_backend`が`true`でなければBursaは起動を拒否します。空の`signer.listen_address`は全インターフェースを意味し、この判定ではループバック以外として扱います。ループバックリスナーまたは明示的な`true`のオプトインでは起動できますが、バックエンドの使用時にはBursaが警告を出力します。本番環境では、プレーンテキストの鍵素材ではなく`Vault`や`SOPS`などの保管バックエンドを使用します。
+`software`/`file` バックエンドを設定した場合、`signer.listen_address` がループバック以外で、`signer.allow_insecure_file_backend` が `true` でなければ、起動を拒否します。空の `signer.listen_address` は全インターフェイスを意味し、この検査ではループバック以外とみなします。ループバックリスナーまたは明示的な `true` の指定で起動できますが、このバックエンドの使用中は常に警告を出します。本番環境では、平文の鍵ではなく `Vault` や `SOPS` などの鍵保管バックエンドを使用してください。
 
-## 署名者のウォーターマーク
+<a id="signer-watermark"></a>
 
-`signer.watermark.type`に`postgres`を設定すると、ウォーターマークと運用証明書カウンターをPostgreSQLに保存できます。既存のメモリ内またはSQLiteの保存方法と異なり、同じコールドキーを保護する署名者レプリカで共有できます。
+## 署名のウォーターマーク
 
-| YAMLキー | 説明 | 要件 |
+`signer.watermark` は、署名の安全性を守るウォーターマークと運用証明書の発行カウンターを保存します。`mem` はメモリに保持し、`file` は SQLite、`postgres` は複数の署名レプリカが共有できる永続的な PostgreSQL データベースに保存します。
+
+| 設定パス | 用途 | 既定値または要件 |
 | --- | --- | --- |
-| `signer.watermark.type` | ウォーターマークの保存先を選択します。 | PostgreSQLを使用する場合は`postgres`を設定します。 |
-| `signer.watermark.dsn` | PostgreSQLへの接続に使うDSNをプレーンテキストで指定します。 | `dsn_env`を使用しない場合のフォールバックです。 |
-| `signer.watermark.dsn_env` | DSNを格納する環境変数の名前を指定します。 | 指定した環境変数は空でない値を持つ必要があります。`dsn`より優先されます。 |
-| `signer.watermark.mode` | 運用証明書の発行カウンター検査を選択します。 | `off`、`warn`、`enforce`のいずれかを設定します。デフォルトは`enforce`です。 |
+| `signer.watermark.type` | ウォーターマークストアを選択します。 | `mem`、`file`、`postgres` に対応します。 |
+| `signer.watermark.path` | file ストアの SQLite データベースパスです。 | `signer.watermark.type` が `file` の場合は必須です。 |
+| `signer.watermark.dsn` | PostgreSQL 接続文字列を直接指定します。 | `dsn_env` を設定していない場合の代替値です。 |
+| `signer.watermark.dsn_env` | PostgreSQL 接続文字列を格納する環境変数名です。 | `dsn` より優先されます。指定した環境変数が空ならエラーです。`postgres` にはこの変数または `dsn` からの DSN が必須です。 |
+| `signer.watermark.mode` | 運用証明書の発行カウンターの保護を制御します。 | 既定値は `enforce`。`off`、`warn`、`enforce` を指定できます。 |
 
-`postgres`を選択する場合は、`signer.watermark.dsn`または`signer.watermark.dsn_env`でDSNソースを指定します。両方を指定した場合は`dsn_env`を優先し、そこに指定した環境変数が空の場合はBursaが設定をエラーとして扱います。認証情報をコミット済みのYAMLに保存せず、`dsn_env`を使用します。
+`mem` ストアは `warn` または `off` でのみ有効です。`enforce` モードは永続化する `file` または `postgres` ストレージを必要とします。空または不明なモードは `enforce` として扱われるため、どちらの場合も `mem` では起動に失敗します。`postgres` ストアには `dsn` または `dsn_env` が必要です。
+
+署名レプリカ間で同じ正規のウォーターマークとカウンター状態を共有する場合は、`postgres` を使用します。同じ鍵を保護するすべてのレプリカを、そのデータベースに接続してください。データベースのロールには、ウォーターマークのテーブル作成と読み書きの権限が必要です。認証情報はコミットする YAML に含めず、リモート接続にはデプロイ構成に適した検証付き TLS を設定してください。
 
 ```yaml
 signer:
@@ -110,90 +163,130 @@ signer:
     dsn_env: BURSA_SIGNER_WATERMARK_DSN
 ```
 
+YAML にパスワードを埋め込まず、指定した環境変数から DSN を渡します。
+
 ```bash
-export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example/bursa?sslmode=require'
+export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?sslmode=verify-full'
 ```
 
-同じコールドキーを保護する高可用性レプリカは、同じ権威データベースを使用する必要があります。PostgreSQLのデータベースロールには、ウォーターマークテーブルを初期化するための作成権限と、初期化後にテーブルを読み書きする権限が必要です。
+`mode` は、コールド鍵ごとに発行カウンターの保護を適用します。
 
-### `opcert`の発行カウンター
+- `enforce` では、各運用証明書の `issue_counter` が、そのコールド鍵の保存済み最大値より厳密に大きい必要があります。同じか小さい値は拒否されます。
+- `warn` は、同じか小さいカウンターへの後退を記録してログ出力しますが、署名は返します。
+- `off` は発行カウンターの保護を無効にします。
 
-`signer.watermark.mode`では、Bursaがコールドキーごとに保存した`opcert`の`issue_counter`の最大値を基準に検査します。
+<a id="operational-certificate-signer-policy"></a>
 
-- `enforce`（デフォルト）では、Bursaは保存済みの最大値より`issue_counter`が厳密に大きい場合だけ署名します。同じ値または小さい値は拒否します。
-- `warn`では、Bursaは同じ値または小さい値を回帰として記録およびログ出力しますが、署名は返します。
-- `off`は発行カウンターの検査を適用しません。
+## 運用証明書の署名ポリシー
 
-### 署名者のヘルスエンドポイント
+`signer.keys[].allowed_requests` に `opcert` を追加すると、`type: opcert` の `POST /v1/sign` リクエストを許可します。鍵にポリシーがない場合、またはポリシーに `opcert` が含まれない場合は拒否します。
 
-- `/healthz`は静的な生存確認で、HTTP `200`を返します。
-- `/readyz`は、設定したSQLiteまたはPostgreSQLウォーターマークストアに3秒以内に書き込めることを確認します。ストアを利用できない場合または書き込めない場合はHTTP `503`を返し、書き込み可能なストアにはHTTP `200`を返します。メモリ内ストアは外部依存関係を持たないため、HTTP `200`を返します。
+```yaml
+signer:
+  keys:
+    - hash: "0000000000000000000000000000000000000000000000000000000000"
+      allowed_requests:
+        - opcert
+```
 
-## `kes_agent`の設定
+<a id="signer-health-endpoints"></a>
 
-| YAMLキー | 環境変数 | 説明 | デフォルトまたは要件 |
+## 署名サービスのヘルスエンドポイント
+
+`/healthz` は固定の生存性を示し、常に HTTP `200` を返します。
+
+`/readyz` は 3 秒のタイムアウトで設定済みのウォーターマークストアを確認します。SQLite と PostgreSQL では、署名に必要なウォーターマークの書き込みを受け入れることを検証します。正常で書き込み可能なら HTTP `200`、利用不能または書き込み不能なら HTTP `503` を返します。メモリ内ストアには外部依存がなく、準備完了として HTTP `200` を返します。
+
+<a id="kes_agent"></a>
+
+## `kes_agent`
+
+`kes_agent` YAML キーにデーモンを設定します。各フィールドは、対応する `KESAGENT_*` 環境変数でも指定できます。
+
+| YAML キー | 環境変数 | 用途 | 既定値または要件 |
 | --- | --- | --- | --- |
-| `kes_agent.mode` | `KESAGENT_MODE` | KESエージェントの動作モード。`serve-key`は現在のKES署名鍵をプロデューサーへ渡し、`sign`はエージェント内に鍵を保持したままブロックヘッダーに署名します。 | `serve-key`または`sign`。必須 |
-| `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | ブロックプロデューサーが接続するUnixソケット。 | 必須。`kes_agent.control_socket`と異なるパス |
-| `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | `gen-staged-key`、`install-key`、`drop-key`、`info`コマンドを受け付けるUnixソケット。 | 必須。`kes_agent.service_socket`と異なるパス |
-| `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | サービスソケットの8進ファイルモード。プロデューサーのUIDが異なる場合は、専用グループへの書き込みを許可できます。 | `0600`。他ユーザーの書き込みは不可。例:`0660` |
-| `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | 制御ソケットの8進ファイルモード。鍵の生成、インストール、破棄を受け付けるため、グループまたは他ユーザーの書き込みを許可できません。 | `0600`。グループまたは他ユーザーの書き込みは不可 |
-| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | プールのコールド検証鍵を含むファイル。`cardano-cli`のテキストエンベロープ、生のバイト列、または16進値を使用できます。 | `kes_agent.cold_vkey_hex`とどちらか一方を指定 |
-| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵を表す16進値。 | `kes_agent.cold_vkey_file`とどちらか一方を指定 |
-| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelleyジェネシスのシステム開始時刻。 | `RFC3339`形式で必須 |
-| `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1スロットの実時間（秒）。 | `1`。正の値が必須 |
-| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES期間に含まれるスロット数。 | 0以外の値が必須。例:`129600` |
-| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | 運用証明書を更新できる最大回数。 | `62` |
-| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | KES鍵を進めるスケジューラーの間隔。Goの期間文字列を使用します。 | `1m` |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加するKES期間を永続化するガードファイルのパス。 | 必須。デフォルトなし |
+| `kes_agent.mode` | `KESAGENT_MODE` | `serve-key` は現在の KES 署名鍵をプロデューサーに渡します。`sign` は鍵を渡さずにブロックヘッダーに署名します。 | `serve-key` または `sign` を指定します。 |
+| `kes_agent.service_socket` | `KESAGENT_SERVICE_SOCKET` | ブロックプロデューサーを接続する Unix ソケットです。 | サービスソケットのパスを指定します。 |
+| `kes_agent.control_socket` | `KESAGENT_CONTROL_SOCKET` | KES 鍵管理コマンドを実行する Unix ソケットです。 | `service_socket` と異なるパスを指定します。 |
+| `kes_agent.service_socket_mode` | `KESAGENT_SERVICE_SOCKET_MODE` | サービスソケットの 8 進数権限モードです。異なるユーザー ID のプロデューサーにはグループアクセスを許可できます。 | 既定は `0600`。その他のユーザーに書き込みを許可してはいけません。 |
+| `kes_agent.control_socket_mode` | `KESAGENT_CONTROL_SOCKET_MODE` | 制御ソケットの 8 進数権限モードです。 | 既定は `0600`。グループやその他のユーザーに書き込みを許可してはいけません。 |
+| `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
+| `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
+| `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley ジェネシスの開始時刻です。 | RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
+| `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES 期間のスロット数です。 | `0` より大きい値を指定します。 |
+| `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | 運用証明書の進化回数を制限します。 | 既定値は `62` です。 |
+| `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | スケジューラーの間隔を `1m` などの Go の期間で指定します。 | 既定値は `1m`。Go の期間を指定します。 |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加する KES 期間ガードを永続的なパスに保存します。 | 永続的なパスを指定します。 |
 
-`kes_agent.cold_vkey_file`と`kes_agent.cold_vkey_hex`は、プールのコールド署名鍵ではなくコールド検証鍵を指定します。両方を指定した場合は`kes_agent.cold_vkey_hex`を使用します。エージェントはコールド署名鍵を保持しません。
+サービスソケットと制御ソケットには異なるパスが必要です。8 進数の権限モードを指定でき、両方の既定値は所有者のみの `0600` です。異なるユーザー ID で動くプロデューサーのため、サービスソケットにはグループアクセスを許可できますが、その他のユーザーに書き込みは許可できません。制御ソケットは KES 鍵のインストールや削除を受け付けるため、書き込みは所有者のみに制限する必要があります。
 
-`kes_agent.service_socket_mode`はグループ書き込みを許可できますが、他ユーザーの書き込みを許可するモードは使用できません。`kes_agent.control_socket_mode`はグループまたは他ユーザーの書き込みを許可できません。両方の値を8進文字列として指定します。
+`cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、永続的な `guard_file` のパスも必要です。
 
-期間ガードはエージェントが承認した最高のKES期間を保存し、再起動後にその期間を復元し、期間のロールバックを拒否します。デーモンはこのガードにメモリ内の代替手段を使用しません。
+`kes_agent.guard_file` が空の場合、KES エージェントは起動を拒否します。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。このガードをメモリ内で代替する機能はありません。
 
-## APIのTLSと`Bearer`認証
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  service_socket_mode: "0660"
+  control_socket_mode: "0600"
+  cold_vkey_file: /etc/bursa/pool-cold.vkey
+  system_start: "2022-03-31T00:00:00Z"
+  slot_length: 1
+  slots_per_kes_period: 129600
+  max_kes_evolutions: 62
+  evolve_interval: 1m
+  guard_file: /var/lib/bursa/kes-period.guard
+```
 
-| YAMLキー | 環境変数 | 説明 | デフォルトまたは要件 |
+<a id="migrate-socket-permissions"></a>
+
+### ソケット権限の移行
+
+従来の `kes_agent.socket_mode` を、`kes_agent.service_socket_mode` と `kes_agent.control_socket_mode` の両方に置き換えます。古いキーは無効です。制御ソケットは `0600` のままにし、プロデューサーにグループアクセスが必要な場合はサービスソケットだけを広げてください。
+
+<a id="legacy-api-security"></a>
+
+## 従来の API のセキュリティ
+
+従来の API は `api` YAML キーに設定します。
+
+| YAML キー | 環境変数 | 用途 | 既定値または要件 |
 | --- | --- | --- | --- |
-| `api.address` | `API_LISTEN_ADDRESS` | APIの待ち受けアドレス。 | `127.0.0.1` |
-| `api.port` | `API_LISTEN_PORT` | APIの待ち受けポート。 | `8080` |
-| `api.tls_cert_file` | `API_TLS_CERT_FILE` | APIサーバー証明書のファイルパス。 | 非ループバックの待ち受けでは必須 |
-| `api.tls_key_file` | `API_TLS_KEY_FILE` | APIサーバー秘密鍵のファイルパス。 | 非ループバックの待ち受けでは必須 |
-| `api.jwt_secret` | `API_JWT_SECRET` | `HS256`の`Bearer`認証で使用する共有シークレット。設定時はこの値を認証元として使用します。 | 非ループバックの待ち受けでは`api.jwks_url`と排他的に指定。32バイト以上 |
-| `api.jwks_url` | `API_JWKS_URL` | `RS256`、`ES256`、または`EdDSA`の`Bearer`認証で使用するJWKSのURL。 | 非ループバックの待ち受けでは`api.jwt_secret`と排他的に指定。`HTTPS`が必須 |
-| `api.jwt_issuer` | `API_JWT_ISSUER` | `Bearer`トークンの発行者を検証する制約。 | 任意 |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | `Bearer`トークンの対象者を検証する制約。 | 任意 |
-| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続ウォレットを管理できるJWT subjectの許可リスト。 | 認証付きGCPウォレットストレージでは、空でないsubjectを少なくとも1つ指定 |
+| `api.tls_cert_file` | `API_TLS_CERT_FILE` | このファイルのサーバー TLS 証明書を提示します。 | 非ループバックのリスナーでは必須です。 |
+| `api.tls_key_file` | `API_TLS_KEY_FILE` | このファイルのサーバー TLS 秘密鍵を使用します。 | 非ループバックのリスナーでは必須です。 |
+| `api.jwt_secret` | `API_JWT_SECRET` | HS256 シークレットで Bearer トークンを認証します。 | `api.jwks_url` の代わりに使用し、32 バイト以上を指定します。 |
+| `api.jwks_url` | `API_JWKS_URL` | JWKS エンドポイントで Bearer トークンを認証します。 | `api.jwt_secret` の代わりに使用します。ループバックでの開発を除き HTTPS が必須です。 |
+| `api.jwt_issuer` | `API_JWT_ISSUER` | Bearer トークンの issuer を制限します。 | 受け入れる issuer を制限する場合に設定します。 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの audience を制限します。 | 受け入れる audience を制限する場合に設定します。 |
+| `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続化したウォレットの管理用 JWT subject の、空でない許可リストです。 | いずれかのウォレットストレージを設定する場合、1 つ以上の空でない subject が必要です。リストが空または未設定なら起動を拒否します。 |
 
-`api.address`にループバック以外のアドレスを設定する場合、起動には`api.tls_cert_file`と`api.tls_key_file`の両方、および`api.jwt_secret`または`api.jwks_url`のどちらか一方が必要です。TLSファイルが片方だけの場合、または`Bearer`認証元を両方またはどちらも指定した場合、起動できません。
+ループバック以外の従来の API リスナーには、読み取り可能な TLS ファイルの両方と、Bearer の信頼元 `api.jwt_secret` または `api.jwks_url` のちょうど一方が必要です。信頼元がちょうど 1 つでなければ起動を拒否します。HS256 シークレットは 32 バイト以上が必要です。JWKS URL は HTTPS を使用し、ループバックでの開発に限り HTTP を使用できます。
 
-`api.jwt_secret`には32バイト以上のシークレットを指定し、設定ファイルへ直接保存せずデプロイメントのシークレットとして管理します。`api.jwks_url`は非ループバックの待ち受けでは`HTTPS` URLが必要です。ループバックの待ち受けではTLSファイルと`Bearer`認証元を省略でき、開発用の`api.jwks_url`には`HTTP` URLも使用できます。
+API は既定でループバックを使用します。TLS ファイルを省略したループバックでの開発は平文で利用できますが、ループバック以外のリスナーでは TLS と Bearer 認証が必須です。
 
-`api.jwt_issuer`と`api.jwt_audience`は任意の制約です。どちらも指定しない場合、発行者または対象者による追加の制約は適用されません。
+いずれかのウォレットストレージバックエンドを設定した場合、`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` には、subject が `api.jwt_admin_subjects` に含まれる有効な Bearer JWT が必要です。
 
-認証付きGCPウォレットストレージを有効にする場合は、`api.jwt_admin_subjects`に空でない管理者subjectを少なくとも1つ指定します。リストが空または未指定の場合、Bursaは起動を拒否します。`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete`の各ルートでは、有効な`Bearer` JWTと、そのsubjectが管理者リストに含まれることの両方を要求します。
+```yaml
+api:
+  address: 0.0.0.0
+  port: 8080
+  tls_cert_file: /run/secrets/bursa-api-cert.pem
+  tls_key_file: /run/secrets/bursa-api-key.pem
+  jwks_url: https://identity.example.com/.well-known/jwks.json
+  jwt_issuer: https://identity.example.com
+  jwt_audience: bursa-api
+```
 
-## `socket_mode`から分割設定への移行
+`api.jwt_secret` はコミットする YAML ではなく、環境変数またはデプロイ用の秘密情報に保存します。
 
-`kes_agent.socket_mode`はサポートされていません。既存の`kes_agent.socket_mode`を削除し、サービスソケットには`kes_agent.service_socket_mode`、制御ソケットには`kes_agent.control_socket_mode`を個別に設定します。
+<a id="signer-transaction-policies"></a>
 
-サービスソケットでプロデューサーのグループアクセスが必要な場合は、`kes_agent.service_socket_mode`に`0660`などのグループ書き込みを許可する値を指定できます。制御ソケットは鍵をインストールまたは破棄できるため、`kes_agent.control_socket_mode`にグループまたは他ユーザーの書き込みを許可する値を指定できません。新しい設定を省略した場合、両方のソケットは`0600`になります。
+## 署名サービスのトランザクションポリシー
 
-## 署名者の運用証明書ポリシー
-
-`POST /v1/sign`で`type: opcert`を指定して運用証明書に署名するには、対象キーの`allowed_requests`に`opcert`を追加します。
-
-| 設定パス | 許可値 | 動作 |
-| --- | --- | --- |
-| `signer.keys[].allowed_requests` | `opcert` | `POST /v1/sign`の`type: opcert`リクエストを許可します。 |
-
-キーのポリシーがない場合、または`allowed_requests`に`opcert`がない場合、Bursaはこの操作をデフォルトで拒否します。
-
-## 署名者のトランザクションポリシー
-
-操作を認識するトランザクション権限を`signer.keys[].tx_policy`の下に設定します。粗い`allow_certificates`と`allow_votes`の設定も使用できますが、空でない`allowed_certificates`リストは`allow_certificates`より優先されます。空でない`allowed_voter_kinds`または`allowed_drep_ids`リストは、`allow_votes`の代わりに許可リストモードを選択します。該当する許可リストまたはブール権限を設定しない場合、Bursaは操作をデフォルトで拒否します。
+`signer.keys[].tx_policy` で、操作の種類を認識するトランザクション権限を設定します。大まかな `allow_certificates` と `allow_votes` も使用できますが、空でない `allowed_certificates` は `allow_certificates` より優先されます。空でない `allowed_voter_kinds` または `allowed_drep_ids` は、`allow_votes` ではなく許可リストモードを選択します。該当する許可リストも真偽値の許可設定もない場合、既定では操作を拒否します。
 
 ```yaml
 signer:
@@ -210,19 +303,21 @@ signer:
           - "hex-credential-id"
 ```
 
-`allowed_certificates`で使用できる値は次のとおりです。
+`allowed_certificates` には次の値を指定できます。
 
-`stake_registration`、`stake_deregistration`、`stake_delegation`、`pool_registration`、`pool_retirement`、`genesis_key_delegation`、`move_instantaneous_rewards`、`registration`、`deregistration`、`vote_delegation`、`stake_vote_delegation`、`stake_registration_delegation`、`vote_registration_delegation`、`stake_vote_registration_delegation`、`auth_committee_hot`、`resign_committee_cold`、`drep_registration`、`drep_deregistration`、`drep_update`。
+`stake_registration`、`stake_deregistration`、`stake_delegation`、`pool_registration`、`pool_retirement`、`genesis_key_delegation`、`move_instantaneous_rewards`、`registration`、`deregistration`、`vote_delegation`、`stake_vote_delegation`、`stake_registration_delegation`、`vote_registration_delegation`、`stake_vote_registration_delegation`、`auth_committee_hot`、`resign_committee_cold`、`drep_registration`、`drep_deregistration`、`drep_update`.
 
-`allowed_voter_kinds`で使用できる値は次のとおりです。
+`allowed_voter_kinds` には次の値を指定できます。
 
-`committee_hot_key`、`committee_hot_script`、`drep_key`、`drep_script`、`staking_pool_key`。
+`committee_hot_key`、`committee_hot_script`、`drep_key`、`drep_script`、`staking_pool_key`.
 
-`allowed_drep_ids`には、DRep投票者を指定した資格情報に制限する16進数の資格情報IDを設定します。DRep IDリストを設定すると、DRep資格情報IDを持たない投票者も拒否されます。Bursaは、一覧にある証明書種別と投票者種別だけを受け入れます。Bursaが操作種別、または有効な許可リストに必要な詳細をデコードできない場合、署名を拒否します。
+`allowed_drep_ids` に 16 進数の資格情報 ID を指定すると、DRep 投票者をその ID に制限します。このリストは DRep 資格情報 ID を持たない投票者も拒否します。記載された証明書と投票者の種類のみを受け入れます。操作の種類、または有効な許可リストが必要とする詳細をデコードできない場合は署名を拒否します。
+
+<a id="per-caller-transaction-restrictions"></a>
 
 ### 呼び出し元ごとのトランザクション制限
 
-`signer.caller_policies`を、呼び出し元サブジェクトから鍵ハッシュ、さらに減算型トランザクション上書きへ対応付けるマップとして使用します。
+`signer.caller_policies` は、呼び出し元の subject、鍵ハッシュ、権限を狭めるトランザクション上書き設定の順のマップとして使用します。
 
 ```yaml
 signer:
@@ -245,15 +340,17 @@ signer:
         forbid_treasury: true
 ```
 
-`signer.caller_policies`の各キーは呼び出し元サブジェクトを識別し、各ネストされたキーは鍵ハッシュを識別します。使用できる上書きフィールドは、`networks`、`allowed_outputs`、`max_output_ada`、`max_total_out_ada`、`max_fee_ada`、`allowed_certificates`、`allowed_voter_kinds`、`allowed_drep_ids`、`forbid_certificates`、`forbid_mint`、`forbid_withdrawals`、`forbid_votes`、`forbid_proposals`、`forbid_treasury`です。
+`signer.caller_policies` の各キーは呼び出し元の subject を識別し、その下の各キーは鍵ハッシュを識別します。上書きできるフィールドは、`networks`、`allowed_outputs`、`max_output_ada`、`max_total_out_ada`、`max_fee_ada`、`allowed_certificates`、`allowed_voter_kinds`、`allowed_drep_ids`、`forbid_certificates`、`forbid_mint`、`forbid_withdrawals`、`forbid_votes`、`forbid_proposals`、`forbid_treasury` です。
 
-Bursaは各呼び出し元の上書きを鍵の基本ポリシーと交差させるため、上書きは権限を狭めることだけができ、基本ポリシーが拒否する権限を付与できません。不明な上書きフィールドや無効な鍵ハッシュがある場合、Bursaは有効なポリシーを構築できません。
+Bursa は、呼び出し元ごとの上書き設定と鍵の基本ポリシーの共通部分を使用します。上書きは権限を狭めることだけが可能で、基本ポリシーが拒否する権限を付与することはできません。不明なフィールドや不正な鍵ハッシュがある場合、有効なポリシーを構築できません。
+
+<a id="external-policy-hook"></a>
 
 ### 外部ポリシーフック
 
-`signer.policy_hook_url`を設定すると、静的ポリシーがリクエストを許可した後に外部ポリシーチェックを有効にします。環境変数`SIGNER_POLICY_HOOK_URL`はこの設定を上書きします。リクエストのタイムアウトをミリ秒単位で設定するには`signer.policy_hook_timeout_ms`を使用し、`SIGNER_POLICY_HOOK_TIMEOUT_MS`で上書きできます。値が`0`の場合はデフォルトの5秒を使用します。Bursaは設定値を1日以内に制限します。
+`signer.policy_hook_url` は、静的ポリシーが承認した後の外部ポリシー検査を有効にします。環境変数 `SIGNER_POLICY_HOOK_URL` が優先されます。タイムアウトは `signer.policy_hook_timeout_ms` でミリ秒単位に設定し、`SIGNER_POLICY_HOOK_TIMEOUT_MS` が優先されます。`0` は既定の 5 秒を使用します。設定値の上限は 1 日です。
 
-Bursaはトランザクション概要をJSONの`POST`リクエストとして送信します。概要には次のフィールドを使用します。
+Bursa は次のフィールドを含むトランザクション概要を JSON の `POST` リクエストとして送信します。
 
 ```json
 {
@@ -275,14 +372,17 @@ Bursaはトランザクション概要をJSONの`POST`リクエストとして�
 }
 ```
 
-フックがHTTP `200`とJSONレスポンス`{"allow": true}`を返した場合だけ、署名を許可します。通信エラー、タイムアウト、`200`以外のレスポンス、読み取れないまたは不正なJSON、`true`以外の`allow`値は署名を拒否します。
+フックが HTTP `200` と JSON 応答 `{"allow": true}` を返した場合のみ署名を許可します。通信エラー、タイムアウト、`200` 以外の応答、読めないか不正な JSON、`true` 以外の `allow` 値では、すべて署名を拒否します。
+
+<a id="troubleshooting"></a>
 
 ## トラブルシューティング
 
-- Bursaが`module`が必要だと報告した場合は、`signer.backends[].module`に`PKCS#11`モジュールのパスを設定します。
-- Bursaが`token_label`または`slot`が必要だと報告した場合は、トークン選択フィールドを少なくとも1つ指定します。
-- Bursaが`pin_env`が必要、またはその環境変数が空だと報告した場合は、`signer.backends[].pin_env`に環境変数の名前を設定し、その変数を通じてユーザーPINを指定します。
-- Bursaが無効な鍵タイプを報告した場合は、各`signer.backends[].keys[].type`に設定する値を設定リファレンスに記載されたサポート対象の値のいずれかに変更します。
+- `module` が必要と報告された場合、`signer.backends[].module` に `PKCS#11` モジュールのパスを設定します。
+- `token_label` または `slot` が必要と報告された場合、少なくとも一方のトークン選択フィールドを指定します。
+- `pin_env` が必要、またはその環境変数が空と報告された場合、`signer.backends[].pin_env` に環境変数名を指定し、その変数でユーザー PIN を渡します。
+- 鍵の種類が不正と報告された場合、各 `signer.backends[].keys[].type` をリファレンスに記載された対応値に設定します。
+
 
 ---
 

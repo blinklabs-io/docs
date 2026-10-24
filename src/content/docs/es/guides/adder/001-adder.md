@@ -1,15 +1,25 @@
 ---
 title: Adder
-description: Introduccion a Adder.
+description: Observa bloques y transacciones de Cardano, filtra eventos y envía notificaciones con Adder.
 ---
 
 ![adder-logo](/adder-logo-with-text-horizontal.png)
 
-Adder es una herramienta para seguir la blockchain de Cardano y emitir eventos para cada bloque y transaccion observada, basandose en filtros configurables por el usuario. Estos eventos pueden ser procesados en otras cadenas de herramientas basadas en eventos para producir aplicaciones ricas y reactivas para Cardano.
+Adder es una herramienta para seguir la blockchain de Cardano y emitir eventos por cada bloque y transacción observados, según filtros configurables por el usuario. Estos eventos se pueden procesar con otras herramientas basadas en eventos para crear aplicaciones reactivas para Cardano.
 
-Basicamente, Adder te permite rastrear eventos que te importan, y puedes recibir notificaciones de la manera que prefieras. Por ejemplo, Adder puede enviarte una notificacion de escritorio cuando se envia un pago a cualquier direccion de billetera que quieras rastrear. O quizas quieras ser notificado en Discord cuando tu Operador de Stake Pool (SPO) acune un bloque. Adder puede rastrear los diferentes eventos de la blockchain de Cardano que te importan y notificarte cuando ocurran.
+Adder te permite seguir los eventos que te interesan y recibir notificaciones del modo que prefieras. Por ejemplo, puede enviarte una notificación de escritorio cuando se envía un pago a una dirección de billetera que sigues, o avisarte en Discord cuando tu operador de stake pool (SPO) acuña un bloque. Adder puede seguir los distintos eventos de la blockchain de Cardano y avisarte cuando ocurren.
 
-## Como uso Adder realmente?
-Es facil, solo descarga el archivo ejecutable de Adder desde blinklabs.io y abre una linea de comandos en tu computadora. En la linea de comandos llama al archivo ejecutable y dile que eventos de la blockchain de Cardano quieres que te notifique y como quieres ser notificado. Es asi de simple!
+## Opciones de implementación de Adder
 
-Comienza con nuestra guia de [Inicio Rapido](../002-quick-start-overview) y aprende lo que Adder puede hacer en nuestras guias de instrucciones y ejemplos
+Adder ofrece dos modos de funcionamiento, cada uno optimizado para distintos usuarios y entornos. Elegir el modo adecuado permite equilibrar la facilidad de uso, la configuración y el control operativo.
+
+✅ Consulta qué modo se adapta a tu caso, Adder Tray o Adder CLI, en el [resumen de los modos de funcionamiento](../002-operating-mode-overview).
+
+### Guías de Adder Tray (Windows y macOS)
+
+- [Guía de instalación en Windows](../003-using-adder-on-windows)
+- [Guía de instalación en Mac](../004-use-adder-on-mac)
+
+### Guías de Adder CLI / monitor de eventos (Linux)
+
+- [Guía para Linux](../005-use-adder-on-linux)

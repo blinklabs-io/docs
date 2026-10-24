@@ -1,129 +1,120 @@
 ---
 title: Guía de inicio rápido
-description: Descripción general del inicio rápido de Dingo.
+description: Resumen del inicio rápido de Dingo.
 ---
 
 # Dingo
 
-Un nodo de datos de la blockchain Cardano escrito en Go que participa activamente en las comunicaciones de red en la blockchain Cardano utilizando la familia de mini-protocolos Node-to-Node de la Red Ouroboros.
+Dingo es un nodo de la blockchain de Cardano escrito en Go que participa activamente en las comunicaciones de la red mediante la familia de miniprotocolos Ouroboros de nodo a nodo.
 
-⚠️ Este es un trabajo en progreso y actualmente está en desarrollo activo
+⚠️ Dingo sigue en desarrollo intensivo.
 
-<br>
+Esta guía explica cómo descargar el binario y poner en marcha un nodo Dingo en la red Cardano Preview.
 
-***
+✅ Se presupone una instalación Linux típica. Ajusta los comandos y las rutas según sea necesario.
 
-En esta guía te guiaremos a través de la descarga del binario de Dingo y todos los pasos necesarios para ejecutar el nodo Dingo en la red Cardano Preview. Para comenzar, sigue los pasos a continuación.
+## Paso 1 - Descargar el binario de Dingo
 
-<br>
+Descarga la última versión desde [GitHub](https://github.com/blinklabs-io/dingo/releases).
 
-✅ Esta guía asume una configuración típica de Linux. Por favor ajusta los comandos y rutas según sea necesario.
+⚠️ Ajusta la versión y la arquitectura a tu sistema.
 
-***
-
-<br>
-
-## Paso 1 - Descargar Binario de Dingo
-<br>
-
-Descarga la última versión desde la página de <a href="https://github.com/blinklabs-io/dingo/releases" target="_blank">versiones de Dingo</a>.
-
-⚠️ Ajusta la versión y la arquitectura para que coincidan con tu sistema.
-
-```bash
+```
 mkdir -p ~/dingo
 cd ~/dingo
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.84.0/dingo-v0.84.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
-Puedes verificar que el binario funciona ejecutando:
+Comprueba que el binario funcione:
 
-```bash
+```
 ./dingo version
 ```
 
 ### Alternativa: instalar con npm
 
-Como alternativa al archivo comprimido, instala el paquete `@blinklabs/dingo`. La instalación requiere Node.js 22 o posterior. El paquete admite Linux, FreeBSD y macOS en arquitecturas `x64`/`amd64` o `arm64`.
+El paquete `@blinklabs/dingo` requiere Node.js 22 o posterior y `tar`. Admite Linux, FreeBSD y macOS en x64/amd64 o arm64. Durante la instalación, descarga la versión correspondiente de Dingo y verifica su suma SHA-256.
 
-```bash
+El instalador solo acepta URL HTTPS de archivos de publicación en su lista de hosts permitidos. Rechaza las URL con credenciales o puertos distintos de 443. También rechaza las redirecciones y las respuestas DNS que resuelvan a direcciones IP privadas o de uso especial.
+
+Instálalo globalmente y comprueba el comando `dingo`:
+
+```
 npm install --global @blinklabs/dingo
 dingo --help
 ```
 
-El paquete descarga el binario nativo correspondiente, valida su suma de comprobación SHA-256 y lo instala de forma atómica. Para usarlo sin una instalación global:
+Después de instalarlo globalmente, utiliza `dingo` en lugar de `./dingo` en los demás comandos. Para comprobarlo sin instalación global:
 
-```bash
+```
 npx @blinklabs/dingo --help
 ```
 
-Después de una instalación global, usa `dingo` en lugar de `./dingo` en los pasos restantes.
+## Ejecutar una devnet local de un solo nodo
 
-### Ejecutar una DevNet local de un solo nodo
+Ejecuta una devnet local de un nodo con el binario descargado:
 
-El comando inicia la DevNet local con un solo nodo:
-
-```bash
+```
 ./dingo devnet
 ```
 
-Una instalación global de npm permite ejecutar `dingo devnet`; sin una instalación global, `npx` ejecuta:
+📝 La configuración de devnet generada por Dingo establece `bindAddr` en `127.0.0.1`, por lo que sus API y servicios aceptan conexiones locales de forma predeterminada. Modifica expresamente la configuración generada si quieres permitir acceso remoto.
 
-```bash
+Con una instalación global de npm, ejecuta `dingo devnet`. Sin instalación global:
+
+```
 npx @blinklabs/dingo devnet
 ```
 
-De forma predeterminada, Dingo guarda la configuración, las claves de prueba y la base de datos en un directorio temporal privado. Dingo elimina ese directorio cuando el nodo termina, incluso después de `Ctrl+C`. Cada ejecución inicia una cadena nueva y deja intacto el directorio actual.
+Sin `--data-dir`, Dingo guarda la configuración, las claves de prueba y los datos de la cadena en un directorio temporal privado que elimina al terminar el proceso. Cada ejecución inicia una cadena nueva.
 
-Dingo instala el faucet local con los archivos `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. En una ejecución temporal, Dingo crea estos archivos en `cardano/keys/` dentro del directorio temporal privado. En una ejecución persistente, Dingo los deja disponibles en `<data-dir>/cardano/keys/`. El archivo `faucet.addr` recibe 900,000 ADA de prueba en el génesis (900_000_000_000 lovelace). Dingo instala las credenciales con permisos exclusivos del propietario.
+Usa `--data-dir` para conservar y reanudar una cadena:
 
-El parámetro `--data-dir` permite conservar una cadena para reutilizarla:
-
-```bash
+```
 ./dingo devnet --data-dir ./.dingo-devnet
 ```
 
-Al repetir este comando, Dingo reanuda esa cadena. El estado se restablece con:
+Repite el mismo comando para reanudarla. `--reset` requiere `--data-dir` y vuelve a crear el estado gestionado por Dingo sin eliminar los archivos ajenos de ese directorio:
 
-```bash
+```
 ./dingo devnet --data-dir ./.dingo-devnet --reset
 ```
 
-Al reanudar una ejecución persistente sin `--reset`, Dingo restaura y actualiza únicamente las credenciales del faucet, sin restablecer las credenciales del productor, la asignación del génesis ni los datos de la cadena. Usa `--reset` para recrear intencionalmente el estado administrado por Dingo.
+La primera ejecución persistente requiere un directorio vacío. Dingo rechaza otra ejecución que utilice el mismo directorio mientras el nodo esté activo. Usa las claves y la red incluidas únicamente para pruebas locales, nunca con fondos reales.
 
-La primera ejecución requiere un directorio vacío. Dingo coloca un marcador antes de crear la base de datos, la configuración generada y las copias de las claves de prueba. `--reset` solo recrea las rutas que administra Dingo y conserva otros archivos del directorio. Dingo rechaza otra ejecución que use el mismo directorio, incluido un intento de restablecerlo mientras el nodo está en ejecución. Estas claves y esta red solo sirven para pruebas locales; el uso con fondos reales queda excluido.
+Dingo proporciona `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. La dirección incluida en `faucet.addr`, `addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`, recibe `900,000` ADA de prueba (`900_000_000_000` lovelace) en la génesis para realizar transacciones locales.
 
-***
+- En una ejecución temporal de `./dingo devnet`, Dingo muestra el directorio temporal. Su carpeta `cardano/keys/` contiene los archivos del faucet hasta que termina el proceso.
+- Con `./dingo devnet --data-dir ./.dingo-devnet`, los archivos se guardan en `./.dingo-devnet/cardano/keys/`.
+- Dingo restringe el acceso a los archivos del faucet y su directorio al propietario.
 
-<br>
+Al reanudar una devnet persistente sin `--reset`, Dingo solo restaura o actualiza los archivos del faucet y reescribe la configuración local. Conserva las credenciales del productor, la asignación de génesis existente y los datos de la cadena.
 
-## Paso 2 - Crear archivo de configuración dingo.yaml
+## Paso 2 - Crear dingo.yaml
 
-Para consultar todos los ajustes de Dingo v0.84.0, sus valores predeterminados y sus alternativas de entorno y línea de comandos, consulta la [referencia de configuración (en inglés)](/guides/dingo/009-configuration-reference/).
-Descarga el [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.84.0/dingo.yaml.example) correspondiente a la versión v0.84.0 como punto de partida para tu configuración.
+Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.87.1. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example) de esa versión como punto de partida.
 
-Dingo incluye configuraciones de red de Cardano integradas (archivos de génesis y `config.json`) para `preview`, `preprod`, `mainnet` y `prime-testnet`. Las configuraciones integradas usan `config.json`, excepto `prime-testnet`, que usa `configuration.yaml`. No necesitas descargarlas por separado.
+Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod y mainnet. No necesitas descargarlas por separado.
 
-Crea un archivo `dingo.yaml` en tu directorio dingo. La variable `$HOME` se expandirá automáticamente a la ruta de tu directorio de inicio:
+Crea `dingo.yaml` en el directorio de Dingo. `$HOME` se expande automáticamente a tu directorio personal:
 
-
-```bash
+```
 cat <<EOF > ~/dingo/dingo.yaml
-# Ruta de datos compartida para los almacenes locales de blob y metadata.
+# Shared database path for the local blob and metadata stores.
 databasePath: "$HOME/dingo/.dingo"
 
-# Plugins de almacenamiento y API
+# Storage
 plugins:
   storage:
     blob:
       provider: "badger"
       config:
-        # Directorio de datos opcional de Badger. Cuando no se define, se usa databasePath.
+        # Optional Badger data directory. When unset, databasePath applies.
         # dataDir: "$HOME/dingo/.dingo/badger"
     metadata:
       provider: "sqlite"
       config:
-        # Directorio de datos opcional de SQLite. Cuando no se define, se usa databasePath.
+        # Optional SQLite data directory. When unset, databasePath applies.
         # dataDir: "$HOME/dingo/.dingo/metadata.db"
 
   api:
@@ -141,9 +132,9 @@ plugins:
         port: 0
 
 # Mempool
-# `plugins.mempool.config.capacity` es una anulación opcional, no un ajuste requerido.
-# Predeterminado: 1 MiB para el modo Praos y el modo serve normal, y 25 MiB para el modo Musashi.
-# Deja la clave comentada o omítela para usar el valor predeterminado del modo.
+# plugins.mempool.config.capacity is an optional override.
+# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
+# Leave the key commented or omit it to use the mode default.
 # plugins:
 #   mempool:
 #     config:
@@ -155,26 +146,18 @@ mithril:
   cleanupAfterLoad: true
   enabled: true
   verifyCertificates: true
-  # En v1, `pinnedDigest` usa un digest de instantánea; en v2 usa un hash de artefacto de base de datos de Cardano. Dingo usa este valor solo en un arranque nuevo con una base de datos vacía.
+  # Optional exact artifact identity for a fresh bootstrap only.
+  # Mithril v1 uses a snapshot digest; Mithril v2 uses a Cardano database artifact hash.
   # pinnedDigest: ""
 
 # Network
-# Límite total de conexiones NtC. Predeterminado: 100. Dingo ignora los valores no positivos.
-maxNtCConns: 100
-# Alias de CLI: `--max-ntc-conns`. Variable de entorno: `DINGO_MAX_NTC_CONNS`.
-# Límite de conexiones NtC por dirección IP. Predeterminado: 5. Dingo ignora los valores no positivos.
-maxNtCConnectionsPerIP: 5
-# Alias de CLI: `--max-ntc-connections-per-ip`. Variable de entorno: `DINGO_MAX_NTC_CONNECTIONS_PER_IP`.
 bindAddr: "0.0.0.0"
-# La dirección de métricas es independiente de `bindAddr` y, de forma predeterminada, usa loopback.
-# Alias de CLI: `--metrics-bind-addr`. Variable de entorno: `DINGO_METRICS_BIND_ADDR`.
+# Prometheus uses this independent address and defaults to loopback; it does
+# not inherit bindAddr. Use --metrics-bind-addr or DINGO_METRICS_BIND_ADDR to
+# override it. Set metricsPort to 0 to disable the metrics listener.
 metricsBindAddr: "127.0.0.1"
 metricsPort: 12798
-# `metricsPort: 0` desactiva el listener de métricas.
-# Alias de CLI: `--health-port`. Variable de entorno: `DINGO_HEALTH_PORT`.
-# `healthPort: 0` desactiva el listener de salud.
 healthPort: 12799
-# Alias de CLI: `--health-ready-gap-slots`. Variable de entorno: `DINGO_HEALTH_READY_GAP_SLOTS`.
 healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
@@ -182,27 +165,46 @@ privateBindAddr: "127.0.0.1"
 privatePort: 3002
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
-
+# Total NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-conns; environment: DINGO_MAX_NTC_CONNS
+maxNtCConns: 100
+# Per-IP NtC connection limit. Dingo ignores non-positive values.
+# CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP
+maxNtCConnectionsPerIP: 5
 
 # Storage
 barkBaseUrl: ""
 barkPort: 0
 storageMode: "core"
+
 EOF
 ```
 
-> 📝 Deja `debugPort` en `0` salvo que se necesite perfilado. `debugPort` controla un listener `pprof` opcional, sigue separado de `metricsPort` y permanece deshabilitado con `0`.
+📝 Deja `debugPort` en `0` salvo que necesites perfiles. Controla un servicio pprof opcional, independiente de `metricsPort`, y permanece desactivado con `0`.
 
-> 💡 Las APIs solo arrancan dentro de `storageMode: "api"`, y asignar `0` a un puerto desactiva esa API.
+📝 `healthPort` utiliza `--health-port` o `DINGO_HEALTH_PORT`; establece `healthPort: 0` para desactivar el servicio de estado. `healthReadyGapSlots` utiliza `--health-ready-gap-slots` o `DINGO_HEALTH_READY_GAP_SLOTS`.
+
+📝 Bark calcula su ventana de seguridad cerca de la punta a partir del estado actual del ledger. No busques ni establezcas manualmente `barkSecurityWindow` en esta configuración.
+
+💡 Los servidores de API permanecen inactivos fuera de `storageMode: "api"`, y un puerto `0` desactiva esa API.
 
 ```yaml
 midnight:
+  # Enable the Midnight gRPC server independently of Midnight indexing.
+  # Default: false.
   serverEnabled: false
+  # Expose gRPC reflection. Requires serverEnabled. Default: false.
   reflectionEnabled: false
+  # Permit plaintext listening on a non-loopback host. A configured TLS
+  # certificate and key allow remote TLS exposure without this setting.
+  # Default: false.
   allowInsecureRemote: false
+  # Must be nonzero when serverEnabled is true. Default: 50051.
   port: 50051
+  # Defaults to loopback; an empty value also uses 127.0.0.1.
   host: "127.0.0.1"
   authTokenPolicyId: ""
+  authTokenAssetName: ""
 storageMode: "api"
 plugins:
   api:
@@ -220,94 +222,71 @@ plugins:
         port: 9090
 ```
 
-> 📝 `midnight.authTokenPolicyId` solo se aplica en el modo de almacenamiento API con indexación de Midnight. Dejarlo vacío mantiene el comportamiento predeterminado más amplio para la coincidencia de tokens de autenticación.
+💡 `midnight.serverEnabled: false` mantiene desactivado el servicio gRPC de Midnight; configurar únicamente `midnight.port` no lo expone.
 
-> 📝 Para que Midnight sirva por gRPC, configure `storageMode: "api"`, `midnight.serverEnabled: true` y un valor distinto de `0` en `midnight.port`. La indexación y el servicio son controles independientes. `midnight.reflectionEnabled` está deshabilitado de forma predeterminada; `midnight.reflectionEnabled: true` activa la reflexión y requiere `midnight.serverEnabled: true`. Dingo mantiene el servidor gRPC deshabilitado cuando `midnight.serverEnabled` es `false`. `127.0.0.1` es el host predeterminado, incluso cuando `midnight.host` está vacío. Dingo limita el texto plano a direcciones de loopback; para exponer el servicio en una dirección que no sea de loopback, active `midnight.allowInsecureRemote: true` para texto plano o configure `tlsCertFilePath` y `tlsKeyFilePath` para TLS.
+📝 Establece conjuntamente `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` o deja ambos sin configurar. Un par incompleto hace fallar la validación de configuración y de inicio. Un identificador de política configurado debe tener exactamente 56 caracteres hexadecimales, 28 bytes decodificados. La comparación utiliza el identificador y el nombre de activo exactos.
 
-> 💡 Configurar `block-cache-size` e `index-cache-size` a 0 con `compression: false` usa la caché de páginas del SO (mmap) en lugar de las cachés internas de BadgerDB. Esto reduce drásticamente el uso de memoria.
+💡 Establecer `block-cache-size` e `index-cache-size` en 0 con `compression: false` utiliza la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB, reduciendo mucho el uso de memoria.
 
-***
+## Paso 3 - Abrir los puertos de red
 
-<br>
+Configura las reglas del cortafuegos UFW para permitir los puertos necesarios de Dingo. UFW significa Uncomplicated Firewall y permite gestionar las reglas de iptables (netfilter).
 
-## Paso 3 - Abrir Puertos
+Consulta los puertos abiertos:
 
-Cubriremos cómo agregar reglas de firewall UFW para los puertos que Dingo necesita.
-
-> 💡 Consejo: UFW significa Uncomplicated Firewall y se usa para administrar reglas de firewall iptables (netfilter).
-
-Para ver qué puertos están actualmente abiertos:
-
-```bash
+```
 sudo ufw status numbered
 ```
 
-### Agregar puerto 3001 para comunicación Ouroboros Node to Node (NtN)
+### Añadir el puerto 3001 para la comunicación Ouroboros de nodo a nodo, NtN
 
-```bash
+```
 sudo ufw allow 3001/tcp
 ```
 
-***
+<a id="step-4---bootstrap-from-mithril-snapshot"></a>
 
-<br>
+## Paso 4 - Arrancar desde una instantánea de Mithril
 
-## Paso 4 - Iniciar desde instantánea de Mithril
+El cliente Mithril integrado descarga y carga una instantánea automáticamente, ahorrando horas frente a reproducir la cadena desde la génesis.
 
-Dingo tiene un cliente Mithril integrado que descarga y carga una instantánea automáticamente. Esto ahorra horas de tiempo de sincronización en comparación con reproducir la cadena desde el génesis.
+Ejecuta desde `~/dingo`:
 
-Ejecuta el siguiente comando desde tu directorio dingo:
-
-```bash
+```
 cd ~/dingo
 ./dingo mithril sync --config ~/dingo/dingo.yaml
 ```
 
-> 📝 `mithril.downloadMaxTransientRetries` controla los reintentos ante fallos transitorios en la descarga de arranque, como tiempos de espera de TLS, respuestas HTTP 429 y respuestas HTTP 5xx. El ejemplo usa el valor predeterminado de `10`.
+📝 Consulta `http://127.0.0.1:12799/health` o `http://127.0.0.1:12799/healthz` para comprobar la actividad y `http://127.0.0.1:12799/readyz` para comprobar la disponibilidad. `/health` y `/healthz` incluyen la capacidad de respuesta del bucle de eventos y no se limitan a la disponibilidad. `/readyz` exige satisfacer la distancia a la punta configurada y la disponibilidad de la base de datos. Para productores, también exige un proceso de forjado en ejecución y credenciales utilizables, incluida la disponibilidad de KES remoto cuando corresponda. Informa de falta de disponibilidad si la distancia a la punta es desconocida o supera `healthReadyGapSlots`. La comprobación de estado del contenedor utiliza `/health`, no las métricas. El servicio de estado permanece disponible durante `dingo mithril sync`.
 
-> 📝 El listener de salud usa el puerto `12799`. Las rutas `/health` y `/healthz` son comprobaciones de actividad y verifican que el bucle de eventos responda. La ruta `/readyz` es la comprobación de disponibilidad: informa que el nodo está listo cuando se conoce la brecha de slots respecto a la punta de la red y no supera `healthReadyGapSlots`, la base de datos está disponible y, para los productores de bloques, el forjador está en ejecución y las credenciales se pueden usar; cuando corresponde, también requiere que KES remoto esté disponible. Informa que no está listo cuando la brecha no se conoce o supera ese límite, la base de datos no está disponible, no se cumplen los requisitos del productor de bloques o KES remoto no está disponible cuando corresponde. Dingo mantiene estas comprobaciones disponibles durante el arranque de Mithril.
+📝 `mithril.downloadMaxTransientRetries` controla los reintentos de descargas de arranque con fallos transitorios, como tiempos de espera TLS, HTTP 429 y HTTP 5xx. El ejemplo utiliza el valor predeterminado `10`.
 
-Dingo:
-1. Descargará la última instantánea de Mithril para tu red configurada
-2. Verificará la cadena de certificados
-3. Cargará la instantánea en la base de datos
+Dingo realizará estos pasos:
 
-Esto toma aproximadamente 10-15 minutos dependiendo de tu sistema y velocidad de red.
+1. Descargar la última instantánea de Mithril de la red configurada.
+2. Verificar la cadena de certificados.
+3. Cargar la instantánea en la base de datos.
 
-> 📝 Si omites este paso, Dingo se sincronizará desde el génesis al iniciarse, lo que toma significativamente más tiempo.
-
-***
-
-<br>
+Tarda aproximadamente 20-30 minutos, según el sistema y la velocidad de red. Si omites este paso, Dingo se sincronizará desde la génesis al iniciarse, lo que tarda bastante más.
 
 ## Paso 5 - Iniciar Dingo
 
-Una vez que la instantánea de Mithril se haya cargado, inicia el nodo:
+Cuando termine la carga de la instantánea:
 
-```bash
+```
 cd ~/dingo
 ./dingo serve --config ~/dingo/dingo.yaml
 ```
 
-> 📝 La comprobación de salud del contenedor usa `/health` en el puerto `12799`, no `/metrics`.
+Los registros mostrarán las conexiones con los pares y la sincronización de los bloques restantes hasta alcanzar la punta.
 
-Deberías ver la salida del registro mostrando el nodo conectándose a los pares y sincronizando los bloques restantes para alcanzar la punta de la cadena.
+### Ejecutar Dingo como servicio systemd
 
-***
+Un servicio systemd inicia Dingo al arrancar el sistema y lo reinicia si termina inesperadamente. Consulta la [guía de creación del servicio](../003-create-start-up-service).
 
-<br>
+### ¡Enhorabuena! El nodo Dingo ya está en ejecución.
 
-### ¿Interesado en usar un servicio systemd para ejecutar un nodo Dingo y maximizar el tiempo de actividad reiniciando automáticamente el nodo Dingo cuando la computadora se reinicia?
-[Consulta nuestra guía sobre cómo crear un servicio de inicio para Dingo](../003-create-start-up-service).
-
-***
-
-<br>
-
-### ¡Felicidades, estás listo para comenzar a usar el nodo Dingo!
-
-[Aprende cómo interactuar con Dingo usando la CLI de Cardano](../004-using-dingo-with-cardano-cli).
-
+[Aprende a interactuar con Dingo mediante Cardano CLI](../004-using-dingo-with-cardano-cli).
 
 ---
 

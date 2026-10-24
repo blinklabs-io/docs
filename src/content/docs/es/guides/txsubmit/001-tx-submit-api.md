@@ -1,6 +1,6 @@
 ---
 title: Tx Submit API
-description: Una guia sobre Tx Submit API.
+description: Envía transacciones de Cardano a través de un endpoint HTTP con Tx Submit API.
 ---
 
 ![txsubmit-logo](/txsubmit-logo.png)

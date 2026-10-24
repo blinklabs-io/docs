@@ -52,8 +52,8 @@ For Linux or FreeBSD CLI archive downloads, copy the path from Blinklabs and run
 > 💡 Tip: You can download the latest Bursa release from the <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a> page.
 
 ```
-wget -O bursa-v0.15.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.15.0/bursa-v0.15.0-linux-amd64.tar.gz
-tar xzf bursa-v0.15.0-linux-amd64.tar.gz
+wget -O bursa-v0.20.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.20.0/bursa-v0.20.0-linux-amd64.tar.gz
+tar xzf bursa-v0.20.0-linux-amd64.tar.gz
 ```
 
 Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files. The official Windows desktop wallet release provides a signed, architecture-specific `.msi` installer. The installer can include the WebView2 Evergreen bootstrapper only when the release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files. The official macOS desktop wallet release provides a notarized, architecture-specific `.pkg` installer.
