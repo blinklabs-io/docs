@@ -143,7 +143,7 @@ databaseLifecycle:
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
   snapshotDir: "$HOME/dingo/snapshots"
   # Optional snapshot trust key used by snapshot authentication operations.
-  # Required when snapshotCloudDestination is configured.
+  # Configure this file before enabling snapshotCloudDestination.
   # When set, this must be a regular, non-symlink file no larger than 1 KiB.
   # Unix: the node user must own it, with no group or other permissions.
   # Windows: the current user or BUILTIN\\Administrators must own it; the process
