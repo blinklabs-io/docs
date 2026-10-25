@@ -312,9 +312,10 @@ Operators must provide an acceptable trust key to enable cloud snapshot
 mirroring. Dingo rejects unsigned legacy snapshots instead of automatically
 signing them for mirroring.
 
-Unkeyed local restores require a private and trusted snapshot location on Unix
-or an authenticated manifest on Windows. See the bootstrap and data maintenance
-guide for the required operational checks.
+On Unix, unkeyed local restores require a private snapshot location that the
+restoring process trusts. On Windows, they require an authenticated manifest.
+See the bootstrap and data maintenance guide for the required operational
+checks.
 
 ### Bark remote lifecycle service
 
