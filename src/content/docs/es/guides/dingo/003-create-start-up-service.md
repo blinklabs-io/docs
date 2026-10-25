@@ -93,6 +93,7 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 
 # Mithril
 mithril:
@@ -191,6 +192,7 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 midnight:
   # Enable the Midnight gRPC server. Default: false.
   serverEnabled: false
@@ -207,6 +209,8 @@ midnight:
 ```
 
 📝 Dingo inicia los servicios Blockfrost, Mesh y UTxO RPC únicamente en modo de almacenamiento API. El servicio `gRPC` de Midnight también requiere modo `API`, `midnight.serverEnabled: true` y un `midnight.port` distinto de cero. Un puerto `0` desactiva esa API.
+
+📝 UTxO RPC escucha en `127.0.0.1` de forma predeterminada, independientemente de `bindAddr`. Para permitir acceso remoto, establece explícitamente `plugins.api.utxorpc.config.host` con el host requerido.
 
 📝 `midnight.serverEnabled` controla explícitamente el servidor `gRPC` y lo mantiene apagado cuando vale false. `midnight.enabled` controla la indexación de forma independiente: el servidor puede servir filas Midnight persistidas sin ejecutar el indexador. `midnight.reflectionEnabled` requiere `midnight.serverEnabled`.
 
@@ -225,6 +229,9 @@ network: preview
 
 # Pre-production testnet
 network: preprod
+
+# Red de pruebas Dijkstra (network magic 6)
+network: dijkstra
 
 # Mainnet - NOT CURRENTLY RECOMMENDED
 network: mainnet
