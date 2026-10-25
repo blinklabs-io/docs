@@ -55,7 +55,7 @@ Establece las variables de entorno antes de la primera ejecución para inicializ
 
 | Variable | Valor predeterminado | Efecto |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos cuando no se proporciona `-n`/`--network`. |
+| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos cuando el comando no incluye `-n`/`--network`. |
 | `BURSA_SYNC` | `mithril` | El valor `genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. |
 | `BURSA_LEAN` | `false` | Activa el almacenamiento reducido, que poda los datos históricos de la cadena para ahorrar disco. |
 | `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
