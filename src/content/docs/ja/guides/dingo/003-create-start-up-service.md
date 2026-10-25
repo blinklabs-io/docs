@@ -172,6 +172,8 @@ databaseLifecycle:
   # Windows: the current user or BUILTIN\\Administrators must own it; the process
   # must belong to Administrators when applicable, and the DACL must restrict access.
   # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust-key"
+  # Cloud mirroring requires an acceptable trust key and an already authenticated manifest.
+  # Unsigned legacy snapshots are rejected and are not automatically signed or mirrored.
   # Keep only the most recent automatic snapshots.
   # Default: 0.
   snapshotRetention: 0
@@ -191,6 +193,8 @@ EOF
 > 📝 `databaseLifecycle.snapshotEnabled` はエポック境界の自動スナップショットを制御します。主 blob プロバイダーが `badger`、`s3`、`gcs` の場合も、手動の `dingo database snapshot` と Bark の `CreateSnapshot` は利用できます。Bark でライブの復元または切り詰めも提供する場合は、`barkPort`、`databaseLifecycle.snapshotDir`、`barkClientCaFilePath`、`tlsCertFilePath`/`tlsKeyFilePath` を設定します。
 
 > `databaseLifecycle.snapshotRetention` は、最新の自動スナップショットだけを維持するために設定します。 `databaseLifecycle.snapshotCloudDestination` は、Dingo が `dingo_extra_plugins` で実行したときに、各スナップショットを S3 または GCS にミラーリングします。 このミラーの宛先は、プライマリブロブプロバイダとは別です。
+
+> `databaseLifecycle.snapshotCloudDestination` を設定する場合は、受け入れ可能な `snapshotTrustKeyFile` を設定し、マニフェストをあらかじめ認証しておく必要があります。未署名の従来のスナップショットは拒否され、自動的に署名またはミラーリングされません。
 
 > `dingo database snapshot`、`dingo database restore <snapshot-dir>`、`dingo database truncate --slot <slot>`、`--hash <hash>`、または`--block-number <n>`をオフラインデータディレクトリに使用。 `restore`は、`snapshotCloudDestination`が使用し、修復前に一時ディレクトリにダウンロードする同じクラウドURIも受け入れます。
 
