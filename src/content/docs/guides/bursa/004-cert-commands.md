@@ -146,7 +146,7 @@ Output format is compatible with cardano-cli certificates.
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
 
-For example, the following command sets one owner and one relay address.
+The following command specifies one owner and one relay address.
 
 ```
 ./bursa cert pool-registration \
