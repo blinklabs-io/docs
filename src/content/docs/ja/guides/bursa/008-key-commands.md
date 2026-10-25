@@ -38,7 +38,7 @@ Bursa はニーモニックから個別の鍵を導出できます。
 
 ## 署名鍵ファイルの形式
 
-Bursa が HD パス由来の署名鍵をエクスポートする場合、拡張 Ed25519-BIP32 エンベロープを書き出します。ルート、アカウント、支払い、ステーク、ポリシー、マルチシグ、Calidus の署名ファイルには、`*_ExtendedSigningKeyShelley_ed25519_bip32` などの型と、`5880` で始まる 128 バイトの CBOR を使用します。従来の非拡張ファイルは、`5820` で始まる 32 バイトの CBOR を使用します。DRep と委員会のガバナンス鍵は、この一般則とは別の専用の型を使用します。
+Bursa が HD パス由来の署名鍵をエクスポートする場合、拡張 Ed25519-BIP32 エンベロープを書き出します。ルート、アカウント、支払い、ステーク、ポリシー、マルチシグ、Calidus の署名ファイルには、`*_ExtendedSigningKeyShelley_ed25519_bip32` などの型と、`5880` で始まる 128 バイトの CBOR を使用します。従来の非拡張ファイルは、`5820` で始まる 32 バイトの CBOR を使用します。DRep と憲法委員会のガバナンス鍵には、それぞれ専用の型を使用します。
 
 プールのコールド署名ファイルは例外です。新しいエクスポートは、型 `StakePoolSigningKey_ed25519` の標準の非拡張 Ed25519 エンベロープを使用し、対応する検証鍵には `StakePoolVerificationKey_ed25519` を使用します。読み込み時には従来の `StakePoolSigningKeyShelley_ed25519` と `StakePoolVerificationKeyShelley_ed25519` も受け入れ、ファイルは変更しません。プールのコールド署名シードは、プール登録と運用証明書で使用する標準 Ed25519 識別子としてエクスポートされた検証鍵を生成します。任意の拡張形式も、この同じプール識別子を維持します。
 
@@ -166,7 +166,7 @@ Calidus 鍵は、CIP-88/CIP-151 が定義する SPO のオンチェーン認証�
 
 ### VRF（検証可能ランダム関数）鍵ペア
 
-VRF 鍵は、Praos コンセンサスのリーダー選出でステークプールオペレーターが使用します。シードはニーモニックから決定的に導出するため、鍵を復元できます。`--signing-key-file -` を指定すると、署名鍵（vrf_sk）と検証鍵（vrf_vk）の両方を bech32 形式で標準出力に出力します。ファイル出力では、検証鍵に `VrfVerificationKey_PraosVRF`、署名鍵に `VrfSigningKey_PraosVRF` の cardano-cli エンベロープ型を使用します。VRF 署名鍵の本体は、32 バイトのシードに公開鍵を続けた 64 バイトの `seed||public key` 形式です。標準出力の `vrf_sk` も同じ形式を使用します。
+VRF 鍵は、Praos コンセンサスのリーダー選出でステークプールオペレーターが使用します。シードはニーモニックから決定的に導出するため、鍵を復元できます。`--signing-key-file -` を指定すると、署名鍵（vrf_sk）と検証鍵（vrf_vk）の両方を bech32 形式で標準出力に出力します。ファイル出力では、検証鍵に `VrfVerificationKey_PraosVRF`、署名鍵に `VrfSigningKey_PraosVRF` の cardano-cli エンベロープ型を使用します。VRF 署名鍵の本体は、32 バイトのシードに公開鍵を続けた 64 バイトの `seed||public key` 形式です。標準出力の `vrf_sk` もこの 64 バイト形式を使用します。
 
 ```
 ./bursa key vrf --mnemonic-file seed.txt --index 0 --signing-key-file vrf.skey --verification-key-file vrf.vkey
@@ -208,7 +208,7 @@ KES 鍵は、Praos コンセンサスでブロックに署名するために使�
 
 ### VRF と KES の鍵検証
 
-Bursa は VRF と KES の鍵データを、エクスポートまたは読み込みの前に検証します。VRF 検証鍵は所定の長さが必要です。VRF 署名データには 32 バイトのシード、またはシードと公開鍵を連結した 64 バイトの形式を指定できます。64 バイト形式では、埋め込まれた公開鍵がシードから導出した公開鍵と一致する必要があります。KES 検証鍵も所定の長さが必要で、KES 署名鍵は Cardano の KES 深さと所定の秘密鍵サイズを使用する必要があります。不正な長さ、VRF シードと公開鍵の不一致、不正な KES 深さ、秘密鍵サイズを検出すると、エンベロープを生成せず拒否します。
+Bursa は VRF と KES の鍵データを、エクスポートまたは読み込みの前に検証します。VRF 検証鍵は所定の長さが必要です。VRF 署名データには 32 バイトのシードまたは 64 バイトの `seed||public key` 形式を指定できます。64 バイト形式では、埋め込まれた公開鍵がシードから導出した公開鍵と一致する必要があります。KES 検証鍵も所定の長さが必要で、KES 署名鍵は Cardano の KES 深さと所定の秘密鍵サイズを使用する必要があります。不正な長さ、VRF シードと公開鍵の不一致、不正な KES 深さ、秘密鍵サイズを検出すると、エンベロープを生成せず拒否します。
 
 <a name="drep"></a>
 
@@ -216,7 +216,7 @@ Bursa は VRF と KES の鍵データを、エクスポートまたは読み込�
 
 ### DRep 鍵
 
-DRep 鍵は CIP-0105 のパス m/1852'/1815'/account'/3/index に従い、委任代表者としてのガバナンス参加に使用します。`--signing-key-file -` を指定すると、bech32 形式（drep_xsk 接頭辞）で標準出力に出力します。ファイル出力では、検証鍵に `DRepVerificationKey_ed25519`、拡張署名鍵に `DRepExtendedSigningKey_ed25519_bip32` を使用します。Bursa は従来の `DRepVerificationKeyShelley_ed25519` と `DRepExtendedSigningKeyShelley_ed25519_bip32`、および非拡張の `DRepSigningKey_ed25519` も読み込みます。
+DRep 鍵は CIP-0105 のパス m/1852'/1815'/account'/3/index に従い、委任代表者としてのガバナンス参加に使用します。`--signing-key-file -` を指定すると、bech32 形式（drep_xsk 接頭辞）で標準出力に出力します。ファイル出力では、検証鍵に `DRepVerificationKey_ed25519`、拡張署名鍵に `DRepExtendedSigningKey_ed25519_bip32` を使用します。Bursa は従来の `DRepVerificationKeyShelley_ed25519` と `DRepExtendedSigningKeyShelley_ed25519_bip32`、および非拡張の `DRepSigningKey_ed25519` も読み込みます。そのため、既存の DRep 鍵ファイルも引き続き使用できます。
 
 ```
 ./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
@@ -238,7 +238,7 @@ DRep 鍵は CIP-0105 のパス m/1852'/1815'/account'/3/index に従い、委任
 
 ### 憲法委員会のコールド鍵
 
-委員会のコールド鍵は CIP-0105 のパス m/1852'/1815'/account'/4/index に従い、憲法委員会のメンバーシップ（長期的な識別子）に使用します。`--signing-key-file -` を指定すると、bech32 形式（cc_cold_xsk 接頭辞）で標準出力に出力します。ファイル出力では、検証鍵に `ConstitutionalCommitteeColdVerificationKey_ed25519`、拡張署名鍵に `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32` を使用します。Bursa は従来の `ConstitutionalCommitteeColdVerificationKeyShelley_ed25519` と `ConstitutionalCommitteeColdExtendedSigningKeyShelley_ed25519_bip32`、および非拡張の `ConstitutionalCommitteeColdSigningKey_ed25519` も読み込みます。
+委員会のコールド鍵は CIP-0105 のパス m/1852'/1815'/account'/4/index に従い、憲法委員会のメンバーシップ（長期的な識別子）に使用します。`--signing-key-file -` を指定すると、bech32 形式（cc_cold_xsk 接頭辞）で標準出力に出力します。ファイル出力では、検証鍵に `ConstitutionalCommitteeColdVerificationKey_ed25519`、拡張署名鍵に `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32` を使用します。Bursa は従来の `ConstitutionalCommitteeColdVerificationKeyShelley_ed25519` と `ConstitutionalCommitteeColdExtendedSigningKeyShelley_ed25519_bip32`、および非拡張の `ConstitutionalCommitteeColdSigningKey_ed25519` も読み込みます。そのため、既存のコールド鍵ファイルも引き続き使用できます。
 
 ```
 ./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
@@ -260,7 +260,7 @@ DRep 鍵は CIP-0105 のパス m/1852'/1815'/account'/3/index に従い、委任
 
 ### 憲法委員会のホット鍵
 
-委員会のホット鍵は CIP-0105 のパス m/1852'/1815'/account'/5/index に従い、憲法委員会の投票（運用鍵）に使用します。`--signing-key-file -` を指定すると、bech32 形式（cc_hot_xsk 接頭辞）で標準出力に出力します。ファイル出力では、検証鍵に `ConstitutionalCommitteeHotVerificationKey_ed25519`、拡張署名鍵に `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32` を使用します。Bursa は従来の `ConstitutionalCommitteeHotVerificationKeyShelley_ed25519` と `ConstitutionalCommitteeHotExtendedSigningKeyShelley_ed25519_bip32`、および非拡張の `ConstitutionalCommitteeHotSigningKey_ed25519` も読み込みます。
+委員会のホット鍵は CIP-0105 のパス m/1852'/1815'/account'/5/index に従い、憲法委員会の投票（運用鍵）に使用します。`--signing-key-file -` を指定すると、bech32 形式（cc_hot_xsk 接頭辞）で標準出力に出力します。ファイル出力では、検証鍵に `ConstitutionalCommitteeHotVerificationKey_ed25519`、拡張署名鍵に `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32` を使用します。Bursa は従来の `ConstitutionalCommitteeHotVerificationKeyShelley_ed25519` と `ConstitutionalCommitteeHotExtendedSigningKeyShelley_ed25519_bip32`、および非拡張の `ConstitutionalCommitteeHotSigningKey_ed25519` も読み込みます。そのため、既存のホット鍵ファイルも引き続き使用できます。
 
 ```
 ./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey
