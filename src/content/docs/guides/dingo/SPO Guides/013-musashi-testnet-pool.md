@@ -703,7 +703,7 @@ cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKe
 - `bksRegisteredIn` is the epoch your registration takes effect in. `cardano-cli` reports this epoch because the node does not expose the epoch the key was registered in. Note it: the key expires a fixed number of epochs after it (see Step 15).
 
 
-> 💡 The <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">Musashi Testnet Rewards Program</a> no longer accepts new pools. Pools already in the program report telemetry with <a href="https://metsuke-leios.play.dev.cardano.org/" target="_blank">Metsuke</a>, an agent built for the Haskell cardano-node that reads the node's Prometheus endpoint and its trace lines.
+> 💡 See the <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">Musashi Testnet Rewards Program</a> page for details. Pools in the program report telemetry with <a href="https://metsuke-leios.play.dev.cardano.org/" target="_blank">Metsuke</a>, an agent built for the Haskell cardano-node that reads the node's Prometheus endpoint and its trace lines.
 
 ***
 

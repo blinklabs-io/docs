@@ -703,7 +703,7 @@ cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKe
 - `bksRegisteredIn`は、登録が有効になるエポックです。ノードはキーが登録されたエポックを公開しないため、`cardano-cli`はこのエポックを報告します。この値を控えておいてください。キーはこのエポックから一定数のエポック後に失効します（ステップ15を参照）。
 
 
-> 💡 <a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">Musashiテストネット報酬プログラム</a>は新しいプールの受け付けを終了しています。すでにプログラムに参加しているプールは、<a href="https://metsuke-leios.play.dev.cardano.org/" target="_blank">Metsuke</a>でテレメトリを報告します。MetsukeはHaskell版cardano-node向けに作られたエージェントで、ノードのPrometheusエンドポイントとトレース行を読み取ります。
+> 💡 詳細は<a href="https://leios.cardano-scaling.org/docs/testnet/rewards-program" target="_blank">Musashiテストネット報酬プログラム</a>のページを参照してください。プログラムに参加しているプールは、<a href="https://metsuke-leios.play.dev.cardano.org/" target="_blank">Metsuke</a>でテレメトリを報告します。MetsukeはHaskell版cardano-node向けに作られたエージェントで、ノードのPrometheusエンドポイントとトレース行を読み取ります。
 
 ***
 
