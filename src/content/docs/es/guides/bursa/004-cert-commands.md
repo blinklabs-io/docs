@@ -121,8 +121,8 @@ El certificado de registro de pool registra un nuevo stake pool o actualiza un r
 > -  `--metadata-url`    URL de metadata del pool
 > -  `--metadata-hash`   Hash de metadata del pool (hex)
 > -  `--owner-stake-vkey` Archivo de clave de verificación de stake del propietario del pool (repetible)
-> -  `--relay-address`   Dirección del relay con puerto: `IPv4:puerto` o `[IPv6]:puerto` (repetible)
-> -  `--relay-host`      Nombre de host del relay: `nombre[:puerto]` (repetible)
+> -  `--relay-address`   Dirección del relay en formato `IPv4:port` o `[IPv6]:port` (repetible)
+> -  `--relay-host`      Nombre de host del relay en formato `name[:port]` (repetible)
 > -  `--relay-multi-host` Nombre DNS SRV del relay multi-host (repetible)
 
 Si no se proporciona `--owner-stake-vkey`, Bursa usa la clave de stake de `--reward-account` cuando la cuenta de recompensa incluye una clave de stake. Las cuentas de recompensa basadas en scripts requieren especificar explícitamente los propietarios mediante `--owner-stake-vkey`. Bursa emite los relays en este orden: dirección, host y multi-host.
@@ -190,7 +190,7 @@ El formato de salida es un sobre de texto JSON compatible con cardano-cli.
     --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
 
-Para generar la forma Conway con un depósito:
+Para generar un certificado Conway con un depósito:
 
 ```
 ./bursa cert stake-registration \
@@ -218,7 +218,7 @@ El formato de salida es un sobre de texto JSON compatible con cardano-cli.
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
 ```
 
-Para generar la forma Conway con un reembolso:
+Para generar un certificado Conway con un reembolso:
 
 ```
 ./bursa cert stake-deregistration \
