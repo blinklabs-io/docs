@@ -117,6 +117,7 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 
 # Mithril
 mithril:
@@ -186,6 +187,7 @@ EOF
 ```
 
 > 📝 既定で Mithril は `HTTPS` を必須とし、ローカル、プライベート、その他の非公開の接続先を拒否します。Mithril v2 ブートストラップは、設定したアグリゲーターまたは公式 Mithril GCS オリジン（`storage.googleapis.com`）からのアーティファクトとリダイレクトのみを受け入れます。ダウンロード全体と展開の安全性を検査し、展開前に署名付き付属データの事前検証を行い、認証済みの台帳内容のみを使用します。`mithril.allowInsecureHttp: true` はローカル開発やテストに限って設定し、本番環境では有効にしないでください。
+> 📝 UTxO RPC リスナーは、デフォルトで `127.0.0.1` にバインドされます。リモートアクセスを許可する場合は、`plugins.api.utxorpc.config.host` を明示的に設定してください。
 
 > `debugPort`を`0`に置きます プロファイリングが要求されなければ。 `debugPort`は別の任意pprofのリスナーを制御し、プロファイリングが要求されなければ無効にとどまるべきです。
 
@@ -217,6 +219,7 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 midnight:
   # Enable the Midnight gRPC server. Default: false.
   serverEnabled: false
@@ -245,6 +248,9 @@ midnight:
 REST ヒント: `network` 設定は、次の値をサポートしています。
 
 ```yaml
+# Dijkstra テストネット（ネットワークマジック 6）
+network: dijkstra
+
 # Musashi (Leios) testnet
 network: musashi
 
