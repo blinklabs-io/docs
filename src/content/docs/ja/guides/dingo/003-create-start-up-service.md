@@ -172,7 +172,7 @@ databaseLifecycle:
   # Windows: the current user or BUILTIN\\Administrators must own it; the process
   # must belong to Administrators when applicable, and the DACL must restrict access.
   # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust-key"
-  # Cloud mirroring requires this trust key and an already authenticated manifest.
+  # Cloud mirroring requires an acceptable configured trust key and an already authenticated manifest.
   # Keep only the most recent automatic snapshots.
   # Default: 0.
   snapshotRetention: 0
