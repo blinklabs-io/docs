@@ -8,7 +8,7 @@ Dingo publishes container images to GitHub Container Registry. The versioned
   example uses Dingo `v0.88.0`:
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.87.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.88.0
 ```
 
 ## Start a Preview node
@@ -24,7 +24,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.87.0
+    ghcr.io/blinklabs-io/dingo:0.88.0
 ```
 
 Port `3001` accepts Ouroboros node-to-node connections. Metrics on `12798` and
