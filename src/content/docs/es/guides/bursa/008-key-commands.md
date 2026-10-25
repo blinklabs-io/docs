@@ -59,7 +59,7 @@ Los ejemplos guardan las claves de firma en archivos explícitos con formato de 
 
 ### Formato de archivo de clave de firma
 
-Cuando Bursa exporta una clave de firma que sigue una ruta HD, escribe un sobre extendido Ed25519-BIP32. Los archivos de firma de las claves raíz, cuenta, pago, stake, política, multifirma y Calidus usan tipos de sobre como `*_ExtendedSigningKeyShelley_ed25519_bip32` y CBOR de 128 bytes que comienza con `5880`. Los archivos antiguos no extendidos usan CBOR de 32 bytes que comienza con `5820`. Las claves de gobernanza usan los tipos específicos descritos en sus respectivas secciones.
+Cuando Bursa exporta una clave de firma que sigue una ruta HD, escribe un sobre extendido Ed25519-BIP32. Los archivos de firma de las claves raíz, cuenta, pago, stake, política, multifirma y Calidus usan tipos de sobre como `*_ExtendedSigningKeyShelley_ed25519_bip32` y CBOR de 128 bytes que comienza con `5880`. Los archivos antiguos no extendidos usan CBOR de 32 bytes que comienza con `5820`. Las claves de gobernanza usan los tipos específicos descritos en sus respectivas secciones; Bursa también carga sus nombres heredados con sufijo `Shelley` y las variantes compatibles de claves de firma no extendidas.
 
 Las nuevas exportaciones de pool-cold usan un sobre Ed25519 estándar no extendido con el tipo `StakePoolSigningKey_ed25519`. El sobre de verificación correspondiente usa `StakePoolVerificationKey_ed25519`. Al cargar archivos, Bursa acepta los tipos heredados `StakePoolSigningKeyShelley_ed25519` y `StakePoolVerificationKeyShelley_ed25519`, pero no los reescribe automáticamente. La clave de verificación exportada de pool-cold es la identidad Ed25519 estándar que usan los certificados operativos. La representación extendida opcional de pool-cold conserva la misma identidad del pool.
 
@@ -173,9 +173,9 @@ Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo cali
 ### Par de claves VRF (función aleatoria verificable)
 Las claves VRF son usadas por los operadores de stake pool para la elección de líder en el protocolo de consenso Praos. La semilla se deriva determinísticamente de la mnemónica, lo que permite la recuperación de la clave.
 
-Con `--signing-key-file -`, la salida estándar incluye tanto la clave de firma (`vrf_sk`) como la clave de verificación (`vrf_vk`) en formato bech32. La salida `vrf_sk` usa un cuerpo de 64 bytes formado por la semilla seguida de la clave pública.
+Con `--signing-key-file -`, la salida estándar incluye tanto la clave de firma (`vrf_sk`) como la clave de verificación (`vrf_vk`) en formato bech32. La salida `vrf_sk` usa el mismo cuerpo de 64 bytes que el sobre de firma: la semilla seguida de la clave pública.
 
-Los sobres de clave de verificación y de firma usan, respectivamente, los tipos `VrfVerificationKey_PraosVRF` y `VrfSigningKey_PraosVRF`. El cuerpo de la clave de firma usa el formato de 64 bytes formado por la semilla seguida de la clave pública.
+Los sobres de clave de verificación y de firma usan, respectivamente, los tipos `VrfVerificationKey_PraosVRF` y `VrfSigningKey_PraosVRF`.
 
 Antes de exportar o cargar material de `VRF`, Bursa valida las longitudes requeridas. La clave de verificación `vrf_vk` debe tener la longitud esperada. La clave de firma `vrf_sk` debe usar un formato de semilla aceptado: una semilla de 32 bytes o una semilla de 32 bytes seguida de su clave pública, para un total de 64 bytes. En el segundo formato, Bursa comprueba que la clave pública incluida coincide con la identidad derivada de la semilla. Si el material tiene una longitud incorrecta o esa identidad no coincide, Bursa rechaza la entrada y no genera un sobre.
 
@@ -228,7 +228,7 @@ La clave DRep sigue la ruta CIP-0105: m/1852'/1815'/account'/3/index
 Estas claves se usan para participación en gobernanza como Representante Delegado.
 Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo drep_xsk).
 
-Los archivos generados usan los tipos `DRepVerificationKey_ed25519` y `DRepExtendedSigningKey_ed25519_bip32`. Bursa sigue cargando los nombres heredados con sufijo `Shelley` y las variantes compatibles de claves de firma no extendidas, por lo que los archivos existentes continúan funcionando.
+Los archivos generados usan los tipos `DRepVerificationKey_ed25519` y `DRepExtendedSigningKey_ed25519_bip32`.
 
 ```bash
 ./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
@@ -251,7 +251,7 @@ La clave fría del comité sigue la ruta CIP-0105: m/1852'/1815'/account'/4/inde
 Estas claves se usan para la membresía en el Comité Constitucional (identidad a largo plazo).
 Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo cc_cold_xsk).
 
-Los archivos generados usan los tipos `ConstitutionalCommitteeColdVerificationKey_ed25519` y `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32`. Bursa sigue cargando los nombres heredados con sufijo `Shelley` y las variantes compatibles de claves de firma no extendidas, por lo que los archivos existentes continúan funcionando.
+Los archivos generados usan los tipos `ConstitutionalCommitteeColdVerificationKey_ed25519` y `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32`.
 
 ```bash
 ./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
@@ -274,7 +274,7 @@ La clave caliente del comité sigue la ruta CIP-0105: m/1852'/1815'/account'/5/i
 Estas claves se usan para votación del Comité Constitucional (clave operacional).
 Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo cc_hot_xsk).
 
-Los archivos generados usan los tipos `ConstitutionalCommitteeHotVerificationKey_ed25519` y `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32`. Bursa sigue cargando los nombres heredados con sufijo `Shelley` y las variantes compatibles de claves de firma no extendidas, por lo que los archivos existentes continúan funcionando.
+Los archivos generados usan los tipos `ConstitutionalCommitteeHotVerificationKey_ed25519` y `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32`.
 
 ```bash
 ./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey
