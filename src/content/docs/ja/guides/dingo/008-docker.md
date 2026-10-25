@@ -3,10 +3,10 @@ title: コンテナで Dingo を実行する
 description: 公開された Dingo イメージを実行し、データを永続化してノードの状態を確認します。
 ---
 
-Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.87.0` を使用します。
+Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.88.1` を使用します。
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.87.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.88.1
 ```
 
 <a id="start-a-preview-node"></a>
@@ -22,7 +22,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.87.0
+    ghcr.io/blinklabs-io/dingo:0.88.1
 ```
 
 ポート `3001` は Ouroboros のノード間接続を受け付けます。この例では、メトリクスの `12798` とヘルスエンドポイントの `12799` をホストのループバックインターフェイスに公開します。イメージは既定でメトリクスをコンテナのループバックにバインドするため、`DINGO_METRICS_BIND_ADDR=0.0.0.0` で上書きして、ホストから公開メトリクスポートに接続できるようにします。ホスト側の公開先は `127.0.0.1` のままです。ネットワークごとに別々の名前付きボリュームを使用してください。
@@ -40,7 +40,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.87.0 \
+     ghcr.io/blinklabs-io/dingo:0.88.1 \
   --config /tmp/dingo.yaml serve
 ```
 
