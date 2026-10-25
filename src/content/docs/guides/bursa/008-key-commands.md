@@ -229,7 +229,7 @@ The DRep key follows CIP-0105 path: m/1852'/1815'/account'/3/index
 These keys are used for governance participation as a Delegated Representative.  
 With `--signing-key-file -`, standard output uses bech32 format (drep_xsk prefix).
 
-Generated verification key files use the envelope type `DRepVerificationKey_ed25519`, and signing key files use `DRepExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Bursa envelope names for DRep keys, so existing key files remain usable.
+Generated verification key files use the envelope type `DRepVerificationKey_ed25519`, and signing key files use `DRepExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Shelley-suffixed Bursa envelope names for DRep keys, so existing key files remain usable.
 
 ```
 ./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
@@ -252,7 +252,7 @@ The committee cold key follows CIP-0105 path: m/1852'/1815'/account'/4/index
 These keys are used for Constitutional Committee membership (long-term identity).  
 With `--signing-key-file -`, standard output uses bech32 format (cc_cold_xsk prefix).
 
-Generated verification key files use the envelope type `ConstitutionalCommitteeColdVerificationKey_ed25519`, and signing key files use `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Bursa envelope names for constitutional committee cold keys, so existing key files remain usable.
+Generated verification key files use the envelope type `ConstitutionalCommitteeColdVerificationKey_ed25519`, and signing key files use `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Shelley-suffixed Bursa envelope names for constitutional committee cold keys, so existing key files remain usable.
 
 ```
 ./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
@@ -275,7 +275,7 @@ The committee hot key follows CIP-0105 path: m/1852'/1815'/account'/5/index
 These keys are used for Constitutional Committee voting (operational key).  
 With `--signing-key-file -`, standard output uses bech32 format (cc_hot_xsk prefix).
 
-Generated verification key files use the envelope type `ConstitutionalCommitteeHotVerificationKey_ed25519`, and signing key files use `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Bursa envelope names for constitutional committee hot keys, so existing key files remain usable.
+Generated verification key files use the envelope type `ConstitutionalCommitteeHotVerificationKey_ed25519`, and signing key files use `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Shelley-suffixed Bursa envelope names for constitutional committee hot keys, so existing key files remain usable.
 
 ```
 ./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey
