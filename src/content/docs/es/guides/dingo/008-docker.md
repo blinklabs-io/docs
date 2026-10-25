@@ -20,7 +20,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.87.0
+    ghcr.io/blinklabs-io/dingo:0.88.0
 ```
 
 El puerto `3001` acepta conexiones Ouroboros de nodo a nodo. En este ejemplo, las métricas del puerto `12798` y el servicio de estado del puerto `12799` se publican en la interfaz de loopback del host. De forma predeterminada, la imagen mantiene las métricas en el loopback del contenedor, por lo que `DINGO_METRICS_BIND_ADDR=0.0.0.0` permite acceder desde el host al puerto de métricas publicado, mientras que el extremo del host permanece limitado a `127.0.0.1`. Utiliza un volumen con nombre distinto para cada red.
