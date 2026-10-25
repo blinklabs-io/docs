@@ -127,7 +127,7 @@ The pool registration certificate registers a new stake pool or updates an exist
 > -  `--relay-host`        Relay host name in `name[:port]` format (repeatable)
 > -  `--relay-multi-host`  Relay multi-host DNS SRV name (repeatable)
 
-When no `--owner-stake-vkey` is supplied, Bursa uses the stake key from
+When the command omits `--owner-stake-vkey`, Bursa uses the stake key from
 `--reward-account` when the reward account provides a stake key. A script reward
 account requires at least one explicit `--owner-stake-vkey`.
 
@@ -187,7 +187,7 @@ Optional input:
 
 > - `--deposit <lovelace>`  Deposit amount that selects the Conway registration form
 
-When `--deposit` is omitted, Bursa writes the Shelley registration form (type 0).
+When the command omits `--deposit`, Bursa writes the Shelley registration form (type 0).
 When the command includes `--deposit`, Bursa writes the Conway registration form
 (type 7) with the specified deposit. Supplying `--deposit 0` also selects the
 Conway form.
@@ -218,7 +218,7 @@ Optional input:
 
 > - `--deposit-refund <lovelace>`  Refund amount that selects the Conway deregistration form
 
-When `--deposit-refund` is omitted, Bursa writes the Shelley deregistration form
+When the command omits `--deposit-refund`, Bursa writes the Shelley deregistration form
 (type 1). When the command includes `--deposit-refund`, Bursa writes the Conway
 deregistration form (type 8) with the specified refund. Supplying
 `--deposit-refund 0` also selects the Conway form.
