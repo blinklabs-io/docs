@@ -125,7 +125,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 すべての Dingo v0.88.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
-Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNet用の組み込みCardanoネットワーク構成（genesisファイル、config.json）を備えています。DijkstraNetを選択するには、`network: "dijkstra"` を設定します。DijkstraNetのネットワークマジックは `6` です。これらを別々にダウンロードする必要はありません。
+Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 
 dingo ディレクトリに `dingo.yaml` ファイルを作成します。`$HOME` 変数は、自動的にホームディレクトリパスに展開します。
 
@@ -254,7 +254,7 @@ plugins:
         host: "127.0.0.1"
 ```
 
-> 組み込み UTxO RPC リスナーは、ルートの `bindAddr` により広いアドレスを設定しても、デフォルトでループバックの `127.0.0.1` で待ち受けます。リモートアクセスには、`plugins.api.utxorpc.config.host` に目的のインターフェースを明示的に設定します。
+> デフォルトでは、組み込み UTxO RPC リスナーは、ルートの `bindAddr` により広いアドレスを設定しても、ループバックの `127.0.0.1` で待ち受けます。リモートアクセスを許可するには、`plugins.api.utxorpc.config.host` に接続を受け付けるインターフェースを明示的に設定します。
 
 > `midnight.serverEnabled: false` は、ミッドナイト gRPC リスナーを無効に保ちます。`midnight.port` を単独で設定することはそれを露出しません。
 
