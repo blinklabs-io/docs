@@ -39,7 +39,7 @@ bursa-wallet
 
 The desktop build opens a native window. The headless build serves the wallet interface at <http://127.0.0.1:8090>; open that address in a browser. The wallet binds to loopback on `127.0.0.1:8090`.
 
-The first launch synchronizes the embedded node. The default `mithril` mode uses a Mithril snapshot when the selected network has Mithril aggregator configuration. When the selected network has no Mithril aggregator configuration, the wallet skips Mithril bootstrap and syncs from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
+The first launch synchronizes the embedded node. By default, `mithril` mode uses a Mithril snapshot when the selected network has Mithril aggregator configuration. If the selected network lacks Mithril aggregator configuration, the wallet skips Mithril bootstrap and syncs from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
 
 Run the wallet on a selected network with the long command-line flag:
 
