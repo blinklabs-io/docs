@@ -163,7 +163,7 @@ connections from another host or interface.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Remote or non-loopback access requires an explicit host. |
+| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Remote access or access from outside loopback requires an explicit host. |
 
 ### Blockfrost provider
 
