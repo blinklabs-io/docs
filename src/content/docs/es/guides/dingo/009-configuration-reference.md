@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.87.1"
-description: Referencia y ejemplo completo de configuración de Dingo v0.87.1.
+title: "Referencia de configuración de Dingo v0.88.0"
+description: Referencia y ejemplo completo de configuración de Dingo v0.88.0.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.87.1. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.87.1](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.88.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.88.0](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -212,6 +212,10 @@ Dingo mantiene desactivada la recolección del registro de valores tanto en `loa
 | Archivo de clave de confianza | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | Vacío de forma predeterminada. Debe ser un archivo regular, sin enlace simbólico, de al menos 16 bytes y no más de 1024 bytes. |
 
 En Unix, el archivo debe pertenecer al usuario actual y no conceder acceso al grupo ni a otros usuarios. Windows admite al usuario actual o a `BUILTIN\Administrators` como propietario si el proceso pertenece a ese grupo. La DACL solo puede incluir al propietario, `Administrators`, `SYSTEM`, `Creator Owner` y `Owner Rights`, además de la ACE local restringida de `Administrator` cuando `Administrators` sea el propietario. Dingo rechaza los archivos no válidos al autenticar instantáneas y en cualquier operación de ciclo de vida que necesite la clave.
+
+Al activar la duplicación de instantáneas en la nube, proporciona una clave de confianza aceptable. Dingo rechaza las instantáneas heredadas sin firma para la duplicación en la nube; no las autentica automáticamente.
+
+Las restauraciones locales sin clave requieren una ubicación privada y de confianza para la instantánea en Unix, y un manifiesto autenticado en Windows. Consulta la guía de arranque y mantenimiento de datos para realizar las comprobaciones operativas necesarias.
 
 ### Servicio remoto de ciclo de vida de Bark
 
