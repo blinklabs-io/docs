@@ -190,7 +190,7 @@ Optional input:
 When the command omits `--deposit`, Bursa writes the Shelley registration form (type 0).
 When the command includes `--deposit`, Bursa writes the Conway registration form
 (type 7) with the specified deposit. Supplying `--deposit 0` also selects the
-Conway form.
+An explicit `--deposit 0` value also selects the Conway form.
 
 Output format is a cardano-cli compatible JSON text envelope.
 
@@ -221,7 +221,7 @@ Optional input:
 When the command omits `--deposit-refund`, Bursa writes the Shelley deregistration form
 (type 1). When the command includes `--deposit-refund`, Bursa writes the Conway
 deregistration form (type 8) with the specified refund. Supplying
-`--deposit-refund 0` also selects the Conway form.
+An explicit `--deposit-refund 0` value also selects the Conway form.
 
 Output format is a cardano-cli compatible JSON text envelope.
 
