@@ -217,8 +217,17 @@ socketPath: \"$DINGO_HOME/dingo.socket\"
 
 # Path to the topology configuration file for Cardano node
 topology: \"$DINGO_HOME/config/topology.json\"
+
+# Mempool: 25 MiB, the Leios size. Dingo v0.88.0 keeps the 1 MiB
+# default on Musashi, which fills and expires transactions.
+plugins:
+  mempool:
+    config:
+      capacity: 26214400
 EOF"
 ```
+
+> 💡 El bloque `plugins.mempool` aumenta el mempool del valor por defecto de Dingo, 1 MiB, a 25 MiB, el tamaño que Dingo usa para Leios. Con 1 MiB el mempool se llena en Musashi y las transacciones expiran antes de incluirse.
 
 Puedes ver y verificar el archivo `dingo.yaml` ejecutando:
 
@@ -751,6 +760,13 @@ shelleyOperationalCertificate: \"$DINGO_HOME/keys/node.cert\"
 
 # Leios voting: the BLS key registered with your pool in Step 9
 leiosVoteSigningKeyFile: \"$DINGO_HOME/keys/bls.skey\"
+
+# Mempool: 25 MiB, the Leios size. Dingo v0.88.0 keeps the 1 MiB
+# default on Musashi, which fills and expires transactions.
+plugins:
+  mempool:
+    config:
+      capacity: 26214400
 EOF"
 ```
 
