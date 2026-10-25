@@ -37,7 +37,7 @@ Go に書かれている Cardano ブロックチェーンノードは、ミニ�
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.1/dingo-v0.88.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 実行中のバイナリの動作を確認することができます。
