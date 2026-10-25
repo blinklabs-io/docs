@@ -308,8 +308,9 @@ owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
 the restricted local `Administrator` ACE when `Administrators` owns the file.
 Dingo rejects an invalid file during snapshot authentication and during any
 lifecycle operation that needs the trust key.
-Cloud snapshot mirroring requires an acceptable trust key. Dingo rejects
-unsigned legacy snapshots instead of automatically signing them for mirroring.
+Operators must provide an acceptable trust key to enable cloud snapshot
+mirroring. Dingo rejects unsigned legacy snapshots instead of automatically
+signing them for mirroring.
 
 Unkeyed local restores require a private and trusted snapshot location on Unix
 or an authenticated manifest on Windows. See the bootstrap and data maintenance
