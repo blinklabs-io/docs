@@ -158,13 +158,12 @@ corroboration, or patience selection.
 
 ### UTxO RPC provider
 
-The built-in UTxO RPC provider listens on loopback by default. Set its host
-explicitly when a deployment must accept connections from another host or
-interface.
+Configure the host explicitly when a deployment must accept UTxO RPC
+connections from another host or interface.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Set the host explicitly for non-loopback or remote access. |
+| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Remote or non-loopback access requires an explicit host. |
 
 ### Blockfrost provider
 
@@ -188,12 +187,11 @@ mutation limits. When either limit is exhausted, it returns HTTP `429` with
 
 ### Shared outbound HTTP user agent
 
-The shared outbound HTTP user agent uses the built-in value unless the
-environment supplies a valid override.
+The shared outbound HTTP user agent has no YAML key or CLI flag.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Shared HTTP user agent | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` by default. Dingo uses a valid environment value when supplied and ignores an invalid value. Component-specific `userAgent` settings for off-chain metadata and token registry take precedence. |
+| Shared HTTP user agent | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` by default. Dingo uses a valid value from this environment variable when set and ignores an invalid value. Component-specific `userAgent` settings for off-chain metadata and token registry take precedence. |
 
 ### LocalStateQuery snapshot lifetime
 
