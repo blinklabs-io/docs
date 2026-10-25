@@ -119,6 +119,16 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 
 Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genesis チェーン選択を無効にします。`genesisBootstrap` が有効で、交差ポイントなしに起点から起動した場合も同じです。この場合、Dingo は Genesis の密度、裏付け確認、patience による選択を適用せず、Cardano の設定に従います。
 
+<a id="utxorpc-provider"></a>
+
+### UTxO RPC プロバイダー
+
+別のホストまたはインターフェイスから UTxO RPC 接続を受け入れる必要がある場合は、ホストを明示的に設定します。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
+| --- | --- | --- | --- | --- |
+| ホスト | `plugins.api.utxorpc.config.host` | — | — | 既定値は `127.0.0.1` です。ループバック以外からアクセスするには、ホストを明示的に設定します。 |
+
 <a id="blockfrost-provider"></a>
 
 ### Blockfrost プロバイダー
@@ -133,6 +143,16 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | 既定値は `1` です。正の値かつ `maxConcurrentMutations` 以下である必要があり、1 つのリモートアドレスからの処理を制限します。 |
 
 `authToken` を設定し、ループバック以外で待ち受ける場合は、`plugins.api.blockfrost.config.tls` でサーバー TLS を設定します。Dingo はサーバー TLS なしの認証付き変更アクセスでの起動を拒否します。認証後、本文を読む前に両方の変更操作制限を適用し、どちらかの空きがない場合は、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。
+
+<a id="shared-outbound-http-user-agent"></a>
+
+### 共有アウトバウンド HTTP ユーザーエージェント
+
+共有アウトバウンド HTTP ユーザーエージェントには YAML キーや CLI フラグがありません。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
+| --- | --- | --- | --- | --- |
+| 共有 HTTP ユーザーエージェント | — | — | `DINGO_HTTP_USER_AGENT` | 既定値は `dingo/<version> (<GOOS>/<GOARCH>)` です。この環境変数に有効な値を設定するとその値を使用し、無効な値は無視します。オフチェーンメタデータとトークンレジストリのコンポーネント固有の `userAgent` 設定が優先されます。 |
 
 <a id="localstatequery-snapshot-lifetime"></a>
 
