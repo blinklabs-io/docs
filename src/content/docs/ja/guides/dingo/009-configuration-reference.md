@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.87.1 設定リファレンス
-description: Dingo v0.87.1 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.88.0 設定リファレンス
+description: Dingo v0.88.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.87.1 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example)にあります。同じファイルは [Dingo v0.87.1 のソース](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.88.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.88.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -248,9 +248,11 @@ Badger プロバイダーで `plugins.storage.blob.config.gc` を `true` に設�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
-| スナップショット信頼鍵ファイル | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | 既定では空です。指定するファイルは 16 バイト以上 1024 バイト以下の通常ファイルで、シンボリックリンクではない必要があります。 |
+| スナップショット信頼鍵ファイル | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | 既定では空です。指定するファイルは 16 バイト以上 1024 バイト以下の通常ファイルで、シンボリックリンクではない必要があります。クラウドスナップショットミラーリングを有効にする場合は、受け入れ可能な信頼鍵を指定してください。 |
 
-Unix では、ファイルは現在のユーザーの所有で、グループや他のユーザーに権限を付与していない必要があります。Windows では、所有者は現在のユーザー、またはプロセスが所属する `BUILTIN\Administrators` である必要があります。DACL に含められるのは、所有者、`Administrators`、`SYSTEM`、`Creator Owner`、`Owner Rights` のみです。`Administrators` が所有する場合は、制限されたローカル `Administrator` ACE も含められます。スナップショット認証時、および信頼鍵が必要なライフサイクル操作時に、不正なファイルを拒否します。
+Unix では、ファイルは現在のユーザーの所有で、グループや他のユーザーに権限を付与していない必要があります。Windows では、所有者は現在のユーザー、またはプロセスが所属する `BUILTIN\Administrators` である必要があります。DACL に含められるのは、所有者、`Administrators`、`SYSTEM`、`Creator Owner`、`Owner Rights` のみです。`Administrators` が所有する場合は、制限されたローカル `Administrator` ACE も含められます。スナップショット認証時、および信頼鍵が必要なライフサイクル操作時に、不正なファイルを拒否します。Dingo は、信頼鍵で認証されていない従来のスナップショットをミラーリング用に自動署名せず、拒否します。ミラーリングするには、信頼鍵を使用してスナップショットを作成し直してください。
+
+信頼鍵を使用しないローカル復元では、Unix ではプライベートで信頼できるスナップショット場所が必要です。Windows では認証済みマニフェストが必要です。所有権、権限、ACL、パスを確認する運用手順については、ブートストラップとデータ保守ガイドを参照してください。
 
 <a id="bark-remote-lifecycle-service"></a>
 
