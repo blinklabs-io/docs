@@ -210,7 +210,7 @@ midnight:
 
 📝 Dingo inicia los servicios Blockfrost, Mesh y UTxO RPC únicamente en modo de almacenamiento API. El servicio `gRPC` de Midnight también requiere modo `API`, `midnight.serverEnabled: true` y un `midnight.port` distinto de cero. Un puerto `0` desactiva esa API.
 
-📝 UTxO RPC escucha en `127.0.0.1` de forma predeterminada, independientemente de `bindAddr`. Para permitir acceso remoto, establece explícitamente `plugins.api.utxorpc.config.host` con el host requerido.
+📝 De forma predeterminada, UTxO RPC escucha en `127.0.0.1`, independientemente de `bindAddr`. Para habilitar el acceso remoto, configura explícitamente `plugins.api.utxorpc.config.host` con el host correspondiente.
 
 📝 `midnight.serverEnabled` controla explícitamente el servidor `gRPC` y lo mantiene apagado cuando vale false. `midnight.enabled` controla la indexación de forma independiente: el servidor puede servir filas Midnight persistidas sin ejecutar el indexador. `midnight.reflectionEnabled` requiere `midnight.serverEnabled`.
 
