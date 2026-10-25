@@ -191,9 +191,9 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
 > オプションの入力:
-> -  `--deposit <lovelace>`  デポジット額。指定するとConway形式 (type 7) を選択します。
+> -  `--deposit <lovelace>`  デポジット額。値を指定するとConway形式 (type 7) を選択します。
 
-`--deposit`を省略するとShelley形式 (type 0) を選択します。`--deposit 0`のように`0`を明示的に指定した場合も、指定済みとしてConway形式 (type 7) を選択します。
+`--deposit`を省略するとShelley形式 (type 0) を選択します。`--deposit`に値を指定するとConway形式 (type 7) を選択し、`--deposit 0`のように`0`を明示した場合もConway形式 (type 7) を選択します。
 
 > ⚠️ 以下のパスを調整してください。
 
@@ -223,9 +223,9 @@ Conway形式でデポジットを指定する例:
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
 > オプションの入力:
-> -  `--deposit-refund <lovelace>`  デポジット返金額。指定するとConway形式 (type 8) を選択します。
+> -  `--deposit-refund <lovelace>`  デポジット返金額。値を指定するとConway形式 (type 8) を選択します。
 
-`--deposit-refund`を省略するとShelley形式 (type 1) を選択します。`--deposit-refund 0`のように`0`を明示的に指定した場合も、指定済みとしてConway形式 (type 8) を選択します。
+`--deposit-refund`を省略するとShelley形式 (type 1) を選択します。`--deposit-refund`に値を指定するとConway形式 (type 8) を選択し、`--deposit-refund 0`のように`0`を明示した場合もConway形式 (type 8) を選択します。
 
 > ⚠️ 以下のパスを調整してください。
 
