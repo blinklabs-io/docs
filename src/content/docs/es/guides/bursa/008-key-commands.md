@@ -41,14 +41,11 @@ Bursa permite derivar claves individuales a partir de una mnemónica y generar m
 
 Guía de línea de comandos de Bursa para derivar claves individuales a partir de una mnemónica y para generar material BLS de Dijkstra para el registro de stake pools.
 
-**La mnemónica se puede proporcionar mediante:**
-  1. Bandera --mnemonic
-  2. Variable de entorno MNEMONIC
-  3. Bandera --mnemonic-file
-  4. Archivo por defecto "seed.txt"
-<br>
+Use `--mnemonic-file seed.txt` para leer la mnemónica desde un archivo o `--mnemonic-file -` para leerla desde la entrada estándar. Las fuentes de mnemónica se consultan en este orden: `--mnemonic` (obsoleto), variable de entorno `MNEMONIC`, `--mnemonic-file` y archivo predeterminado `seed.txt`. Los argumentos `--mnemonic` y `--password` están obsoletos porque otros usuarios locales pueden ver los argumentos del proceso; use `--mnemonic-file` y `--password-file` en su lugar. Para una contraseña de derivación opcional, use `--password-file <ruta>`; `-` lee la entrada estándar, pero ambos secretos no pueden usarla en el mismo comando.
 
-> Bursa genera las claves derivadas a partir de una mnemónica según los estándares CIP de Cardano y en formato bech32 adecuado para usar con cardano-cli y otras herramientas.
+Los ejemplos guardan las claves de firma en archivos explícitos con formato de sobre JSON de cardano-cli. Para los comandos de derivación, `--signing-key-file -` solicita explícitamente la salida de material secreto en formato bech32 por la salida estándar. Omitir el destino de firma produce un error, salvo cuando el comando admite y recibe solo `--verification-key-file`. Los comandos root y account requieren un destino de firma. No combine `--signing-key-file -` con `--verification-key-file`.
+
+> Las claves se derivan según los estándares CIP de Cardano. Los archivos usan sobres de cardano-cli; la salida estándar solicitada explícitamente usa bech32.
 >
 > **Rutas de derivación por tipo de clave:**
 > -  CIP-1852: root, account, payment, stake (m/1852'/1815'/...)
@@ -74,9 +71,9 @@ No intente reparar un archivo de firma HD antiguo cambiando únicamente el campo
 
 ### Clave raíz
 La clave raíz es la clave maestra a partir de la cual se derivan todas las demás claves.
-La salida es en formato bech32 (prefijo root_xsk) a menos que se especifique --signing-key-file.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo root_xsk).
 ```bash
-./bursa key root --mnemonic "word1 word2 ..."
+./bursa key root --mnemonic-file seed.txt --signing-key-file root.skey
 ```
 
 **Ejemplo de clave raíz con archivo de clave de firma:**
@@ -84,7 +81,7 @@ La salida es en formato bech32 (prefijo root_xsk) a menos que se especifique --s
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key root --signing-key-file /path/root.skey
+./bursa key root --mnemonic-file seed.txt --signing-key-file /path/root.skey
 ```
 
 ***
@@ -93,10 +90,10 @@ La salida es en formato bech32 (prefijo root_xsk) a menos que se especifique --s
 
 ### Clave de Cuenta
 La clave de cuenta sigue la ruta CIP-1852: m/1852'/1815'/account'
-La salida es en formato bech32 (prefijo acct_xsk) a menos que se especifique --signing-key-file.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo acct_xsk).
 
 ```bash
-./bursa key account --mnemonic "word1 word2 ..." --index 0
+./bursa key account --mnemonic-file seed.txt --index 0 --signing-key-file account.skey
 ```
 
 ***
@@ -105,9 +102,9 @@ La salida es en formato bech32 (prefijo acct_xsk) a menos que se especifique --s
 
 ### Clave de Pago
 La clave de pago sigue la ruta CIP-1852: m/1852'/1815'/account'/0/index
-La salida es en formato bech32 (prefijo addr_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo addr_xsk).
 ```bash
-./bursa key payment --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key payment --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file payment.skey --verification-key-file payment.vkey
 ```
 
 ***
@@ -116,9 +113,9 @@ La salida es en formato bech32 (prefijo addr_xsk) a menos que se especifiquen ar
 
 ### Clave de Stake
 La clave de stake sigue la ruta CIP-1852: m/1852'/1815'/account'/2/index
-La salida es en formato bech32 (prefijo stake_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo stake_xsk).
 ```bash
-./bursa key stake --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key stake --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file stake.skey --verification-key-file stake.vkey
 ```
 
 ***
@@ -128,9 +125,9 @@ La salida es en formato bech32 (prefijo stake_xsk) a menos que se especifiquen a
 ### Clave fría de pool
 La clave fría de pool sigue la ruta CIP-1853: m/1853'/1815'/0'/index'
 Estas claves se usan como las claves de identidad a largo plazo para los operadores de stake pool.
-La salida es en formato bech32 (prefijo pool_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo pool_xsk).
 ```bash
-./bursa key pool-cold --mnemonic "word1 word2 ..." --index 0
+./bursa key pool-cold --mnemonic-file seed.txt --index 0 --signing-key-file pool-cold.skey --verification-key-file pool-cold.vkey
 ```
 
 ***
@@ -140,9 +137,9 @@ La salida es en formato bech32 (prefijo pool_xsk) a menos que se especifiquen ar
 ### Clave de política
 La clave de política sigue la ruta CIP-1855: m/1855'/1815'/policy_ix'
 Estas claves se usan para políticas de acuñación/quema de activos nativos.
-La salida es en formato bech32 (prefijo policy_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo policy_xsk).
 ```bash
-./bursa key policy --mnemonic "word1 word2 ..." --index 0
+./bursa key policy --mnemonic-file seed.txt --index 0 --signing-key-file policy.skey --verification-key-file policy.vkey
 ```
 
 ***
@@ -155,10 +152,10 @@ m/1852'/1815'/account'/0/index
 
 La clave es funcionalmente idéntica a la clave de pago, pero usa diferentes prefijos bech32 (calidus_xsk/calidus_xvk) y diferentes tipos de sobre de texto de cardano-cli para propósitos de identidad SPO.
 
-La salida es en formato bech32 (prefijo calidus_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo calidus_xsk).
 
 ```bash
-./bursa key calidus --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key calidus --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file calidus.skey --verification-key-file calidus.vkey
 ```
 
 **Ejemplo de Clave Calidus con Archivos de Clave**
@@ -166,7 +163,7 @@ La salida es en formato bech32 (prefijo calidus_xsk) a menos que se especifiquen
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key calidus --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
+./bursa key calidus --mnemonic-file seed.txt --signing-key-file /path/calidus.skey --verification-key-file /path/calidus.vkey
 ```
 
 ***
@@ -176,12 +173,12 @@ La salida es en formato bech32 (prefijo calidus_xsk) a menos que se especifiquen
 ### Par de claves VRF (función aleatoria verificable)
 Las claves VRF son usadas por los operadores de stake pool para la elección de líder en el protocolo de consenso Praos. La semilla se deriva determinísticamente de la mnemónica, lo que permite la recuperación de la clave.
 
-La salida incluye tanto la clave de firma (vrf_sk) como la clave de verificación (vrf_vk) en formato bech32, a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar incluye tanto la clave de firma (vrf_sk) como la clave de verificación (vrf_vk) en formato bech32.
 
 Antes de exportar o cargar material de `VRF`, Bursa valida las longitudes requeridas. La clave de verificación `vrf_vk` debe tener la longitud esperada. La clave de firma `vrf_sk` debe usar un formato de semilla aceptado: una semilla sola o una semilla seguida de su clave pública. En el segundo formato, Bursa comprueba que la clave pública incluida coincide con la identidad derivada de la semilla. Si el material tiene una longitud incorrecta o esa identidad no coincide, Bursa rechaza la entrada y no genera un sobre.
 
 ```bash
-./bursa key vrf --mnemonic "word1 word2 ..." --index 0
+./bursa key vrf --mnemonic-file seed.txt --index 0 --signing-key-file vrf.skey --verification-key-file vrf.vkey
 ```
 
 **Ejemplo de VRF con Archivos de Clave**
@@ -189,7 +186,7 @@ Antes de exportar o cargar material de `VRF`, Bursa valida las longitudes requer
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key vrf --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
+./bursa key vrf --mnemonic-file seed.txt --signing-key-file /path/vrf.skey --verification-key-file /path/vrf.vkey
 ```
 
 ***
@@ -202,12 +199,12 @@ Las claves KES son usadas por los operadores de stake pool para firma de bloques
 Esta implementación usa la profundidad 6 de Cardano, proporcionando 64 períodos de tiempo.
 La semilla se deriva determinísticamente de la mnemónica, lo que permite la recuperación de la clave.
 
-La salida incluye tanto la clave de firma (kes_sk, 608 bytes) como la clave de verificación (kes_vk, 32 bytes) en formato bech32, a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar incluye tanto la clave de firma (kes_sk, 608 bytes) como la clave de verificación (kes_vk, 32 bytes) en formato bech32.
 
 Antes de exportar o cargar material de `KES`, Bursa valida las longitudes requeridas. La clave de verificación `kes_vk` debe tener la longitud esperada. La clave de firma `kes_sk` debe usar la profundidad de Cardano KES y el tamaño de clave secreta esperados. Bursa rechaza el material con longitudes malformadas, una profundidad KES inválida o un tamaño de clave secreta inválido, y no genera un sobre.
 
 ```bash
-./bursa key kes --mnemonic "word1 word2 ..." --index 0
+./bursa key kes --mnemonic-file seed.txt --index 0 --signing-key-file kes.skey --verification-key-file kes.vkey
 ```
 
 **Ejemplo de Clave KES con Archivos de Clave**
@@ -215,7 +212,7 @@ Antes de exportar o cargar material de `KES`, Bursa valida las longitudes requer
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key kes --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
+./bursa key kes --mnemonic-file seed.txt --signing-key-file /path/kes.skey --verification-key-file /path/kes.vkey
 ```
 
 ***
@@ -225,10 +222,10 @@ Antes de exportar o cargar material de `KES`, Bursa valida las longitudes requer
 ### Clave DRep
 La clave DRep sigue la ruta CIP-0105: m/1852'/1815'/account'/3/index
 Estas claves se usan para participación en gobernanza como Representante Delegado.
-La salida es en formato bech32 (prefijo drep_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo drep_xsk).
 
 ```bash
-./bursa key drep --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
 ```
 
 **Ejemplo de Clave DRep con Archivos de Clave**
@@ -236,7 +233,7 @@ La salida es en formato bech32 (prefijo drep_xsk) a menos que se especifiquen ar
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key drep --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
+./bursa key drep --mnemonic-file seed.txt --signing-key-file /path/drep.skey --verification-key-file /path/drep.vkey
 ```
 
 ***
@@ -246,10 +243,10 @@ La salida es en formato bech32 (prefijo drep_xsk) a menos que se especifiquen ar
 ### Clave fría del Comité Constitucional
 La clave fría del comité sigue la ruta CIP-0105: m/1852'/1815'/account'/4/index
 Estas claves se usan para la membresía en el Comité Constitucional (identidad a largo plazo).
-La salida es en formato bech32 (prefijo cc_cold_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo cc_cold_xsk).
 
 ```bash
-./bursa key committee-cold --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
 ```
 
 **Ejemplo de clave fría del Comité Constitucional con archivos de clave**
@@ -257,7 +254,7 @@ La salida es en formato bech32 (prefijo cc_cold_xsk) a menos que se especifiquen
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key committee-cold --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
+./bursa key committee-cold --mnemonic-file seed.txt --signing-key-file /path/committee-cold.skey --verification-key-file /path/committee-cold.vkey
 ```
 
 ***
@@ -267,10 +264,10 @@ La salida es en formato bech32 (prefijo cc_cold_xsk) a menos que se especifiquen
 ### Clave caliente del Comité Constitucional
 La clave caliente del comité sigue la ruta CIP-0105: m/1852'/1815'/account'/5/index
 Estas claves se usan para votación del Comité Constitucional (clave operacional).
-La salida es en formato bech32 (prefijo cc_hot_xsk) a menos que se especifiquen archivos de clave.
+Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo cc_hot_xsk).
 
 ```bash
-./bursa key committee-hot --mnemonic "word1 word2 ..." --account-index 0 --index 0
+./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey
 ```
 
 **Ejemplo de clave caliente del Comité Constitucional con archivos de clave**
@@ -278,7 +275,7 @@ La salida es en formato bech32 (prefijo cc_hot_xsk) a menos que se especifiquen 
 > Por favor ajusta la ruta a continuación.
 
 ```bash
-./bursa key committee-hot --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
+./bursa key committee-hot --mnemonic-file seed.txt --signing-key-file /path/committee-hot.skey --verification-key-file /path/committee-hot.vkey
 ```
 
 ***
@@ -317,6 +314,9 @@ Explora otros comandos de Bursa
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
 > 8. [key](#key)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica y generar material BLS de Dijkstra
+> 9. [tx](../003-commands#tx) - Comandos para firmar transacciones y ensamblar testigos
+> 10. [sign](../003-commands#sign) - Comandos para firmar datos con CIP-8
+> 11. [signer](../003-commands#signer) - Comandos para ejecutar el servicio de firma remota
 
 ***
 
