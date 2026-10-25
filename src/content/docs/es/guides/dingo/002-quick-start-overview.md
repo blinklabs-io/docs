@@ -22,7 +22,7 @@ Descarga la última versión desde [GitHub](https://github.com/blinklabs-io/ding
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Comprueba que el binario funcione:
