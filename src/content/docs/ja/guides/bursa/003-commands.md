@@ -111,9 +111,9 @@ http://localhost:8080/swagger/index.html
 
 `tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。
 
-`tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`babbage` や `conway` など、CLIが受け付ける値を指定してください。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
+`tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`--era` には、たとえば `babbage` または `conway` を指定します。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
 
-入力が `Tx ConwayEra` のような era を宣言するJSONテキストエンベロープであれば、`--era` を省略してもその宣言から era を解決します。era を宣言しない生のCBORまたはeraなしの入力は、1つの era に明確に解決できる場合だけ `--era` なしで使用できます。`--era` の値と入力エンベロープが宣言する era が一致しない場合、コマンドはエラーになります。
+入力が `Tx ConwayEra` のような era を宣言するJSONテキストエンベロープであれば、`--era` を省略してもその宣言から era を解決します。生のCBORやeraを宣言しない入力は、CBORを1つの era にだけ明確に解決できる場合に限り、`--era` なしで使用できます。`--era` の値と入力エンベロープが宣言する era が一致しない場合、コマンドはエラーになります。
 
 ```sh
 ./bursa tx decode --tx-file unsigned.tx
