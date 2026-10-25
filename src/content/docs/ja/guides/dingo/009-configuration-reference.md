@@ -123,11 +123,11 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 
 ### UTxO RPC プロバイダー
 
-別のホストまたはインターフェイスから UTxO RPC 接続を受け入れる必要がある場合は、ホストを明示的に設定します。
+UTxO RPC 接続を別のホストまたはインターフェイスから受け入れる場合は、ホストを明示的に設定します。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| ホスト | `plugins.api.utxorpc.config.host` | — | — | 既定値は `127.0.0.1` です。ループバック以外からアクセスするには、ホストを明示的に設定します。 |
+| ホスト | `plugins.api.utxorpc.config.host` | — | — | 既定値は `127.0.0.1` です。ループバック以外からアクセスする場合は、ホストを明示的に設定します。 |
 
 <a id="blockfrost-provider"></a>
 
@@ -148,11 +148,11 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 
 ### 共有アウトバウンド HTTP ユーザーエージェント
 
-共有アウトバウンド HTTP ユーザーエージェントには YAML キーや CLI フラグがありません。
+共有アウトバウンド HTTP ユーザーエージェントには YAML キーも CLI フラグもありません。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| 共有 HTTP ユーザーエージェント | — | — | `DINGO_HTTP_USER_AGENT` | 既定値は `dingo/<version> (<GOOS>/<GOARCH>)` です。この環境変数に有効な値を設定するとその値を使用し、無効な値は無視します。オフチェーンメタデータとトークンレジストリのコンポーネント固有の `userAgent` 設定が優先されます。 |
+| 共有 HTTP ユーザーエージェント | — | — | `DINGO_HTTP_USER_AGENT` | 既定値は `dingo/<version> (<GOOS>/<GOARCH>)` です。環境変数に有効な値を設定すると、その値を使用します。無効な値は無視します。オフチェーンメタデータとトークンレジストリのコンポーネント固有の `userAgent` 設定が優先されます。 |
 
 <a id="localstatequery-snapshot-lifetime"></a>
 
