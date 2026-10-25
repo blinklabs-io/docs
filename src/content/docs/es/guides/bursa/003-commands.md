@@ -123,7 +123,7 @@ Repite `--signing-key-file` para añadir varios firmantes. Para sesiones de firm
 
 Repite `--witness-file` para incluir más testigos. La firma, la creación de testigos y el ensamblado escriben sobres de texto JSON en `--out-file`, o en la salida estándar si se omite. La era resuelta determina el tipo del sobre de salida y la codificación del conjunto de testigos.
 
-`tx sign`, `tx witness` y `tx assemble` admiten la opción `--era`, con valores como `babbage` y `conway`. Bursa resuelve la era a partir de un sobre JSON tipado, del valor explícito de `--era` o de un CBOR sin era cuando este se decodifica de forma inequívoca. Si el CBOR sin era puede corresponder a más de una era, el comando falla; la operación requiere `--era` o un sobre cuyo tipo declare la era, como `Tx ConwayEra`. Si `--era` contradice la era declarada por el sobre, el comando también falla.
+`tx sign`, `tx witness` y `tx assemble` admiten la opción `--era`, con valores como `babbage` y `conway`. Bursa resuelve la era a partir de un sobre JSON tipado, del valor explícito de `--era` o de un CBOR sin era cuando este se decodifica de forma inequívoca. Si el CBOR sin era puede corresponder a más de una era, el comando falla y exige `--era` o un sobre cuyo tipo declare la era, como `Tx ConwayEra`. Si `--era` contradice la era declarada por el sobre, el comando también falla.
 
 ```sh
 ./bursa tx sign --tx-file unsigned.tx --era conway \
