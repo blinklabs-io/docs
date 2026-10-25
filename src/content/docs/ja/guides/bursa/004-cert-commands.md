@@ -127,6 +127,12 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 >オプションの入力:
 > -  `--metadata-url`    プールメタデータURL
 > -  `--metadata-hash`   プールメタデータハッシュ (hex)
+> -  `--owner-stake-vkey`  プール所有者のステーク検証キー ファイル (繰り返し指定可)
+> -  `--relay-address`    リレーのIPアドレスとポート (`IPv4:port` または `[IPv6]:port`) (繰り返し指定可)
+> -  `--relay-host`       リレーホスト名と任意のポート (`name[:port]`) (繰り返し指定可)
+> -  `--relay-multi-host` リレーのマルチホストDNS SRV名 (繰り返し指定可)
+
+`--owner-stake-vkey`を指定しない場合、`--reward-account`がステークキーを持つ報酬アカウントであれば、そのステークキーを所有者として使用します。スクリプト報酬アカウントにはステークキーがないため、`--owner-stake-vkey`で所有者のステーク検証キーを明示的に指定する必要があります。リレーはアドレス、ホスト、マルチホストの順に出力します。
 
 出力形式はcardano-cli証明書と互換性があります。
 
@@ -139,6 +145,16 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --reward-account stake1... \
     --metadata-url "https://example.com/pool.json" \
     --metadata-hash "abc123..." --out pool-reg.cert
+```
+
+所有者とリレーを指定する例:
+
+```
+./bursa cert pool-registration \
+    --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
+    --pledge 500000000 --cost 340000000 --margin 0.05 \
+    --reward-account stake1... --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 --out pool-reg.cert
 ```
 
 ***
@@ -174,11 +190,24 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
+> オプションの入力:
+> -  `--deposit <lovelace>`  デポジット額。指定するとConway形式 (type 7) を選択します。
+
+`--deposit`を省略するとShelley形式 (type 0) を選択します。`--deposit 0`のように`0`を明示的に指定した場合も、指定済みとしてConway形式 (type 7) を選択します。
+
 > ⚠️ 以下のパスを調整してください。
 
 ```
 ./bursa cert stake-registration \
     --stake-vkey /path/stake.vkey --out stake-reg.cert
+```
+
+Conway形式でデポジットを指定する例:
+
+```
+./bursa cert stake-registration \
+    --stake-vkey /path/stake.vkey --deposit 2000000 \
+    --out stake-reg.cert
 ```
 
 ***
@@ -193,11 +222,24 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
+> オプションの入力:
+> -  `--deposit-refund <lovelace>`  デポジット返金額。指定するとConway形式 (type 8) を選択します。
+
+`--deposit-refund`を省略するとShelley形式 (type 1) を選択します。`--deposit-refund 0`のように`0`を明示的に指定した場合も、指定済みとしてConway形式 (type 8) を選択します。
+
 > ⚠️ 以下のパスを調整してください。
 
 ```
  ./bursa cert stake-deregistration \
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
+```
+
+Conway形式でデポジット返金額を指定する例:
+
+```
+./bursa cert stake-deregistration \
+    --stake-vkey /path/stake.vkey --deposit-refund 2000000 \
+    --out stake-dereg.cert
 ```
 
 ***
