@@ -263,7 +263,7 @@ plugins:
         host: "127.0.0.1"
 ```
 
-> 📝 The built-in UTxO RPC listener uses `127.0.0.1` by default, even when `bindAddr` uses a broader address. Set `plugins.api.utxorpc.config.host` explicitly to expose the listener on another interface for remote clients.
+> 📝 The built-in UTxO RPC listener stays on loopback (`127.0.0.1`) by default, even when the root `bindAddr` uses a broader address. Set `plugins.api.utxorpc.config.host` explicitly to expose it on another interface for remote clients.
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
