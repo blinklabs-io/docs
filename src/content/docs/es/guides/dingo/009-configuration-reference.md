@@ -215,7 +215,7 @@ En Unix, el archivo debe pertenecer al usuario actual y no conceder acceso al gr
 
 Al activar la duplicación de instantáneas en la nube, proporciona una clave de confianza válida. Dingo rechaza las instantáneas heredadas no firmadas para la duplicación en la nube; no las firma automáticamente.
 
-Las restauraciones locales sin clave requieren una ubicación privada y de confianza para la instantánea en Unix, y un manifiesto autenticado en Windows. Consulta la guía de arranque y mantenimiento de datos para realizar las comprobaciones operativas necesarias.
+Las restauraciones locales sin una clave de confianza requieren un directorio de instantáneas privado y de confianza en Unix, y un manifiesto autenticado en Windows. Consulta la guía de arranque y mantenimiento de datos para realizar las comprobaciones operativas necesarias.
 
 ### Servicio remoto de ciclo de vida de Bark
 
