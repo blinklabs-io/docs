@@ -110,6 +110,8 @@ plugins:
     utxorpc:
       provider: "builtin"
       config:
+        # UTxO RPC remains on loopback by default. For remote access, set plugins.api.utxorpc.config.host explicitly.
+        host: "127.0.0.1"
         port: 9090
 
 # Mithril
@@ -209,6 +211,8 @@ plugins:
     utxorpc:
       provider: "builtin"
       config:
+        # UTxO RPC remains on loopback by default. For remote access, set plugins.api.utxorpc.config.host explicitly.
+        host: "127.0.0.1"
         port: 9090
 midnight:
   # Enable the Midnight gRPC server. Default: false.
@@ -238,6 +242,9 @@ midnight:
 💡 Tip: The `network` setting supports the following values:
 
 ```yaml
+# Dijkstra testnet (network magic 6)
+network: dijkstra
+
 # Musashi (Leios) testnet
 network: musashi
 
