@@ -74,11 +74,11 @@ dingo database truncate --slot 12345678
 
 Para las operaciones que autentican instantáneas, `databaseLifecycle.snapshotTrustKeyFile` debe identificar un archivo regular de no más de 1024 bytes, cuyo componente final no sea un enlace simbólico. En Unix, el usuario del nodo debe ser su propietario y el archivo solo debe conceder acceso a ese propietario. En Windows, el propietario debe ser el usuario del nodo o `BUILTIN\Administrators`; en este último caso, el proceso debe pertenecer al grupo de administradores, y la DACL debe restringir el acceso a las identidades permitidas. La autenticación rechaza los archivos que no cumplan cualquiera de estos requisitos.
 
-Las operaciones de instantánea y restauración de MySQL rechazan `tls=skip-verify`. Consulta la referencia de configuración de Dingo para conocer los valores TLS predeterminados de los proveedores.
-
 Cuando una restauración local no utiliza una clave de confianza, Dingo solo acepta una instantánea ubicada en una ruta privada y de confianza. En Unix, Dingo comprueba la propiedad y los permisos de escritura del directorio de la instantánea, de los archivos requeridos y de todos los antecesores existentes de la ruta, incluidos los componentes que sean enlaces simbólicos. En Windows, una restauración local sin clave requiere un manifiesto autenticado. Si la ruta no cumple estas condiciones de privacidad, configura correctamente una clave de confianza o utiliza una instantánea con un manifiesto autenticado.
 
 El espejado en la nube requiere un manifiesto autenticado. Dingo no autentica automáticamente las instantáneas heredadas sin firma y no las espeja en la nube.
+
+Las operaciones de instantánea y restauración de MySQL rechazan `tls=skip-verify`. Consulta la referencia de configuración de Dingo para conocer los valores TLS predeterminados de los proveedores.
 
 `truncate` acepta exactamente un destino: `--slot`, `--hash` o `--block-number`. Elimina los bloques y metadatos posteriores a ese punto para que el nodo vuelva a sincronizar desde la nueva punta. Consulta todas las opciones con `dingo database --help` antes de ejecutar una recuperación. Dingo rechaza los destinos anteriores al límite de confianza de Mithril registrado, porque el historial UTxO necesario no está disponible localmente antes de ese punto. El truncado también puede fallar si la base de datos ya no conserva el historial de UTxO consumidos que requiere el destino. Si el historial local es insuficiente, utiliza una instantánea de la base de datos de un par completamente sincronizado que conserve el historial necesario.
 
