@@ -79,7 +79,7 @@ Then download and extract the release:
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 Verify the binary version, then copy it to `/usr/local/bin/` so it is accessible system-wide:

@@ -79,7 +79,7 @@ echo $DINGO_ARCH
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 バイナリのバージョンを確認してから、システム全体からアクセスできるように`/usr/local/bin/`にコピーします：
