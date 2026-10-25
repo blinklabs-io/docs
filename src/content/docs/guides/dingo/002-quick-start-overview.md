@@ -134,7 +134,7 @@ overrides, see the [configuration reference](/guides/dingo/009-configuration-ref
 Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
-Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Select DijkstraNet with `network: "dijkstra"`; its network magic is `6`.
+Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
@@ -263,7 +263,7 @@ plugins:
         host: "127.0.0.1"
 ```
 
-> 📝 The built-in UTxO RPC listener uses `127.0.0.1` by default, even when `bindAddr` uses a broader address. Set `plugins.api.utxorpc.config.host` explicitly to expose UTxO RPC to remote clients.
+> 📝 The built-in UTxO RPC listener uses `127.0.0.1` by default, even when `bindAddr` uses a broader address. Set `plugins.api.utxorpc.config.host` explicitly to expose the listener on another interface for remote clients.
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 
