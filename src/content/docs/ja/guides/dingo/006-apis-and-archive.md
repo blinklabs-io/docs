@@ -48,7 +48,7 @@ plugins:
       provider: builtin
       config:
         port: 9090
-         host: "127.0.0.1"
+        host: "127.0.0.1"
 ```
 
 <a id="blockfrost-mutation-requests"></a>
