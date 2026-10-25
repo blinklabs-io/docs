@@ -188,8 +188,9 @@ Optional input:
 > - `--deposit <lovelace>`  Deposit amount that selects the Conway registration form
 
 When `--deposit` is omitted, Bursa writes the Shelley registration form (type 0).
-When `--deposit` is supplied, Bursa writes the Conway registration form (type 7)
-with the specified deposit. Supplying `--deposit 0` also selects the Conway form.
+When the command includes `--deposit`, Bursa writes the Conway registration form
+(type 7) with the specified deposit. Supplying `--deposit 0` also selects the
+Conway form.
 
 Output format is a cardano-cli compatible JSON text envelope.
 
@@ -218,7 +219,7 @@ Optional input:
 > - `--deposit-refund <lovelace>`  Refund amount that selects the Conway deregistration form
 
 When `--deposit-refund` is omitted, Bursa writes the Shelley deregistration form
-(type 1). When `--deposit-refund` is supplied, Bursa writes the Conway
+(type 1). When the command includes `--deposit-refund`, Bursa writes the Conway
 deregistration form (type 8) with the specified refund. Supplying
 `--deposit-refund 0` also selects the Conway form.
 
