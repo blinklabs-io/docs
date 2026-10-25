@@ -619,7 +619,12 @@ cardano-cli dijkstra stake-address stake-delegation-certificate \
   --out-file delegation.cert
 ```
 
-Get the UTxO for `--tx-in`:
+Wait for the registration transaction to reach a block. Its input (`$TXIN` from Step 9) leaves your address once it does:
+```
+while cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -e --arg txin "$TXIN" 'has($txin)' > /dev/null; do sleep 5; done
+```
+
+Then get the UTxO for `--tx-in`:
 ```
 TXIN=$(cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -r 'keys[0]')
 ```
@@ -696,7 +701,7 @@ Check that your BLS key is registered:
 cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKey'
 ```
 
-- `bksKey.blsPubKey` should match your key. Compare it with your `bls.vkey` without its 4-character `5860` CBOR prefix:
+- The public key under `blsKey` should match your key. Compare it with your `bls.vkey` without its 4-character `5860` CBOR prefix:
   ```
   jq -r .cborHex bls.vkey | cut -c5-
   ```
@@ -856,10 +861,11 @@ cardano-cli dijkstra transaction submit --tx-file pool-rotate.signed
 Watch for the new registration epoch:
 
 ```
+POOL_ID=$(cardano-cli dijkstra stake-pool id --cold-verification-key-file cold.vkey --output-format hex)
 cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKey.bksRegisteredIn'
 ```
 
-Switch Dingo to the new key only after `bksRegisteredIn` shows the new epoch **and** the following epoch boundary has passed. Then set `leiosVoteSigningKeyFile` in `/etc/dingo/dingo.yaml` to `bls-new.skey`, make it readable only by your user (`chmod 600`), and restart Dingo with `sudo systemctl restart dingo`.
+Switch Dingo to the new key only after `bksRegisteredIn` shows the new epoch **and** the following epoch boundary has passed. Then set `leiosVoteSigningKeyFile` in `/etc/dingo/dingo.yaml` to the full path of the new key (print it with `echo $DINGO_HOME/keys/bls-new.skey`), make it readable only by your user (`chmod 600`), and restart Dingo with `sudo systemctl restart dingo`.
 
 ***
 

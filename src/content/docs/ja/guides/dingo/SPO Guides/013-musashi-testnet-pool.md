@@ -323,7 +323,7 @@ cardano-cli query tip
 
 > 先に進む前に、ノードが完全に同期していることを確認してください。`cardano-cli query tip`で`"syncProgress": "100.00"`と表示される必要があります。
 
-このセクションのコマンドは`dijkstra`エラを使用します。エラは`cardano-cli query tip`の`era`フィールドで確認してください。
+このセクションのコマンドは`dijkstra` era（時代）を使用します。eraは`cardano-cli query tip`の`era`フィールドで確認してください。
 
 ***
 
@@ -619,7 +619,12 @@ cardano-cli dijkstra stake-address stake-delegation-certificate \
   --out-file delegation.cert
 ```
 
-`--tx-in`に使用するUTxOを取得します：
+登録トランザクションがブロックに取り込まれるまで待ちます。取り込まれると、その入力（ステップ9の`$TXIN`）がアドレスから消えます：
+```
+while cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -e --arg txin "$TXIN" 'has($txin)' > /dev/null; do sleep 5; done
+```
+
+その後、`--tx-in`に使用するUTxOを取得します：
 ```
 TXIN=$(cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -r 'keys[0]')
 ```
@@ -696,7 +701,7 @@ BLSキーが登録されていることを確認します：
 cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKey'
 ```
 
-- `bksKey.blsPubKey`が自分のキーと一致するはずです。4文字のCBORプレフィックス`5860`を除いた`bls.vkey`と比較してください：
+- `blsKey`内の公開鍵が自分のキーと一致するはずです。4文字のCBORプレフィックス`5860`を除いた`bls.vkey`と比較してください：
   ```
   jq -r .cborHex bls.vkey | cut -c5-
   ```
@@ -856,10 +861,11 @@ cardano-cli dijkstra transaction submit --tx-file pool-rotate.signed
 新しい登録エポックを確認します：
 
 ```
+POOL_ID=$(cardano-cli dijkstra stake-pool id --cold-verification-key-file cold.vkey --output-format hex)
 cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKey.bksRegisteredIn'
 ```
 
-`bksRegisteredIn`に新しいエポックが表示され、**かつ**その次のエポック境界を過ぎてから、Dingoを新しいキーに切り替えてください。その後、`/etc/dingo/dingo.yaml`の`leiosVoteSigningKeyFile`を`bls-new.skey`に設定し、自分のユーザーだけが読み取れるようにして（`chmod 600`）、`sudo systemctl restart dingo`でDingoを再起動します。
+`bksRegisteredIn`に新しいエポックが表示され、**かつ**その次のエポック境界を過ぎてから、Dingoを新しいキーに切り替えてください。その後、`/etc/dingo/dingo.yaml`の`leiosVoteSigningKeyFile`を新しいキーのフルパス（`echo $DINGO_HOME/keys/bls-new.skey`で表示できます）に設定し、自分のユーザーだけが読み取れるようにして（`chmod 600`）、`sudo systemctl restart dingo`でDingoを再起動します。
 
 ***
 

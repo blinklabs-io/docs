@@ -619,7 +619,12 @@ cardano-cli dijkstra stake-address stake-delegation-certificate \
   --out-file delegation.cert
 ```
 
-Obtén el UTxO para `--tx-in`:
+Espera a que la transacción de registro entre en un bloque. Su entrada (`$TXIN` del Paso 9) desaparece de tu dirección cuando lo hace:
+```
+while cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -e --arg txin "$TXIN" 'has($txin)' > /dev/null; do sleep 5; done
+```
+
+Después obtén el UTxO para `--tx-in`:
 ```
 TXIN=$(cardano-cli dijkstra query utxo --address "$(cat payment.addr)" | jq -r 'keys[0]')
 ```
@@ -696,7 +701,7 @@ Comprueba que tu clave BLS está registrada:
 cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKey'
 ```
 
-- `bksKey.blsPubKey` debe coincidir con tu clave. Compárala con tu `bls.vkey` sin su prefijo CBOR `5860` de 4 caracteres:
+- La clave pública dentro de `blsKey` debe coincidir con tu clave. Compárala con tu `bls.vkey` sin su prefijo CBOR `5860` de 4 caracteres:
   ```
   jq -r .cborHex bls.vkey | cut -c5-
   ```
@@ -856,10 +861,11 @@ cardano-cli dijkstra transaction submit --tx-file pool-rotate.signed
 Vigila la nueva epoch de registro:
 
 ```
+POOL_ID=$(cardano-cli dijkstra stake-pool id --cold-verification-key-file cold.vkey --output-format hex)
 cardano-cli dijkstra query pool-state --stake-pool-id "$POOL_ID" | jq '.[].blsKey.bksRegisteredIn'
 ```
 
-Cambia Dingo a la nueva clave solo después de que `bksRegisteredIn` muestre la nueva epoch **y** haya pasado el siguiente límite de epoch. Después define `leiosVoteSigningKeyFile` en `/etc/dingo/dingo.yaml` como `bls-new.skey`, haz que solo tu usuario pueda leerla (`chmod 600`) y reinicia Dingo con `sudo systemctl restart dingo`.
+Cambia Dingo a la nueva clave solo después de que `bksRegisteredIn` muestre la nueva epoch **y** haya pasado el siguiente límite de epoch. Después define `leiosVoteSigningKeyFile` en `/etc/dingo/dingo.yaml` como la ruta completa de la nueva clave (muéstrala con `echo $DINGO_HOME/keys/bls-new.skey`), haz que solo tu usuario pueda leerla (`chmod 600`) y reinicia Dingo con `sudo systemctl restart dingo`.
 
 ***
 
