@@ -43,7 +43,7 @@ Para seleccionar una red de forma explícita, utiliza `--network` o su forma cor
 bursa-wallet --network musashi
 ```
 
-La billetera resuelve la red en este orden: `-n`/`--network`, después `BURSA_NETWORK` y, por último, `preview`. Las redes admitidas son `preview`, `preprod`, `mainnet`, `musashi` y `dijkstra`. La billetera rechaza los nombres de red desconocidos y los argumentos posicionales adicionales antes de crear el directorio de datos de la red.
+Bursa selecciona la red con esta precedencia: primero `-n`/`--network`, después `BURSA_NETWORK` y, cuando ninguno de los dos define una red, `preview`. Las redes admitidas son `preview`, `preprod`, `mainnet`, `musashi` y `dijkstra`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales antes de crear el directorio de datos de la red.
 
 La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en <http://127.0.0.1:8090>; abre esa dirección en el navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
