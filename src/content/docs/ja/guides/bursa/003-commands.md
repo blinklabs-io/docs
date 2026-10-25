@@ -111,10 +111,21 @@ http://localhost:8080/swagger/index.html
 
 `tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。
 
+`tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`babbage` や `conway` など、CLIが受け付ける値を指定してください。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
+
+入力が `Tx ConwayEra` のような era を宣言するJSONテキストエンベロープであれば、`--era` を省略してもその宣言から era を解決します。era を宣言しない生のCBORまたはeraなしの入力は、1つの era に明確に解決できる場合だけ `--era` なしで使用できます。`--era` の値と入力エンベロープが宣言する era が一致しない場合、コマンドはエラーになります。
+
 ```sh
 ./bursa tx decode --tx-file unsigned.tx
 ./bursa tx id --tx-file unsigned.tx
 ./bursa tx sign --tx-file unsigned.tx \
+  --signing-key-file dev/payment.skey --out-file signed.tx
+```
+
+CBORが複数の era で有効になる場合は、`--era` で era を明示します。
+
+```sh
+./bursa tx sign --tx-file unsigned.tx --era conway \
   --signing-key-file dev/payment.skey --out-file signed.tx
 ```
 
@@ -127,7 +138,7 @@ http://localhost:8080/swagger/index.html
   --witness-file payment.witness --out-file assembled.tx
 ```
 
-追加のウィットネスには `--witness-file` を繰り返します。署名、ウィットネス作成、結合はJSONテキストエンベロープを `--out-file` に書き出し、省略時は標準出力に表示します。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
+追加のウィットネスには `--witness-file` を繰り返します。署名、ウィットネス作成、結合はJSONテキストエンベロープを `--out-file` に書き出します。出力エンベロープの種類とウィットネスのエンコードは、入力または `--era` から解決した era に従います。`--out-file` を省略すると標準出力に表示します。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
 
 <a name="sign"></a>
 
