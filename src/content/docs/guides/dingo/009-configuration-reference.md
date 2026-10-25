@@ -156,6 +156,16 @@ the node starts from origin without an intersection point. Dingo follows the
 Cardano configuration in this case instead of applying Genesis density,
 corroboration, or patience selection.
 
+### UTxO RPC provider
+
+The built-in UTxO RPC provider listens on loopback by default. Set its host
+explicitly when a deployment must accept connections from another host or
+interface.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Set the host explicitly for non-loopback or remote access. |
+
 ### Blockfrost provider
 
 The built-in Blockfrost provider listens on loopback by default. Read-only API
@@ -175,6 +185,15 @@ refuses to start authenticated mutation access without server TLS. After
 authentication and before reading the request body, the provider applies both
 mutation limits. When either limit is exhausted, it returns HTTP `429` with
 `Retry-After: 1` without reading the body.
+
+### Shared outbound HTTP user agent
+
+The shared outbound HTTP user agent uses the built-in value unless the
+environment supplies a valid override.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Shared HTTP user agent | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` by default. Dingo uses a valid environment value when supplied and ignores an invalid value. Component-specific `userAgent` settings for off-chain metadata and token registry take precedence. |
 
 ### LocalStateQuery snapshot lifetime
 
