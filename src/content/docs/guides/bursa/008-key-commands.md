@@ -176,7 +176,7 @@ VRF keys are used by stake pool operators for leader election in the Praos conse
 
 With `--signing-key-file -`, standard output includes both the signing key (`vrf_sk`) and verification key (`vrf_vk`) in bech32 format.
 
-Generated verification key files use the envelope type `VrfVerificationKey_PraosVRF`, and signing key files use `VrfSigningKey_PraosVRF`. The signing key body contains 64 bytes: the 32-byte seed followed by the 32-byte public key. Standard-output `vrf_sk` uses the same seed-plus-public-key layout.
+Generated verification key files use the envelope type `VrfVerificationKey_PraosVRF`, and generated signing key files use `VrfSigningKey_PraosVRF`. The signing key body contains 64 bytes: a 32-byte seed followed by a 32-byte public key. Standard output encodes `vrf_sk` with the same seed-plus-public-key layout.
 
 ```
 ./bursa key vrf --mnemonic-file seed.txt --index 0 --signing-key-file vrf.skey --verification-key-file vrf.vkey
