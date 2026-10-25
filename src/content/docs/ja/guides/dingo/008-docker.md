@@ -3,10 +3,10 @@ title: コンテナで Dingo を実行する
 description: 公開された Dingo イメージを実行し、データを永続化してノードの状態を確認します。
 ---
 
-Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.87.0` を使用します。
+Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.88.0` を使用します。
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.87.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.88.0
 ```
 
 <a id="start-a-preview-node"></a>
