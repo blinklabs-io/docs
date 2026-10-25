@@ -49,7 +49,7 @@ bursa-wallet
 bursa-wallet --network musashi
 ```
 
-ネットワークの選択は、`-n` または `--network`、`BURSA_NETWORK`、`preview` の順に適用します。対応するネットワーク名は `preview`、`preprod`、`mainnet`、`musashi`、`dijkstra` です。未知のネットワーク名や末尾の位置引数を指定すると、ネットワークのデータディレクトリを作成する前に起動が失敗します。
+ネットワークは、`-n` または `--network`、`BURSA_NETWORK`、`preview` の順に選択します。対応するネットワーク名は `preview`、`preprod`、`mainnet`、`musashi`、`dijkstra` です。未知のネットワーク名や、ネットワーク以外の引数を末尾に指定すると、ネットワークのデータディレクトリを作成する前に起動が失敗します。
 
 デスクトップ版はネイティブウィンドウを開きます。ヘッドレス版は <http://127.0.0.1:8090> にインターフェイスを提供するので、ブラウザーで開いてください。ウォレットはループバックの `127.0.0.1:8090` にバインドします。
 
@@ -63,7 +63,7 @@ bursa-wallet --network musashi
 
 | 変数 | 既定値 | 動作 |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | CLI でネットワークフラグを指定しない場合に、Cardano ネットワークとそのデータディレクトリを選択します。 |
+| `BURSA_NETWORK` | `preview` | コマンドラインでネットワークフラグを指定しない場合に、Cardano ネットワークとそのデータディレクトリを選択します。 |
 | `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。 |
 | `BURSA_LEAN` | `false` | 過去のチェーンデータを削除してディスク使用量を減らす lean ストレージを有効にします。 |
 | `BURSA_CONNECTOR` | `false` | dApp コネクターバックエンドを有効にします。 |
