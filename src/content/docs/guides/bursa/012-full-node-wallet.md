@@ -39,7 +39,15 @@ bursa-wallet
 
 The desktop build opens a native window. The headless build serves the wallet interface at <http://127.0.0.1:8090>; open that address in a browser. The wallet binds to loopback on `127.0.0.1:8090`.
 
-The first launch synchronizes the embedded node. The default `mithril` mode bootstraps from a Mithril snapshot instead of replaying the chain from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
+The first launch synchronizes the embedded node. The default `mithril` mode uses a Mithril snapshot when the selected network has Mithril aggregator configuration. When the selected network has no Mithril aggregator configuration, the wallet skips Mithril bootstrap and syncs from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
+
+Select a network with the long or short command-line flag:
+
+```bash
+bursa-wallet --network musashi
+```
+
+`-n` is the short form of `--network`. The wallet resolves the network in this order: `-n` or `--network`, then `BURSA_NETWORK`, then `preview`. Supported network names are `preview`, `preprod`, `mainnet`, `musashi`, and `dijkstra`. The wallet rejects unknown network names and trailing positional arguments before it creates a per-network data directory.
 
 ## Configuration
 
@@ -47,7 +55,7 @@ Set environment variables before the first launch to seed the wallet configurati
 
 | Variable | Default | Operational effect |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selects the Cardano network and its data directory. |
+| `BURSA_NETWORK` | `preview` | Selects the Cardano network and its data directory when no `-n` or `--network` flag is provided. |
 | `BURSA_SYNC` | `mithril` | Uses `genesis` to replay the chain from its beginning instead of bootstrapping from a Mithril snapshot. |
 | `BURSA_LEAN` | `false` | Enables lean storage, which prunes historical chain data to reduce disk usage. |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
