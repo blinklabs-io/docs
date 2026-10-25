@@ -110,6 +110,7 @@ plugins:
     utxorpc:
       provider: "builtin"
       config:
+        # UTxO RPC remains on loopback by default. For remote access, set plugins.api.utxorpc.config.host explicitly.
         host: "127.0.0.1"
         port: 9090
 
@@ -210,7 +211,6 @@ plugins:
     utxorpc:
       provider: "builtin"
       config:
-        # UTxO RPC remains on loopback by default. For remote access, set plugins.api.utxorpc.config.host explicitly.
         host: "127.0.0.1"
         port: 9090
 midnight:
