@@ -41,13 +41,13 @@ The desktop build opens a native window. The headless build serves the wallet in
 
 The first launch synchronizes the embedded node. The default `mithril` mode uses a Mithril snapshot when the selected network has Mithril aggregator configuration. When the selected network has no Mithril aggregator configuration, the wallet skips Mithril bootstrap and syncs from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
 
-Select a network with the long or short command-line flag:
+Run the wallet on a selected network with the long command-line flag:
 
 ```bash
 bursa-wallet --network musashi
 ```
 
-`-n` is the short form of `--network`. The wallet resolves the network in this order: `-n` or `--network`, then `BURSA_NETWORK`, then `preview`. Supported network names are `preview`, `preprod`, `mainnet`, `musashi`, and `dijkstra`. The wallet rejects unknown network names and trailing positional arguments before it creates a per-network data directory.
+`-n` is the short form of `--network`. The wallet resolves the network in this order: `-n`/`--network`, then `BURSA_NETWORK`, then `preview`. Supported network names are `preview`, `preprod`, `mainnet`, `musashi`, and `dijkstra`. The wallet rejects unknown network names and trailing positional arguments before creating a per-network data directory.
 
 ## Configuration
 
