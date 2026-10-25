@@ -223,7 +223,7 @@ plugins:
         host: "127.0.0.1"
 ```
 
-📝 Dingo establece el listener integrado de UTxO RPC en `127.0.0.1` de forma predeterminada, aunque `bindAddr` raíz tenga un alcance más amplio. Para permitir el acceso remoto, configura explícitamente `plugins.api.utxorpc.config.host` con la interfaz deseada.
+📝 El servicio integrado de UTxO RPC escucha en `127.0.0.1` de forma predeterminada, aunque `bindAddr` raíz tenga un alcance más amplio. Para permitir el acceso remoto, configura explícitamente `plugins.api.utxorpc.config.host` con la interfaz deseada.
 
 💡 `midnight.serverEnabled: false` mantiene desactivado el servicio gRPC de Midnight; configurar únicamente `midnight.port` no lo expone.
 
