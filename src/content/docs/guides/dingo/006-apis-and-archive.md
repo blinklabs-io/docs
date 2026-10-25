@@ -101,10 +101,11 @@ provider options can change between versions.
 ## Secure API access
 
 The shared API bind address applies to the selected API providers, including
-Kupo. The built-in UTxO RPC listener defaults to `127.0.0.1`; set
-`plugins.api.utxorpc.config.host` explicitly to allow remote access. The
-`api.tls` and `api.auth` settings define shared defaults. A provider can
-override either policy under its own `plugins.api.<name>.config` block.
+Kupo. The built-in UTxO RPC listener uses `127.0.0.1` by default. Set
+`plugins.api.utxorpc.config.host` explicitly to allow remote access; a shared
+API bind address alone does not change this default. The `api.tls` and
+`api.auth` settings define shared defaults. A provider can override either
+policy under its own `plugins.api.<name>.config` block.
 Provider-specific TLS settings take precedence over the shared TLS defaults.
 Shared API authentication is disabled by default. The built-in Blockfrost
 mutation policy is separate: its mutation routes require the provider's
