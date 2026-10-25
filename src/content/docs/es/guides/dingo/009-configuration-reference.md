@@ -102,8 +102,6 @@ El ajuste `immutableDbPath` y el argumento posicional de `dingo load` aceptan un
 
 En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva la selección de cadena Genesis aunque `genesisBootstrap` esté activado y el nodo comience desde el origen sin punto de intersección. Dingo sigue la configuración Cardano en lugar de aplicar selección por densidad, corroboración o paciencia de Genesis.
 
-### Proveedor Blockfrost
-
 ### Proveedor UTxO RPC
 
 Configura el host explícitamente cuando una implementación deba aceptar conexiones UTxO RPC desde otro host o interfaz.
@@ -111,6 +109,8 @@ Configura el host explícitamente cuando una implementación deba aceptar conexi
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` de forma predeterminada. El acceso remoto o desde fuera de loopback requiere un host explícito. |
+
+### Proveedor Blockfrost
 
 El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada. Las solicitudes de solo lectura no están sujetas a los límites de admisión de modificaciones, aunque puede aplicarse la autenticación compartida de API si está configurada.
 
@@ -123,15 +123,15 @@ El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada
 
 Cuando `authToken` está configurado y el proveedor escucha fuera de loopback, configura TLS de servidor mediante `plugins.api.blockfrost.config.tls`. Dingo rechaza el inicio del acceso autenticado de modificación sin TLS. Tras autenticar y antes de leer el cuerpo, aplica ambos límites de modificaciones. Si alguno se agota, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
 
-### Duración de las instantáneas LocalStateQuery
-
 ### Agente de usuario HTTP saliente compartido
 
 El agente de usuario HTTP saliente compartido no tiene clave YAML ni opción CLI.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Agente de usuario HTTP compartido | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` de forma predeterminada. Dingo utiliza un valor válido de esta variable de entorno cuando se establece e ignora un valor no válido. Los ajustes `userAgent` específicos de componente para metadatos off-chain y el registro de tokens tienen prioridad. |
+| Agente de usuario HTTP compartido | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` de forma predeterminada. Dingo utiliza un valor válido de esta variable de entorno cuando se establece e ignora un valor no válido. Los ajustes `userAgent` específicos de componente para metadatos fuera de la cadena y el registro de tokens tienen prioridad. |
+
+### Duración de las instantáneas LocalStateQuery
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
 | --- | --- | --- | --- | --- | --- |
