@@ -104,7 +104,7 @@ En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva 
 
 ### Proveedor UTxO RPC
 
-Configura el host explícitamente cuando una implementación deba aceptar conexiones UTxO RPC desde otro host o interfaz.
+Configura explícitamente el host cuando el proveedor deba aceptar conexiones UTxO RPC desde otro host o interfaz.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
@@ -129,7 +129,7 @@ El agente de usuario HTTP saliente compartido no tiene clave YAML ni opción CLI
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Agente de usuario HTTP compartido | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` de forma predeterminada. Dingo utiliza un valor válido de esta variable de entorno cuando se establece e ignora un valor no válido. Los ajustes `userAgent` específicos de componente para metadatos fuera de la cadena y el registro de tokens tienen prioridad. |
+| Agente de usuario HTTP compartido | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` de forma predeterminada. Dingo utiliza un valor válido de esta variable de entorno cuando se establece e ignora un valor no válido. Los ajustes de `userAgent` específicos de cada componente para metadatos fuera de la cadena y el registro de tokens tienen prioridad sobre este valor. |
 
 ### Duración de las instantáneas LocalStateQuery
 
