@@ -125,7 +125,7 @@ El certificado de registro de pool registra un nuevo stake pool o actualiza un r
 > -  `--relay-host`      Nombre de host del relay: `nombre[:puerto]` (repetible)
 > -  `--relay-multi-host` Nombre DNS SRV del relay multi-host (repetible)
 
-Si no se proporciona `--owner-stake-vkey`, Bursa usa la clave de stake de `--reward-account` cuando esa cuenta de recompensa proporciona una clave de stake. Las cuentas de recompensa basadas en scripts requieren propietarios especificados explícitamente mediante `--owner-stake-vkey`. Bursa emite los relays en este orden: dirección, host y multi-host.
+Si no se proporciona `--owner-stake-vkey`, Bursa usa la clave de stake de `--reward-account` cuando la cuenta de recompensa incluye una clave de stake. Las cuentas de recompensa basadas en scripts requieren especificar explícitamente los propietarios mediante `--owner-stake-vkey`. Bursa emite los relays en este orden: dirección, host y multi-host.
 
 El formato de salida es compatible con certificados de cardano-cli.
 
@@ -181,7 +181,7 @@ Este certificado registra una dirección de stake on-chain, lo cual es requerido
 El formato de salida es un sobre de texto JSON compatible con cardano-cli.
 
 > Entradas opcionales:
-> - `--deposit <lovelace>` Cantidad del depósito en lovelace. Al proporcionar esta opción, Bursa genera la forma Conway (tipo 7); al omitirla, conserva la forma Shelley (tipo 0). Un valor explícito de `0` también selecciona la forma Conway.
+> - `--deposit <lovelace>` Cantidad del depósito en lovelace. Al proporcionar esta opción, Bursa genera el certificado Conway de tipo 7; al omitirla, genera el certificado Shelley de tipo 0. Un valor explícito de `0` también selecciona el certificado Conway.
 
 > Por favor ajusta la ruta a continuación.
 
@@ -209,7 +209,7 @@ Este certificado cancela el registro de una dirección de stake, devolviendo el 
 El formato de salida es un sobre de texto JSON compatible con cardano-cli.
 
 > Entradas opcionales:
-> - `--deposit-refund <lovelace>` Cantidad del reembolso del depósito en lovelace. Al proporcionar esta opción, Bursa genera la forma Conway (tipo 8); al omitirla, conserva la forma Shelley (tipo 1). Un valor explícito de `0` también selecciona la forma Conway.
+> - `--deposit-refund <lovelace>` Cantidad del reembolso del depósito en lovelace. Al proporcionar esta opción, Bursa genera el certificado Conway de tipo 8; al omitirla, genera el certificado Shelley de tipo 1. Un valor explícito de `0` también selecciona el certificado Conway.
 
 > Por favor ajusta la ruta a continuación.
 
