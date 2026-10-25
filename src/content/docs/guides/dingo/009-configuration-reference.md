@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.87.1 Configuration Reference
-description: Complete, release-specific Dingo v0.87.1 configuration reference and example.
+title: Dingo v0.88.0 Configuration Reference
+description: Complete, release-specific Dingo v0.88.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.87.1. The complete
+This page covers the configuration shipped with Dingo v0.88.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.87.1 source](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.88.0 source](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -308,6 +308,12 @@ owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
 the restricted local `Administrator` ACE when `Administrators` owns the file.
 Dingo rejects an invalid file during snapshot authentication and during any
 lifecycle operation that needs the trust key.
+Cloud snapshot mirroring requires an acceptable trust key. Dingo rejects
+unsigned legacy snapshots instead of automatically signing them for mirroring.
+
+Unkeyed local restores require a private and trusted snapshot location on Unix
+or an authenticated manifest on Windows. See the bootstrap and data maintenance
+guide for the required operational checks.
 
 ### Bark remote lifecycle service
 
