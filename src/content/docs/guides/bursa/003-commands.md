@@ -128,7 +128,7 @@ The `--era` option is available on `tx sign`, `tx witness`, and `tx assemble`. U
   --signing-key-file dev/payment.skey --out-file signed.tx
 ```
 
-Bursa can also resolve the era from an era-typed JSON text envelope, such as one with type `Tx ConwayEra`. Bursa accepts raw or era-less CBOR without `--era` only when it decodes unambiguously. If the input is ambiguous, provide `--era` or an era-typed envelope. If `--era` conflicts with the era declared by the input envelope, the command fails.
+Bursa resolves the era from an era-typed JSON text envelope, such as one with type `Tx ConwayEra`, when the flag is absent. Without `--era`, Bursa accepts raw or era-less CBOR only when it decodes unambiguously. Provide `--era` or an era-typed envelope when the input is ambiguous. The command fails when `--era` conflicts with the era declared by the input envelope.
 
 The resolved era controls the output envelope type and witness encoding.
 
