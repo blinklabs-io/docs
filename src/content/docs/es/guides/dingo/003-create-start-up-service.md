@@ -143,6 +143,7 @@ databaseLifecycle:
   # Set this when snapshotEnabled is true and when Bark mounts the live service.
   snapshotDir: "$HOME/dingo/snapshots"
   # Optional snapshot trust key used by snapshot authentication operations.
+  # Required when snapshotCloudDestination is configured.
   # When set, this must be a regular, non-symlink file no larger than 1 KiB.
   # Unix: the node user must own it, with no group or other permissions.
   # Windows: the current user or BUILTIN\\Administrators must own it; the process
@@ -166,7 +167,7 @@ EOF
 
 📝 `databaseLifecycle.snapshotEnabled` controla las instantáneas automáticas en los límites de época. Las instantáneas manuales mediante `dingo database snapshot` y `CreateSnapshot` de Bark siguen disponibles con `badger`, `s3` o `gcs` como proveedor principal de blobs. Si Bark también sirve restauraciones o truncados en vivo, configura `barkPort`, `databaseLifecycle.snapshotDir`, `barkClientCaFilePath` y `tlsCertFilePath`/`tlsKeyFilePath`.
 
-📝 Configura `databaseLifecycle.snapshotRetention` para conservar únicamente las instantáneas automáticas más recientes. `databaseLifecycle.snapshotCloudDestination` copia cada instantánea a S3 o GCS cuando Dingo se ejecuta con `dingo_extra_plugins`. Ese destino es independiente del proveedor principal de blobs.
+📝 Configura `databaseLifecycle.snapshotRetention` para conservar únicamente las instantáneas automáticas más recientes. `databaseLifecycle.snapshotCloudDestination` copia cada instantánea a S3 o GCS cuando Dingo se ejecuta con `dingo_extra_plugins`. La replicación en la nube requiere una clave de confianza de instantáneas aceptable en `snapshotTrustKeyFile` y un manifiesto ya autenticado. Dingo rechaza las instantáneas heredadas sin firma y no las firma ni las replica automáticamente. Ese destino es independiente del proveedor principal de blobs.
 
 📝 Usa `dingo database snapshot`, `dingo database restore <snapshot-dir>` y `dingo database truncate --slot <slot>`, `--hash <hash>` o `--block-number <n>` sobre un directorio de datos sin conexión. `restore` también acepta el mismo URI de nube que `snapshotCloudDestination` y lo descarga a un directorio temporal antes de restaurarlo.
 
