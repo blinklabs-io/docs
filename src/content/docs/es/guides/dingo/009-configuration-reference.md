@@ -213,7 +213,7 @@ Dingo mantiene desactivada la recolección del registro de valores tanto en `loa
 
 En Unix, el archivo debe pertenecer al usuario actual y no conceder acceso al grupo ni a otros usuarios. Windows admite al usuario actual o a `BUILTIN\Administrators` como propietario si el proceso pertenece a ese grupo. La DACL solo puede incluir al propietario, `Administrators`, `SYSTEM`, `Creator Owner` y `Owner Rights`, además de la ACE local restringida de `Administrator` cuando `Administrators` sea el propietario. Dingo rechaza los archivos no válidos al autenticar instantáneas y en cualquier operación de ciclo de vida que necesite la clave.
 
-Al activar la duplicación de instantáneas en la nube, proporciona una clave de confianza aceptable. Dingo rechaza las instantáneas heredadas sin firma para la duplicación en la nube; no las autentica automáticamente.
+Al activar la duplicación de instantáneas en la nube, proporciona una clave de confianza válida. Dingo rechaza las instantáneas heredadas no firmadas para la duplicación en la nube; no las firma automáticamente.
 
 Las restauraciones locales sin clave requieren una ubicación privada y de confianza para la instantánea en Unix, y un manifiesto autenticado en Windows. Consulta la guía de arranque y mantenimiento de datos para realizar las comprobaciones operativas necesarias.
 
