@@ -9,7 +9,7 @@ description: LocalMessageNotification クライアントのリプレイ ID 保�
 
 ## 概要
 
-`localmessagenotification.Config.MaxReplayEntries` は、クライアントが署名付きの有効期限まで保持する、受け入れ済みメッセージ ID の最大数を指定します。
+`localmessagenotification.Config.MaxReplayEntries` は、クライアントが保持する、受け入れ済みメッセージ ID の最大数を指定します。
 
 ## 設定
 
