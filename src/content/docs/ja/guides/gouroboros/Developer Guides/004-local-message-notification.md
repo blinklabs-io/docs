@@ -32,7 +32,7 @@ cfg := localmessagenotification.NewConfig(
 - 受け入れ済み ID が十分な数だけ期限切れになるまで、後続の返信も処理できません。
 
 ---
- 
+
 <!-- doc-holiday-watermark -->
 <p align="center">
   <a href="https://doc.holiday">
