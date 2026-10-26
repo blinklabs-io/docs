@@ -34,7 +34,7 @@ The trusted argument treatment applies only to the finite data values supplied t
 
 Use `RunScriptContext` to evaluate a script and report whether its result is unit without expanding or discharging the final result.
 
-Use `RunContextWithTrustedDataArguments` when the integration needs the full evaluated result. That path discharges the result and can return `ErrCodeResultTooLarge` after evaluation succeeds when the result exceeds the discharge limits.
+Use `RunContextWithTrustedDataArguments` when the integration needs the full evaluated result. That path discharges the result and can return `ErrCodeResultTooLarge` after evaluation succeeds when the result exceeds the discharge limits. `RunScriptContext` avoids this separate discharge error when only unit status is required.
 
 Before evaluation, call `data.Normalize` on decoded datum and redeemer values that become visible to the script. Normalization deep copies container values and resets their definite or indefinite CBOR encoding style to the package defaults; without it, decoded encoding metadata can produce serialized bytes that differ from the reference behavior.
 
