@@ -17,13 +17,13 @@ cfg := localmessagenotification.NewConfig(
 )
 ```
 
-Si se omite `WithMaxReplayEntries` o se establece su valor en `0`, el cliente utiliza `126976`. Un valor positivo establece explícitamente el máximo de identificadores aceptados que el cliente puede conservar. Este valor pertenece a `LocalMessageNotification` y no cambia el límite `10,000` de `LocalMessageSubmission`.
+Cuando el código omite `WithMaxReplayEntries` o establece su valor en `0`, el cliente utiliza `126976`. Un valor positivo configura explícitamente el máximo de identificadores aceptados que el cliente puede conservar. Este valor pertenece a `LocalMessageNotification` y no cambia el límite `10,000` de `LocalMessageSubmission`.
 
 ## Límite y caducidad
 
 `Config.MaxReplayEntries` cuenta los identificadores de mensajes aceptados que el cliente conserva hasta la hora de caducidad firmada de cada mensaje. El cliente no expulsa un identificador aceptado antes de que caduque para crear espacio para otro.
 
-El valor predeterminado `126976` representa `31` mensajes sin caducar por cada uno de `4096` grupos de participación. El cliente utiliza este valor cuando `MaxReplayEntries` vale `0` o no se especifica.
+El valor predeterminado `126976` representa `31` mensajes sin caducar por cada uno de `4096` grupos de participación.
 
 ## Desbordamiento de capacidad
 
