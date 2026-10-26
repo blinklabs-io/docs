@@ -32,7 +32,7 @@ El evaluador trata como argumentos de confianza únicamente los valores de datos
 
 ## Integración del evaluador
 
-Las integraciones deben usar `RunScriptContext` cuando solo necesiten clasificar el resultado del script como `unit` o no `unit`. Esta ruta evalúa el script y comprueba el estado `unit` sin expandir ni descargar el resultado final. `RunContextWithTrustedDataArguments` sigue siendo apropiado cuando una integración necesita descargar el resultado completo, pero puede devolver `ErrCodeResultTooLarge` si la evaluación termina correctamente y el resultado supera los límites de descarga. Ese error no indica por sí mismo que la evaluación haya agotado el presupuesto.
+Las integraciones deben usar `RunScriptContext` cuando solo necesiten clasificar el resultado del script como `unit` o no `unit`. Esta ruta evalúa el script y comprueba el estado `unit` sin expandir ni descargar el resultado final. `RunContextWithTrustedDataArguments` sigue siendo apropiado cuando una integración necesita descargar el resultado completo, pero puede devolver `ErrCodeResultTooLarge` si la evaluación termina correctamente y el resultado supera los límites de descarga.
 
 ## Validez de las entradas y errores
 
@@ -44,4 +44,4 @@ La decodificación predeterminada rechaza la etiqueta CBOR `1401` y las etiqueta
 
 ## Errores de presupuesto
 
-En `BudgetError`, `Requested` representa el cargo que provocó el agotamiento del presupuesto y `Available` representa el presupuesto restante inmediatamente antes de ese cargo. El evaluador descuenta el cargo antes de devolver el error, por lo que el presupuesto posterior al fallo refleja `Available - Requested`. `ErrCodeResultTooLarge` es un error independiente de descarga del resultado.
+En `BudgetError`, `Requested` representa el cargo que provocó el agotamiento del presupuesto y `Available` representa el presupuesto restante inmediatamente antes de ese cargo. El evaluador descuenta el cargo antes de devolver el error, por lo que el presupuesto posterior al fallo refleja `Available - Requested`. A diferencia del agotamiento del presupuesto, `ErrCodeResultTooLarge` indica un error al descargar el resultado.
