@@ -40,7 +40,7 @@ Plutus V1 と V2 は、`datum`、`redeemer`、`scriptContext` の順で引数を
 
 呼び出し元は、信頼するすべての引数ツリーを、`EvaluateContext` に渡す前にその生成元で検証する必要があります。`EvaluateContext` はこれらを `RunContextWithTrustedDataArguments` に転送し、この関数の検証では、転送されたツリーを意図的に検証しません。各ツリーが有限で、有効な Plutus データを含み、循環がないことを呼び出し元が保証してください。
 
-デコードした datum や redeemer をスクリプトから見える値として渡す前に、`data.Normalize` を適用してください。デコード結果には元の CBOR が definite-length か indefinite-length かという形式が保持されますが、参照実装はスクリプト用の値を新しく構築します。正規化しない値は、同じ意味のデータでも参照実装と異なるシリアライズ済みバイト列になる可能性があります。
+デコードした datum や redeemer をスクリプトから見える値として渡す前に、`data.Normalize` を適用してください。デコーダーは元の CBOR の固定長または不定長の形式を保持しますが、参照実装はスクリプト用の値を新しく構築します。`data.Normalize` を適用しない値は、同じ意味のデータでも参照実装と異なるシリアライズ済みバイト列になる可能性があります。
 
 既定の入力デコードは CBOR tag `1401` と long-head bignum tag を拒否します。`Integer` と `ByteString` の CBOR unmarshalling も、以前より厳格に入力を検証します。
 
