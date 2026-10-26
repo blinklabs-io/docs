@@ -45,3 +45,14 @@ La decodificación predeterminada rechaza la etiqueta CBOR `1401` y las etiqueta
 ## Errores de presupuesto
 
 En `BudgetError`, `Requested` representa el cargo que provocó el agotamiento del presupuesto y `Available` representa el presupuesto restante inmediatamente antes de ese cargo. El evaluador descuenta el cargo antes de devolver el error, por lo que el presupuesto posterior al fallo refleja `Available - Requested`. A diferencia del agotamiento del presupuesto, `ErrCodeResultTooLarge` indica un error al descargar el resultado.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

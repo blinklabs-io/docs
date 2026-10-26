@@ -47,3 +47,14 @@ By default, `data.Decode` rejects CBOR tag `1401` and long-head bignum tags. `In
 When evaluation exceeds its budget, `BudgetError.Requested` contains the charge that caused the overrun, and `BudgetError.Available` contains the budget remaining immediately before that charge. The evaluator deducts the requested charge before returning the failure, so the post-failure budget reflects `Available - Requested`.
 
 The evaluator rejects malformed or unknown script terms that caller code constructs and returns an error instead of evaluating them. Correct the supplied term before retrying after such an error.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

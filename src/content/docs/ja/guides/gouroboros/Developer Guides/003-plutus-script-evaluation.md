@@ -47,3 +47,14 @@ Plutus V1 と V2 は、`datum`、`redeemer`、`scriptContext` の順で引数を
 `BudgetError` が予算超過を示す場合、`Requested` は予算を超過させた `charge`、`Available` はその `charge` の直前に残っていた予算を示します。`charge-then-check` の動作では、評価器は失敗を返す前に `charge` を差し引くため、失敗後の残りの予算は `Available - Requested` です。これは、評価は予算内で成功したものの、最終結果の `discharge` に失敗する `ErrCodeResultTooLarge` とは別のエラーです。
 
 評価器は、呼び出し元のコードが構築した不正または未知のスクリプト項を評価せず、エラーを返します。このエラーの後に再試行する場合は、指定した項を修正してください。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
