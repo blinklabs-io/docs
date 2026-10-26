@@ -21,8 +21,7 @@ cfg := localmessagenotification.NewConfig(
 
 | Setting | Behavior |
 | --- | --- |
-| Omit `WithMaxReplayEntries` | `NewConfig` uses the default of `126976` entries. |
-| Set `Config.MaxReplayEntries` to `0` | The client uses the default of `126976` entries. |
+| Omit `WithMaxReplayEntries` or set `Config.MaxReplayEntries` to `0` | The client uses the package default. |
 | Set `WithMaxReplayEntries` to a positive value | The client uses that value as the replay-cache bound. |
 
 The default value is `31 * 4096 = 126976` entries. It covers 31 unexpired messages per stake pool for 4096 pools.
@@ -31,11 +30,9 @@ The default value is `31 * 4096 = 126976` entries. It covers 31 unexpired messag
 
 The bound counts accepted message IDs that the client retains until their signed expiration time. The client never evicts an unexpired ID to make room for a new message. Expiration removes an ID from the retained set.
 
-When a reply contains enough fresh messages to make the unexpired accepted IDs plus those fresh messages exceed `MaxReplayEntries`, the client refuses the entire reply. The client delivers and records none of the messages from that reply.
-
 | Condition | Result |
 | --- | --- |
-| The reply fits within the configured bound | The client can accept and retain the reply's fresh message IDs. |
+| The reply fits within the configured bound | The client admits the reply's fresh message IDs. |
 | The reply would exceed the configured bound | The client refuses the entire reply, delivers and records no messages from it, and returns a replay-cache-capacity error. The protocol closes the connection because it returns the error. |
 
 After a capacity refusal, later replies remain refused until enough accepted message IDs expire to bring the retained set below the configured bound.
