@@ -32,9 +32,9 @@ Plutus V1 と V2 は、`datum`、`redeemer`、`scriptContext` の順で引数を
 
 ## 評価結果の扱い
 
-最終結果が `unit` か非 `unit` かだけを判定する場合は、`RunScriptContext` を使用します。この経路はスクリプトを評価して判定結果を返しますが、最終結果を展開したり discharge したりしません。
+最終結果が `unit` か非 `unit` かだけを判定する場合は、`RunScriptContext` を使用します。この経路はスクリプトを評価して判定結果を返しますが、最終結果を展開したり `discharge` したりしません。
 
-完全な結果を項として取得する場合は、`RunContextWithTrustedDataArguments` を使用できます。この経路は評価後に結果を discharge するため、評価自体が成功していても、結果が大きすぎると `ErrCodeResultTooLarge` で失敗することがあります。どちらの経路でも、実行予算の超過など評価中のエラーは引き続き返されます。
+完全な結果を項として取得する場合は、`RunContextWithTrustedDataArguments` を使用できます。この経路は評価後に結果を `discharge` するため、評価自体が成功していても、結果が大きすぎると `ErrCodeResultTooLarge` で失敗することがあります。どちらの経路も、実行予算の超過など評価中のエラーを返します。
 
 ## 入力の妥当性とエラー
 
@@ -44,6 +44,6 @@ Plutus V1 と V2 は、`datum`、`redeemer`、`scriptContext` の順で引数を
 
 既定の入力デコーダーは CBOR tag `1401` と long-head bignum tag を拒否します。`Integer` と `ByteString` の CBOR unmarshalling も、以前より厳格に入力を検証します。
 
-`BudgetError` が予算超過を示す場合、`Requested` は予算を超過させた charge、`Available` はその charge の直前に残っていた予算を示します。charge-then-check の動作では、評価器は失敗を返す前に charge を差し引くため、失敗後の残りの予算は `Available - Requested` です。これは、評価は予算内で成功したものの、最終結果の discharge に失敗する `ErrCodeResultTooLarge` とは別のエラーです。
+`BudgetError` が予算超過を示す場合、`Requested` は予算を超過させた `charge`、`Available` はその `charge` の直前に残っていた予算を示します。`charge-then-check` の動作では、評価器は失敗を返す前に `charge` を差し引くため、失敗後の残りの予算は `Available - Requested` です。これは、評価は予算内で成功したものの、最終結果の `discharge` に失敗する `ErrCodeResultTooLarge` とは別のエラーです。
 
 評価器は、呼び出し元のコードが構築した不正または未知のスクリプト項を評価せず、エラーを返します。このエラーの後に再試行する場合は、指定した項を修正してください。
