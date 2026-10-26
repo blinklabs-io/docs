@@ -32,8 +32,7 @@ The bound counts accepted message IDs that the client retains until their signed
 
 | Condition | Result |
 | --- | --- |
-| The reply fits within the configured bound | The client admits the reply's fresh message IDs. |
-| The reply would exceed the configured bound | The client refuses the entire reply, delivers and records no messages from it, and returns a replay-cache-capacity error. The protocol closes the connection because it returns the error. |
+| The unexpired accepted IDs plus the fresh messages in the reply would exceed `MaxReplayEntries` | The client refuses the entire reply, delivers and records no messages from it, and returns a replay-cache-capacity error. The protocol closes the connection because it returns the error. |
 
 After a capacity refusal, later replies remain refused until enough accepted message IDs expire to bring the retained set below the configured bound.
 
