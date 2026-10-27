@@ -43,9 +43,18 @@ macOS または Windows パッケージをインストール後、アプリケ�
 bursa-wallet
 ```
 
+ネットワークを指定するには、`-n` または `--network` を使用します。
+
+```bash
+bursa-wallet -n mainnet
+bursa-wallet --network musashi
+```
+
+指定できるネットワークは `mainnet`、`preprod`、`preview`、`musashi`、`dijkstra` です。ネットワークは、コマンドラインフラグ、`BURSA_NETWORK`、`preview` の順に選択します。コマンドラインフラグを指定すると、`BURSA_NETWORK` より優先されます。未知のネットワーク名や、フラグ解析後に残った位置引数を指定すると、起動に失敗します。
+
 デスクトップ版はネイティブウィンドウを開きます。ヘッドレス版はループバック（通常は `127.0.0.1:8090`）でインターフェイスを提供し、起動時に完全な認証済み URL を表示します。Bursa が表示する URL 全体をブラウザーで開いてください。ブラウザーは URL の `#session=...` フラグメントを使ってセッション Cookie と一度だけ交換し、その後フラグメントをブラウザー履歴から削除します。トークンを通常の API リクエストに追加する必要はありません。
 
-初回起動時に組み込みノードを同期します。既定の `mithril` モードは、ジェネシスからチェーンを再実行せず、Mithril スナップショットからブートストラップします。データは `~/.bursa-wallet/<network>/` に保存します。
+初回起動時に組み込みノードを同期します。既定の `mithril` モードは、Mithril スナップショットとアグリゲーター設定があるネットワークでは、ジェネシスからチェーンを再実行せずにスナップショットからブートストラップします。`musashi` と `dijkstra` には Mithril スナップショットとアグリゲーター設定がないため、Mithril ブートストラップを無効にしてジェネシスから同期します。`BURSA_SYNC=genesis` を指定した場合も、ジェネシスからチェーンを再実行します。データは `~/.bursa-wallet/<network>/` に保存します。
 
 <a id="configuration"></a>
 
@@ -55,8 +64,8 @@ bursa-wallet
 
 | 変数 | 既定値 | 動作 |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Cardano ネットワークとそのデータディレクトリを選択します。 |
-| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。 |
+| `BURSA_NETWORK` | `preview` | `mainnet`、`preprod`、`preview`、`musashi`、`dijkstra` のいずれかを指定して、Cardano ネットワークとそのデータディレクトリを選択します。 |
+| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。`musashi` と `dijkstra` では Mithril の設定がないため、`mithril` を指定してもジェネシスから同期します。 |
 | `BURSA_LEAN` | `false` | 過去のチェーンデータを削除してディスク使用量を減らす lean ストレージを有効にします。 |
 | `BURSA_CONNECTOR` | `false` | dApp コネクターバックエンドを有効にします。 |
 
