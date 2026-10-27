@@ -64,8 +64,8 @@ bursa-wallet --network musashi
 
 | 変数 | 既定値 | 動作 |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | `mainnet`、`preprod`、`preview`、`musashi`、`dijkstra` のいずれかを指定して、Cardano ネットワークとそのデータディレクトリを選択します。 |
-| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。`musashi` と `dijkstra` では Mithril の設定がないため、`mithril` を指定してもジェネシスから同期します。 |
+| `BURSA_NETWORK` | `preview` | コマンドラインフラグを指定しない場合に、`mainnet`、`preprod`、`preview`、`musashi`、`dijkstra` のいずれかを指定して、Cardano ネットワークとそのデータディレクトリを選択します。 |
+| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。`musashi` と `dijkstra` には Mithril アグリゲーター設定がないため、`mithril` を指定してもジェネシスから同期します。 |
 | `BURSA_LEAN` | `false` | 過去のチェーンデータを削除してディスク使用量を減らす lean ストレージを有効にします。 |
 | `BURSA_CONNECTOR` | `false` | dApp コネクターバックエンドを有効にします。 |
 
