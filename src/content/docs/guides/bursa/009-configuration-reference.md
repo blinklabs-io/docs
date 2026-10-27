@@ -238,7 +238,7 @@ A non-loopback legacy API listener must provide both readable TLS files and exac
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
-When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`.
+When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`. If the requested wallet does not exist, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete` return HTTP `404` with the structured `api.ErrorResponse` body documented by OpenAPI.
 
 ```yaml
 api:
@@ -271,6 +271,8 @@ signer:
         allowed_drep_ids:
           - "hex-credential-id"
 ```
+
+When a transaction includes collateral inputs, Bursa requires `total_collateral`. It evaluates the collateral charge and collateral return with the configured fee, output, total-value, network, address, and native-asset or multi-asset constraints that apply to ordinary transaction value. Caller policy overrides narrow these collateral checks as well.
 
 The accepted `allowed_certificates` values are:
 
@@ -317,6 +319,8 @@ Set `signer.policy_hook_url` to enable an external policy check after the static
 
 The JSON operation summary uses these fields:
 
+The hook receives optional collateral fields alongside the ordinary outputs and fee when the transaction supplies the corresponding collateral data. `collateral_inputs` contains transaction inputs, `collateral_return` uses the output fields for its address, lovelace amount, and asset flag, and `total_collateral` is a string amount. The `TxInspection` API/OpenAPI contract exposes the same three fields as optional fields.
+
 ```json
 {
   "type": "tx",
@@ -332,6 +336,15 @@ The JSON operation summary uses these fields:
       "has_assets": true
     }
   ],
+  "collateral_inputs": [
+    { "tx_id": "collateral-transaction-id", "index": 0 }
+  ],
+  "collateral_return": {
+    "address": "addr1collateralreturn",
+    "lovelace": "2000000",
+    "has_assets": false
+  },
+  "total_collateral": "3000000",
   "certificate_count": 1,
   "certificates": ["stake_registration"],
   "has_mint": false,
