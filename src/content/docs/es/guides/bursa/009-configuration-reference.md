@@ -375,7 +375,7 @@ Bursa envía el resumen de la transacción como JSON mediante `POST` sobre la co
 
 Con `max_total_out_ada`, Bursa incluye la donación a la tesorería, los efectos de depósitos y reembolsos de certificados y los depósitos de propuestas en el valor total evaluado. Bursa deniega la firma cuando no puede resolver un efecto de valor requerido.
 
-El hook permite firmar únicamente cuando devuelve HTTP `200` con el objeto JSON explícito `{"allow": true}`. La respuesta no puede incluir datos posteriores al objeto JSON. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado, cualquier valor de `allow` distinto de `true` y un resumen de operación incompleto deniegan la firma. Bursa deniega antes de invocar el hook cuando no puede construir un resumen completo de certificados o votantes.
+El hook autoriza la firma únicamente cuando Bursa recibe HTTP `200` con el objeto JSON explícito `{"allow": true}`. La respuesta no puede incluir datos posteriores al objeto JSON. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado, cualquier valor de `allow` distinto de `true` y un resumen de operación incompleto deniegan la firma. Bursa deniega antes de invocar el hook cuando no puede construir un resumen completo de certificados o votantes.
 
 ## Solución de problemas
 
