@@ -96,7 +96,8 @@ PUT /wallet/settings/history-expiry
 
 | 設定パス | 環境変数 | 用途 | 既定値または要件 |
 | --- | --- | --- | --- |
-| `storage.backend` | `STORAGE_BACKEND` | ウォレットのストレージバックエンドを選択します。 | AWS Secrets Manager を使用するには `aws` を指定します。 |
+| `storage.backend` | `STORAGE_BACKEND` | ウォレットのストレージバックエンドを選択します。 | AWS Secrets Manager または GCP Secret Manager を使用するには、それぞれ `aws` または `gcp` を指定します。 |
+| `google.project` | `GOOGLE_PROJECT` | GCP Secret Manager でウォレット秘密情報を含む Google Cloud プロジェクトを指定します。 | `storage.backend` が `gcp` の場合は必須です。 |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Manager 内のウォレット秘密情報の接頭辞です。 | `storage.backend` が `aws` の場合は必須です。 |
 | `google.secret_prefix` | `GCP_SECRET_PREFIX` | GCP Secret Manager 内のウォレット秘密情報の名前空間を指定します。 | `storage.backend` が `gcp` の場合に指定します。 |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS 暗号化に使用する AWS KMS マスター鍵を選択します。 | AWS KMS が暗号鍵を提供する場合、SOPS のマスター鍵リソースの 1 つとして設定します。 |
