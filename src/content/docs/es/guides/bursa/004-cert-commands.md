@@ -120,14 +120,14 @@ El certificado de registro de pool registra un nuevo stake pool o actualiza un r
 >Entradas opcionales:
 > -  `--metadata-url`    URL de metadata del pool
 > -  `--metadata-hash`   Hash de metadata del pool (hex)
-> -  `--owner-stake-vkey`  Archivo de clave de verificación de stake del propietario del pool (se puede repetir). Si no se proporciona, usa la clave de stake de `--reward-account`.
+> -  `--owner-stake-vkey`  Archivo de clave de verificación de stake del propietario del pool (se puede repetir)
 > -  `--relay-address`   Dirección IP del relay con puerto, `IPv4:puerto` o `[IPv6]:puerto` (se puede repetir)
 > -  `--relay-host`      Nombre de host del relay con puerto opcional, `nombre[:puerto]` (se puede repetir)
 > -  `--relay-multi-host`  Nombre de host multi-host del relay (DNS SRV, se puede repetir)
 
-Sin archivos `--owner-stake-vkey`, Bursa usa la clave de stake de la cuenta de recompensa como propietario. Si la cuenta de recompensa no es una dirección de stake, se debe proporcionar un archivo de propietario explícito. Cada archivo de propietario debe ser un sobre de clave de verificación de stake con el tipo `StakeVerificationKeyShelley_ed25519`.
+Sin archivos `--owner-stake-vkey`, Bursa usa la clave de stake de la cuenta de recompensa como propietario. Si la cuenta de recompensa no es una dirección de stake, Bursa requiere un archivo de propietario explícito. Cada archivo de propietario debe ser un sobre de clave de verificación de stake con el tipo `StakeVerificationKeyShelley_ed25519`.
 
-Las entradas de relay se escriben en este orden: dirección, host y multi-host.
+Bursa escribe las entradas de relay en este orden: dirección, host y multi-host.
 
 El formato de salida es compatible con certificados de cardano-cli.
 
