@@ -42,7 +42,7 @@ for the main runtime choices.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. `tachys` is also supported for Babbage or Conway shaped configurations. Tachys rejects Genesis or Mithril bootstrap, Leios mode, a Dijkstra start or transition, missing Shelley genesis configuration, nonzero Shelley through Babbage hard fork epochs, and `activeSlotsCoeff` values other than `1/1`. |
+| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. Operators can select `tachys` for Babbage or Conway shaped configurations. Tachys rejects Genesis or Mithril bootstrap, Leios mode, a Dijkstra start or transition, missing Shelley genesis configuration, nonzero Shelley through Babbage hard fork epochs, and `activeSlotsCoeff` values other than `1/1`. |
 
 Dingo records the selected provider's database identity in the data directory.
 When the stored identity differs from the selected provider identity, Dingo
@@ -307,7 +307,7 @@ even when the Badger provider configuration sets
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. It is required when `snapshotEnabled` is true and when Bark mounts its DatabaseService. Dingo validates that the configured directory is owned by the process user or root and is writable. |
+| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable; on Windows, Dingo requires the current user or an allowed Administrators owner and writability. |
 
 Dingo keeps configured snapshot roots and generated local snapshot and staging
 paths private. Unix directories use `0700` permissions and files use `0600`.
@@ -378,9 +378,9 @@ Every file-backed value must meet these requirements:
 
 - The path must identify a regular file. Dingo rejects directories, devices,
   and other non-regular paths.
-- On Unix, the file and every ancestor path entry must be owned by the Dingo
-  process user or root. Dingo rejects a non-sticky directory in the path when
-  group or other users can write to it.
+- On Unix, Dingo requires the file and every ancestor path entry to belong to
+  the Dingo process user or root. Dingo rejects a non-sticky directory in the
+  path when group or other users can write to it.
 - Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
   and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix
