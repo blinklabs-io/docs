@@ -37,9 +37,17 @@ Después de instalar el paquete macOS o Windows, abre `Bursa` desde el menú de 
 bursa-wallet
 ```
 
+Para seleccionar una red de forma explícita, utiliza `--network` o su forma corta `-n`:
+
+```bash
+bursa-wallet --network musashi
+```
+
+Bursa selecciona la red con esta precedencia: primero `-n`/`--network`, después `BURSA_NETWORK` y, cuando ninguno de los dos define una red, `preview`. Las redes admitidas son `preview`, `preprod`, `mainnet`, `musashi` y `dijkstra`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales antes de crear el directorio de datos de la red.
+
 La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en <http://127.0.0.1:8090>; abre esa dirección en el navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
-La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril en lugar de reproducir la cadena desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
+La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril cuando la red seleccionada tiene configuración de agregador de Mithril. Si la red no tiene esa configuración, Bursa omite el arranque desde Mithril y sincroniza desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
 ## Configuración
 
@@ -47,7 +55,7 @@ Establece las variables de entorno antes de la primera ejecución para inicializ
 
 | Variable | Valor predeterminado | Efecto |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos. |
+| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos cuando el comando no incluye `-n`/`--network`. |
 | `BURSA_SYNC` | `mithril` | El valor `genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. |
 | `BURSA_LEAN` | `false` | Activa el almacenamiento reducido, que poda los datos históricos de la cadena para ahorrar disco. |
 | `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
