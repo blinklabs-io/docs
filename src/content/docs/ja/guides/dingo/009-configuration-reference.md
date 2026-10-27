@@ -250,6 +250,14 @@ Badger プロバイダーで `plugins.storage.blob.config.gc` を `true` に設�
 | --- | --- | --- | --- | --- | --- |
 | スナップショットのコミット停止時間上限 | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`。`0s` は上限なし。 | 0 以上の期間を指定します。負の値は設定検証で拒否されます。正の値は、手動のオフライン、ライブ、自動エポック境界スナップショットのすべてで、コミットバリア取得後の処理時間を制限します。上限を超えるとスナップショットをキャンセルし、部分的な出力を削除し、`ErrCommitPauseExceeded` をラップしたエラーを返します。 |
 
+<a id="database-lifecycle-snapshot-directory"></a>
+
+### データベーススナップショットの保存先
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| ローカルスナップショットディレクトリ | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | 既定値は空です。自動スナップショットと Bark からのスナップショットを保存するローカルファイルシステムのディレクトリを指定します。`snapshotEnabled` を有効にする場合と、Bark の DatabaseService をマウントする場合に必要です。Unix ではディレクトリをプロセスユーザーまたは root が所有し、ディレクトリを `0700`、スナップショットファイルを `0600` にします。Windows では保護された所有者だけの ACL を使用します。ディレクトリの所有権または書き込み権限が要件を満たさない場合、起動を拒否します。 |
+
 <a id="database-lifecycle-snapshot-trust-key"></a>
 
 ### データベーススナップショットの信頼鍵
