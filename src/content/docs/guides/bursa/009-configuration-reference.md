@@ -89,7 +89,7 @@ Configure wallet persistence and SOPS encryption with the following fields:
 | `age.recipients` | `AGE_RECIPIENTS` | Lists age recipients for SOPS encryption. | Provide recipients as a comma-separated value. |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Allows wallet persistence without encryption. | Explicitly enable this opt-in for file storage without a SOPS master key or for SQLite storage. |
 
-The `gcp` backend refuses to start when `google.secret_prefix` is empty or contains characters other than letters, numbers, hyphens, or underscores. Bursa applies the same character validation to wallet names and requires the prefix plus wallet name to fit within the 255-character Secret Manager ID limit. List, load, save, and delete operations remain within the configured prefix namespace.
+The `gcp` backend refuses to start when `google.secret_prefix` is empty or contains characters other than letters, numbers, hyphens, or underscores. Wallet names must use the same characters, and the prefix plus wallet name must fit within the 255-character Secret Manager ID limit. Bursa scopes list, load, save, and delete operations to the configured prefix namespace.
 
 SOPS encryption requires at least one configured master-key resource. Bursa rejects malformed key resources before encryption starts. The unencrypted-storage opt-in permits unencrypted wallet persistence.
 
@@ -354,7 +354,7 @@ The JSON operation summary uses these fields:
 }
 ```
 
-The `voters` entries contain `kind` and, for DRep voters, `drep_id`. The summary also reports TTL, certificate, mint, withdrawal, governance, treasury-donation, and ledger value-effect details. The value-effect fields report certificate deposits and refunds, unresolved certificate effect counts, whether certificate value effects are complete, treasury donations, and proposal deposits.
+Each `voters` entry contains `kind` and an optional `drep_id`. The summary also reports TTL, certificate, mint, withdrawal, governance, treasury-donation, and ledger value-effect details. The value-effect fields report certificate deposits and refunds, unresolved certificate effect counts, whether certificate value effects are complete, treasury donations, and proposal deposits.
 
 The hook permits signing only when it returns HTTP `200` with the exact JSON decision `{"allow": true}` and no trailing response data. Transport errors, timeouts, redirects, non-`200` responses, unreadable or malformed JSON, incomplete operation summaries, and any `allow` value other than `true` deny signing. When `max_total_out_ada` is configured, Bursa includes treasury donations, certificate deposit and refund effects, and proposal deposits in the capped total-value evaluation. Bursa denies signing when a required value effect remains unresolved.
 
