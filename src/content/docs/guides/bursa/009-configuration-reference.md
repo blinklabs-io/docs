@@ -272,7 +272,7 @@ signer:
           - "hex-credential-id"
 ```
 
-When a transaction includes collateral inputs, Bursa requires `total_collateral`. It evaluates the collateral charge and collateral return with the configured fee, output, total-value, network, address, and native-asset or multi-asset constraints that apply to ordinary transaction value. Caller policy overrides narrow these collateral checks as well.
+When `collateral_inputs` is non-empty, Bursa requires `total_collateral`. It evaluates the collateral forfeiture amount and any collateral return with the same configured fee, output, total-value, network, address, and native-asset or multi-asset constraints used for ordinary transaction value. Caller policy overrides narrow these checks for collateral effects as well.
 
 The accepted `allowed_certificates` values are:
 
@@ -319,7 +319,7 @@ Set `signer.policy_hook_url` to enable an external policy check after the static
 
 The JSON operation summary uses these fields:
 
-The hook receives optional collateral fields alongside the ordinary outputs and fee when the transaction supplies the corresponding collateral data. `collateral_inputs` contains transaction inputs, `collateral_return` uses the output fields for its address, lovelace amount, and asset flag, and `total_collateral` is a string amount. The `TxInspection` API/OpenAPI contract exposes the same three fields as optional fields.
+When present, the hook receives `collateral_inputs`, `collateral_return`, and `total_collateral` alongside ordinary outputs and fee. `collateral_inputs` contains transaction inputs; `collateral_return` uses the output fields for its address, lovelace amount, and asset flag; and `total_collateral` is a string amount. The `TxInspection` API/OpenAPI contract exposes the same three fields as optional fields.
 
 ```json
 {
