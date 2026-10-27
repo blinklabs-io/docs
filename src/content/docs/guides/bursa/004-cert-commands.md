@@ -183,7 +183,7 @@ Output format is a cardano-cli compatible JSON text envelope.
 
 Without `--deposit`, Bursa writes the Shelley registration certificate (type `0`). With `--deposit <lovelace>`, Bursa writes the Conway registration certificate (type `7`) and includes the deposit. `--deposit 0` still selects the Conway form and includes a zero coin because the flag's presence selects the certificate form.
 
-> Optional input: `--deposit <lovelace>`  Deposit amount in lovelace; supplying the flag selects the Conway certificate.
+> Optional input: `--deposit <lovelace>`  Deposit amount in lovelace.
 
 > ⚠️ Please adjust path below.
 
@@ -211,7 +211,7 @@ Output format is a cardano-cli compatible JSON text envelope.
 
 Without `--deposit-refund`, Bursa writes the Shelley deregistration certificate (type `1`). With `--deposit-refund <lovelace>`, Bursa writes the Conway deregistration certificate (type `8`) and includes the refund. `--deposit-refund 0` still selects the Conway form and includes a zero coin because the flag's presence selects the certificate form.
 
-> Optional input: `--deposit-refund <lovelace>`  Deposit refund amount in lovelace; supplying the flag selects the Conway certificate.
+> Optional input: `--deposit-refund <lovelace>`  Deposit refund amount in lovelace.
 
 > ⚠️ Please adjust path below.
 
