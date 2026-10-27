@@ -252,8 +252,8 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Clave API de paridad Koios de Dingo | `koiosParity.apiKey` | Eliminada; no válida: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Vacía de forma predeterminada. YAML y esta variable de entorno siguen aceptando claves API literales. La opción CLI literal está eliminada y no es válida. |
-| Archivo de clave API de paridad Koios de Dingo | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Vacío de forma predeterminada. Utiliza esta opción respaldada por archivo para la entrada CLI. El archivo se lee como una cadena de clave API. |
+| Clave API de paridad Koios de Dingo | `koiosParity.apiKey` | Eliminada; no válida: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Vacía de forma predeterminada. YAML y esta variable de entorno siguen aceptando claves API literales. Dingo eliminó la opción CLI literal, por lo que no es válida. |
+| Archivo de clave API de paridad Koios de Dingo | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Vacío de forma predeterminada. La entrada CLI utiliza esta opción respaldada por archivo. El archivo se lee como una cadena de clave API. |
 | Archivo de campo genérico de configuración de plugins | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Sustituye a `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo lee el archivo como una cadena de texto, sin interpretarlo como YAML. |
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
