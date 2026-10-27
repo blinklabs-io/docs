@@ -44,13 +44,13 @@ bursa-wallet -n mainnet
 bursa-wallet --network musashi
 ```
 
-The wallet supports exactly `mainnet`, `preprod`, `preview`, `musashi`, and `dijkstra`. Bursa selects the network in this order:
+Supported network values are exactly `mainnet`, `preprod`, `preview`, `musashi`, and `dijkstra`. The wallet chooses a network in this order:
 
 1. The `-n` or `--network` command-line flag.
 2. The `BURSA_NETWORK` environment variable when no flag is supplied.
 3. `preview` when neither the flag nor the environment variable is set.
 
-The command-line flag overrides `BURSA_NETWORK`. The wallet rejects unknown network names and extra positional arguments during startup, before it creates the per-network data directory.
+The `-n` or `--network` flag overrides `BURSA_NETWORK`. Unknown network names and extra positional arguments cause startup to fail before the wallet creates the per-network data directory.
 
 The desktop build opens a native window. The headless build prints a complete authenticated launch URL after the service becomes reachable. Open that URL in a browser. The URL includes a `#session=<token>` fragment that carries a process-local session capability. The page exchanges the capability for a session cookie and removes the fragment from browser history. The service listens on loopback at <http://127.0.0.1:8090>, but the bare address does not launch protected wallet routes.
 
