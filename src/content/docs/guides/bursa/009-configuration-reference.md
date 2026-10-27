@@ -315,7 +315,7 @@ Bursa intersects each caller override with the key's base policy, so an override
 
 Set `signer.policy_hook_url` to enable an external policy check after the static policy approves a request. The environment variable `SIGNER_POLICY_HOOK_URL` overrides this setting. The URL must be an absolute `https://` URL with a non-empty hostname; Bursa rejects invalid values during startup. Bursa sends the operation summary as JSON by `POST` over HTTPS, verifies the server certificate with the system certificate trust store, and refuses redirects. Set `signer.policy_hook_timeout_ms` to configure the request timeout in milliseconds; `SIGNER_POLICY_HOOK_TIMEOUT_MS` overrides it. A value of `0` uses the five-second default. Bursa limits configured values to one day.
 
-Bursa sends the transaction summary as a JSON `POST` request. The summary uses these fields:
+The JSON operation summary uses these fields:
 
 ```json
 {
