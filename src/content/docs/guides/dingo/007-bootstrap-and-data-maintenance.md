@@ -50,7 +50,7 @@ newest snapshots. Enable the optional `mithril.server.aggregator` settings when 
 must collect signatures and certify snapshots. Configure
 `mithril.server.aggregator.operatorTokenFile` for the bearer token used by registration
 and signature operations; non-loopback aggregator binds also require TLS. See
- the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example)
+the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)
 for the complete `server` and `aggregator` settings.
 
 Mithril v2 bootstrap accepts artifact locations and redirects only from the configured
