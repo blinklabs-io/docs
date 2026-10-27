@@ -368,7 +368,8 @@ Dingo rejects a source that sets both the literal form and the file form.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. Use instead of `koiosParity.apiKey`, `--koios-parity-api-key`, or `DINGO_KOIOS_PARITY_API_KEY`. Dingo reads the file as the API key string. |
+| Dingo Koios parity API key | `koiosParity.apiKey` | Removed; invalid: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Empty by default. Literal API keys remain supported through YAML and this environment variable. CLI users must use `--koios-parity-api-key-file`. |
+| Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. Use this file backed option for CLI input instead of the removed and invalid literal flag. Dingo reads the file as the API key string. |
 | Generic plugin configuration field file | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Use instead of `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo reads the file as a plain string and does not parse its contents as YAML. |
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
