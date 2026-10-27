@@ -174,9 +174,9 @@ plugins:
 # Mempool
 # plugins.mempool.config.capacity is an optional override.
 # Default: 1 MiB for standard/Praos operation. Dingo uses 25 MiB when
-# runMode is "leios" or the network is Musashi, including in "serve" mode.
-# Uncomment and configure capacity to override the automatic default; an
-# explicit capacity remains authoritative.
+# runMode is "leios" or when the network is Musashi, even in "serve" mode.
+# Uncomment and configure capacity to override the automatic default.
+# An explicit capacity remains authoritative.
 # plugins:
 #   mempool:
 #     config:
