@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.88.0 設定リファレンス
-description: Dingo v0.88.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.89.0 設定リファレンス
+description: Dingo v0.89.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.88.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.88.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.89.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.89.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -35,9 +35,17 @@ description: Dingo v0.88.0 に対応する完全な設定リファレンスと�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| コンセンサスプロバイダー | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | 既定値は `praos` です。ヘッダー検証、チェーン比較、リーダースケジューリングに使用するコンセンサスプロバイダーを選択します。 |
+| コンセンサスプロバイダー | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | 既定値は `praos` です。ヘッダー検証、チェーン比較、リーダースケジューリングに使用するコンセンサスプロバイダーを選択します。`tachys` は Babbage または Conway から始まる対応ネットワーク構成で使用できます。Dingo は `genesisBootstrap`、Mithril ブートストラップ、Leios モード、Dijkstra の開始または移行設定、Shelley ジェネシス設定の欠落、Shelley から Babbage までのハードフォークエポックのいずれかの非ゼロ値、`activeSlotsCoeff` の `1/1` 以外の値を拒否します。 |
 
-Dingo は、選択したプロバイダーのデータベース識別子をデータディレクトリに記録します。保存された識別子が選択したプロバイダーと異なる場合は起動を拒否します。識別子のないデータベースは、組み込みの Praos プロバイダー識別子 `praos/v1` の場合にのみ受け入れ、その識別子を以降の確認用に記録します。
+Dingo は、選択したプロバイダーのデータベース識別子をデータディレクトリに記録します。保存された識別子が選択したプロバイダーと異なる場合は起動を拒否します。Praos が既定のプロバイダーです。既存の Praos データベースとの互換性を保つため、識別子のない空でないデータベースは、選択した識別子が `praos/v1` の場合に受け入れられ、検証が成功すると Dingo はその識別子を記録します。それ以外の識別子を選択した場合、識別子のない空でないデータベースは拒否されます。Praos の識別子を持つデータベースで `tachys` を選択した場合も起動を拒否します。空のデータベースは、チェーンデータをインポートする前に、選択したプロバイダーの識別子を記録して使用できます。
+
+<a id="mempool-capacity"></a>
+
+### メモリプール容量
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
+| --- | --- | --- | --- | --- |
+| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB`、`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合は `25 MiB` です。この既定値は `serve` の Musashi にも適用します。明示した値はこれらの既定値に優先します。 |
 
 <a id="ledger-processing"></a>
 
@@ -262,6 +270,14 @@ Badger プロバイダーで `plugins.storage.blob.config.gc` を `true` に設�
 | --- | --- | --- | --- | --- | --- |
 | スナップショットのコミット停止時間上限 | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`。`0s` は上限なし。 | 0 以上の期間を指定します。負の値は設定検証で拒否されます。正の値は、手動のオフライン、ライブ、自動エポック境界スナップショットのすべてで、コミットバリア取得後の処理時間を制限します。上限を超えるとスナップショットをキャンセルし、部分的な出力を削除し、`ErrCommitPauseExceeded` をラップしたエラーを返します。 |
 
+<a id="database-lifecycle-snapshot-directory"></a>
+
+### データベーススナップショットの保存先
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| ローカルスナップショットディレクトリ | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | 既定値は空です。自動スナップショットと Bark からのスナップショットを保存するローカルファイルシステムのディレクトリを指定します。`snapshotEnabled` を有効にする場合と、Bark の DatabaseService をマウントする場合に必要です。Unix では保存先をプロセスユーザーまたは root の所有に限定し、ディレクトリを `0700`、スナップショットファイルを `0600` にします。Windows では保護された所有者だけの ACL を使用します。ディレクトリの所有権または書き込み権限が要件を満たさない場合、起動を拒否します。 |
+
 <a id="database-lifecycle-snapshot-trust-key"></a>
 
 ### データベーススナップショットの信頼鍵
@@ -307,7 +323,8 @@ Dingo は `FetchBlock` の参照バッチ全体を両方の制限に計上しま
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。`koiosParity.apiKey`、`--koios-parity-api-key`、`DINGO_KOIOS_PARITY_API_KEY` の代わりに使用します。ファイルを API 鍵の文字列として読み取ります。 |
+| Dingo Koios パリティ API 鍵 | `koiosParity.apiKey` | 削除済み・無効: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | 既定では空です。YAML とこの環境変数では、リテラルの API 鍵を引き続き使用できます。 |
+| Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。CLI 入力にはこのファイル方式を使用します。ファイルを API 鍵の文字列として読み取ります。 |
 | 汎用プラグイン設定フィールドのファイル | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>` の代わりに使用します。ファイルを通常の文字列として読み取り、YAML として解析しません。 |
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
@@ -317,7 +334,7 @@ Dingo は `FetchBlock` の参照バッチ全体を両方の制限に計上しま
 
 - パスは通常ファイルを指定する必要があります。ディレクトリ、デバイス、その他の通常ファイル以外は拒否されます。
 - ファイル内容は最大 `64 KiB` です。末尾の `CR` と `LF` を除去し、空または空白のみの内容を拒否します。
-- 権限または ACL はプラットフォームのセキュリティポリシーを満たす必要があります。Unix では所有者とグループのアクセスを許可できますが、その他のユーザーには許可できません。Windows の ACL では所有者、Administrators、SYSTEM のみを許可できます。
+- 権限または ACL はプラットフォームのセキュリティポリシーを満たす必要があります。Unix ではファイルとパスのすべての祖先ディレクトリをプロセスユーザーまたは root が所有している必要があります。sticky bit のないディレクトリがグループまたは他のユーザーによって書き込み可能な場合は拒否します。sticky bit のあるディレクトリはこの書き込み条件の対象外ですが、所有者の確認は行います。ファイルは所有者とグループのアクセスを許可できますが、その他のユーザーには許可できません。Windows の ACL では所有者、Administrators、SYSTEM のみを許可できます。
 - エラーでは値またはパスを示しますが、ファイル内容は含めません。
 
 <a id="token-registry-manifest-authentication"></a>

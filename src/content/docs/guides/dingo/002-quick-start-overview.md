@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.1/dingo-v0.88.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -129,9 +129,9 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.88.0 settings, defaults, and environment or command-line
+For all Dingo v0.89.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
@@ -173,8 +173,10 @@ plugins:
 
 # Mempool
 # plugins.mempool.config.capacity is an optional override.
-# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
-# Leave the key commented or omit it to use the mode default.
+# Default: 1 MiB for standard/Praos operation. Dingo uses 25 MiB when
+# runMode is "leios" or the network is Musashi, including "serve" mode.
+# Uncomment and configure capacity to override the automatic default. An
+# explicit capacity remains authoritative.
 # plugins:
 #   mempool:
 #     config:

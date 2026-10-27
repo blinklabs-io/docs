@@ -3,10 +3,10 @@ title: Ejecutar Dingo en un contenedor
 description: Ejecuta la imagen publicada de Dingo, conserva sus datos y comprueba el estado del nodo.
 ---
 
-Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.88.1`:
+Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.89.0`:
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.88.1
+ docker pull ghcr.io/blinklabs-io/dingo:0.89.0
 ```
 
 ## Iniciar un nodo de Preview
@@ -20,7 +20,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.88.1
+    ghcr.io/blinklabs-io/dingo:0.89.0
 ```
 
 El puerto `3001` acepta conexiones Ouroboros de nodo a nodo. En este ejemplo, las métricas del puerto `12798` y el servicio de estado del puerto `12799` se publican en la interfaz de loopback del host. De forma predeterminada, la imagen mantiene las métricas en el loopback del contenedor, por lo que `DINGO_METRICS_BIND_ADDR=0.0.0.0` permite acceder desde el host al puerto de métricas publicado, mientras que el extremo del host permanece limitado a `127.0.0.1`. Utiliza un volumen con nombre distinto para cada red.
@@ -36,13 +36,22 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.88.1 \
+     ghcr.io/blinklabs-io/dingo:0.89.0 \
   --config /tmp/dingo.yaml serve
 ```
 
 Si la configuración personalizada publica el puerto de métricas, establece `metricsBindAddr: "0.0.0.0"` en `dingo.yaml` o `DINGO_METRICS_BIND_ADDR=0.0.0.0` en el entorno del contenedor. Montar un archivo de configuración no basta para acceder a las métricas de loopback mediante un puerto publicado.
 
 El contenedor se ejecuta con UID `1000`. Asegúrate de que ese usuario puede leer el archivo de configuración montado. Para otras opciones del nodo, consulta [Configuración y modos de almacenamiento](/es/guides/dingo/005-node-configuration/).
+
+Antes de iniciar el contenedor, prepara la propiedad del directorio del host que se montará como `databaseLifecycle.snapshotDir`:
+
+```sh
+mkdir -p ./dingo-snapshots
+sudo chown 1000:1000 ./dingo-snapshots
+```
+
+Las rutas de `snapshotDir` bajo `/data/db` ya están preparadas para `UID:GID 1000:1000`. Si el bind mount usa otro directorio del host, asígnale esa propiedad antes de montarlo y configura `snapshotDir` con la ruta de destino; Dingo falla al iniciar si la ruta no permite escritura.
 
 ### Proteger las métricas publicadas
 

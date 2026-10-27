@@ -71,7 +71,7 @@ plugins:
 
 ループバック以外のホストで認証付きの変更操作を公開する前に、`plugins.api.blockfrost.config.tls` でサーバー TLS を設定します。サーバー TLS がない場合、Dingo は認証付きの変更アクセスを持つ非ループバックホストでの起動を拒否します。外部からの変更アクセスを意図的に公開する場合を除き、既定のループバックホストを維持してください。
 
-このサイトでは、完全な v0.88.0 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
+このサイトでは、完全な v0.89.0 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
 
 <a id="secure-api-access"></a>
 

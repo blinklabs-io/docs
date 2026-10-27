@@ -37,7 +37,7 @@ Go に書かれている Cardano ブロックチェーンノードは、ミニ�
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.1/dingo-v0.88.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 実行中のバイナリの動作を確認することができます。
@@ -123,7 +123,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 ## ステップ2 - dingo.yaml構成ファイルを作成する
 
-すべての Dingo v0.88.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
+すべての Dingo v0.89.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
 Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 
@@ -164,8 +164,11 @@ plugins:
 
 # Mempool
 # plugins.mempool.config.capacity is an optional override.
-# Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
-# Leave the key commented or omit it to use the mode default.
+# Default: 1 MiB for standard/Praos modes. If runMode is "leios", the default
+# is 25 MiB. If the network is Musashi (by name or network magic), the default
+# is also 25 MiB; on Musashi, this includes normal "serve" mode. An explicitly
+# configured capacity always takes precedence. Leave the key commented or omit
+# it to use the applicable default.
 # plugins:
 #   mempool:
 #     config:

@@ -3,7 +3,7 @@ title: Configuración del nodo y modos de almacenamiento
 description: Elige la función del nodo Dingo y consulta las opciones de configuración correspondientes.
 ---
 
-Usa el [inicio rápido](/es/guides/dingo/002-quick-start-overview/) para instalar Dingo e iniciar un nodo. Esta página explica las principales decisiones de configuración. Lee la [referencia completa de configuración de Dingo v0.88.0](/es/guides/dingo/009-configuration-reference/) y descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) de esa versión.
+Usa el [inicio rápido](/es/guides/dingo/002-quick-start-overview/) para instalar Dingo e iniciar un nodo. Esta página explica las principales decisiones de configuración. Lee la [referencia completa de configuración de Dingo v0.89.0](/es/guides/dingo/009-configuration-reference/) y descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) de esa versión.
 
 ## Elegir la función del nodo
 
@@ -27,7 +27,7 @@ Dingo lee los ajustes de un archivo YAML, variables de entorno y opciones de la 
 
 Para una configuración persistente o distinta de la predeterminada, guarda el archivo descargado como `dingo.yaml` y pásalo con `--config`. Las opciones de configuración y sus valores predeterminados pueden cambiar entre versiones.
 
-Los proveedores se configuran bajo `plugins`: los de almacenamiento conservan los datos de bloques y metadatos, los de mempool ordenan las transacciones pendientes y los de API atienden las solicitudes de los clientes. La configuración específica de cada proveedor se encuentra junto a su nombre. El archivo de ejemplo documenta los proveedores y las opciones de Dingo v0.88.0.
+Los proveedores se configuran bajo `plugins`: los de almacenamiento conservan los datos de bloques y metadatos, los de mempool ordenan las transacciones pendientes y los de API atienden las solicitudes de los clientes. La configuración específica de cada proveedor se encuentra junto a su nombre. El archivo de ejemplo documenta los proveedores y las opciones de Dingo v0.89.0.
 
 Cuando `plugins.storage.metadata.provider` es `sqlite`, el ajuste raíz `databasePath` no puede estar vacío. Si no se especifica un proveedor, se utiliza `sqlite`, y Dingo rechaza la configuración al inicio si `databasePath` está vacío. Las variables de entorno siguen el formato `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...`. El ejemplo actual muestra los proveedores de blobs y metadatos admitidos y sus opciones.
 

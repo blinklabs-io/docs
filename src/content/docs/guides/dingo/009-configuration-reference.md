@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.88.0 Configuration Reference
-description: Complete, release-specific Dingo v0.88.0 configuration reference and example.
+title: Dingo v0.89.0 Configuration Reference
+description: Complete, release-specific Dingo v0.89.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.88.0. The complete
+This page covers the configuration shipped with Dingo v0.89.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.88.0 source](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.89.0 source](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -42,12 +42,22 @@ for the main runtime choices.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. |
+| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. Operators can select `tachys` for Babbage or Conway-shaped configurations. Tachys rejects Genesis or Mithril bootstrap, Leios mode, a Dijkstra start or transition, missing Shelley genesis configuration, nonzero Shelley-through-Babbage hard-fork epochs, and `activeSlotsCoeff` values other than `1/1`. |
 
-Dingo records the selected provider's database identity in the data directory.
-When the stored identity differs from the selected provider identity, Dingo
-rejects startup. Dingo accepts an unmarked database only with the built-in
-Praos provider identity `praos/v1`, then records that identity for later checks.
+Dingo records the selected provider's database identity in the data directory
+and rejects startup when the stored identity differs from the selected provider.
+Praos is the default provider. For compatibility with legacy Praos databases,
+an unmarked nonempty database is accepted when the selected identity is
+`praos/v1`, and Dingo records that identity on success. Other selected identities
+reject an unmarked nonempty database; selecting Tachys for a Praos-identified
+database also fails. An empty database can adopt the selected provider identity
+before chain data import.
+
+### Mempool capacity
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. `25 MiB` (`26214400` bytes) applies when the run mode is Leios or the network is Musashi, identified by name or network magic. An explicit YAML or provider capacity overrides both defaults. |
 
 ### Ledger processing
 
@@ -312,6 +322,17 @@ even when the Badger provider configuration sets
 | --- | --- | --- | --- | --- | --- |
 | Snapshot commit pause bound | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`. Set `0s` for no bound. | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual and offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
 
+### Database lifecycle snapshot directory
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
+
+Dingo keeps configured snapshot roots and generated local snapshot and staging
+paths private. Unix directories use `0700` permissions and files use `0600`.
+Windows uses protected owner-only ACLs. Dingo rejects a snapshot directory that
+does not satisfy the ownership or writability requirements.
+
 ### Database lifecycle snapshot trust key
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
@@ -374,7 +395,8 @@ Dingo rejects a source that sets both the literal form and the file form.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. Use instead of `koiosParity.apiKey`, `--koios-parity-api-key`, or `DINGO_KOIOS_PARITY_API_KEY`. Dingo reads the file as the API key string. |
+| Dingo Koios parity API key | `koiosParity.apiKey` | Removed; invalid: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Empty by default. YAML and this environment variable continue to accept literal API keys. |
+| Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. CLI input uses this file-backed option. Dingo reads the file as the API key string. |
 | Generic plugin configuration field file | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Use instead of `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo reads the file as a plain string and does not parse its contents as YAML. |
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
@@ -384,6 +406,9 @@ Every file-backed value must meet these requirements:
 
 - The path must identify a regular file. Dingo rejects directories, devices,
   and other non-regular paths.
+- On Unix, Dingo requires the file and every ancestor path entry to belong to
+  the Dingo process user or root. Dingo rejects a non-sticky directory in the
+  path when group or other users can write to it.
 - Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
   and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix

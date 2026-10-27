@@ -32,7 +32,7 @@ dingo mithril serve --config ./dingo.yaml
 
 作成や配信の前に `mithril.server.artifactStore` を設定します。`mithril.server.publicBaseUrl` は公開の `https://` オリジンを指定します。`http://` はループバックのみで許可されます。配信ポートは `mithril.server.port` です。サーバーはアーティファクトの読み取りを公開し、クライアントは HTTP Range リクエストでダウンロードできます。
 
-公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。登録と署名操作に用いる Bearer トークンを `mithril.server.aggregator.operatorTokenFile` で指定してください。ループバック以外へのアグリゲーターのバインドには TLS も必要です。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)を参照してください。
+公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。登録と署名操作に用いる Bearer トークンを `mithril.server.aggregator.operatorTokenFile` で指定してください。ループバック以外へのアグリゲーターのバインドには TLS も必要です。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)を参照してください。
 
 Mithril v2 ブートストラップは、設定されたアグリゲーターのオリジンまたは公式の `storage.googleapis.com` Mithril オリジンからの取得先とリダイレクトのみを受け入れます。`https://` の要件と、ループバック宛てのローカル開発例外は維持されます。各ブートストラップは、アーティファクトとリダイレクトのリクエスト数およびバイト数をまとめて全体予算に計上し、24 時間のダウンロード期限を適用します。immutable アーカイブは 100000 個に制限し、アーティファクトの各構成要素の取得先を重複排除して最大 4 個に制限します。展開時もエントリー数と展開後のバイト数を制限し、必要な空き領域を予約します。これらの保護には組み込みの上限を適用します。
 
@@ -79,6 +79,8 @@ dingo database truncate --slot 12345678
 
 `snapshot` の出力先は、まだ存在しないディレクトリである必要があります。復元前に設定済みのデータディレクトリを別の場所に移し、元のパスを存在しない状態または空にしてください。データのあるディレクトリへの復元は失敗します。スナップショット認証を行う操作では、`databaseLifecycle.snapshotTrustKeyFile` は 1024 バイト以下の通常ファイルを指定し、パス末尾の要素はシンボリックリンクにできません。Unix ではノードのユーザーが所有し、所有者のみにアクセスを許可する必要があります。Windows では所有者がノードのユーザーまたは `BUILTIN\Administrators` であり、後者の場合はプロセスが管理者グループに所属する必要があります。DACL は許可された主体のみにアクセスを制限する必要があります。どれかを満たさないファイルはスナップショット認証で拒否されます。
 
+ローカルスナップショットのルートディレクトリ、各リーフディレクトリ、スナップショットファイルは、所有者専用として扱います。Unix ではディレクトリに `0700`、ファイルに `0600` を設定します。Windows では保護された所有者専用 ACL を設定します。Dingo は、設定した `databaseLifecycle.snapshotDir` が信頼できる所有者のものであり、書き込み可能であることを検証します。条件を満たさない場合、Dingo はスナップショット処理を開始しません。
+
 トラストキーを使用しない場合、Dingo はプライベートで信頼できるスナップショット場所からのローカル復元だけを受け付けます。Unix では、スナップショットディレクトリ、必要なファイル、スナップショットパス上に存在するすべての祖先について、シンボリックリンクの構成要素も含めて所有者と書き込み権限を確認します。Windows では、トラストキーを使用しないローカル復元に認証済みマニフェストが必要です。これらのプライベートパス条件を満たせない場合は、適切に構成したトラストキーまたは認証済みスナップショットを使用してください。クラウドミラーリングでは、署名のない従来のスナップショットを自動認証しません。クラウドにミラーする場合は、あらかじめ認証済みマニフェストを持つスナップショットを使用してください。
 
 MySQL のスナップショットと復元は `tls=skip-verify` を拒否します。プロバイダーの TLS 既定値は Dingo 設定リファレンスを参照してください。`truncate` は、`--slot`、`--hash`、`--block-number` のちょうど 1 つを対象に指定します。そのポイント以降のブロックとメタデータを削除し、新しい先端から再同期できるようにします。復旧操作の前に `dingo database --help` で全オプションを確認してください。記録済みの Mithril 信頼境界より前には必要な UTxO 履歴がローカルにないため、そのような対象は拒否します。また、対象までの巻き戻しに必要な消費済み UTxO 履歴がデータベースに残っていない場合も失敗します。ローカル履歴が不足する場合は、必要な履歴を保持する完全同期済みピアからのデータベーススナップショットを使用してください。
@@ -87,7 +89,7 @@ MySQL のスナップショットと復元は `tls=skip-verify` を拒否しま�
 
 ## 履歴の期限切れとアーカイブ
 
-履歴の期限切れ処理は、台帳のインデックスとメタデータを保持したまま、古い immutable ブロックファイルをローカルストレージから削除します。そのブロックを読むには設定済みの [Bark アーカイブ](/ja/guides/dingo/006-apis-and-archive/)が必要で、なければ履歴期限切れエラーを返します。アーカイブサービスは、署名付きダウンロード URL を発行できるオブジェクトストレージプロバイダーを使用します。期限切れ処理の頻度、アーカイブストレージ、ダウンロードホストの許可リストは、Dingo v0.88.0 の[設定サンプル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)で設定してください。設定オプションはバージョン間で変わる場合があるため、このサンプルは Dingo v0.88.0 でのみ使用してください。
+履歴の期限切れ処理は、台帳のインデックスとメタデータを保持したまま、古い immutable ブロックファイルをローカルストレージから削除します。そのブロックを読むには設定済みの [Bark アーカイブ](/ja/guides/dingo/006-apis-and-archive/)が必要で、なければ履歴期限切れエラーを返します。アーカイブサービスは、署名付きダウンロード URL を発行できるオブジェクトストレージプロバイダーを使用します。期限切れ処理の頻度、アーカイブストレージ、ダウンロードホストの許可リストは、Dingo v0.89.0 の[設定サンプル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)で設定してください。設定オプションはバージョン間で変わる場合があるため、このサンプルは Dingo v0.89.0 でのみ使用してください。
 
 Mithril オブジェクトごとの圧縮ダウンロードサイズ上限は、`dingo.yaml` の `mithril.downloadMaxBytes`、CLI の `--mithril-download-max-bytes`、環境変数の `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` で設定します。`0` は組み込み上限を使用します。`v1` は `512 GiB`、`v2` は immutable アーカイブに `1 GiB`、ダイジェスト一覧に `256 MiB`、付属データに `64 GiB` です。正のバイト数を設定すると、各ダウンロードオブジェクトで組み込み上限をその値に置き換えます。負の値は無効で、設定検証に失敗します。
 

@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.88.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.88.0.
+title: "Referencia de configuración de Dingo v0.89.0"
+description: Referencia y ejemplo completo de configuración de Dingo v0.89.0.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.88.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.88.0](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.89.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.89.0](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -30,9 +30,17 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Proveedor de consenso | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` de forma predeterminada. Selecciona el proveedor para validar cabeceras, comparar cadenas y programar líderes. |
+| Proveedor de consenso | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` de forma predeterminada. `tachys` también es válido para redes compatibles. Selecciona el proveedor para validar cabeceras, comparar cadenas y programar líderes. |
 
-Dingo registra en el directorio de datos la identidad de base de datos del proveedor seleccionado. Si la identidad almacenada difiere de la del proveedor seleccionado, rechaza el inicio. Solo acepta una base de datos sin identificar con el proveedor Praos integrado `praos/v1` y después registra esa identidad para futuras comprobaciones.
+Dingo registra en el directorio de datos la identidad de base de datos del proveedor seleccionado. Si la identidad almacenada difiere de la del proveedor seleccionado, rechaza el inicio. `tachys` rechaza el arranque si se activa el bootstrap de Genesis o Mithril, el modo Leios, el inicio o la transición Dijkstra, si falta la configuración de génesis de Shelley, si las épocas de Shelley a Babbage no son cero o si `activeSlotsCoeff` no es `1/1`.
+
+Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos Praos existentes, una base de datos no vacía y sin identificar se acepta cuando la identidad seleccionada es `praos/v1`, y Dingo registra esa identidad si la comprobación tiene éxito. Con cualquier otra identidad seleccionada, rechaza una base de datos no vacía y sin identificar; seleccionar Tachys para una base de datos identificada como Praos también falla. Una base de datos vacía puede adoptar la identidad del proveedor seleccionado antes de importar datos de la cadena.
+
+### Capacidad del mempool
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. `25 MiB` cuando el modo es Leios o la red es Musashi por nombre o por magic, incluso en `serve`. Un valor explícito prevalece sobre ambos valores predeterminados. |
 
 ### Procesamiento del ledger
 
@@ -221,6 +229,12 @@ Dingo mantiene desactivada la recolección del registro de valores tanto en `loa
 | --- | --- | --- | --- | --- | --- |
 | Límite de pausa de commit de instantáneas | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`; `0s` elimina el límite. | Admite una duración no negativa; la validación rechaza valores negativos. Un valor positivo limita las instantáneas manuales sin conexión, en vivo y automáticas de límite de época después de adquirir la barrera de commit. Si se supera, cancela la instantánea, elimina la salida parcial y devuelve un error que envuelve `ErrCommitPauseExceeded`. |
 
+### Directorio de instantáneas de base de datos
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y requisitos |
+| --- | --- | --- | --- | --- |
+| Directorio local de instantáneas | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Vacío de forma predeterminada. Cuando se configura, Dingo valida que el directorio sea propiedad del usuario que ejecuta el proceso o de root en Unix y que pueda escribirse; fija permisos privados `0700`. Las carpetas de instantáneas utilizan `0700` y sus archivos `0600`. En Windows, Dingo aplica una ACL protegida de propietario único. |
+
 ### Clave de confianza de las instantáneas de base de datos
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
@@ -260,7 +274,8 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Archivo de clave API de paridad Koios de Dingo | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Vacío de forma predeterminada. Sustituye a `koiosParity.apiKey`, `--koios-parity-api-key` o `DINGO_KOIOS_PARITY_API_KEY`. El archivo se lee como una cadena de clave API. |
+| Clave API de paridad Koios de Dingo | `koiosParity.apiKey` | Eliminada; no válida: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Vacía de forma predeterminada. YAML y esta variable de entorno siguen aceptando claves API literales. |
+| Archivo de clave API de paridad Koios de Dingo | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Vacío de forma predeterminada. La entrada CLI utiliza esta opción respaldada por archivo. El archivo se lee como una cadena de clave API. |
 | Archivo de campo genérico de configuración de plugins | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Sustituye a `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo lee el archivo como una cadena de texto, sin interpretarlo como YAML. |
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
@@ -270,7 +285,7 @@ Cada valor respaldado por archivos debe cumplir estos requisitos:
 
 - La ruta debe identificar un archivo regular. Dingo rechaza directorios, dispositivos y otros caminos no regulares.
 - Dingo acepta como máximo `64 KiB` de contenido. Elimina los caracteres `CR` y `LF` finales y rechaza el contenido vacío o compuesto únicamente de espacios.
-- Los permisos o ACL deben cumplir la política de seguridad de la plataforma. Unix permite acceso al propietario y al grupo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM.
+- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, deben pertenecer al usuario que ejecuta el proceso o a root; además, Dingo rechaza los directorios no sticky que permitan escritura al grupo o a otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
 - Los errores identifican el valor o la ruta, pero nunca incluyen el contenido del archivo.
 
 ### Autenticación de manifiestos del registro de tokens

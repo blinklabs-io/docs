@@ -11,7 +11,7 @@ description: "Dingo プールのSPOガイド - Dingo Nodeを更新する方法�
 ⚠️ バージョンとアーキテクチャを調整して、システムにマッチします。
 ```
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.1/dingo-v0.88.1-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
