@@ -37,9 +37,18 @@ Después de instalar el paquete macOS o Windows, abre `Bursa` desde el menú de 
 bursa-wallet
 ```
 
+Selecciona la red con `-n` o `--network`:
+
+```bash
+bursa-wallet -n mainnet
+bursa-wallet --network musashi
+```
+
+Las redes admitidas son `mainnet`, `preprod`, `preview`, `musashi` y `dijkstra`. Bursa selecciona la red en este orden: primero el indicador de línea de comandos, después `BURSA_NETWORK` y, si no se proporciona ninguno, `preview`. El indicador de línea de comandos tiene prioridad sobre `BURSA_NETWORK`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales, por lo que la billetera no se inicia en esos casos.
+
 La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez mediante `POST /session` por la cookie HttpOnly `bursa-control-session` y después elimine el fragmento del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
-La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril en lugar de reproducir la cadena desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
+La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril en lugar de reproducir la cadena desde la génesis cuando la red ofrece configuración de Mithril. `musashi` y `dijkstra` no tienen instantáneas ni configuración de agregador de Mithril; en esas redes, Bursa desactiva el arranque de Mithril y sincroniza desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
 ## Configuración
 
@@ -47,10 +56,12 @@ Establece las variables de entorno antes de la primera ejecución para inicializ
 
 | Variable | Valor predeterminado | Efecto |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos. |
-| `BURSA_SYNC` | `mithril` | El valor `genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. |
+| `BURSA_NETWORK` | `preview` | Selecciona `mainnet`, `preprod`, `preview`, `musashi` o `dijkstra`, y determina el directorio de datos. El indicador `-n` o `--network` tiene prioridad sobre esta variable. |
+| `BURSA_SYNC` | `mithril` | Usa `genesis` para reproducir la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. En `musashi` y `dijkstra`, Bursa usa la sincronización desde la génesis porque esas redes no tienen configuración de agregador de Mithril. |
 | `BURSA_LEAN` | `false` | Activa el almacenamiento reducido, que poda los datos históricos de la cadena para ahorrar disco. |
 | `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
+
+Si no se proporciona `-n` ni `--network`, `BURSA_NETWORK` determina la red; si tampoco se establece, Bursa usa `preview`. Un valor de red desconocido o un argumento posicional adicional hace que el inicio falle.
 
 La billetera conserva los ajustes configurados mediante su interfaz tras la primera ejecución. Cuando un ajuste ya está almacenado, tiene prioridad sobre la variable de entorno.
 
