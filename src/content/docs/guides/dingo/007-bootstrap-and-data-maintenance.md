@@ -145,12 +145,12 @@ the process must belong to the administrator group when that owner applies, and
 the DACL must restrict access to the permitted trustees. Snapshot authentication
 rejects a file that fails any of these requirements.
 
-Dingo keeps local snapshot data private before it writes backup data. On Unix, the
-snapshot root, each snapshot directory, and metadata staging directory use `0700`;
-snapshot and staging files use `0600`. On Windows, Dingo applies protected ACLs
-that allow only the owner to access these directories and files. A configured
-snapshot directory must already be owned by the node's trusted user and must be
-writable by that user; Dingo rejects an existing directory that fails either check.
+Dingo protects local snapshot data before it writes backup data. On Unix, Dingo
+sets the snapshot root, each snapshot leaf directory, and the metadata staging
+directory to mode `0700`; it sets snapshot and staging files to mode `0600`. On
+Windows, Dingo applies protected owner-only ACLs to these directories and files.
+The node's trusted user must own a configured snapshot directory and must be able
+to write to it; Dingo rejects an existing directory when either check fails.
 
 MySQL snapshot and restore reject `tls=skip-verify`. See the Dingo configuration reference
 for provider TLS defaults.
