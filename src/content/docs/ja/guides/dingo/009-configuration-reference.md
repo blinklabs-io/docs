@@ -1,6 +1,6 @@
 ---
 title: Dingo v0.89.0 設定リファレンス
-description: Dingo v0.87.1 に対応する完全な設定リファレンスとサンプル。
+description: Dingo v0.89.0 に対応する完全な設定リファレンスとサンプル。
 ---
 このページは Dingo v0.87.1 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example)にあります。同じファイルは [Dingo v0.87.1 のソース](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example)にも含まれます。
 
