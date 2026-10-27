@@ -45,11 +45,11 @@ for the main runtime choices.
 | Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. Operators can select `tachys` for Babbage or Conway-shaped configurations. Tachys rejects Genesis or Mithril bootstrap, Leios mode, a Dijkstra start or transition, missing Shelley genesis configuration, nonzero Shelley-through-Babbage hard-fork epochs, and `activeSlotsCoeff` values other than `1/1`. |
 
 Dingo records the selected provider's database identity in the data directory
-and rejects startup if the stored identity does not match the selected provider.
-The default provider is Praos. A nonempty database must already carry the
-selected provider identity. Selecting Tachys for an unmarked nonempty database
-or a database identified as Praos fails. An empty database can adopt the
-selected provider identity before chain data import.
+and rejects startup when the stored identity differs from the selected provider.
+Praos is the default provider. A nonempty database must already carry the
+selected provider identity; selecting Tachys for an unmarked nonempty database
+or a Praos-identified database fails. An empty database can adopt the selected
+provider identity before chain data import.
 
 ### Mempool capacity
 
