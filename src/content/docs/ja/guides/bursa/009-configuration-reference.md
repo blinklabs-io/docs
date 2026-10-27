@@ -358,7 +358,7 @@ Bursa は、呼び出し元ごとの上書き設定と鍵の基本ポリシー�
 
 Bursa は次のフィールドを含むトランザクション概要を JSON の `POST` リクエストとして送信します。
 
-`collateral_inputs`、`collateral_return`、`total_collateral` は `TxInspection` API と OpenAPI 契約にも含まれる任意のフィールドです。対応する担保データを持つトランザクションでは、フックはこれらのフィールドを通常の `outputs` と `fee` とともに受け取ります。
+`collateral_inputs`、`collateral_return`、`total_collateral` は `TxInspection` の API/OpenAPI 契約に含まれる任意のフィールドです。JSON と OpenAPI のモデルではこれらのフィールドを任意として扱い、対応する担保データをトランザクションが持つ場合、フックは通常の `outputs` と `fee` とともに受け取ります。
 
 ```json
 {
