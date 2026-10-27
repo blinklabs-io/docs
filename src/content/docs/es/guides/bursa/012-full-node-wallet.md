@@ -48,7 +48,7 @@ Las redes admitidas son `mainnet`, `preprod`, `preview`, `musashi` y `dijkstra`.
 
 La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez mediante `POST /session` por la cookie HttpOnly `bursa-control-session` y después elimine el fragmento del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
-La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril en lugar de reproducir la cadena desde la génesis cuando la red ofrece configuración de Mithril. Cuando la configuración activa `mithril` para `musashi` o `dijkstra`, Bursa desactiva el arranque de Mithril y sincroniza desde la génesis porque esas redes no tienen instantáneas ni configuración de agregador de Mithril. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
+La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea cuando la red seleccionada tiene configuración de agregador de Mithril; de lo contrario, Bursa omite el arranque de Mithril y sincroniza desde la génesis. `musashi` y `dijkstra` no tienen configuración de agregador de Mithril. `BURSA_SYNC=genesis` también fuerza la sincronización desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
 ## Configuración
 

@@ -111,11 +111,22 @@ http://localhost:8080/swagger/index.html
 
 `tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。テキストエンベロープの型にEraが含まれている場合、BursaはそのEraを使用します。`--era`も指定する場合は、エンベロープのEraと一致させてください。
 
+`tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`--era` には、たとえば `babbage` または `conway` を指定します。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
+
+入力が `Tx ConwayEra` のような era を宣言するJSONテキストエンベロープであれば、`--era` を省略してもその宣言から era を解決します。eraを宣言しない生のCBORは、そのCBORが1つの era でだけ有効になる場合に限り、`--era` なしで使用できます。`--era` の値と入力エンベロープが宣言する era が一致しない場合、コマンドはエラーになります。
+
 ```sh
 ./bursa tx decode --tx-file unsigned.tx
 ./bursa tx id --tx-file unsigned.tx
 ./bursa tx sign --tx-file unsigned.tx \
   --signing-key-file dev/payment.skey --era Conway --out-file signed.tx
+```
+
+CBORが複数の era で有効になる場合は、`--era` で era を明示します。
+
+```sh
+./bursa tx sign --tx-file unsigned.tx --era conway \
+  --signing-key-file dev/payment.skey --out-file signed.tx
 ```
 
 複数の署名鍵を使うには `--signing-key-file` を繰り返します。別々に署名する場合は、分離したウィットネスを作成し、同じトランザクションに結合します。

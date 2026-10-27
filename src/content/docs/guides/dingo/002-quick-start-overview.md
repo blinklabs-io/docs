@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.1/dingo-v0.88.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -129,12 +129,12 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.87.1 settings, defaults, and environment or command-line
+For all Dingo v0.88.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
-Dingo ships with embedded Cardano network configurations (genesis files, config.json) for preview, preprod, and mainnet. You do not need to download them separately.
+Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
@@ -260,7 +260,10 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 ```
+
+> 📝 The built-in UTxO RPC listener stays on loopback (`127.0.0.1`) by default, even when the root `bindAddr` uses a broader address. Set `plugins.api.utxorpc.config.host` explicitly to expose it on another interface for remote clients.
 
 > 💡 `midnight.serverEnabled: false` keeps the Midnight gRPC listener disabled; setting `midnight.port` alone does not expose it.
 

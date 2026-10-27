@@ -48,6 +48,7 @@ plugins:
       provider: builtin
       config:
         port: 9090
+        host: "127.0.0.1"
 ```
 
 <a id="blockfrost-mutation-requests"></a>
@@ -70,13 +71,13 @@ plugins:
 
 ループバック以外のホストで認証付きの変更操作を公開する前に、`plugins.api.blockfrost.config.tls` でサーバー TLS を設定します。サーバー TLS がない場合、Dingo は認証付きの変更アクセスを持つ非ループバックホストでの起動を拒否します。外部からの変更アクセスを意図的に公開する場合を除き、既定のループバックホストを維持してください。
 
-このサイトでは、完全な v0.87.0 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
+このサイトでは、完全な v0.88.0 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
 
 <a id="secure-api-access"></a>
 
 ## API アクセスの保護
 
-共有 API バインドアドレスは、Kupo を含む選択された API プロバイダーに適用されます。`api.tls` と `api.auth` は共有の既定値を定義します。各プロバイダーは、自身の `plugins.api.<name>.config` ブロックでどちらのポリシーも上書きできます。プロバイダー固有の TLS 設定は共有の TLS 既定値より優先されます。共有 API 認証は既定では無効です。組み込みの Blockfrost の変更ポリシーは独立しており、共有 API 認証が無効でも、変更ルートにはプロバイダーの `authToken` が必要です。変更リクエストの受け入れ制限は、これらの Blockfrost 変更ルートにのみ適用され、リスナー上のすべてのルートには適用されません。
+共有 API バインドアドレスは、Kupo を含む選択された API プロバイダーに適用されます。組み込みの UTxO RPC プロバイダーは、`host` を設定しない場合、共有 API バインドアドレスではなく `127.0.0.1` で待ち受けます。リモートアクセスを許可するには `plugins.api.utxorpc.config.host` を明示的に設定してください。`api.tls` と `api.auth` は共有の既定値を定義します。各プロバイダーは、自身の `plugins.api.<name>.config` ブロックでどちらのポリシーも上書きできます。プロバイダー固有の TLS 設定は共有の TLS 既定値より優先されます。共有 API 認証は既定では無効です。組み込みの Blockfrost の変更ポリシーは独立しており、共有 API 認証が無効でも、変更ルートにはプロバイダーの `authToken` が必要です。変更リクエストの受け入れ制限は、これらの Blockfrost 変更ルートにのみ適用され、リスナー上のすべてのルートには適用されません。
 トークン認証を有効にした場合は `Authorization: Bearer <token>` を送信します。Blockfrost クライアントは `project_id` ヘッダーも使用できます。UTxO RPC の HTTP および Connect/gRPC ルートでも Bearer トークンを使用します。
 
 認証は、ヘルスチェックを含む、そのリスナーのすべてのルートに適用されます。プローブがトークンを送信するよう設定するか、認証情報を付加できないプローブでは TCP チェックを使用してください。Dingo は不完全な TLS 証明書と鍵の組を起動時に拒否し、トークンや鍵の内容をログに出力しません。

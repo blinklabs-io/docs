@@ -55,6 +55,7 @@ plugins:
       provider: builtin
       config:
         port: 9090
+        host: "127.0.0.1"
 ```
 
 ### Blockfrost mutation requests
@@ -92,16 +93,19 @@ Dingo rejects startup for a non-loopback host with authenticated mutation
 access. Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
 
-The complete v0.87.0 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example) are
+The complete v0.88.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
 ## Secure API access
 
 The shared API bind address applies to the selected API providers, including
-Kupo. The `api.tls` and `api.auth` settings define shared defaults. A provider
-can override either policy under its own `plugins.api.<name>.config` block.
+Kupo. The built-in UTxO RPC listener binds to `127.0.0.1` by default. To allow
+remote access, set `plugins.api.utxorpc.config.host` explicitly; the shared
+API bind address alone does not expose this listener. The `api.tls` and
+`api.auth` settings define shared defaults. A provider can override either
+policy under its own `plugins.api.<name>.config` block.
 Provider-specific TLS settings take precedence over the shared TLS defaults.
 Shared API authentication is disabled by default. The built-in Blockfrost
 mutation policy is separate: its mutation routes require the provider's

@@ -9,6 +9,8 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.216.0 - *[View Release Notes](../v0-216-0)*
+- Version: v0.215.1 - *[View Release Notes](../v0-215-1)*
 - Version: v0.215.0 - *[View Release Notes](../v0-215-0)*
 - Version: v0.214.0 - *[View Release Notes](../v0-214-0)*
 - Version: v0.213.11 - *[View Release Notes](../v0-213-11)*

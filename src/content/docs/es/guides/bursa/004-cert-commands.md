@@ -146,6 +146,17 @@ El formato de salida es compatible con certificados de cardano-cli.
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
 
+Ejemplo con un propietario y un relay:
+
+```
+./bursa cert pool-registration \
+    --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
+    --pledge 1000000000 --cost 340000000 --margin 0.01 \
+    --reward-account stake1... \
+    --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 --out pool-reg.cert
+```
+
 ***
 
 <a name="pool-retirement"></a>

@@ -153,6 +153,16 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
 
+所有者とリレーを指定する例:
+
+```
+./bursa cert pool-registration \
+    --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
+    --pledge 500000000 --cost 340000000 --margin 0.05 \
+    --reward-account stake1... --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 --out pool-reg.cert
+```
+
 ***
 
 <a name="pool-retirement"></a>

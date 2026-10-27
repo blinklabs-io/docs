@@ -125,6 +125,17 @@ Signing and assembly write JSON text envelopes to `--out-file`, or to standard o
 
 The `/api/tx/sign` and `/api/tx/assemble` endpoints resolve the era from `tx_cbor`. When raw or era-less CBOR is valid in multiple eras, the request returns HTTP `400` unless `tx_cbor` uses an era-named text envelope such as `Tx ConwayEra`; the response includes remediation guidance. `tx decode --protocol-params protocol-parameters.json` also estimates the minimum fee from a Cardano protocol-parameters JSON file. Use `./bursa tx --help` and each subcommand's `--help` for options.
 
+The `--era` option is available on `tx sign`, `tx witness`, and `tx assemble`. For raw or era-less CBOR that is valid in more than one era, `--era` is required; for example:
+
+```sh
+./bursa tx sign --tx-file unsigned.tx --era conway \
+  --signing-key-file dev/payment.skey --out-file signed.tx
+```
+
+Bursa resolves the era from an era-typed JSON text envelope, such as one with type `Tx ConwayEra`, when the flag is absent. Without `--era`, Bursa accepts raw or era-less CBOR only when it decodes unambiguously. Provide `--era` or an era-typed envelope when the input is ambiguous. The command fails when `--era` conflicts with the era declared by the input envelope.
+
+The resolved era selects the output envelope type and witness encoding for signing, witnessing, and assembly.
+
 <a name="sign"></a>
 
 ## Sign and verify messages

@@ -152,6 +152,16 @@ Output format is compatible with cardano-cli certificates.
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
 
+The following command specifies one owner and one relay address.
+
+```
+./bursa cert pool-registration \
+    --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
+    --pledge 1000000000 --cost 340000000 --margin 0.01 \
+    --reward-account stake1... --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 --out pool-reg.cert
+```
+
 ***
 
 <a name="pool-retirement"></a>
@@ -178,6 +188,15 @@ Output format is compatible with cardano-cli certificates.
 ## Create a Stake Address Registration Certificate
 
 This certificate registers a stake address on-chain, which is required before the stake key can be used for delegation or reward withdrawal.
+
+Optional input:
+
+> - `--deposit <lovelace>`  Deposit amount that selects the Conway registration form
+
+When the command omits `--deposit`, Bursa writes the Shelley registration form (type 0).
+When the command includes `--deposit`, Bursa writes the Conway registration form
+(type 7) with the specified deposit. An explicit `--deposit 0` value also selects
+the Conway form.
 
 Output format is a cardano-cli compatible JSON text envelope.
 
@@ -206,6 +225,15 @@ To write the Conway form with an explicit deposit:
 ## Create a Stake Address Deregistration Certificate
 
 This certificate deregisters a stake address, returning the deposit and removing the stake key from on-chain registration.
+
+Optional input:
+
+> - `--deposit-refund <lovelace>`  Refund amount that selects the Conway deregistration form
+
+When the command omits `--deposit-refund`, Bursa writes the Shelley deregistration form
+(type 1). When the command includes `--deposit-refund`, Bursa writes the Conway
+deregistration form (type 8) with the specified refund. An explicit
+`--deposit-refund 0` value also selects the Conway form.
 
 Output format is a cardano-cli compatible JSON text envelope.
 
