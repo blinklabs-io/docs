@@ -37,7 +37,7 @@ Después de instalar el paquete macOS o Windows, abre `Bursa` desde el menú de 
 bursa-wallet
 ```
 
-La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez por la cookie HttpOnly de la sesión y después lo elimine del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
+La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez mediante `POST /session` por la cookie HttpOnly `bursa-control-session` y después elimine el fragmento del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
 La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril en lugar de reproducir la cadena desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
