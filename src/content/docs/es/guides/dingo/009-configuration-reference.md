@@ -1,5 +1,4 @@
 ---
-title: "Referencia de configuración de Dingo v0.87.1"
 title: "Referencia de configuración de Dingo v0.89.0"
 description: Referencia y ejemplo completo de configuración de Dingo v0.89.0.
 ---
@@ -33,7 +32,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 | --- | --- | --- | --- | --- |
 | Proveedor de consenso | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` de forma predeterminada. `tachys` también es válido para redes compatibles. Selecciona el proveedor para validar cabeceras, comparar cadenas y programar líderes. |
 
-Dingo registra en el directorio de datos la identidad de base de datos del proveedor seleccionado. Si la identidad almacenada difiere de la del proveedor seleccionado, rechaza el inicio. `tachys` rechaza el arranque si se activa el bootstrap de Genesis o Mithril, el modo Leios, el inicio o la transición Dijkstra, si falta la configuración de génesis de Shelley, si las épocas de Shelley a Babbage no son cero o si `activeSlotsCoeff` no es `1/1`. Solo acepta una base de datos sin identificar con el proveedor Praos integrado `praos/v1` y después registra esa identidad para futuras comprobaciones.
+Dingo registra en el directorio de datos la identidad de base de datos del proveedor seleccionado. Si la identidad almacenada difiere de la del proveedor seleccionado, rechaza el inicio. `tachys` rechaza el arranque si se activa el bootstrap de Genesis o Mithril, el modo Leios, el inicio o la transición Dijkstra, si falta la configuración de génesis de Shelley, si las épocas de Shelley a Babbage no son cero o si `activeSlotsCoeff` no es `1/1`. Una base de datos sin identificar adopta el proveedor seleccionado y Dingo registra esa identidad para futuras comprobaciones.
 
 ### Capacidad del mempool
 
