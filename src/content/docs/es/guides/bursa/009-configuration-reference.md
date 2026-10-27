@@ -48,13 +48,16 @@ Configura el almacenamiento de billeteras y las claves maestras de SOPS con esta
 
 | Ruta de configuración | Variable de entorno | Uso y validación |
 | --- | --- | --- |
-| `storage.backend` | `STORAGE_BACKEND` | Selecciona el backend de almacenamiento de billeteras. Establece `aws` para usar AWS Secrets Manager. |
+| `storage.backend` | `STORAGE_BACKEND` | Selecciona el backend de almacenamiento de billeteras. Establece `aws` para usar AWS Secrets Manager o `gcp` para usar Google Secret Manager. |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Define el prefijo obligatorio de los nombres de secretos que contienen las billeteras de AWS. |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Identifica la clave maestra de AWS KMS que usa SOPS para cifrar las billeteras. |
+| `google.secret_prefix` | `GCP_SECRET_PREFIX` | Define el prefijo obligatorio del espacio de nombres de las billeteras en Google Secret Manager. |
 | `age.recipients` | `AGE_RECIPIENTS` | Define los destinatarios `age` separados por comas que usa SOPS para cifrar las billeteras. |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Permite explícitamente que Bursa persista las billeteras sin cifrar. Bursa requiere esta autorización para el almacenamiento de archivos sin una clave maestra de SOPS y para el almacenamiento SQLite. |
 
 El cifrado de billeteras con SOPS requiere al menos un recurso de clave maestra configurado. Bursa rechaza un recurso de clave mal formado antes de iniciar el cifrado.
+
+Para el backend `gcp`, `google.secret_prefix` es obligatorio y no puede estar vacío. El prefijo solo puede contener letras, números, guiones o guiones bajos, y debe dejar espacio para el nombre de la billetera dentro del límite combinado de `255` caracteres del ID de Secret Manager. Los nombres de billetera deben ser no vacíos y usar los mismos caracteres permitidos. Bursa rechaza el inicio cuando el prefijo está vacío o no es válido. Las operaciones de listar, cargar, guardar y eliminar billeteras solo usan recursos de Secret Manager cuyo ID pertenece al prefijo configurado.
 
 ## Referencia de configuración
 
@@ -324,9 +327,9 @@ Bursa intersecta cada anulación del llamador con la política base de la clave,
 
 ### Hook de política externo
 
-Establece `signer.policy_hook_url` para habilitar una comprobación de política externa después de que la política estática apruebe una solicitud. La variable de entorno `SIGNER_POLICY_HOOK_URL` sustituye este ajuste. Usa `signer.policy_hook_timeout_ms` para configurar el tiempo de espera de la solicitud en milisegundos; `SIGNER_POLICY_HOOK_TIMEOUT_MS` lo sustituye. El valor `0` usa el valor predeterminado de cinco segundos. Bursa limita los valores configurados a un día.
+Establece `signer.policy_hook_url` para habilitar una comprobación de política externa después de que la política estática apruebe una solicitud. La variable de entorno `SIGNER_POLICY_HOOK_URL` sustituye este ajuste. La URL debe ser absoluta, usar `https` y tener un nombre de host no vacío. Bursa verifica el certificado del servidor mediante el almacén de confianza del sistema y rechaza las redirecciones. Usa `signer.policy_hook_timeout_ms` para configurar el tiempo de espera de la solicitud en milisegundos; `SIGNER_POLICY_HOOK_TIMEOUT_MS` lo sustituye. El valor `0` usa el valor predeterminado de cinco segundos. Bursa limita los valores configurados a un día.
 
-Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El resumen usa estos campos:
+Bursa envía el resumen de la transacción como JSON mediante `POST` sobre HTTPS con el certificado del servidor validado. El resumen puede incluir estos campos:
 
 ```json
 {
@@ -335,6 +338,7 @@ Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El re
   "key": "key-hash",
   "tx_id": "transaction-id",
   "fee": "1000000",
+  "ttl": 123,
   "outputs": [
     {
       "address": "addr1example",
@@ -342,13 +346,36 @@ Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El re
       "has_assets": true
     }
   ],
+  "certificate_count": 1,
   "certificates": ["stake_registration"],
+  "has_mint": false,
+  "withdrawal_count": 1,
+  "voting_procedure_count": 1,
+  "voters": [
+    {
+      "kind": "drep_key",
+      "drep_id": "hex-credential-id"
+    }
+  ],
+  "proposal_procedure_count": 1,
+  "proposal_deposit_total": "5000000",
+  "has_treasury_donation": true,
+  "treasury_donation": "1000000",
+  "certificate_deposit_total": "2000000",
+  "certificate_refund_total": "0",
+  "unresolved_certificate_deposits": 0,
+  "unresolved_certificate_refunds": 0,
+  "certificate_value_effects_complete": true,
   "voter_kinds": ["drep_key"],
   "drep_ids": ["hex-credential-id"]
 }
 ```
 
-El hook permite firmar únicamente cuando devuelve HTTP `200` con la respuesta JSON `{"allow": true}`. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado y cualquier valor de `allow` distinto de `true` deniegan la firma.
+`voters` contiene el `kind` de cada votante y, cuando corresponde, su `drep_id`. `certificate_value_effects_complete` y los contadores de depósitos o reembolsos no resueltos indican si Bursa conoce todos los efectos de valor de los certificados.
+
+Cuando se configura `max_total_out_ada`, Bursa incluye la donación a la tesorería, los efectos de depósitos y reembolsos de certificados y los depósitos de propuestas en el valor total evaluado. Bursa deniega la firma cuando no puede resolver un efecto de valor requerido.
+
+El hook permite firmar únicamente cuando devuelve HTTP `200` con el objeto JSON explícito `{"allow": true}`. La respuesta no puede incluir datos posteriores al objeto JSON. Los errores de transporte, los tiempos de espera, las redirecciones, las respuestas distintas de `200`, el JSON ilegible o mal formado, los datos posteriores, cualquier valor de `allow` distinto de `true` y un resumen de operación incompleto deniegan la firma. Bursa deniega antes de invocar el hook cuando no puede construir un resumen completo de certificados o votantes.
 
 ## Solución de problemas
 
