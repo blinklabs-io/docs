@@ -125,7 +125,18 @@ Repite `--signing-key-file` para añadir varios firmantes. Para sesiones de firm
   --witness-file payment.witness --out-file assembled.tx
 ```
 
-La firma y el ensamblado escriben estos sobres de texto JSON: `TxSignedShelley` para Shelley; `Tx AllegraEra`, `Tx MaryEra`, `Tx AlonzoEra`, `Tx BabbageEra`, `Tx ConwayEra` y `Tx DijkstraEra` para las eras de Allegra a Dijkstra; y `Tx` para Byron. La creación de testigos escribe `TxWitness ShelleyEra`, `TxWitness AllegraEra`, `TxWitness MaryEra`, `TxWitness AlonzoEra`, `TxWitness BabbageEra`, `TxWitness ConwayEra` o `TxWitness DijkstraEra` para Shelley a Dijkstra, y `TxWitness` para Byron. Bursa escribe los sobres en `--out-file`, o en la salida estándar si se omite. Repite `--witness-file` para incluir más testigos. `tx decode --protocol-params protocol-parameters.json` también estima la tarifa mínima a partir de un archivo JSON de parámetros del protocolo Cardano. Consulta las opciones con `./bursa tx --help` y el `--help` de cada subcomando.
+Los comandos de firma y ensamblado escriben estos sobres de texto JSON:
+
+- Shelley: `TxSignedShelley`.
+- Allegra, Mary, Alonzo, Babbage, Conway y Dijkstra: `Tx AllegraEra`, `Tx MaryEra`, `Tx AlonzoEra`, `Tx BabbageEra`, `Tx ConwayEra` y `Tx DijkstraEra`, respectivamente.
+- Byron: `Tx`.
+
+El comando de creación de testigos escribe estos sobres de texto JSON:
+
+- Shelley, Allegra, Mary, Alonzo, Babbage, Conway y Dijkstra: `TxWitness ShelleyEra`, `TxWitness AllegraEra`, `TxWitness MaryEra`, `TxWitness AlonzoEra`, `TxWitness BabbageEra`, `TxWitness ConwayEra` y `TxWitness DijkstraEra`, respectivamente.
+- Byron: `TxWitness`.
+
+Bursa escribe los sobres en `--out-file`, o en la salida estándar si se omite. Repite `--witness-file` para incluir más testigos. `tx decode --protocol-params protocol-parameters.json` también estima la tarifa mínima a partir de un archivo JSON de parámetros del protocolo Cardano. Consulta las opciones con `./bursa tx --help` y el `--help` de cada subcomando.
 
 Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. Cuando el CBOR sin era o el sobre sin era corresponde a varias eras, el cliente debe enviar `tx_cbor` como un sobre de texto cuyo tipo declare la era, como `Tx ConwayEra`; de lo contrario, la solicitud devuelve HTTP `400` con instrucciones para corregir el formato.
 
