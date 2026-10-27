@@ -119,11 +119,11 @@ Repeat `--signing-key-file` to add multiple signers. The optional `--era` flag a
   --witness-file payment.witness --era Conway --out-file assembled.tx
 ```
 
-Repeat `--witness-file` to include additional witnesses. Bursa uses an era named in a text envelope and requires it to match `--era` when both are present. Raw hex and a legacy era-less `Tx` envelope work without `--era` only when the CBOR resolves to one era. If the CBOR is valid in more than one era, Bursa does not guess: provide `--era` or an era typed envelope such as `Tx ConwayEra`. An unknown era or a conflict between the envelope and `--era` fails.
+Repeat `--witness-file` to include additional witnesses. Bursa uses an era named in a text envelope and requires it to match `--era` when both are present. Raw hex and a legacy era-less `Tx` envelope work without `--era` only when the CBOR resolves to one era. If the CBOR is valid in more than one era, Bursa does not guess: provide `--era` or an era-typed envelope such as `Tx ConwayEra`. An unknown era or a conflict between the envelope and `--era` fails.
 
 Signing and assembly write JSON text envelopes to `--out-file`, or to standard output when it is omitted. Signed and assembled outputs use `TxSignedShelley` for Shelley, `Tx <Era>Era` for Allegra through Dijkstra, and plain `Tx` for Byron. Detached witnesses use `TxWitness <Era>Era` for Shelley through Dijkstra and plain `TxWitness` for Byron. For example, Conway outputs use `Tx ConwayEra` and `TxWitness ConwayEra`.
 
-The `/api/tx/sign` and `/api/tx/assemble` endpoints resolve the era from `tx_cbor`. When raw or era-less CBOR is valid in multiple eras, send `tx_cbor` as an era named text envelope such as `Tx ConwayEra`; otherwise the endpoint returns HTTP `400` with this remediation guidance. These endpoints do not accept a separate API era field. `tx decode --protocol-params protocol-parameters.json` also estimates the minimum fee from a Cardano protocol-parameters JSON file. Use `./bursa tx --help` and each subcommand's `--help` for options.
+The `/api/tx/sign` and `/api/tx/assemble` endpoints resolve the era from `tx_cbor`. When raw or era-less CBOR is valid in multiple eras, send `tx_cbor` as an era-named text envelope such as `Tx ConwayEra`; the request otherwise returns HTTP `400` with remediation guidance. `tx decode --protocol-params protocol-parameters.json` also estimates the minimum fee from a Cardano protocol-parameters JSON file. Use `./bursa tx --help` and each subcommand's `--help` for options.
 
 <a name="sign"></a>
 
