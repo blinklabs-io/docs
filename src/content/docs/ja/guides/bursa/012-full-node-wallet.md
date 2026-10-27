@@ -96,7 +96,7 @@ CGO、C ツールチェーン、対象プラットフォームの webview 開発
 - Windows: `WebView2`
 - Linux: ビルド用の `webkit2gtk` 開発ヘッダーと、実行時用の `libayatana-appindicator3`。`webview` タグ付きビルドでトレイを使用するには両方が必要です。
 
-Windows MSI に WebView2 Evergreen bootstrapper をバンドルする場合は、bootstrapper に有効な Authenticode 署名が必要です。`WEBVIEW2_SHA256` を指定しない場合、署名者は `Microsoft Corporation` でなければなりません。`WEBVIEW2_SHA256` を指定すると受け入れるファイルをハッシュで固定できますが、有効な Authenticode 署名の検証は引き続き必要です。
+Windows MSI ビルドで WebView2 Evergreen bootstrapper をバンドルする場合は、その bootstrapper に有効な Authenticode 署名が必要です。`WEBVIEW2_SHA256` を指定しない場合、署名者は `Microsoft Corporation` でなければなりません。`WEBVIEW2_SHA256` を指定すると受け入れるファイルをハッシュで固定できますが、有効な Authenticode 署名の検証は引き続き必要です。
 
 webview 版は異なるアーキテクチャへのコンパイルに対応しません。対象のアーキテクチャを持つマシンでビルドします。Linux では `webkit2gtk-4.1` を使用できます。上流のバインディングが `4.0` を要求する場合、Makefile が `pkg-config` シムを提供します。
 
