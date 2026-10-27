@@ -127,6 +127,14 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 >オプションの入力:
 > -  `--metadata-url`    プールメタデータURL
 > -  `--metadata-hash`   プールメタデータハッシュ (hex)
+> -  `--owner-stake-vkey`  プール所有者のステーク検証鍵ファイル (繰り返し指定可)。省略時は`--reward-account`のステークキーを使用
+> -  `--relay-address`   リレーIPアドレスとポート (`IPv4:port`または`[IPv6]:port`) (繰り返し指定可)
+> -  `--relay-host`      オプションのポートを付けたリレーホスト名 (`name[:port]`) (繰り返し指定可)
+> -  `--relay-multi-host`  マルチホスト名 (DNS SRV、繰り返し指定可)
+
+`--owner-stake-vkey`を1つも指定しない場合、`--reward-account`のステークキーを既定のプール所有者として使用します。報酬アカウントがステークキーアドレスでない場合は、`--owner-stake-vkey`を明示的に指定する必要があります。所有者ファイルは、`StakeVerificationKeyShelley_ed25519`型のステーク検証キーエンベロープである必要があります。
+
+リレーは、アドレス、ホスト、マルチホストの順に証明書へ書き込みます。
 
 出力形式はcardano-cli証明書と互換性があります。
 
@@ -137,6 +145,10 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
     --pledge 1000000000 --cost 340000000 --margin 0.01 \
     --reward-account stake1... \
+    --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 \
+    --relay-host relay.example.com:3001 \
+    --relay-multi-host pool.example.com \
     --metadata-url "https://example.com/pool.json" \
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
@@ -174,11 +186,21 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
+> オプションの入力:
+> -  `--deposit <lovelace>`  デポジット額。省略するとShelley形式(タイプ`0`)を出力し、指定すると指定額を含むConway形式(タイプ`7`)を出力します。`0`を明示的に指定した場合もConway形式を選択します。
+
 > ⚠️ 以下のパスを調整してください。
 
 ```
 ./bursa cert stake-registration \
     --stake-vkey /path/stake.vkey --out stake-reg.cert
+```
+
+`--deposit`を指定する場合:
+
+```
+./bursa cert stake-registration \
+    --stake-vkey /path/stake.vkey --deposit 2000000 --out stake-reg.cert
 ```
 
 ***
@@ -193,11 +215,22 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
+> オプションの入力:
+> -  `--deposit-refund <lovelace>`  デポジット返金額。省略するとShelley形式(タイプ`1`)を出力し、指定すると指定額を含むConway形式(タイプ`8`)を出力します。`0`を明示的に指定した場合もConway形式を選択します。
+
 > ⚠️ 以下のパスを調整してください。
 
 ```
  ./bursa cert stake-deregistration \
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
+```
+
+`--deposit-refund`を指定する場合:
+
+```
+ ./bursa cert stake-deregistration \
+    --stake-vkey /path/stake.vkey --deposit-refund 2000000 \
+    --out stake-dereg.cert
 ```
 
 ***
