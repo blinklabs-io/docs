@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.87.1 Configuration Reference
-description: Complete, release-specific Dingo v0.87.1 configuration reference and example.
+title: Dingo v0.89.0 Configuration Reference
+description: Complete, release-specific Dingo v0.89.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.87.1. The complete
+This page covers the configuration shipped with Dingo v0.89.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.87.1 source](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.89.0 source](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -42,12 +42,20 @@ for the main runtime choices.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. |
+| Consensus provider | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` by default. Selects the consensus provider used for header validation, chain comparison, and leader scheduling. `tachys` is also supported for Babbage or Conway shaped configurations. Tachys rejects Genesis or Mithril bootstrap, Leios mode, a Dijkstra start or transition, missing Shelley genesis configuration, nonzero Shelley through Babbage hard fork epochs, and `activeSlotsCoeff` values other than `1/1`. |
 
 Dingo records the selected provider's database identity in the data directory.
 When the stored identity differs from the selected provider identity, Dingo
-rejects startup. Dingo accepts an unmarked database only with the built-in
-Praos provider identity `praos/v1`, then records that identity for later checks.
+rejects startup. A nonempty database must already carry the selected provider
+identity; Dingo does not reinterpret an unmarked or Praos identified database as
+Tachys. An empty database can adopt the selected provider identity before chain
+data import.
+
+### Mempool capacity
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. `25 MiB` (`26214400` bytes) applies when the run mode is Leios or the network is Musashi, identified by name or network magic. An explicit YAML or provider capacity overrides both defaults. |
 
 ### Ledger processing
 
