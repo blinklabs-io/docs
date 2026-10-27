@@ -35,7 +35,7 @@ description: Dingo v0.89.0 に対応する完全な設定リファレンスと�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| コンセンサスプロバイダー | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | 既定値は `praos` です。ヘッダー検証、チェーン比較、リーダースケジューリングに使用するコンセンサスプロバイダーを選択します。`tachys` は Babbage または Conway から始まる対応ネットワーク構成で使用できます。`genesisBootstrap`、Mithril ブートストラップ、Leios モード、Dijkstra の開始または移行設定、Shelley ジェネシス設定の欠落、Shelley から Babbage までのハードフォークエポックのいずれかの非ゼロ値、`activeSlotsCoeff` の `1/1` 以外の値は拒否されます。 |
+| コンセンサスプロバイダー | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | 既定値は `praos` です。ヘッダー検証、チェーン比較、リーダースケジューリングに使用するコンセンサスプロバイダーを選択します。`tachys` は Babbage または Conway から始まる対応ネットワーク構成で使用できます。Dingo は `genesisBootstrap`、Mithril ブートストラップ、Leios モード、Dijkstra の開始または移行設定、Shelley ジェネシス設定の欠落、Shelley から Babbage までのハードフォークエポックのいずれかの非ゼロ値、`activeSlotsCoeff` の `1/1` 以外の値を拒否します。 |
 
 Dingo は、選択したプロバイダーのデータベース識別子をデータディレクトリに記録します。保存された識別子が選択したプロバイダーと異なる場合は起動を拒否します。識別子のない空のデータベースは、選択したプロバイダーの識別子を記録して使用できます。識別子のない空でないデータベースや、Praos の識別子を持つデータベースで `tachys` を選択すると、起動を拒否します。
 
