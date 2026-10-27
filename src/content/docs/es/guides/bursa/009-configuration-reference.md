@@ -51,7 +51,7 @@ Configura el almacenamiento de billeteras y las claves maestras de SOPS con esta
 | `storage.backend` | `STORAGE_BACKEND` | Selecciona el backend de almacenamiento de billeteras. Establece `aws` para usar AWS Secrets Manager o `gcp` para usar Google Secret Manager. |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Define el prefijo obligatorio de los nombres de secretos que contienen las billeteras de AWS. |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Identifica la clave maestra de AWS KMS que usa SOPS para cifrar las billeteras. |
-| `google.project` | `GOOGLE_PROJECT` | Selecciona el proyecto de Google Cloud que contiene los secretos de las billeteras al usar el backend `gcp`. |
+| `google.project` | `GOOGLE_PROJECT` | Selecciona el proyecto de Google Cloud que contiene los secretos de las billeteras para el backend `gcp`. |
 | `google.secret_prefix` | `GCP_SECRET_PREFIX` | Define el prefijo obligatorio del espacio de nombres de las billeteras en Google Secret Manager. |
 | `age.recipients` | `AGE_RECIPIENTS` | Define los destinatarios `age` separados por comas que usa SOPS para cifrar las billeteras. |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Permite explícitamente que Bursa persista las billeteras sin cifrar. Bursa requiere esta autorización para el almacenamiento de archivos sin una clave maestra de SOPS y para el almacenamiento SQLite. |
