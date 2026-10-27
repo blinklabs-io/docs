@@ -46,6 +46,7 @@ plugins:
       provider: builtin
       config:
         port: 9090
+        host: "127.0.0.1"
 ```
 
 ### Solicitudes de modificación de Blockfrost
@@ -70,7 +71,7 @@ Este sitio incluye la referencia de configuración completa de v0.89.0 y el arch
 
 ## Acceso seguro a las API
 
-La dirección de escucha compartida de las API se aplica a los proveedores seleccionados, incluido Kupo. Los ajustes `api.tls` y `api.auth` definen valores predeterminados compartidos. Cada proveedor puede sustituir cualquiera de estas políticas en su bloque `plugins.api.<name>.config`. La configuración TLS específica del proveedor tiene prioridad sobre la compartida.
+La dirección de escucha compartida de las API se aplica a los proveedores seleccionados, incluido Kupo. El proveedor integrado de UTxO RPC escucha en `127.0.0.1` de forma predeterminada. Una dirección de escucha compartida más amplia no cambia este valor. Para permitir el acceso remoto, establece explícitamente `plugins.api.utxorpc.config.host`. Los ajustes `api.tls` y `api.auth` definen valores predeterminados compartidos. Cada proveedor puede sustituir cualquiera de estas políticas en su bloque `plugins.api.<name>.config`. La configuración TLS específica del proveedor tiene prioridad sobre la compartida.
 
 La autenticación compartida de las API está desactivada de forma predeterminada. La política de modificación del proveedor integrado de Blockfrost es independiente: sus rutas de modificación requieren el `authToken` del proveedor incluso cuando la autenticación compartida está desactivada. Los límites de admisión de modificaciones solo se aplican a esas rutas de Blockfrost, no a todas las rutas del servicio.
 

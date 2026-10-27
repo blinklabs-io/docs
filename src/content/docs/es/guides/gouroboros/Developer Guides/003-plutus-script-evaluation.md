@@ -30,8 +30,29 @@ Este comportamiento permite que el evaluador procese contextos con datums inline
 
 El evaluador trata como argumentos de confianza únicamente los valores de datos finitos que recibe mediante los argumentos de `EvaluateContext`. El evaluador aún decodifica y valida el programa UPLC, y los límites estructurales siguen aplicándose a ese programa. Este comportamiento no hace ilimitados los datos del ledger ni elimina la aplicación del presupuesto de ejecución.
 
+## Integración del evaluador
+
+Las integraciones deben usar `RunScriptContext` cuando solo necesiten clasificar el resultado del script como `unit` o no `unit`. Esta ruta evalúa el script y comprueba el estado `unit` sin expandir ni descargar el resultado final. `RunContextWithTrustedDataArguments` sigue siendo apropiado cuando una integración necesita descargar el resultado completo, pero puede devolver `ErrCodeResultTooLarge` si la evaluación termina correctamente y el resultado supera los límites de descarga.
+
 ## Validez de las entradas y errores
 
 Antes de pasar cada árbol de argumentos de confianza a `EvaluateContext`, el llamador debe validarlo. `EvaluateContext` reenvía esos árboles a `RunContextWithTrustedDataArguments`, cuya validación omite deliberadamente los árboles reenviados. Por ello, el llamador debe garantizar desde el origen que cada árbol sea finito, contenga datos Plutus válidos y sea acíclico.
 
-El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. El llamador debe corregir el término antes de volver a intentarlo después de ese error.
+Antes de pasar datums o redeemers decodificados al evaluador, el llamador debe aplicar `data.Normalize`. La normalización realiza una copia profunda de los datos y restablece las opciones de codificación CBOR a los valores predeterminados del paquete, para que los valores visibles para el script coincidan con la representación de referencia.
+
+La decodificación predeterminada rechaza la etiqueta CBOR `1401` y las etiquetas `bignum` con una cabecera larga. El unmarshalling de `Integer` y `ByteString` también aplica una validación más estricta. El evaluador rechaza los términos de script malformados o desconocidos que construye el código del llamador y devuelve un error en lugar de evaluarlos. El llamador debe corregir el término antes de volver a intentarlo después de ese error.
+
+## Errores de presupuesto
+
+En `BudgetError`, `Requested` representa el cargo que provocó el agotamiento del presupuesto y `Available` representa el presupuesto restante inmediatamente antes de ese cargo. El evaluador descuenta el cargo antes de devolver el error, por lo que el presupuesto posterior al fallo refleja `Available - Requested`. A diferencia del agotamiento del presupuesto, `ErrCodeResultTooLarge` indica un error al descargar el resultado.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

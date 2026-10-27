@@ -46,10 +46,12 @@ for the main runtime choices.
 
 Dingo records the selected provider's database identity in the data directory
 and rejects startup when the stored identity differs from the selected provider.
-Praos is the default provider. A nonempty database must already carry the
-selected provider identity; selecting Tachys for an unmarked nonempty database
-or a Praos-identified database fails. An empty database can adopt the selected
-provider identity before chain data import.
+Praos is the default provider. For compatibility with legacy Praos databases,
+an unmarked nonempty database is accepted when the selected identity is
+`praos/v1`, and Dingo records that identity on success. Other selected identities
+reject an unmarked nonempty database; selecting Tachys for a Praos-identified
+database also fails. An empty database can adopt the selected provider identity
+before chain data import.
 
 ### Mempool capacity
 
@@ -164,6 +166,15 @@ the node starts from origin without an intersection point. Dingo follows the
 Cardano configuration in this case instead of applying Genesis density,
 corroboration, or patience selection.
 
+### UTxO RPC provider
+
+Configure the host explicitly when a deployment must accept UTxO RPC
+connections from another host or interface.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Remote access or access from outside loopback requires an explicit host. |
+
 ### Blockfrost provider
 
 The built-in Blockfrost provider listens on loopback by default. Read-only API
@@ -183,6 +194,14 @@ refuses to start authenticated mutation access without server TLS. After
 authentication and before reading the request body, the provider applies both
 mutation limits. When either limit is exhausted, it returns HTTP `429` with
 `Retry-After: 1` without reading the body.
+
+### Shared outbound HTTP user agent
+
+The shared outbound HTTP user agent has no YAML key or CLI flag.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Shared HTTP user agent | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` by default. Dingo uses a valid value from this environment variable when set and ignores an invalid value. Component-specific `userAgent` settings for off-chain metadata and token registry take precedence. |
 
 ### LocalStateQuery snapshot lifetime
 
@@ -327,6 +346,14 @@ owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
 the restricted local `Administrator` ACE when `Administrators` owns the file.
 Dingo rejects an invalid file during snapshot authentication and during any
 lifecycle operation that needs the trust key.
+Operators must provide an acceptable trust key to enable cloud snapshot
+mirroring. Dingo rejects unsigned legacy snapshots instead of automatically
+signing them for mirroring.
+
+On Unix, unkeyed local restores require a private snapshot location that the
+restoring process trusts. On Windows, they require an authenticated manifest.
+See the bootstrap and data maintenance guide for the required operational
+checks.
 
 ### Bark remote lifecycle service
 

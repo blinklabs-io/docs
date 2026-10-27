@@ -143,7 +143,9 @@ On Unix, the node user must own the file and the file must grant access only to 
 owner. On Windows, the owner must be the node user or `BUILTIN\Administrators`,
 the process must belong to the administrator group when that owner applies, and
 the DACL must restrict access to the permitted trustees. Snapshot authentication
-rejects a file that fails any of these requirements.
+ rejects a file that fails any of these requirements.
+Dingo accepts an unkeyed local restore only when the snapshot location is private and trusted. On Unix, Dingo checks ownership and write permissions for the snapshot directory, its required files, existing ancestors, and symlink components. On Windows, an unkeyed local restore requires an authenticated manifest. Use a properly configured trust key and an authenticated snapshot when the snapshot cannot come from a private location.
+Cloud mirroring requires an already authenticated manifest; Dingo does not automatically authenticate unsigned legacy snapshots for cloud mirroring.
 
 Dingo protects local snapshot data before it writes backup data. On Unix, Dingo
 sets the snapshot root, each snapshot leaf directory, and the metadata staging

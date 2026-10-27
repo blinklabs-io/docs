@@ -32,7 +32,9 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 | --- | --- | --- | --- | --- |
 | Proveedor de consenso | `plugins.consensus.provider` | `--consensus` | `DINGO_PLUGINS_CONSENSUS_PROVIDER` | `praos` de forma predeterminada. `tachys` también es válido para redes compatibles. Selecciona el proveedor para validar cabeceras, comparar cadenas y programar líderes. |
 
-Dingo registra en el directorio de datos la identidad de base de datos del proveedor seleccionado. Si la identidad almacenada difiere de la del proveedor seleccionado, rechaza el inicio. `tachys` rechaza el arranque si se activa el bootstrap de Genesis o Mithril, el modo Leios, el inicio o la transición Dijkstra, si falta la configuración de génesis de Shelley, si las épocas de Shelley a Babbage no son cero o si `activeSlotsCoeff` no es `1/1`. Una base de datos sin identificar adopta el proveedor seleccionado y Dingo registra esa identidad para futuras comprobaciones.
+Dingo registra en el directorio de datos la identidad de base de datos del proveedor seleccionado. Si la identidad almacenada difiere de la del proveedor seleccionado, rechaza el inicio. `tachys` rechaza el arranque si se activa el bootstrap de Genesis o Mithril, el modo Leios, el inicio o la transición Dijkstra, si falta la configuración de génesis de Shelley, si las épocas de Shelley a Babbage no son cero o si `activeSlotsCoeff` no es `1/1`.
+
+Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos Praos existentes, una base de datos no vacía y sin identificar se acepta cuando la identidad seleccionada es `praos/v1`, y Dingo registra esa identidad si la comprobación tiene éxito. Con cualquier otra identidad seleccionada, rechaza una base de datos no vacía y sin identificar; seleccionar Tachys para una base de datos identificada como Praos también falla. Una base de datos vacía puede adoptar la identidad del proveedor seleccionado antes de importar datos de la cadena.
 
 ### Capacidad del mempool
 
@@ -108,6 +110,14 @@ El ajuste `immutableDbPath` y el argumento posicional de `dingo load` aceptan un
 
 En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva la selección de cadena Genesis aunque `genesisBootstrap` esté activado y el nodo comience desde el origen sin punto de intersección. Dingo sigue la configuración Cardano en lugar de aplicar selección por densidad, corroboración o paciencia de Genesis.
 
+### Proveedor UTxO RPC
+
+Configura explícitamente el host cuando el proveedor deba aceptar conexiones UTxO RPC desde otro host o interfaz.
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` de forma predeterminada. El acceso remoto o desde fuera de loopback requiere un host explícito. |
+
 ### Proveedor Blockfrost
 
 El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada. Las solicitudes de solo lectura no están sujetas a los límites de admisión de modificaciones, aunque puede aplicarse la autenticación compartida de API si está configurada.
@@ -120,6 +130,14 @@ El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada
 | Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` de forma predeterminada. Debe ser positivo y no superar `maxConcurrentMutations`; limita el trabajo de una dirección remota. |
 
 Cuando `authToken` está configurado y el proveedor escucha fuera de loopback, configura TLS de servidor mediante `plugins.api.blockfrost.config.tls`. Dingo rechaza el inicio del acceso autenticado de modificación sin TLS. Tras autenticar y antes de leer el cuerpo, aplica ambos límites de modificaciones. Si alguno se agota, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
+
+### Agente de usuario HTTP saliente compartido
+
+El agente de usuario HTTP saliente compartido no tiene clave YAML ni opción CLI.
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Agente de usuario HTTP compartido | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` de forma predeterminada. Dingo utiliza un valor válido de esta variable de entorno cuando se establece e ignora un valor no válido. Los ajustes de `userAgent` específicos de cada componente para metadatos fuera de la cadena y el registro de tokens tienen prioridad sobre este valor. |
 
 ### Duración de las instantáneas LocalStateQuery
 
@@ -224,6 +242,10 @@ Dingo mantiene desactivada la recolección del registro de valores tanto en `loa
 | Archivo de clave de confianza | `databaseLifecycle.snapshotTrustKeyFile` | `--db-snapshot-trust-key-file` | `DINGO_DB_LIFECYCLE_SNAPSHOT_TRUST_KEY_FILE` | Vacío de forma predeterminada. Debe ser un archivo regular, sin enlace simbólico, de al menos 16 bytes y no más de 1024 bytes. |
 
 En Unix, el archivo debe pertenecer al usuario actual y no conceder acceso al grupo ni a otros usuarios. Windows admite al usuario actual o a `BUILTIN\Administrators` como propietario si el proceso pertenece a ese grupo. La DACL solo puede incluir al propietario, `Administrators`, `SYSTEM`, `Creator Owner` y `Owner Rights`, además de la ACE local restringida de `Administrator` cuando `Administrators` sea el propietario. Dingo rechaza los archivos no válidos al autenticar instantáneas y en cualquier operación de ciclo de vida que necesite la clave.
+
+Al activar la duplicación de instantáneas en la nube, proporciona una clave de confianza válida. Dingo rechaza las instantáneas heredadas no firmadas para la duplicación en la nube; no las firma automáticamente.
+
+Las restauraciones locales sin una clave de confianza requieren un directorio de instantáneas privado y de confianza en Unix, y un manifiesto autenticado en Windows. Consulta la guía de arranque y mantenimiento de datos para realizar las comprobaciones operativas necesarias.
 
 ### Servicio remoto de ciclo de vida de Bark
 
