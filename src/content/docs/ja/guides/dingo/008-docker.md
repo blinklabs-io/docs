@@ -48,7 +48,7 @@ docker run --detach --name dingo-custom \
 
 コンテナは UID `1000` で実行されます。バインドマウントした設定ファイルを、そのユーザーが読み取れるようにしてください。その他のノード設定については、[設定とストレージモード](/ja/guides/dingo/005-node-configuration/)を参照してください。
 
-イメージは `/data/db` 配下を UID:GID `1000:1000` 向けに準備しています。`databaseLifecycle.snapshotDir` に `/data/db` とは別のホストディレクトリをバインドマウントする場合は、マウント前にホスト側の所有者を UID:GID `1000:1000` に変更してください。所有者を変更しないと、起動時の書き込み可能性の検証に失敗します。
+イメージは `/data/db` 配下を UID:GID `1000:1000` 向けに準備しています。`databaseLifecycle.snapshotDir` に `/data/db` とは別のホストディレクトリをバインドマウントする場合は、マウント前にホスト側の所有者を UID:GID `1000:1000` に設定してください。所有者を設定しないと、起動時の書き込み可能性の検証に失敗します。
 
 <a id="protect-published-metrics"></a>
 
