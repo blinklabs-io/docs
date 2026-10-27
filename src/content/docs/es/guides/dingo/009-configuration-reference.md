@@ -38,7 +38,7 @@ Dingo registra en el directorio de datos la identidad de base de datos del prove
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. `25 MiB` cuando el modo es Leios o la red es Musashi por nombre o por magic, incluso en `serve`. Un valor explícito conserva la prioridad sobre ambos valores predeterminados. |
+| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. `25 MiB` cuando el modo es Leios o la red es Musashi por nombre o por magic, incluso en `serve`. Un valor explícito prevalece sobre ambos valores predeterminados. |
 
 ### Procesamiento del ledger
 
@@ -215,7 +215,7 @@ Dingo mantiene desactivada la recolección del registro de valores tanto en `loa
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y requisitos |
 | --- | --- | --- | --- | --- |
-| Directorio local de instantáneas | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Vacío de forma predeterminada. Cuando se configura, Dingo valida que el directorio sea propiedad del usuario del proceso o de root en Unix y que pueda escribirse; lo restringe a permisos privados `0700`. Las carpetas de instantáneas utilizan `0700` y sus archivos `0600`. En Windows, Dingo aplica una ACL protegida de propietario único. |
+| Directorio local de instantáneas | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Vacío de forma predeterminada. Cuando se configura, Dingo valida que el directorio sea propiedad del usuario que ejecuta el proceso o de root en Unix y que pueda escribirse; fija permisos privados `0700`. Las carpetas de instantáneas utilizan `0700` y sus archivos `0600`. En Windows, Dingo aplica una ACL protegida de propietario único. |
 
 ### Clave de confianza de las instantáneas de base de datos
 
@@ -262,7 +262,7 @@ Cada valor respaldado por archivos debe cumplir estos requisitos:
 
 - La ruta debe identificar un archivo regular. Dingo rechaza directorios, dispositivos y otros caminos no regulares.
 - Dingo acepta como máximo `64 KiB` de contenido. Elimina los caracteres `CR` y `LF` finales y rechaza el contenido vacío o compuesto únicamente de espacios.
-- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, deben pertenecer al usuario del proceso o a root; además, Dingo rechaza los directorios no sticky que permitan escritura al grupo o a otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
+- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, deben pertenecer al usuario que ejecuta el proceso o a root; además, Dingo rechaza los directorios no sticky que permitan escritura al grupo o a otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
 - Los errores identifican el valor o la ruta, pero nunca incluyen el contenido del archivo.
 
 ### Autenticación de manifiestos del registro de tokens
