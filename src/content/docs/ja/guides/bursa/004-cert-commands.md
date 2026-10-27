@@ -127,12 +127,14 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 >オプションの入力:
 > -  `--metadata-url`    プールメタデータURL
 > -  `--metadata-hash`   プールメタデータハッシュ (hex)
-> -  `--owner-stake-vkey`  プール所有者のステーク検証キーファイル (繰り返し指定可)
-> -  `--relay-address`    リレーのIPアドレスとポート (`IPv4:port` または `[IPv6]:port`) (繰り返し指定可)
-> -  `--relay-host`       リレーホスト名と任意のポート (`name[:port]`) (繰り返し指定可)
-> -  `--relay-multi-host` リレーのマルチホストDNS SRV名 (繰り返し指定可)
+> -  `--owner-stake-vkey`  プール所有者のステーク検証鍵ファイル (繰り返し指定可)
+> -  `--relay-address`   リレーIPアドレスとポート (`IPv4:port`または`[IPv6]:port`) (繰り返し指定可)
+> -  `--relay-host`      オプションのポートを付けたリレーホスト名 (`name[:port]`) (繰り返し指定可)
+> -  `--relay-multi-host`  マルチホスト名 (DNS SRV、繰り返し指定可)
 
-`--owner-stake-vkey`を指定しない場合、ステークキーを持つ`--reward-account`のステークキーを所有者として使用します。`--reward-account`がスクリプト報酬アカウントの場合はステークキーを持たないため、`--owner-stake-vkey`で所有者のステーク検証キーを明示的に指定する必要があります。リレーはアドレス、ホスト、マルチホストの順に出力します。
+`--owner-stake-vkey`を1つも指定しない場合、`--reward-account`のステークキーを既定のプール所有者として使用します。報酬アカウントがステークキーアドレスでない場合は、`--owner-stake-vkey`を明示的に指定する必要があります。所有者ファイルは、`StakeVerificationKeyShelley_ed25519`型のステーク検証キーエンベロープである必要があります。
+
+リレーは、アドレス、ホスト、マルチホストの順に証明書へ書き込みます。
 
 出力形式はcardano-cli証明書と互換性があります。
 
@@ -143,6 +145,10 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
     --pledge 1000000000 --cost 340000000 --margin 0.01 \
     --reward-account stake1... \
+    --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 \
+    --relay-host relay.example.com:3001 \
+    --relay-multi-host pool.example.com \
     --metadata-url "https://example.com/pool.json" \
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
@@ -191,9 +197,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
 > オプションの入力:
-> -  `--deposit <lovelace>`  デポジット額。値を指定するとConway形式 (type 7) を選択します。
-
-`--deposit`を省略するとShelley形式 (type 0) を選択します。`--deposit`に値を指定するとConway形式 (type 7) を選択し、`--deposit 0`のように`0`を明示した場合もConway形式 (type 7) を選択します。
+> -  `--deposit <lovelace>`  デポジット額。`--deposit`フラグを省略するとShelley形式(タイプ`0`)を出力し、指定すると指定した額を含むConway形式(タイプ`7`)を出力します。値に`0`を指定した場合もConway形式を選択します。
 
 > ⚠️ 以下のパスを調整してください。
 
@@ -202,12 +206,11 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
 
-Conway形式でデポジットを指定する例:
+`--deposit`フラグを指定する場合:
 
 ```
 ./bursa cert stake-registration \
-    --stake-vkey /path/stake.vkey --deposit 2000000 \
-    --out stake-reg.cert
+    --stake-vkey /path/stake.vkey --deposit 2000000 --out stake-reg.cert
 ```
 
 ***
@@ -223,9 +226,7 @@ Conway形式でデポジットを指定する例:
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
 > オプションの入力:
-> -  `--deposit-refund <lovelace>`  デポジット返金額。値を指定するとConway形式 (type 8) を選択します。
-
-`--deposit-refund`を省略するとShelley形式 (type 1) を選択します。`--deposit-refund`に値を指定するとConway形式 (type 8) を選択し、`--deposit-refund 0`のように`0`を明示した場合もConway形式 (type 8) を選択します。
+> -  `--deposit-refund <lovelace>`  デポジット返金額。`--deposit-refund`フラグを省略するとShelley形式(タイプ`1`)を出力し、指定すると指定した額を含むConway形式(タイプ`8`)を出力します。値に`0`を指定した場合もConway形式を選択します。
 
 > ⚠️ 以下のパスを調整してください。
 
@@ -234,10 +235,10 @@ Conway形式でデポジットを指定する例:
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
 ```
 
-Conway形式でデポジット返金額を指定する例:
+`--deposit-refund`フラグを指定する場合:
 
 ```
-./bursa cert stake-deregistration \
+ ./bursa cert stake-deregistration \
     --stake-vkey /path/stake.vkey --deposit-refund 2000000 \
     --out stake-dereg.cert
 ```

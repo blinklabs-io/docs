@@ -37,17 +37,18 @@ Después de instalar el paquete macOS o Windows, abre `Bursa` desde el menú de 
 bursa-wallet
 ```
 
-Para seleccionar una red de forma explícita, utiliza `--network` o su forma corta `-n`:
+Selecciona la red con `-n` o `--network`:
 
 ```bash
+bursa-wallet -n mainnet
 bursa-wallet --network musashi
 ```
 
-Bursa selecciona la red con esta precedencia: primero `-n`/`--network`, después `BURSA_NETWORK` y, cuando ninguno de los dos define una red, `preview`. Las redes admitidas son `preview`, `preprod`, `mainnet`, `musashi` y `dijkstra`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales antes de crear el directorio de datos de la red.
+Las redes admitidas son `mainnet`, `preprod`, `preview`, `musashi` y `dijkstra`. Bursa selecciona la red en este orden: primero `-n` o `--network`, después `BURSA_NETWORK` y, si ambos faltan, `preview`; por tanto, la opción de línea de comandos tiene prioridad sobre `BURSA_NETWORK`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales, por lo que la billetera no se inicia en esos casos.
 
-La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en <http://127.0.0.1:8090>; abre esa dirección en el navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
+La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez mediante `POST /session` por la cookie HttpOnly `bursa-control-session` y después elimine el fragmento del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
-La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea de Mithril cuando la red seleccionada tiene configuración de agregador de Mithril. Si la red no tiene esa configuración, Bursa omite el arranque desde Mithril y sincroniza desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
+La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea cuando la red seleccionada tiene configuración de agregador de Mithril; de lo contrario, Bursa omite el arranque de Mithril y sincroniza desde la génesis. `musashi` y `dijkstra` no tienen configuración de agregador de Mithril. `BURSA_SYNC=genesis` también fuerza la sincronización desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
 ## Configuración
 
@@ -55,8 +56,8 @@ Establece las variables de entorno antes de la primera ejecución para inicializ
 
 | Variable | Valor predeterminado | Efecto |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano y su directorio de datos cuando el comando no incluye `-n`/`--network`. |
-| `BURSA_SYNC` | `mithril` | El valor `genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. |
+| `BURSA_NETWORK` | `preview` | Selecciona una red Cardano y determina el directorio de datos. También admite `musashi` y `dijkstra`. La opción `-n` o `--network` tiene prioridad sobre esta variable. |
+| `BURSA_SYNC` | `mithril` | `BURSA_SYNC=genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. |
 | `BURSA_LEAN` | `false` | Activa el almacenamiento reducido, que poda los datos históricos de la cadena para ahorrar disco. |
 | `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
 
@@ -89,6 +90,8 @@ Este objetivo requiere CGO, herramientas de compilación C y las cabeceras de de
 - macOS: `WKWebView`.
 - Windows: `WebView2`.
 - Linux: cabeceras de desarrollo `webkit2gtk` para compilar y `libayatana-appindicator3` para ejecutar. Una compilación con la etiqueta `webview` necesita ambas para funcionar con soporte de bandeja.
+
+Para los mantenedores de MSI que incluyan el bootstrapper Evergreen de WebView2, el bootstrapper debe tener una firma Authenticode válida. Cuando no se proporciona `WEBVIEW2_SHA256`, el firmante debe ser `Microsoft Corporation`. Cuando se proporciona `WEBVIEW2_SHA256`, el hash fija el artefacto aceptado, pero la firma Authenticode válida sigue siendo obligatoria.
 
 La versión webview no admite compilación para otra arquitectura. Compílala en una máquina con la arquitectura de destino. En Linux puede utilizar `webkit2gtk-4.1`; el Makefile proporciona una adaptación de `pkg-config` cuando el enlace del proyecto original solicita `4.0`.
 

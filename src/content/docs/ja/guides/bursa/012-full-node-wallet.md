@@ -43,17 +43,18 @@ macOS または Windows パッケージをインストール後、アプリケ�
 bursa-wallet
 ```
 
-ネットワークを指定して起動する場合は、`--network` を使用します。短縮形は `-n` です。
+ネットワークを指定するには、`-n` または `--network` を使用します。
 
 ```bash
+bursa-wallet -n mainnet
 bursa-wallet --network musashi
 ```
 
-ネットワークは、`-n` または `--network`、`BURSA_NETWORK`、`preview` の順に選択します。対応するネットワーク名は `preview`、`preprod`、`mainnet`、`musashi`、`dijkstra` です。未知のネットワーク名や、ネットワーク以外の引数を末尾に指定すると、ネットワークのデータディレクトリを作成する前に起動が失敗します。
+指定できるネットワークは `mainnet`、`preprod`、`preview`、`musashi`、`dijkstra` です。選択順序は、コマンドラインフラグ、`BURSA_NETWORK`、`preview` です。コマンドラインフラグは `BURSA_NETWORK` より優先されます。未知のネットワーク名を指定した場合や、フラグ解析後に余分な位置引数が残った場合は、ウォレットは起動しません。
 
-デスクトップ版はネイティブウィンドウを開きます。ヘッドレス版は <http://127.0.0.1:8090> にインターフェイスを提供するので、ブラウザーで開いてください。ウォレットはループバックの `127.0.0.1:8090` にバインドします。
+デスクトップ版はネイティブウィンドウを開きます。ヘッドレス版はループバック（通常は `127.0.0.1:8090`）でインターフェイスを提供し、起動時に完全な認証済み URL を表示します。Bursa が表示する URL 全体をブラウザーで開いてください。ブラウザーは URL の `#session=...` フラグメントを使ってセッション Cookie と一度だけ交換し、その後フラグメントをブラウザー履歴から削除します。トークンを通常の API リクエストに追加する必要はありません。
 
-初回起動時に組み込みノードを同期します。選択したネットワークに Mithril アグリゲーターの設定が存在する場合、既定の `mithril` モードはジェネシスからチェーンを再実行せず、Mithril スナップショットを使用してブートストラップします。その設定がない場合、Bursa は Mithril ブートストラップを省略し、ジェネシスから同期します。データは `~/.bursa-wallet/<network>/` に保存します。
+初回起動時に組み込みノードを同期します。既定の `mithril` モードは、選択したネットワークにアグリゲーター設定がある場合に Mithril スナップショットを使用します。設定がない場合は Mithril ブートストラップを省略し、ジェネシスから同期します。`musashi` と `dijkstra` には Mithril のスナップショットとアグリゲーター設定がありません。`BURSA_SYNC=genesis` を指定した場合もジェネシスから同期します。データは `~/.bursa-wallet/<network>/` に保存します。
 
 <a id="configuration"></a>
 
@@ -63,8 +64,8 @@ bursa-wallet --network musashi
 
 | 変数 | 既定値 | 動作 |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | コマンドラインでネットワークフラグを指定しない場合に、Cardano ネットワークとそのデータディレクトリを選択します。 |
-| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。 |
+| `BURSA_NETWORK` | `preview` | コマンドラインフラグを指定しない場合に、`mainnet`、`preprod`、`preview`、`musashi`、`dijkstra` のいずれかを指定して、Cardano ネットワークとそのデータディレクトリを選択します。 |
+| `BURSA_SYNC` | `mithril` | `genesis` を指定すると、Mithril スナップショットではなくチェーンの起点から再実行します。`musashi` と `dijkstra` には Mithril アグリゲーター設定がないため、`mithril` を指定してもジェネシスから同期します。 |
 | `BURSA_LEAN` | `false` | 過去のチェーンデータを削除してディスク使用量を減らす lean ストレージを有効にします。 |
 | `BURSA_CONNECTOR` | `false` | dApp コネクターバックエンドを有効にします。 |
 
@@ -103,6 +104,8 @@ CGO、C ツールチェーン、対象プラットフォームの webview 開発
 - macOS: `WKWebView`
 - Windows: `WebView2`
 - Linux: ビルド用の `webkit2gtk` 開発ヘッダーと、実行時用の `libayatana-appindicator3`。`webview` タグ付きビルドでトレイを使用するには両方が必要です。
+
+Windows MSI ビルドで WebView2 Evergreen bootstrapper をバンドルする場合は、その bootstrapper に有効な Authenticode 署名が必要です。`WEBVIEW2_SHA256` を指定しない場合、署名者は `Microsoft Corporation` でなければなりません。`WEBVIEW2_SHA256` を指定すると受け入れるファイルをハッシュで固定できますが、有効な Authenticode 署名の検証は引き続き必要です。
 
 webview 版は異なるアーキテクチャへのコンパイルに対応しません。対象のアーキテクチャを持つマシンでビルドします。Linux では `webkit2gtk-4.1` を使用できます。上流のバインディングが `4.0` を要求する場合、Makefile が `pkg-config` シムを提供します。
 

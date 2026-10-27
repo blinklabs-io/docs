@@ -109,7 +109,7 @@ http://localhost:8080/swagger/index.html
 
 ## オフライントランザクション操作
 
-`tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。
+`tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。テキストエンベロープの型にEraが含まれている場合、BursaはそのEraを使用します。`--era`も指定する場合は、エンベロープのEraと一致させてください。
 
 `tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`--era` には、たとえば `babbage` または `conway` を指定します。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
 
@@ -119,7 +119,7 @@ http://localhost:8080/swagger/index.html
 ./bursa tx decode --tx-file unsigned.tx
 ./bursa tx id --tx-file unsigned.tx
 ./bursa tx sign --tx-file unsigned.tx \
-  --signing-key-file dev/payment.skey --out-file signed.tx
+  --signing-key-file dev/payment.skey --era Conway --out-file signed.tx
 ```
 
 CBORが複数の era で有効になる場合は、`--era` で era を明示します。
@@ -133,12 +133,43 @@ CBORが複数の era で有効になる場合は、`--era` で era を明示し�
 
 ```sh
 ./bursa tx witness --tx-file unsigned.tx \
-  --signing-key-file dev/payment.skey --out-file payment.witness
+  --signing-key-file dev/payment.skey --era Conway --out-file payment.witness
 ./bursa tx assemble --tx-file unsigned.tx \
-  --witness-file payment.witness --out-file assembled.tx
+  --witness-file payment.witness --era Conway --out-file assembled.tx
 ```
 
-追加のウィットネスには `--witness-file` を繰り返します。署名、ウィットネス作成、結合はJSONテキストエンベロープを `--out-file` に書き出します。出力エンベロープの種類とウィットネスのエンコードには、入力または `--era` から解決した era を使用します。`--out-file` を省略すると標準出力に表示します。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
+追加のウィットネスには `--witness-file` を繰り返します。入力のEraは次の規則で解決します。
+
+- `--era` は `Shelley`、`Allegra`、`Mary`、`Alonzo`、`Babbage`、`Conway`、`Dijkstra` を受け付け、大文字と小文字を区別しません。
+- Eraを宣言しない16進数CBORまたは従来の型なし `Tx` エンベロープは、CBORが1つのEraに明確に解決できる場合に限り `--era` なしで使用できます。
+- 複数のEraで有効な曖昧なCBORにはEraを推測しません。`--era` を指定するか、`Tx ConwayEra` のようにEraを含むテキストエンベロープを使用してください。
+- Bursaは未知のEraを受け付けません。エンベロープに記載されたEraと `--era` が一致しない場合もエラーになります。
+
+署名済みおよび結合済みの出力はJSONテキストエンベロープです。出力型は次のとおりです。
+
+- Shelley: `TxSignedShelley`
+- Allegra: `Tx AllegraEra`
+- Mary: `Tx MaryEra`
+- Alonzo: `Tx AlonzoEra`
+- Babbage: `Tx BabbageEra`
+- Conway: `Tx ConwayEra`
+- Dijkstra: `Tx DijkstraEra`
+- Byron: `Tx`
+
+分離ウィットネスの出力型は次のとおりです。
+
+- Shelley: `TxWitness ShelleyEra`
+- Allegra: `TxWitness AllegraEra`
+- Mary: `TxWitness MaryEra`
+- Alonzo: `TxWitness AlonzoEra`
+- Babbage: `TxWitness BabbageEra`
+- Conway: `TxWitness ConwayEra`
+- Dijkstra: `TxWitness DijkstraEra`
+- Byron: `TxWitness`
+
+これらの出力は `--out-file` に書き出し、省略時は標準出力に表示します。
+
+APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra解決規則を適用します。複数のEraで有効なraw CBORまたは型なしエンベロープを送信するとHTTP `400`を返します。その場合は、`Tx ConwayEra` のようにEraを含むテキストエンベロープとして `tx_cbor` を送信してください。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
 
 <a name="sign"></a>
 

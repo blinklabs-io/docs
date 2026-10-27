@@ -96,11 +96,15 @@ PUT /wallet/settings/history-expiry
 
 | 設定パス | 環境変数 | 用途 | 既定値または要件 |
 | --- | --- | --- | --- |
-| `storage.backend` | `STORAGE_BACKEND` | ウォレットのストレージバックエンドを選択します。 | AWS Secrets Manager を使用するには `aws` を指定します。 |
+| `storage.backend` | `STORAGE_BACKEND` | ウォレットのストレージバックエンドを選択します。 | AWS Secrets Manager または GCP Secret Manager を使用するには、`aws` または `gcp` を指定します。 |
+| `google.project` | `GOOGLE_PROJECT` | GCP バックエンドで使用する、ウォレット秘密情報を含む Google Cloud プロジェクトを指定します。 | `storage.backend` が `gcp` の場合は必須です。 |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Manager 内のウォレット秘密情報の接頭辞です。 | `storage.backend` が `aws` の場合は必須です。 |
+| `google.secret_prefix` | `GCP_SECRET_PREFIX` | GCP Secret Manager 内のウォレット秘密情報の名前空間を指定します。 | `storage.backend` が `gcp` の場合に指定します。 |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS 暗号化に使用する AWS KMS マスター鍵を選択します。 | AWS KMS が暗号鍵を提供する場合、SOPS のマスター鍵リソースの 1 つとして設定します。 |
 | `age.recipients` | `AGE_RECIPIENTS` | SOPS 暗号化の age 受信者一覧です。 | カンマ区切りで指定します。 |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | ウォレットを暗号化せずに保存することを許可します。 | SOPS マスター鍵なしのファイル保存、または SQLite 保存では明示的に有効にします。 |
+
+GCP バックエンドでは、`google.secret_prefix` を必ず指定します。空または不正な値を指定した場合、Bursa は GCP バックエンドの初期化に失敗します。接頭辞とウォレット名には英字、数字、ハイフン、アンダースコアだけを使用し、ウォレット名は空にできません。接頭辞とウォレット名を連結した Secret Manager ID は 255 文字を超えないようにします。Bursa は設定した接頭辞の範囲だけでウォレットの一覧表示、読み込み、保存、削除を実行します。
 
 SOPS 暗号化には、少なくとも 1 つのマスター鍵リソースの設定が必要です。不正な鍵リソースは暗号化の開始前に拒否されます。暗号化なしの保存を明示的に許可すると、ウォレットを暗号化せずに永続化できます。
 
@@ -267,7 +271,7 @@ kes_agent:
 
 API は既定でループバックを使用します。TLS ファイルを省略したループバックでの開発は平文で利用できますが、ループバック以外のリスナーでは TLS と Bearer 認証が必須です。
 
-いずれかのウォレットストレージバックエンドを設定した場合、`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` には、subject が `api.jwt_admin_subjects` に含まれる有効な Bearer JWT が必要です。
+いずれかのウォレットストレージバックエンドを設定した場合、`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` には、subject が `api.jwt_admin_subjects` に含まれる有効な Bearer JWT が必要です。ウォレットが見つからない場合、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` は HTTP `404` を返し、本文には OpenAPI に定義された構造化された `api.ErrorResponse` を含めます。
 
 ```yaml
 api:
@@ -313,6 +317,8 @@ signer:
 
 `allowed_drep_ids` に 16 進数の資格情報 ID を指定すると、DRep 投票者をその ID に制限します。このリストは DRep 資格情報 ID を持たない投票者も拒否します。記載された証明書と投票者の種類のみを受け入れます。操作の種類、または有効な許可リストが必要とする詳細をデコードできない場合は署名を拒否します。
 
+トランザクションが空でない `collateral_inputs` を持つ場合、署名認可には `total_collateral` が必要です。Bursa は担保の徴収額と返却額を、通常の値の経路と同じ設定済みの手数料、出力、合計値、ネットワーク、アドレス、ネイティブ資産、マルチアセットの各制約で評価します。呼び出し元ごとの上書き設定も担保の評価に適用します。
+
 <a id="per-caller-transaction-restrictions"></a>
 
 ### 呼び出し元ごとのトランザクション制限
@@ -348,9 +354,11 @@ Bursa は、呼び出し元ごとの上書き設定と鍵の基本ポリシー�
 
 ### 外部ポリシーフック
 
-`signer.policy_hook_url` は、静的ポリシーが承認した後の外部ポリシー検査を有効にします。環境変数 `SIGNER_POLICY_HOOK_URL` が優先されます。タイムアウトは `signer.policy_hook_timeout_ms` でミリ秒単位に設定し、`SIGNER_POLICY_HOOK_TIMEOUT_MS` が優先されます。`0` は既定の 5 秒を使用します。設定値の上限は 1 日です。
+`signer.policy_hook_url` は、静的ポリシーが承認した後の外部ポリシー検査を有効にします。環境変数 `SIGNER_POLICY_HOOK_URL` が優先されます。URL には絶対 `https://` URL と空でないホスト名が必要です。Bursa はシステムの信頼ストアでサーバー証明書を検証し、リダイレクトを拒否します。タイムアウトは `signer.policy_hook_timeout_ms` でミリ秒単位に設定し、`SIGNER_POLICY_HOOK_TIMEOUT_MS` が優先されます。`0` または未設定の場合は既定の 5 秒を使用します。設定値の上限は 1 日です。
 
 Bursa は次のフィールドを含むトランザクション概要を JSON の `POST` リクエストとして送信します。
+
+`collateral_inputs`、`collateral_return`、`total_collateral` は `TxInspection` の API/OpenAPI 契約に含まれる任意のフィールドです。JSON と OpenAPI のモデルではこれらのフィールドを任意として扱い、対応する担保データをトランザクションが持つ場合、フックは通常の `outputs` と `fee` とともに受け取ります。
 
 ```json
 {
@@ -359,6 +367,19 @@ Bursa は次のフィールドを含むトランザクション概要を JSON �
   "key": "key-hash",
   "tx_id": "transaction-id",
   "fee": "1000000",
+  "collateral_inputs": [
+    {
+      "tx_id": "collateral-transaction-id",
+      "index": 0
+    }
+  ],
+  "collateral_return": {
+    "address": "addr1example",
+    "lovelace": "4000000",
+    "has_assets": false
+  },
+  "total_collateral": "1000000",
+  "ttl": 50000000,
   "outputs": [
     {
       "address": "addr1example",
@@ -366,13 +387,33 @@ Bursa は次のフィールドを含むトランザクション概要を JSON �
       "has_assets": true
     }
   ],
+  "certificate_count": 1,
   "certificates": ["stake_registration"],
+  "has_mint": false,
+  "withdrawal_count": 0,
+  "voting_procedure_count": 1,
+  "voters": [
+    { "kind": "drep_key", "drep_id": "hex-credential-id" }
+  ],
   "voter_kinds": ["drep_key"],
-  "drep_ids": ["hex-credential-id"]
+  "drep_ids": ["hex-credential-id"],
+  "proposal_procedure_count": 1,
+  "has_treasury_donation": true,
+  "treasury_donation": "1000000",
+  "certificate_deposit_total": "2000000",
+  "certificate_refund_total": "1000000",
+  "unresolved_certificate_deposits": 0,
+  "unresolved_certificate_refunds": 0,
+  "certificate_value_effects_complete": true,
+  "proposal_deposit_total": "500000000"
 }
 ```
 
-フックが HTTP `200` と JSON 応答 `{"allow": true}` を返した場合のみ署名を許可します。通信エラー、タイムアウト、`200` 以外の応答、読めないか不正な JSON、`true` 以外の `allow` 値では、すべて署名を拒否します。
+`ttl`、`certificate_count`、`has_mint`、`withdrawal_count`、`voting_procedure_count`、`proposal_procedure_count`、`has_treasury_donation` はトランザクションの概要を示します。`voters` の各項目には `kind` と、DRep の場合に任意の `drep_id` を含めます。`treasury_donation`、`certificate_deposit_total`、`certificate_refund_total`、`proposal_deposit_total` は対応する値の合計を示します。`unresolved_certificate_deposits` と `unresolved_certificate_refunds` は未解決の証明書の件数を示し、`certificate_value_effects_complete` は証明書の値の影響を完全に判定できたかを示します。
+
+`max_total_out_ada` は、出力と手数料に加えて、財務省への寄付、証明書の預入と返還の影響、提案の預入を合計します。必要な値の影響を解決できない場合、Bursa は署名を許可せず、閉鎖側に倒して拒否します。
+
+フックは JSON の `POST` を受け取り、HTTP `200` と明示的な JSON 許可判定 `{"allow": true}` を返した場合だけ署名を許可します。応答本文の後続データも拒否します。通信エラー、タイムアウト、`200` 以外の応答、読めないか不正な JSON、`true` 以外の `allow` 値、トランザクション概要を完全に構築できない場合は、すべて署名を拒否します。
 
 <a id="troubleshooting"></a>
 

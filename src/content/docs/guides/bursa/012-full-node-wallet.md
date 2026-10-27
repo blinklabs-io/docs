@@ -37,17 +37,24 @@ Launch `Bursa` from the applications menu after installing the macOS or Windows 
 bursa-wallet
 ```
 
-The desktop build opens a native window. The headless build serves the wallet interface at <http://127.0.0.1:8090>; open that address in a browser. The wallet binds to loopback on `127.0.0.1:8090`.
-
-The first launch synchronizes the embedded node. By default, `mithril` mode uses a Mithril snapshot when the selected network has Mithril aggregator configuration. If the selected network lacks Mithril aggregator configuration, the wallet skips Mithril bootstrap and syncs from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
-
-Run the wallet on a selected network with the long command-line flag:
+Select a network with `-n` or `--network`:
 
 ```bash
+bursa-wallet -n mainnet
 bursa-wallet --network musashi
 ```
 
-`-n` is the short form of `--network`. The wallet resolves the network in this order: `-n`/`--network`, then `BURSA_NETWORK`, then `preview`. Supported network names are `preview`, `preprod`, `mainnet`, `musashi`, and `dijkstra`. The wallet rejects unknown network names and trailing positional arguments before creating a per-network data directory.
+Supported network values are exactly `mainnet`, `preprod`, `preview`, `musashi`, and `dijkstra`. The wallet chooses a network in this order:
+
+1. The `-n` or `--network` command-line flag.
+2. The `BURSA_NETWORK` environment variable when no flag is supplied.
+3. `preview` when neither the flag nor the environment variable is set.
+
+The `-n` or `--network` flag overrides `BURSA_NETWORK`. Unknown network names and extra positional arguments cause startup to fail before the wallet creates the per-network data directory.
+
+The desktop build opens a native window. The headless build prints a complete authenticated launch URL after the service becomes reachable. Open that URL in a browser. The URL includes a `#session=<token>` fragment that carries a process-local session capability. The page exchanges the capability for a session cookie and removes the fragment from browser history. The service listens on loopback at <http://127.0.0.1:8090>, but the bare address does not launch protected wallet routes.
+
+The first launch synchronizes the embedded node. By default, `mithril` mode uses a Mithril snapshot when the selected network has Mithril aggregator configuration. If the selected network lacks that configuration, the wallet skips Mithril bootstrap and syncs from genesis. Musashi and Dijkstra currently have no Mithril snapshot or aggregator configuration. Setting `BURSA_SYNC=genesis` explicitly also replays the chain from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
 
 ## Configuration
 
@@ -55,7 +62,7 @@ Set environment variables before the first launch to seed the wallet configurati
 
 | Variable | Default | Operational effect |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selects the Cardano network and its data directory when no `-n` or `--network` flag is provided. |
+| `BURSA_NETWORK` | `preview` | Selects one of the supported Cardano networks: `mainnet`, `preprod`, `preview`, `musashi`, or `dijkstra`, and its data directory when no command-line network flag is supplied. |
 | `BURSA_SYNC` | `mithril` | Uses `genesis` to replay the chain from its beginning instead of bootstrapping from a Mithril snapshot. |
 | `BURSA_LEAN` | `false` | Enables lean storage, which prunes historical chain data to reduce disk usage. |
 | `BURSA_CONNECTOR` | `false` | Enables the dApp connector backend. |
@@ -89,6 +96,8 @@ This target requires CGO, a C toolchain, and the webview development headers for
 - macOS: `WKWebView`
 - Windows: `WebView2`
 - Linux: `webkit2gtk` development headers for the build and `libayatana-appindicator3` for runtime use. A `webview`-tagged build needs both to run with tray support.
+
+For Windows MSI builds that bundle a WebView2 Evergreen bootstrapper, the bootstrapper must have a valid Authenticode signature. Without `WEBVIEW2_SHA256`, the signer identity must equal `Microsoft Corporation`. Supplying `WEBVIEW2_SHA256` pins the artifact that the build accepts, but the build still requires a valid signature.
 
 The webview build does not support compilation for another target architecture. Build it on a machine with the target architecture. On Linux, the build can use `webkit2gtk-4.1`; the Makefile supplies a `pkg-config` shim when the upstream binding requests `4.0`.
 

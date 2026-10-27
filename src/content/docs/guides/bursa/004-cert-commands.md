@@ -122,16 +122,14 @@ The pool registration certificate registers a new stake pool or updates an exist
 >Optional inputs:
 > -  `--metadata-url`    Pool metadata URL
 > -  `--metadata-hash`   Pool metadata hash (hex)
-> -  `--owner-stake-vkey`  Owner stake verification key file (repeatable)
-> -  `--relay-address`     Relay address in `IPv4:port` or `[IPv6]:port` format (repeatable)
-> -  `--relay-host`        Relay host name in `name[:port]` format (repeatable)
-> -  `--relay-multi-host`  Relay multi-host DNS SRV name (repeatable)
+> -  `--owner-stake-vkey`  Pool owner stake verification key file (repeatable)
+> -  `--relay-address`  Relay IP address with port: `IPv4:port` or `[IPv6]:port` (repeatable)
+> -  `--relay-host`  Relay host name with an optional port: `name[:port]` (repeatable)
+> -  `--relay-multi-host`  Multi host DNS name (repeatable)
 
-When the command omits `--owner-stake-vkey`, Bursa uses the stake key from
-`--reward-account` when the reward account provides a stake key. A script reward
-account requires at least one explicit `--owner-stake-vkey`.
+When no `--owner-stake-vkey` flags are supplied, Bursa derives the pool owner from the stake key in `--reward-account`. If the reward account is not a stake key address, Bursa requires at least one explicit `--owner-stake-vkey` file. Each explicit owner file must contain a `StakeVerificationKeyShelley_ed25519` envelope; use stake verification key files rather than pool cold key files.
 
-Bursa emits relays in this order: address, host, then multi-host.
+Bursa emits relay values in this order: address, host, then multi host.
 
 Output format is compatible with cardano-cli certificates.
 
@@ -142,6 +140,14 @@ Output format is compatible with cardano-cli certificates.
     --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
     --pledge 1000000000 --cost 340000000 --margin 0.01 \
     --reward-account stake1... \
+    --owner-stake-vkey /path/owner-1.vkey \
+    --owner-stake-vkey /path/owner-2.vkey \
+    --relay-address 203.0.113.10:3001 \
+    --relay-address '[2001:db8::1]:3001' \
+    --relay-host relay.example.com:3001 \
+    --relay-host relay.example.net \
+    --relay-multi-host multi.example.com \
+    --relay-multi-host another.example.com \
     --metadata-url "https://example.com/pool.json" \
     --metadata-hash "abc123..." --out pool-reg.cert
 ```
@@ -194,12 +200,18 @@ the Conway form.
 
 Output format is a cardano-cli compatible JSON text envelope.
 
+Without `--deposit`, Bursa writes the Shelley registration certificate (type `0`). With `--deposit <lovelace>`, Bursa writes the Conway registration certificate (type `7`) and includes the deposit. `--deposit 0` still selects the Conway form and includes a zero coin because the flag's presence selects the certificate form.
+
+> Optional input: `--deposit <lovelace>`  Deposit amount in lovelace.
+
 > ⚠️ Please adjust path below.
 
 ```
 ./bursa cert stake-registration \
     --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
+
+To write the Conway form with an explicit deposit:
 
 ```
 ./bursa cert stake-registration \
@@ -225,6 +237,10 @@ deregistration form (type 8) with the specified refund. An explicit
 
 Output format is a cardano-cli compatible JSON text envelope.
 
+Without `--deposit-refund`, Bursa writes the Shelley deregistration certificate (type `1`). With `--deposit-refund <lovelace>`, Bursa writes the Conway deregistration certificate (type `8`) and includes the refund. `--deposit-refund 0` still selects the Conway form and includes a zero coin because the flag's presence selects the certificate form.
+
+> Optional input: `--deposit-refund <lovelace>`  Deposit refund amount in lovelace.
+
 > ⚠️ Please adjust path below.
 
 ```
@@ -232,8 +248,10 @@ Output format is a cardano-cli compatible JSON text envelope.
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
 ```
 
+To write the Conway form with an explicit deposit refund:
+
 ```
-./bursa cert stake-deregistration \
+ ./bursa cert stake-deregistration \
     --stake-vkey /path/stake.vkey --deposit-refund 2000000 \
     --out stake-dereg.cert
 ```

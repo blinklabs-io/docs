@@ -107,19 +107,23 @@ The `tx` commands inspect and sign an existing transaction without contacting a 
 ./bursa tx decode --tx-file unsigned.tx
 ./bursa tx id --tx-file unsigned.tx
 ./bursa tx sign --tx-file unsigned.tx \
-  --signing-key-file dev/payment.skey --out-file signed.tx
+  --signing-key-file dev/payment.skey --era Conway --out-file signed.tx
 ```
 
-Repeat `--signing-key-file` to add multiple signers. For separate signing sessions, create detached witnesses and assemble them against the same transaction:
+Repeat `--signing-key-file` to add multiple signers. The optional `--era` flag accepts `Shelley`, `Allegra`, `Mary`, `Alonzo`, `Babbage`, `Conway`, or `Dijkstra` without regard to letter case. Use it with `tx sign`, `tx witness`, or `tx assemble` when raw CBOR or a legacy era-less `Tx` envelope does not identify a single era:
 
 ```sh
 ./bursa tx witness --tx-file unsigned.tx \
-  --signing-key-file dev/payment.skey --out-file payment.witness
+  --signing-key-file dev/payment.skey --era Conway --out-file payment.witness
 ./bursa tx assemble --tx-file unsigned.tx \
-  --witness-file payment.witness --out-file assembled.tx
+  --witness-file payment.witness --era Conway --out-file assembled.tx
 ```
 
-Repeat `--witness-file` to include additional witnesses. Signing, witnessing, and assembly write JSON text envelopes to `--out-file`, or to standard output when it is omitted. `tx decode --protocol-params protocol-parameters.json` also estimates the minimum fee from a Cardano protocol-parameters JSON file. Use `./bursa tx --help` and each subcommand's `--help` for options.
+Repeat `--witness-file` to include additional witnesses. Bursa uses an era named in a text envelope and requires it to match `--era` when both are present. Raw hex and a legacy era-less `Tx` envelope work without `--era` only when the CBOR resolves to one era. If the CBOR is valid in more than one era, Bursa does not guess: provide `--era` or an era-typed envelope such as `Tx ConwayEra`. An unknown era or a conflict between the envelope and `--era` fails.
+
+Signing and assembly write JSON text envelopes to `--out-file`, or to standard output when it is omitted. Signed and assembled outputs use `TxSignedShelley` for Shelley, `Tx <Era>Era` for Allegra through Dijkstra, such as `Tx ConwayEra`, and plain `Tx` for Byron. Detached witnesses use `TxWitness <Era>Era` for Shelley through Dijkstra, such as `TxWitness ConwayEra`, and plain `TxWitness` for Byron.
+
+The `/api/tx/sign` and `/api/tx/assemble` endpoints resolve the era from `tx_cbor`. When raw or era-less CBOR is valid in multiple eras, the request returns HTTP `400` unless `tx_cbor` uses an era-named text envelope such as `Tx ConwayEra`; the response includes remediation guidance. `tx decode --protocol-params protocol-parameters.json` also estimates the minimum fee from a Cardano protocol-parameters JSON file. Use `./bursa tx --help` and each subcommand's `--help` for options.
 
 The `--era` option is available on `tx sign`, `tx witness`, and `tx assemble`. For raw or era-less CBOR that is valid in more than one era, `--era` is required; for example:
 

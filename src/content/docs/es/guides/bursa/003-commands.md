@@ -108,29 +108,37 @@ Los comandos `tx` inspeccionan y firman una transacción existente sin conectars
 ```sh
 ./bursa tx decode --tx-file unsigned.tx
 ./bursa tx id --tx-file unsigned.tx
-./bursa tx sign --tx-file unsigned.tx \
+./bursa tx sign --tx-file unsigned.tx --era Conway \
   --signing-key-file dev/payment.skey --out-file signed.tx
 ```
+
+Los subcomandos `tx sign`, `tx witness` y `tx assemble` aceptan la opción opcional `--era`. Bursa acepta `Shelley`, `Allegra`, `Mary`, `Alonzo`, `Babbage`, `Conway` y `Dijkstra`, sin distinguir mayúsculas y minúsculas. Usa `--era` cuando el CBOR no declara una era y puede corresponder a más de una.
+
+Bursa usa la era declarada por un sobre de texto cuando el archivo la incluye. Si el archivo también incluye `--era`, ambos valores deben coincidir. Bursa acepta el CBOR hexadecimal sin era o el sobre heredado `Tx` sin era sin `--era` solo cuando el CBOR corresponde a una sola era. Cuando corresponde a varias, Bursa solicita `--era` o un sobre cuyo tipo declare la era, como `Tx ConwayEra`; no infiere una era ambigua. Una era desconocida o un conflicto entre `--era` y el tipo del sobre produce un error.
 
 Repite `--signing-key-file` para añadir varios firmantes. Para sesiones de firma separadas, crea testigos independientes y ensámblalos sobre la misma transacción:
 
 ```sh
-./bursa tx witness --tx-file unsigned.tx \
+./bursa tx witness --tx-file unsigned.tx --era Conway \
   --signing-key-file dev/payment.skey --out-file payment.witness
-./bursa tx assemble --tx-file unsigned.tx \
+./bursa tx assemble --tx-file unsigned.tx --era Conway \
   --witness-file payment.witness --out-file assembled.tx
 ```
 
-Repite `--witness-file` para incluir más testigos. La firma, la creación de testigos y el ensamblado escriben sobres de texto JSON en `--out-file`, o en la salida estándar si se omite. La era resuelta determina el tipo del sobre de salida y la codificación del conjunto de testigos.
+Los comandos de firma y ensamblado escriben estos sobres de texto JSON:
 
-`tx sign`, `tx witness` y `tx assemble` admiten la opción `--era`, con valores como `babbage` y `conway`. Bursa resuelve la era a partir de un sobre JSON tipado, del valor explícito de `--era` o de un CBOR sin era cuando este se decodifica de forma inequívoca. Si el CBOR sin era puede corresponder a más de una era, el comando falla y exige `--era` o un sobre cuyo tipo declare la era, como `Tx ConwayEra`. Si `--era` contradice la era declarada por el sobre, el comando también falla.
+- Shelley: `TxSignedShelley`.
+- Allegra, Mary, Alonzo, Babbage, Conway y Dijkstra: `Tx AllegraEra`, `Tx MaryEra`, `Tx AlonzoEra`, `Tx BabbageEra`, `Tx ConwayEra` y `Tx DijkstraEra`, respectivamente.
+- Byron: `Tx`.
 
-```sh
-./bursa tx sign --tx-file unsigned.tx --era conway \
-  --signing-key-file dev/payment.skey --out-file signed.tx
-```
+El comando de creación de testigos escribe estos sobres de texto JSON:
 
-`tx decode --protocol-params protocol-parameters.json` también estima la tarifa mínima a partir de un archivo JSON de parámetros del protocolo Cardano. Consulta las opciones con `./bursa tx --help` y el `--help` de cada subcomando.
+- Shelley, Allegra, Mary, Alonzo, Babbage, Conway y Dijkstra: `TxWitness ShelleyEra`, `TxWitness AllegraEra`, `TxWitness MaryEra`, `TxWitness AlonzoEra`, `TxWitness BabbageEra`, `TxWitness ConwayEra` y `TxWitness DijkstraEra`, respectivamente.
+- Byron: `TxWitness`.
+
+Bursa escribe los sobres en `--out-file`, o en la salida estándar si se omite. Repite `--witness-file` para incluir más testigos. `tx decode --protocol-params protocol-parameters.json` también estima la tarifa mínima a partir de un archivo JSON de parámetros del protocolo Cardano. Consulta las opciones con `./bursa tx --help` y el `--help` de cada subcomando.
+
+Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. Cuando el CBOR sin era o el sobre sin era corresponde a varias eras, el cliente debe enviar `tx_cbor` como un sobre de texto cuyo tipo declare la era, como `Tx ConwayEra`; de lo contrario, la solicitud devuelve HTTP `400` con instrucciones para corregir el formato.
 
 <a name="sign"></a>
 

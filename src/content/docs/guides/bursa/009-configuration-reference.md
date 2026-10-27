@@ -81,11 +81,15 @@ Configure wallet persistence and SOPS encryption with the following fields:
 
 | Configuration path | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
-| `storage.backend` | `STORAGE_BACKEND` | Selects the wallet storage backend. | Set to `aws` to use AWS Secrets Manager. |
+| `storage.backend` | `STORAGE_BACKEND` | Selects the wallet storage backend. | Use `aws` for AWS Secrets Manager or `gcp` for Google Cloud Secret Manager. |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Sets the prefix for wallet secrets in AWS Secrets Manager. | Required when `storage.backend` is `aws`. |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Selects an AWS KMS master key for SOPS encryption. | Configure as one SOPS master-key resource when AWS KMS provides the encryption key. |
+| `google.project` | `GOOGLE_PROJECT` | Selects the Google Cloud project that contains the wallet secrets. | Set this field when using the `gcp` storage backend. |
+| `google.secret_prefix` | `GCP_SECRET_PREFIX` | Sets the namespace prefix for wallet secrets in Google Cloud Secret Manager. | Required and non-empty when `storage.backend` is `gcp`; use only letters, numbers, hyphens, or underscores, and leave room for a wallet name within the combined 255-character Secret Manager ID limit. |
 | `age.recipients` | `AGE_RECIPIENTS` | Lists age recipients for SOPS encryption. | Provide recipients as a comma-separated value. |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Allows wallet persistence without encryption. | Explicitly enable this opt-in for file storage without a SOPS master key or for SQLite storage. |
+
+The `gcp` backend refuses to start when `google.secret_prefix` is empty or contains characters other than letters, numbers, hyphens, or underscores. Wallet names must use the same characters, and the prefix plus wallet name must fit within the 255-character Secret Manager ID limit. Bursa scopes list, load, save, and delete operations to the configured prefix namespace.
 
 SOPS encryption requires at least one configured master-key resource. Bursa rejects malformed key resources before encryption starts. The unencrypted-storage opt-in permits unencrypted wallet persistence.
 
@@ -234,7 +238,7 @@ A non-loopback legacy API listener must provide both readable TLS files and exac
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
-When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`.
+When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`. If the requested wallet does not exist, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete` return HTTP `404`; OpenAPI defines the structured response body as `api.ErrorResponse`.
 
 ```yaml
 api:
@@ -267,6 +271,8 @@ signer:
         allowed_drep_ids:
           - "hex-credential-id"
 ```
+
+When `collateral_inputs` is non-empty, Bursa requires `total_collateral`. It evaluates the collateral forfeiture amount and any collateral return with the same configured fee, output, total-value, network, address, and native-asset or multi-asset constraints used for ordinary transaction value. Caller policy overrides narrow these checks for collateral effects as well.
 
 The accepted `allowed_certificates` values are:
 
@@ -309,9 +315,11 @@ Bursa intersects each caller override with the key's base policy, so an override
 
 ### External policy hook
 
-Set `signer.policy_hook_url` to enable an external policy check after the static policy approves a request. The environment variable `SIGNER_POLICY_HOOK_URL` overrides this setting. Set `signer.policy_hook_timeout_ms` to configure the request timeout in milliseconds; `SIGNER_POLICY_HOOK_TIMEOUT_MS` overrides it. A value of `0` uses the five-second default. Bursa limits configured values to one day.
+Set `signer.policy_hook_url` to enable an external policy check after the static policy approves a request. The environment variable `SIGNER_POLICY_HOOK_URL` overrides this setting. The URL must be an absolute `https://` URL with a non-empty hostname; Bursa rejects invalid values during startup. Bursa sends the operation summary as JSON by `POST` over HTTPS, verifies the server certificate with the system certificate trust store, and refuses redirects. Set `signer.policy_hook_timeout_ms` to configure the request timeout in milliseconds; `SIGNER_POLICY_HOOK_TIMEOUT_MS` overrides it. A value of `0` uses the five-second default. Bursa limits configured values to one day.
 
-Bursa sends the transaction summary as a JSON `POST` request. The summary uses these fields:
+The JSON operation summary uses these fields:
+
+When present, the hook receives `collateral_inputs`, `collateral_return`, and `total_collateral` alongside ordinary outputs and fee. `collateral_inputs` contains transaction inputs; `collateral_return` uses the output fields for its address, lovelace amount, and asset flag; and `total_collateral` is a string amount. The `TxInspection` API/OpenAPI contract exposes the same three fields as optional fields.
 
 ```json
 {
@@ -320,6 +328,7 @@ Bursa sends the transaction summary as a JSON `POST` request. The summary uses t
   "key": "key-hash",
   "tx_id": "transaction-id",
   "fee": "1000000",
+  "ttl": 12345,
   "outputs": [
     {
       "address": "addr1example",
@@ -327,13 +336,40 @@ Bursa sends the transaction summary as a JSON `POST` request. The summary uses t
       "has_assets": true
     }
   ],
+  "collateral_inputs": [
+    { "tx_id": "collateral-transaction-id", "index": 0 }
+  ],
+  "collateral_return": {
+    "address": "addr1collateralreturn",
+    "lovelace": "2000000",
+    "has_assets": false
+  },
+  "total_collateral": "3000000",
+  "certificate_count": 1,
   "certificates": ["stake_registration"],
+  "has_mint": false,
+  "withdrawal_count": 1,
+  "voting_procedure_count": 1,
+  "voters": [
+    { "kind": "drep_key", "drep_id": "hex-credential-id" }
+  ],
+  "proposal_procedure_count": 1,
+  "has_treasury_donation": true,
+  "treasury_donation": "1000000",
+  "certificate_deposit_total": "2000000",
+  "certificate_refund_total": "500000",
+  "unresolved_certificate_deposits": 0,
+  "unresolved_certificate_refunds": 0,
+  "certificate_value_effects_complete": true,
+  "proposal_deposit_total": "10000000",
   "voter_kinds": ["drep_key"],
   "drep_ids": ["hex-credential-id"]
 }
 ```
 
-The hook permits signing only when it returns HTTP `200` with the JSON response `{"allow": true}`. Transport errors, timeouts, non-`200` responses, unreadable or malformed JSON, and any `allow` value other than `true` deny signing.
+Each `voters` entry contains `kind` and an optional `drep_id`. The summary also reports TTL, certificate, mint, withdrawal, governance, treasury-donation, and ledger value-effect details. The value-effect fields report certificate deposits and refunds, unresolved certificate effect counts, whether certificate value effects are complete, treasury donations, and proposal deposits.
+
+The hook permits signing only when it returns HTTP `200` with the exact JSON decision `{"allow": true}` and no trailing response data. Transport errors, timeouts, redirects, non-`200` responses, unreadable or malformed JSON, incomplete operation summaries, and any `allow` value other than `true` deny signing. When `max_total_out_ada` is configured, Bursa includes treasury donations, certificate deposit and refund effects, and proposal deposits in the capped total-value evaluation. Bursa denies signing when a required value effect remains unresolved.
 
 ## Troubleshooting
 

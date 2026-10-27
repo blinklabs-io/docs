@@ -48,13 +48,17 @@ Configura el almacenamiento de billeteras y las claves maestras de SOPS con esta
 
 | Ruta de configuración | Variable de entorno | Uso y validación |
 | --- | --- | --- |
-| `storage.backend` | `STORAGE_BACKEND` | Selecciona el backend de almacenamiento de billeteras. Establece `aws` para usar AWS Secrets Manager. |
+| `storage.backend` | `STORAGE_BACKEND` | Selecciona el backend de almacenamiento de billeteras. Establece `aws` para usar AWS Secrets Manager o `gcp` para usar Google Secret Manager. |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Define el prefijo obligatorio de los nombres de secretos que contienen las billeteras de AWS. |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Identifica la clave maestra de AWS KMS que usa SOPS para cifrar las billeteras. |
+| `google.project` | `GOOGLE_PROJECT` | Selecciona el proyecto de Google Cloud que contiene los secretos de las billeteras para el backend `gcp`. |
+| `google.secret_prefix` | `GCP_SECRET_PREFIX` | Define el prefijo obligatorio del espacio de nombres de las billeteras en Google Secret Manager. |
 | `age.recipients` | `AGE_RECIPIENTS` | Define los destinatarios `age` separados por comas que usa SOPS para cifrar las billeteras. |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | Permite explícitamente que Bursa persista las billeteras sin cifrar. Bursa requiere esta autorización para el almacenamiento de archivos sin una clave maestra de SOPS y para el almacenamiento SQLite. |
 
 El cifrado de billeteras con SOPS requiere al menos un recurso de clave maestra configurado. Bursa rechaza un recurso de clave mal formado antes de iniciar el cifrado.
+
+Para el backend `gcp`, `google.secret_prefix` es obligatorio y no puede estar vacío. El prefijo solo puede contener letras, números, guiones o guiones bajos, y debe dejar espacio para el nombre de la billetera dentro del límite combinado de `255` caracteres del ID de Secret Manager. Los nombres de billetera deben ser no vacíos y usar los mismos caracteres permitidos. Bursa rechaza el inicio cuando el prefijo está vacío o no es válido. Las operaciones de listar, cargar, guardar y eliminar billeteras solo usan recursos de Secret Manager cuyo ID pertenece al prefijo configurado.
 
 ## Referencia de configuración
 
@@ -233,6 +237,7 @@ Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar 
 La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, la configuración debe incluir el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
 
 Cuando se configura cualquier backend de almacenamiento de billeteras, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un encabezado `Authorization: Bearer <JWT>` válido, y el sujeto del token debe coincidir con un sujeto de la lista de administradores.
+Si la billetera solicitada no existe, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete` devuelven HTTP `404` con el cuerpo estructurado `api.ErrorResponse` definido en OpenAPI.
 
 ```yaml
 api:
@@ -322,11 +327,14 @@ Cada clave de `signer.caller_policies` identifica un sujeto llamador. Cada clave
 
 Bursa intersecta cada anulación del llamador con la política base de la clave, por lo que una anulación solo puede reducir la autoridad y no puede conceder un permiso que la política base deniega. Los campos de anulación desconocidos y los hashes de clave no válidos impiden que Bursa construya una política válida.
 
+Cuando una transacción incluye entradas de garantía (`collateral_inputs`), Bursa exige `total_collateral` para autorizarla. Bursa evalúa el cargo y el retorno de garantía con los mismos límites configurados para la comisión, las salidas, el valor total, la red, las direcciones y los activos nativos o múltiples activos que aplica a la ruta de valor ordinaria. Las anulaciones específicas del llamador también restringen la ruta de garantía.
+
 ### Hook de política externo
 
-Establece `signer.policy_hook_url` para habilitar una comprobación de política externa después de que la política estática apruebe una solicitud. La variable de entorno `SIGNER_POLICY_HOOK_URL` sustituye este ajuste. Usa `signer.policy_hook_timeout_ms` para configurar el tiempo de espera de la solicitud en milisegundos; `SIGNER_POLICY_HOOK_TIMEOUT_MS` lo sustituye. El valor `0` usa el valor predeterminado de cinco segundos. Bursa limita los valores configurados a un día.
+Establece `signer.policy_hook_url` para habilitar una comprobación de política externa después de que la política estática apruebe una solicitud. La variable de entorno `SIGNER_POLICY_HOOK_URL` sustituye este ajuste. La URL debe ser absoluta, usar `https` y tener un nombre de host no vacío. Bursa verifica el certificado del servidor mediante el almacén de confianza del sistema y rechaza las redirecciones. Usa `signer.policy_hook_timeout_ms` para configurar el tiempo de espera de la solicitud en milisegundos; `SIGNER_POLICY_HOOK_TIMEOUT_MS` lo sustituye. El valor `0` usa el valor predeterminado de cinco segundos. Bursa limita los valores configurados a un día.
 
-Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El resumen usa estos campos:
+Bursa envía el resumen de la transacción como JSON mediante `POST` sobre la conexión HTTPS. El resumen puede incluir estos campos:
+La API de inspección y la especificación OpenAPI de Bursa exponen `collateral_inputs`, `collateral_return` y `total_collateral` como campos opcionales de `TxInspection`. `collateral_inputs` contiene las entradas de transacción usadas como garantía; `collateral_return` usa los campos de una salida (`address`, `lovelace` y `has_assets`); y `total_collateral` representa el importe como una cadena. Cuando la transacción proporciona datos de garantía, el hook recibe estos campos junto con las salidas ordinarias y la comisión.
 
 ```json
 {
@@ -335,6 +343,7 @@ Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El re
   "key": "key-hash",
   "tx_id": "transaction-id",
   "fee": "1000000",
+  "ttl": 123,
   "outputs": [
     {
       "address": "addr1example",
@@ -342,13 +351,48 @@ Bursa envía el resumen de la transacción como una solicitud JSON `POST`. El re
       "has_assets": true
     }
   ],
+  "collateral_inputs": [
+    {
+      "tx_id": "collateral-transaction-id",
+      "index": 0
+    }
+  ],
+  "collateral_return": {
+    "address": "addr1example",
+    "lovelace": "4000000",
+    "has_assets": false
+  },
+  "total_collateral": "1000000",
+  "certificate_count": 1,
   "certificates": ["stake_registration"],
+  "has_mint": false,
+  "withdrawal_count": 1,
+  "voting_procedure_count": 1,
+  "voters": [
+    {
+      "kind": "drep_key",
+      "drep_id": "hex-credential-id"
+    }
+  ],
+  "proposal_procedure_count": 1,
+  "proposal_deposit_total": "5000000",
+  "has_treasury_donation": true,
+  "treasury_donation": "1000000",
+  "certificate_deposit_total": "2000000",
+  "certificate_refund_total": "0",
+  "unresolved_certificate_deposits": 0,
+  "unresolved_certificate_refunds": 0,
+  "certificate_value_effects_complete": true,
   "voter_kinds": ["drep_key"],
   "drep_ids": ["hex-credential-id"]
 }
 ```
 
-El hook permite firmar únicamente cuando devuelve HTTP `200` con la respuesta JSON `{"allow": true}`. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado y cualquier valor de `allow` distinto de `true` deniegan la firma.
+`voters` contiene el `kind` de cada votante y, cuando corresponde, su `drep_id`. `certificate_value_effects_complete` y los contadores de depósitos o reembolsos no resueltos indican si Bursa conoce todos los efectos de valor de los certificados.
+
+Con `max_total_out_ada`, Bursa incluye la donación a la tesorería, los efectos de depósitos y reembolsos de certificados y los depósitos de propuestas en el valor total evaluado. Bursa deniega la firma cuando no puede resolver un efecto de valor requerido.
+
+El hook autoriza la firma únicamente cuando Bursa recibe HTTP `200` con el objeto JSON explícito `{"allow": true}`. La respuesta no puede incluir datos posteriores al objeto JSON. Los errores de transporte, los tiempos de espera, las respuestas distintas de `200`, el JSON ilegible o mal formado, cualquier valor de `allow` distinto de `true` y un resumen de operación incompleto deniegan la firma. Bursa deniega antes de invocar el hook cuando no puede construir un resumen completo de certificados o votantes.
 
 ## Solución de problemas
 
