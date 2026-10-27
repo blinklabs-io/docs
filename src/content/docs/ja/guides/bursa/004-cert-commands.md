@@ -187,7 +187,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
 > オプションの入力:
-> -  `--deposit <lovelace>`  デポジット額。省略するとShelley形式(タイプ`0`)を出力し、指定すると指定した額を含むConway形式(タイプ`7`)を出力します。`0`を明示的に指定した場合もConway形式を選択します。
+> -  `--deposit <lovelace>`  デポジット額。`--deposit`フラグを省略するとShelley形式(タイプ`0`)を出力し、指定すると指定した額を含むConway形式(タイプ`7`)を出力します。値に`0`を指定した場合もConway形式を選択します。
 
 > ⚠️ 以下のパスを調整してください。
 
@@ -196,7 +196,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --stake-vkey /path/stake.vkey --out stake-reg.cert
 ```
 
-`--deposit`を指定する場合:
+`--deposit`フラグを指定する場合:
 
 ```
 ./bursa cert stake-registration \
@@ -216,7 +216,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
 出力形式はcardano-cli互換のJSONテキストエンベロープです。
 
 > オプションの入力:
-> -  `--deposit-refund <lovelace>`  デポジット返金額。省略するとShelley形式(タイプ`1`)を出力し、指定すると指定した額を含むConway形式(タイプ`8`)を出力します。`0`を明示的に指定した場合もConway形式を選択します。
+> -  `--deposit-refund <lovelace>`  デポジット返金額。`--deposit-refund`フラグを省略するとShelley形式(タイプ`1`)を出力し、指定すると指定した額を含むConway形式(タイプ`8`)を出力します。値に`0`を指定した場合もConway形式を選択します。
 
 > ⚠️ 以下のパスを調整してください。
 
@@ -225,7 +225,7 @@ Bursaは、ステークプール運用、ステーク委任、Conway時代のガ
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
 ```
 
-`--deposit-refund`を指定する場合:
+`--deposit-refund`フラグを指定する場合:
 
 ```
  ./bursa cert stake-deregistration \
