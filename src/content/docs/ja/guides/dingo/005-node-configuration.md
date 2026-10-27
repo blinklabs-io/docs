@@ -3,7 +3,7 @@ title: ノード設定とストレージモード
 description: Dingo ノードの役割を選び、対応する設定オプションを確認します。
 ---
 
-[クイックスタート](/ja/guides/dingo/002-quick-start-overview/)に従って Dingo をインストールし、ノードを起動します。このページでは主な設定の選択肢を説明します。[Dingo v0.87.0 の完全な設定リファレンス](/ja/guides/dingo/009-configuration-reference/)を読み、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.0/dingo.yaml.example) をダウンロードしてください。
+[クイックスタート](/ja/guides/dingo/002-quick-start-overview/)に従って Dingo をインストールし、ノードを起動します。このページでは主な設定の選択肢を説明します。[Dingo v0.89.0 の完全な設定リファレンス](/ja/guides/dingo/009-configuration-reference/)を読み、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) をダウンロードしてください。
 
 <a id="choose-a-node-role"></a>
 
@@ -31,7 +31,7 @@ Dingo は YAML ファイル、環境変数、コマンドラインフラグか�
 
 継続的な運用や既定値以外の設定では、ダウンロードしたファイルを `dingo.yaml` として保存し、`--config` で渡します。設定オプションと既定値はリリースによって変わる場合があります。
 
-プロバイダーは `plugins` の下に設定します。ストレージプロバイダーはブロックデータとメタデータを保持し、メモリプールプロバイダーは保留中のトランザクションを順序付け、API プロバイダーはクライアントリクエストを処理します。プロバイダー固有の設定は、そのプロバイダー名とともに記述します。サンプルファイルは Dingo v0.87.0 のプロバイダーとオプションを説明しています。`plugins.storage.metadata.provider` が `sqlite` の場合、ルートの `databasePath` は空にできません。プロバイダーを省略した場合の既定値も `sqlite` であり、`databasePath` が空なら起動時に設定を拒否します。環境変数は `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` の形式です。現在のサンプルでは、対応する blob およびメタデータのプロバイダーと各オプションを確認できます。
+プロバイダーは `plugins` の下に設定します。ストレージプロバイダーはブロックデータとメタデータを保持し、メモリプールプロバイダーは保留中のトランザクションを順序付け、API プロバイダーはクライアントリクエストを処理します。プロバイダー固有の設定は、そのプロバイダー名とともに記述します。サンプルファイルは Dingo v0.89.0 のプロバイダーとオプションを説明しています。`plugins.storage.metadata.provider` が `sqlite` の場合、ルートの `databasePath` は空にできません。プロバイダーを省略した場合の既定値も `sqlite` であり、`databasePath` が空なら起動時に設定を拒否します。環境変数は `DINGO_PLUGINS_<CAPABILITY>_<PROVIDER>_...` の形式です。現在のサンプルでは、対応する blob およびメタデータのプロバイダーと各オプションを確認できます。
 
 メトリクスのダッシュボードについては [Grafana ガイド](../spo-guides/008-grafana-dashboard/)を参照してください。Linux サービスとして実行するには、[Dingo をサービスとして実行する](/ja/guides/dingo/003-create-start-up-service/)を参照してください。
 
