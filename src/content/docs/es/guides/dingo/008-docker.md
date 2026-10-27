@@ -44,14 +44,14 @@ Si la configuración personalizada publica el puerto de métricas, establece `me
 
 El contenedor se ejecuta con UID `1000`. Asegúrate de que ese usuario puede leer el archivo de configuración montado. Para otras opciones del nodo, consulta [Configuración y modos de almacenamiento](/es/guides/dingo/005-node-configuration/).
 
-Para montar desde el host el directorio configurado en `databaseLifecycle.snapshotDir`, prepara su propiedad antes de iniciar el contenedor:
+Antes de iniciar el contenedor, prepara la propiedad del directorio del host que se montará como `databaseLifecycle.snapshotDir`:
 
 ```sh
 mkdir -p ./dingo-snapshots
 sudo chown 1000:1000 ./dingo-snapshots
 ```
 
-Una ruta de `snapshotDir` bajo `/data/db` ya tiene la propiedad `1000:1000`. Un bind mount independiente debe tener la propiedad `UID:GID 1000:1000` antes de montarse; de lo contrario, Dingo falla al iniciar porque no puede escribir en la ruta.
+Las rutas de `snapshotDir` bajo `/data/db` ya están preparadas para `UID:GID 1000:1000`. Un bind mount independiente debe tener esa propiedad antes de montarse y debe coincidir con la ruta configurada; de lo contrario, Dingo falla al iniciar porque no puede escribir en la ruta.
 
 ### Proteger las métricas publicadas
 
