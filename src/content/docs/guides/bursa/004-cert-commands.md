@@ -122,7 +122,7 @@ The pool registration certificate registers a new stake pool or updates an exist
 >Optional inputs:
 > -  `--metadata-url`    Pool metadata URL
 > -  `--metadata-hash`   Pool metadata hash (hex)
-> -  `--owner-stake-vkey`  Pool owner stake verification key file (repeatable). If no owner files are supplied, Bursa uses the stake key from `--reward-account`.
+> -  `--owner-stake-vkey`  Pool owner stake verification key file (repeatable)
 > -  `--relay-address`  Relay IP address with port: `IPv4:port` or `[IPv6]:port` (repeatable)
 > -  `--relay-host`  Relay host name with an optional port: `name[:port]` (repeatable)
 > -  `--relay-multi-host`  Multi host DNS name (repeatable)
