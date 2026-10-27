@@ -22,7 +22,7 @@ Descarga la última versión desde [GitHub](https://github.com/blinklabs-io/ding
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.87.1/dingo-v0.87.1-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Comprueba que el binario funcione:
@@ -92,9 +92,9 @@ Al reanudar una devnet persistente sin `--reset`, Dingo solo restaura o actualiz
 
 ## Paso 2 - Crear dingo.yaml
 
-Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.87.1. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example) de esa versión como punto de partida.
+Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.88.0. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example) de esa versión como punto de partida.
 
-Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod y mainnet. No necesitas descargarlas por separado.
+Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod, mainnet y DijkstraNet. Selecciona DijkstraNet con la opción de red `dijkstra`; DijkstraNet utiliza la magia de red `6`. No necesitas descargarlas por separado.
 
 Crea `dingo.yaml` en el directorio de Dingo. `$HOME` se expande automáticamente a tu directorio personal:
 
@@ -220,7 +220,10 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 ```
+
+📝 El servicio integrado de UTxO RPC escucha en `127.0.0.1` de forma predeterminada, aunque `bindAddr` raíz tenga un alcance más amplio. Para permitir el acceso remoto, configura explícitamente `plugins.api.utxorpc.config.host` con la interfaz deseada.
 
 💡 `midnight.serverEnabled: false` mantiene desactivado el servicio gRPC de Midnight; configurar únicamente `midnight.port` no lo expone.
 
