@@ -164,11 +164,11 @@ plugins:
 
 # Mempool
 # plugins.mempool.config.capacity is an optional override.
-# Default: 1 MiB for standard and Praos modes. When runMode is "leios", or when
-# the network is Musashi (by name or network magic), the default is 25 MiB;
-# this includes normal "serve" mode on Musashi. An explicitly configured
-# capacity always takes precedence. Leave the key commented or omit it to use
-# the applicable default.
+# Default: 1 MiB for standard/Praos modes. If runMode is "leios", the default
+# is 25 MiB. If the network is Musashi (by name or network magic), the default
+# is also 25 MiB; on Musashi, this includes normal "serve" mode. An explicitly
+# configured capacity always takes precedence. Leave the key commented or omit
+# it to use the applicable default.
 # plugins:
 #   mempool:
 #     config:
