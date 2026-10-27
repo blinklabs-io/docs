@@ -46,10 +46,11 @@ for the main runtime choices.
 
 Dingo records the selected provider's database identity in the data directory.
 When the stored identity differs from the selected provider identity, Dingo
-rejects startup. A nonempty database must already carry the selected provider
-identity; Dingo does not reinterpret an unmarked or Praos-identified database as
-Tachys. An empty database can adopt the selected provider identity before chain
-data import.
+rejects startup. Dingo accepts an unmarked database only with the built-in Praos
+provider identity `praos/v1`, then records that identity for later checks. A
+nonempty database with an existing identity must match the selected provider;
+selecting Tachys for an unmarked or Praos-identified database fails. An empty
+database can adopt the selected provider identity before chain data import.
 
 ### Mempool capacity
 
