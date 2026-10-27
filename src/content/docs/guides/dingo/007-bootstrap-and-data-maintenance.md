@@ -149,8 +149,9 @@ Dingo protects local snapshot data before it writes backup data. On Unix, Dingo
 sets the snapshot root, each snapshot leaf directory, and the metadata staging
 directory to mode `0700`; it sets snapshot and staging files to mode `0600`. On
 Windows, Dingo applies protected owner-only ACLs to these directories and files.
-The node's trusted user must own a configured snapshot directory and must be able
-to write to it; Dingo rejects an existing directory when either check fails.
+During validation, Dingo checks that the node's trusted user owns the configured
+snapshot directory and can write to it. Dingo rejects an existing directory when
+either check fails.
 
 MySQL snapshot and restore reject `tls=skip-verify`. See the Dingo configuration reference
 for provider TLS defaults.
