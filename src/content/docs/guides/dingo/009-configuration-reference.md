@@ -303,6 +303,17 @@ even when the Badger provider configuration sets
 | --- | --- | --- | --- | --- | --- |
 | Snapshot commit pause bound | `databaseLifecycle.snapshotMaxCommitPause` | `--db-snapshot-max-commit-pause` | `DINGO_DB_LIFECYCLE_SNAPSHOT_MAX_COMMIT_PAUSE` | `30s`. Set `0s` for no bound. | Set a nonnegative duration. Dingo rejects negative values during configuration validation. A positive duration limits manual and offline, live, and automatic epoch-boundary snapshots after they acquire the commit barrier. If the bound is exceeded, Dingo cancels the snapshot, removes partial output, and reports an error that wraps `ErrCommitPauseExceeded`. |
 
+### Database lifecycle snapshot directory
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. It is required when `snapshotEnabled` is true and when Bark mounts its DatabaseService. Dingo validates that the configured directory is owned by the process user or root and is writable. |
+
+Dingo keeps configured snapshot roots and generated local snapshot and staging
+paths private. Unix directories use `0700` permissions and files use `0600`.
+Windows uses protected owner-only ACLs. Dingo rejects a snapshot directory that
+does not satisfy the ownership or writability requirements.
+
 ### Database lifecycle snapshot trust key
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
@@ -367,6 +378,9 @@ Every file-backed value must meet these requirements:
 
 - The path must identify a regular file. Dingo rejects directories, devices,
   and other non-regular paths.
+- On Unix, the file and every ancestor path entry must be owned by the Dingo
+  process user or root. Dingo rejects a non-sticky directory in the path when
+  group or other users can write to it.
 - Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
   and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix
