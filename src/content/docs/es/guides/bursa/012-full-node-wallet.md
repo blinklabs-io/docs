@@ -44,7 +44,7 @@ bursa-wallet -n mainnet
 bursa-wallet --network musashi
 ```
 
-Las redes admitidas son `mainnet`, `preprod`, `preview`, `musashi` y `dijkstra`. Bursa selecciona la red en este orden: primero el indicador de línea de comandos, después `BURSA_NETWORK` y, cuando ninguno de los dos define una red, `preview`. El indicador de línea de comandos tiene prioridad sobre `BURSA_NETWORK`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales, por lo que la billetera no se inicia en esos casos.
+Las redes admitidas son `mainnet`, `preprod`, `preview`, `musashi` y `dijkstra`. Bursa selecciona la red en este orden: primero `-n` o `--network`, después `BURSA_NETWORK` y, si ambos faltan, `preview`; por tanto, la opción de línea de comandos tiene prioridad sobre `BURSA_NETWORK`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales, por lo que la billetera no se inicia en esos casos.
 
 La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez mediante `POST /session` por la cookie HttpOnly `bursa-control-session` y después elimine el fragmento del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
 
@@ -56,7 +56,7 @@ Establece las variables de entorno antes de la primera ejecución para inicializ
 
 | Variable | Valor predeterminado | Efecto |
 | --- | --- | --- |
-| `BURSA_NETWORK` | `preview` | Selecciona la red Cardano, incluidas `musashi` y `dijkstra`, y determina el directorio de datos. El indicador `-n` o `--network` tiene prioridad sobre esta variable. |
+| `BURSA_NETWORK` | `preview` | Selecciona una red Cardano y determina el directorio de datos. También admite `musashi` y `dijkstra`. La opción `-n` o `--network` tiene prioridad sobre esta variable. |
 | `BURSA_SYNC` | `mithril` | `BURSA_SYNC=genesis` reproduce la cadena desde el principio en lugar de arrancar desde una instantánea de Mithril. En `musashi` y `dijkstra`, Bursa desactiva el arranque de Mithril y sincroniza desde la génesis aunque esta variable conserve `mithril`, porque esas redes no tienen configuración de agregador de Mithril. |
 | `BURSA_LEAN` | `false` | Activa el almacenamiento reducido, que poda los datos históricos de la cadena para ahorrar disco. |
 | `BURSA_CONNECTOR` | `false` | Activa el backend del conector de dApps. |
