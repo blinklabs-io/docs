@@ -301,8 +301,8 @@ Dingo は `FetchBlock` の参照バッチ全体を両方の制限に計上しま
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| Dingo Koios パリティ API 鍵 | `koiosParity.apiKey` | 削除済み・無効: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | 既定では空です。リテラルの API 鍵は YAML とこの環境変数で引き続き使用できます。CLI では `--koios-parity-api-key-file` を使用します。 |
-| Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。CLI から入力する場合は、削除され無効になったリテラルフラグの代わりにこのファイル方式を使用します。ファイルを API 鍵の文字列として読み取ります。 |
+| Dingo Koios パリティ API 鍵 | `koiosParity.apiKey` | 削除済み・無効: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | 既定では空です。YAML とこの環境変数では、リテラルの API 鍵を引き続き使用できます。リテラル CLI フラグは削除済みで無効です。 |
+| Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。CLI から入力する場合は、このファイル方式を使用します。ファイルを API 鍵の文字列として読み取ります。 |
 | 汎用プラグイン設定フィールドのファイル | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>` の代わりに使用します。ファイルを通常の文字列として読み取り、YAML として解析しません。 |
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
