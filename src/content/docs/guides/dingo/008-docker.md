@@ -59,11 +59,11 @@ published port.
 The container runs as UID `1000`. Make sure a bind-mounted configuration file
 is readable by that user. For other node settings, see [configuration and
 storage modes](/guides/dingo/005-node-configuration/).
-The image prepares a snapshot directory under its `/data/db` volume for
-UID:GID `1000:1000`. If `databaseLifecycle.snapshotDir` uses a separate host
-bind mount, prepare that host directory with ownership set to UID:GID
-`1000:1000` before starting Dingo; otherwise, Dingo fails startup with a
-writability or permission error.
+The image already prepares a snapshot directory under its `/data/db` volume
+for UID:GID `1000:1000`. When `databaseLifecycle.snapshotDir` points to a
+separate host bind mount, set that host directory's ownership to UID:GID
+`1000:1000` and prepare it before starting Dingo. Otherwise, Dingo fails
+startup with a writability or permission error.
 
 ### Protect published metrics
 
