@@ -120,6 +120,12 @@ El certificado de registro de pool registra un nuevo stake pool o actualiza un r
 >Entradas opcionales:
 > -  `--metadata-url`    URL de metadata del pool
 > -  `--metadata-hash`   Hash de metadata del pool (hex)
+> -  `--owner-stake-vkey` Archivo de clave de verificación de stake del propietario del pool (repetible)
+> -  `--relay-address`   Dirección del relay en formato `IPv4:port` o `[IPv6]:port` (repetible)
+> -  `--relay-host`      Nombre de host del relay en formato `name[:port]` (repetible)
+> -  `--relay-multi-host` Nombre DNS SRV del relay multi-host (repetible)
+
+Si no se proporciona `--owner-stake-vkey`, Bursa usa la clave de stake de `--reward-account` cuando la cuenta de recompensa incluye una clave de stake. Las cuentas de recompensa basadas en scripts requieren especificar explícitamente los propietarios mediante `--owner-stake-vkey`. Bursa emite los relays en este orden: dirección, host y multi-host.
 
 El formato de salida es compatible con certificados de cardano-cli.
 
@@ -132,6 +138,17 @@ El formato de salida es compatible con certificados de cardano-cli.
     --reward-account stake1... \
     --metadata-url "https://example.com/pool.json" \
     --metadata-hash "abc123..." --out pool-reg.cert
+```
+
+Ejemplo con un propietario y un relay:
+
+```
+./bursa cert pool-registration \
+    --cold-vkey /path/cold.vkey --vrf-vkey /path/vrf.vkey \
+    --pledge 1000000000 --cost 340000000 --margin 0.01 \
+    --reward-account stake1... \
+    --owner-stake-vkey /path/owner.vkey \
+    --relay-address 203.0.113.10:3001 --out pool-reg.cert
 ```
 
 ***
@@ -163,11 +180,22 @@ Este certificado registra una dirección de stake on-chain, lo cual es requerido
 
 El formato de salida es un sobre de texto JSON compatible con cardano-cli.
 
+> Entradas opcionales:
+> - `--deposit <lovelace>` Cantidad del depósito en lovelace. Al proporcionar esta opción, Bursa genera el certificado Conway de tipo 7; al omitirla, genera el certificado Shelley de tipo 0. Un valor explícito de `0` también selecciona el certificado Conway.
+
 > Por favor ajusta la ruta a continuación.
 
 ```
 ./bursa cert stake-registration \
     --stake-vkey /path/stake.vkey --out stake-reg.cert
+```
+
+Para generar un certificado Conway con un depósito:
+
+```
+./bursa cert stake-registration \
+    --stake-vkey /path/stake.vkey --deposit 2000000 \
+    --out stake-reg.cert
 ```
 
 ***
@@ -180,11 +208,22 @@ Este certificado cancela el registro de una dirección de stake, devolviendo el 
 
 El formato de salida es un sobre de texto JSON compatible con cardano-cli.
 
+> Entradas opcionales:
+> - `--deposit-refund <lovelace>` Cantidad del reembolso del depósito en lovelace. Al proporcionar esta opción, Bursa genera el certificado Conway de tipo 8; al omitirla, genera el certificado Shelley de tipo 1. Un valor explícito de `0` también selecciona el certificado Conway.
+
 > Por favor ajusta la ruta a continuación.
 
 ```
  ./bursa cert stake-deregistration \
     --stake-vkey /path/stake.vkey --out stake-dereg.cert
+```
+
+Para generar un certificado Conway con un reembolso:
+
+```
+./bursa cert stake-deregistration \
+    --stake-vkey /path/stake.vkey --deposit-refund 2000000 \
+    --out stake-dereg.cert
 ```
 
 ***

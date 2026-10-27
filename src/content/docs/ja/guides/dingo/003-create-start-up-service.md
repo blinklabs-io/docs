@@ -117,6 +117,7 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 
 # Mithril
 mithril:
@@ -172,6 +173,7 @@ databaseLifecycle:
   # Windows: the current user or BUILTIN\\Administrators must own it; the process
   # must belong to Administrators when applicable, and the DACL must restrict access.
   # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust-key"
+  # Cloud mirroring requires an acceptable configured trust key and an already authenticated manifest.
   # Keep only the most recent automatic snapshots.
   # Default: 0.
   snapshotRetention: 0
@@ -186,11 +188,15 @@ EOF
 
 > 📝 既定で Mithril は `HTTPS` を必須とし、ローカル、プライベート、その他の非公開の接続先を拒否します。Mithril v2 ブートストラップは、設定したアグリゲーターまたは公式 Mithril GCS オリジン（`storage.googleapis.com`）からのアーティファクトとリダイレクトのみを受け入れます。ダウンロード全体と展開の安全性を検査し、展開前に署名付き付属データの事前検証を行い、認証済みの台帳内容のみを使用します。`mithril.allowInsecureHttp: true` はローカル開発やテストに限って設定し、本番環境では有効にしないでください。
 
+> 📝 UTxO RPC は、デフォルトで `127.0.0.1` からの接続だけを受け付けます。同じホスト以外から接続する場合は、`plugins.api.utxorpc.config.host` に接続先を明示的に設定してください。
+
 > `debugPort`を`0`に置きます プロファイリングが要求されなければ。 `debugPort`は別の任意pprofのリスナーを制御し、プロファイリングが要求されなければ無効にとどまるべきです。
 
 > 📝 `databaseLifecycle.snapshotEnabled` はエポック境界の自動スナップショットを制御します。主 blob プロバイダーが `badger`、`s3`、`gcs` の場合も、手動の `dingo database snapshot` と Bark の `CreateSnapshot` は利用できます。Bark でライブの復元または切り詰めも提供する場合は、`barkPort`、`databaseLifecycle.snapshotDir`、`barkClientCaFilePath`、`tlsCertFilePath`/`tlsKeyFilePath` を設定します。
 
 > `databaseLifecycle.snapshotRetention` は、最新の自動スナップショットだけを維持するために設定します。 `databaseLifecycle.snapshotCloudDestination` は、Dingo が `dingo_extra_plugins` で実行したときに、各スナップショットを S3 または GCS にミラーリングします。 このミラーの宛先は、プライマリブロブプロバイダとは別です。
+
+> `databaseLifecycle.snapshotCloudDestination` を設定した場合、Dingo は未署名の従来のスナップショットを拒否し、自動的な署名やミラーリングを行いません。
 
 > `dingo database snapshot`、`dingo database restore <snapshot-dir>`、`dingo database truncate --slot <slot>`、`--hash <hash>`、または`--block-number <n>`をオフラインデータディレクトリに使用。 `restore`は、`snapshotCloudDestination`が使用し、修復前に一時ディレクトリにダウンロードする同じクラウドURIも受け入れます。
 
@@ -214,6 +220,7 @@ plugins:
       provider: "builtin"
       config:
         port: 9090
+        host: "127.0.0.1"
 midnight:
   # Enable the Midnight gRPC server. Default: false.
   serverEnabled: false
@@ -242,6 +249,9 @@ midnight:
 REST ヒント: `network` 設定は、次の値をサポートしています。
 
 ```yaml
+# Dijkstra テストネット（ネットワークマジック 6）
+network: dijkstra
+
 # Musashi (Leios) testnet
 network: musashi
 

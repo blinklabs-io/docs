@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.87.1 Configuration Reference
-description: Complete, release-specific Dingo v0.87.1 configuration reference and example.
+title: Dingo v0.88.0 Configuration Reference
+description: Complete, release-specific Dingo v0.88.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.87.1. The complete
+This page covers the configuration shipped with Dingo v0.88.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.87.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.87.1 source](https://github.com/blinklabs-io/dingo/blob/v0.87.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.88.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.88.0 source](https://github.com/blinklabs-io/dingo/blob/v0.88.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -156,6 +156,15 @@ the node starts from origin without an intersection point. Dingo follows the
 Cardano configuration in this case instead of applying Genesis density,
 corroboration, or patience selection.
 
+### UTxO RPC provider
+
+Configure the host explicitly when a deployment must accept UTxO RPC
+connections from another host or interface.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Host | `plugins.api.utxorpc.config.host` | — | — | `127.0.0.1` by default. Remote access or access from outside loopback requires an explicit host. |
+
 ### Blockfrost provider
 
 The built-in Blockfrost provider listens on loopback by default. Read-only API
@@ -175,6 +184,14 @@ refuses to start authenticated mutation access without server TLS. After
 authentication and before reading the request body, the provider applies both
 mutation limits. When either limit is exhausted, it returns HTTP `429` with
 `Retry-After: 1` without reading the body.
+
+### Shared outbound HTTP user agent
+
+The shared outbound HTTP user agent has no YAML key or CLI flag.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Shared HTTP user agent | — | — | `DINGO_HTTP_USER_AGENT` | `dingo/<version> (<GOOS>/<GOARCH>)` by default. Dingo uses a valid value from this environment variable when set and ignores an invalid value. Component-specific `userAgent` settings for off-chain metadata and token registry take precedence. |
 
 ### LocalStateQuery snapshot lifetime
 
@@ -308,6 +325,14 @@ owner, `Administrators`, `SYSTEM`, `Creator Owner`, and `Owner Rights`, plus
 the restricted local `Administrator` ACE when `Administrators` owns the file.
 Dingo rejects an invalid file during snapshot authentication and during any
 lifecycle operation that needs the trust key.
+Operators must provide an acceptable trust key to enable cloud snapshot
+mirroring. Dingo rejects unsigned legacy snapshots instead of automatically
+signing them for mirroring.
+
+On Unix, unkeyed local restores require a private snapshot location that the
+restoring process trusts. On Windows, they require an authenticated manifest.
+See the bootstrap and data maintenance guide for the required operational
+checks.
 
 ### Bark remote lifecycle service
 

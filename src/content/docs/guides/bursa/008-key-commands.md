@@ -60,7 +60,7 @@ The examples below write signing keys to explicit files in cardano-cli JSON enve
 
 ### Signing Key File Format
 
-When Bursa exports a signing key derived from an HD path, it writes an extended Ed25519-BIP32 envelope. Root, account, payment, stake, governance, policy, multisig, and Calidus signing files use envelope types such as `*_ExtendedSigningKeyShelley_ed25519_bip32` and 128-byte CBOR beginning with `5880`. Legacy non-extended files use 32-byte CBOR beginning with `5820`.
+When Bursa exports a signing key derived from an HD path, it writes an extended Ed25519-BIP32 envelope. Root, account, payment, stake, policy, multisig, and Calidus signing files use envelope types such as `*_ExtendedSigningKeyShelley_ed25519_bip32` and 128-byte CBOR beginning with `5880`. Generated governance signing files use the specific envelope types documented in their sections below. Legacy non-extended files use 32-byte CBOR beginning with `5820`.
 
 Pool-cold signing files are the exception. Fresh exports use a standard, non-extended Ed25519 envelope with type `StakePoolSigningKey_ed25519`; the matching verification envelope uses type `StakePoolVerificationKey_ed25519`. Bursa accepts the legacy `StakePoolSigningKeyShelley_ed25519` and `StakePoolVerificationKeyShelley_ed25519` types when loading and leaves those files unchanged. The pool-cold signing seed produces the exported verification key as the standard Ed25519 identity used by pool registration and operational certificates. The optional extended pool-cold representation preserves that same identity.
 
@@ -176,6 +176,8 @@ VRF keys are used by stake pool operators for leader election in the Praos conse
 
 With `--signing-key-file -`, standard output includes both the signing key (`vrf_sk`) and verification key (`vrf_vk`) in bech32 format.
 
+Generated verification key files use the envelope type `VrfVerificationKey_PraosVRF`, and generated signing key files use `VrfSigningKey_PraosVRF`. The signing key body contains 64 bytes: a 32-byte seed followed by a 32-byte public key. Standard output encodes `vrf_sk` with the same seed-plus-public-key layout.
+
 ```
 ./bursa key vrf --mnemonic-file seed.txt --index 0 --signing-key-file vrf.skey --verification-key-file vrf.vkey
 ```
@@ -200,6 +202,8 @@ The seed is derived deterministically from the mnemonic, allowing for key recove
 
 With `--signing-key-file -`, standard output includes both the signing key (`kes_sk`, 608 bytes) and verification key (`kes_vk`, 32 bytes) in bech32 format.
 
+Generated verification key files use the envelope type `KesVerificationKey_ed25519_kes_2^6`, and signing key files use `KesSigningKey_ed25519_kes_2^6`.
+
 ```
 ./bursa key kes --mnemonic-file seed.txt --index 0 --signing-key-file kes.skey --verification-key-file kes.vkey
 ```
@@ -214,7 +218,7 @@ With `--signing-key-file -`, standard output includes both the signing key (`kes
 
 ### VRF and KES Key Validation
 
-Bursa validates VRF and KES material before exporting or loading it. A VRF verification key must have the expected length. VRF signing material must use an accepted seed or seed-plus-public-key form, and its embedded public key must match the seed when that form is used. A KES verification key must have the expected length. A KES signing key must use Cardano KES depth and the expected secret-key size. Bursa rejects malformed lengths, a mismatched VRF seed and public key, invalid KES depth, and invalid KES secret size instead of producing an envelope.
+Bursa validates VRF and KES material before exporting or loading it. A VRF verification key must have the expected length. VRF signing material must use either a 32-byte seed or a 64-byte seed-plus-public-key form, and its embedded public key must match the seed when the 64-byte form is used. A KES verification key must have the expected length. A KES signing key must use Cardano KES depth and the expected secret-key size. Bursa rejects malformed lengths, a mismatched VRF seed and public key, invalid KES depth, and invalid KES secret size instead of producing an envelope.
 
 ***
 
@@ -224,6 +228,8 @@ Bursa validates VRF and KES material before exporting or loading it. A VRF verif
 The DRep key follows CIP-0105 path: m/1852'/1815'/account'/3/index  
 These keys are used for governance participation as a Delegated Representative.  
 With `--signing-key-file -`, standard output uses bech32 format (drep_xsk prefix).
+
+Generated verification key files use the envelope type `DRepVerificationKey_ed25519`, and signing key files use `DRepExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Shelley-suffixed Bursa envelope names for DRep keys, so existing key files remain usable.
 
 ```
 ./bursa key drep --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file drep.skey --verification-key-file drep.vkey
@@ -246,6 +252,8 @@ The committee cold key follows CIP-0105 path: m/1852'/1815'/account'/4/index
 These keys are used for Constitutional Committee membership (long-term identity).  
 With `--signing-key-file -`, standard output uses bech32 format (cc_cold_xsk prefix).
 
+Generated verification key files use the envelope type `ConstitutionalCommitteeColdVerificationKey_ed25519`, and signing key files use `ConstitutionalCommitteeColdExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Shelley-suffixed Bursa envelope names for constitutional committee cold keys, so existing key files remain usable.
+
 ```
 ./bursa key committee-cold --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-cold.skey --verification-key-file committee-cold.vkey
 ```
@@ -266,6 +274,8 @@ With `--signing-key-file -`, standard output uses bech32 format (cc_cold_xsk pre
 The committee hot key follows CIP-0105 path: m/1852'/1815'/account'/5/index  
 These keys are used for Constitutional Committee voting (operational key).  
 With `--signing-key-file -`, standard output uses bech32 format (cc_hot_xsk prefix).
+
+Generated verification key files use the envelope type `ConstitutionalCommitteeHotVerificationKey_ed25519`, and signing key files use `ConstitutionalCommitteeHotExtendedSigningKey_ed25519_bip32`. Bursa continues to load legacy Shelley-suffixed Bursa envelope names for constitutional committee hot keys, so existing key files remain usable.
 
 ```
 ./bursa key committee-hot --mnemonic-file seed.txt --account-index 0 --index 0 --signing-key-file committee-hot.skey --verification-key-file committee-hot.vkey

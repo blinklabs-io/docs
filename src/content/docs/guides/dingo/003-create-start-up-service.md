@@ -110,6 +110,8 @@ plugins:
     utxorpc:
       provider: "builtin"
       config:
+        # UTxO RPC remains on loopback by default. For remote access, set plugins.api.utxorpc.config.host explicitly.
+        host: "127.0.0.1"
         port: 9090
 
 # Mithril
@@ -166,6 +168,8 @@ databaseLifecycle:
   # Windows: the current user or BUILTIN\\Administrators must own it; the process
   # must belong to Administrators when applicable, and the DACL must restrict access.
   # snapshotTrustKeyFile: "$HOME/dingo/snapshot-trust-key"
+  # Cloud mirroring requires the configured snapshot trust key and an already authenticated manifest.
+  # Dingo rejects unsigned legacy snapshots; it does not automatically sign or mirror them.
   # Keep only the most recent automatic snapshots.
   # Default: 0.
   snapshotRetention: 0
@@ -207,6 +211,7 @@ plugins:
     utxorpc:
       provider: "builtin"
       config:
+        host: "127.0.0.1"
         port: 9090
 midnight:
   # Enable the Midnight gRPC server. Default: false.
@@ -236,6 +241,9 @@ midnight:
 💡 Tip: The `network` setting supports the following values:
 
 ```yaml
+# Dijkstra testnet (network magic 6)
+network: dijkstra
+
 # Musashi (Leios) testnet
 network: musashi
 
