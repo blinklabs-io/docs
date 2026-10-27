@@ -127,11 +127,38 @@ http://localhost:8080/swagger/index.html
   --witness-file payment.witness --era Conway --out-file assembled.tx
 ```
 
-追加のウィットネスには `--witness-file` を繰り返します。`--era` は `Shelley`、`Allegra`、`Mary`、`Alonzo`、`Babbage`、`Conway`、`Dijkstra` を受け付け、大文字と小文字を区別しません。Eraを宣言しない16進数CBORまたは従来の型なし `Tx` エンベロープは、CBORが1つのEraに明確に解決できる場合に限り `--era` なしで使用できます。複数のEraで有効な曖昧なCBORにはEraを推測せず、`--era` を指定するか、`Tx ConwayEra` のようにEraを含むテキストエンベロープを使用してください。未知のEra、またはエンベロープに記載されたEraと `--era` の不一致はエラーになります。
+追加のウィットネスには `--witness-file` を繰り返します。入力のEraは次の規則で解決します。
 
-署名済みおよび結合済みの出力はJSONテキストエンベロープです。出力型は、Shelleyでは `TxSignedShelley`、Allegraでは `Tx AllegraEra`、Maryでは `Tx MaryEra`、Alonzoでは `Tx AlonzoEra`、Babbageでは `Tx BabbageEra`、Conwayでは `Tx ConwayEra`、Dijkstraでは `Tx DijkstraEra` です。Byronでは型 `Tx` を使用します。分離ウィットネスの出力型は、Shelleyでは `TxWitness ShelleyEra`、Allegraでは `TxWitness AllegraEra`、Maryでは `TxWitness MaryEra`、Alonzoでは `TxWitness AlonzoEra`、Babbageでは `TxWitness BabbageEra`、Conwayでは `TxWitness ConwayEra`、Dijkstraでは `TxWitness DijkstraEra` です。Byronでは型 `TxWitness` を使用します。これらの出力は `--out-file` に書き出され、省略時は標準出力に表示されます。
+- `--era` は `Shelley`、`Allegra`、`Mary`、`Alonzo`、`Babbage`、`Conway`、`Dijkstra` を受け付け、大文字と小文字を区別しません。
+- Eraを宣言しない16進数CBORまたは従来の型なし `Tx` エンベロープは、CBORが1つのEraに明確に解決できる場合に限り `--era` なしで使用できます。
+- 複数のEraで有効な曖昧なCBORにはEraを推測しません。`--era` を指定するか、`Tx ConwayEra` のようにEraを含むテキストエンベロープを使用してください。
+- Bursaは未知のEraを受け付けません。エンベロープに記載されたEraと `--era` が一致しない場合もエラーになります。
 
-APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra解決規則を適用します。複数のEraで有効なraw CBORまたは型なしエンベロープを送信するとHTTP `400`を返すため、`Tx ConwayEra` のようにEraを含むテキストエンベロープとして `tx_cbor` を送信してください。APIリクエストには `--era` フィールドはありません。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
+署名済みおよび結合済みの出力はJSONテキストエンベロープです。出力型は次のとおりです。
+
+- Shelley: `TxSignedShelley`
+- Allegra: `Tx AllegraEra`
+- Mary: `Tx MaryEra`
+- Alonzo: `Tx AlonzoEra`
+- Babbage: `Tx BabbageEra`
+- Conway: `Tx ConwayEra`
+- Dijkstra: `Tx DijkstraEra`
+- Byron: `Tx`
+
+分離ウィットネスの出力型は次のとおりです。
+
+- Shelley: `TxWitness ShelleyEra`
+- Allegra: `TxWitness AllegraEra`
+- Mary: `TxWitness MaryEra`
+- Alonzo: `TxWitness AlonzoEra`
+- Babbage: `TxWitness BabbageEra`
+- Conway: `TxWitness ConwayEra`
+- Dijkstra: `TxWitness DijkstraEra`
+- Byron: `TxWitness`
+
+これらの出力は `--out-file` に書き出し、省略時は標準出力に表示します。
+
+APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra解決規則を適用します。複数のEraで有効なraw CBORまたは型なしエンベロープを送信するとHTTP `400`を返します。その場合は、`Tx ConwayEra` のようにEraを含むテキストエンベロープとして `tx_cbor` を送信してください。APIリクエストには `--era` フィールドはありません。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
 
 <a name="sign"></a>
 
