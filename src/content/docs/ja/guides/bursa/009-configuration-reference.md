@@ -271,7 +271,7 @@ kes_agent:
 
 API は既定でループバックを使用します。TLS ファイルを省略したループバックでの開発は平文で利用できますが、ループバック以外のリスナーでは TLS と Bearer 認証が必須です。
 
-いずれかのウォレットストレージバックエンドを設定した場合、`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` には、subject が `api.jwt_admin_subjects` に含まれる有効な Bearer JWT が必要です。
+いずれかのウォレットストレージバックエンドを設定した場合、`/api/wallet/list`、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` には、subject が `api.jwt_admin_subjects` に含まれる有効な Bearer JWT が必要です。ウォレットが見つからない場合、`/api/wallet/get`、`/api/wallet/update`、`/api/wallet/delete` は HTTP `404` と OpenAPI に定義された構造化された `api.ErrorResponse` を返します。
 
 ```yaml
 api:
@@ -317,6 +317,8 @@ signer:
 
 `allowed_drep_ids` に 16 進数の資格情報 ID を指定すると、DRep 投票者をその ID に制限します。このリストは DRep 資格情報 ID を持たない投票者も拒否します。記載された証明書と投票者の種類のみを受け入れます。操作の種類、または有効な許可リストが必要とする詳細をデコードできない場合は署名を拒否します。
 
+トランザクションが空でない `collateral_inputs` を持つ場合、署名認可には `total_collateral` が必要です。Bursa は担保として徴収される額と担保返却を、通常の値の経路と同じ設定済みの手数料、出力、合計値、ネットワーク、アドレス、ネイティブ資産、マルチアセットの各制約で評価します。呼び出し元ごとの上書き設定も担保の評価に適用します。
+
 <a id="per-caller-transaction-restrictions"></a>
 
 ### 呼び出し元ごとのトランザクション制限
@@ -356,6 +358,8 @@ Bursa は、呼び出し元ごとの上書き設定と鍵の基本ポリシー�
 
 Bursa は次のフィールドを含むトランザクション概要を JSON の `POST` リクエストとして送信します。
 
+`collateral_inputs`、`collateral_return`、`total_collateral` は `TxInspection` API と OpenAPI 契約にも含まれる任意のフィールドです。トランザクションに対応する担保データがある場合、フックはこれらのフィールドを通常の `outputs` と `fee` とともに受け取ります。
+
 ```json
 {
   "type": "tx",
@@ -363,6 +367,18 @@ Bursa は次のフィールドを含むトランザクション概要を JSON �
   "key": "key-hash",
   "tx_id": "transaction-id",
   "fee": "1000000",
+  "collateral_inputs": [
+    {
+      "tx_id": "collateral-transaction-id",
+      "index": 0
+    }
+  ],
+  "collateral_return": {
+    "address": "addr1example",
+    "lovelace": "4000000",
+    "has_assets": false
+  },
+  "total_collateral": "1000000",
   "ttl": 50000000,
   "outputs": [
     {
