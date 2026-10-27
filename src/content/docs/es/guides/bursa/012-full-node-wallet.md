@@ -82,7 +82,7 @@ Este objetivo requiere CGO, herramientas de compilación C y las cabeceras de de
 - Windows: `WebView2`.
 - Linux: cabeceras de desarrollo `webkit2gtk` para compilar y `libayatana-appindicator3` para ejecutar. Una compilación con la etiqueta `webview` necesita ambas para funcionar con soporte de bandeja.
 
-Para los mantenedores de MSI que incluyan el bootstrapper Evergreen de WebView2, el archivo debe tener una firma Authenticode válida. Sin `WEBVIEW2_SHA256`, el firmante debe ser `Microsoft Corporation`; si se proporciona `WEBVIEW2_SHA256`, el hash fija el artefacto aceptado, pero no omite la verificación de una firma Authenticode válida.
+Para los mantenedores de MSI que incluyan el bootstrapper Evergreen de WebView2, el bootstrapper debe tener una firma Authenticode válida. Cuando no se proporciona `WEBVIEW2_SHA256`, el firmante debe ser `Microsoft Corporation`. Cuando se proporciona `WEBVIEW2_SHA256`, el hash fija el artefacto aceptado, pero la firma Authenticode válida sigue siendo obligatoria.
 
 La versión webview no admite compilación para otra arquitectura. Compílala en una máquina con la arquitectura de destino. En Linux puede utilizar `webkit2gtk-4.1`; el Makefile proporciona una adaptación de `pkg-config` cuando el enlace del proyecto original solicita `4.0`.
 
