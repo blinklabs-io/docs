@@ -45,7 +45,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB`、`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合は `25 MiB` です。この既定値は `serve` の Musashi にも適用します。明示した値は両方の既定値に優先します。 |
+| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB`、`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合は `25 MiB` です。この既定値は `serve` の Musashi にも適用します。明示した値はこれらの既定値に優先します。 |
 
 <a id="ledger-processing"></a>
 
@@ -256,7 +256,7 @@ Badger プロバイダーで `plugins.storage.blob.config.gc` を `true` に設�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
-| ローカルスナップショットディレクトリ | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | 既定値は空です。自動スナップショットと Bark からのスナップショットを保存するローカルファイルシステムのディレクトリを指定します。`snapshotEnabled` を有効にする場合と、Bark の DatabaseService をマウントする場合に必要です。Unix ではディレクトリをプロセスユーザーまたは root が所有し、ディレクトリを `0700`、スナップショットファイルを `0600` にします。Windows では保護された所有者だけの ACL を使用します。ディレクトリの所有権または書き込み権限が要件を満たさない場合、起動を拒否します。 |
+| ローカルスナップショットディレクトリ | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | 既定値は空です。自動スナップショットと Bark からのスナップショットを保存するローカルファイルシステムのディレクトリを指定します。`snapshotEnabled` を有効にする場合と、Bark の DatabaseService をマウントする場合に必要です。Unix では保存先をプロセスユーザーまたは root の所有に限定し、ディレクトリを `0700`、スナップショットファイルを `0600` にします。Windows では保護された所有者だけの ACL を使用します。ディレクトリの所有権または書き込み権限が要件を満たさない場合、起動を拒否します。 |
 
 <a id="database-lifecycle-snapshot-trust-key"></a>
 
