@@ -82,7 +82,7 @@ This target requires CGO, a C toolchain, and the webview development headers for
 - Windows: `WebView2`
 - Linux: `webkit2gtk` development headers for the build and `libayatana-appindicator3` for runtime use. A `webview`-tagged build needs both to run with tray support.
 
-For Windows MSI builds that bundle a WebView2 Evergreen bootstrapper, verify that the bootstrapper has a valid Authenticode signature. Without `WEBVIEW2_SHA256`, the signer identity must equal `Microsoft Corporation`. Supplying `WEBVIEW2_SHA256` pins the artifact that the build accepts, but the valid signature requirement still applies.
+For Windows MSI builds that bundle a WebView2 Evergreen bootstrapper, the bootstrapper must have a valid Authenticode signature. Without `WEBVIEW2_SHA256`, the signer identity must equal `Microsoft Corporation`. Supplying `WEBVIEW2_SHA256` pins the artifact that the build accepts, but the build still requires a valid signature.
 
 The webview build does not support compilation for another target architecture. Build it on a machine with the target architecture. On Linux, the build can use `webkit2gtk-4.1`; the Makefile supplies a `pkg-config` shim when the upstream binding requests `4.0`.
 
