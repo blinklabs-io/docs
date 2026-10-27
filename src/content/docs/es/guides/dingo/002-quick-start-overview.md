@@ -133,9 +133,9 @@ plugins:
 
 # Mempool
 # `plugins.mempool.config.capacity` permite establecer una capacidad explícita.
-# Predeterminado: 1 MiB en los modos estándar/Praos y 25 MiB si `runMode` es
-# `leios` o si la red es Musashi, identificada por nombre o magic, incluso con
-# `serve`. Una capacidad explícita siempre tiene prioridad. Deja la clave
+# Predeterminado: 1 MiB en los modos estándar/Praos y 25 MiB cuando `runMode`
+# es `leios` o cuando la red es Musashi por nombre o magic, incluso si `runMode`
+# es `serve`. Una capacidad explícita siempre tiene prioridad. Deja la clave
 # comentada u omítela para usar el valor predeterminado del modo.
 # plugins:
 #   mempool:
