@@ -238,7 +238,7 @@ A non-loopback legacy API listener must provide both readable TLS files and exac
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
-When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`. If the requested wallet does not exist, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete` return HTTP `404` with the structured `api.ErrorResponse` body documented by OpenAPI.
+When any wallet-storage backend is configured, Bursa requires a valid bearer JWT whose subject appears in `api.jwt_admin_subjects` for `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete`. If the requested wallet does not exist, `/api/wallet/get`, `/api/wallet/update`, and `/api/wallet/delete` return HTTP `404`; OpenAPI defines the structured response body as `api.ErrorResponse`.
 
 ```yaml
 api:
