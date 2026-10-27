@@ -112,9 +112,9 @@ Los comandos `tx` inspeccionan y firman una transacción existente sin conectars
   --signing-key-file dev/payment.skey --out-file signed.tx
 ```
 
-Los subcomandos `tx sign`, `tx witness` y `tx assemble` aceptan la opción opcional `--era`. Los nombres admitidos son `Shelley`, `Allegra`, `Mary`, `Alonzo`, `Babbage`, `Conway` y `Dijkstra`; Bursa no distingue mayúsculas y minúsculas en estos nombres. Usa `--era` cuando el CBOR no declara una era y puede corresponder a más de una.
+Los subcomandos `tx sign`, `tx witness` y `tx assemble` aceptan la opción opcional `--era`. Bursa acepta `Shelley`, `Allegra`, `Mary`, `Alonzo`, `Babbage`, `Conway` y `Dijkstra`, sin distinguir mayúsculas y minúsculas. Usa `--era` cuando el CBOR no declara una era y puede corresponder a más de una.
 
-Bursa usa la era declarada por un sobre de texto cuando el archivo la incluye. Si el archivo también incluye `--era`, ambos valores deben coincidir. El CBOR hexadecimal sin era o el sobre heredado `Tx` sin era solo funciona sin `--era` cuando el CBOR corresponde a una sola era. Si corresponde a varias, Bursa solicita `--era` o un sobre cuyo tipo declare la era, como `Tx ConwayEra`; no infiere una era ambigua. Una era desconocida o un conflicto entre `--era` y el tipo del sobre produce un error.
+Bursa usa la era declarada por un sobre de texto cuando el archivo la incluye. Si el archivo también incluye `--era`, ambos valores deben coincidir. Bursa acepta el CBOR hexadecimal sin era o el sobre heredado `Tx` sin era sin `--era` solo cuando el CBOR corresponde a una sola era. Cuando corresponde a varias, Bursa solicita `--era` o un sobre cuyo tipo declare la era, como `Tx ConwayEra`; no infiere una era ambigua. Una era desconocida o un conflicto entre `--era` y el tipo del sobre produce un error.
 
 Repite `--signing-key-file` para añadir varios firmantes. Para sesiones de firma separadas, crea testigos independientes y ensámblalos sobre la misma transacción:
 
@@ -127,7 +127,7 @@ Repite `--signing-key-file` para añadir varios firmantes. Para sesiones de firm
 
 La firma y el ensamblado escriben estos sobres de texto JSON: `TxSignedShelley` para Shelley; `Tx AllegraEra`, `Tx MaryEra`, `Tx AlonzoEra`, `Tx BabbageEra`, `Tx ConwayEra` y `Tx DijkstraEra` para las eras de Allegra a Dijkstra; y `Tx` para Byron. La creación de testigos escribe `TxWitness ShelleyEra`, `TxWitness AllegraEra`, `TxWitness MaryEra`, `TxWitness AlonzoEra`, `TxWitness BabbageEra`, `TxWitness ConwayEra` o `TxWitness DijkstraEra` para Shelley a Dijkstra, y `TxWitness` para Byron. Bursa escribe los sobres en `--out-file`, o en la salida estándar si se omite. Repite `--witness-file` para incluir más testigos. `tx decode --protocol-params protocol-parameters.json` también estima la tarifa mínima a partir de un archivo JSON de parámetros del protocolo Cardano. Consulta las opciones con `./bursa tx --help` y el `--help` de cada subcomando.
 
-Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. Cuando el CBOR sin era o el sobre sin era es válido en varias eras, `tx_cbor` debe ser un sobre de texto cuyo tipo declare la era, como `Tx ConwayEra`; de lo contrario, la solicitud devuelve HTTP `400` con instrucciones para corregir el formato.
+Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. Cuando el CBOR sin era o el sobre sin era corresponde a varias eras, el cliente debe enviar `tx_cbor` como un sobre de texto cuyo tipo declare la era, como `Tx ConwayEra`; de lo contrario, la solicitud devuelve HTTP `400` con instrucciones para corregir el formato.
 
 <a name="sign"></a>
 
