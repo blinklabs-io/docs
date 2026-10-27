@@ -51,7 +51,7 @@ mkdir -p ./dingo-snapshots
 sudo chown 1000:1000 ./dingo-snapshots
 ```
 
-Las rutas de `snapshotDir` bajo `/data/db` ya están preparadas para `UID:GID 1000:1000`. Un bind mount independiente debe tener esa propiedad antes de montarse y debe coincidir con la ruta configurada; de lo contrario, Dingo falla al iniciar porque no puede escribir en la ruta.
+Las rutas de `snapshotDir` bajo `/data/db` ya están preparadas para `UID:GID 1000:1000`. Si el bind mount usa otro directorio del host, asígnale esa propiedad antes de montarlo y configura `snapshotDir` con la ruta de destino; Dingo falla al iniciar si la ruta no permite escritura.
 
 ### Proteger las métricas publicadas
 
