@@ -98,12 +98,12 @@ PUT /wallet/settings/history-expiry
 | --- | --- | --- | --- |
 | `storage.backend` | `STORAGE_BACKEND` | ウォレットのストレージバックエンドを選択します。 | AWS Secrets Manager を使用するには `aws` を指定します。 |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | AWS Secrets Manager 内のウォレット秘密情報の接頭辞です。 | `storage.backend` が `aws` の場合は必須です。 |
-| `google.secret_prefix` | `GCP_SECRET_PREFIX` | GCP Secret Manager 内のウォレット秘密情報の名前空間を指定します。 | `storage.backend` が `gcp` の場合は必須です。空でなく、英字、数字、ハイフン、アンダースコアだけで構成し、接頭辞とウォレット名を連結した Secret Manager ID が 255 文字以内になる長さにします。 |
+| `google.secret_prefix` | `GCP_SECRET_PREFIX` | GCP Secret Manager 内のウォレット秘密情報の名前空間を指定します。 | `storage.backend` が `gcp` の場合に指定します。 |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | SOPS 暗号化に使用する AWS KMS マスター鍵を選択します。 | AWS KMS が暗号鍵を提供する場合、SOPS のマスター鍵リソースの 1 つとして設定します。 |
 | `age.recipients` | `AGE_RECIPIENTS` | SOPS 暗号化の age 受信者一覧です。 | カンマ区切りで指定します。 |
 | `storage.allow_unencrypted_wallet_storage` | `STORAGE_ALLOW_UNENCRYPTED_WALLET_STORAGE` | ウォレットを暗号化せずに保存することを許可します。 | SOPS マスター鍵なしのファイル保存、または SQLite 保存では明示的に有効にします。 |
 
-GCP バックエンドでは、`google.secret_prefix` が空または不正な場合、Bursa はストアの初期化に失敗します。接頭辞には英字、数字、ハイフン、アンダースコアだけを使用し、空にできません。ウォレット名にも同じ文字の検証を適用し、接頭辞とウォレット名を連結した Secret Manager ID は 255 文字を超えないようにします。Bursa は設定した接頭辞の範囲だけでウォレットの一覧表示、読み込み、保存、削除を実行します。
+GCP バックエンドでは、`google.secret_prefix` を必ず指定します。空または不正な値を指定した場合、Bursa はストアの初期化に失敗します。接頭辞には英字、数字、ハイフン、アンダースコアだけを使用します。ウォレット名も空にできず、同じ文字だけを使用します。接頭辞とウォレット名を連結した Secret Manager ID は 255 文字を超えないようにします。Bursa は設定した接頭辞の範囲だけでウォレットの一覧表示、読み込み、保存、削除を実行します。
 
 SOPS 暗号化には、少なくとも 1 つのマスター鍵リソースの設定が必要です。不正な鍵リソースは暗号化の開始前に拒否されます。暗号化なしの保存を明示的に許可すると、ウォレットを暗号化せずに永続化できます。
 
@@ -396,7 +396,7 @@ Bursa は次のフィールドを含むトランザクション概要を JSON �
 
 `max_total_out_ada` は、出力と手数料に加えて、財務省への寄付、証明書の預入と返還の影響、提案の預入を合計します。必要な値の影響を解決できない場合、Bursa は署名を許可せず、閉鎖側に倒して拒否します。
 
-フックは JSON の `POST` を受け取り、HTTP `200` と明示的な JSON 許可判定 `{"allow": true}` を返した場合だけ署名を許可します。応答本文の後続データも拒否します。通信エラー、タイムアウト、リダイレクト、`200` 以外の応答、読めないか不正な JSON、`true` 以外の `allow` 値、トランザクション概要を完全に構築できない場合は、すべて署名を拒否します。
+フックは JSON の `POST` を受け取り、HTTP `200` と明示的な JSON 許可判定 `{"allow": true}` を返した場合だけ署名を許可します。応答本文の後続データも拒否します。通信エラー、タイムアウト、`200` 以外の応答、読めないか不正な JSON、`true` 以外の `allow` 値、トランザクション概要を完全に構築できない場合は、すべて署名を拒否します。
 
 <a id="troubleshooting"></a>
 
