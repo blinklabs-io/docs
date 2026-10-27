@@ -81,7 +81,7 @@ Configure wallet persistence and SOPS encryption with the following fields:
 
 | Configuration path | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
-| `storage.backend` | `STORAGE_BACKEND` | Selects the wallet storage backend. | Set to `aws` to use AWS Secrets Manager or `gcp` to use Google Cloud Secret Manager. |
+| `storage.backend` | `STORAGE_BACKEND` | Selects the wallet storage backend. | Set to `aws` for AWS Secrets Manager or `gcp` for Google Cloud Secret Manager. |
 | `aws.secret_prefix` | `AWS_SECRET_PREFIX` | Sets the prefix for wallet secrets in AWS Secrets Manager. | Required when `storage.backend` is `aws`. |
 | `aws.kms_key_arn` | `AWS_KMS_KEY_ARN` | Selects an AWS KMS master key for SOPS encryption. | Configure as one SOPS master-key resource when AWS KMS provides the encryption key. |
 | `google.project` | `GOOGLE_PROJECT` | Selects the Google Cloud project that contains the wallet secrets. | Set this field when using the `gcp` storage backend. |
