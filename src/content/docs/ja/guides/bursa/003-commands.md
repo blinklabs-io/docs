@@ -158,7 +158,7 @@ http://localhost:8080/swagger/index.html
 
 これらの出力は `--out-file` に書き出し、省略時は標準出力に表示します。
 
-APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra解決規則を適用します。複数のEraで有効なraw CBORまたは型なしエンベロープを送信するとHTTP `400`を返します。その場合は、`Tx ConwayEra` のようにEraを含むテキストエンベロープとして `tx_cbor` を送信してください。APIリクエストには `--era` フィールドはありません。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
+APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra解決規則を適用します。複数のEraで有効なraw CBORまたは型なしエンベロープを送信するとHTTP `400`を返します。その場合は、`Tx ConwayEra` のようにEraを含むテキストエンベロープとして `tx_cbor` を送信してください。`tx decode --protocol-params protocol-parameters.json` はCardanoプロトコルパラメータのJSONファイルから最小手数料も推定します。オプションは `./bursa tx --help` と各サブコマンドの `--help` で確認できます。
 
 <a name="sign"></a>
 
