@@ -37,7 +37,7 @@ Launch `Bursa` from the applications menu after installing the macOS or Windows 
 bursa-wallet
 ```
 
-The desktop build opens a native window. The headless build serves the wallet interface at <http://127.0.0.1:8090>; open that address in a browser. The wallet binds to loopback on `127.0.0.1:8090`.
+The desktop build opens a native window. The headless build prints an authenticated launch URL after the service becomes reachable; open that complete URL in a browser. The URL includes a `#session=<token>` fragment that carries a process-local session capability. The page exchanges the capability for a session cookie and removes the fragment from browser history. The service listens on loopback at <http://127.0.0.1:8090>, but the bare address does not launch protected wallet routes.
 
 The first launch synchronizes the embedded node. The default `mithril` mode bootstraps from a Mithril snapshot instead of replaying the chain from genesis. The wallet stores its data under `~/.bursa-wallet/<network>/`.
 
@@ -81,6 +81,8 @@ This target requires CGO, a C toolchain, and the webview development headers for
 - macOS: `WKWebView`
 - Windows: `WebView2`
 - Linux: `webkit2gtk` development headers for the build and `libayatana-appindicator3` for runtime use. A `webview`-tagged build needs both to run with tray support.
+
+For a Windows MSI build that bundles a WebView2 Evergreen bootstrapper, verify that the bootstrapper has a valid Authenticode signature. When `WEBVIEW2_SHA256` is not supplied, the signer identity must be `Microsoft Corporation`. Supplying `WEBVIEW2_SHA256` pins the accepted artifact, but the valid signature requirement still applies.
 
 The webview build does not support compilation for another target architecture. Build it on a machine with the target architecture. On Linux, the build can use `webkit2gtk-4.1`; the Makefile supplies a `pkg-config` shim when the upstream binding requests `4.0`.
 
