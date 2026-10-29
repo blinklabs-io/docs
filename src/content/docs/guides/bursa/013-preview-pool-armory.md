@@ -8,12 +8,9 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. Two pieces are in open pull requests:
+This guide describes work in progress. Profiles and the response binding in Bursa's signer are in an open pull request, [bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086).
 
-- The armory firmware and signing service: [bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)
-- Profiles and the response binding in Bursa's signer: [bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)
-
-`bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)) and `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)) and `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
 Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-not-built-yet) section lists them. Use Preview and test funds only.
 :::
