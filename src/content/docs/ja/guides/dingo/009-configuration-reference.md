@@ -347,7 +347,7 @@ Dingo は `FetchBlock` の参照バッチ全体を両方の制限に計上しま
 | --- | --- | --- | --- | --- |
 | 署名付きマニフェスト URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | 既定では空です。公開アーカイブでは空のままにし、署名付きミラーでは `trustedManifestKey` とともに設定します。設定する場合は絶対 HTTPS URL を指定します。 |
 | 信頼するマニフェスト鍵 | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | 既定では空です。公開アーカイブでは空のままにし、署名付きミラーでは `manifestUrl` とともに設定します。設定する場合は 32 バイトの Ed25519 公開鍵を 16 進数で指定します。 |
-| マニフェストのロールバックを許可 | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | 既定値は `false`。公開者による意図的なロールバックの場合のみ `true` にします。 |
+| マニフェストのロールバックを許可 | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | 既定値は `false`。署名付きミラーで公開者による意図的なロールバックを許可する場合のみ `true` にします。 |
 
 `tokenRegistry.sourceUrl` を明示する場合、それも絶対 HTTPS URL である必要があります。公開アーカイブでは署名付きマニフェストなしでアーカイブを同期します。署名付きミラーでは、スナップショットの適用前に署名付きマニフェストを、設定したアーカイブ URL、正確な圧縮サイズ、BLAKE2b-256 ダイジェストに対して検証します。ロールバック検査に用いるシーケンス番号もマニフェストから取得します。
 
