@@ -494,7 +494,7 @@ The armory chooses the counter, not the host. The host sends the KES public key,
 bursa query pool --socket-path "$SOCKET" --network preview --pool-id pool1...
 ```
 
-The `opcert` field holds `on_chain_counter`, and `kes` holds `current_kes_period`. Pass them to `armory-pool opcert`. Use `none` when the counter is `null`:
+The `opcert` field holds `on_chain_counter`, and `kes` holds `current_kes_period`. Pass them to `armory-pool opcert`. The device has no clock, so it signs whatever KES period the host sends: take it from the query, not from memory. Use `none` when the counter is `null`:
 
 ```sh
 armory-pool -identity <identity public key> -profile mypool@preview \
@@ -606,6 +606,7 @@ A pool that already forges can move its cold key onto the armory.
 | Message | Cause | Fix |
 |---|---|---|
 | `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `/provision/reward` on the provisioning image |
+| `a second pool registration in one body` | The body carries two pool registration certificates; the second would replace the first's parameters on chain | Put one `pool-registration` certificate in the transaction |
 | `pool owners must be exactly the device owner` | The certificate lists another owner, or more than one | Pass only `device/owner.vkey` as `--owner-stake-vkey` |
 | `pool registration for another operator` | `--cold-vkey` is not this profile's cold key | Use `pool-cold.vkey` for this profile |
 | `delegation other than owner to this pool` or `stake registration of another credential` | The body carries a certificate for another stake key | Register and delegate other stake keys in their own transaction |
@@ -613,6 +614,7 @@ A pool that already forges can move its cold key onto the armory.
 | `policy: network id does not match profile` or `output N is on another network` | A mainnet address in a Preview transaction, or the reverse | Check `CARDANO_NETWORK` and the change address |
 | `key hash does not match the profile key for this role` | The wrong `-role` for this witness | `pool` for the cold key, `stake` for the owner key |
 | `unknown profile` | The `-profile` name is not on the device | Use the exact name given to `/provision/profile`, on the device that holds it |
+| `malformed request` | A request field is misspelled or unknown, or the JSON has trailing data | Check the field names against the examples in this guide; the device never ignores an unknown field |
 | `nonce replayed` | A request was sent twice | Run the command again; each run uses a new nonce |
 | `cold key object already exists with a different key` | The object already holds another key | Use a free object; keys are never overwritten |
 | `owner key object already exists with a different key` | The slot already holds another owner key | Use a free slot |
@@ -648,14 +650,14 @@ Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced
 
 `armory/e2e/preview-pool-registration.sh` in the Bursa repository runs this guide against Preview and checks each step against the chain:
 
-- cold key import and profile;
+- cold and owner key derivation from the mnemonic, their import, and the profile;
 - reward account registration;
 - owner and pool registration signed by the armory;
 - a refused registration that names another reward account;
 - the first opcert, cross-checked with `opcert-check`;
 - retirement, when `RETIRE=1` is set.
 
-The header lists the environment variables. Rerunning it on the same work directory skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys.
+Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. The header lists the other environment variables. Rerunning it on the same work directory skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys.
 
 ## What is not built yet
 
