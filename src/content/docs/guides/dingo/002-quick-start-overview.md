@@ -105,6 +105,14 @@ invocation that uses the same directory while the node is running. Use the
 bundled keys and network for local testing only. Never use them with real
 funds.
 
+Note: Dingo accepts a `--data-dir` under existing symlinked ancestors, but
+rejects symlinked or non-directory components in the state path itself,
+including components replaced during setup. An existing persistent directory
+must contain Dingo's recognized DevNet marker and version before Dingo
+restricts its permissions to owner only. If the directory is unrecognized,
+startup fails and Dingo leaves it unchanged; Dingo does not adopt arbitrary
+existing data.
+
 Dingo provides `faucet.skey`, `faucet.vkey`, and `faucet.addr` in the
 `cardano/keys/` directory. The bundled `faucet.addr`
 (`addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`) receives
