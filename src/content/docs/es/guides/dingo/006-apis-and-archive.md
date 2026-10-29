@@ -67,7 +67,7 @@ Envía el token mediante uno de estos encabezados: `project_id: <token>`, `X-Blo
 
 Antes de exponer modificaciones autenticadas en un host ajeno a loopback, configura TLS en el servidor mediante `plugins.api.blockfrost.config.tls`. Sin TLS de servidor, Dingo rechaza el inicio de un host ajeno a loopback con acceso autenticado a modificaciones. Conserva el host de loopback predeterminado salvo que decidas expresamente permitir el acceso externo a estas operaciones.
 
-Este sitio incluye la referencia de configuración completa de v0.89.0 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
+Este sitio incluye la referencia de configuración completa de v0.90.0 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
 
 ## Acceso seguro a las API
 
