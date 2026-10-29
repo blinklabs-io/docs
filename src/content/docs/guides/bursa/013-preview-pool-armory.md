@@ -186,7 +186,7 @@ make imx
 make imx PROVISION=1
 ```
 
-Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. Run `make clean` before you change `TESTNET`, because `make` does not rebuild an image when only a flag changes.
+Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. The provisioning image cannot be built with `TESTNET=1`.
 
 A board with nothing on its eMMC boots into USB recovery mode. Load an image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot), the provisioning image first:
 
@@ -619,7 +619,7 @@ A pool that already forges can move its cold key onto the armory.
 
 A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
-An opcert request below the floor is refused. If a rollback lowered the chain counter, reset the floor as in [Rollbacks](#rollbacks).
+An opcert request below the floor is refused. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
 
 ## Keys to keep and delete
 
