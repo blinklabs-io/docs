@@ -299,7 +299,7 @@ The board boots from the eMMC only when its boot switch points toward eMMC. With
 
 ![The boot switch on the underside of the USB armory Mk II, beside the eMMC chip: toward the plug boots the eMMC, toward the microSD slot goes to USB recovery mode](/bursa-armory-boot-switch.svg)
 
-The switch is on the underside of the board, beside the eMMC chip, under a small orange film. In the official enclosure it shows through a window in the bottom half: slide it with a toothpick, without opening the case. The film can stay on. The usbarmory wiki has a [photo of the switch](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II)).
+The switch is on the underside of the board, beside the eMMC chip, under a small orange film. In the official enclosure it shows through a window in the bottom half: slide it with a pin or paper clip, without opening the case. The film can stay on. The usbarmory wiki has a [photo of the switch](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II)).
 
 ### Provision from a microSD card
 
