@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.89.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.89.0.
+title: "Referencia de configuración de Dingo v0.90.0"
+description: Referencia y ejemplo completo de configuración de Dingo v0.90.0.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.89.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.89.0](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.90.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.0](https://github.com/blinklabs-io/dingo/blob/v0.90.0/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -79,14 +79,16 @@ El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un p
 | Ruta del socket | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | Si está activado, exige un valor no vacío y distinto de `socketPath` de Cardano. |
 | TTL de los mensajes | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` segundos | Si está activado, exige un valor positivo no mayor que `9223372036` segundos. |
 | Tamaño máximo del mempool | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | Si está activado, exige un valor positivo no mayor que `8796093022207` MB. |
-| Puerto de pares N2N | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` desactiva el puerto N2N. En la implementación DMQ actual, un valor distinto de cero no activa la escucha ni las conexiones salientes entre pares. |
+| Puerto de pares N2N | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` desactiva el puerto N2N. Un puerto distinto de cero activa la escucha entre nodos DMQ y la gestión de pares cuando `dmq.maxPeers` también es distinto de cero. |
 | Dirección IPv4 de escucha | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | Si `dmq.n2nPort` no es cero y se configura este campo, exige un literal IPv4. |
 | Dirección IPv6 de escucha | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | Si `dmq.n2nPort` no es cero y se configura este campo, exige un literal IPv6. |
 | Archivo de topología DMQ | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Sin configurar | Si se configura, la ruta no puede incluir recorridos `..` y debe identificar un archivo regular existente. Dingo lo carga y valida antes de abrir el socket DMQ. |
-| Mínimo de pares DMQ | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` permite no requerir pares. La implementación actual no aplica el número mínimo de pares. |
-| Máximo de pares DMQ | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` no permite pares cuando `minPeers` también es `0`. La implementación actual no aplica el máximo de pares. |
+| Mínimo de pares DMQ | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` permite no requerir pares. Solo las conexiones salientes cuentan para cumplir este mínimo; las conexiones entrantes no lo satisfacen. |
+| Máximo de pares DMQ | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` no permite pares cuando `minPeers` también es `0`. Limita el total de conexiones y reserva espacio para las conexiones salientes según `minPeers` y la valencia total de las raíces locales. |
 
-Dingo valida estos seis ajustes de pares al iniciar DMQ. Con `dmq.n2nPort: 0`, omite la validación de las direcciones de escucha. Si `dmq.n2nPort` no es cero, cada dirección debe utilizar su versión IP correspondiente. El gestor de pares y el transporte todavía no utilizan el archivo de topología para establecer conexiones.
+Dingo valida estos seis ajustes de pares al iniciar DMQ. Con `dmq.n2nPort: 0`, omite la validación de las direcciones de escucha. Si `dmq.n2nPort` no es cero, cada dirección debe utilizar su versión IP correspondiente. Cuando `dmq.n2nPort` y `dmq.maxPeers` son distintos de cero, Dingo escucha en las direcciones configuradas y el gestor mantiene los pares dentro de `dmq.minPeers` y `dmq.maxPeers`. El archivo de topología configurado proporciona pares al gestor, que intenta primero las raíces locales y después las raíces públicas. El tema activado también puede descubrir pares relay del ledger mediante registros SRV de DNS asociados al prefijo del tema.
+
+La pila DMQ cuenta únicamente las conexiones salientes para alcanzar `dmq.minPeers`; las conexiones entrantes no satisfacen ese mínimo. Para admitir conexiones entrantes, la pila reserva el mayor valor entre `dmq.minPeers` y la valencia total de las raíces locales, sin superar `dmq.maxPeers`. La pila calcula internamente el límite de conexiones entrantes como la capacidad restante de `dmq.maxPeers`; Dingo no expone ese límite como un parámetro YAML, una opción CLI ni una variable de entorno. Cuando la reserva saliente alcanza `dmq.maxPeers`, la pila rechaza las nuevas conexiones entrantes.
 
 Cuando se configura `dmq.topologyFile`, Dingo aplica estas reglas antes de abrir el socket DMQ:
 
@@ -266,7 +268,7 @@ Todas las operaciones de ciclo de vida requieren un certificado de cliente verif
 | Consultas globales de archivo por segundo | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` cuando vale `0`. Cubre todos los llamadores anónimos de `ArchiveService`. Se rechazan los valores negativos. |
 | Consultas de archivo por llamador y segundo | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` cuando vale `0`. Identifica a los llamadores por dirección IPv4 o prefijo IPv6 `/64`. Se rechazan los valores negativos. |
 
-Dingo descuenta el lote completo de referencias de `FetchBlock` de ambos presupuestos. Si alguno no puede cubrirlo, rechaza toda la solicitud con `RESOURCE_EXHAUSTED` antes de consultar archivos o servicios de nube.
+Dingo cobra en ambos presupuestos un cargo base por cada referencia de `FetchBlock`. Cuando el lote contiene referencias por altura, reserva por adelantado en ambos presupuestos, una sola vez, el coste de resolver el límite superior (`66` unidades de consulta). Después, reserva en ambos presupuestos el trabajo de búsqueda binaria de cada referencia según el límite resuelto. Los reintentos por un tramo final obsoleto del índice y los saltos de entradas interiores obsoletas también reservan por adelantado, en ambos presupuestos, el coste de cada operación. Si alguno de los dos presupuestos no cubre el siguiente trabajo, Dingo rechaza la solicitud con `RESOURCE_EXHAUSTED` antes de iniciar la resolución, búsqueda o lectura correspondiente del archivo o del almacenamiento en nube. Los lotes grandes que contienen referencias por altura pueden necesitar dividirse.
 
 ### Secretos y entradas de paridad desde archivos
 
@@ -290,17 +292,18 @@ Cada valor respaldado por archivos debe cumplir estos requisitos:
 
 ### Autenticación de manifiestos del registro de tokens
 
-Cuando se activa la sincronización del registro de tokens, Dingo exige una URL de manifiesto firmado y la clave pública de confianza para verificarlo.
+La sincronización del registro de tokens admite un archivo público sin manifiesto firmado y réplicas con manifiesto firmado.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| URL del manifiesto firmado | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Vacía de forma predeterminada. Obligatoria al activar la sincronización del registro de tokens. Debe ser una URL HTTPS absoluta. |
-| Clave de confianza del manifiesto | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Vacía de forma predeterminada. Obligatoria al activar la sincronización. Configura una clave pública Ed25519 de 32 bytes codificada en hexadecimal. |
-| Permitir retroceso del manifiesto | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` de forma predeterminada. Utiliza `true` únicamente para un retroceso intencional del editor. |
+| URL del archivo del registro | `tokenRegistry.sourceUrl` | `--token-registry-source-url` | `DINGO_TOKEN_REGISTRY_SOURCE_URL` | Vacía de forma predeterminada. Dingo selecciona el archivo público correspondiente a la red. Un valor explícito debe ser una URL HTTPS absoluta. |
+| URL del manifiesto firmado | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Vacía de forma predeterminada. Una réplica firmada requiere esta URL y `trustedManifestKey`; debe ser una URL HTTPS absoluta. |
+| Clave de confianza del manifiesto | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Vacía de forma predeterminada. Una réplica firmada requiere esta clave junto con `manifestUrl`; configura una clave pública Ed25519 de 32 bytes codificada en hexadecimal. |
+| Permitir retroceso del manifiesto | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` de forma predeterminada. Dingo aplica este ajuste solo cuando verifica la instantánea mediante un manifiesto firmado; utiliza `true` únicamente para un retroceso intencional del editor. |
 
-Si `tokenRegistry.sourceUrl` tiene un valor explícito, también debe ser una URL HTTPS absoluta. Antes de aplicar una instantánea, Dingo verifica el manifiesto firmado frente a la URL del archivo configurada, el tamaño comprimido exacto y el resumen BLAKE2b-256. El manifiesto también aporta la secuencia de las comprobaciones de retroceso.
+Para sincronizar el archivo público, Dingo requiere que `tokenRegistry.manifestUrl` y `tokenRegistry.trustedManifestKey` permanezcan vacíos. Dingo utiliza `tokenRegistry.sourceUrl` o el archivo público predeterminado de la red sin exigir un manifiesto firmado. Para una réplica firmada, Dingo requiere ambos campos y rechaza una configuración que establezca solo uno.
 
-Dingo rechaza las instantáneas sin autenticar, que no coincidan o estén incompletas. También rechaza una secuencia inferior salvo que `allowRollback` sea `true`, y rechaza un cambio de resumen con la misma secuencia. Una instantánea rechazada no sustituye la última aceptada.
+En el flujo con manifiesto firmado, Dingo verifica el manifiesto frente a la URL del archivo configurada, el tamaño comprimido exacto y el resumen BLAKE2b-256. El manifiesto aporta la secuencia para las comprobaciones de retroceso. Dingo rechaza una instantánea cuando falta la autenticación, cuando sus datos no coinciden o cuando está incompleta; también rechaza una secuencia inferior salvo que `allowRollback` sea `true`, y rechaza un cambio de resumen con la misma secuencia. Una instantánea rechazada no sustituye la última aceptada.
 
 ### Credenciales de encabezados del registro de tokens
 
@@ -318,7 +321,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.77.1 elimina `ForgePrimaryChainTipToleranceSlots` y `forgePrimaryChainTipToleranceSlots` de YAML, CLI y variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.90.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 

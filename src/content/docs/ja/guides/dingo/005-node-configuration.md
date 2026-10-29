@@ -3,7 +3,7 @@ title: ノード設定とストレージモード
 description: Dingo ノードの役割を選び、対応する設定オプションを確認します。
 ---
 
-[クイックスタート](/ja/guides/dingo/002-quick-start-overview/)に従って Dingo をインストールし、ノードを起動します。このページでは主な設定の選択肢を説明します。[Dingo v0.89.0 の完全な設定リファレンス](/ja/guides/dingo/009-configuration-reference/)を読み、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) をダウンロードしてください。
+[クイックスタート](/ja/guides/dingo/002-quick-start-overview/)に従って Dingo をインストールし、ノードを起動します。このページでは主な設定の選択肢を説明します。[Dingo v0.90.0 の完全な設定リファレンス](/ja/guides/dingo/009-configuration-reference/)を読み、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) をダウンロードしてください。
 
 <a id="choose-a-node-role"></a>
 

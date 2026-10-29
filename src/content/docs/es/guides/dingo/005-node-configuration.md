@@ -3,7 +3,7 @@ title: Configuración del nodo y modos de almacenamiento
 description: Elige la función del nodo Dingo y consulta las opciones de configuración correspondientes.
 ---
 
-Usa el [inicio rápido](/es/guides/dingo/002-quick-start-overview/) para instalar Dingo e iniciar un nodo. Esta página explica las principales decisiones de configuración. Lee la [referencia completa de configuración de Dingo v0.89.0](/es/guides/dingo/009-configuration-reference/) y descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) de esa versión.
+Usa el [inicio rápido](/es/guides/dingo/002-quick-start-overview/) para instalar Dingo e iniciar un nodo. Esta página explica las principales decisiones de configuración. Lee la [referencia completa de configuración de Dingo v0.90.0](/es/guides/dingo/009-configuration-reference/) y descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) de esa versión.
 
 ## Elegir la función del nodo
 

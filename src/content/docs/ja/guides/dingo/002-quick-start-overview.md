@@ -37,7 +37,7 @@ Go に書かれている Cardano ブロックチェーンノードは、ミニ�
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 実行中のバイナリの動作を確認することができます。
@@ -105,6 +105,8 @@ npx @blinklabs/dingo devnet
 
 最初の永続的な実行には空のディレクトリが必要です。Dingoは、ノードが実行中に同じディレクトリを使用する別の呼び出しを拒否します。束縛されたキーとネットワークを使用してローカルテストのみを実行します。実際の資金では使用しないでください。
 
+`--data-dir` は、既存のシンボリックリンクを含む親ディレクトリの下でも使用できます。ただし、状態パス自体の各要素にシンボリックリンクまたはディレクトリでない要素がある場合や、作成中に別のものがその要素を置き換えた場合は、起動を拒否します。既存の永続ディレクトリでは、Dingo は認識済みの DevNet マーカーとバージョンを確認してから、所有者だけがアクセスできる権限を適用します。認識されないディレクトリでは起動に失敗し、そのディレクトリの権限を変更しません。
+
 Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、`faucet.addr` を用意します。同梱の `faucet.addr`（`addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`）には、ローカルトランザクション用としてジェネシス時に `900,000` テスト ADA（`900_000_000_000` lovelace）が割り当てられます。
 
 - 一時的な `./dingo devnet` の操業のために、 Dingo は一時的な操業を印刷します
@@ -123,7 +125,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 ## ステップ2 - dingo.yaml構成ファイルを作成する
 
-すべての Dingo v0.89.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
+すべての Dingo v0.90.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
 Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 

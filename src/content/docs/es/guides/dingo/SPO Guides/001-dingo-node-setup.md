@@ -34,7 +34,7 @@ Descarga la última versión desde la página de [versiones de Dingo](https://gi
 
 ```
 cd $DINGO_HOME
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ✅ Comprueba la versión del binario:
