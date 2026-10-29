@@ -396,15 +396,15 @@ error.
 | Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
 
 Dingo charges one base lookup to both budgets for each `FetchBlock` reference.
-A batch with one or more height references also reserves `66` lookup units once
-for resolving the highest indexed block, then reserves additional lookup
-units for each height reference based on binary-search probes up to that
-resolved bound. Dingo reserves extra budget before stale-tail retries during
-bound resolution and stale interior index skips during height searches. These
-charges apply to both the global and per-caller budgets. When either budget
-cannot cover the required work, Dingo refuses the request with
-`RESOURCE_EXHAUSTED` before the corresponding archive or cloud lookup. Large
-batches that contain height references may need to be split.
+For a batch containing height references, Dingo also reserves `66` lookup units
+once to resolve the highest indexed block and reserves additional lookup units
+for each height reference based on binary-search probes up to that bound. Dingo
+reserves the budget for each stale-tail retry during bound resolution and each
+stale interior index skip during a height search before performing that work.
+The base and additional charges apply to both the global and per-caller
+budgets. If either budget cannot cover the required charge, Dingo refuses the
+request with `RESOURCE_EXHAUSTED` before the corresponding archive or cloud
+lookup. Large batches containing height references may need to be split.
 
 ### File-backed secret and parity inputs
 
