@@ -107,11 +107,11 @@ funds.
 
 Note: Dingo accepts a `--data-dir` under existing symlinked ancestors, but
 rejects symlinked or non-directory components in the state path itself,
-including a component that changes to a symlink during setup. An existing persistent directory
-must contain Dingo's recognized DevNet marker and version before Dingo
-restricts its permissions to owner only. If Dingo cannot recognize the
-directory, startup fails and Dingo leaves it unchanged; Dingo does not adopt
-arbitrary existing data.
+including a component that another process replaces during setup. An existing
+persistent directory must contain Dingo's recognized DevNet marker and version
+before Dingo restricts its permissions to owner only. If Dingo cannot recognize
+the directory, startup fails and Dingo leaves it unchanged; Dingo does not
+adopt arbitrary existing data.
 
 Dingo provides `faucet.skey`, `faucet.vkey`, and `faucet.addr` in the
 `cardano/keys/` directory. The bundled `faucet.addr`
