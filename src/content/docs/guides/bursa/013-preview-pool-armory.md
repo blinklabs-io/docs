@@ -44,6 +44,15 @@ The armory checks every request against a policy before it signs:
 
 Every signature comes back with a second signature, from the same key, over the complete request. Bursa checks it, so an untrusted host between Bursa and the device cannot replay a response or swap the profile.
 
+### Terms
+
+- **Profile:** one pool on one network, for example `mypool@preview`. It names the cold key, the owner key, the pinned reward account and the opcert floor. Every signing request names a profile.
+- **Slot:** where a profile is stored on the device, 0 to 31. Each slot holds one profile and its owner key for good.
+- **Cold key object:** the SE050 object holding a cold key, `0x20e50010` to `0x20e5001f`.
+- **Identity key:** a device key that signs the key inventory, so the host can tell it is talking to the right device.
+- **Opcert counter:** the issue number in an operational certificate. The chain keeps the last one it saw for each pool.
+- **Floor:** the highest on-chain counter the device has been told. It refuses requests that report a lower one.
+
 ## Before you start
 
 - A USB armory Mk II with an SE050, and a host with a free USB port
@@ -91,7 +100,7 @@ One slip restores every key the pool needs:
 | VRF key | Bursa seed rule | [`bursa key vrf`](/guides/bursa/008-key-commands/#vrf-verifiable-random-function-key-pair) | Block producer |
 | KES keys | Bursa seed rule, one `--index` per rotation | [`bursa key kes`](/guides/bursa/008-key-commands/#kes-key-pair) | Block producer |
 
-The words come from [`bursa wallet create`](/guides/bursa/003-commands/#use-command-line-to-create-a-wallet-and-output-wallet-files), a 24-word [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic.
+The words come from [`bursa wallet create`](/guides/bursa/003-commands/#use-command-line-to-create-a-wallet-and-output-wallet-files), a 24-word [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic. Bursa turns the words into a root key as [CIP-3](https://cips.cardano.org/cip/CIP-3) describes (Icarus), then derives each key along its path.
 
 Losing the cold key loses the pool: a pool ID is the hash of its cold key. The pool mnemonic restores the cold key on a replacement device, or in any wallet that follows CIP-1853.
 
@@ -194,6 +203,8 @@ sudo ip addr add 10.0.0.2/24 dev <usb interface>
 sudo ip link set <usb interface> up
 curl http://10.0.0.1/
 ```
+
+The device answers with its bring-up report in plain text: the board model, the SE050 applet version, and the checks it ran at boot.
 
 ### Create the identity key
 
@@ -353,6 +364,10 @@ The operator checks every key bundle before it rolls it out: the opcert signatur
 - `Auto` generates the KES key, asks a cold signer for the opcert, updates the Secret and rolls the pod. This is in [dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101). It needs `blockProducer.nodeToClient.enabled: true` so the operator can read the on-chain counter. It also needs write access to the keys Secret, through `rbac.keySecretsUpdate` and `rbac.keySecretNames` in [helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532).
 
 Auto mode cannot issue the first opcert of a new pool. See [A new pool](#a-new-pool).
+
+:::note[Not built yet]
+`Auto` with the armory. The operator asks the Bursa signer service for the opcert, and that service has no armory backend yet. Until it does, issue opcerts with `armory-pool opcert` and run in `Assisted` mode.
+:::
 
 ## Step 4: Register the pool
 
@@ -563,6 +578,26 @@ A pool that already forges can move its cold key onto the armory.
    ```
 
 4. Re-register the pool with the device owner key as owner, and move the pledge to an address with that stake key.
+
+## Troubleshooting
+
+`armory-pool` prints the device's reason when it refuses. The common ones:
+
+| Message | Cause | Fix |
+|---|---|---|
+| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `/provision/reward` |
+| `pool owners must be exactly the device owner` | The certificate lists another owner, or more than one | Pass only `device/owner.vkey` as `--owner-stake-vkey` |
+| `pool registration for another operator` | `--cold-vkey` is not this profile's cold key | Use `pool-cold.vkey` for this profile |
+| `delegation other than owner to this pool` or `stake registration of another credential` | The body carries a certificate for another stake key | Register and delegate other stake keys in their own transaction |
+| `policy: body key N not allowed` | The body has a field outside pool operations, such as a withdrawal or mint | Build pool operations in a transaction of their own |
+| `policy: network id does not match profile` or `output N is on another network` | A mainnet address in a Preview transaction, or the reverse | Check `CARDANO_NETWORK` and the change address |
+| `key hash does not match the profile key for this role` | The wrong `-role` for this witness | `pool` for the cold key, `stake` for the owner key |
+| `unknown profile` | The `-profile` name is not on the device | Use the exact name given to `/provision/profile`, on the device that holds it |
+| `nonce replayed` | A request was sent twice | Run the command again; each run uses a new nonce |
+| `cold key object already exists with a different key` | The object already holds another key | Use a free object; keys are never overwritten |
+| `owner key object already exists with a different key` | The slot already holds another owner key | Use a free slot |
+
+An opcert request below the floor is refused. If a rollback lowered the chain counter, reset the floor as in [Rollbacks](#rollbacks).
 
 ## Keys to keep and delete
 
