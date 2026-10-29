@@ -23,6 +23,10 @@ Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-n
 
 Three places hold keys, and each holds only what it needs.
 
+![The pool mnemonic on an offline machine derives the cold and owner keys, which are imported once into the SE050 on the USB armory. The host builds transactions with Bursa, the armory signs them over USB, and the host submits them to the node. The armory issues the operational certificate for the block producer, which holds the VRF and KES keys.](/bursa-armory-pool-overview.svg)
+
+Photos and the board layout are on the [USB armory Mk II wiki](https://github.com/usbarmory/usbarmory/wiki).
+
 | Place | Holds | Signs |
 |---|---|---|
 | Hardware wallet (pledge) | Payment key for the pledge funds | Spending the pledge funds |
@@ -44,11 +48,21 @@ Every signature comes back with a second signature, from the same key, over the 
 
 - A USB armory Mk II with an SE050, and a host with a free USB port
 - Bursa (see the [quick start](/guides/bursa/002-quick-start/))
-- `armory-pool`, the host tool that talks to the armory. Build it from the Bursa repository: `cd armory && go build ./cmd/armory-pool`
-- A synced Preview node whose socket Bursa can reach. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers after v0.89.0.
+- `armory-pool` and `opcert-check`, the host tools that talk to the armory. Build them from the Bursa repository: `cd armory && go build ./cmd/armory-pool ./cmd/opcert-check`
+- `armory-boot-usb`, to load the firmware: `go install github.com/usbarmory/armory-boot/cmd/armory-boot-usb@latest`
+- `jq` and `curl`
+- A synced Preview node whose socket Bursa can reach, for Steps 4 and 5. Start it as a relay early ([Step 3](#step-3-run-the-node) shows the three setups) and set `SOCKET` to its socket path. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers from v0.90.0.
+- A payer wallet Bursa can sign with. `bursa wallet create --output payer` writes `payer/payment.skey` and the address `payer/payment.addr`. Fund that address from the [Cardano testnet faucet](https://docs.cardano.org/cardano-testnets/tools/faucet): a new pool needs at least the 500 ada pool deposit, two 2 ada stake key deposits and fees.
 - A hardware wallet for the pledge funds
-- Test ada from the [Cardano testnet faucet](https://docs.cardano.org/cardano-testnets/tools/faucet). A new pool needs at least the 500 ada pool deposit, the 2 ada stake key deposit, fees, and your pledge.
 - Paper, or a metal backup, for two mnemonics
+
+Commands run in three places:
+
+- **Offline machine:** the pool mnemonic, key derivation and armory provisioning (Steps 1 and 2). Plug the armory in here to provision it.
+- **Host:** online, with the node socket and the payer wallet. It builds, signs with the armory and submits (Steps 4 and 5). Plug the armory in here to sign.
+- **Block producer:** the node, `vrf.skey`, `kes.skey` and `node.cert` (Step 3).
+
+Only verification keys, transaction files, witnesses and certificates move to the host. The cold and owner signing keys never leave the offline machine.
 
 Set the network once for Bursa:
 
@@ -79,7 +93,11 @@ Create the pool mnemonic on an offline machine:
 bursa wallet create --output ./pool
 ```
 
-This writes `seed.txt` (24 words) and the derived keys. Write the words down, then derive the cold key as a plain Ed25519 key the SE050 can import:
+This writes `seed.txt` (24 words) and a full wallet of derived keys, the extended cold key among them. Write the words down and delete everything in `pool/` except `seed.txt`.
+
+Check the paper copy before you rely on it: type the words into a new `seed.txt` on the same machine, derive `pool-cold.vkey` from it as below, and compare. The armory cannot export the cold key, so the paper is its only backup.
+
+Derive the cold key as a plain Ed25519 key the SE050 can import:
 
 ```sh
 bursa key pool-cold --mnemonic-file pool/seed.txt \
@@ -114,6 +132,19 @@ bursa key kes --mnemonic-file pool/seed.txt --index 0 \
 
 Bursa derives VRF and KES seeds with its own rule, so only Bursa can re-derive them from the mnemonic. Use a new `--index` for each KES rotation.
 
+### Reward account key
+
+The reward account can be any stake key. This example derives it from the pool mnemonic, on account 1:
+
+```sh
+bursa key stake --mnemonic-file pool/seed.txt --account-index 1 \
+  --signing-key-file reward.skey --verification-key-file reward.vkey
+armory-pool address -stake-vkey reward.vkey -network preview -type reward
+armory-pool reward-hex stake_test1...
+```
+
+`address` prints the reward address (`stake_test1...`), and `reward-hex` prints it in the hex form the device profile needs. The pool registration names the reward address, and the device pins the hex. `reward.skey` signs the reward account's registration in Step 4 and later withdrawals; it is not on the armory.
+
 ## Step 2: Prepare the armory
 
 ### Build the firmware
@@ -134,7 +165,7 @@ A board with nothing on its eMMC boots into USB recovery mode. Load the image in
 armory-boot-usb -i armory.imx
 ```
 
-The image runs until the board loses power, so load it again after every unplug.
+The image runs until the board loses power, so load it again after every unplug. Keys and profiles live in the SE050 and survive the power cycle.
 
 :::note[Not built yet]
 Flashing the image to eMMC is not documented yet.
@@ -142,9 +173,11 @@ Flashing the image to eMMC is not documented yet.
 
 ### Connect
 
-The armory is an Ethernet device over USB. The device is `10.0.0.1`, the host is `10.0.0.2`, and the service listens on port 80. Give the host interface that address, then check the device answers:
+The armory is an Ethernet device over USB. The device is `10.0.0.1`, the host is `10.0.0.2`, and the service listens on port 80. Find the new USB network interface with `ip link`, give it the host address, then check the device answers:
 
 ```sh
+sudo ip addr add 10.0.0.2/24 dev <usb interface>
+sudo ip link set <usb interface> up
 curl http://10.0.0.1/
 ```
 
@@ -172,28 +205,6 @@ The device returns `public_key` and `pool_id` in hex. Compare the key with `pool
 
 Delete `pool-cold.skey` from the offline machine afterwards. The mnemonic is the backup.
 
-### Register the reward account
-
-The reward account can be any stake key. It must be registered before the pool registration names it, in a transaction of its own: the armory refuses to sign a body that carries a certificate for any stake key other than its owner key.
-
-This example derives it from the pool mnemonic:
-
-```sh
-bursa key stake --mnemonic-file pool/seed.txt --account-index 1 \
-  --signing-key-file reward.skey --verification-key-file reward.vkey
-armory-pool address -stake-vkey reward.vkey -network preview -type reward
-bursa cert stake-registration --stake-vkey reward.vkey --deposit 2000000 -o reward-reg.cert
-bursa tx build --socket-path /ipc/dingo.socket --network preview \
-  --change-address addr_test1... --certificate-file reward-reg.cert --out-file reward-reg.tx
-bursa tx witness --tx-file reward-reg.tx --signing-key-file payer.skey --out-file payer.wit
-bursa tx witness --tx-file reward-reg.tx --signing-key-file reward.skey --out-file reward.wit
-bursa tx assemble --tx-file reward-reg.tx --witness-file payer.wit --witness-file reward.wit \
-  --out-file reward-reg.signed
-bursa tx submit --socket-path /ipc/dingo.socket --network preview --tx-file reward-reg.signed
-```
-
-`armory-pool reward-hex stake_test1...` prints the same address in the hex form the profile needs.
-
 ### Create the profile
 
 A profile ties the cold key to one network, one owner key and one reward account.
@@ -211,6 +222,7 @@ curl -s -X POST http://10.0.0.1/provision/profile -d '{
 
 - `network_id` is 0 for every testnet.
 - `cold_key_id` is the object the import above used.
+- `slot` is a free profile slot, 0 to 31.
 - `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`.
 - `owner_signing_key` is `jq -r .cborHex owner.skey`. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
 - Leave out `chain_counter` for a new pool. For a pool that has already forged, set it to the on-chain counter (see [Migrating an existing pool](#migrating-an-existing-pool)).
@@ -225,13 +237,13 @@ The response holds the owner key: `owner_public_key` (base64) and `owner_key_has
 armory-pool -identity <identity public key> -profile mypool@preview keys -out-dir device
 ```
 
-It writes `device/pool-cold.vkey` and `device/owner.vkey`, and prints the pool ID, the owner key hash, and the owner key in bech32. `device/pool-cold.vkey` must match the `pool-cold.vkey` you derived. Every later `armory-pool` command takes the same `-identity` and `-profile` flags before the subcommand.
+It writes `device/pool-cold.vkey` and `device/owner.vkey`, and prints the pool ID in hex and bech32 (`pool1...`), the owner key hash, and the owner key in bech32. `device/pool-cold.vkey` must match the `pool-cold.vkey` you derived. `witness` and `opcert` take the same `-identity` and `-profile` flags before the subcommand; `address` and `reward-hex` need neither.
 
-## Step 3: Run the block producer
+## Step 3: Run the node
 
-The block producer needs `vrf.skey`, `kes.skey` and an operational certificate. Issue the first operational certificate in [Step 5](#step-5-the-first-operational-certificate) before you start forging; a relay-only node can sync now.
+Start the node now without the block-producer settings, so it syncs and Bursa has a socket for Steps 4 and 5. Add the block-producer settings below after [Step 5](#step-5-the-first-operational-certificate) writes `node.cert`.
 
-Dingo refuses key files readable by group or others:
+The block producer needs `vrf.skey`, `kes.skey` and `node.cert`. Dingo refuses key files readable by group or others:
 
 ```sh
 chmod 400 vrf.skey kes.skey node.cert
@@ -239,7 +251,7 @@ chmod 400 vrf.skey kes.skey node.cert
 
 ### Local install
 
-Follow [Dingo node setup](/guides/dingo/spo-guides/001-dingo-node-setup/) to install Dingo, write `/etc/dingo/dingo.yaml` with `network: "preview"`, and run it under systemd. Set up the relay and producer topology with [Topology setup](/guides/dingo/spo-guides/012-topology-setup-overview/).
+Follow [Dingo node setup](/guides/dingo/spo-guides/001-dingo-node-setup/) to install Dingo, write `/etc/dingo/dingo.yaml` with `network: "preview"`, and run it under systemd. `SOCKET` is the `socketPath` from `dingo.yaml`. Copy the key files to `/var/lib/dingo/keys/`, owned by the user Dingo runs as. Set up the relay and producer topology with [Topology setup](/guides/dingo/spo-guides/012-topology-setup-overview/).
 
 Add the block-producer settings to `dingo.yaml`:
 
@@ -261,17 +273,17 @@ sudo chown 1000:1000 keys/*
 docker run -d --name dingo-bp \
   -p 3001:3001 \
   -v dingo-preview-data:/data/db \
-  -v dingo-preview-ipc:/ipc \
+  -v "$PWD/ipc":/ipc \
   -v "$PWD/keys":/keys:ro \
   -e CARDANO_NETWORK=preview \
   -e CARDANO_BLOCK_PRODUCER=true \
   -e CARDANO_SHELLEY_VRF_KEY=/keys/vrf.skey \
   -e CARDANO_SHELLEY_KES_KEY=/keys/kes.skey \
   -e CARDANO_SHELLEY_OPERATIONAL_CERTIFICATE=/keys/node.cert \
-  ghcr.io/blinklabs-io/dingo:0.89.0
+  ghcr.io/blinklabs-io/dingo:0.90.0
 ```
 
-The node socket is `/ipc/dingo.socket` in the `dingo-preview-ipc` volume. Bursa's `--socket-path` needs access to it.
+The node socket is `ipc/dingo.socket` in the current directory: `SOCKET=$PWD/ipc/dingo.socket`. Until `node.cert` exists, leave out the `CARDANO_BLOCK_PRODUCER` and key variables.
 
 ### Kubernetes
 
@@ -283,7 +295,9 @@ helm install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/charts/dingo-
   --set 'rbac.keySecretsNamespaces={cardano}'
 ```
 
-Store the producer keys in a Secret:
+Bursa needs a node socket on the host, which a pod does not give it. Run a local or Docker relay for Bursa, or run Bursa in a pod that mounts the producer's socket.
+
+After Step 5, store the producer keys in a Secret:
 
 ```sh
 kubectl create namespace cardano
@@ -328,6 +342,25 @@ Auto mode cannot issue the first opcert of a new pool. See [A new pool](#a-new-p
 
 ## Step 4: Register the pool
 
+### Register the reward account
+
+The reward account must be registered before the pool registration names it, in a transaction of its own: the armory refuses to sign a body that carries a certificate for any stake key other than its owner key.
+
+```sh
+bursa cert stake-registration --stake-vkey reward.vkey --deposit 2000000 -o reward-reg.cert
+bursa tx build --socket-path "$SOCKET" --network preview \
+  --change-address "$(cat payer/payment.addr)" --certificate-file reward-reg.cert --out-file reward-reg.tx
+bursa tx witness --tx-file reward-reg.tx --signing-key-file payer/payment.skey --out-file payer.wit
+bursa tx witness --tx-file reward-reg.tx --signing-key-file reward.skey --out-file reward.wit
+bursa tx assemble --tx-file reward-reg.tx --witness-file payer.wit --witness-file reward.wit \
+  --out-file reward-reg.signed
+bursa tx submit --socket-path "$SOCKET" --network preview --tx-file reward-reg.signed
+```
+
+`bursa tx witness` needs no network: make `reward.wit` on the offline machine from a copy of `reward-reg.tx`, and carry the witness back. `bursa query stake-address --socket-path "$SOCKET" --network preview --address stake_test1...` shows `registered: true` once it is on chain.
+
+### One transaction for the pool
+
 Registration takes one transaction: register the owner stake key, register the pool, and delegate the owner to the pool. The paying wallet covers the 500 ada pool deposit, the 2 ada stake deposit and the fee.
 
 ### The pledge address
@@ -337,6 +370,8 @@ Pledge counts the stake controlled by the pool's owners. Keep the pledge funds a
 ```sh
 armory-pool address -payment-vkey payment.vkey -stake-vkey device/owner.vkey -network preview
 ```
+
+`payment.vkey` is the hardware wallet's payment verification key.
 
 The payment key never leaves the hardware wallet, and the owner key only signs certificates. `bursa tx build` spends only from its change address, so send the pledge to this address from the hardware wallet.
 
@@ -358,13 +393,13 @@ bursa cert pool-registration \
 bursa cert stake-delegation --stake-vkey device/owner.vkey --pool-id pool1... -o owner-deleg.cert
 ```
 
-Metadata URLs and relay DNS names must be 128 bytes or less.
+`--reward-account` is the `stake_test1...` address from Step 1, and `--pool-id` is the `pool1...` ID from `armory-pool keys`. Metadata URLs and relay DNS names must be 128 bytes or less.
 
 ### Build, sign, submit
 
 ```sh
-bursa tx build --socket-path /ipc/dingo.socket --network preview \
-  --change-address addr_test1... \
+bursa tx build --socket-path "$SOCKET" --network preview \
+  --change-address "$(cat payer/payment.addr)" \
   --certificate-file owner-reg.cert \
   --certificate-file pool-reg.cert \
   --certificate-file owner-deleg.cert \
@@ -376,7 +411,7 @@ bursa tx build --socket-path /ipc/dingo.socket --network preview \
 The paying wallet signs, the armory signs once per role, and Bursa assembles and submits:
 
 ```sh
-bursa tx witness --tx-file pool-reg.tx --signing-key-file payer.skey --out-file payer.wit
+bursa tx witness --tx-file pool-reg.tx --signing-key-file payer/payment.skey --out-file payer.wit
 armory-pool -identity <identity public key> -profile mypool@preview \
   witness -role pool -tx-file pool-reg.tx -out pool.wit
 armory-pool -identity <identity public key> -profile mypool@preview \
@@ -384,7 +419,7 @@ armory-pool -identity <identity public key> -profile mypool@preview \
 bursa tx assemble --tx-file pool-reg.tx \
   --witness-file payer.wit --witness-file pool.wit --witness-file owner.wit \
   --out-file pool-reg.signed
-bursa tx submit --socket-path /ipc/dingo.socket --network preview --tx-file pool-reg.signed
+bursa tx submit --socket-path "$SOCKET" --network preview --tx-file pool-reg.signed
 ```
 
 `armory-pool witness` sends the exact body bytes to the device and checks the answer before it writes anything. The signature must verify over the body hash, and the binding signature must cover the request. If the policy refuses, it prints the device's reason and writes no witness:
@@ -396,7 +431,7 @@ armory-pool: device refused: policy: certificate 0: pool registration reward acc
 Check the result:
 
 ```sh
-bursa query pool --socket-path /ipc/dingo.socket --network preview --pool-id pool1...
+bursa query pool --socket-path "$SOCKET" --network preview --pool-id pool1...
 ```
 
 `registered` is `true` once the transaction is on chain, and `params` shows the pledge, cost, margin, owners and reward account.
@@ -408,7 +443,7 @@ An operational certificate (opcert) lets the KES key sign blocks for the pool. I
 The armory chooses the counter, not the host. The host sends the KES public key, the on-chain counter and the start period. The device returns the signature and `issue_counter`.
 
 ```sh
-bursa query pool --socket-path /ipc/dingo.socket --network preview --pool-id pool1...
+bursa query pool --socket-path "$SOCKET" --network preview --pool-id pool1...
 ```
 
 The `opcert` field holds `on_chain_counter`, and `kes` holds `current_kes_period`. Pass them to `armory-pool opcert`. Use `none` when the counter is `null`:
@@ -421,7 +456,7 @@ armory-pool -identity <identity public key> -profile mypool@preview \
 
 The device signs `kes_vkey || issue || period` with the cold key and returns the issue number it chose. `armory-pool` prints `issue counter N`, checks the signature and binding, and writes `node.cert` in the same format as `bursa cert op-cert`.
 
-To check a certificate against the device later, `opcert-check` has the device reproduce its signature:
+To check a certificate against the device later, `opcert-check` has the device reproduce its signature. Like every opcert request, it raises the device floor to the chain counter it reports:
 
 ```sh
 opcert-check -vkey "$(jq -r .cborHex pool-cold.vkey)" -cert "$(jq -r .cborHex node.cert)" \
@@ -465,7 +500,7 @@ To rotate:
 
 1. Generate a new KES key with the next `--index`.
 2. Query the pool for `on_chain_counter` and `current_kes_period`.
-3. Get the opcert from the armory with `opcert-next`.
+3. Get the opcert from the armory with `armory-pool opcert`, as in Step 5.
 4. Replace `kes.skey` and `node.cert` on the producer and restart it. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
 
 ### Rollbacks
@@ -514,6 +549,20 @@ A pool that already forges can move its cold key onto the armory.
    ```
 
 4. Re-register the pool with the device owner key as owner, and move the pledge to an address with that stake key.
+
+## Keys to keep and delete
+
+| File | Where | Keep? |
+|---|---|---|
+| Pool mnemonic words | Paper, checked | Keep. The only backup of the cold and owner keys. |
+| `pool/seed.txt` | Offline machine | Delete once the armory is provisioned and the paper is checked. |
+| `pool-cold.skey`, `owner.skey`, other files in `pool/` | Offline machine | Delete after import. |
+| `vrf.skey`, `kes.skey` | Block producer | Only on the producer. Delete other copies. |
+| `reward.skey` | Offline | Keep offline, or re-derive from the mnemonic (account 1) when you withdraw rewards. |
+| `payer/` | Host | A hot wallet for fees and deposits. Keep only what the next transactions need. |
+| Identity public key | Anywhere | Keep. Every `armory-pool` call pins it. |
+
+Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced folders.
 
 ## Recovery
 
