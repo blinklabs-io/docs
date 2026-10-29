@@ -309,8 +309,6 @@ Insert the card, slide the switch toward microSD and plug the board in. `curl ht
 
 While the card is in and the switch points toward microSD, the board boots the provisioning image at every power-up, and the host can change profiles, the reward account and the floor. When provisioning is done, slide the switch back toward eMMC and take the card out. The board boots whatever image is on the card, so store the card offline with the pool mnemonic.
 
-Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
-
 ### Read the device keys
 
 `armory-pool` checks the device's key list against the identity key you recorded, then writes the keys as files Bursa can use:
@@ -660,6 +658,8 @@ A pool that already forges can move its cold key onto the armory.
 A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
 An opcert request below the floor is refused. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
+
+Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
 
 ## Keys to keep and delete
 
