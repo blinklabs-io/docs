@@ -396,8 +396,8 @@ error.
 | Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
 
 Dingo charges one base lookup to both budgets for each `FetchBlock` reference.
-A batch with one or more height references also reserves a one-time `66` lookup
-units for resolving the highest indexed block, then reserves additional lookup
+A batch with one or more height references also reserves `66` lookup units once
+for resolving the highest indexed block, then reserves additional lookup
 units for each height reference based on binary-search probes up to that
 resolved bound. Dingo reserves extra budget before stale-tail retries during
 bound resolution and stale interior index skips during height searches. These
