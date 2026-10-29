@@ -82,6 +82,8 @@ Repite el mismo comando para reanudarla. `--reset` requiere `--data-dir` y vuelv
 
 La primera ejecución persistente requiere un directorio vacío. Dingo rechaza otra ejecución que utilice el mismo directorio mientras el nodo esté activo. Usa las claves y la red incluidas únicamente para pruebas locales, nunca con fondos reales.
 
+📝 `--data-dir` puede estar bajo antecesores que ya sean enlaces simbólicos, incluidos los prefijos de directorios temporales del sistema. Dingo rechaza cualquier componente enlazado simbólicamente o que no sea un directorio dentro de la propia ruta de estado, incluso si otro proceso lo sustituye durante la preparación. Para un directorio persistente existente, Dingo comprueba primero que contenga el marcador y la versión reconocidos de DevNet y solo después restringe sus permisos al propietario. Si no reconoce el directorio, el inicio falla y Dingo no modifica sus permisos; no adopta datos existentes arbitrarios.
+
 Dingo proporciona `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. La dirección incluida en `faucet.addr`, `addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`, recibe `900,000` ADA de prueba (`900_000_000_000` lovelace) en la génesis para realizar transacciones locales.
 
 - En una ejecución temporal de `./dingo devnet`, Dingo muestra el directorio temporal. Su carpeta `cardano/keys/` contiene los archivos del faucet hasta que termina el proceso.
