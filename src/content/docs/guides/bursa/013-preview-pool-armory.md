@@ -12,6 +12,7 @@ This guide describes work in progress. Several pieces are in open pull requests:
 
 - `bursa tx build`, `bursa tx submit` and `bursa query`: [bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)
 - The armory firmware and signing service: [bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)
+- `bursa key pool-owner`: [bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)
 - Profiles and the response binding in Bursa's signer: [bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)
 - Automatic opcert rotation in the operator: [dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101) and [helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)
 
@@ -66,9 +67,9 @@ Use two separate recovery phrases.
 
 Losing the cold key loses the pool: a pool ID is the hash of its cold key. The pool mnemonic restores the cold key on a replacement device, or in any wallet that follows CIP-1853.
 
-Losing the owner key is recoverable. A pool registration needs witnesses from the cold key and from the owners named in that certificate, not from the owners already on chain. So the cold key and a new owner can re-register the pool without the old owner. Three things follow:
+The owner can also be replaced without the old owner's signature. A pool registration needs witnesses from the cold key and from the owners named in that certificate, not from the owners already on chain. So the cold key and a new owner can re-register the pool without the old owner. Three things follow:
 
-- The armory accepts only its own owner key as owner, so the new owner comes from a new profile on a device holding the cold key, for example a replacement restored from the pool mnemonic.
+- The armory accepts only its own owner key as owner, so the new owner comes from a new profile on a device holding the cold key.
 - Pledge counts only stake on the owners' stake keys. Move the pledge to an address with the new owner's stake key; the hardware wallet's payment key still controls the funds.
 - The old owner's 2 ada stake deposit stays locked, because deregistering that key needs its signature.
 
@@ -90,9 +91,15 @@ Pass file paths. With `-` Bursa prints the extended `pool_xsk` key instead, whic
 
 The pool ID is the blake2b-224 hash of `pool-cold.vkey`.
 
-:::note[Not built yet]
-Today the armory generates the owner key inside the SE050, so the pool mnemonic cannot restore it. Deriving the owner key from the pool mnemonic needs an owner key import on the device. Until then, back up the owner public key and plan to re-register with a new owner if the device is lost.
-:::
+Derive the owner key the same way, from the stake key path of the pool mnemonic:
+
+```sh
+bursa key pool-owner --mnemonic-file pool/seed.txt \
+  --signing-key-file owner.skey \
+  --verification-key-file owner.vkey
+```
+
+This is a plain Ed25519 key. Its key hash and reward address differ from those of `bursa key stake` for the same path, so a wallet restored from the pool mnemonic does not show them.
 
 ### VRF and KES keys
 
@@ -197,16 +204,18 @@ curl -s -X POST http://10.0.0.1/provision/profile -d '{
   "network_id": 0,
   "slot": 0,
   "cold_key_id": 551878672,
-  "reward_account": "e0<28-byte stake key hash in hex>"
+  "reward_account": "e0<28-byte stake key hash in hex>",
+  "owner_signing_key": "<cborHex of owner.skey>"
 }'
 ```
 
 - `network_id` is 0 for every testnet.
 - `cold_key_id` is the object the import above used.
 - `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`.
+- `owner_signing_key` is `jq -r .cborHex owner.skey`. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
 - Leave out `chain_counter` for a new pool. For a pool that has already forged, set it to the on-chain counter (see [Migrating an existing pool](#migrating-an-existing-pool)).
 
-The response holds the new owner key: `owner_public_key` (base64) and `owner_key_hash`. Save both.
+The response holds the owner key: `owner_public_key` (base64) and `owner_key_hash`. Check the key against `owner.vkey`, then delete `owner.skey` from the offline machine.
 
 ### Read the device keys
 
@@ -510,7 +519,7 @@ A pool that already forges can move its cold key onto the armory.
 
 | Lost | Effect | Recovery |
 |---|---|---|
-| Armory | No new signatures | Restore the cold key from the pool mnemonic on a new device, which generates a new owner key. Re-register with it; the old owner does not sign. Move the pledge to the new owner's stake key. |
+| Armory | No new signatures | Restore the cold key and owner key from the pool mnemonic on a new device, with the same reward account. The pool, owner and pledge address stay the same. |
 | Pool mnemonic | No backup of the cold key | The armory keeps signing, but the SE050 cannot export the key. If the armory is lost too, the pool is gone and a new pool needs a new cold key. |
 | Pledge hardware wallet | Pledge funds | Restore from the pledge mnemonic. |
 | Block producer | No blocks | Restore VRF and KES keys from the pool mnemonic, then issue a new opcert. |
@@ -531,6 +540,5 @@ The header lists the environment variables. Rerunning it on the same work direct
 ## What is not built yet
 
 - A Bursa signer backend for the armory. `armory-pool` is the host tool until then.
-- Importing the owner key from the pool mnemonic.
 - Automatic rotation on Kubernetes through the armory. The operator's `Auto` mode talks to the Bursa signer service.
 - Firmware flashing instructions. The image is loaded into RAM over USB with `armory-boot-usb`.
