@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.89.0 設定リファレンス
-description: Dingo v0.89.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.90.0 設定リファレンス
+description: Dingo v0.90.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.89.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.89.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.90.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -96,10 +96,10 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | IPv4 ピアリスナーのアドレス | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv4 リテラルが必要です。 |
 | IPv6 ピアリスナーのアドレス | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv6 リテラルが必要です。 |
 | DMQ ピアトポロジーファイル | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | 未設定 | 設定する場合、パスには `..` による移動を含めず、既存の通常ファイルを指定します。DMQ ソケットを開く前に読み込み、検証します。 |
-| DMQ ピアの最小数 | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | `dmq.minPeers <= dmq.maxPeers` が必要です。`0` は必要なピア数を 0 にします。現在の DMQ スタックでは最小ピア数は強制されません。 |
-| DMQ ピアの最大数 | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | `dmq.minPeers <= dmq.maxPeers` が必要です。`minPeers` も `0` の場合、`0` はピアを許可しません。現在の DMQ スタックでは最大ピア数は強制されません。 |
+| DMQ ピアの最小数 | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | `dmq.minPeers <= dmq.maxPeers` が必要です。これは接続を確立する発信ピアの最小数であり、着信接続はこの数を満たすものとして数えません。`0` は必要な発信ピア数を 0 にします。 |
+| DMQ ピアの最大数 | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | `dmq.minPeers <= dmq.maxPeers` が必要です。発信接続と着信接続を合わせた最大接続数を指定します。着信接続用の枠は、`dmq.minPeers` とローカルルートの合計 `valency` の大きい方を発信接続用に予約した残りから導出します。`minPeers` も `0` の場合、`0` はピアを許可しません。 |
 
-DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2nPort: 0` の場合はリスナーアドレスの検証を省略します。0 以外の場合、各リスナーアドレスは対応する IP バージョンである必要があります。ピアマネージャーとトランスポートは、まだトポロジーファイルを接続に使用しません。
+DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2nPort: 0` の場合はリスナーアドレスの検証を省略します。0 以外の場合、各リスナーアドレスは対応する IP バージョンである必要があります。DMQ スタックは `maxPeers`、`minPeers`、ローカルルートの合計 `valency` から着信接続の上限を内部的に導出します。この上限は Dingo の YAML キー、CLI フラグ、環境変数として公開されていません。導出した枠を使い切ると、DMQ スタックはハンドシェイク前に着信接続を拒否します。ピアマネージャーとトランスポートは、まだトポロジーファイルを接続に使用しません。
 
 `dmq.topologyFile` を設定した場合、DMQ ソケットを開く前に次のトポロジールールを適用します。
 
@@ -341,17 +341,17 @@ Dingo は `FetchBlock` の参照バッチ全体を両方の制限に計上しま
 
 ### トークンレジストリのマニフェスト認証
 
-トークンレジストリの同期を有効にする場合、署名付きマニフェスト URL と、その検証に用いる信頼する公開鍵が必要です。
+トークンレジストリの同期では、公開アーカイブまたは署名付きミラーを使用できます。公開アーカイブでは `tokenRegistry.manifestUrl` と `tokenRegistry.trustedManifestKey` の両方を空にします。署名付きミラーでは両方を設定する必要があり、片方だけの設定は無効です。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| 署名付きマニフェスト URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | 既定では空です。トークンレジストリの同期を有効にする場合は必須です。絶対 HTTPS URL を指定します。 |
-| 信頼するマニフェスト鍵 | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | 既定では空です。トークンレジストリの同期を有効にする場合は必須です。32 バイトの Ed25519 公開鍵を 16 進数で指定します。 |
+| 署名付きマニフェスト URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | 既定では空です。公開アーカイブでは空のままにし、署名付きミラーでは `trustedManifestKey` とともに設定します。設定する場合は絶対 HTTPS URL を指定します。 |
+| 信頼するマニフェスト鍵 | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | 既定では空です。公開アーカイブでは空のままにし、署名付きミラーでは `manifestUrl` とともに設定します。設定する場合は 32 バイトの Ed25519 公開鍵を 16 進数で指定します。 |
 | マニフェストのロールバックを許可 | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | 既定値は `false`。公開者による意図的なロールバックの場合のみ `true` にします。 |
 
-`tokenRegistry.sourceUrl` を明示する場合、それも絶対 HTTPS URL である必要があります。スナップショットの適用前に、署名付きマニフェストを、設定したアーカイブ URL、正確な圧縮サイズ、BLAKE2b-256 ダイジェストに対して検証します。ロールバック検査に用いるシーケンス番号もマニフェストから取得します。
+`tokenRegistry.sourceUrl` を明示する場合、それも絶対 HTTPS URL である必要があります。公開アーカイブでは署名付きマニフェストなしでアーカイブを同期します。署名付きミラーでは、スナップショットの適用前に署名付きマニフェストを、設定したアーカイブ URL、正確な圧縮サイズ、BLAKE2b-256 ダイジェストに対して検証します。ロールバック検査に用いるシーケンス番号もマニフェストから取得します。
 
-未認証、不一致、不完全なスナップショットは拒否されます。`allowRollback` が `true` でない限り、小さいシーケンス番号も拒否し、同じシーケンス番号でダイジェストが変わる場合も拒否します。拒否されたスナップショットが最後に受け入れたものを置き換えることはありません。
+署名付きミラーでは、未認証、不一致、不完全なスナップショットを拒否します。`allowRollback` が `true` でない限り、小さいシーケンス番号も拒否し、同じシーケンス番号でダイジェストが変わる場合も拒否します。拒否されたスナップショットが最後に受け入れたものを置き換えることはありません。
 
 <a id="token-registry-header-credentials"></a>
 
@@ -373,7 +373,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.77.1 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数から削除しました。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.90.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
