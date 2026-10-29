@@ -8,13 +8,12 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. Several pieces are in open pull requests:
+This guide describes work in progress. Two pieces are in open pull requests:
 
-- `bursa tx build`, `bursa tx submit` and `bursa query`: [bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)
 - The armory firmware and signing service: [bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)
-- `bursa key pool-owner`: [bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)
 - Profiles and the response binding in Bursa's signer: [bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)
-- Automatic opcert rotation in the operator: [dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101) and [helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)
+
+`bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)) and `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
 Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-not-built-yet) section lists them. Use Preview and test funds only.
 :::
@@ -56,9 +55,9 @@ Every signature comes back with a second signature, from the same key, over the 
 ## Before you start
 
 - A USB armory Mk II with an SE050, and a host with a free USB port
-- Bursa (see the [quick start](/guides/bursa/002-quick-start/))
+- Bursa from its `main` branch until the next release: `go install github.com/blinklabs-io/bursa/cmd/bursa@main` (Go 1.26.10 or later)
 - `armory-pool` and `opcert-check`, the host tools that talk to the armory. Build them from the Bursa repository: `cd armory && go build ./cmd/armory-pool ./cmd/opcert-check`
-- `armory-boot-usb`, to load the firmware: `go install github.com/usbarmory/armory-boot/cmd/armory-boot-usb@latest`
+- `armory-boot-usb`, to load the firmware: `go install github.com/usbarmory/armory-boot/cmd/armory-boot-usb@latest`. Without a udev rule for the board, run it with `sudo`.
 - `jq` and `curl`
 - A synced Preview node whose socket Bursa can reach, for Steps 4 and 5. Start it as a relay early ([Step 3](#step-3-run-the-node) shows the three setups) and set `SOCKET` to its socket path. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers from v0.90.0.
 - A payer wallet Bursa can sign with. `bursa wallet create --output payer` writes `payer/payment.skey` and the address `payer/payment.addr`. Fund that address from the [Cardano testnet faucet](https://docs.cardano.org/cardano-testnets/tools/faucet): a new pool needs at least the 500 ada pool deposit, two 2 ada stake key deposits and fees.
