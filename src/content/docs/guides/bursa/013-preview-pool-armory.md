@@ -79,6 +79,20 @@ Use two separate recovery phrases.
 1. **Pledge mnemonic, on the hardware wallet.** It holds the payment key for the pledge funds. It never touches the armory or the block producer.
 2. **Pool mnemonic, written down offline.** It derives the pool cold key and the owner key. Both are imported into the armory, and the paper copy is the recovery path.
 
+![A paper slip holds the 24-word pool mnemonic. Bursa derives the pool cold key and the owner key, which are imported into the armory; the reward key, kept offline; and the VRF and KES keys, which go to the block producer.](/bursa-pool-mnemonic-slip.svg)
+
+One slip restores every key the pool needs:
+
+| Key | Path | Command | Goes to |
+|---|---|---|---|
+| Pool cold key | `m/1853'/1815'/0'/0'` ([CIP-1853](https://cips.cardano.org/cip/CIP-1853)) | [`bursa key pool-cold`](/guides/bursa/008-key-commands/#pool-cold-key) | Armory |
+| Owner key | `m/1852'/1815'/0'/2/0` ([CIP-1852](https://cips.cardano.org/cip/CIP-1852)) | `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) | Armory |
+| Reward key | `m/1852'/1815'/1'/2/0` | [`bursa key stake`](/guides/bursa/008-key-commands/#stake-key) | Offline |
+| VRF key | Bursa seed rule | [`bursa key vrf`](/guides/bursa/008-key-commands/#vrf-verifiable-random-function-key-pair) | Block producer |
+| KES keys | Bursa seed rule, one `--index` per rotation | [`bursa key kes`](/guides/bursa/008-key-commands/#kes-key-pair) | Block producer |
+
+The words come from [`bursa wallet create`](/guides/bursa/003-commands/#use-command-line-to-create-a-wallet-and-output-wallet-files), a 24-word [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic.
+
 Losing the cold key loses the pool: a pool ID is the hash of its cold key. The pool mnemonic restores the cold key on a replacement device, or in any wallet that follows CIP-1853.
 
 The owner can also be replaced without the old owner's signature. A pool registration needs witnesses from the cold key and from the owners named in that certificate, not from the owners already on chain. So the cold key and a new owner can re-register the pool without the old owner. Three things follow:

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">One pool mnemonic, every pool key</title>
+  <desc id="d">A paper slip holds the 24-word pool mnemonic. Bursa derives five keys from it: the pool cold key on path m/1853'/1815'/0'/0' and the owner key on m/1852'/1815'/0'/2/0, both imported into the armory; the reward key on m/1852'/1815'/1'/2/0, kept offline; and the VRF and KES keys, which go to the block producer.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5d6068"/>
+    </marker>
+    <pattern id="lines" width="8" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0 8 L8 0" stroke="#e8dcc0" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <style>
+    .t{fill:#1c1d21;font-size:14px}
+    .s{fill:#5d6068;font-size:12px}
+    .h{fill:#1c1d21;font-size:15px;font-weight:700}
+    .m{font-family:ui-monospace, Menlo, monospace;font-size:12px;fill:#1c1d21}
+    .w{font-family:ui-monospace, Menlo, monospace;font-size:12px;fill:#8a7a55}
+    .ln{stroke:#5d6068;stroke-width:2;fill:none}
+  </style>
+  <rect width="1000" height="560" rx="16" fill="#f6f5f1"/>
+
+  <!-- the slip -->
+  <g transform="rotate(-2 180 280)">
+    <rect x="38" y="52" width="290" height="456" rx="6" fill="#fffaf0" stroke="#c9b98f" stroke-width="2"/>
+    <rect x="38" y="52" width="290" height="44" rx="6" fill="url(#lines)"/>
+    <text x="183" y="80" text-anchor="middle" fill="#6b5a2e" font-size="15" font-weight="700" letter-spacing="2">POOL MNEMONIC</text>
+    <g class="w">
+      <text x="60" y="126">1 ______</text><text x="152" y="126">9 ______</text><text x="244" y="126">17 _____</text>
+      <text x="60" y="154">2 ______</text><text x="152" y="154">10 _____</text><text x="244" y="154">18 _____</text>
+      <text x="60" y="182">3 ______</text><text x="152" y="182">11 _____</text><text x="244" y="182">19 _____</text>
+      <text x="60" y="210">4 ______</text><text x="152" y="210">12 _____</text><text x="244" y="210">20 _____</text>
+      <text x="60" y="238">5 ______</text><text x="152" y="238">13 _____</text><text x="244" y="238">21 _____</text>
+      <text x="60" y="266">6 ______</text><text x="152" y="266">14 _____</text><text x="244" y="266">22 _____</text>
+      <text x="60" y="294">7 ______</text><text x="152" y="294">15 _____</text><text x="244" y="294">23 _____</text>
+      <text x="60" y="322">8 ______</text><text x="152" y="322">16 _____</text><text x="244" y="322">24 _____</text>
+    </g>
+    <line x1="58" y1="352" x2="308" y2="352" stroke="#c9b98f" stroke-dasharray="4 4"/>
+    <text class="s" x="58" y="378">bursa wallet create --output pool</text>
+    <text class="s" x="58" y="400">Written by hand. Checked once by</text>
+    <text class="s" x="58" y="418">re-deriving pool-cold.vkey.</text>
+    <text class="s" x="58" y="448">Never typed into an online machine.</text>
+    <text class="s" x="58" y="470">The armory cannot export its keys:</text>
+    <text class="s" x="58" y="488">this slip is the only backup.</text>
+  </g>
+
+  <!-- trunk -->
+  <path class="ln" d="M330 280 L392 280"/>
+  <path class="ln" d="M392 74 L392 486"/>
+
+  <!-- branches -->
+  <g>
+    <path class="ln" d="M392 74 L430 74" marker-end="url(#a)"/>
+    <rect x="432" y="40" width="380" height="68" rx="12" fill="#fbeadf" stroke="#c2410c" stroke-width="2"/>
+    <text class="h" x="450" y="66">Pool cold key</text>
+    <text class="m" x="450" y="90">m/1853'/1815'/0'/0'  · bursa key pool-cold</text>
+  </g>
+  <g>
+    <path class="ln" d="M392 177 L430 177" marker-end="url(#a)"/>
+    <rect x="432" y="143" width="380" height="68" rx="12" fill="#fbeadf" stroke="#c2410c" stroke-width="2"/>
+    <text class="h" x="450" y="169">Owner key</text>
+    <text class="m" x="450" y="193">m/1852'/1815'/0'/2/0 · bursa key pool-owner</text>
+  </g>
+  <g>
+    <path class="ln" d="M392 280 L430 280" marker-end="url(#a)"/>
+    <rect x="432" y="246" width="380" height="68" rx="12" fill="#e6eefb" stroke="#2f6fd6" stroke-width="2"/>
+    <text class="h" x="450" y="272">Reward key</text>
+    <text class="m" x="450" y="296">m/1852'/1815'/1'/2/0 · bursa key stake</text>
+  </g>
+  <g>
+    <path class="ln" d="M392 383 L430 383" marker-end="url(#a)"/>
+    <rect x="432" y="349" width="380" height="68" rx="12" fill="#dff3ea" stroke="#0f8a5f" stroke-width="2"/>
+    <text class="h" x="450" y="375">VRF key</text>
+    <text class="m" x="450" y="399">Bursa seed rule · bursa key vrf</text>
+  </g>
+  <g>
+    <path class="ln" d="M392 486 L430 486" marker-end="url(#a)"/>
+    <rect x="432" y="452" width="380" height="68" rx="12" fill="#dff3ea" stroke="#0f8a5f" stroke-width="2"/>
+    <text class="h" x="450" y="478">KES keys</text>
+    <text class="m" x="450" y="502">one --index per rotation · bursa key kes</text>
+  </g>
+
+  <!-- destinations -->
+  <g>
+    <rect x="840" y="74" width="136" height="104" rx="12" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+    <text class="h" x="858" y="104">USB armory</text>
+    <text class="s" x="858" y="126">imported once</text>
+    <text class="s" x="858" y="144">into the SE050,</text>
+    <text class="s" x="858" y="162">never overwritten</text>
+    <path class="ln" d="M812 74 L838 100" marker-end="url(#a)"/>
+    <path class="ln" d="M812 177 L838 152" marker-end="url(#a)"/>
+  </g>
+  <g>
+    <rect x="840" y="246" width="136" height="68" rx="12" fill="#fff" stroke="#2f6fd6" stroke-width="2"/>
+    <text class="h" x="858" y="274">Offline</text>
+    <text class="s" x="858" y="296">signs rewards</text>
+    <path class="ln" d="M812 280 L838 280" marker-end="url(#a)"/>
+  </g>
+  <g>
+    <rect x="840" y="384" width="136" height="104" rx="12" fill="#fff" stroke="#0f8a5f" stroke-width="2"/>
+    <text class="h" x="858" y="414">Block</text>
+    <text class="h" x="858" y="434">producer</text>
+    <text class="s" x="858" y="458">hot keys, online</text>
+    <path class="ln" d="M812 383 L838 410" marker-end="url(#a)"/>
+    <path class="ln" d="M812 486 L838 462" marker-end="url(#a)"/>
+  </g>
+</svg>
