@@ -672,8 +672,14 @@ An opcert request below the floor is refused. If a rollback lowered the chain co
 | `pool/seed.txt` | Offline machine | Delete once the armory is provisioned and the paper is checked. |
 | `pool-cold.skey`, `owner.skey`, other files in `pool/` | Offline machine | Delete after import. |
 | `vrf.skey`, `kes.skey` | Block producer | Only on the producer. Delete other copies. |
+| `node.cert` (the opcert) | Block producer | Keep the current one with its `kes.skey`. Not secret, but with that `kes.skey` and `vrf.skey` it forges blocks, so after a rotation delete the old `node.cert` and `kes.skey` together. |
+| `kes.vkey` | Host | Needed only to issue its opcert. Delete it with its `kes.skey` at the next rotation. |
 | `reward.skey` | Offline | Keep offline, or re-derive from the mnemonic (account 1) when you withdraw rewards. |
 | `payer/` | Host | A hot wallet for fees and deposits. Keep only what the next transactions need. |
+| `pool-cold.vkey`, `device/*.vkey`, `vrf.vkey`, `reward.vkey` | Host | Keep. Public, and needed for every re-registration, vote and retirement. |
+| `*.cert` other than `node.cert` (pool registration, owner registration and delegation, reward account registration) | Host | Public and single-use. Delete once the transaction is on chain, or keep as a record. Build new ones for later changes. |
+| `*.tx`, `*.wit`, `*.signed` | Host | Public. A `.signed` file can be submitted by anyone who holds it until it is on chain or its inputs are spent. Delete them after submission. |
+| `pool.json` | Web server | Keep it at the metadata URL, unchanged: the registration pins its hash. Re-register to change it. |
 | Identity public key | Anywhere | Keep. Every `armory-pool` call pins it. |
 
 Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced folders.
