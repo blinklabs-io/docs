@@ -436,10 +436,8 @@ the configuration invalid.
 | Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Leave empty for public archive sync. Set a hex-encoded 32-byte Ed25519 public key only with `manifestUrl` for a signed mirror. |
 | Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. For signed manifest mirrors, set `true` only for an intentional publisher rollback. |
 
-If `tokenRegistry.sourceUrl` has an explicit value, Dingo also requires it to
-be an absolute HTTPS URL and uses it as the explicit archive source. When
-`manifestUrl` is empty, Dingo does not require a signed manifest for the public
-archive.
+If `tokenRegistry.sourceUrl` has an explicit value, Dingo requires an absolute
+HTTPS URL and uses it as the archive source instead of the network default.
 
 When both signed mirror fields are set, Dingo verifies the signed manifest
 against the configured archive URL, exact compressed size, and BLAKE2b-256
