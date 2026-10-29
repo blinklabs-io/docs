@@ -22,7 +22,7 @@ Descarga la última versión desde [GitHub](https://github.com/blinklabs-io/ding
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Comprueba que el binario funcione:
@@ -92,7 +92,7 @@ Al reanudar una devnet persistente sin `--reset`, Dingo solo restaura o actualiz
 
 ## Paso 2 - Crear dingo.yaml
 
-Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.89.0. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) de esa versión como punto de partida.
+Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.90.0. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) de esa versión como punto de partida.
 
 Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod, mainnet y DijkstraNet. Selecciona DijkstraNet con la opción de red `dijkstra`; DijkstraNet utiliza la magia de red `6`. No necesitas descargarlas por separado.
 
