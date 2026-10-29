@@ -174,19 +174,27 @@ armory-pool reward-hex stake_test1...
 
 The firmware is a [TamaGo](https://github.com/usbarmory/tamago) image. It needs TamaGo Go 1.27.3.
 
+The device runs one of two images:
+
+- **Provisioning image** (`armory-provision.imx`): creates the identity key, imports keys, creates profiles, and changes the reward account or the opcert floor. It never signs transactions or opcerts.
+- **Signing image** (`armory.imx`): reads the key inventory and signs. It serves no provisioning endpoint, so nothing on the host can change a profile, the floor or the key objects while the device signs.
+
 ```sh
 cd armory/firmware
 source ~/tamago/env.sh
 make imx
+make imx PROVISION=1
 ```
 
-`make imx` writes `armory.imx`. Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint.
+Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. Run `make clean` before you change `TESTNET`, because `make` does not rebuild an image when only a flag changes.
 
-A board with nothing on its eMMC boots into USB recovery mode. Load the image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot):
+A board with nothing on its eMMC boots into USB recovery mode. Load an image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot), the provisioning image first:
 
 ```sh
-armory-boot-usb -i armory.imx
+armory-boot-usb -i armory-provision.imx
 ```
+
+`curl http://10.0.0.1/` shows which image is running: the report starts with `provisioning build` or `signing build`.
 
 The image runs until the board loses power, so load it again after every unplug. Keys and profiles live in the SE050 and survive the power cycle.
 
@@ -248,11 +256,22 @@ curl -s -X POST http://10.0.0.1/provision/profile -d '{
 - `network_id` is 0 for every testnet.
 - `cold_key_id` is the object the import above used.
 - `slot` is a free profile slot, 0 to 31.
-- `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`.
+- `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`, with the provisioning image.
 - `owner_signing_key` is `jq -r .cborHex owner.skey`. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
 - Leave out `chain_counter` for a new pool. For a pool that has already forged, set it to the on-chain counter (see [Migrating an existing pool](#migrating-an-existing-pool)).
 
 The response holds the owner key: `owner_public_key` (base64) and `owner_key_hash`. Check the key against `owner.vkey`, then delete `owner.skey` from the offline machine.
+
+### Switch to the signing image
+
+Provisioning is done. Reset the board into USB recovery mode and load the signing image:
+
+```sh
+curl -s -X POST http://10.0.0.1/reset
+armory-boot-usb -i armory.imx
+```
+
+The signing image has no reset endpoint. To provision again later, unplug the board and load the provisioning image.
 
 ### Read the device keys
 
@@ -545,14 +564,15 @@ If you rotate just after the pool forged a block, and that block is later rolled
 To recover:
 
 1. Confirm the real counter with `bursa query pool`.
-2. Reset the device floor to it:
+2. Unplug the board, load the provisioning image, and reset the device floor to it:
 
    ```sh
+   armory-boot-usb -i armory-provision.imx
    curl -s -X POST http://10.0.0.1/provision/floor \
      -d '{"profile": "mypool@preview", "chain_counter": <on-chain counter>}'
    ```
 
-3. Issue a new opcert and install it.
+3. Load the signing image again, as in [Switch to the signing image](#switch-to-the-signing-image), then issue a new opcert and install it.
 
 Rotate several KES periods before expiry, as the operator's `renewBeforePeriods: 8` does. A rotation then rarely lands right after a fresh block, and a mistake leaves time to recover.
 
@@ -570,7 +590,7 @@ A pool that already forges can move its cold key onto the armory.
 
 1. Import the existing cold key, as in [Import the cold key](#import-the-cold-key).
 2. Create the profile with `chain_counter` set to the pool's `on_chain_counter`. This sets the device floor.
-3. Check the device reproduces the pool's current opcert:
+3. Load the signing image, as in [Switch to the signing image](#switch-to-the-signing-image), and check the device reproduces the pool's current opcert:
 
    ```sh
    opcert-check -vkey <cold vkey cborHex> -cert <node.cert cborHex> \
@@ -585,7 +605,7 @@ A pool that already forges can move its cold key onto the armory.
 
 | Message | Cause | Fix |
 |---|---|---|
-| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `/provision/reward` |
+| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `/provision/reward` on the provisioning image |
 | `pool owners must be exactly the device owner` | The certificate lists another owner, or more than one | Pass only `device/owner.vkey` as `--owner-stake-vkey` |
 | `pool registration for another operator` | `--cold-vkey` is not this profile's cold key | Use `pool-cold.vkey` for this profile |
 | `delegation other than owner to this pool` or `stake registration of another credential` | The body carries a certificate for another stake key | Register and delegate other stake keys in their own transaction |
@@ -596,6 +616,8 @@ A pool that already forges can move its cold key onto the armory.
 | `nonce replayed` | A request was sent twice | Run the command again; each run uses a new nonce |
 | `cold key object already exists with a different key` | The object already holds another key | Use a free object; keys are never overwritten |
 | `owner key object already exists with a different key` | The slot already holds another owner key | Use a free slot |
+
+A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
 An opcert request below the floor is refused. If a rollback lowered the chain counter, reset the floor as in [Rollbacks](#rollbacks).
 
