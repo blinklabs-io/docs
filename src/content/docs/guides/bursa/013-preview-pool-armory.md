@@ -291,7 +291,7 @@ sudo dd if=armory.imx of=/dev/disk/by-id/usb-F-Secure_USB_armory_Mk_II_<serial>-
 
 Unplug the board and plug it in again. The USB network interface appears without `armory-boot-usb`, and `curl http://10.0.0.1/` starts with `signing build`.
 
-The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))). If the board shows up on neither USB recovery nor the network, check the slot is empty: with a card in it and the switch toward microSD, it tries to boot the card instead.
+The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))).
 
 ![The boot switch on the underside of the USB armory Mk II, beside the eMMC chip: toward the plug boots the eMMC, toward the microSD slot goes to USB recovery mode](/bursa-armory-boot-switch.svg)
 
