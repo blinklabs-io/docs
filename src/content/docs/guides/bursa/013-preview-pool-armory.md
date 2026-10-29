@@ -196,11 +196,7 @@ armory-boot-usb -i armory-provision.imx
 
 `curl http://10.0.0.1/` shows which image is running: the report starts with `provisioning build` or `signing build`.
 
-The image runs until the board loses power, so load it again after every unplug. Keys and profiles live in the SE050 and survive the power cycle.
-
-:::note[Not built yet]
-Flashing the image to eMMC is not documented yet.
-:::
+The image runs until the board loses power, so load it again after every unplug. Keys and profiles live in the SE050 and survive the power cycle. After provisioning, you can write the signing image to the eMMC so the board boots it by itself: see [Flash the signing image to eMMC](#flash-the-signing-image-to-emmc).
 
 ### Connect
 
@@ -271,7 +267,37 @@ curl -s -X POST http://10.0.0.1/reset
 armory-boot-usb -i armory.imx
 ```
 
-The signing image has no reset endpoint. To provision again later, unplug the board and load the provisioning image.
+The signing image has no reset endpoint. To provision again later, unplug the board and load the provisioning image. If the signing image is on the eMMC, set the boot switch toward microSD first, as below.
+
+### Flash the signing image to eMMC
+
+Optional. A signing image loaded over USB is gone after every unplug. Written to the eMMC, it boots by itself.
+
+[armory-ums](https://github.com/usbarmory/armory-ums) exposes the eMMC to the host as a USB disk. Put the board in USB recovery mode (`curl -s -X POST http://10.0.0.1/reset` from the provisioning image) and load it:
+
+```sh
+curl -LO https://github.com/usbarmory/armory-ums/releases/download/v20231018/armory-ums.imx
+armory-boot-usb -i armory-ums.imx
+```
+
+The eMMC appears as a disk named after the board's serial number:
+
+```sh
+ls -l /dev/disk/by-id/ | grep USB_armory
+```
+
+Check with `lsblk` that it is about 16 GB and not mounted. Write the signing image 1 KiB into the disk, through the `by-id` path so the write cannot reach another disk:
+
+```sh
+sudo dd if=armory.imx of=/dev/disk/by-id/usb-F-Secure_USB_armory_Mk_II_<serial>-0:0 \
+  bs=512 seek=2 conv=fsync
+```
+
+Unplug the board and plug it in again. The USB network interface appears without `armory-boot-usb`, and `curl http://10.0.0.1/` starts with `signing build`.
+
+The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))). On a board in an enclosure the switch is inside it.
+
+Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
 
 ### Read the device keys
 
@@ -663,4 +689,3 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 
 - A Bursa signer backend for the armory. `armory-pool` is the host tool until then.
 - Automatic rotation on Kubernetes through the armory. The operator's `Auto` mode talks to the Bursa signer service.
-- Firmware flashing instructions. The image is loaded into RAM over USB with `armory-boot-usb`.
