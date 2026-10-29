@@ -22,7 +22,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.89.0
+    ghcr.io/blinklabs-io/dingo:0.90.0
 ```
 
 ポート `3001` は Ouroboros のノード間接続を受け付けます。この例では、メトリクスの `12798` とヘルスエンドポイントの `12799` をホストのループバックインターフェイスに公開します。イメージは既定でメトリクスをコンテナのループバックにバインドするため、`DINGO_METRICS_BIND_ADDR=0.0.0.0` で上書きして、ホストから公開メトリクスポートに接続できるようにします。ホスト側の公開先は `127.0.0.1` のままです。ネットワークごとに別々の名前付きボリュームを使用してください。
