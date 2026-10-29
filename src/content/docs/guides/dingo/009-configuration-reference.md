@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.89.0 Configuration Reference
-description: Complete, release-specific Dingo v0.89.0 configuration reference and example.
+title: Dingo v0.90.0 Configuration Reference
+description: Complete, release-specific Dingo v0.90.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.89.0. The complete
+This page covers the configuration shipped with Dingo v0.90.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.89.0 source](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.90.0 source](https://github.com/blinklabs-io/dingo/blob/v0.90.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -102,13 +102,20 @@ network.
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
 | IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. |
 | DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When configuration sets this field, the path must contain no `..` traversal and identify an existing regular file. Dingo loads and validates the file before opening the DMQ socket. |
-| Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no required peers. The current DMQ stack does not enforce the minimum peer count. |
-| Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no peers when `minPeers` is also `0`. The current DMQ stack does not enforce the maximum peer count. |
+| Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no required outbound peers. Only outbound or dialed peers count toward this minimum; inbound sessions cannot satisfy it. |
+| Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no peers when `minPeers` is also `0`. This is the total connection capacity for inbound and outbound peers. Dingo reserves capacity for outbound peers using the larger of `minPeers` and local-root valency, capped at `maxPeers`. |
 
 Dingo validates these six peer settings when DMQ starts. With `dmq.n2nPort: 0`,
 Dingo skips listener address validation. When `dmq.n2nPort` is nonzero, each
 configured listener address must use its matching IP version. The peer manager
 and transport do not use the topology file for dialing yet.
+
+DMQ derives the inbound admission limit from the capacity remaining after it
+reserves the larger of `dmq.minPeers` and the local roots' total valency, capped
+at `dmq.maxPeers`. The limit applies only to inbound sessions; Dingo still counts
+only outbound or dialed peers toward `dmq.minPeers`. Dingo does not expose this
+derived limit as a `dmq.maxInbound` YAML key, CLI flag, or environment variable.
+If the outbound reserve consumes all `dmq.maxPeers`, Dingo refuses inbound peers.
 
 When configuration sets `dmq.topologyFile`, Dingo applies these topology rules
 before it opens the DMQ socket:
@@ -416,27 +423,31 @@ Every file-backed value must meet these requirements:
   users. Windows ACLs can allow only the owner, Administrators, and SYSTEM.
 - Dingo identifies the value or path in errors but never includes file contents.
 
-### Token registry manifest authentication
+### Token registry source and manifest authentication
 
-When configuration enables token registry sync, Dingo requires a signed manifest
-URL and the trusted public key used to verify it.
+When token registry sync is enabled, Dingo uses the public registry archive for
+the configured network when `manifestUrl` is empty. A signed operator mirror
+requires `manifestUrl` and `trustedManifestKey` together; setting only one makes
+the configuration invalid.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Signed manifest URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Empty by default. Required when token registry sync is enabled. Set an absolute HTTPS URL. |
-| Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Required when token registry sync is enabled. Set a hex-encoded 32-byte Ed25519 public key. |
-| Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. Set `true` only for an intentional publisher rollback. |
+| Signed manifest URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Empty by default. Leave empty for public archive sync. Set an absolute HTTPS URL only with `trustedManifestKey` for a signed mirror. |
+| Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Leave empty for public archive sync. Set a hex-encoded 32-byte Ed25519 public key only with `manifestUrl` for a signed mirror. |
+| Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. For signed manifest mirrors, set `true` only for an intentional publisher rollback. |
 
 If `tokenRegistry.sourceUrl` has an explicit value, Dingo also requires it to
-be an absolute HTTPS URL. Before Dingo applies a snapshot, it verifies the
-signed manifest against the configured archive URL, exact compressed size, and
-BLAKE2b-256 digest. The manifest also supplies the sequence used for rollback
-checks.
+be an absolute HTTPS URL and uses it as the explicit archive source. When
+`manifestUrl` is empty, Dingo does not require a signed manifest for the public
+archive.
 
-Dingo rejects unauthenticated, mismatched, or incomplete snapshots. Dingo
-also rejects a lower sequence unless `allowRollback` is `true`, and rejects a
-same-sequence digest change. A rejected snapshot does not replace the last
-accepted snapshot.
+When both signed mirror fields are set, Dingo verifies the signed manifest
+against the configured archive URL, exact compressed size, and BLAKE2b-256
+digest. The manifest also supplies the sequence used for rollback checks. Dingo
+rejects unauthenticated, mismatched, or incomplete signed-manifest snapshots.
+Dingo also rejects a lower sequence unless `allowRollback` is `true`, and
+rejects a same-sequence digest change. A rejected signed-manifest snapshot does
+not replace the last accepted snapshot.
 
 ### Token registry header credentials
 
@@ -463,7 +474,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.77.1 removes `ForgePrimaryChainTipToleranceSlots` and
+Dingo v0.90.0 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` from YAML, the CLI, and environment
 variables.
 Remove these settings rather than replacing them with another field.
