@@ -98,7 +98,7 @@ network.
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
-| N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N port. A nonzero value does not activate peer listening or dialing in the current DMQ stack. |
+| N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N peer port. A nonzero value activates DMQ node-to-node listening and peer management when `dmq.maxPeers` is also nonzero. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
 | IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. |
 | DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When configuration sets this field, the path must contain no `..` traversal and identify an existing regular file. Dingo loads and validates the file before opening the DMQ socket. |
@@ -107,8 +107,13 @@ network.
 
 Dingo validates these six peer settings when DMQ starts. With `dmq.n2nPort: 0`,
 Dingo skips listener address validation. When `dmq.n2nPort` is nonzero, each
-configured listener address must use its matching IP version. The peer manager
-and transport do not use the topology file for dialing yet.
+configured listener address must use its matching IP version. When both
+`dmq.n2nPort` and `dmq.maxPeers` are nonzero, Dingo listens on the configured
+IPv4 and IPv6 addresses and maintains peers within `dmq.minPeers` and
+`dmq.maxPeers`. A configured topology supplies peers to the manager, which
+attempts local roots before public roots; the enabled topic can also discover
+ledger relay peers through its DNS SRV prefix. When either `dmq.n2nPort` or
+`dmq.maxPeers` is `0`, Dingo accepts or dials no peers.
 
 DMQ derives the inbound admission limit from the capacity remaining after it
 reserves the larger of `dmq.minPeers` and the local roots' total valency, capped
@@ -390,9 +395,16 @@ error.
 | Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` when set to `0`. The budget covers all anonymous `ArchiveService` callers. Dingo rejects negative values. |
 | Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
 
-Dingo charges the full `FetchBlock` reference batch against both budgets. When
-either budget cannot cover the batch, Dingo refuses the whole request with
-`RESOURCE_EXHAUSTED` before it performs archive or cloud lookups.
+Dingo charges one base lookup to both budgets for each `FetchBlock` reference.
+A batch with one or more height references also reserves a one-time `66` lookup
+units for resolving the highest indexed block, then reserves additional lookup
+units for each height reference based on binary-search probes up to that
+resolved bound. Dingo reserves extra budget before stale-tail retries during
+bound resolution and stale interior index skips during height searches. These
+charges apply to both the global and per-caller budgets. When either budget
+cannot cover the required work, Dingo refuses the request with
+`RESOURCE_EXHAUSTED` before the corresponding archive or cloud lookup. Large
+batches that contain height references may need to be split.
 
 ### File-backed secret and parity inputs
 
