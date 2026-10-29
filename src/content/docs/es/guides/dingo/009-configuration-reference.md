@@ -303,7 +303,7 @@ La sincronización del registro de tokens admite un archivo público sin manifie
 
 Para sincronizar el archivo público, Dingo requiere que `tokenRegistry.manifestUrl` y `tokenRegistry.trustedManifestKey` permanezcan vacíos. Dingo utiliza `tokenRegistry.sourceUrl` o el archivo público predeterminado de la red sin exigir un manifiesto firmado. Para una réplica firmada, Dingo requiere ambos campos y rechaza una configuración que establezca solo uno.
 
-En el flujo con manifiesto firmado, Dingo verifica el manifiesto frente a la URL del archivo configurada, el tamaño comprimido exacto y el resumen BLAKE2b-256. El manifiesto aporta la secuencia para las comprobaciones de retroceso. Dingo rechaza las instantáneas no autenticadas, que no coincidan o estén incompletas; también rechaza una secuencia inferior salvo que `allowRollback` sea `true`, y rechaza un cambio de resumen con la misma secuencia. Una instantánea rechazada no sustituye la última aceptada.
+En el flujo con manifiesto firmado, Dingo verifica el manifiesto frente a la URL del archivo configurada, el tamaño comprimido exacto y el resumen BLAKE2b-256. El manifiesto aporta la secuencia para las comprobaciones de retroceso. Dingo rechaza una instantánea cuando falta la autenticación, cuando sus datos no coinciden o cuando está incompleta; también rechaza una secuencia inferior salvo que `allowRollback` sea `true`, y rechaza un cambio de resumen con la misma secuencia. Una instantánea rechazada no sustituye la última aceptada.
 
 ### Credenciales de encabezados del registro de tokens
 
