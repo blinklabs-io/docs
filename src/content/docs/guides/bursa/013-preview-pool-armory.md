@@ -8,9 +8,9 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. Profiles and the response binding in Bursa's signer are in an open pull request, [bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086).
+This guide describes work in progress. These are in open pull requests: the Bursa signer backend for the armory ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), opcerts issued by the armory from the on-chain counter through that signer ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), host authentication ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123)) and firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)).
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)) and `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)) and `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
 Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-not-built-yet) section lists them. Use Preview and test funds only.
 :::
@@ -423,7 +423,7 @@ The operator checks every key bundle before it rolls it out: the opcert signatur
 Auto mode cannot issue the first opcert of a new pool. See [A new pool](#a-new-pool).
 
 :::note[Not built yet]
-`Auto` with the armory. The operator asks the Bursa signer service for the opcert, and that service has no armory backend yet. Until it does, issue opcerts with `armory-pool opcert` and run in `Assisted` mode.
+`Auto` with the armory. The operator asks the Bursa signer service for the opcert, and that service's armory backend is in an open pull request, [bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125). Until it is merged, issue opcerts with `armory-pool opcert` and run in `Assisted` mode.
 :::
 
 ## Step 4: Register the pool
@@ -705,5 +705,5 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 
 ## What is not built yet
 
-- A Bursa signer backend for the armory. `armory-pool` is the host tool until then.
+- A Bursa signer backend for the armory, in [bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125). `armory-pool` is the host tool until it is merged.
 - Automatic rotation on Kubernetes through the armory. The operator's `Auto` mode talks to the Bursa signer service.
