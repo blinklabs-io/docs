@@ -129,9 +129,9 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.89.0 settings, defaults, and environment or command-line
+For all Dingo v0.90.0 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
