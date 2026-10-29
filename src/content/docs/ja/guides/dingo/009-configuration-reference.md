@@ -92,14 +92,14 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | ソケットパス | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | 有効な場合、空ではなく、Cardano の `socketPath` とは異なる値が必要です。 |
 | メッセージの TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` 秒 | 有効な場合、`9223372036` 秒以下の正の値が必要です。 |
 | メモリプールの最大サイズ | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | 有効な場合、`8796093022207` MB 以下の正の値が必要です。 |
-| N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定すると、`dmq.maxPeers` も 0 以外の場合に DMQ のノード間リスナーとピア管理を有効にします。`dmq.maxPeers: 0` の場合、ピアの待ち受けや接続は行いません。 |
+| N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定すると、`dmq.maxPeers` も 0 以外の場合に DMQ のノード間リスナーとピア管理を有効にします。 |
 | IPv4 ピアリスナーのアドレス | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv4 リテラルが必要です。 |
 | IPv6 ピアリスナーのアドレス | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv6 リテラルが必要です。 |
 | DMQ ピアトポロジーファイル | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | 未設定 | 設定する場合、パスには `..` による移動を含めず、既存の通常ファイルを指定します。DMQ ソケットを開く前に読み込み、検証します。 |
 | DMQ ピアの最小数 | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | `dmq.minPeers <= dmq.maxPeers` が必要です。これは接続を確立する発信ピアの最小数であり、着信接続はこの数を満たすものとして数えません。`0` は必要な発信ピア数を 0 にします。 |
 | DMQ ピアの最大数 | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | `dmq.minPeers <= dmq.maxPeers` が必要です。発信接続と着信接続を合わせた最大接続数を指定します。着信接続用の枠は、`dmq.minPeers` とローカルルートの合計 `valency` の大きい方を発信接続用に予約した残りから導出します。`minPeers` も `0` の場合、`0` はピアを許可しません。 |
 
- DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2nPort: 0` の場合はリスナーアドレスの検証を省略します。0 以外の場合、各リスナーアドレスは対応する IP バージョンである必要があります。DMQ スタックは `maxPeers` から、`minPeers` とローカルルートの合計 `valency` の大きい方を発信接続用に予約し、残りを着信接続の上限として内部的に導出します。この上限は Dingo の YAML キー、CLI フラグ、環境変数として公開されていません。導出した枠を使い切ると、DMQ スタックはハンドシェイク前に着信接続を拒否します。設定したトポロジーファイルはピアマネージャーに接続先を提供し、ピアマネージャーはまず `localRoots`、次に `publicRoots` の順に発信接続を試みます。有効なトピックでは、トピックの DNS SRV プレフィックスを使って台帳から検出したリレーピアも接続を試みます。
+DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2nPort: 0` の場合はリスナーアドレスの検証を省略します。0 以外の場合、各リスナーアドレスは対応する IP バージョンである必要があります。DMQ スタックは `maxPeers` から、`minPeers` とローカルルートの合計 `valency` の大きい方を発信接続用に予約し、残りを着信接続の上限として内部的に導出します。この上限は Dingo の YAML キー、CLI フラグ、環境変数として公開されていません。導出した枠を使い切ると、DMQ スタックはハンドシェイク前に着信接続を拒否します。設定したトポロジーファイルはピアマネージャーに接続先を提供し、ピアマネージャーはまず `localRoots`、次に `publicRoots` の順に発信接続を試みます。有効なトピックでは、トピックの DNS SRV プレフィックスを使って台帳から検出したリレーピアも接続を試みます。
 
 `dmq.topologyFile` を設定した場合、DMQ ソケットを開く前に次のトポロジールールを適用します。
 
