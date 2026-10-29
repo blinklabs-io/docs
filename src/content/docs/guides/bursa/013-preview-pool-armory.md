@@ -295,7 +295,23 @@ sudo dd if=armory.imx of=/dev/disk/by-id/usb-F-Secure_USB_armory_Mk_II_<serial>-
 
 Unplug the board and plug it in again. The USB network interface appears without `armory-boot-usb`, and `curl http://10.0.0.1/` starts with `signing build`.
 
-The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))). On a board in an enclosure the switch is inside it.
+The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))).
+
+![The boot switch on the underside of the USB armory Mk II, beside the eMMC chip: toward the plug boots the eMMC, toward the microSD slot goes to USB recovery mode](/bursa-armory-boot-switch.svg)
+
+The switch is on the underside of the board, beside the eMMC chip, under a small orange film. In the official enclosure it shows through a window in the bottom half: slide it with a toothpick, without opening the case. The film can stay on. The usbarmory wiki has a [photo of the switch](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II)).
+
+### Provision from a microSD card
+
+Optional. Instead of USB recovery mode, the board can boot the provisioning image from a microSD card, with no `armory-boot-usb` step. Write the image to the card the same way as to the eMMC:
+
+```sh
+sudo dd if=armory-provision.imx of=/dev/disk/by-id/<card> bs=512 seek=2 conv=fsync
+```
+
+Insert the card, slide the switch toward microSD and plug the board in. `curl http://10.0.0.1/` starts with `provisioning build`.
+
+While the card is in and the switch points toward microSD, the board boots the provisioning image at every power-up, and the host can change profiles, the reward account and the floor. When provisioning is done, slide the switch back toward eMMC and take the card out. The board boots whatever image is on the card, so store the card offline with the pool mnemonic.
 
 Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
 
