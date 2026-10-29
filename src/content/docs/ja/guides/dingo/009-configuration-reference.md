@@ -92,7 +92,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | ソケットパス | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | 有効な場合、空ではなく、Cardano の `socketPath` とは異なる値が必要です。 |
 | メッセージの TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` 秒 | 有効な場合、`9223372036` 秒以下の正の値が必要です。 |
 | メモリプールの最大サイズ | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | 有効な場合、`8796093022207` MB 以下の正の値が必要です。 |
-| N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定すると、`dmq.maxPeers` も 0 以外の場合に DMQ のノード間リスナーとピア管理を有効にします。 |
+| N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定し、かつ `dmq.maxPeers` が 0 以外の場合、DMQ のノード間リスナーとピア管理を有効にします。 |
 | IPv4 ピアリスナーのアドレス | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv4 リテラルが必要です。 |
 | IPv6 ピアリスナーのアドレス | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv6 リテラルが必要です。 |
 | DMQ ピアトポロジーファイル | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | 未設定 | 設定する場合、パスには `..` による移動を含めず、既存の通常ファイルを指定します。DMQ ソケットを開く前に読み込み、検証します。 |
@@ -313,7 +313,7 @@ Bark のリモートライフサイクルサービスは既定で無効です。
 | アーカイブ検索全体の毎秒上限 | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0` の場合は `200`。すべての匿名 `ArchiveService` 呼び出し元に適用します。負の値は拒否されます。 |
 | 呼び出し元ごとのアーカイブ検索の毎秒上限 | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0` の場合は `50`。IPv4 アドレスまたは IPv6 `/64` を呼び出し元の識別に使用します。負の値は拒否されます。 |
 
-Dingo は各参照に基本検索コストを 1 件ずつ計上し、グローバル制限と呼び出し元ごとの制限の両方に適用します。高さを含む参照がバッチにある場合は、上限ブロックを解決するための 1 回限りの追加料金 `66` ルックアップ単位をバッチ単位で計上し、各高さ参照には、解決した上限に基づく二分探索の追加プローブ分を計上します。境界解決中の古い末尾の再試行や、探索中に古い内部インデックス項目をスキップする処理にも、実行前に追加予算を確保します。予算が不足すると、対応するアーカイブまたはクラウド検索を開始する前に、`RESOURCE_EXHAUSTED` で拒否します。高さ参照を含む大きなバッチは分割してください。
+Dingo は各参照に基本検索コストを 1 件ずつ計上し、グローバル制限と呼び出し元ごとの制限の両方に適用します。高さを含む参照がバッチにある場合は、インデックスの上限を解決するための 1 回限りの追加料金 `66` ルックアップ単位をバッチ単位で計上し、各高さ参照には、解決した上限に基づく二分探索の追加プローブ分を計上します。境界解決中の古い末尾の再試行や、探索中に古い内部インデックス項目をスキップする処理にも、実行前に追加予算を確保します。予算が不足すると、対応するアーカイブまたはクラウド検索を開始する前に、`RESOURCE_EXHAUSTED` で拒否します。高さ参照を含む大きなバッチは分割してください。
 
 <a id="file-backed-secret-and-parity-inputs"></a>
 
