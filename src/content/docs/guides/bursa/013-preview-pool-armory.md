@@ -8,7 +8,7 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. Mainnet builds that refuse to sign until a host key is registered are in an open pull request ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)).
+This guide describes work in progress. These are in open pull requests: mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)) and the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)).
 
 The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)) and the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
@@ -258,19 +258,18 @@ The response holds the owner key: `owner_public_key` (base64) and `owner_key_has
 
 Without a host key, the device signs for any host on its USB link. Once one is registered, it refuses every signing request not signed by a registered host key. A mainnet build refuses to sign until one is registered.
 
-Create the key on the host that will sign, and register its public key. The request takes the key in base64; `armory-pool host-key` prints it in hex:
+Create the key on the host that will sign. `armory-pool host-key` writes the private key and prints the registration request for its public key; send that request to the device:
 
 ```sh
-HOST_PUB=$(armory-pool host-key -out host.skey)
-jq -n --arg key "$(echo "$HOST_PUB" | xxd -r -p | base64)" '{public_key: $key}' |
-  curl -s -X POST http://10.0.0.1/provision/host-key --data-binary @-
+armory-pool host-key -out host.skey > host-key.json
+curl -s -X POST http://10.0.0.1/provision/host-key --data-binary @host-key.json
 ```
 
 The response lists the registered keys in `host_keys`. The device holds up to four, one per host that signs: a laptop, a Bursa signer service. `host.skey` is created mode 600, and `armory-pool` refuses a key file others can read.
 
 Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
 
-To revoke a key, send the same request to `/provision/host-key/revoke` from the provisioning image. Revoking a key never touches the pool keys.
+To revoke a key, send the same `host-key.json` to `/provision/host-key/revoke` from the provisioning image. Revoking a key never touches the pool keys.
 
 ### Switch to the signing image
 
@@ -531,7 +530,13 @@ bursa tx assemble --tx-file pool-reg.tx \
 bursa tx submit --socket-path "$SOCKET" --network preview --tx-file pool-reg.signed
 ```
 
-`armory-pool witness` sends the exact body bytes to the device and checks the answer before it writes anything. The signature must verify over the body hash, and the binding signature must cover the request. If the policy refuses, it prints the device's reason and writes no witness:
+`armory-pool witness` sends the exact body bytes to the device and checks the answer before it writes anything. The signature must verify over the body hash, and the binding signature must cover the request. It then prints what the device approved, covered by the same binding signature. Check it against what you meant to submit:
+
+```
+device signed: fee=181209 pool-reg pledge=100000000000 cost=170000000 margin=1/100 relays=1 leios=false
+```
+
+If the policy refuses, it prints the device's reason and writes no witness:
 
 ```
 armory-pool: device refused: policy: certificate 0: pool registration reward account is not the profile's reward account
