@@ -657,7 +657,7 @@ A pool that already forges can move its cold key onto the armory.
 
 A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
-An opcert request below the floor is refused. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
+An opcert request below the floor is refused with `chain counter below the recorded on-chain counter`. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
 
 Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
 
