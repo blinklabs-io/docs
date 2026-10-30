@@ -8,9 +8,9 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. These are in open pull requests: mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)) the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)) and the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)).
+This guide describes work in progress. These are in open pull requests: `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)) and `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)).
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)) and the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)) and the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
 Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-not-built-yet) section lists them. Use Preview and test funds only.
 :::
@@ -136,7 +136,7 @@ bursa key pool-owner --mnemonic-file pool/seed.txt \
   --verification-key-file owner.vkey
 ```
 
-This is a plain Ed25519 key. Its key hash and reward address differ from those of `bursa key stake` for the same path, so a wallet restored from the pool mnemonic does not show them.
+This is a plain Ed25519 key. Its key hash and reward address differ from those of `bursa key stake` for the same path, so a wallet restored from the pool mnemonic does not show them. The device imports only plain keys: it refuses the extended key `bursa key stake` writes, so an owner made that way cannot be restored onto a device.
 
 ### VRF and KES keys
 
@@ -580,11 +580,12 @@ armory-pool -identity <identity public key> -profile mypool@preview \
 
 The device signs `kes_vkey || issue || period` with the cold key and returns the issue number it chose. `armory-pool` prints `issue counter N`, checks the signature and binding, and writes `node.cert` in the same format as `bursa cert op-cert`.
 
-To check a certificate against the device later, `opcert-check` has the device reproduce its signature. Like every opcert request, it raises the device floor to the chain counter it reports:
+To check a certificate against the device later, `opcert-check` has the device reproduce its signature. Like every opcert request, it raises the device floor to the chain counter it reports. Once a host key is registered, pass it with `-host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)); without it the device refuses the check:
 
 ```sh
 opcert-check -vkey "$(jq -r .cborHex pool-cold.vkey)" -cert "$(jq -r .cborHex node.cert)" \
-  -pool <pool id hex> -profile mypool@preview -signer http://10.0.0.1 -source 10.0.0.2
+  -pool <pool id hex> -profile mypool@preview -signer http://10.0.0.1 -source 10.0.0.2 \
+  -host-key host.skey
 ```
 
 The block producer validates the certificate when it starts. A good start logs:
@@ -670,7 +671,8 @@ A pool that already forges can move its cold key onto the armory.
 
    ```sh
    opcert-check -vkey <cold vkey cborHex> -cert <node.cert cborHex> \
-     -pool <pool id hex> -profile mypool@preview -signer http://10.0.0.1 -source 10.0.0.2
+     -pool <pool id hex> -profile mypool@preview -signer http://10.0.0.1 -source 10.0.0.2 \
+     -host-key host.skey
    ```
 
 4. Re-register the pool with the device owner key as owner, and move the pledge to an address with that stake key.
