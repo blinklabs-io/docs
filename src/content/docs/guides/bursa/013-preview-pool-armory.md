@@ -705,5 +705,4 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 
 ## What is not built yet
 
-- A Bursa signer backend for the armory, in [bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125). `armory-pool` is the host tool until it is merged.
-- Automatic rotation on Kubernetes through the armory. The operator's `Auto` mode talks to the Bursa signer service.
+- Automatic rotation on Kubernetes through the armory. The Bursa signer service has an armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), and the operator's `Auto` mode talks to that service, but this guide does not cover running them together yet. Use `armory-pool` and `Assisted` mode.
