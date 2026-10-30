@@ -8,9 +8,9 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. These are in open pull requests: the Bursa signer backend for the armory ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), opcerts issued by the armory from the on-chain counter through that signer ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), host authentication ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123)) and firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)).
+This guide describes work in progress. Mainnet builds that refuse to sign until a host key is registered are in an open pull request ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)).
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)) and `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)) and the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
 Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-not-built-yet) section lists them. Use Preview and test funds only.
 :::
@@ -254,6 +254,24 @@ curl -s -X POST http://10.0.0.1/provision/profile -d '{
 
 The response holds the owner key: `owner_public_key` (base64) and `owner_key_hash`. Check the key against `owner.vkey`, then delete `owner.skey` from the offline machine.
 
+### Register a host key
+
+Without a host key, the device signs for any host on its USB link. Once one is registered, it refuses every signing request not signed by a registered host key. A mainnet build refuses to sign until one is registered.
+
+Create the key on the host that will sign, and register its public key. The request takes the key in base64; `armory-pool host-key` prints it in hex:
+
+```sh
+HOST_PUB=$(armory-pool host-key -out host.skey)
+jq -n --arg key "$(echo "$HOST_PUB" | xxd -r -p | base64)" '{public_key: $key}' |
+  curl -s -X POST http://10.0.0.1/provision/host-key --data-binary @-
+```
+
+The response lists the registered keys in `host_keys`. The device holds up to four, one per host that signs: a laptop, a Bursa signer service. `host.skey` is created mode 600, and `armory-pool` refuses a key file others can read.
+
+Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
+
+To revoke a key, send the same request to `/provision/host-key/revoke` from the provisioning image. Revoking a key never touches the pool keys.
+
 ### Switch to the signing image
 
 Provisioning is done. Reset the board into USB recovery mode and load the signing image:
@@ -421,7 +439,7 @@ The operator checks every key bundle before it rolls it out: the opcert signatur
 Auto mode cannot issue the first opcert of a new pool. See [A new pool](#a-new-pool).
 
 :::note[Not built yet]
-`Auto` with the armory. The operator asks the Bursa signer service for the opcert, and that service's armory backend is in an open pull request, [bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125). Until it is merged, issue opcerts with `armory-pool opcert` and run in `Assisted` mode.
+`Auto` with the armory. The operator asks the Bursa signer service for the opcert, and that service has an armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), but the two have not been run together yet. Issue opcerts with `armory-pool opcert` and run in `Assisted` mode.
 :::
 
 ## Step 4: Register the pool
