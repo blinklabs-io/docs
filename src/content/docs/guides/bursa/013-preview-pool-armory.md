@@ -184,7 +184,7 @@ make imx PROVISION=1
 
 Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. The provisioning image cannot be built with `TESTNET=1`.
 
-A board with nothing on its eMMC boots into USB recovery mode. Load an image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot), the provisioning image first:
+A board with nothing on its eMMC and no microSD card boots into USB recovery mode. Load an image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot), the provisioning image first:
 
 ```sh
 armory-boot-usb -i armory-provision.imx
@@ -308,7 +308,17 @@ sudo dd if=armory.imx of=/dev/disk/by-id/usb-F-Secure_USB_armory_Mk_II_<serial>-
 
 Unplug the board and plug it in again. The USB network interface appears without `armory-boot-usb`, and `curl http://10.0.0.1/` starts with `signing build`.
 
-The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))). A blank card is not the same as no card: with a card in that holds no image, the board shows nothing on USB.
+The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))). A blank card is not the same as no card: with a card in that holds no image, the board shows nothing on USB, whichever way the switch points, unless the eMMC has an image and the switch points toward eMMC.
+
+| Switch | eMMC | Slot | Result |
+|---|---|---|---|
+| eMMC | image | anything | Boots the eMMC image |
+| eMMC | empty | provisioning card | Boots the card |
+| eMMC | empty | blank card | Nothing on USB |
+| eMMC | empty | empty | USB recovery mode |
+| microSD | either | empty | USB recovery mode |
+| microSD | either | provisioning card | Boots the card |
+| microSD | either | blank card | Nothing on USB |
 
 ![The boot switch on the underside of the USB armory Mk II, beside the eMMC chip: toward the plug boots the eMMC, toward the microSD slot goes to USB recovery mode](/bursa-armory-boot-switch.svg)
 
@@ -324,7 +334,7 @@ sudo dd if=armory-provision.imx of=/dev/disk/by-id/<card> bs=512 seek=2 conv=fsy
 
 Insert the card, slide the switch toward microSD and plug the board in. `curl http://10.0.0.1/` starts with `provisioning build`.
 
-While the card is in and the switch points toward microSD, the board boots the provisioning image at every power-up, and the host can change profiles, the reward account and the floor. When provisioning is done, slide the switch back toward eMMC and take the card out. The board boots whatever image is on the card, so store the card offline with the pool mnemonic.
+While the card is in and the switch points toward microSD, the board boots the provisioning image at every power-up, and the host can change profiles, the reward account and the floor. When provisioning is done, slide the switch back toward eMMC and take the card out. With an image on the eMMC and the switch toward eMMC the card is ignored, but a board with an empty eMMC boots the card in either position. The board boots whatever image is on the card, so store the card offline with the pool mnemonic.
 
 ### Read the device keys
 
