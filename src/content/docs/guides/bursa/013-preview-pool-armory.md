@@ -459,6 +459,13 @@ armory-pool address -payment-vkey payment.vkey -stake-vkey device/owner.vkey -ne
 
 The payment key never leaves the hardware wallet, and the owner key only signs certificates. `bursa tx build` spends only from its change address, so send the pledge to this address from the hardware wallet.
 
+The payment key can belong to someone else. Their funds then count toward the pledge while the pool keeps one owner, so the armory still re-registers the pool alone. Before relying on that:
+
+- They can spend the funds at any time, with no signature from the pool. If the owner's stake falls below the declared pledge at the snapshot, the pool earns no rewards for that epoch. Check it with `bursa query stake-address` for the owner's reward address.
+- Owners earn no delegator rewards, so their funds earn nothing on chain. Their delegation and voting weight follow the owner key.
+- Wallets find funds by their own stake key, so theirs may not show this balance. They can query the address directly with `bursa query utxo --address`.
+- The pledge shown on chain no longer measures the operator's own funds. Say so in the pool's public information.
+
 ### Certificates
 
 `device/owner.vkey` from `armory-pool keys` is the owner's stake verification key:
