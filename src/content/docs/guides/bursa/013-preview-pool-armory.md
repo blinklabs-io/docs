@@ -8,7 +8,7 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. These are in open pull requests: mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)) and the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)).
+This guide describes work in progress. These are in open pull requests: mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)) the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)) and the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)).
 
 The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)) and the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
 
@@ -226,7 +226,7 @@ jq -n --argjson id 551878672 --arg key "$(jq -r .cborHex pool-cold.skey)" \
   curl -s -X POST http://10.0.0.1/provision/cold --data-binary @-
 ```
 
-The device returns `public_key` and `pool_id` in hex. Compare the key with `pool-cold.vkey`: its `cborHex` is `5820` followed by the same hex. The device never overwrites a key: a second import into the same object is refused, and no endpoint deletes one. Each pool uses one cold key object and one profile slot for good.
+The device returns `public_key` and `pool_id` in hex. Compare the key with `pool-cold.vkey`: its `cborHex` is `5820` followed by the same hex. The device never overwrites a key: a second import into the same object is refused. Only the wipe image deletes a key (see [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device)).
 
 Delete `pool-cold.skey` from the offline machine afterwards. The mnemonic is the backup.
 
@@ -720,6 +720,33 @@ Some hosts reset the disk at its first read: the kernel logs `device descriptor 
 | Identity public key | Anywhere | Keep. Every `armory-pool` call pins it. |
 
 Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced folders.
+
+## Removing a profile or wiping the device
+
+Neither the signing nor the provisioning image deletes a key. A third image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`.
+
+List what is on the device first:
+
+```sh
+curl -s -X POST http://10.0.0.1/wipe/objects -d '{}'
+```
+
+Remove one profile: its owner key, its cold key and its record. The slot and the cold key object can be provisioned again.
+
+```sh
+curl -s -X POST http://10.0.0.1/wipe/profile \
+  -d '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}'
+```
+
+Wipe the device: every key and profile, host keys and the identity key included.
+
+```sh
+curl -s -X POST http://10.0.0.1/wipe/device -d '{"identity_public_key": "<identity public key>"}'
+```
+
+Both requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. If a request stops part way, send it again. `curl -s -X POST http://10.0.0.1/reset` then returns the board to USB recovery mode.
+
+Deleted keys cannot be recovered from the device. Before removing a profile, check the pool mnemonic restores its cold key and owner key; an owner key the device generated has no backup.
 
 ## Recovery
 
