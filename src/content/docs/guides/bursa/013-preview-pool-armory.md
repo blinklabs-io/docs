@@ -8,11 +8,11 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. These are in open pull requests: the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)) and `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)).
+This guide describes work in progress. These are in open pull requests: `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), a signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)) and a `dingo-operator` chart that pins an operator image with `Auto` rotation ([helm-charts#534](https://github.com/blinklabs-io/helm-charts/pull/534)).
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)) and the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is in the operator ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101)) and the `dingo-operator` chart 0.3.0 ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132)) and the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)). The `dingo-operator` chart 0.3.0 grants the operator write access to the keys Secret ([helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532)), but its default image predates `Auto` rotation.
 
-Steps marked **Not built yet** describe the intended flow. The [gaps](#what-is-not-built-yet) section lists them. Use Preview and test funds only.
+The [gaps](#what-is-not-built-yet) section lists what is still open. Use Preview and test funds only.
 :::
 
 ## How the pieces fit
@@ -170,19 +170,23 @@ armory-pool reward-hex stake_test1...
 
 The firmware is a [TamaGo](https://github.com/usbarmory/tamago) image. It needs TamaGo Go 1.27.3.
 
-The device runs one of two images:
+The device runs one of three images:
 
 - **Provisioning image** (`armory-provision.imx`): creates the identity key, imports keys, creates profiles, and changes the reward account or the opcert floor. It never signs transactions or opcerts.
 - **Signing image** (`armory.imx`): reads the key inventory and signs. It serves no provisioning endpoint, so nothing on the host can change a profile, the floor or the key objects while the device signs.
+- **Wipe image** (`armory-wipe.imx`): deletes a profile and its keys, or every key and profile. It neither signs nor provisions. See [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device).
 
 ```sh
 cd armory/firmware
 source ~/tamago/env.sh
 make imx
 make imx PROVISION=1
+make imx WIPE=1
 ```
 
-Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. The provisioning image cannot be built with `TESTNET=1`.
+Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. Neither the provisioning nor the wipe image can be built with `TESTNET=1`.
+
+Build the firmware and the host tools from the same Bursa commit, and load the new signing image before you use the new `armory-pool`. `armory-pool witness` asks the device for a signing summary (protocol version 2), and firmware built before that change refuses it. If the signing image is on the eMMC, write the new one there too.
 
 A board with nothing on its eMMC and no microSD card boots into USB recovery mode. Load an image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot), the provisioning image first:
 
@@ -190,7 +194,7 @@ A board with nothing on its eMMC and no microSD card boots into USB recovery mod
 armory-boot-usb -i armory-provision.imx
 ```
 
-`curl http://10.0.0.1/` shows which image is running: the report starts with `provisioning build` or `signing build`.
+`curl http://10.0.0.1/` shows which image is running: the report starts with `provisioning build`, `signing build` or `wipe build`.
 
 The image runs until the board loses power, so load it again after every unplug. Keys and profiles live in the SE050 and survive the power cycle. After provisioning, you can write the signing image to the eMMC so the board boots it by itself: see [Flash the signing image to eMMC](#flash-the-signing-image-to-emmc).
 
@@ -324,6 +328,8 @@ The board boots from the eMMC only when its boot switch points toward eMMC. With
 
 The switch is on the underside of the board, beside the eMMC chip, under a small orange film. In the official enclosure it shows through a window in the bottom half: slide it with a pin or paper clip, without opening the case. The film can stay on. The usbarmory wiki has a [photo of the switch](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II)).
 
+An open pull request adds a signing log on a microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)). With it, the signing image refuses to sign unless a card holding its log is in the slot at boot, and it formats only a card written with zeros. A zeroed card is a blank card in the table above, so the signing image then has to boot from the eMMC with the switch toward eMMC.
+
 ### Provision from a microSD card
 
 Optional. Instead of USB recovery mode, the board can boot the provisioning image from a microSD card, with no `armory-boot-usb` step. Write the image to the card the same way as to the eMMC:
@@ -443,13 +449,89 @@ The operator checks every key bundle before it rolls it out: the opcert signatur
 
 - `MonitorOnly` (default) reports KES and opcert status and never changes keys.
 - `Assisted` rolls the pod when you replace the Secret's contents with a new KES key and opcert.
-- `Auto` generates the KES key, asks a cold signer for the opcert, updates the Secret and rolls the pod. This is in [dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101). It needs `blockProducer.nodeToClient.enabled: true` so the operator can read the on-chain counter. It also needs write access to the keys Secret, through `rbac.keySecretsUpdate` and `rbac.keySecretNames` in [helm-charts#532](https://github.com/blinklabs-io/helm-charts/pull/532).
+- `Auto` generates the KES key, asks a cold signer for the opcert, updates the Secret and rolls the pod. See [Auto rotation with the armory](#auto-rotation-with-the-armory).
 
 Auto mode cannot issue the first opcert of a new pool. See [A new pool](#a-new-pool).
 
-:::note[Not built yet]
-`Auto` with the armory. The operator asks the Bursa signer service for the opcert, and that service has an armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), but the two have not been run together yet. Issue opcerts with `armory-pool opcert` and run in `Assisted` mode.
-:::
+#### Auto rotation with the armory
+
+In `Auto` mode the operator asks the Bursa signer service for each new opcert, and the signer asks the armory. The operator sends the pool's on-chain counter; the armory issues that counter plus one and refuses a counter below its floor. The operator then writes the new `kes.skey` and opcert into the keys Secret and rolls the pod onto them.
+
+`Auto` needs an operator image built from the operator's `main` branch. The chart 0.3.0 default image predates it. Until a chart release pins a newer image, set the digest that [helm-charts#534](https://github.com/blinklabs-io/helm-charts/pull/534) pins, and grant the operator write access to the keys Secret:
+
+```sh
+helm upgrade --install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/charts/dingo-operator \
+  --namespace dingo-operator-system --create-namespace \
+  --set 'rbac.keySecretsNamespaces={cardano}' \
+  --set rbac.keySecretsUpdate=true \
+  --set 'rbac.keySecretNames={producer-pool-keys}' \
+  --set image.digest=sha256:454f603835313cf9fc435efb419743049996835a109b40918f41ebc722b56e3f
+```
+
+Run the signer on the host the armory is plugged into, with an armory backend and a host key registered on the device (see [Register a host key](#register-a-host-key)). The operator connects with a TLS client certificate, so the signer needs a server certificate and the CA that issued the client certificate. Allow the pool's cold key only `opcert` requests, and only for that client:
+
+```yaml
+signer:
+  listen_address: "0.0.0.0"
+  listen_port: 8090
+  tls_cert_file: "/etc/bursa/signer/tls/server.crt"
+  tls_key_file: "/etc/bursa/signer/tls/server.key"
+  client_ca_cert: "/etc/bursa/signer/tls/client-ca.crt"
+  require_client_cert: true
+  watermark:
+    type: "file"
+    path: "/var/lib/bursa/signer/watermark.sqlite"
+    mode: "enforce"
+  backends:
+    - name: "armory"
+      type: "armory"
+      address: "http://10.0.0.1"
+      profile: "mypool@preview"
+      identity_public_key: "<identity public key>"
+      host_key_file: "/etc/bursa/armory-host.skey"
+  keys:
+    - hash: "<pool id hex>"
+      backend: "armory"
+      allowed_requests: ["opcert"]
+  callers:
+    - subject: "dingo-operator"
+      keys: ["<pool id hex>"]
+```
+
+Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
+
+Store the client certificate, its key and the signer's CA for the operator:
+
+```sh
+kubectl create secret generic bursa-signer-mtls -n cardano \
+  --from-file=tls.crt=client.crt --from-file=tls.key=client.key --from-file=ca.crt=signer-ca.crt
+```
+
+Then set the producer's rotation to `Auto`:
+
+```yaml
+  blockProducer:
+    poolId: pool1...
+    keys:
+      secretRef: producer-pool-keys
+    nodeToClient:
+      enabled: true
+    rotation:
+      mode: Auto
+      renewBeforePeriods: 8
+      coldSigner:
+        type: bursa
+        endpoint: https://signer.example.com:8090
+        mtlsSecretRef: bursa-signer-mtls
+        coldKeyHash: <pool id hex>
+```
+
+- `nodeToClient.enabled` lets the operator read the on-chain counter from the node.
+- `endpoint` must be an `https` URL.
+- `coldKeyHash` is the pool ID in hex, as `armory-pool keys` prints it. The operator refuses any other value.
+- `renewBeforePeriods` is how many KES periods before expiry the operator rotates.
+
+The operator reports each attempt in the `OpCertIssued` condition and as an event. When it cannot get an opcert, for example because the signer is unreachable, the condition is `False` with a reason such as `IssueFailed`, the keys Secret and the running opcert stay as they are, and the operator tries again after 10 minutes. See [Troubleshooting](#troubleshooting).
 
 ## Step 4: Register the pool
 
@@ -543,8 +625,10 @@ bursa tx submit --socket-path "$SOCKET" --network preview --tx-file pool-reg.sig
 `armory-pool witness` sends the exact body bytes to the device and checks the answer before it writes anything. The signature must verify over the body hash, and the binding signature must cover the request. It then prints what the device approved, covered by the same binding signature. Check it against what you meant to submit:
 
 ```
-device signed: fee=181209 pool-reg pledge=100000000000 cost=170000000 margin=1/100 relays=1 leios=false
+device signed: fee=181209 stake-reg pool-reg pledge=100000000 cost=170000000 margin=1/50 relays=1 leios=false stake-deleg
 ```
+
+The summary needs firmware from the same Bursa commit as `armory-pool`; see [Build the firmware](#build-the-firmware).
 
 If the policy refuses, it prints the device's reason and writes no witness:
 
@@ -696,12 +780,25 @@ A pool that already forges can move its cold key onto the armory.
 | `nonce replayed` | A request was sent twice | Run the command again; each run uses a new nonce |
 | `cold key object already exists with a different key` | The object already holds another key | Use a free object; keys are never overwritten |
 | `owner key object already exists with a different key` | The slot already holds another owner key | Use a free slot |
+| `response version "bursa-attested-signer/1", want "bursa-attested-signer/2"` | The signing image predates the signing summary that `armory-pool witness` asks for | Build the firmware from the same Bursa commit as `armory-pool` and load it, as in [Build the firmware](#build-the-firmware) |
+| `a profile record is unreadable or inconsistent; wipe the device instead` | From `/wipe/profile`: a stored profile record cannot be read, is in the wrong slot, or shares its name with another | Wipe the whole device with `/wipe/device`, as in [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device) |
 
 A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
 An opcert request below the floor is refused with `chain counter below the recorded on-chain counter`. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
 
 Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
+
+On Kubernetes in `Auto` mode, read the `OpCertIssued` condition and the events with `kubectl describe dingonode producer -n cardano`. The reason names what failed:
+
+| Reason | Cause | Fix |
+|---|---|---|
+| `IssueFailed` | The signer did not return an opcert: it is unreachable, refused the client certificate, or the armory refused | Check the signer's log and that the armory answers on the signer host. The operator retries after 10 minutes |
+| `ColdSignerUnavailable` | The operator cannot read the client certificate Secret, or it lacks `tls.crt` or `tls.key` | Create the Secret named in `mtlsSecretRef` in the producer's namespace |
+| `OnChainCounterUnknown` | The operator has no fresh on-chain counter for the pool | Check `nodeToClient.enabled` and the `OnChainCounterAvailable` condition. A pool that has never forged has none; see [A new pool](#a-new-pool) |
+| `SecretUpdateFailed` | The operator cannot write the keys Secret | Install the chart with `rbac.keySecretsUpdate=true` and the Secret's name in `rbac.keySecretNames` |
+
+An open pull request adds a `TipNotAdvancing` reason on the `LedgerPipelineHealthy` condition for a node whose tip stops moving ([dingo-operator#115](https://github.com/blinklabs-io/dingo-operator/pull/115)).
 
 ## Keys to keep and delete
 
@@ -725,7 +822,7 @@ Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced
 
 ## Removing a profile or wiping the device
 
-Neither the signing nor the provisioning image deletes a key. A third image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`.
+Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. `curl http://10.0.0.1/` starts with `wipe build`.
 
 List what is on the device first:
 
@@ -733,7 +830,7 @@ List what is on the device first:
 curl -s -X POST http://10.0.0.1/wipe/objects -d '{}'
 ```
 
-Remove one profile: its owner key, its cold key and its record. The slot and the cold key object can be provisioned again.
+Remove one profile: its owner key, its cold key and its record. A cold key that another profile still names stays. The slot and the freed cold key object can be provisioned again.
 
 ```sh
 curl -s -X POST http://10.0.0.1/wipe/profile \
@@ -746,7 +843,9 @@ Wipe the device: every key and profile, host keys and the identity key included.
 curl -s -X POST http://10.0.0.1/wipe/device -d '{"identity_public_key": "<identity public key>"}'
 ```
 
-Both requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. If a request stops part way, send it again. `curl -s -X POST http://10.0.0.1/reset` then returns the board to USB recovery mode.
+Both requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. A device with no identity key takes an empty value. If a request stops part way, send it again. `curl -s -X POST http://10.0.0.1/reset` then returns the board to USB recovery mode.
+
+Removing a profile is refused while any stored profile record is unreadable, in the wrong slot, or shares its name with another, because the device cannot then tell which keys belong to the profile. `/wipe/device` still works and clears the device.
 
 Deleted keys cannot be recovered from the device. Before removing a profile, check the pool mnemonic restores its cold key and owner key; an owner key the device generated has no backup.
 
@@ -774,4 +873,6 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 
 ## What is not built yet
 
-- Automatic rotation on Kubernetes through the armory. The Bursa signer service has an armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), and the operator's `Auto` mode talks to that service, but this guide does not cover running them together yet. Use `armory-pool` and `Assisted` mode.
+- A chart release that pins an operator image with `Auto` rotation ([helm-charts#534](https://github.com/blinklabs-io/helm-charts/pull/534)). Until then, set `image.digest` as in [Auto rotation with the armory](#auto-rotation-with-the-armory).
+- `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)). Without it, `opcert-check` cannot check a certificate on a device with a registered host key.
+- A signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)). See the note under [Flash the signing image to eMMC](#flash-the-signing-image-to-emmc).
