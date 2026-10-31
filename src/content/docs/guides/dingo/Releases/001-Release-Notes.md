@@ -9,6 +9,7 @@ description: Dingo Release Notes
 
 ☑️ Select a version below to view the full release notes. The latest release appears first.
 
+- Version: v0.90.2 - *[View Release Notes](../v0-90-2)*
 - Version: v0.90.1 - *[View Release Notes](../v0-90-1)*
 - Version: v0.90.0 - *[View Release Notes](../v0-90-0)*
 - Version: v0.89.0 - *[View Release Notes](../v0-89-0)*
