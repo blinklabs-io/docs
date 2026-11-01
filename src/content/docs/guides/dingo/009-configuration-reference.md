@@ -329,7 +329,7 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
-| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects configuration when compression is enabled and `blockCacheSize` is `0`. Compression requires a positive value. |
+| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects the configuration and returns an error when compression is enabled and `blockCacheSize` is `0`; set a positive `blockCacheSize` for compression. |
 | Index cache size | `plugins.storage.blob.config.indexCacheSize` | `0` in Core mode and API mode | Set a byte count for the index cache. |
 | Compression | `plugins.storage.blob.config.compression` | `false` in Core mode; enabled in API mode | Dingo accepts a zero `blockCacheSize` when compression is disabled. |
 | Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; all other storage and run mode combinations use `128 MiB` when configuration omits this setting or sets it to `0` | Set a byte count. An explicit value overrides the built-in default. No top-level CLI flag or environment variable exists. |
