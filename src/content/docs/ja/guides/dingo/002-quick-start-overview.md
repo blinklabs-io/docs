@@ -37,7 +37,7 @@ Go に書かれている Cardano ブロックチェーンノードは、ミニ�
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.3/dingo-v0.90.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 実行中のバイナリの動作を確認することができます。
@@ -125,7 +125,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 ## ステップ2 - dingo.yaml構成ファイルを作成する
 
-すべての Dingo v0.90.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
+すべての Dingo v0.90.3 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
 Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 
@@ -265,7 +265,7 @@ plugins:
 
 > `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` を一緒に設定するか、unset を両方残します。 部分的なペアは、設定と起動の検証を失敗します。 設定されたポリシー ID は、正確に 56 個の 16 個の 16 個の 16 個の 16 個の 16 個のデコードされたバイト (28 個のデコードされたバイト) でなければなりません。 一致は、正確なポリシー ID とアセット名を使用します。
 
-> `block-cache-size` と `index-cache-size` を 0 に設定すると、`compression: false` は、BadgerDB の内部キャッシュの代わりに OS ページのキャッシュ (mmap) を使用します。これによりメモリ使用量が劇的に低下します。
+> Core モードでは、`plugins.storage.blob.config.blockCacheSize` と `plugins.storage.blob.config.indexCacheSize` のデフォルトは `0`、`plugins.storage.blob.config.compression` のデフォルトは `false` です。これにより、BadgerDB の内部キャッシュの代わりに OS ページキャッシュ（mmap）を使用します。オンディスクの Badger 圧縮を有効にする場合は、`plugins.storage.blob.config.blockCacheSize` に正の値を設定してください。`blockCacheSize` が `0` のまま圧縮を有効にすると、設定が無効になり起動に失敗します。
 
 ***
 
