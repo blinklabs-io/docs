@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.90.0 Configuration Reference
-description: Complete, release-specific Dingo v0.90.0 configuration reference and example.
+title: Dingo v0.90.3 Configuration Reference
+description: Complete, release-specific Dingo v0.90.3 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.90.0. The complete
+This page covers the configuration shipped with Dingo v0.90.3. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.90.0 source](https://github.com/blinklabs-io/dingo/blob/v0.90.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example).
+The same file is available in the [Dingo v0.90.3 source](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -37,6 +37,18 @@ for the main runtime choices.
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
+
+### Cardano node transaction submission
+
+Configure this key in the Cardano node configuration file. It is not a
+Dingo-native configuration key.
+
+| Setting | Cardano node configuration key | Dingo CLI flag | Dingo environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Transaction submission logic | `TxSubmissionLogicVersion` | — | — | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+
+No Dingo CLI flag or environment variable provides this Cardano configuration
+key.
 
 ### Consensus provider
 
@@ -320,6 +332,9 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
+| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects configuration when compression is enabled and this value is `0`. Set a positive value when enabling compression. |
+| Index cache size | `plugins.storage.blob.config.indexCacheSize` | `0` in Core mode and API mode | Set a byte count for the index cache. |
+| Compression | `plugins.storage.blob.config.compression` | `false` in Core mode; enabled in API mode | A zero `blockCacheSize` remains valid when compression is disabled. |
 | Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; all other storage and run mode combinations use `128 MiB` when configuration omits this setting or sets it to `0` | Set a byte count. An explicit value overrides the built-in default. No top-level CLI flag or environment variable exists. |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
