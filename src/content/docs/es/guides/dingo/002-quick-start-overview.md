@@ -233,7 +233,7 @@ plugins:
 
 📝 Establece conjuntamente `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` o deja ambos sin configurar. Un par incompleto hace fallar la validación de configuración y de inicio. Un identificador de política configurado debe tener exactamente 56 caracteres hexadecimales, 28 bytes decodificados. La comparación utiliza el identificador y el nombre de activo exactos.
 
-💡 En el modo Core, establece `plugins.storage.blob.config.blockCacheSize: 0`, `plugins.storage.blob.config.indexCacheSize: 0` y `plugins.storage.blob.config.compression: false` para usar la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB y reducir mucho el uso de memoria. La compresión en disco requiere un valor positivo para `plugins.storage.blob.config.blockCacheSize`; con el valor `0`, la configuración falla.
+💡 En el modo Core, configura `plugins.storage.blob.config.blockCacheSize` e `plugins.storage.blob.config.indexCacheSize` en `0`, y `plugins.storage.blob.config.compression` en `false`, para usar la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB y reducir mucho el uso de memoria. La compresión en disco requiere un valor positivo para `plugins.storage.blob.config.blockCacheSize`; con el valor `0`, la configuración falla.
 
 ## Paso 3 - Abrir los puertos de red
 
