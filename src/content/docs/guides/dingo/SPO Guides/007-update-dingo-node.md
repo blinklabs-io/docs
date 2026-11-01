@@ -11,7 +11,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ⚠️ Adjust the version and architecture to match your system.
 ```
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.3/dingo-v0.90.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ***
