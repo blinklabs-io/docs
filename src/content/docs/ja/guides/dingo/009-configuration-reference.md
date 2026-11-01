@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.90.0 設定リファレンス
-description: Dingo v0.90.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.90.3 設定リファレンス
+description: Dingo v0.90.3 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.90.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.90.3 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.3 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -11,6 +11,16 @@ description: Dingo v0.90.0 に対応する完全な設定リファレンスと�
 ## 設定の優先順位
 
 設定の優先順位は、コマンドライン、環境変数、YAML ファイル、組み込みの既定値の順です。CLI フラグと環境変数の名前は、サンプルの各フィールドとともに記載されています。主要な実行時の選択については、[ノード設定とストレージモード](/ja/guides/dingo/005-node-configuration/)を参照してください。
+
+<a id="cardano-node-configuration"></a>
+
+### Cardano ノード設定
+
+`TxSubmissionLogicVersion` は Cardano ノード設定ファイル（YAML または JSON）の項目です。Dingo 固有の CLI フラグや環境変数ではありません。
+
+| 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値と検証と動作 |
+| --- | --- | --- | --- | --- |
+| トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略時は `TxSubmissionLogicV1` です。`TxSubmissionLogicV1` は Dingo が実装する従来のピア単位の着信トランザクション送信戦略です。`TxSubmissionLogicV2` と不明な値は、設定の読み込み時に拒否されます。 |
 
 <a id="configuration-areas"></a>
 
@@ -256,6 +266,9 @@ Badger プロバイダーでは、`plugins.storage.blob.config` の下にこれ�
 
 | 設定 | プロバイダーの YAML キー | 既定値 | 検証と動作 |
 | --- | --- | --- | --- |
+| ブロックキャッシュのサイズ | `plugins.storage.blob.config.blockCacheSize` | Core では `0`、API では `256 MiB` | バイト数を指定します。オンディスクの Badger ストレージで圧縮を有効にする場合は、正の値が必要です。 |
+| インデックスキャッシュのサイズ | `plugins.storage.blob.config.indexCacheSize` | Core と API の両方で `0` | バイト数を指定します。圧縮を無効にしている場合、`0` のままにできます。 |
+| 圧縮 | `plugins.storage.blob.config.compression` | Core では `false`、API では `true` | オンディスクの Badger ストレージで有効にする場合、`blockCacheSize` に正の値が必要です。`blockCacheSize: 0` のまま圧縮を有効にすると、設定の読み込みに失敗します。圧縮を無効にしている場合、キャッシュサイズ `0` は無効ではありません。 |
 | Memtable のサイズ | `plugins.storage.blob.config.memTableSize` | ストレージモードが `core` で実行モードが `sync` の場合のみ `512 MiB`。それ以外のモードの組み合わせで、この設定を省略または `0` にした場合は `128 MiB`。 | バイト数を指定します。明示した値は組み込みの既定値に優先します。トップレベルの CLI フラグや環境変数はありません。 |
 | 値ログ GC の間隔 | `plugins.storage.blob.config.gcInterval` | `5m` | 0 の間隔は既定値 `5m` を選択します。負の間隔は拒否されます。 |
 | 値ログ GC の破棄率 | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | `0` より大きく `1` より小さい値が必要です。 |
@@ -373,7 +386,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.90.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.90.3 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
