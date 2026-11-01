@@ -40,15 +40,12 @@ for the main runtime choices.
 
 ### Cardano node transaction submission
 
-Configure this key in the Cardano node configuration file. It is not a
-Dingo-native configuration key.
+Set this key in the Cardano node configuration file. Dingo does not expose this
+key through a native CLI flag or environment variable.
 
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
 | Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
-
-No Dingo CLI flag or environment variable provides this Cardano configuration
-key.
 
 ### Consensus provider
 
@@ -332,9 +329,9 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
-| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects configuration when compression is enabled and this value is `0`. Compression requires a positive value. |
+| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects configuration when compression is enabled and `blockCacheSize` is `0`. Compression requires a positive value. |
 | Index cache size | `plugins.storage.blob.config.indexCacheSize` | `0` in Core mode and API mode | Set a byte count for the index cache. |
-| Compression | `plugins.storage.blob.config.compression` | `false` in Core mode; enabled in API mode | A zero `blockCacheSize` remains valid when compression is disabled. |
+| Compression | `plugins.storage.blob.config.compression` | `false` in Core mode; enabled in API mode | Dingo accepts a zero `blockCacheSize` when compression is disabled. |
 | Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; all other storage and run mode combinations use `128 MiB` when configuration omits this setting or sets it to `0` | Set a byte count. An explicit value overrides the built-in default. No top-level CLI flag or environment variable exists. |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
