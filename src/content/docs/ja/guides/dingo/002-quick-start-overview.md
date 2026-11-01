@@ -265,7 +265,7 @@ plugins:
 
 > `midnight.authTokenPolicyId` と `midnight.authTokenAssetName` を一緒に設定するか、unset を両方残します。 部分的なペアは、設定と起動の検証を失敗します。 設定されたポリシー ID は、正確に 56 個の 16 個の 16 個の 16 個の 16 個の 16 個のデコードされたバイト (28 個のデコードされたバイト) でなければなりません。 一致は、正確なポリシー ID とアセット名を使用します。
 
-> Core モードでは、`plugins.storage.blob.config.blockCacheSize` と `plugins.storage.blob.config.indexCacheSize` のデフォルトは `0`、`plugins.storage.blob.config.compression` のデフォルトは `false` です。これにより、BadgerDB の内部キャッシュの代わりに OS ページキャッシュ（mmap）を使用します。オンディスクの Badger 圧縮を有効にする場合は、`plugins.storage.blob.config.blockCacheSize` に正の値を設定してください。`blockCacheSize` が `0` のまま圧縮を有効にすると、設定が無効になり起動に失敗します。
+> Core モードでは、`plugins.storage.blob.config.blockCacheSize` と `plugins.storage.blob.config.indexCacheSize` の既定値は `0` で、`plugins.storage.blob.config.compression` の既定値は `false` です。これらの設定では、BadgerDB の内部キャッシュの代わりに OS ページキャッシュ（mmap）を使用します。オンディスクの Badger 圧縮を有効にするには、`plugins.storage.blob.config.blockCacheSize` に正の値を設定してください。`blockCacheSize` が `0` のまま圧縮を有効にすると、設定検証に失敗して起動できません。
 
 ***
 
