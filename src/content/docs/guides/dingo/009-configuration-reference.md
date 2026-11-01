@@ -43,9 +43,9 @@ for the main runtime choices.
 Configure this key in the Cardano node configuration file. It is not a
 Dingo-native configuration key.
 
-| Setting | Cardano node configuration key | Dingo CLI flag | Dingo environment variable | Default and behavior |
-| --- | --- | --- | --- | --- |
-| Transaction submission logic | `TxSubmissionLogicVersion` | — | — | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+| Setting | Cardano node configuration key | Default and behavior |
+| --- | --- | --- |
+| Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
 
 No Dingo CLI flag or environment variable provides this Cardano configuration
 key.
@@ -332,7 +332,7 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
-| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects configuration when compression is enabled and this value is `0`. Set a positive value when enabling compression. |
+| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects configuration when compression is enabled and this value is `0`. Compression requires a positive value. |
 | Index cache size | `plugins.storage.blob.config.indexCacheSize` | `0` in Core mode and API mode | Set a byte count for the index cache. |
 | Compression | `plugins.storage.blob.config.compression` | `false` in Core mode; enabled in API mode | A zero `blockCacheSize` remains valid when compression is disabled. |
 | Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; all other storage and run mode combinations use `128 MiB` when configuration omits this setting or sets it to `0` | Set a byte count. An explicit value overrides the built-in default. No top-level CLI flag or environment variable exists. |
