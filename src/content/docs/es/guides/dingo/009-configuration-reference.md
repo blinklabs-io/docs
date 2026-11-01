@@ -1,15 +1,23 @@
 ---
-title: "Referencia de configuración de Dingo v0.90.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.90.0.
+title: "Referencia de configuración de Dingo v0.90.3"
+description: Referencia y ejemplo completo de configuración de Dingo v0.90.3.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.90.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.0](https://github.com/blinklabs-io/dingo/blob/v0.90.0/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.90.3. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.3](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
 ## Prelación de configuración
 
 Dingo busca cada ajuste primero en la línea de comandos, después en las variables de entorno, luego en el archivo YAML y finalmente en los valores predeterminados integrados. El ejemplo documenta las opciones CLI y variables de entorno junto a cada campo. Consulta [Configuración del nodo y modos de almacenamiento](/es/guides/dingo/005-node-configuration/) para conocer las principales opciones de ejecución.
+
+### Configuración Cardano del archivo del nodo
+
+`TxSubmissionLogicVersion` pertenece al archivo de configuración del nodo Cardano. No es un ajuste nativo de Dingo y no tiene una opción CLI ni una variable de entorno equivalente.
+
+| Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Si se omite, Dingo utiliza `TxSubmissionLogicV1`, la estrategia heredada de entrada por par que Dingo implementa. Dingo acepta `TxSubmissionLogicV1`. Rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
 
 ## Áreas de configuración
 
@@ -219,6 +227,9 @@ Dingo utiliza `1 MiB` como valor predeterminado de `plugins.storage.blob.config.
 
 | Configuración | Clave YAML del proveedor | Valor predeterminado | Validación y comportamiento |
 | --- | --- | --- | --- |
+| Caché de bloques | `plugins.storage.blob.config.blockCacheSize` | `0` en almacenamiento `core`; `256 MiB` en modo API. | Configura el tamaño de la caché de bloques en bytes. No existen opción CLI ni variable de entorno de nivel superior. |
+| Caché de índices | `plugins.storage.blob.config.indexCacheSize` | `0` en almacenamiento `core` y en modo API. | Configura el tamaño de la caché de índices en bytes. No existen opción CLI ni variable de entorno de nivel superior. |
+| Compresión | `plugins.storage.blob.config.compression` | Desactivada en almacenamiento `core`; activada en modo API. | En Badger en disco, la compresión requiere un `blockCacheSize` positivo. `blockCacheSize: 0` hace fallar la carga de la configuración cuando la compresión está activada. Los valores cero de las cachés siguen siendo válidos cuando la compresión está desactivada. |
 | Tamaño de memtable | `plugins.storage.blob.config.memTableSize` | `512 MiB` únicamente en almacenamiento `core` y ejecución `sync`; las demás combinaciones utilizan `128 MiB` cuando se omite o vale `0`. | Configura un número de bytes. Un valor explícito sustituye el predeterminado integrado. No existen opción CLI ni variable de entorno de nivel superior. |
 | Intervalo de GC del registro de valores | `plugins.storage.blob.config.gcInterval` | `5m` | Un intervalo cero selecciona `5m`. Se rechazan los intervalos negativos. |
 | Proporción de descarte de GC | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | Debe ser estrictamente mayor que `0` y menor que `1`. |
@@ -321,7 +332,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.90.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.90.3 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
