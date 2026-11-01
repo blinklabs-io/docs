@@ -16,11 +16,11 @@ description: Dingo v0.90.3 に対応する完全な設定リファレンスと�
 
 ### Cardano ノード設定
 
-Cardano ノード設定ファイル（YAML または JSON）では、`TxSubmissionLogicVersion` を設定します。この項目には Dingo 固有の CLI フラグや環境変数がありません。
+Cardano ノード設定ファイル（YAML または JSON）に記載する項目です。Dingo 固有の CLI フラグや環境変数ではありません。
 
-| 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値と検証と動作 |
+| 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値、検証、動作 |
 | --- | --- | --- | --- | --- |
-| トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略時は `TxSubmissionLogicV1` です。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
+| トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
 
 <a id="configuration-areas"></a>
 
@@ -268,7 +268,7 @@ Badger プロバイダーでは、`plugins.storage.blob.config` の下にこれ�
 | --- | --- | --- | --- |
 | ブロックキャッシュのサイズ | `plugins.storage.blob.config.blockCacheSize` | Core では `0`、API では `256 MiB` | バイト数を指定します。 |
 | インデックスキャッシュのサイズ | `plugins.storage.blob.config.indexCacheSize` | Core と API の両方で `0` | バイト数を指定します。 |
-| 圧縮 | `plugins.storage.blob.config.compression` | Core では `false`、API では `true` | ディスク上の Badger ストレージで有効にする場合、`blockCacheSize` に正の値を設定します。`blockCacheSize: 0` のまま圧縮を有効にすると、Dingo は設定の読み込みに失敗します。圧縮を無効にする場合、キャッシュサイズ `0` は有効です。 |
+| 圧縮 | `plugins.storage.blob.config.compression` | Core では `false`、API では `true` | ディスク上の Badger ストレージで圧縮を有効にする場合、`blockCacheSize` に正の値を設定します。`blockCacheSize: 0` のまま圧縮を有効にすると、Dingo は設定の読み込みに失敗します。圧縮を無効にする場合、キャッシュサイズ `0` は有効です。 |
 | Memtable のサイズ | `plugins.storage.blob.config.memTableSize` | ストレージモードが `core` で実行モードが `sync` の場合のみ `512 MiB`。それ以外のモードの組み合わせで、この設定を省略または `0` にした場合は `128 MiB`。 | バイト数を指定します。明示した値は組み込みの既定値に優先します。トップレベルの CLI フラグや環境変数はありません。 |
 | 値ログ GC の間隔 | `plugins.storage.blob.config.gcInterval` | `5m` | 0 の間隔は既定値 `5m` を選択します。負の間隔は拒否されます。 |
 | 値ログ GC の破棄率 | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | `0` より大きく `1` より小さい値が必要です。 |
