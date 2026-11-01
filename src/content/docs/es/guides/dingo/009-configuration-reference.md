@@ -17,7 +17,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando la clave falta, Dingo utiliza `TxSubmissionLogicV1`, la estrategia heredada de entrada por par que Dingo implementa. Dingo acepta `TxSubmissionLogicV1`. Rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
+| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Este es el único valor aceptado y corresponde a la estrategia heredada de recepción por par implementada por Dingo. Dingo rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
 
 ## Áreas de configuración
 
