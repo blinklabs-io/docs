@@ -17,7 +17,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Si se omite, Dingo utiliza `TxSubmissionLogicV1`, la estrategia heredada de entrada por par que Dingo implementa. Dingo acepta `TxSubmissionLogicV1`. Rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
+| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando la clave falta, Dingo utiliza `TxSubmissionLogicV1`, la estrategia heredada de entrada por par que Dingo implementa. Dingo acepta `TxSubmissionLogicV1`. Rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
 
 ## Áreas de configuración
 
@@ -332,7 +332,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.90.3 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.90.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
