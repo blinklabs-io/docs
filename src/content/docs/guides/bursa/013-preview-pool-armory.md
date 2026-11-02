@@ -212,12 +212,14 @@ curl http://10.0.0.1/
 
 The device answers with its bring-up report in plain text: the board model, the SE050 applet version, and the checks it ran at boot.
 
+Every `POST` below sends `Content-Type: application/json` and goes to `10.0.0.1` by address. Firmware with [bursa#1165](https://github.com/blinklabs-io/bursa/pull/1165) refuses a `POST` without that content type, and any request whose `Host` is not `10.0.0.1`, so that a web page open on the host cannot reach the device.
+
 ### Create the identity key
 
 The identity key signs the device's key inventory, so Bursa can pin which device it talks to.
 
 ```sh
-curl -s -X POST http://10.0.0.1/provision/identity -d '{}' |
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/identity -d '{}' |
   jq -r .public_key | base64 -d | od -An -tx1 -v | tr -d ' \n'; echo
 ```
 
@@ -230,7 +232,7 @@ Cold keys live in SE050 objects 551878672 to 551878687 (`0x20e50010` to `0x20e50
 ```sh
 jq -n --argjson id 551878672 --slurpfile key pool-cold.skey \
   '{cold_key_id: $id, signing_key: $key[0].cborHex}' |
-  curl -s -X POST http://10.0.0.1/provision/cold --data-binary @-
+  curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/cold --data-binary @-
 ```
 
 `jq` reads the key from the file and `curl` reads the request from standard input, so the key never appears in a command line, where other processes and the shell history could see it.
@@ -251,7 +253,7 @@ jq -n --slurpfile owner owner.skey '{
   cold_key_id: 551878672,
   reward_account: "e0<28-byte stake key hash in hex>",
   owner_signing_key: $owner[0].cborHex
-}' | curl -s -X POST http://10.0.0.1/provision/profile --data-binary @-
+}' | curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/profile --data-binary @-
 ```
 
 - `network_id` is 0 for every testnet.
@@ -271,7 +273,7 @@ Create the key on the host that will sign. `armory-pool host-key` writes the pri
 
 ```sh
 armory-pool host-key -out host.skey > host-key.json
-curl -s -X POST http://10.0.0.1/provision/host-key --data-binary @host-key.json
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/host-key --data-binary @host-key.json
 ```
 
 The response lists the registered keys in `host_keys`. The device holds up to four, one per host that signs: a laptop, a Bursa signer service. `host.skey` is created mode 600, and `armory-pool` refuses a key file with any group or other permission.
@@ -285,7 +287,7 @@ To revoke a key, send the same `host-key.json` to `/provision/host-key/revoke` f
 Provisioning is done. Reset the board into USB recovery mode, insert the signing log card (see [The signing log card](#the-signing-log-card)), then load the signing image:
 
 ```sh
-curl -s -X POST http://10.0.0.1/reset
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/reset
 # insert the log card now
 armory-boot-usb -i armory.imx
 ```
@@ -298,7 +300,7 @@ The signing image has no reset endpoint. To provision again later, unplug the bo
 
 Optional. A signing image loaded over USB is gone after every unplug. Written to the eMMC, it boots by itself.
 
-[armory-ums](https://github.com/usbarmory/armory-ums) exposes the eMMC to the host as a USB disk. Put the board in USB recovery mode (`curl -s -X POST http://10.0.0.1/reset` from the provisioning image) and load it:
+[armory-ums](https://github.com/usbarmory/armory-ums) exposes the eMMC to the host as a USB disk. Put the board in USB recovery mode (`curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/reset` from the provisioning image) and load it:
 
 ```sh
 curl -LO https://github.com/usbarmory/armory-ums/releases/download/v20231018/armory-ums.imx
@@ -371,7 +373,7 @@ If the card is pulled while the signing image runs, the device refuses to sign. 
 The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. To keep the keys, load the wipe image and delete only the head:
 
 ```sh
-curl -s -X POST http://10.0.0.1/wipe/signlog -d '{"identity_public_key": "<identity public key>"}'
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/signlog -d '{"identity_public_key": "<identity public key>"}'
 ```
 
 The signing image then formats a zeroed card and numbers entries from 1 again under the same identity. Keep the old card, or zero it before reuse: the device refuses a card with an old log once the head is reset.
@@ -776,7 +778,7 @@ To recover:
 
    ```sh
    armory-boot-usb -i armory-provision.imx
-   curl -s -X POST http://10.0.0.1/provision/floor \
+   curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/floor \
      -d '{"profile": "mypool@preview", "chain_counter": <on-chain counter>}'
    ```
 
@@ -881,13 +883,13 @@ Neither the signing nor the provisioning image deletes a key. The wipe image, bu
 List what is on the device first:
 
 ```sh
-curl -s -X POST http://10.0.0.1/wipe/objects -d '{}'
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/objects -d '{}'
 ```
 
 Remove one profile: its owner key, its cold key and its record. A cold key that another profile still names stays. The slot and the freed cold key object can be provisioned again.
 
 ```sh
-curl -s -X POST http://10.0.0.1/wipe/profile \
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/profile \
   -d '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}'
 ```
 
@@ -896,10 +898,10 @@ Delete only the signing log head, to start a new log on a zeroed card: see [The 
 Wipe the device: every key and profile, host keys and the identity key included.
 
 ```sh
-curl -s -X POST http://10.0.0.1/wipe/device -d '{"identity_public_key": "<identity public key>"}'
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/device -d '{"identity_public_key": "<identity public key>"}'
 ```
 
-Both requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. A device with no identity key takes an empty value. If a request stops part way, send it again. `curl -s -X POST http://10.0.0.1/reset` then returns the board to USB recovery mode.
+Both requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. A device with no identity key takes an empty value. If a request stops part way, send it again. `curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/reset` then returns the board to USB recovery mode.
 
 Removing a profile is refused while any stored profile record is unreadable, in the wrong slot, or shares its name with another, because the device cannot then tell which keys belong to the profile. `/wipe/device` still works and clears the device.
 
