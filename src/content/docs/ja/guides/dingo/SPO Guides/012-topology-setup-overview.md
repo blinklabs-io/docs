@@ -63,7 +63,7 @@ Dingo は組み込みの既定トポロジーでも動作しますが、SPO は�
 
 <h3 id="bootstrapping">ブートストラップピア</h3>
 
-ノードが長時間停止していた場合に役立ちます。これらと他の信頼するピアから同期し、先端に到達したら台帳ピアを使用します。
+ノードが長時間停止していた場合に役立ちます。これらのピアから同期し、先端に到達したら台帳ピアを使用します。
 
 <h3 id="advertise">advertise フラグ</h3>
 
@@ -75,9 +75,9 @@ Dingo は組み込みの既定トポロジーでも動作しますが、SPO は�
 
 <h3 id="trustable">trustable フラグ</h3>
 
-信頼するピアは、ブートストラップピアと、信頼対象に設定したローカルルートピアで構成されます。ローカルルートピアは既定では信頼対象ではありません。
+Dingo は cardano-node のトポロジーファイルを変更せずに読み込めるよう `trustable` を受け付けますが、このフラグは使用しません。`trustable` のローカルルートは、先端から遅れたノードが Genesis チェーン選択を抜ける助けにはなりません。
 
-自分のリレーと BP は `"trustable": true` に設定してください。
+mainnet、preprod、preview では、既定の `genesisBootstrap.corroborationPeers: 1` の場合、Genesis チェーン選択はノードがチェーンに従う前に、2 つ目の独立したグループのピアによる確認を必要とします。`corroborationPeers` を `0` にするとこの確認は無効になります。`dingo.yaml` に `genesisBootstrap.controlGroups` がない場合、Dingo は台帳ピアをそのリレーをオンチェーンで登録したステークプールごとに、トポロジーのピアを接続アドレスごとにグループ化します。そのため、同じ IPv4 /24 または IPv6 /64 にあるトポロジーのピアは 1 つのグループになります。`controlGroups` を設定した場合は、記載したエンドポイントだけが対象となり、その `identity` ごとにグループ化されます。したがって既定の設定では、トポロジーのピアがすべて同じ /24 または /64 にあるノードや、ローカルルートが 1 つだけのノードは、遅れた後に追いつくために `useLedgerAfterSlot` で台帳ピアも使用する必要があります（<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>）。
 
 <h2 id="relay">リレー用トポロジー例</h2>
 
@@ -87,7 +87,7 @@ Dingo は組み込みの既定トポロジーでも動作しますが、SPO は�
 - BP を含むグループは `"advertise": false,` にして、BP を非公開に保ちます。
 - 他のリレーが 1 つ（合計 2 つ）なら "valency": 1、他のリレーが 2 つ（合計 3 つ）なら "valency": 2 とします。
 - `hotValency` は `valency` の別名として使用でき、両方があれば `valency` が優先されます。空でないトポロジーグループでは、アクセスポイント数に対して `warmValency` を検証します。
-- 先端から大きく遅れても同期できるよう、リレーは "trustable": true にします。
+- 先端から遅れても追いつけるよう、`useLedgerAfterSlot` はネットワークの値のままにします。
 - Genesis/スナップショットモードでは、ブートストラップピアの代わりに、または併用して `peerSnapshotFile` を使用します。
 - `"publicRoots": [{ "accessPoints": [], "advertise": false }]` で公開ルートを空にします。
 
@@ -138,15 +138,14 @@ Dingo は組み込みの既定トポロジーでも動作しますが、SPO は�
 
 <h2 id="bp">BP 用トポロジー例</h2>
 
-ブロックプロデューサーは、自分のリレーにのみ接続するようにします。
+ブロックプロデューサーは、自分のリレーだけをローカルルートにします。
 
 - `"bootstrapPeers": null` にします。
 - BP のローカルルートを非公開に保つため、`"advertise": false,` にします。
-- リレーを `"trustable": true,` にします。
 - この例はリレーが 2 つなので `"valency": 2` にします。3 つなら `3` にします。
 - `"publicRoots": [{ "accessPoints": [], "advertise": false }]` で公開ルートを空にします。
-- 台帳ピアデータでほかのノードに接続しないよう、`"useLedgerAfterSlot": -1` にします。
-- 公開ネットワークから同期すべきではないため、BP に `peerSnapshotFile` や `bootstrapPeers` は不要です。
+- リレーと同様に、`useLedgerAfterSlot` をネットワークの値にします。`-1` で既定の corroboration 設定の場合、リレーが 1 つだけの BP や、リレーが同じ IPv4 /24 または IPv6 /64 にある BP はピアグループが 1 つしかなく、先端から遅れる再起動の後に Genesis チェーン選択を抜けられません（<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>）。この設定では BP は台帳ピアにも接続します。
+- BP に `peerSnapshotFile` や `bootstrapPeers` は不要です。
 
 BP 用トポロジー JSON の例:
 
@@ -176,11 +175,11 @@ BP 用トポロジー JSON の例:
       "advertise": false
     }
   ],
-  "useLedgerAfterSlot": -1
+  "useLedgerAfterSlot": 119231973
 }
 ```
 
-各トポロジーファイルを保存後、Dingo がそのファイルを使用するよう設定して再起動し、BP が自分のリレーだけにホット接続していることを確認します。
+各トポロジーファイルを保存後、Dingo がそのファイルを使用するよう設定して再起動し、BP が自分のリレーにホット接続していることを確認します。
 
 既存の `/etc/dingo/dingo.yaml` に次を追加します。ファイルを上書きしないでください。
 

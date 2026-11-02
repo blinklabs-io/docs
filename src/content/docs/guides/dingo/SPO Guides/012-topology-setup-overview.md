@@ -85,7 +85,7 @@ Dingo accepts `trustable` so that cardano-node topology files load unchanged, bu
 
 <br>
 
-On mainnet, preprod and preview, Genesis chain selection needs a second, independent peer to confirm a chain before the node follows it. Dingo counts a peer as independent only through the stake pool that registered its relay on chain, or through `genesisBootstrap.controlGroups` in `dingo.yaml`. So a node also needs ledger peers, set with `useLedgerAfterSlot`, to catch up after falling behind (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>).
+On mainnet, preprod and preview, Genesis chain selection with the default `genesisBootstrap.corroborationPeers: 1` needs a peer from a second, independent group to confirm a chain before the node follows it. Setting `corroborationPeers` to `0` disables this check. Without `genesisBootstrap.controlGroups` in `dingo.yaml`, Dingo groups a ledger peer by the stake pool that registered its relay on-chain, and a topology peer by its connection address, so topology peers in one IPv4 /24 or IPv6 /64 form one group. With `controlGroups` configured, only the listed endpoints count, grouped by their `identity`. So with the defaults, a node whose topology peers all share one /24 or /64, or that has a single local root, also needs ledger peers, set with `useLedgerAfterSlot`, to catch up after falling behind (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>).
 
 ***
 
@@ -154,7 +154,7 @@ A block producer keeps your own relays as its only local roots. Use the followin
 - Set `"advertise": false,` since these are the BP's local roots and should stay private.
 - This example uses 2 relays, so it sets `"valency": 2`. With three relays, set it to `3`.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
-- Set `useLedgerAfterSlot` to your network's value, as on the relays. With `-1` the BP has no ledger peers, and after a restart that leaves it behind the tip it cannot leave Genesis chain selection, even with its relays connected (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>). The BP then also connects to ledger peers.
+- Set `useLedgerAfterSlot` to your network's value, as on the relays. With `-1` and the default corroboration settings, a BP with one relay, or with relays that share one IPv4 /24 or IPv6 /64, has a single peer group, and after a restart that leaves it behind the tip it cannot leave Genesis chain selection (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>). The BP then also connects to ledger peers.
 - The BP does not need `peerSnapshotFile` or `bootstrapPeers`.
 
 Sample BP Topology JSON FILE: 
