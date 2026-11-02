@@ -22,7 +22,7 @@ Descarga la última versión desde [GitHub](https://github.com/blinklabs-io/ding
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.3/dingo-v0.90.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Comprueba que el binario funcione:
@@ -94,7 +94,7 @@ Al reanudar una devnet persistente sin `--reset`, Dingo solo restaura o actualiz
 
 ## Paso 2 - Crear dingo.yaml
 
-Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.90.0. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example) de esa versión como punto de partida.
+Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.90.3. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example) de esa versión como punto de partida.
 
 Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod, mainnet y DijkstraNet. Selecciona DijkstraNet con la opción de red `dijkstra`; DijkstraNet utiliza la magia de red `6`. No necesitas descargarlas por separado.
 
@@ -233,7 +233,7 @@ plugins:
 
 📝 Establece conjuntamente `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` o deja ambos sin configurar. Un par incompleto hace fallar la validación de configuración y de inicio. Un identificador de política configurado debe tener exactamente 56 caracteres hexadecimales, 28 bytes decodificados. La comparación utiliza el identificador y el nombre de activo exactos.
 
-💡 Establecer `block-cache-size` e `index-cache-size` en 0 con `compression: false` utiliza la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB, reduciendo mucho el uso de memoria.
+💡 En el modo Core, configura `plugins.storage.blob.config.blockCacheSize` e `plugins.storage.blob.config.indexCacheSize` en `0`, y `plugins.storage.blob.config.compression` en `false` para usar la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB y reducir mucho el uso de memoria. La compresión en disco requiere un valor positivo para `plugins.storage.blob.config.blockCacheSize`; con el valor `0`, la configuración falla.
 
 ## Paso 3 - Abrir los puertos de red
 
