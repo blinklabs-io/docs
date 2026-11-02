@@ -53,7 +53,7 @@ Every signature comes back with a second signature, from the same key, over the 
 
 - A USB armory Mk II with an SE050, and a host with a free USB port
 - Bursa from its `main` branch until the next release: `go install github.com/blinklabs-io/bursa/cmd/bursa@main` (Go 1.26.10 or later)
-- `armory-pool` and `opcert-check`, the host tools that talk to the armory. Build them from the Bursa repository: `cd armory && go build ./cmd/armory-pool ./cmd/opcert-check`
+- `armory-pool` and `opcert-check`, the host tools that talk to the armory. Build them, with `signlog-verify`, from the Bursa repository: `cd armory && go build -o . ./cmd/armory-pool ./cmd/opcert-check ./cmd/signlog-verify`
 - `armory-boot-usb`, to load the firmware: `go install github.com/usbarmory/armory-boot/cmd/armory-boot-usb@latest`. Without a udev rule for the board, run it with `sudo`.
 - `jq` and `curl`
 - A synced Preview node whose socket Bursa can reach, for Steps 4 and 5. Start it as a relay early ([Step 3](#step-3-run-the-node) shows the three setups) and set `SOCKET` to its socket path. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers from v0.90.0.
@@ -98,7 +98,7 @@ One slip restores every key the pool needs:
 
 The words come from [`bursa wallet create`](/guides/bursa/003-commands/#use-command-line-to-create-a-wallet-and-output-wallet-files), a 24-word [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic. Bursa turns the words into a root key as [CIP-3](https://cips.cardano.org/cip/CIP-3) describes (Icarus), then derives each key along its path.
 
-Losing the cold key loses the pool: a pool ID is the hash of its cold key. The pool mnemonic restores the cold key on a replacement device, or in any wallet that follows CIP-1853.
+Losing the cold key loses the pool: a pool ID is the hash of its cold key. The pool mnemonic restores the cold key on a replacement device through `bursa key pool-cold`. Bursa uses the derived key as a plain Ed25519 seed, so another CIP-1853 wallet may derive a different pool ID from the same words.
 
 The owner can also be replaced without the old owner's signature. A pool registration needs witnesses from the cold key and from the owners named in that certificate, not from the owners already on chain. So the cold key and a new owner can re-register the pool without the old owner. Three things follow:
 
@@ -194,7 +194,7 @@ A board with nothing on its eMMC and no microSD card boots into USB recovery mod
 armory-boot-usb -i armory-provision.imx
 ```
 
-`curl http://10.0.0.1/` shows which image is running: the report starts with `provisioning build`, `signing build` or `wipe build`.
+`curl http://10.0.0.1/` shows which image is running: after the Bluetooth line, the report has a line starting with `provisioning build`, `signing build` or `wipe build`.
 
 The image runs until the board loses power, so load it again after every unplug. Keys and profiles live in the SE050 and survive the power cycle. After provisioning, you can write the signing image to the eMMC so the board boots it by itself: see [Flash the signing image to eMMC](#flash-the-signing-image-to-emmc).
 
@@ -215,10 +215,11 @@ The device answers with its bring-up report in plain text: the board model, the 
 The identity key signs the device's key inventory, so Bursa can pin which device it talks to.
 
 ```sh
-curl -s -X POST http://10.0.0.1/provision/identity -d '{}'
+curl -s -X POST http://10.0.0.1/provision/identity -d '{}' |
+  jq -r .public_key | base64 -d | od -An -tx1 -v | tr -d ' \n'; echo
 ```
 
-Record the returned `public_key`.
+The device returns `public_key` in base64; the pipe prints it as hex. Record the hex: `armory-pool -identity`, the signer's `identity_public_key` and the wipe requests all take it in that form.
 
 ### Import the cold key
 
@@ -230,7 +231,7 @@ jq -n --argjson id 551878672 --arg key "$(jq -r .cborHex pool-cold.skey)" \
   curl -s -X POST http://10.0.0.1/provision/cold --data-binary @-
 ```
 
-The device returns `public_key` and `pool_id` in hex. Compare the key with `pool-cold.vkey`: its `cborHex` is `5820` followed by the same hex. The device never overwrites a key: a second import into the same object is refused. Only the wipe image deletes a key (see [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device)).
+The device returns `public_key` and `pool_id` in hex. Compare the key with `pool-cold.vkey`: its `cborHex` is `5820` followed by the same hex. The device never overwrites a key: importing the same key again is confirmed, and a different key in the same object is refused. Only the wipe image deletes a key (see [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device)).
 
 Delete `pool-cold.skey` from the offline machine afterwards. The mnemonic is the backup.
 
@@ -269,7 +270,7 @@ armory-pool host-key -out host.skey > host-key.json
 curl -s -X POST http://10.0.0.1/provision/host-key --data-binary @host-key.json
 ```
 
-The response lists the registered keys in `host_keys`. The device holds up to four, one per host that signs: a laptop, a Bursa signer service. `host.skey` is created mode 600, and `armory-pool` refuses a key file others can read.
+The response lists the registered keys in `host_keys`. The device holds up to four, one per host that signs: a laptop, a Bursa signer service. `host.skey` is created mode 600, and `armory-pool` refuses a key file with any group or other permission.
 
 Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
 
@@ -284,7 +285,9 @@ curl -s -X POST http://10.0.0.1/reset
 armory-boot-usb -i armory.imx
 ```
 
-The signing image has no reset endpoint. To provision again later, unplug the board and load the provisioning image. If the signing image is on the eMMC, set the boot switch toward microSD first, as below.
+A signing image loaded this way starts with the card slot empty, because USB recovery mode needs the card out, so it cannot open the signing log and refuses to sign. Use it to check the inventory and the keys; to sign, write it to the eMMC and boot it with the log card in, as below.
+
+The signing image has no reset endpoint. To provision again later, unplug the board and load the provisioning image. If the signing image is on the eMMC, set the boot switch toward microSD and take the card out first, as below.
 
 ### Flash the signing image to eMMC
 
@@ -303,14 +306,22 @@ The eMMC appears as a disk named after the board's serial number:
 ls -l /dev/disk/by-id/ | grep USB_armory
 ```
 
-Check with `lsblk` that it is about 16 GB and not mounted. Write the signing image 1 KiB into the disk, through the `by-id` path so the write cannot reach another disk:
+Check with `lsblk` that it is about 15.7 GB (14.6 GiB) and not mounted. Write the signing image 1 KiB into the disk, through the `by-id` path so the write cannot reach another disk:
 
 ```sh
 sudo dd if=armory.imx of=/dev/disk/by-id/usb-F-Secure_USB_armory_Mk_II_<serial>-0:0 \
   bs=512 seek=2 conv=fsync
 ```
 
-Unplug the board and plug it in again. The USB network interface appears without `armory-boot-usb`, and `curl http://10.0.0.1/` starts with `signing build`.
+Read it back and compare. The two hashes must match:
+
+```sh
+sha256sum armory.imx
+sudo dd if=/dev/disk/by-id/usb-F-Secure_USB_armory_Mk_II_<serial>-0:0 bs=512 skip=2 \
+  count=$(( $(stat -c %s armory.imx) / 512 )) iflag=direct status=none | sha256sum
+```
+
+Unplug the board, slide the switch toward eMMC, insert the log card (see [The signing log card](#the-signing-log-card)) and plug it in again. The USB network interface appears without `armory-boot-usb`, the report shows `signing build`, and ends with `signing log: open` and `RESULT: PASS`.
 
 The board boots from the eMMC only when its boot switch points toward eMMC. With an image on the eMMC, it no longer falls back to USB recovery mode. To load the provisioning image again, slide the switch toward microSD with no card inserted; the board then goes to USB recovery mode ([boot modes](https://github.com/usbarmory/usbarmory/wiki/Boot-Modes-(Mk-II))). A blank card is not the same as no card: with a card in that holds no image, the board shows nothing on USB, whichever way the switch points, unless the eMMC has an image and the switch points toward eMMC.
 
@@ -332,18 +343,20 @@ The switch is on the underside of the board, beside the eMMC chip, under a small
 
 The signing image appends every signature to a log on the microSD card before the signature leaves the device, and refuses to sign unless a card holding its log is in the slot at boot. Each entry is chained to the one before and signed by the device identity key, and the SE050 keeps the number and hash of the latest entry, so a swapped, edited or truncated card is refused. A card holds 32768 entries; a full card stays full.
 
-On its first start with an unset head, the signing image formats a card written with zeros. A new card usually carries a partition table, which is refused, so write zeros over the whole card first. Check which device is the card with `lsblk`, since `dd` overwrites whatever it is given:
+On its first start with an unset head, the signing image formats a card written with zeros. A new card usually carries a partition table, which is refused, so write zeros over the log area first: a header block and 32768 four-block entries, just over 64 MiB. Check which device is the card with `lsblk`, since `dd` overwrites whatever it is given:
 
 ```sh
-sudo dd if=/dev/zero of=/dev/sdX bs=4M conv=fsync
+sudo dd if=/dev/zero of=/dev/sdX bs=1M count=65 conv=fsync
 ```
+
+Zeroing the whole card works too, but takes minutes per gigabyte.
 
 A zeroed card is a blank card in the table above, so the signing image has to boot from the eMMC with the switch toward eMMC.
 
 Read the log back and verify it with the signing image running:
 
 ```sh
-armory-pool signlog -identity <identity public key> -host-key host.skey
+armory-pool -identity <identity public key> -host-key host.skey signlog
 ```
 
 The device attests the current head for a fresh nonce, and `armory-pool` checks every entry and the chain under the pinned identity key. Add `-head-seq N -head-hash HEX` to also pin the latest entry you expect. A card taken out of the device is checked with `signlog-verify -identity <identity public key> -image <card image>`.
@@ -366,9 +379,9 @@ Optional. Instead of USB recovery mode, the board can boot the provisioning imag
 sudo dd if=armory-provision.imx of=/dev/disk/by-id/<card> bs=512 seek=2 conv=fsync
 ```
 
-Insert the card, slide the switch toward microSD and plug the board in. `curl http://10.0.0.1/` starts with `provisioning build`.
+Insert the card, slide the switch toward microSD and plug the board in. The report from `curl http://10.0.0.1/` shows `provisioning build`.
 
-While the card is in and the switch points toward microSD, the board boots the provisioning image at every power-up, and the host can change profiles, the reward account and the floor. When provisioning is done, slide the switch back toward eMMC and take the card out. With an image on the eMMC and the switch toward eMMC the card is ignored, but a board with an empty eMMC boots the card in either position. The board boots whatever image is on the card, so store the card offline with the pool mnemonic.
+While the card is in and the switch points toward microSD, the board boots the provisioning image at every power-up, and the host can change profiles, the reward account and the floor. When provisioning is done, slide the switch back toward eMMC and take the card out. With an image on the eMMC and the switch toward eMMC the card is ignored, but a board with an empty eMMC boots the card in either position. The board boots whatever image is on the card, so store the card offline with the pool mnemonic. The provisioning card and the signing log card share the one slot: put the log card back before the signing image starts, or it refuses to sign.
 
 ### Read the device keys
 
@@ -378,7 +391,7 @@ While the card is in and the switch points toward microSD, the board boots the p
 armory-pool -identity <identity public key> -profile mypool@preview keys -out-dir device
 ```
 
-It writes `device/pool-cold.vkey` and `device/owner.vkey`, and prints the pool ID in hex and bech32 (`pool1...`), the owner key hash, and the owner key in bech32. `device/pool-cold.vkey` must match the `pool-cold.vkey` you derived. `witness` and `opcert` take the same `-identity` and `-profile` flags before the subcommand; `address` and `reward-hex` need neither.
+It writes `device/pool-cold.vkey` and `device/owner.vkey`, and prints the pool ID in hex and bech32 (`pool1...`), the owner key hash, the owner key in bech32, and the owner's reward address. `device/pool-cold.vkey` must match the `pool-cold.vkey` you derived. `witness` and `opcert` take the same `-identity` and `-profile` flags before the subcommand; `address`, `reward-hex` and `host-key` need neither. Signing requests also need `-host-key` once a host key is registered; reading the keys does not.
 
 ## Step 3: Run the node
 
@@ -392,7 +405,7 @@ chmod 400 vrf.skey kes.skey node.cert
 
 ### Local install
 
-Follow [Dingo node setup](/guides/dingo/spo-guides/001-dingo-node-setup/) to install Dingo, write `/etc/dingo/dingo.yaml` with `network: "preview"`, and run it under systemd. `SOCKET` is the `socketPath` from `dingo.yaml`. Copy the key files to `/var/lib/dingo/keys/`, owned by the user Dingo runs as. Set up the relay and producer topology with [Topology setup](/guides/dingo/spo-guides/012-topology-setup-overview/).
+Follow [Dingo node setup](/guides/dingo/spo-guides/001-dingo-node-setup/) to install Dingo, write `/etc/dingo/dingo.yaml` with `network: "preview"`, and run it under systemd. `SOCKET` is the `socketPath` from `dingo.yaml`. Copy the key files to `/var/lib/dingo/keys/`, owned by the user Dingo runs as. Set up the relay and producer topology with [Topology setup](/guides/dingo/spo-guides/012-topology-setup-overview/). Preview runs Genesis chain selection, so keep the network's ledger peer slot on the producer too: a producer whose only peers are its relays can fail to leave Genesis selection after a restart that leaves it behind the tip ([dingo#5831](https://github.com/blinklabs-io/dingo/issues/5831)).
 
 Add the block-producer settings to `dingo.yaml`:
 
@@ -421,7 +434,7 @@ docker run -d --name dingo-bp \
   -e CARDANO_SHELLEY_VRF_KEY=/keys/vrf.skey \
   -e CARDANO_SHELLEY_KES_KEY=/keys/kes.skey \
   -e CARDANO_SHELLEY_OPERATIONAL_CERTIFICATE=/keys/node.cert \
-  ghcr.io/blinklabs-io/dingo:0.90.0
+  ghcr.io/blinklabs-io/dingo:0.90.3
 ```
 
 The node socket is `ipc/dingo.socket` in the current directory: `SOCKET=$PWD/ipc/dingo.socket`. Until `node.cert` exists, leave out the `CARDANO_BLOCK_PRODUCER` and key variables.
@@ -592,7 +605,7 @@ Pledge counts the stake controlled by the pool's owners. Keep the pledge funds a
 armory-pool address -payment-vkey payment.vkey -stake-vkey device/owner.vkey -network preview
 ```
 
-`payment.vkey` is the hardware wallet's payment verification key.
+`payment.vkey` is the hardware wallet's payment verification key, as a `PaymentVerificationKeyShelley_ed25519` envelope. An extended (`_bip32`) key is refused: convert it to the plain key first.
 
 The payment key never leaves the hardware wallet, and the owner key only signs certificates. `bursa tx build` spends only from its change address, so send the pledge to this address from the hardware wallet.
 
@@ -640,9 +653,9 @@ The paying wallet signs, the armory signs once per role, and Bursa assembles and
 
 ```sh
 bursa tx witness --tx-file pool-reg.tx --signing-key-file payer/payment.skey --out-file payer.wit
-armory-pool -identity <identity public key> -profile mypool@preview \
+armory-pool -identity <identity public key> -profile mypool@preview -host-key host.skey \
   witness -role pool -tx-file pool-reg.tx -out pool.wit
-armory-pool -identity <identity public key> -profile mypool@preview \
+armory-pool -identity <identity public key> -profile mypool@preview -host-key host.skey \
   witness -role stake -tx-file pool-reg.tx -out owner.wit
 bursa tx assemble --tx-file pool-reg.tx \
   --witness-file payer.wit --witness-file pool.wit --witness-file owner.wit \
@@ -685,7 +698,7 @@ bursa query pool --socket-path "$SOCKET" --network preview --pool-id pool1...
 The `opcert` field holds `on_chain_counter`, and `kes` holds `current_kes_period`. Pass them to `armory-pool opcert`. The device has no clock, so it signs whatever KES period the host sends: take it from the query, not from memory. Use `none` when the counter is `null`:
 
 ```sh
-armory-pool -identity <identity public key> -profile mypool@preview \
+armory-pool -identity <identity public key> -profile mypool@preview -host-key host.skey \
   opcert -kes-vkey kes.vkey -kes-period <current_kes_period> -chain-counter <on_chain_counter|none> \
   -out node.cert
 ```
@@ -753,7 +766,7 @@ If you rotate just after the pool forged a block, and that block is later rolled
 To recover:
 
 1. Confirm the real counter with `bursa query pool`.
-2. Unplug the board, load the provisioning image, and reset the device floor to it:
+2. Unplug the board, load the provisioning image (with the signing image on the eMMC: switch toward microSD, card out), and reset the device floor to it:
 
    ```sh
    armory-boot-usb -i armory-provision.imx
@@ -761,7 +774,7 @@ To recover:
      -d '{"profile": "mypool@preview", "chain_counter": <on-chain counter>}'
    ```
 
-3. Load the signing image again, as in [Switch to the signing image](#switch-to-the-signing-image), then issue a new opcert and install it.
+3. Start the signing image again: switch toward eMMC with the log card in, then plug the board in. Issue a new opcert and install it.
 
 Rotate several KES periods before expiry, as the operator's `renewBeforePeriods: 8` does. A rotation then rarely lands right after a fresh block, and a mistake leaves time to recover.
 
@@ -778,14 +791,16 @@ All of these use the same flow: build with `bursa tx build`, sign the body with 
 A pool that already forges can move its cold key onto the armory.
 
 1. Import the existing cold key, as in [Import the cold key](#import-the-cold-key).
-2. Create the profile with `chain_counter` set to the pool's `on_chain_counter`. This sets the device floor.
-3. Load the signing image, as in [Switch to the signing image](#switch-to-the-signing-image), and check the device reproduces the pool's current opcert:
+2. Create the profile with `chain_counter` set to one less than the issue number of the pool's current `node.cert`. This sets the device floor.
+3. Boot the signing image, and check the device reproduces the pool's current opcert:
 
    ```sh
    opcert-check -vkey <cold vkey cborHex> -cert <node.cert cborHex> \
      -pool <pool id hex> -profile mypool@preview -signer http://10.0.0.1 -source 10.0.0.2 \
      -host-key host.skey
    ```
+
+   `opcert-check` asks for the cert's issue number minus one as the chain counter, so it is refused below the floor: that is why step 2 sets the floor there, even when `on_chain_counter` already equals the issue number. The first real rotation then reports the on-chain counter and raises the floor to it. A cert with issue number 0 cannot be checked this way.
 
 4. Re-register the pool with the device owner key as owner, and move the pledge to an address with that stake key.
 
@@ -808,6 +823,7 @@ A pool that already forges can move its cold key onto the armory.
 | `nonce replayed` | A request was sent twice | Run the command again; each run uses a new nonce |
 | `cold key object already exists with a different key` | The object already holds another key | Use a free object; keys are never overwritten |
 | `owner key object already exists with a different key` | The slot already holds another owner key | Use a free slot |
+| `profile name in use`, `slot in use` or `cold key already belongs to a profile` | `/provision/profile` names a profile, slot or cold key object another profile already has | Pick a new name, a free slot, or the cold key's own profile |
 | `response version "bursa-attested-signer/1", want "bursa-attested-signer/2"` | The signing image predates the signing summary that `armory-pool witness` asks for | Build the firmware from the same Bursa commit as `armory-pool` and load it, as in [Build the firmware](#build-the-firmware) |
 | `a profile record is unreadable or inconsistent; wipe the device instead` | From `/wipe/profile`: a stored profile record cannot be read, is in the wrong slot, or shares its name with another | Wipe the whole device with `/wipe/device`, as in [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device) |
 
@@ -852,7 +868,7 @@ Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced
 
 ## Removing a profile or wiping the device
 
-Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. `curl http://10.0.0.1/` starts with `wipe build`. Until an open pull request lands ([bursa#1146](https://github.com/blinklabs-io/bursa/pull/1146)), the wipe image's report also tries the signing log card and ends in `signing log: NOT OPEN` and `RESULT: FAIL` with the card out; the wipe endpoints work regardless.
+Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. The report from `curl http://10.0.0.1/` shows `wipe build`. Until an open pull request lands ([bursa#1146](https://github.com/blinklabs-io/bursa/pull/1146)), the wipe image's report also tries the signing log card and ends in `signing log: NOT OPEN` and `RESULT: FAIL` with the card out; the wipe endpoints work regardless.
 
 List what is on the device first:
 
@@ -898,10 +914,10 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 - reward account registration;
 - owner and pool registration signed by the armory;
 - a refused registration that names another reward account;
-- the first opcert, cross-checked with `opcert-check`;
+- the first opcert, cross-checked with `opcert-check` when `OPCERT_CHECK` names it (with `HOST_KEY` set, every signing request is host-authenticated);
 - retirement, when `RETIRE=1` is set.
 
-Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. The header lists the other environment variables. Rerunning it on the same work directory skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys.
+Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. Either way the signing image then runs from RAM with the card slot empty and refuses to sign, so with the signing log the script stops at the first signature. Run the signing steps against the eMMC image with the log card in: leave `SIGNING_IMX` unset, boot the eMMC image when the script stops, and rerun it on the same work directory. The header lists the other environment variables. Set `WORK` to keep the work directory: rerunning it on the same `WORK` skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys. Without `WORK` each run starts in a new temporary directory and creates a new pool.
 
 ## What is not built yet
 
