@@ -9,6 +9,8 @@ description: Notas de la versión de Plutigo
 
 ☑️ Selecciona una versión para ver las notas de la versión completas.
 
+- Versión: v0.11.0 - *[Ver notas de la versión](../v0-11-0)*
+- Versión: v0.10.2 - *[Ver notas de la versión](../v0-10-2)*
 - Versión: v0.10.1 - *[Ver notas de la versión](../v0-10-1)*
 - Versión: v0.10.0 - *[Ver notas de la versión](../v0-10-0)*
 - Versión: v0.9.11 - *[Ver notas de la versión](../v0-9-11)*

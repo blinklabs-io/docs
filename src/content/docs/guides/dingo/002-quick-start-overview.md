@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.0/dingo-v0.90.0-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.3/dingo-v0.90.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -137,9 +137,9 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.90.0 settings, defaults, and environment or command-line
+For all Dingo v0.90.3 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example)
 to use as a starting point for your own settings.
 
 Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
@@ -279,7 +279,7 @@ plugins:
 
 > 📝 Set `midnight.authTokenPolicyId` and `midnight.authTokenAssetName` together or leave both unset. A partial pair causes configuration and startup validation to fail. A configured policy ID must be exactly 56 hexadecimal characters (28 decoded bytes). Matching uses the exact policy ID and asset name.
 
-> 💡 Setting `block-cache-size` and `index-cache-size` to 0 with `compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage.
+> 💡 Setting `plugins.storage.blob.config.blockCacheSize` and `plugins.storage.blob.config.indexCacheSize` to 0 with `plugins.storage.blob.config.compression: false` uses OS page cache (mmap) instead of BadgerDB's internal caches. This dramatically reduces memory usage. On-disk Badger compression requires a positive `plugins.storage.blob.config.blockCacheSize`; Dingo rejects the configuration when the value is 0.
 
 ***
 
