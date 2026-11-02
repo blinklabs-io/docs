@@ -348,6 +348,8 @@ armory-pool signlog -identity <identity public key> -host-key host.skey
 
 The device attests the current head for a fresh nonce, and `armory-pool` checks every entry and the chain under the pinned identity key. Add `-head-seq N -head-hash HEX` to also pin the latest entry you expect. A card taken out of the device is checked with `signlog-verify -identity <identity public key> -image <card image>`.
 
+If the card is pulled while the signing image runs, the device refuses to sign. Putting it back is not enough: the card is not initialised again until the device restarts ([bursa#1147](https://github.com/blinklabs-io/bursa/pull/1147)). Unplug the armory and plug it in again; it reopens the log at the same entry.
+
 The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. To keep the keys, load the wipe image and delete only the head:
 
 ```sh
@@ -850,7 +852,7 @@ Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced
 
 ## Removing a profile or wiping the device
 
-Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. `curl http://10.0.0.1/` starts with `wipe build`.
+Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. `curl http://10.0.0.1/` starts with `wipe build`. Until an open pull request lands ([bursa#1146](https://github.com/blinklabs-io/bursa/pull/1146)), the wipe image's report also tries the signing log card and ends in `signing log: NOT OPEN` and `RESULT: FAIL` with the card out; the wipe endpoints work regardless.
 
 List what is on the device first:
 
