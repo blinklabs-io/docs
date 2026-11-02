@@ -332,7 +332,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.90.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.90.3 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
