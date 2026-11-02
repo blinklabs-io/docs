@@ -278,14 +278,15 @@ To revoke a key, send the same `host-key.json` to `/provision/host-key/revoke` f
 
 ### Switch to the signing image
 
-Provisioning is done. Reset the board into USB recovery mode and load the signing image:
+Provisioning is done. Reset the board into USB recovery mode, insert the signing log card (see [The signing log card](#the-signing-log-card)), then load the signing image:
 
 ```sh
 curl -s -X POST http://10.0.0.1/reset
+# insert the log card now
 armory-boot-usb -i armory.imx
 ```
 
-A signing image loaded this way starts with the card slot empty, because USB recovery mode needs the card out, so it cannot open the signing log and refuses to sign. Use it to check the inventory and the keys; to sign, write it to the eMMC and boot it with the log card in, as below.
+USB recovery mode needs the slot empty when the board starts, but once the board waits in recovery mode a card can go in, and the signing image reads it when it starts. Without the card it cannot open the signing log and refuses to sign.
 
 The signing image has no reset endpoint. To provision again later, unplug the board and load the provisioning image. If the signing image is on the eMMC, set the boot switch toward microSD and take the card out first, as below.
 
@@ -917,7 +918,7 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 - the first opcert, cross-checked with `opcert-check` when `OPCERT_CHECK` names it (with `HOST_KEY` set, every signing request is host-authenticated);
 - retirement, when `RETIRE=1` is set.
 
-Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. Either way the signing image then runs from RAM with the card slot empty and refuses to sign, so with the signing log the script stops at the first signature. Run the signing steps against the eMMC image with the log card in: leave `SIGNING_IMX` unset, boot the eMMC image when the script stops, and rerun it on the same work directory. The header lists the other environment variables. Set `WORK` to keep the work directory: rerunning it on the same `WORK` skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys. Without `WORK` each run starts in a new temporary directory and creates a new pool.
+Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. With `SIGNING_IMX` set, the script waits after the reset for you to insert the signing log card, then loads the signing image; it needs a terminal for that ([bursa#1148](https://github.com/blinklabs-io/bursa/pull/1148)). Until that change lands, leave `SIGNING_IMX` unset, load the signing image yourself with the card inserted after the reset, and rerun the script on the same `WORK`. The header lists the other environment variables. Set `WORK` to keep the work directory: rerunning it on the same `WORK` skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys. Without `WORK` each run starts in a new temporary directory and creates a new pool.
 
 ## What is not built yet
 
