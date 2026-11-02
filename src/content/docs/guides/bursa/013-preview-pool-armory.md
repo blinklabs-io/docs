@@ -59,7 +59,7 @@ Every signature comes back with a second signature, from the same key, over the 
 - A synced Preview node whose socket Bursa can reach, for Steps 4 and 5. Start it as a relay early ([Step 3](#step-3-run-the-node) shows the three setups) and set `SOCKET` to its socket path. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers from v0.90.0.
 - A payer wallet Bursa can sign with. `bursa wallet create --output payer` writes `payer/payment.skey` and the address `payer/payment.addr`. Fund that address from the [Cardano testnet faucet](https://docs.cardano.org/cardano-testnets/tools/faucet): a new pool needs at least the 500 ada pool deposit, two 2 ada stake key deposits and fees.
 - A hardware wallet for the pledge funds
-- Paper, or a metal backup, for two mnemonics
+- Paper, or a metal backup, for three mnemonics
 
 Commands run in three places:
 
@@ -77,24 +77,25 @@ export CARDANO_NETWORK=preview
 
 Bursa defaults to `mainnet` when `CARDANO_NETWORK` is unset.
 
-## Step 1: Two mnemonics
+## Step 1: Three mnemonics
 
-Use two separate recovery phrases.
+Use three separate recovery phrases.
 
 1. **Pledge mnemonic, on the hardware wallet.** It holds the payment key for the pledge funds. It never touches the armory or the block producer.
 2. **Pool mnemonic, written down offline.** It derives the pool cold key and the owner key. Both are imported into the armory, and the paper copy is the recovery path.
+3. **Hot mnemonic, kept where KES rotations are done.** It derives the VRF and KES keys for the block producer. Every rotation needs it, so it cannot stay as far away as the pool mnemonic, and it cannot derive the cold key.
 
-![A paper slip holds the 24-word pool mnemonic. Bursa derives the pool cold key and the owner key, which are imported into the armory; the reward key, kept offline; and the VRF and KES keys, which go to the block producer.](/bursa-pool-mnemonic-slip.svg)
+![A paper slip holds the 24-word pool mnemonic. Bursa derives the pool cold key and the owner key, which are imported into the armory, and the reward key, kept offline. A separate hot mnemonic derives the VRF and KES keys, which go to the block producer.](/bursa-pool-mnemonic-slip.svg)
 
-One slip restores every key the pool needs:
+The pool slip restores the cold, owner and reward keys; the hot mnemonic restores the VRF and KES keys:
 
 | Key | Path | Command | Goes to |
 |---|---|---|---|
 | Pool cold key | `m/1853'/1815'/0'/0'` ([CIP-1853](https://cips.cardano.org/cip/CIP-1853)) | [`bursa key pool-cold`](/guides/bursa/008-key-commands/#pool-cold-key) | Armory |
 | Owner key | `m/1852'/1815'/0'/2/0` ([CIP-1852](https://cips.cardano.org/cip/CIP-1852)) | `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) | Armory |
 | Reward key | `m/1852'/1815'/1'/2/0` | [`bursa key stake`](/guides/bursa/008-key-commands/#stake-key) | Offline |
-| VRF key | Bursa seed rule | [`bursa key vrf`](/guides/bursa/008-key-commands/#vrf-verifiable-random-function-key-pair) | Block producer |
-| KES keys | Bursa seed rule, one `--index` per rotation | [`bursa key kes`](/guides/bursa/008-key-commands/#kes-key-pair) | Block producer |
+| VRF key | Bursa seed rule, hot mnemonic | [`bursa key vrf`](/guides/bursa/008-key-commands/#vrf-verifiable-random-function-key-pair) | Block producer |
+| KES keys | Bursa seed rule, hot mnemonic, one `--index` per rotation | [`bursa key kes`](/guides/bursa/008-key-commands/#kes-key-pair) | Block producer |
 
 The words come from [`bursa wallet create`](/guides/bursa/003-commands/#use-command-line-to-create-a-wallet-and-output-wallet-files), a 24-word [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic. Bursa turns the words into a root key as [CIP-3](https://cips.cardano.org/cip/CIP-3) describes (Icarus), then derives each key along its path.
 
@@ -140,16 +141,17 @@ This is a plain Ed25519 key. Its key hash and reward address differ from those o
 
 ### VRF and KES keys
 
-These live on the block producer. Generate them from the pool mnemonic:
+These live on the block producer. Derive them from the hot mnemonic, not the pool mnemonic. The pool mnemonic re-derives the cold key, so it stays offline; every KES rotation needs the mnemonic its KES keys come from.
 
 ```sh
-bursa key vrf --mnemonic-file pool/seed.txt \
+bursa wallet create --output ./hot
+bursa key vrf --mnemonic-file hot/seed.txt \
   --signing-key-file vrf.skey --verification-key-file vrf.vkey
-bursa key kes --mnemonic-file pool/seed.txt --index 0 \
+bursa key kes --mnemonic-file hot/seed.txt --index 0 \
   --signing-key-file kes.skey --verification-key-file kes.vkey
 ```
 
-Bursa derives VRF and KES seeds with its own rule, so only Bursa can re-derive them from the mnemonic. Use a new `--index` for each KES rotation.
+Bursa derives VRF and KES seeds with its own rule, so only Bursa can re-derive them from the mnemonic. Use a new `--index` for each KES rotation. Write the hot words down and keep `hot/seed.txt` where the rotations are done, apart from the pool mnemonic.
 
 ### Reward account key
 
@@ -226,10 +228,12 @@ The device returns `public_key` in base64; the pipe prints it as hex. Record the
 Cold keys live in SE050 objects 551878672 to 551878687 (`0x20e50010` to `0x20e5001f`). Pick a free one:
 
 ```sh
-jq -n --argjson id 551878672 --arg key "$(jq -r .cborHex pool-cold.skey)" \
-  '{cold_key_id: $id, signing_key: $key}' |
+jq -n --argjson id 551878672 --slurpfile key pool-cold.skey \
+  '{cold_key_id: $id, signing_key: $key[0].cborHex}' |
   curl -s -X POST http://10.0.0.1/provision/cold --data-binary @-
 ```
+
+`jq` reads the key from the file and `curl` reads the request from standard input, so the key never appears in a command line, where other processes and the shell history could see it.
 
 The device returns `public_key` and `pool_id` in hex. Compare the key with `pool-cold.vkey`: its `cborHex` is `5820` followed by the same hex. The device never overwrites a key: importing the same key again is confirmed, and a different key in the same object is refused. Only the wipe image deletes a key (see [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device)).
 
@@ -240,21 +244,21 @@ Delete `pool-cold.skey` from the offline machine afterwards. The mnemonic is the
 A profile ties the cold key to one network, one owner key and one reward account.
 
 ```sh
-curl -s -X POST http://10.0.0.1/provision/profile -d '{
-  "name": "mypool@preview",
-  "network_id": 0,
-  "slot": 0,
-  "cold_key_id": 551878672,
-  "reward_account": "e0<28-byte stake key hash in hex>",
-  "owner_signing_key": "<cborHex of owner.skey>"
-}'
+jq -n --slurpfile owner owner.skey '{
+  name: "mypool@preview",
+  network_id: 0,
+  slot: 0,
+  cold_key_id: 551878672,
+  reward_account: "e0<28-byte stake key hash in hex>",
+  owner_signing_key: $owner[0].cborHex
+}' | curl -s -X POST http://10.0.0.1/provision/profile --data-binary @-
 ```
 
 - `network_id` is 0 for every testnet.
 - `cold_key_id` is the object the import above used.
 - `slot` is a free profile slot, 0 to 31.
 - `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`, with the provisioning image.
-- `owner_signing_key` is `jq -r .cborHex owner.skey`. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
+- `owner_signing_key` is the `cborHex` of `owner.skey`, read from the file as for the cold key. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
 - Leave out `chain_counter` for a new pool. For a pool that has already forged, set it to the on-chain counter (see [Migrating an existing pool](#migrating-an-existing-pool)).
 
 The response holds the owner key: `owner_public_key` (base64) and `owner_key_hash`. Check the key against `owner.vkey`, then delete `owner.skey` from the offline machine.
@@ -510,11 +514,11 @@ helm upgrade --install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/cha
   --version 0.4.1
 ```
 
-Run the signer on the host the armory is plugged into, with an armory backend and a host key registered on the device (see [Register a host key](#register-a-host-key)). The operator connects with a TLS client certificate, so the signer needs a server certificate and the CA that issued the client certificate. Allow the pool's cold key only `opcert` requests, and only for that client:
+Run the signer on the host the armory is plugged into, with an armory backend and a host key registered on the device (see [Register a host key](#register-a-host-key)). The operator connects with a TLS client certificate, so the signer needs a server certificate and the CA that issued the client certificate. Use a CA that issues only this client certificate: the signer accepts any certificate from `client_ca_cert` whose subject matches a caller, so a shared cluster issuer lets any workload that can get a `dingo-operator` certificate request opcerts. Listen only on the address the operator reaches, not `0.0.0.0`. Allow the pool's cold key only `opcert` requests, and only for that client:
 
 ```yaml
 signer:
-  listen_address: "0.0.0.0"
+  listen_address: "<host address the operator reaches>"
   listen_port: 8090
   tls_cert_file: "/etc/bursa/signer/tls/server.crt"
   tls_key_file: "/etc/bursa/signer/tls/server.key"
@@ -531,6 +535,7 @@ signer:
       profile: "mypool@preview"
       identity_public_key: "<identity public key>"
       host_key_file: "/etc/bursa/armory-host.skey"
+      protocol: "2"
   keys:
     - hash: "<pool id hex>"
       backend: "armory"
@@ -540,7 +545,7 @@ signer:
       keys: ["<pool id hex>"]
 ```
 
-Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
+Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. `protocol: "2"` makes the signer ask the device for its signing summary and refuse firmware that cannot give one; the default, `"1"`, does not ask for it. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
 
 Store the client certificate, its key and the signer's CA for the operator:
 
@@ -749,7 +754,7 @@ The armory always issues the on-chain counter plus one, so the host only reports
 
 To rotate:
 
-1. Generate a new KES key with the next `--index`.
+1. Generate a new KES key from the hot mnemonic with the next `--index`.
 2. Query the pool for `on_chain_counter` and `current_kes_period`.
 3. Get the opcert from the armory with `armory-pool opcert`, as in Step 5.
 4. Replace `kes.skey` and `node.cert` on the producer and restart it. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
@@ -854,6 +859,8 @@ An open pull request adds a `TipNotAdvancing` reason on the `LedgerPipelineHealt
 | Pool mnemonic words | Paper, checked | Keep. The only backup of the cold and owner keys. |
 | `pool/seed.txt` | Offline machine | Delete once the armory is provisioned and the paper is checked. |
 | `pool-cold.skey`, `owner.skey`, other files in `pool/` | Offline machine | Delete after import. |
+| Hot mnemonic words | Paper | Keep. The backup of the VRF and KES keys. |
+| `hot/seed.txt` | Where KES rotations are done | Each rotation derives the next KES key from it. It cannot derive the cold key. |
 | `vrf.skey`, `kes.skey` | Block producer | Only on the producer. Delete other copies. |
 | `node.cert` (the opcert) | Block producer | Keep the current one with its `kes.skey`. Not secret, but with that `kes.skey` and `vrf.skey` it forges blocks, so after a rotation delete the old `node.cert` and `kes.skey` together. |
 | `kes.vkey` | Host | Needed only to issue its opcert. Delete it with its `kes.skey` at the next rotation. |
@@ -905,7 +912,7 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 | Armory | No new signatures | Restore the cold key and owner key from the pool mnemonic on a new device, with the same reward account. The pool, owner and pledge address stay the same. |
 | Pool mnemonic | No backup of the cold key | The armory keeps signing, but the SE050 cannot export the key. If the armory is lost too, the pool is gone and a new pool needs a new cold key. |
 | Pledge hardware wallet | Pledge funds | Restore from the pledge mnemonic. |
-| Block producer | No blocks | Restore VRF and KES keys from the pool mnemonic, then issue a new opcert. |
+| Block producer | No blocks | Restore VRF and KES keys from the hot mnemonic, then issue a new opcert. |
 
 ## Testing on Preview
 
