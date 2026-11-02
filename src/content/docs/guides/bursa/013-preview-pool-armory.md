@@ -8,9 +8,9 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. Resetting the signing log head from the wipe image is in an open pull request ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)).
+This guide describes work in progress. With a card in the slot, the signing image built from `main` stops answering at start, until an open pull request lands ([bursa#1145](https://github.com/blinklabs-io/bursa/pull/1145)). Build the firmware from that pull request's branch until it merges.
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)) and the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)) and the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
 
 The [gaps](#what-is-not-built-yet) section lists what is still open. Use Preview and test funds only.
 :::
@@ -348,7 +348,13 @@ armory-pool signlog -identity <identity public key> -host-key host.skey
 
 The device attests the current head for a fresh nonce, and `armory-pool` checks every entry and the chain under the pinned identity key. Add `-head-seq N -head-hash HEX` to also pin the latest entry you expect. A card taken out of the device is checked with `signlog-verify -identity <identity public key> -image <card image>`.
 
-The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. An open pull request ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)) adds `POST /wipe/signlog` to the wipe image, which deletes only the head; the signing image then formats a zeroed card and numbers entries from 1 again under the same identity.
+The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. To keep the keys, load the wipe image and delete only the head:
+
+```sh
+curl -s -X POST http://10.0.0.1/wipe/signlog -d '{"identity_public_key": "<identity public key>"}'
+```
+
+The signing image then formats a zeroed card and numbers entries from 1 again under the same identity. Keep the old card, or zero it before reuse: the device refuses a card with an old log once the head is reset.
 
 ### Provision from a microSD card
 
@@ -809,6 +815,8 @@ An opcert request below the floor is refused with `chain counter below the recor
 
 Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
 
+If the signing image shows up on USB but answers nothing, not even a ping, with a card in the slot, the firmware predates [bursa#1145](https://github.com/blinklabs-io/bursa/pull/1145): it runs out of DMA memory while it checks the card. Nothing is written to the card. Take the card out to confirm the device starts and its report says `signing log: NOT OPEN`, then flash an image with the fix and put the card back.
+
 On Kubernetes in `Auto` mode, read the `OpCertIssued` condition and the events with `kubectl describe dingonode producer -n cardano`. The reason names what failed:
 
 | Reason | Cause | Fix |
@@ -857,6 +865,8 @@ curl -s -X POST http://10.0.0.1/wipe/profile \
   -d '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}'
 ```
 
+Delete only the signing log head, to start a new log on a zeroed card: see [The signing log card](#the-signing-log-card).
+
 Wipe the device: every key and profile, host keys and the identity key included.
 
 ```sh
@@ -893,4 +903,4 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 
 ## What is not built yet
 
-- Resetting the signing log head without a device wipe ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)). See [The signing log card](#the-signing-log-card).
+- A signing image built from `main` that starts with the log card in the slot ([bursa#1145](https://github.com/blinklabs-io/bursa/pull/1145)). See [The signing log card](#the-signing-log-card).
