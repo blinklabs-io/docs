@@ -87,16 +87,16 @@ existing `TargetNumberOf*Peers` settings:
 - `DeadlineTargetNumberOfActivePeers` maps to `TargetNumberOfActivePeers`.
 
 The flat format remains valid and continues to use its existing top-level
-fields. Dingo rejects an envelope when `Version` is missing, is not an integer,
-or is not `2`; when `Configuration` is missing or is not an object; or when a
-supported section is not an object. Dingo also rejects duplicate keys in the
-envelope root, `Configuration`, or supported sections, including duplicates
-that resolve to the same flat field, such as `TargetNumberOfRootPeers` and
-`DeadlineTargetNumberOfRootPeers`. The envelope uses the same
-`TxSubmissionLogicVersion` validation as the flat format: `TxSubmissionLogicV1`
-is accepted, while `TxSubmissionLogicV2` and unknown values are rejected.
-Unrelated or unknown cardano-node settings are not newly supported by this
-format.
+fields. `Version` must be an integer with the value `2`, and the envelope must
+contain an object in `Configuration`. Each supported section must also contain
+an object. Dingo rejects an envelope that omits either required node or uses a
+different shape. Dingo also rejects duplicate keys in the envelope root,
+`Configuration`, or supported sections, including duplicates that resolve to
+the same flat field, such as `TargetNumberOfRootPeers` and
+`DeadlineTargetNumberOfRootPeers`. The envelope applies the same
+`TxSubmissionLogicVersion` validation as the flat format, so Dingo rejects
+invalid transaction submission logic in both formats. This format does not add
+support for unrelated or unknown cardano-node settings.
 
 ### Consensus provider
 
