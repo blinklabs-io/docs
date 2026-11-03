@@ -89,8 +89,9 @@ existing `TargetNumberOf*Peers` settings:
 The flat format remains valid and continues to use its existing top-level
 fields. `Version` must be an integer with the value `2`, and the envelope must
 contain an object in `Configuration`. Each supported section must also contain
-an object. Dingo rejects an envelope that omits either required node or uses a
-different shape. Dingo also rejects duplicate keys in the envelope root,
+an object. Dingo rejects an envelope that omits either required key or gives a
+required value a different shape. Dingo also rejects duplicate keys in the
+envelope root,
 `Configuration`, or supported sections, including duplicates that resolve to
 the same flat field, such as `TargetNumberOfRootPeers` and
 `DeadlineTargetNumberOfRootPeers`. The envelope applies the same
