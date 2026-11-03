@@ -51,14 +51,14 @@ Dingo は、Cardano ノード設定に従来のフラット形式と Version 2 �
 }
 ```
 
-各セクションの設定は、既存の Cardano ノード設定フィールドに反映されます。`Protocol` はジェネシスファイルとハッシュなどのプロトコル設定、`Testing` はテスト用ジェネシス設定とハードフォークのエポック設定、`Consensus` はコンセンサスモード、`Network` はピア共有とピア数の目標を指定します。Version 2 のネットワーク設定では、次のキーを既存のキーに対応付けます。
+Dingo は各セクションの設定を既存の Cardano ノード設定フィールドに反映します。`Protocol` はジェネシスファイルとハッシュなどのプロトコル設定、`Testing` はテスト用ジェネシス設定とハードフォークのエポック設定、`Consensus` はコンセンサスモード、`Network` はピア共有とピア数の目標を指定します。Version 2 のネットワーク設定では、次のキーを既存のキーに対応付けます。
 
 - `DeadlineTargetNumberOfRootPeers` → `TargetNumberOfRootPeers`
 - `DeadlineTargetNumberOfKnownPeers` → `TargetNumberOfKnownPeers`
 - `DeadlineTargetNumberOfEstablishedPeers` → `TargetNumberOfEstablishedPeers`
 - `DeadlineTargetNumberOfActivePeers` → `TargetNumberOfActivePeers`
 
-Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。`Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値は拒否されます。ルート、`Configuration`、セクション内の重複キーも拒否され、別のキーで同じ設定フィールドを指定する衝突も含まれます。従来のフラット形式は引き続き使用できます。エンベロープ内でも `TxSubmissionLogicVersion` を検証し、`TxSubmissionLogicV1` 以外の値を拒否します。
+Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。Dingo は `Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値を拒否します。Dingo はルート、`Configuration`、セクション内の重複キーを拒否し、別のキーで同じ設定フィールドを指定する衝突も拒否します。従来のフラット形式は引き続き使用できます。エンベロープでも、表に示す `TxSubmissionLogicVersion` の検証を適用します。
 
 <a id="configuration-areas"></a>
 
