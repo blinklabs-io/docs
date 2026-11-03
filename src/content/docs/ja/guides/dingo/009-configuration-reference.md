@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.90.3 設定リファレンス
-description: Dingo v0.90.3 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.90.4 設定リファレンス
+description: Dingo v0.90.4 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.90.3 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.3 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.90.4 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.4 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -21,6 +21,44 @@ Cardano ノード設定ファイル（YAML または JSON）に記載する項�
 | 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値、検証、動作 |
 | --- | --- | --- | --- | --- |
 | トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
+
+Dingo は、Cardano ノード設定に従来のフラット形式と Version 2 のバージョン付きエンベロープ形式の両方を受け付けます。Version 2 形式では、トップレベルの `Version` と `Configuration` の下に設定を配置します。
+
+```json
+{
+  "Version": 2,
+  "Configuration": {
+    "Protocol": {
+      "ByronGenesisFile": "byron-genesis.json",
+      "ShelleyGenesisFile": "shelley-genesis.json",
+      "ShelleyGenesisHash": "<hash>"
+    },
+    "Testing": {
+      "DijkstraGenesisFile": "dijkstra-genesis.json",
+      "DijkstraGenesisHash": "<hash>"
+    },
+    "Consensus": {
+      "ConsensusMode": "GenesisMode"
+    },
+    "Network": {
+      "PeerSharing": false,
+      "DeadlineTargetNumberOfRootPeers": 7,
+      "DeadlineTargetNumberOfKnownPeers": 80,
+      "DeadlineTargetNumberOfEstablishedPeers": 30,
+      "DeadlineTargetNumberOfActivePeers": 15
+    }
+  }
+}
+```
+
+各セクションの設定は、既存の Cardano ノード設定フィールドに反映されます。`Protocol` はジェネシスファイルとハッシュなどのプロトコル設定、`Testing` はテスト用ジェネシス設定とハードフォークのエポック設定、`Consensus` はコンセンサスモード、`Network` はピア共有とピア数の目標を指定します。Version 2 のネットワーク設定では、次のキーを既存のキーに対応付けます。
+
+- `DeadlineTargetNumberOfRootPeers` → `TargetNumberOfRootPeers`
+- `DeadlineTargetNumberOfKnownPeers` → `TargetNumberOfKnownPeers`
+- `DeadlineTargetNumberOfEstablishedPeers` → `TargetNumberOfEstablishedPeers`
+- `DeadlineTargetNumberOfActivePeers` → `TargetNumberOfActivePeers`
+
+Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。`Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値は拒否されます。ルート、`Configuration`、セクション内の重複キーも拒否され、別のキーで同じ設定フィールドを指定する衝突も含まれます。従来のフラット形式は引き続き使用できます。エンベロープ内でも `TxSubmissionLogicVersion` を検証し、`TxSubmissionLogicV1` 以外の値を拒否します。
 
 <a id="configuration-areas"></a>
 
