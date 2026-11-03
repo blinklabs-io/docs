@@ -8,7 +8,7 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. With a card in the slot, the signing image built from `main` stops answering at start, until an open pull request lands ([bursa#1145](https://github.com/blinklabs-io/bursa/pull/1145)). Build the firmware from that pull request's branch until it merges.
+This guide describes work in progress. Build the firmware from Bursa `main`.
 
 The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)) and the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
 
@@ -212,7 +212,9 @@ curl http://10.0.0.1/
 
 The device answers with its bring-up report in plain text: the board model, the SE050 applet version, and the checks it ran at boot.
 
-Every `POST` below sends `Content-Type: application/json` and goes to `10.0.0.1` by address. Firmware with [bursa#1165](https://github.com/blinklabs-io/bursa/pull/1165) refuses a `POST` without that content type, and any request whose `Host` is not `10.0.0.1`, so that a web page open on the host cannot reach the device.
+Every `POST` below sends `Content-Type: application/json` and goes to `10.0.0.1` by address. The firmware refuses a `POST` without that content type ([bursa#1165](https://github.com/blinklabs-io/bursa/pull/1165)), and any request whose `Host` is not `10.0.0.1`, so that a web page open on the host cannot reach the device.
+
+The setup steps below go out unsigned with `curl`, which a device accepts only until its first host key is registered ([Register a host key](#register-a-host-key)). After that, provisioning and wipe requests must be signed with a host key ([bursa#1172](https://github.com/blinklabs-io/bursa/pull/1172)), and `armory-pool` sends them.
 
 ### Create the identity key
 
@@ -241,6 +243,8 @@ The device returns `public_key` and `pool_id` in hex. Compare the key with `pool
 
 Delete `pool-cold.skey` from the offline machine afterwards. The mnemonic is the backup.
 
+The device never creates a cold key itself. A key made inside the SE050 could not be exported or backed up, so a lost or broken device would lose the pool for good.
+
 ### Create the profile
 
 A profile ties the cold key to one network, one owner key and one reward account.
@@ -259,7 +263,7 @@ jq -n --slurpfile owner owner.skey '{
 - `network_id` is 0 for every testnet.
 - `cold_key_id` is the object the import above used.
 - `slot` is a free profile slot, 0 to 31.
-- `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`, with the provisioning image.
+- `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`, with the provisioning image and a host key: `armory-pool -host-key host.skey provision reward`.
 - `owner_signing_key` is the `cborHex` of `owner.skey`, read from the file as for the cold key. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
 - Leave out `chain_counter` for a new pool. For a pool that has already forged, set it to the on-chain counter (see [Migrating an existing pool](#migrating-an-existing-pool)).
 
@@ -280,7 +284,13 @@ The response lists the registered keys in `host_keys`. The device holds up to fo
 
 Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
 
-To revoke a key, send the same `host-key.json` to `/provision/host-key/revoke` from the provisioning image. Revoking a key never touches the pool keys.
+From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile` or `signlog`.
+
+To revoke a key, send the same `host-key.json` from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys.
+
+```sh
+armory-pool -host-key host.skey provision host-key/revoke < host-key.json
+```
 
 ### Switch to the signing image
 
@@ -373,7 +383,7 @@ If the card is pulled while the signing image runs, the device refuses to sign. 
 The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. To keep the keys, load the wipe image and delete only the head:
 
 ```sh
-curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/signlog -d '{"identity_public_key": "<identity public key>"}'
+echo '{"identity_public_key": "<identity public key>"}' | armory-pool -host-key host.skey wipe signlog
 ```
 
 The signing image then formats a zeroed card and numbers entries from 1 again under the same identity. Keep the old card, or zero it before reuse: the device refuses a card with an old log once the head is reset.
@@ -778,8 +788,8 @@ To recover:
 
    ```sh
    armory-boot-usb -i armory-provision.imx
-   curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/floor \
-     -d '{"profile": "mypool@preview", "chain_counter": <on-chain counter>}'
+   echo '{"profile": "mypool@preview", "chain_counter": <on-chain counter>}' |
+     armory-pool -host-key host.skey provision floor
    ```
 
 3. Start the signing image again: switch toward eMMC with the log card in, then plug the board in. Issue a new opcert and install it.
@@ -818,7 +828,7 @@ A pool that already forges can move its cold key onto the armory.
 
 | Message | Cause | Fix |
 |---|---|---|
-| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `/provision/reward` on the provisioning image |
+| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `armory-pool -host-key host.skey provision reward` on the provisioning image |
 | `a second pool registration in one body` | The body carries two pool registration certificates; the second would replace the first's parameters on chain | Put one `pool-registration` certificate in the transaction |
 | `pool owners must be exactly the device owner` | The certificate lists another owner, or more than one | Pass only `device/owner.vkey` as `--owner-stake-vkey` |
 | `pool registration for another operator` | `--cold-vkey` is not this profile's cold key | Use `pool-cold.vkey` for this profile |
@@ -878,7 +888,7 @@ Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced
 
 ## Removing a profile or wiping the device
 
-Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. The report from `curl http://10.0.0.1/` shows `wipe build`. Until an open pull request lands ([bursa#1146](https://github.com/blinklabs-io/bursa/pull/1146)), the wipe image's report also tries the signing log card and ends in `signing log: NOT OPEN` and `RESULT: FAIL` with the card out; the wipe endpoints work regardless.
+Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. The report from `curl http://10.0.0.1/` shows `wipe build`.
 
 List what is on the device first:
 
@@ -889,8 +899,8 @@ curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/objects
 Remove one profile: its owner key, its cold key and its record. A cold key that another profile still names stays. The slot and the freed cold key object can be provisioned again.
 
 ```sh
-curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/profile \
-  -d '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}'
+echo '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}' |
+  armory-pool -host-key host.skey wipe profile
 ```
 
 Delete only the signing log head, to start a new log on a zeroed card: see [The signing log card](#the-signing-log-card).
@@ -927,12 +937,9 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 - the first opcert, cross-checked with `opcert-check` when `OPCERT_CHECK` names it (with `HOST_KEY` set, every signing request is host-authenticated);
 - retirement, when `RETIRE=1` is set.
 
-Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. With `SIGNING_IMX` set, the script waits after the reset for you to insert the signing log card, then loads the signing image; it needs a terminal for that, and checks for one before it resets the board ([bursa#1148](https://github.com/blinklabs-io/bursa/pull/1148)). Before the first signature it checks that the signing image's report says `signing log: open`, and stops with the report's reason otherwise. Until that change lands, leave `SIGNING_IMX` unset, load the signing image yourself with the card inserted after the reset, and rerun the script on the same `WORK`. The header lists the other environment variables. Set `WORK` to keep the work directory: rerunning it on the same `WORK` skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys. Without `WORK` each run starts in a new temporary directory and creates a new pool.
+Start the device on the provisioning image. With `SIGNING_IMX` set to the signing image, the script resets the board and loads it after provisioning; without it, the script stops and asks you to load it. With `SIGNING_IMX` set, the script waits after the reset for you to insert the signing log card, then loads the signing image; it needs a terminal for that, and checks for one before it resets the board ([bursa#1148](https://github.com/blinklabs-io/bursa/pull/1148)). Before the first signature it checks that the signing image's report says `signing log: open`, and stops with the report's reason otherwise. The header lists the other environment variables. Set `WORK` to keep the work directory: rerunning it on the same `WORK` skips the steps already done and re-registers the existing pool, so repeated runs use no new device keys. Without `WORK` each run starts in a new temporary directory and creates a new pool.
 
 ## What is not built yet
 
-- A signing image built from `main` that starts with the log card in the slot ([bursa#1145](https://github.com/blinklabs-io/bursa/pull/1145)). See [The signing log card](#the-signing-log-card).
-- Secure boot ([bursa#1112](https://github.com/blinklabs-io/bursa/issues/1112)). Until the board's fuses are burnt, its boot ROM runs any image from the eMMC, a card or USB recovery mode, and that image can use the keys in the SE050, so keep the armory where nobody else can reach it. Open pull requests sign every image with a high assurance boot (HAB) key ([bursa#1171](https://github.com/blinklabs-io/bursa/pull/1171)) and print the boot ROM's HAB status in the report ([bursa#1174](https://github.com/blinklabs-io/bursa/pull/1174)): on an unfused board a signed image reports `hab: config open, state non-secure, no events`, and an unsigned one lists the failed checks. Burning the fuses cannot be undone and is not covered here.
-- Provisioning and wipe requests signed with a host key once one is registered ([bursa#1172](https://github.com/blinklabs-io/bursa/pull/1172)). Until then, anyone who boots the provisioning or wipe image can change or delete what is on the device.
+- Secure boot ([bursa#1112](https://github.com/blinklabs-io/bursa/issues/1112)). Until the board's fuses are burnt, its boot ROM runs any image from the eMMC, a card or USB recovery mode, and that image can use the keys in the SE050, so keep the armory where nobody else can reach it. Every image can be signed with a high assurance boot (HAB) key ([bursa#1171](https://github.com/blinklabs-io/bursa/pull/1171)), and the report prints the boot ROM's HAB status ([bursa#1174](https://github.com/blinklabs-io/bursa/pull/1174)): on an unfused board a signed image reports `hab: config open, state non-secure, no events`, and an unsigned one lists the failed checks. Burning the fuses cannot be undone and is not covered here.
 - Pool registration pins: the VRF key hash and metadata hash, with bounds on pledge, cost and margin ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)). Until then, the device checks only the operator, the owner and the reward account of a registration.
-- A ttl on every body the device signs, shown in its summary as `fee=… ttl=…` ([bursa#1168](https://github.com/blinklabs-io/bursa/pull/1168)). `bursa tx build` already sets one.
