@@ -11,8 +11,8 @@ Dingo es la implementación de un nodo de Cardano en Go de Blink Labs. Elige la 
 
 - [Inicio rápido](/es/guides/dingo/002-quick-start-overview/) — descarga Dingo e inicia un nodo Preview.
 - [Configuración y modos de almacenamiento (en inglés)](/es/guides/dingo/005-node-configuration/) — elige y configura un relay, productor de bloques o nodo de API.
-- [Referencia de configuración de Dingo (en inglés)](/es/guides/dingo/009-configuration-reference/) — consulta todos los ajustes de Dingo v0.90.3.
-- [Descargar `dingo.yaml.example` para Dingo v0.90.3](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example).
+- [Referencia de configuración de Dingo (en inglés)](/es/guides/dingo/009-configuration-reference/) — consulta todos los ajustes de Dingo v0.90.4.
+- [Descargar `dingo.yaml.example` para Dingo v0.90.4](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example).
 - [Referencia del benchmark de LeiosDB (en inglés)](/es/guides/dingo/010-leios-db-benchmark/).
 - [Arranque inicial y mantenimiento de datos (en inglés)](/es/guides/dingo/007-bootstrap-and-data-maintenance/) — usa Mithril y administra los datos locales del nodo.
 - [Ejecutar Dingo como servicio](/es/guides/dingo/003-create-start-up-service/) y [supervisarlo con Grafana](/es/guides/dingo/spo-guides/008-grafana-dashboard/).
