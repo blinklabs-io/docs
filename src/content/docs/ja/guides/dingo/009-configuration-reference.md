@@ -22,7 +22,7 @@ Cardano ノード設定ファイル（YAML または JSON）に記載する項�
 | --- | --- | --- | --- | --- |
 | トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
 
-Dingo は、Cardano ノード設定に従来のフラット形式と Version 2 のバージョン付きエンベロープ形式の両方を受け付けます。Version 2 形式では、トップレベルの `Version` と `Configuration` の下に設定を配置します。
+Dingo は、Cardano ノード設定に従来のフラット形式と cardano-node の Version 2 エンベロープ形式の両方を受け付けます。Version 2 形式では、トップレベルに整数の `Version: 2` を置き、`Configuration` の下に設定を配置します。
 
 ```json
 {
@@ -51,7 +51,7 @@ Dingo は、Cardano ノード設定に従来のフラット形式と Version 2 �
 }
 ```
 
-Dingo は各セクションの設定を既存の Cardano ノード設定フィールドに反映します。`Protocol` はジェネシスファイルとハッシュなどのプロトコル設定、`Testing` はテスト用ジェネシス設定とハードフォークのエポック設定、`Consensus` はコンセンサスモード、`Network` はピア共有とピア数の目標を指定します。Version 2 のネットワーク設定では、次のキーを既存のキーに対応付けます。
+Dingo は各セクションの設定を既存の Cardano ノード設定フィールドに反映します。`Protocol` はジェネシスファイル、ハッシュ、チェックポイントなどのプロトコル設定、`Testing` はテスト用ジェネシス設定とハードフォークのエポック設定、`Consensus` はコンセンサスモード、`Network` はピア共有とピア数の目標を指定します。Version 2 のネットワーク設定では、次のキーを既存のキーに対応付けます。
 
 - `DeadlineTargetNumberOfRootPeers` → `TargetNumberOfRootPeers`
 - `DeadlineTargetNumberOfKnownPeers` → `TargetNumberOfKnownPeers`
