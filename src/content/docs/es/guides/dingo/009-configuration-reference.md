@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.90.3"
-description: Referencia y ejemplo completo de configuración de Dingo v0.90.3.
+title: "Referencia de configuración de Dingo v0.90.4"
+description: Referencia y ejemplo completo de configuración de Dingo v0.90.4.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.90.3. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.3](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.90.4. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.4](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -18,6 +18,29 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Este es el único valor aceptado y corresponde a la estrategia heredada de recepción por par implementada por Dingo. Dingo rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
+
+El archivo de configuración del nodo Cardano admite tanto el formato plano existente como el formato envolvente con `Version: 2`. En el formato envolvente, `Version` debe ser el entero `2` y `Configuration` debe ser un objeto. Un ejemplo compacto es:
+
+```yaml
+Version: 2
+Configuration:
+  Protocol:
+    ByronGenesisFile: byron-genesis.json
+    ShelleyGenesisFile: shelley-genesis.json
+  Testing:
+    DijkstraGenesisFile: dijkstra-genesis.json
+  Consensus:
+    ConsensusMode: GenesisMode
+  Network:
+    DeadlineTargetNumberOfRootPeers: 7
+    DeadlineTargetNumberOfKnownPeers: 80
+    DeadlineTargetNumberOfEstablishedPeers: 30
+    DeadlineTargetNumberOfActivePeers: 15
+```
+
+Dingo asigna las secciones `Protocol`, `Testing`, `Consensus` y `Network` a los campos existentes de configuración del nodo. `Protocol` contiene la configuración de los archivos y hashes de génesis; `Testing` contiene la configuración de génesis de Dijkstra y las anulaciones de épocas de bifurcación; `Consensus` contiene `ConsensusMode`; y `Network` contiene los ajustes de red, incluido `PeerSharing` y los objetivos de pares. En `Network`, Dingo asigna `DeadlineTargetNumberOfRootPeers`, `DeadlineTargetNumberOfKnownPeers`, `DeadlineTargetNumberOfEstablishedPeers` y `DeadlineTargetNumberOfActivePeers` respectivamente a `TargetNumberOfRootPeers`, `TargetNumberOfKnownPeers`, `TargetNumberOfEstablishedPeers` y `TargetNumberOfActivePeers`.
+
+Dingo rechaza los datos del formato envolvente si falta `Version` o `Configuration`, si `Version` no es el entero `2`, si `Configuration` o una sección admitida no es un objeto, o si el archivo usa una versión no admitida. Dingo también rechaza cualquier clave duplicada, incluidas las que aparecen en distintas secciones o las que establecen el mismo campo efectivo, como un objetivo `TargetNumberOf*Peers` y su alias `DeadlineTargetNumberOf*Peers`. Dentro del formato envolvente, Dingo aplica igualmente la validación de `TxSubmissionLogicVersion`: solo acepta `TxSubmissionLogicV1` y rechaza los valores no válidos, incluido `TxSubmissionLogicV2`, durante la carga.
 
 ## Áreas de configuración
 
@@ -332,7 +355,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.90.3 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.90.4 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 

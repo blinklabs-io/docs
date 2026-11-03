@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.90.3 設定リファレンス
-description: Dingo v0.90.3 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.90.4 設定リファレンス
+description: Dingo v0.90.4 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.90.3 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.3 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.90.4 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.4 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -21,6 +21,44 @@ Cardano ノード設定ファイル（YAML または JSON）に記載する項�
 | 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値、検証、動作 |
 | --- | --- | --- | --- | --- |
 | トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
+
+Dingo は、Cardano ノード設定に従来のフラット形式と cardano-node の Version 2 エンベロープ形式の両方を受け付けます。Version 2 形式では、トップレベルに整数の `Version: 2` を置き、`Configuration` の下に設定を配置します。
+
+```json
+{
+  "Version": 2,
+  "Configuration": {
+    "Protocol": {
+      "ByronGenesisFile": "byron-genesis.json",
+      "ShelleyGenesisFile": "shelley-genesis.json",
+      "ShelleyGenesisHash": "<hash>"
+    },
+    "Testing": {
+      "DijkstraGenesisFile": "dijkstra-genesis.json",
+      "DijkstraGenesisHash": "<hash>"
+    },
+    "Consensus": {
+      "ConsensusMode": "GenesisMode"
+    },
+    "Network": {
+      "PeerSharing": false,
+      "DeadlineTargetNumberOfRootPeers": 7,
+      "DeadlineTargetNumberOfKnownPeers": 80,
+      "DeadlineTargetNumberOfEstablishedPeers": 30,
+      "DeadlineTargetNumberOfActivePeers": 15
+    }
+  }
+}
+```
+
+Dingo は各セクションの設定を既存の Cardano ノード設定フィールドに反映します。`Protocol` はジェネシスファイル、ハッシュ、チェックポイントなどのプロトコル設定、`Testing` はテスト用ジェネシス設定とハードフォークのエポック設定、`Consensus` はコンセンサスモード、`Network` はピア共有とピア数の目標を指定します。Version 2 のネットワーク設定では、次のキーを既存のキーに対応付けます。
+
+- `DeadlineTargetNumberOfRootPeers` → `TargetNumberOfRootPeers`
+- `DeadlineTargetNumberOfKnownPeers` → `TargetNumberOfKnownPeers`
+- `DeadlineTargetNumberOfEstablishedPeers` → `TargetNumberOfEstablishedPeers`
+- `DeadlineTargetNumberOfActivePeers` → `TargetNumberOfActivePeers`
+
+Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。Dingo は `Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値を拒否します。Dingo はルート、`Configuration`、セクション内の重複キーを拒否し、別のキーで同じ設定フィールドを指定する衝突も拒否します。従来のフラット形式は引き続き使用できます。エンベロープでも、表に示す `TxSubmissionLogicVersion` の検証を適用します。
 
 <a id="configuration-areas"></a>
 
@@ -386,7 +424,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.90.3 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.90.4 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 

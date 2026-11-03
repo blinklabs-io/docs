@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.90.3 Configuration Reference
-description: Complete, release-specific Dingo v0.90.3 configuration reference and example.
+title: Dingo v0.90.4 Configuration Reference
+description: Complete, release-specific Dingo v0.90.4 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.90.3. The complete
+This page covers the configuration shipped with Dingo v0.90.4. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example).
-The same file is available in the [Dingo v0.90.3 source](https://github.com/blinklabs-io/dingo/blob/v0.90.3/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example).
+The same file is available in the [Dingo v0.90.4 source](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -46,6 +46,58 @@ key through a native CLI flag or environment variable.
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
 | Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+
+### Cardano node Version 2 envelope configuration
+
+Dingo accepts both the existing flat Cardano node configuration and the Version 2
+envelope format. A document with a top-level `Version` or `Configuration` key
+uses the envelope format and must include both keys. The supported sections map
+their fields to the corresponding Cardano node settings:
+
+- `Configuration.Protocol` supplies protocol settings, including genesis file
+  paths and hashes.
+- `Configuration.Testing` supplies testing genesis settings and hard fork
+  overrides.
+- `Configuration.Consensus` supplies consensus settings such as
+  `ConsensusMode`.
+- `Configuration.Network` supplies network settings. Same-name fields remain
+  in this section, including `PeerSharing`.
+
+```yaml
+Version: 2
+Configuration:
+  Protocol:
+    ByronGenesisFile: byron-genesis.json
+  Testing:
+    DijkstraGenesisFile: dijkstra-genesis.json
+  Consensus:
+    ConsensusMode: GenesisMode
+  Network:
+    PeerSharing: false
+    DeadlineTargetNumberOfRootPeers: 7
+```
+
+The four `Configuration.Network.DeadlineTargetNumberOf*Peers` fields map to the
+existing `TargetNumberOf*Peers` settings:
+
+- `DeadlineTargetNumberOfRootPeers` maps to `TargetNumberOfRootPeers`.
+- `DeadlineTargetNumberOfKnownPeers` maps to `TargetNumberOfKnownPeers`.
+- `DeadlineTargetNumberOfEstablishedPeers` maps to
+  `TargetNumberOfEstablishedPeers`.
+- `DeadlineTargetNumberOfActivePeers` maps to `TargetNumberOfActivePeers`.
+
+The flat format remains valid and continues to use its existing top-level
+fields. `Version` must be an integer with the value `2`, and the envelope must
+contain an object in `Configuration`. Each supported section must also contain
+an object. Dingo rejects an envelope that omits either required key or gives a
+required value a different shape. Dingo also rejects duplicate keys in the
+envelope root,
+`Configuration`, or supported sections, including duplicates that resolve to
+the same flat field, such as `TargetNumberOfRootPeers` and
+`DeadlineTargetNumberOfRootPeers`. The envelope applies the same
+`TxSubmissionLogicVersion` validation as the flat format, so Dingo rejects
+invalid transaction submission logic in both formats. This format does not add
+support for unrelated or unknown cardano-node settings.
 
 ### Consensus provider
 
@@ -496,7 +548,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.90.3 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.90.4 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.

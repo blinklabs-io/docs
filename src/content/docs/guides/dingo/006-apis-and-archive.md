@@ -93,8 +93,8 @@ Dingo rejects startup for a non-loopback host with authenticated mutation
 access. Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
 
-The complete v0.90.3 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.3/dingo.yaml.example) are
+The complete v0.90.4 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
