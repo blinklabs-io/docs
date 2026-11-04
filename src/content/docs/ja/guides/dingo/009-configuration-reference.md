@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.90.4 設定リファレンス
-description: Dingo v0.90.4 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.90.5 設定リファレンス
+description: Dingo v0.90.5 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.90.4 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.4 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.90.5 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.5 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.5/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -71,7 +71,7 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 | ログと TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | ログ出力を選択し、対応する API または Bark リスナーを保護します。 |
 | ストレージと API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | 保存する履歴、ストレージプロバイダー、トランザクションの順序、アプリケーション API を選択します。 |
 | コンセンサスとプラグインの選択 | `plugins.consensus` | ノードで使用するコンセンサスプロバイダーを選択します。 |
-| ブートストラップと同期 | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | スナップショットまたはジェネシスからのブートストラップ、同期、過去のデータの検証を設定します。 |
+| ブートストラップと同期 | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | スナップショットまたはジェネシスからのブートストラップ、同期、過去のデータの検証を設定します。 |
 | ピア管理 | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | ピア数の目標、取得元ごとの割り当て、着信ピアのポリシーを設定します。 |
 | ブロック生成と台帳ルール | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | ブロック生成鍵、安全性のしきい値、オプションの台帳動作を設定します。 |
 | アーカイブとデータベースのライフサイクル | `bark*`, `historyExpiry`, `databaseLifecycle` | アーカイブデータの配信や取得、ローカル履歴の期限切れ、スナップショットの管理を設定します。 |
@@ -171,7 +171,8 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| 裏付け確認用ピア | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | 既定値は `1` です。高速な取得元が Genesis 選択を駆動するには、独立した 1 つのピアから同じ最近のブロックが報告される必要があります。意図的な単一ピアまたはテスト構成でこの確認を無効にするには、明示的に `0` を設定します。 |
+| 裏付け確認用ピア | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | 既定値は `0` です。裏付け確認ゲートは既定で無効です。必要な場合は、正の値を明示的に設定して有効にします。 |
+| Genesis の control group | `genesisBootstrap.controlGroups` | — | — | ネットワーク固有の control group は暗黙には提供されません。固定の control-group セットが必要な場合は、このフィールドを明示的に設定します。 |
 
 Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genesis チェーン選択を無効にします。`genesisBootstrap` が有効で、交差ポイントなしに起点から起動した場合も同じです。この場合、Dingo は Genesis の密度、裏付け確認、patience による選択を適用せず、Cardano の設定に従います。
 
@@ -380,6 +381,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
 | `node-parity from-genesis` Koios API 鍵ファイル | — | `--koios-api-key-file` | — | `--koios-api-key` の代わりに使用します。Koios リクエストに使用する API 鍵をファイルで指定します。 |
+| `node-parity from-genesis` の境界キャプチャディレクトリ | — | `--boundary-capture-dir` | — | from-genesis の UTxO 比較フローで使用する任意の境界キャプチャディレクトリを指定します。 |
 
 ファイルから読み取る値は、次の要件を満たす必要があります。
 
@@ -424,7 +426,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.90.4 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.90.5 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
