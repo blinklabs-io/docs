@@ -172,7 +172,7 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
 | 裏付け確認用ピア | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | 既定値は `0` です。裏付け確認ゲートは既定で無効です。必要な場合は、正の値を明示的に設定して有効にします。 |
-| Genesis の control group | `genesisBootstrap.controlGroups` | — | — | ネットワーク固有の control group は暗黙には提供されません。固定の control-group セットが必要な場合は、このフィールドを明示的に設定します。 |
+| Genesis の control group | `genesisBootstrap.controlGroups` | — | — | ネットワーク固有の control group は暗黙には提供されません。固定の control group のセットが必要な場合は、このフィールドを明示的に設定します。 |
 
 Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genesis チェーン選択を無効にします。`genesisBootstrap` が有効で、交差ポイントなしに起点から起動した場合も同じです。この場合、Dingo は Genesis の密度、裏付け確認、patience による選択を適用せず、Cardano の設定に従います。
 
