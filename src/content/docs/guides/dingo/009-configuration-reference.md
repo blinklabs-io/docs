@@ -232,7 +232,7 @@ chunk, and integrity requirements.
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` by default, which disables the corroboration gate. Set a positive value to explicitly enable the required corroboration behavior. |
-| Genesis control groups | `genesisBootstrap.controlGroups` | — | — | Dingo no longer injects network-specific control groups implicitly. Configure this field explicitly when a fixed control-group set is required. |
+| Genesis control groups | `genesisBootstrap.controlGroups` | — | — | Dingo no longer supplies network-specific control groups implicitly. Configure this field explicitly to use a fixed control-group set. |
 
 For Musashi, a Cardano node configuration with `ConsensusMode: PraosMode`
 disables Genesis chain selection, even when `genesisBootstrap` is enabled and
