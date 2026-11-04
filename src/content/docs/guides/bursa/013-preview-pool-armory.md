@@ -892,7 +892,7 @@ On Kubernetes in `Auto` mode, read the `OpCertIssued` condition and the events w
 | `OnChainCounterUnknown` | The operator has no fresh on-chain counter for the pool | Check `nodeToClient.enabled` and the `OnChainCounterAvailable` condition. A pool that has never forged has none; see [A new pool](#a-new-pool) |
 | `SecretUpdateFailed` | The operator cannot write the keys Secret | Install the chart with `rbac.keySecretsUpdate=true` and the Secret's name in `rbac.keySecretNames` |
 
-An open pull request adds a `TipNotAdvancing` reason on the `LedgerPipelineHealthy` condition for a node whose tip stops moving ([dingo-operator#115](https://github.com/blinklabs-io/dingo-operator/pull/115)).
+From chart 0.4.1, a node whose tip stops moving shows the `TipNotAdvancing` reason on the `LedgerPipelineHealthy` condition ([dingo-operator#115](https://github.com/blinklabs-io/dingo-operator/pull/115)).
 
 ## Keys to keep and delete
 
@@ -972,4 +972,3 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 ## What is not built yet
 
 - Secure boot ([bursa#1112](https://github.com/blinklabs-io/bursa/issues/1112)). Until the board's fuses are burnt, its boot ROM runs any image from the eMMC, a card or USB recovery mode, and that image can use the keys in the SE050, so keep the armory where nobody else can reach it. Every image can be signed with a high assurance boot (HAB) key ([bursa#1171](https://github.com/blinklabs-io/bursa/pull/1171)), and the report prints the boot ROM's HAB status ([bursa#1174](https://github.com/blinklabs-io/bursa/pull/1174)): on an unfused board a signed image reports `hab: config open, state non-secure, no events`, and an unsigned one lists the failed checks. Burning the fuses cannot be undone and is not covered here.
-- Pool registration pins: the VRF key hash and metadata hash, with bounds on pledge, cost and margin ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)). Until then, the device checks only the operator, the owner and the reward account of a registration.
