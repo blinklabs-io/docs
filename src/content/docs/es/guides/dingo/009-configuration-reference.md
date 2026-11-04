@@ -317,7 +317,7 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
 | Archivo de clave Koios de `node-parity from-genesis` | — | `--koios-api-key-file` | — | Sustituye a `--koios-api-key`. Aporta la clave API de la solicitud Koios. |
-| Directorio de captura de límites de `node-parity from-genesis` | — | `--boundary-capture-dir` | — | Opcional. El operador puede indicar un directorio de capturas de límites para el flujo de comparación de UTxO desde génesis. |
+| Directorio de captura de límites de `node-parity from-genesis` | — | `--boundary-capture-dir` | — | El operador puede indicar un directorio de capturas de límites para la comparación de UTxO desde génesis. |
 
 Cada valor respaldado por archivos debe cumplir estos requisitos:
 
