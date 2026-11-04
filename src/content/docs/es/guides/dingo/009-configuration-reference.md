@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.90.4"
-description: Referencia y ejemplo completo de configuración de Dingo v0.90.4.
+title: "Referencia de configuración de Dingo v0.90.5"
+description: Referencia y ejemplo completo de configuración de Dingo v0.90.5.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.90.4. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.4](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.90.5. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.90.5](https://github.com/blinklabs-io/dingo/blob/v0.90.5/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -51,7 +51,7 @@ Dingo rechaza los datos del formato envolvente si falta `Version` o `Configurati
 | Registro y TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Selecciona la salida de registros y protege los servicios compatibles de API o Bark. |
 | Almacenamiento y API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Elige el historial almacenado, proveedores de almacenamiento, orden de transacciones y API de aplicaciones. |
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
-| Arranque y sincronización | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configura el arranque desde instantáneas o génesis, la sincronización y la validación histórica. |
+| Arranque y sincronización | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configura el arranque desde instantáneas o génesis, la sincronización y la validación histórica. |
 | Gestión de los pares | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Establece objetivos de pares, cuotas de origen y políticas de pares entrantes. |
 | Producción de bloques y reglas del ledger | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
 | Archivo y ciclo de vida de bases de datos | `bark*`, `historyExpiry`, `databaseLifecycle` | Sirve o consume datos de archivo, hace caducar el historial local y gestiona instantáneas. |
@@ -139,7 +139,8 @@ El ajuste `immutableDbPath` y el argumento posicional de `dingo load` aceptan un
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Pares de corroboración | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `1` de forma predeterminada. Un par independiente debe informar de los mismos bloques recientes antes de permitir que una fuente rápida impulse la selección Genesis. Establece explícitamente `0` solo para una topología de un par o una prueba deliberada. |
+| Pares de corroboración | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` de forma predeterminada. El valor predeterminado desactiva la barrera de corroboración. Configura un valor positivo explícito cuando necesites exigir pares de corroboración antes de permitir que una fuente rápida impulse la selección Genesis. |
+| Grupos de control de Genesis | `genesisBootstrap.controlGroups` | — | — | Dingo ya no proporciona grupos de control específicos de red de forma implícita. Los operadores deben configurar este campo explícitamente cuando necesiten un conjunto fijo de grupos de control. |
 
 En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva la selección de cadena Genesis aunque `genesisBootstrap` esté activado y el nodo comience desde el origen sin punto de intersección. Dingo sigue la configuración Cardano en lugar de aplicar selección por densidad, corroboración o paciencia de Genesis.
 
@@ -316,6 +317,7 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
 | Archivo de clave Koios de `node-parity from-genesis` | — | `--koios-api-key-file` | — | Sustituye a `--koios-api-key`. Aporta la clave API de la solicitud Koios. |
+| Directorio de captura de límites de `node-parity from-genesis` | — | `--boundary-capture-dir` | — | Opcional. Indica el directorio de capturas de límites que utiliza el flujo de comparación de UTxO desde génesis. |
 
 Cada valor respaldado por archivos debe cumplir estos requisitos:
 
@@ -355,7 +357,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.90.4 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.90.5 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
