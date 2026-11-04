@@ -139,7 +139,7 @@ El ajuste `immutableDbPath` y el argumento posicional de `dingo load` aceptan un
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Pares de corroboración | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` de forma predeterminada. El valor predeterminado desactiva la barrera de corroboración. Configura un valor positivo explícito cuando necesites exigir pares de corroboración antes de permitir que una fuente rápida impulse la selección Genesis. |
+| Pares de corroboración | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` de forma predeterminada. El valor predeterminado desactiva la barrera de corroboración. El operador debe configurar un valor positivo explícito cuando necesite exigir pares de corroboración antes de permitir que una fuente rápida impulse la selección Genesis. |
 | Grupos de control de Genesis | `genesisBootstrap.controlGroups` | — | — | Dingo ya no proporciona grupos de control específicos de red de forma implícita. Los operadores deben configurar este campo explícitamente cuando necesiten un conjunto fijo de grupos de control. |
 
 En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva la selección de cadena Genesis aunque `genesisBootstrap` esté activado y el nodo comience desde el origen sin punto de intersección. Dingo sigue la configuración Cardano en lugar de aplicar selección por densidad, corroboración o paciencia de Genesis.
@@ -317,7 +317,7 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
 | Archivo de clave Koios de `node-parity from-genesis` | — | `--koios-api-key-file` | — | Sustituye a `--koios-api-key`. Aporta la clave API de la solicitud Koios. |
-| Directorio de captura de límites de `node-parity from-genesis` | — | `--boundary-capture-dir` | — | Opcional. Indica el directorio de capturas de límites que utiliza el flujo de comparación de UTxO desde génesis. |
+| Directorio de captura de límites de `node-parity from-genesis` | — | `--boundary-capture-dir` | — | Opcional. El operador puede indicar un directorio de capturas de límites para el flujo de comparación de UTxO desde génesis. |
 
 Cada valor respaldado por archivos debe cumplir estos requisitos:
 
