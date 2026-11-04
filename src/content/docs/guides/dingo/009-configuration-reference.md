@@ -485,7 +485,7 @@ Dingo rejects a source that sets both the literal form and the file form.
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
 | `node-parity from-genesis` Koios API key file | — | `--koios-api-key-file` | — | Use instead of `--koios-api-key`. The file supplies the API key used for the Koios request. |
-| `node-parity from-genesis` boundary capture directory | — | `--boundary-capture-dir` | — | Optional directory for boundary captures used by the `from-genesis` UTxO comparison flow when UTxO comparison is enabled. |
+| `node-parity from-genesis` boundary capture directory | — | `--boundary-capture-dir` | — | Optional directory where the `from-genesis` UTxO comparison flow stores boundary captures when UTxO comparison is enabled. |
 
 Every file-backed value must meet these requirements:
 
