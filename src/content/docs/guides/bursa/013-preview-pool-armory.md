@@ -10,7 +10,7 @@ This guide takes a Preview stake pool from nothing to forging blocks. Bursa buil
 :::caution[Draft]
 This guide describes work in progress. Build the firmware from Bursa `main`.
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)) and the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)), the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)) and pool registration pins ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
 
 The [gaps](#what-is-not-built-yet) section lists what is still open. Use Preview and test funds only.
 :::
@@ -284,13 +284,40 @@ The response lists the registered keys in `host_keys`. The device holds up to fo
 
 Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
 
-From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile` or `signlog`.
+From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `pins`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile` or `signlog`.
 
 To revoke a key, send the same `host-key.json` from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys.
 
 ```sh
 armory-pool -host-key host.skey provision host-key/revoke < host-key.json
 ```
+
+### Pin the pool registration
+
+Without pins, the device checks only that a pool registration names the profile's cold key, owner and reward account. A host that can request signatures could then register another VRF key, other relays or another metadata URL, or set pledge, cost and margin freely. Pins fix them to values you choose now ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)). They need the provisioning image and a host key.
+
+Choose the values the pool registers in [Step 4](#certificates), then print the request with `armory-pool pins-request` and send it:
+
+```sh
+armory-pool pins-request -profile mypool@preview \
+  -vrf-key-hash "$(jq -r .cborHex vrf.vkey | cut -c5- | xxd -r -p | b2sum -l 256 | cut -d' ' -f1)" \
+  -pledge-min 100000000 -pledge-max 100000000 \
+  -cost-max 170000000 -margin-max 2/100 \
+  -relay relay.example.com:3001 \
+  -metadata-url https://example.com/pool.json \
+  -metadata-hash "$(bursa hash metadata pool.json)" > pins.json
+armory-pool -host-key host.skey provision pins < pins.json
+```
+
+- `-vrf-key-hash` is the Blake2b-256 hash of the VRF verification key; the pipeline above computes it from `vrf.vkey`. The registration's VRF key must match it exactly.
+- `-pledge-min` and `-pledge-max` bound the pledge, in lovelace, both inclusive. Set both to the same value to fix it.
+- `-cost-max` is the highest fixed cost in lovelace, and `-margin-max` the highest margin as a fraction `N/D`.
+- Give one `-relay` per relay, in registration order: `HOST:PORT`, `IPV4:PORT`, `[IPV6]:PORT`, `IPV4,[IPV6]:PORT` or `srv:NAME`. `armory-pool` digests them with the metadata URL, and the device refuses a registration that adds, removes, reorders or changes a relay, or changes the URL.
+- `-metadata-hash` must match exactly. Without `-metadata-url` and `-metadata-hash`, the pins require a registration with no metadata.
+
+From the next start, the report shows `registration pins set` for the profile, and the signing image refuses any pool registration outside them; see [Troubleshooting](#troubleshooting). A second request replaces the pins. To change a pinned value later, load the provisioning image, send new pins, then re-register. A profile without pins keeps the checks above, and the pins apply to pool registrations only. `/wipe/profile` and `/wipe/device` delete them.
+
+To keep relays and metadata changeable without the provisioning image, for example when a relay moves, pass `-unpinned-relays` instead of `-relay` and the `-metadata-*` flags. The report then shows `registration pins set, relays and metadata not pinned` from the next start. A host that can request signatures can then point the registration at other relays or other metadata, but still cannot change the VRF key, pledge, cost or margin.
 
 ### Switch to the signing image
 
@@ -844,6 +871,9 @@ A pool that already forges can move its cold key onto the armory.
 | `profile name in use`, `slot in use` or `cold key already belongs to a profile` | `/provision/profile` names a profile, slot or cold key object another profile already has | Pick a new name, a free slot, or the cold key's own profile |
 | `response version "bursa-attested-signer/1", want "bursa-attested-signer/2"` | The signing image predates the signing summary that `armory-pool witness` asks for | Build the firmware from the same Bursa commit as `armory-pool` and load it, as in [Build the firmware](#build-the-firmware) |
 | `a profile record is unreadable or inconsistent; wipe the device instead` | From `/wipe/profile`: a stored profile record cannot be read, is in the wrong slot, or shares its name with another | Wipe the whole device with `/wipe/device`, as in [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device) |
+| `pool registration VRF key hash is not the pinned one` | The registration names another VRF key than the pins | Register with the pinned `vrf.vkey`, or send new pins as in [Pin the pool registration](#pin-the-pool-registration) |
+| `pool registration pledge N outside the pinned bounds`, `cost N above the pinned maximum` or `margin above the pinned maximum` | The certificate's pledge, cost or margin is outside the pins | Fix the certificate, or send new pins from the provisioning image |
+| `pool registration relays or metadata URL are not the pinned ones`, `metadata hash is not the pinned one`, `carries metadata, none is pinned` or `has no metadata, a metadata hash is pinned` | A relay, the metadata URL or the metadata hash differs from the pins, or the relays are in another order | Register the pinned relays in the pinned order, or send new pins (or `-unpinned-relays`) from the provisioning image |
 
 A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
