@@ -77,7 +77,7 @@ Los puntos de acceso pertenecen a un grupo `localRoots`. Así puedes mantener ad
 
 Dingo acepta `trustable` para que los archivos de topología de cardano-node se carguen sin cambios, pero no utiliza la opción. Una raíz local con `trustable` no ayuda a un nodo retrasado respecto a la punta a salir de la selección de cadena Genesis.
 
-En mainnet, preprod y preview, la selección de cadena Genesis con el valor predeterminado `genesisBootstrap.corroborationPeers: 1` necesita un par de un segundo grupo independiente que confirme una cadena antes de que el nodo la siga. Establecer `corroborationPeers` en `0` desactiva esta comprobación. Sin `genesisBootstrap.controlGroups` en `dingo.yaml`, Dingo agrupa un par del ledger por el stake pool que registró su relay on-chain, y un par de la topología por su dirección de conexión, de modo que los pares de la topología de una misma /24 IPv4 o /64 IPv6 forman un solo grupo. Con `controlGroups` configurado, solo cuentan los endpoints listados, agrupados por su `identity`. Por eso, con los valores predeterminados, un nodo cuyos pares de topología comparten una misma /24 o /64, o que tiene una sola raíz local, también necesita pares del ledger, configurados con `useLedgerAfterSlot`, para ponerse al día después de quedarse atrás (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>).
+En mainnet, preprod y preview, el valor predeterminado `genesisBootstrap.corroborationPeers: 0` desactiva la comprobación de corroboración durante la selección de cadena Genesis. Un valor positivo de `corroborationPeers` activa explícitamente esta comprobación. Dingo no añade grupos de control específicos de la red cuando falta `genesisBootstrap.controlGroups` en `dingo.yaml`; el operador debe configurar este campo explícitamente para definir un conjunto fijo. Cuando el operador configura `controlGroups`, solo cuentan los endpoints listados, agrupados por su `identity`.
 
 <h2 id="relay">Ejemplo de topología de relay</h2>
 
@@ -144,7 +144,7 @@ Un productor de bloques mantiene tus propios relays como sus únicas raíces loc
 - Establece `"advertise": false,`, porque estas raíces locales del productor deben permanecer privadas.
 - Este ejemplo utiliza dos relays y establece `"valency": 2`. Con tres relays, utiliza `3`.
 - Deja vacías las raíces públicas mediante `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
-- Establece `useLedgerAfterSlot` en el valor de tu red, igual que en los relays. Con `-1` y la configuración de corroboración predeterminada, un productor con un solo relay, o con relays que comparten una misma /24 IPv4 o /64 IPv6, tiene un único grupo de pares y, tras un reinicio que lo deja atrás respecto a la punta, no puede salir de la selección de cadena Genesis (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>). El productor también se conecta entonces a pares del ledger.
+- Establece `useLedgerAfterSlot` en el valor de tu red, igual que en los relays.
 - El productor no necesita `peerSnapshotFile` ni `bootstrapPeers`.
 
 Ejemplo de archivo JSON de topología del productor de bloques:

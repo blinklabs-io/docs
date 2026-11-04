@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.90.4 Configuration Reference
-description: Complete, release-specific Dingo v0.90.4 configuration reference and example.
+title: Dingo v0.90.5 Configuration Reference
+description: Complete, release-specific Dingo v0.90.5 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.90.4. The complete
+This page covers the configuration shipped with Dingo v0.90.5. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.4/dingo.yaml.example).
-The same file is available in the [Dingo v0.90.4 source](https://github.com/blinklabs-io/dingo/blob/v0.90.4/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example).
+The same file is available in the [Dingo v0.90.5 source](https://github.com/blinklabs-io/dingo/blob/v0.90.5/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -32,7 +32,7 @@ for the main runtime choices.
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
-| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
+| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
@@ -231,7 +231,8 @@ chunk, and integrity requirements.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `1` by default. One independent peer must report the same recent blocks before a fast source can drive Genesis selection. Set `0` explicitly to disable the corroboration gate for an intentional single-peer or test topology. |
+| Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` by default, which disables the corroboration gate. Set a positive value to explicitly enable the required corroboration behavior. |
+| Genesis control groups | `genesisBootstrap.controlGroups` | — | — | Dingo no longer supplies network-specific control groups implicitly. Configure this field explicitly to use a fixed control-group set. |
 
 For Musashi, a Cardano node configuration with `ConsensusMode: PraosMode`
 disables Genesis chain selection, even when `genesisBootstrap` is enabled and
@@ -484,6 +485,7 @@ Dingo rejects a source that sets both the literal form and the file form.
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
 | `node-parity from-genesis` Koios API key file | — | `--koios-api-key-file` | — | Use instead of `--koios-api-key`. The file supplies the API key used for the Koios request. |
+| `node-parity from-genesis` boundary capture directory | — | `--boundary-capture-dir` | — | Optional directory where the `from-genesis` UTxO comparison flow stores boundary captures when UTxO comparison is enabled. |
 
 Every file-backed value must meet these requirements:
 
@@ -548,7 +550,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.90.4 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.90.5 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
