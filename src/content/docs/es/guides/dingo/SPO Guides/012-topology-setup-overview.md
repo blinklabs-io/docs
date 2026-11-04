@@ -77,7 +77,7 @@ Los puntos de acceso pertenecen a un grupo `localRoots`. Así puedes mantener ad
 
 Dingo acepta `trustable` para que los archivos de topología de cardano-node se carguen sin cambios, pero no utiliza la opción. Una raíz local con `trustable` no ayuda a un nodo retrasado respecto a la punta a salir de la selección de cadena Genesis.
 
-En mainnet, preprod y preview, el valor predeterminado `genesisBootstrap.corroborationPeers: 0` desactiva la comprobación de corroboración durante la selección de cadena Genesis. Un valor positivo de `corroborationPeers` activa explícitamente esta comprobación. Dingo no añade grupos de control específicos de la red cuando falta `genesisBootstrap.controlGroups` en `dingo.yaml`; el operador debe configurar este campo explícitamente para definir un conjunto fijo. Con `controlGroups` configurado, solo cuentan los endpoints listados, agrupados por su `identity`.
+En mainnet, preprod y preview, el valor predeterminado `genesisBootstrap.corroborationPeers: 0` desactiva la comprobación de corroboración durante la selección de cadena Genesis. Un valor positivo de `corroborationPeers` activa explícitamente esta comprobación. Dingo no añade grupos de control específicos de la red cuando falta `genesisBootstrap.controlGroups` en `dingo.yaml`; el operador debe configurar este campo explícitamente para definir un conjunto fijo. Cuando el operador configura `controlGroups`, solo cuentan los endpoints listados, agrupados por su `identity`.
 
 <h2 id="relay">Ejemplo de topología de relay</h2>
 
