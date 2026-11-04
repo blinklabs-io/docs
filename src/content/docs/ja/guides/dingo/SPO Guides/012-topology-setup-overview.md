@@ -77,7 +77,7 @@ Dingo は組み込みの既定トポロジーでも動作しますが、SPO は�
 
 Dingo は cardano-node のトポロジーファイルを変更せずに読み込めるよう `trustable` を受け付けますが、このフラグは使用しません。`trustable` のローカルルートは、先端から遅れたノードが Genesis チェーン選択を抜ける助けにはなりません。
 
-mainnet、preprod、preview では、既定の `genesisBootstrap.corroborationPeers: 1` の場合、Genesis チェーン選択はノードがチェーンに従う前に、2 つ目の独立したグループのピアによる確認を必要とします。`corroborationPeers` を `0` にするとこの確認は無効になります。`dingo.yaml` に `genesisBootstrap.controlGroups` がない場合、Dingo は台帳ピアをそのリレーをオンチェーンで登録したステークプールごとに、トポロジーのピアを接続アドレスごとにグループ化します。そのため、同じ IPv4 /24 または IPv6 /64 にあるトポロジーのピアは 1 つのグループになります。`controlGroups` を設定した場合は、記載したエンドポイントだけが対象となり、その `identity` ごとにグループ化されます。したがって既定の設定では、トポロジーのピアがすべて同じ /24 または /64 にあるノードや、ローカルルートが 1 つだけのノードは、遅れた後に追いつくために `useLedgerAfterSlot` で台帳ピアも使用する必要があります（<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>）。
+mainnet、preprod、preview では、既定の `genesisBootstrap.corroborationPeers: 0` により、Genesis チェーン選択の確認ゲートが無効になります。`corroborationPeers` に正の値を明示的に設定すると、チェーンに従う前に、指定数の独立したグループのピアによる確認が必要になります。`dingo.yaml` に `genesisBootstrap.controlGroups` がない場合、Dingo はネットワーク固有の control group を自動的に追加しません。固定したグループを使用する場合は、`genesisBootstrap.controlGroups` を明示的に設定してください。設定した場合は、記載したエンドポイントだけが対象となり、その `identity` ごとにグループ化されます。
 
 <h2 id="relay">リレー用トポロジー例</h2>
 
@@ -144,7 +144,7 @@ mainnet、preprod、preview では、既定の `genesisBootstrap.corroborationPe
 - BP のローカルルートを非公開に保つため、`"advertise": false,` にします。
 - この例はリレーが 2 つなので `"valency": 2` にします。3 つなら `3` にします。
 - `"publicRoots": [{ "accessPoints": [], "advertise": false }]` で公開ルートを空にします。
-- リレーと同様に、`useLedgerAfterSlot` をネットワークの値にします。`-1` で既定の corroboration 設定の場合、リレーが 1 つだけの BP や、リレーが同じ IPv4 /24 または IPv6 /64 にある BP はピアグループが 1 つしかなく、先端から遅れる再起動の後に Genesis チェーン選択を抜けられません（<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>）。この設定では BP は台帳ピアにも接続します。
+- リレーと同様に、`useLedgerAfterSlot` をネットワークの値にします。この設定では BP は台帳ピアにも接続します。
 - BP に `peerSnapshotFile` や `bootstrapPeers` は不要です。
 
 BP 用トポロジー JSON の例:
