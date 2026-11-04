@@ -77,7 +77,7 @@ Dingo は組み込みの既定トポロジーでも動作しますが、SPO は�
 
 Dingo は cardano-node のトポロジーファイルを変更せずに読み込めるよう `trustable` を受け付けますが、このフラグは使用しません。`trustable` のローカルルートは、先端から遅れたノードが Genesis チェーン選択を抜ける助けにはなりません。
 
-mainnet、preprod、preview では、既定の `genesisBootstrap.corroborationPeers: 0` により、Genesis チェーン選択の確認ゲートを無効にします。`corroborationPeers` に正の値を明示的に設定すると、チェーンに従う前に、指定数の独立したグループに属するピアの確認を必要とします。`dingo.yaml` に `genesisBootstrap.controlGroups` がない場合、Dingo はネットワーク固有の制御グループを自動的に追加しません。固定のグループを使用する場合は、`genesisBootstrap.controlGroups` を明示的に設定してください。設定すると、記載したエンドポイントだけを対象にし、その `identity` ごとにグループ化します。
+mainnet、preprod、preview では、既定の `genesisBootstrap.corroborationPeers: 0` により、Genesis チェーン選択の確認ゲートを無効にします。`corroborationPeers` に正の値を明示的に設定すると、確認ゲートが有効になり、チェーンに従う前に指定数の独立したグループに属するピアの確認が必要になります。`dingo.yaml` に `genesisBootstrap.controlGroups` がない場合、Dingo はネットワーク固有の制御グループを自動的に追加しません。固定の制御グループを使用する場合は、`genesisBootstrap.controlGroups` を明示的に設定してください。設定すると、記載したエンドポイントだけを対象にし、その `identity` ごとにグループ化します。
 
 <h2 id="relay">リレー用トポロジー例</h2>
 
