@@ -381,7 +381,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
 | `node-parity from-genesis` Koios API 鍵ファイル | — | `--koios-api-key-file` | — | `--koios-api-key` の代わりに使用します。Koios リクエストに使用する API 鍵をファイルで指定します。 |
-| `node-parity from-genesis` の境界キャプチャディレクトリ | — | `--boundary-capture-dir` | — | from-genesis の UTxO 比較フローで使用する任意の境界キャプチャディレクトリを指定します。 |
+| `node-parity from-genesis` の境界キャプチャディレクトリ | — | `--boundary-capture-dir` | — | from-genesis の UTxO 比較で使用する、任意の境界キャプチャディレクトリを指定します。 |
 
 ファイルから読み取る値は、次の要件を満たす必要があります。
 
