@@ -831,6 +831,52 @@ All of these use the same flow: build with `bursa tx build`, sign the body with 
 - **Vote as an SPO.** `bursa tx build --vote-pool-id pool1... --vote-gov-action <txid>#<index> --vote yes|no|abstain`. The armory signs with the cold key, and only for its own pool.
 - **Retire.** `bursa cert pool-retirement --cold-vkey pool-cold.vkey --epoch <epoch>`. The deposit returns to the reward account.
 
+## More than one pool
+
+One armory can hold up to 16 pools of one operator on one network; a mainnet image serves one chain, so Cardano and Prime pools need separate devices. Each pool gets its own profile with its own cold key, owner key, reward account, opcert floor and registration pins. The limit is the cold key objects (`0x20e50010` to `0x20e5001f`); profile slots go up to 32.
+
+To add a pool, load the provisioning image and repeat [Import the cold key](#import-the-cold-key) with a free object, [Create the profile](#create-the-profile) with a free slot, and [Pin the pool registration](#pin-the-pool-registration). The device signs nothing while the provisioning image runs, so every pool on it waits until the signing image is back.
+
+The signer takes one armory backend per profile. They share the device address, identity key and host key, and each pool's cold key gets its own `keys` entry:
+
+```yaml
+  backends:
+    - name: "armory-pool-a"
+      type: "armory"
+      address: "http://10.0.0.1"
+      profile: "pool-a@preview"
+      identity_public_key: "<identity public key>"
+      host_key_file: "/etc/bursa/armory-host.skey"
+      protocol: "2"
+    - name: "armory-pool-b"
+      type: "armory"
+      address: "http://10.0.0.1"
+      profile: "pool-b@preview"
+      identity_public_key: "<identity public key>"
+      host_key_file: "/etc/bursa/armory-host.skey"
+      protocol: "2"
+  keys:
+    - hash: "<pool A id hex>"
+      backend: "armory-pool-a"
+      allowed_requests: ["opcert"]
+    - hash: "<pool B id hex>"
+      backend: "armory-pool-b"
+      allowed_requests: ["opcert"]
+  callers:
+    - subject: "dingo-operator"
+      keys: ["<pool A id hex>", "<pool B id hex>"]
+```
+
+At startup the signer reads each profile's keys from the device and refuses to start if two backends list the same key. A profile that is removed from the device keeps the signer from starting, so remove its backend first. In Kubernetes, each producer sets its own `coldKeyHash` and uses the same `endpoint` and `mtlsSecretRef`.
+
+Before putting several pools on one device:
+
+- One device failure, theft, lost log card or bad firmware image stops every pool on it. Each cold key needs its own mnemonic backup.
+- A registered host key can sign for every pool on the device, and the signing log on the card records all of them. Keep pools of different owners on separate devices.
+- A second device holding the same pools can only be a spare that you switch to by hand: each device keeps its own opcert floor, so two active devices could issue the same counter.
+
+On Preview, two pools on one armory got their opcerts through one signer at the same time (2026-11-04), each byte-identical to the pool's running certificate.
+
 ## Migrating an existing pool
 
 A pool that already forges can move its cold key onto the armory.
