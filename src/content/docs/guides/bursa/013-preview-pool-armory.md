@@ -722,7 +722,7 @@ bursa tx submit --socket-path "$SOCKET" --network preview --tx-file pool-reg.sig
 `armory-pool witness` sends the exact body bytes to the device and checks the answer before it writes anything. The signature must verify over the body hash, and the binding signature must cover the request. It then prints what the device approved, covered by the same binding signature. Check it against what you meant to submit:
 
 ```
-device signed: fee=181209 ttl=106532180 stake-reg pool-reg pledge=100000000 cost=170000000 margin=1/50 relays=1 leios=false vrf=3f9c1a2b meta=8e4d0c7a stake-deleg
+device signed: fee=181209 ttl=<slot> stake-reg pool-reg pledge=100000000 cost=170000000 margin=1/50 relays=1 leios=false vrf=<8 hex digits> meta=<8 hex digits> stake-deleg
 ```
 
 `ttl` is the slot after which the transaction is invalid, followed by `valid-from` when the body sets a start. `vrf` and `meta` are the first four bytes of the VRF key hash and the metadata hash, or `meta=none` for a registration without metadata.
@@ -850,7 +850,7 @@ All of these use the same flow: build with `bursa tx build`, sign the body with 
 
 One armory can hold up to 32 pools: 32 cold key objects (`0x20e50010` to `0x20e5001f` and `0x20e50600` to `0x20e5060f`) and 32 profile slots (0 to 31). Each pool gets its own profile with its own cold key, owner key, reward account, opcert floor and registration pins.
 
-Which networks share a device depends on the image. The testnet image this guide builds serves every testnet. A `NETWORK=mainnet CHAIN=cardano` or `CHAIN=prime` image serves that one chain. A `NETWORK=multi` image ([bursa#1187](https://github.com/blinklabs-io/bursa/pull/1187)) serves three scopes on one device: every testnet, `cardano-mainnet` and `prime-mainnet`, with profile names ending `@cardano-mainnet` or `@prime-mainnet`. Each scope needs its own host key: a testnet key never signs or provisions for a mainnet profile, nor a Cardano key for a Prime one. The firmware README in the Bursa repository describes the multi image.
+Which networks share a device depends on the image. The testnet image this guide builds serves every testnet. A `NETWORK=mainnet CHAIN=cardano` or `CHAIN=prime` image serves that one chain. A `NETWORK=multi` image ([bursa#1187](https://github.com/blinklabs-io/bursa/pull/1187)) serves three scopes on one device: every testnet, `cardano-mainnet` and `prime-mainnet`, with profile names ending `@cardano-mainnet` or `@prime-mainnet`. Each scope needs its own host key: a testnet key never signs or provisions for a mainnet profile, nor a Cardano key for a Prime one. A device provisioned with the testnet image, as in this guide, keeps its profiles and testnet host key on a multi image, but that key cannot add a mainnet scope and the device's last host key cannot be revoked. Adding mainnet pools to it takes a device wipe and provisioning again, mainnet host key first. The [firmware README](https://github.com/blinklabs-io/bursa/blob/main/armory/firmware/README.md#multi-image) describes the multi image.
 
 To add a pool, load the provisioning image and repeat [Import the cold key](#import-the-cold-key) with a free object, [Create the profile](#create-the-profile) with a free slot, and [Pin the pool registration](#pin-the-pool-registration). The device signs nothing while the provisioning image runs, so every pool on it waits until the signing image is back.
 
