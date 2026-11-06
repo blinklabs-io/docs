@@ -715,8 +715,10 @@ bursa tx submit --socket-path "$SOCKET" --network preview --tx-file pool-reg.sig
 `armory-pool witness` sends the exact body bytes to the device and checks the answer before it writes anything. The signature must verify over the body hash, and the binding signature must cover the request. It then prints what the device approved, covered by the same binding signature. Check it against what you meant to submit:
 
 ```
-device signed: fee=181209 stake-reg pool-reg pledge=100000000 cost=170000000 margin=1/50 relays=1 leios=false stake-deleg
+device signed: fee=181209 ttl=106532180 stake-reg pool-reg pledge=100000000 cost=170000000 margin=1/50 relays=1 leios=false vrf=3f9c1a2b meta=8e4d0c7a stake-deleg
 ```
+
+`ttl` is the slot after which the transaction is invalid, followed by `valid-from` when the body sets a start. `vrf` and `meta` are the first four bytes of the VRF key hash and the metadata hash, or `meta=none` for a registration without metadata.
 
 The summary needs firmware from the same Bursa commit as `armory-pool`; see [Build the firmware](#build-the-firmware).
 
@@ -1027,4 +1029,4 @@ Start the device on the provisioning image. With `SIGNING_IMX` set to the signin
 
 ## What is not built yet
 
-- Secure boot ([bursa#1112](https://github.com/blinklabs-io/bursa/issues/1112)). Until the board's fuses are burnt, its boot ROM runs any image from the eMMC, a card or USB recovery mode, and that image can use the keys in the SE050, so keep the armory where nobody else can reach it. Every image can be signed with a high assurance boot (HAB) key ([bursa#1171](https://github.com/blinklabs-io/bursa/pull/1171)), and the report prints the boot ROM's HAB status ([bursa#1174](https://github.com/blinklabs-io/bursa/pull/1174)): on an unfused board a signed image reports `hab: config open, state non-secure, no events`, and an unsigned one lists the failed checks. Burning the fuses cannot be undone and is not covered here.
+- Secure boot ([bursa#1112](https://github.com/blinklabs-io/bursa/issues/1112)). Until the board's fuses are burnt, its boot ROM runs any image from the eMMC, a card or USB recovery mode, and that image can use the keys in the SE050, so keep the armory where nobody else can reach it. Every image can be signed with a high assurance boot (HAB) key ([bursa#1171](https://github.com/blinklabs-io/bursa/pull/1171)), and the report prints the boot ROM's HAB status ([bursa#1174](https://github.com/blinklabs-io/bursa/pull/1174)): on an unfused board a signed image reports `hab: status success, config open, state non-secure, no events`, and an unsigned one lists the failed checks. Burning the fuses cannot be undone and is not covered here.
