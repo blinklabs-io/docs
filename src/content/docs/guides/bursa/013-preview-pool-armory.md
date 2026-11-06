@@ -10,7 +10,7 @@ This guide takes a Preview stake pool from nothing to forging blocks. Bursa buil
 :::caution[Draft]
 This guide describes work in progress. Build the firmware from Bursa `main`.
 
-The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)), the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)) and pool registration pins ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
+The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)), the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)), pool registration pins ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)), the signer bounding both opcert request forms by the last counter it issued ([bursa#1235](https://github.com/blinklabs-io/bursa/pull/1235)) and the device refusing an opcert reissue at an earlier KES period, with signing log format version 2 ([bursa#1236](https://github.com/blinklabs-io/bursa/pull/1236)) are on Bursa's `main` branch but not yet in a release, so build Bursa from `main`. Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
 
 The [gaps](#what-is-not-built-yet) section lists what is still open. Use Preview and test funds only.
 :::
@@ -405,6 +405,8 @@ armory-pool -identity <identity public key> -host-key host.skey signlog
 
 The device attests the current head for a fresh nonce, and `armory-pool` checks every entry and the chain under the pinned identity key. Add `-head-seq N -head-hash HEX` to also pin the latest entry you expect. A card taken out of the device is checked with `signlog-verify -identity <identity public key> -image <card image>`.
 
+The signing image formats a card with log format version 2, whose `opcert-next` entries also carry the cold key hash (the pool ID). A card formatted by earlier firmware (version 1) is still read, verified and appended to in its own format; its entries carry no cold key hash, so an opcert entry there applies to every cold key of its profile. `signlog-verify` reads both versions.
+
 If the card is pulled while the signing image runs, the device refuses to sign. Putting it back is not enough: the card is not initialised again until the device restarts ([bursa#1147](https://github.com/blinklabs-io/bursa/pull/1147)). Unplug the armory and plug it in again; it reopens the log at the same entry.
 
 The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. To keep the keys, load the wipe image and delete only the head:
@@ -586,6 +588,8 @@ signer:
 
 Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. `protocol: "2"` makes the signer ask the device for its signing summary and refuse firmware that cannot give one; the default, `"1"`, does not ask for it. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
 
+The `watermark` keeps the signer's own counter records for each cold key, besides the device's: the chain counter the operator last reported, as a floor, and the last issue number it signed. In `enforce` mode it refuses with HTTP 409 a chain counter below its floor or above the last issued counter, and an issue number below the last issued counter. After signing it writes both records in one transaction. `warn` mode logs such a request and signs it; see the [watermark section of the signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md#7-anti-double-sign-watermark). The signer also answers a request the armory refuses for its floor, its last issued counter or a backdated reissue with HTTP 409, whatever the mode.
+
 Store the client certificate, its key and the signer's CA for the operator:
 
 ```sh
@@ -740,7 +744,7 @@ The armory chooses the counter, not the host. The host sends the KES public key,
 bursa query pool --socket-path "$SOCKET" --network preview --pool-id pool1...
 ```
 
-The `opcert` field holds `on_chain_counter`, and `kes` holds `current_kes_period`. Pass them to `armory-pool opcert`. The device has no clock, so it signs whatever KES period the host sends: take it from the query, not from memory. Use `none` when the counter is `null`:
+The `opcert` field holds `on_chain_counter`, and `kes` holds `current_kes_period`. Pass them to `armory-pool opcert`. The device has no clock and takes the KES period from the host, so take it from the query, not from memory. It does refuse a reissue of its last counter at a KES period below the one its signing log holds for that counter (see [Rotating the KES key](#rotating-the-kes-key)). Use `none` when the counter is `null`:
 
 ```sh
 armory-pool -identity <identity public key> -profile mypool@preview -host-key host.skey \
@@ -789,7 +793,7 @@ You do not need to track whether the pool forged with the current opcert. The no
 | One lower | The pool has not forged with the current opcert | The same counter again |
 | `null` | The pool has never forged | See [A new pool](#a-new-pool) |
 
-The armory always issues the on-chain counter plus one, so the host only reports the chain. Reissuing the same counter burns nothing, and the counter on chain never skips. The device remembers the highest counter the host has reported (its floor) and refuses a request that reports a lower one.
+The armory always issues the on-chain counter plus one, so the host only reports the chain. Reissuing the same counter burns nothing, and the counter on chain never skips. The device remembers the highest counter the host has reported (its floor) and refuses a request that reports a lower one. A reissue of the latest counter in the signing log, for the same profile and cold key, may not take a KES period below the logged one: both opcerts stay valid until one forges, so an earlier period would only extend an older KES key's window.
 
 To rotate:
 
@@ -820,6 +824,8 @@ To recover:
    ```
 
 3. Start the signing image again: switch toward eMMC with the log card in, then plug the board in. Issue a new opcert and install it.
+
+In `Auto` mode the reset clears only the device's records. The signer's watermark still holds the higher chain counter as its floor and refuses the lower one with HTTP 409, which the operator reports as `IssueFailed`. Set the producer to `Assisted`, issue the recovery opcert with `armory-pool opcert` as in step 3, and replace the Secret's contents. The signer accepts the chain counter again once the pool forges with that opcert.
 
 Rotate several KES periods before expiry, as the operator's `renewBeforePeriods: 8` does. A rotation then rarely lands right after a fresh block, and a mistake leaves time to recover.
 
@@ -925,6 +931,8 @@ A `404` from a `/provision/` endpoint means the signing image is running; a `404
 
 An opcert request below the floor is refused with `chain counter below the recorded on-chain counter`. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
 
+A reissue of the device's last counter at a KES period below the logged one is refused with `KES period below the logged opcert at this counter`. Take the period from `bursa query pool`. `opcert-check` sends the certificate's own KES period, so after a reissue of the same counter at a later period, the older certificate cannot be checked this way.
+
 Some hosts reset the disk at its first read: the kernel logs `device descriptor read/64, error -110` and the board stops answering. Unplug it and flash from another host.
 
 If the signing image shows up on USB but answers nothing, not even a ping, with a card in the slot, the firmware predates [bursa#1145](https://github.com/blinklabs-io/bursa/pull/1145): it runs out of DMA memory while it checks the card. Nothing is written to the card. Take the card out to confirm the device starts and its report says `signing log: NOT OPEN`, then flash an image with the fix and put the card back.
@@ -933,7 +941,7 @@ On Kubernetes in `Auto` mode, read the `OpCertIssued` condition and the events w
 
 | Reason | Cause | Fix |
 |---|---|---|
-| `IssueFailed` | The signer did not return an opcert: it is unreachable, refused the client certificate, or the armory refused | Check the signer's log and that the armory answers on the signer host. The operator retries after 10 minutes |
+| `IssueFailed` | The signer did not return an opcert: it is unreachable, refused the client certificate, its watermark refused the counter (HTTP 409), or the armory refused | Check the signer's log and that the armory answers on the signer host. The operator retries after 10 minutes. After a rollback, see [Rollbacks](#rollbacks) |
 | `ColdSignerUnavailable` | The operator cannot read the client certificate Secret, or it lacks `tls.crt` or `tls.key` | Create the Secret named in `mtlsSecretRef` in the producer's namespace |
 | `OnChainCounterUnknown` | The operator has no fresh on-chain counter for the pool | Check `nodeToClient.enabled` and the `OnChainCounterAvailable` condition. A pool that has never forged has none; see [A new pool](#a-new-pool) |
 | `SecretUpdateFailed` | The operator cannot write the keys Secret | Install the chart with `rbac.keySecretsUpdate=true` and the Secret's name in `rbac.keySecretNames` |
