@@ -958,6 +958,11 @@ On Kubernetes in `Auto` mode, read the `OpCertIssued` condition and the events w
 | `ColdSignerUnavailable` | The operator cannot read the client certificate Secret, or it lacks `tls.crt` or `tls.key` | Create the Secret named in `mtlsSecretRef` in the producer's namespace |
 | `OnChainCounterUnknown` | The operator has no fresh on-chain counter for the pool | Check `nodeToClient.enabled` and the `OnChainCounterAvailable` condition. A pool that has never forged has none; see [A new pool](#a-new-pool) |
 | `SecretUpdateFailed` | The operator cannot write the keys Secret | Install the chart with `rbac.keySecretsUpdate=true` and the Secret's name in `rbac.keySecretNames` |
+| `KESPeriodUnknown` | The operator has not yet read the node's KES period from its metrics | Wait for the node to start and serve metrics, then check the `kes` status |
+| `RenewWindowTooLong` | `renewBeforePeriods` is not below the KES key's lifetime in periods, so every opcert would be due at once | Set `renewBeforePeriods` well below 62 on Preview; the default is 8 |
+| `KeysSecretUnavailable` | The operator cannot read the keys Secret | Check the Secret named in `keys.secretRef` exists and the chart grants read access to it |
+| `KeysSecretInvalid` | The keys Secret holds no opcert, or one that does not parse | Store the current `node.cert` as `opcert.cert`; for a new pool see [A new pool](#a-new-pool) |
+| `IssuedBundleRejected` | The new KES key and opcert failed the operator's checks, so the Secret was not updated | Check the opcert's pool and counter in the message; the running keys stay as they are |
 
 From chart 0.4.1, a node whose tip stops moving shows the `TipNotAdvancing` reason on the `LedgerPipelineHealthy` condition ([dingo-operator#115](https://github.com/blinklabs-io/dingo-operator/pull/115)).
 
