@@ -480,7 +480,7 @@ docker run -d --name dingo-bp \
   -e CARDANO_SHELLEY_VRF_KEY=/keys/vrf.skey \
   -e CARDANO_SHELLEY_KES_KEY=/keys/kes.skey \
   -e CARDANO_SHELLEY_OPERATIONAL_CERTIFICATE=/keys/node.cert \
-  ghcr.io/blinklabs-io/dingo:0.90.3
+  ghcr.io/blinklabs-io/dingo:0.90.5
 ```
 
 The node socket is `ipc/dingo.socket` in the current directory: `SOCKET=$PWD/ipc/dingo.socket`. Until `node.cert` exists, leave out the `CARDANO_BLOCK_PRODUCER` and key variables.
@@ -552,8 +552,11 @@ helm upgrade --install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/cha
   --set 'rbac.keySecretsNamespaces={cardano}' \
   --set rbac.keySecretsUpdate=true \
   --set 'rbac.keySecretNames={producer-pool-keys}' \
-  --version 0.4.1
+  --set 'rbac.readSecretNames={bursa-signer-mtls}' \
+  --version 0.5.1
 ```
+
+`rbac.readSecretNames` (chart 0.5.0) limits read access to the named Secrets plus `keySecretNames`, instead of every Secret in the namespace. List every Secret the operator reads: each producer's `keys.secretRef` and the signer client certificate in `mtlsSecretRef`. Leave it out to keep read access to every Secret there.
 
 Run the signer on the host the armory is plugged into, with an armory backend and a host key registered on the device (see [Register a host key](#register-a-host-key)). The operator connects with a TLS client certificate, so the signer needs a server certificate and the CA that issued the client certificate. Use a CA that issues only this client certificate: the signer accepts any certificate from `client_ca_cert` whose subject matches a caller, so a shared cluster issuer lets any workload that can get a `dingo-operator` certificate request opcerts. Listen only on the address the operator reaches, not `0.0.0.0`. Allow the pool's cold key only `opcert` requests, and only for that client:
 
