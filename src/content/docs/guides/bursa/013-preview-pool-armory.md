@@ -176,7 +176,7 @@ The device runs one of three images:
 
 - **Provisioning image** (`armory-provision.imx`): creates the identity key, imports keys, creates profiles, and changes the reward account or the opcert floor. It never signs transactions or opcerts.
 - **Signing image** (`armory.imx`): reads the key inventory and signs. It serves no provisioning endpoint, so nothing on the host can change a profile, the floor or the key objects while the device signs.
-- **Wipe image** (`armory-wipe.imx`): deletes a profile and its keys, every key and profile, or the signing log head. It neither signs nor provisions. See [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device).
+- **Wipe image** (`armory-wipe.imx`): deletes a profile and its keys, a cold key no profile names, every key and profile, or the signing log head. It neither signs nor provisions. See [Removing a profile or wiping the device](#removing-a-profile-or-wiping-the-device).
 
 ```sh
 cd armory/firmware
@@ -284,7 +284,7 @@ The response lists the registered keys in `host_keys`. The device holds up to fo
 
 Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
 
-From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `pins`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile` or `signlog`.
+From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `pins`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile`, `cold` or `signlog`.
 
 To revoke a key, send the same `host-key.json` from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys.
 
@@ -976,7 +976,7 @@ Never paste the mnemonic into a shell command, and keep `seed.txt` out of synced
 
 ## Removing a profile or wiping the device
 
-Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. The report from `curl http://10.0.0.1/` shows `wipe build`.
+Neither the signing nor the provisioning image deletes a key. The wipe image, built with `make imx WIPE=1`, removes one profile with its keys, one cold key that no profile names, or every key and profile on the device. Load it like the provisioning image: card out, switch toward microSD, then `armory-boot-usb -i armory-wipe.imx`. The report from `curl http://10.0.0.1/` shows `wipe build`.
 
 List what is on the device first:
 
@@ -984,11 +984,18 @@ List what is on the device first:
 curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/objects -d '{}'
 ```
 
-Remove one profile: its owner key, its cold key and its record. A cold key that another profile still names stays. The slot and the freed cold key object can be provisioned again.
+Remove one profile: its owner key, its cold key, its registration pins and its record. A cold key that another profile still names stays. The slot and the freed cold key object can be provisioned again.
 
 ```sh
 echo '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}' |
   armory-pool -host-key host.skey wipe profile
+```
+
+Remove a cold key that no profile names, for example one imported for a profile you never created ([bursa#1187](https://github.com/blinklabs-io/bursa/pull/1187)). `cold_key_id` is the object's number in decimal. A key that a profile names is refused: remove the profile instead.
+
+```sh
+echo '{"identity_public_key": "<identity public key>", "cold_key_id": 551878672}' |
+  armory-pool -host-key host.skey wipe cold
 ```
 
 Delete only the signing log head, to start a new log on a zeroed card: see [The signing log card](#the-signing-log-card).
@@ -999,7 +1006,7 @@ Wipe the device: every key and profile, host keys and the identity key included.
 curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/wipe/device -d '{"identity_public_key": "<identity public key>"}'
 ```
 
-Both requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. A device with no identity key takes an empty value. If a request stops part way, send it again. `curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/reset` then returns the board to USB recovery mode.
+These requests name the device by its identity public key in hex, the value you pin with `-identity`; any other value deletes nothing. A device with no identity key takes an empty value. If a request stops part way, send it again. `curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/reset` then returns the board to USB recovery mode.
 
 Removing a profile is refused while any stored profile record is unreadable, in the wrong slot, or shares its name with another, because the device cannot then tell which keys belong to the profile. `/wipe/device` still works and clears the device.
 
