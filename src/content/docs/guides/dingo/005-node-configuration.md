@@ -21,8 +21,8 @@ and download the release-matched [`dingo.yaml.example`](https://raw.githubuserco
 providers require `api` mode, including the optional built-in Kupo-compatible
 API. Setting an individual provider port to `0` disables that listener. Storage
 mode does not enable block production.
-Use `api` mode for complete historical epoch output totals. `core` mode prunes
-spent outputs, so it cannot provide complete historical totals.
+Complete historical epoch output totals require `api` mode. `core` mode prunes
+spent outputs and cannot provide those totals.
 
 Dingo block production is intended for test networks and private devnets in
 current releases. Follow the pool key and certificate guidance in the [SPO
