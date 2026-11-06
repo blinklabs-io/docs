@@ -44,7 +44,7 @@ Every signature comes back with a second signature, from the same key, over the 
 
 - **Profile:** one pool on one network, for example `mypool@preview`. It names the cold key, the owner key, the pinned reward account and the opcert floor. Every signing request names a profile.
 - **Slot:** where a profile is stored on the device, 0 to 31. Each slot holds one profile and its owner key for good.
-- **Cold key object:** the SE050 object holding a cold key, `0x20e50010` to `0x20e5001f`.
+- **Cold key object:** the SE050 object holding a cold key, `0x20e50010` to `0x20e5001f` or `0x20e50600` to `0x20e5060f`.
 - **Identity key:** a device key that signs the key inventory, so the host can tell it is talking to the right device.
 - **Opcert counter:** the issue number in an operational certificate. The chain keeps the last one it saw for each pool.
 - **Floor:** the highest on-chain counter the device has been told. It refuses requests that report a lower one.
@@ -229,7 +229,7 @@ The device returns `public_key` in base64; the pipe prints it as hex. Record the
 
 ### Import the cold key
 
-Cold keys live in SE050 objects 551878672 to 551878687 (`0x20e50010` to `0x20e5001f`). Pick a free one:
+Cold keys live in 32 SE050 objects: 551878672 to 551878687 (`0x20e50010` to `0x20e5001f`) and 551880192 to 551880207 (`0x20e50600` to `0x20e5060f`). Pick a free one:
 
 ```sh
 jq -n --argjson id 551878672 --slurpfile key pool-cold.skey \
@@ -839,11 +839,13 @@ All of these use the same flow: build with `bursa tx build`, sign the body with 
 
 ## More than one pool
 
-One armory can hold up to 16 pools of one operator on one network; a mainnet image serves one chain, so Cardano and Prime pools need separate devices. Each pool gets its own profile with its own cold key, owner key, reward account, opcert floor and registration pins. The limit is the cold key objects (`0x20e50010` to `0x20e5001f`); profile slots go up to 32.
+One armory can hold up to 32 pools: 32 cold key objects (`0x20e50010` to `0x20e5001f` and `0x20e50600` to `0x20e5060f`) and 32 profile slots (0 to 31). Each pool gets its own profile with its own cold key, owner key, reward account, opcert floor and registration pins.
+
+Which networks share a device depends on the image. The testnet image this guide builds serves every testnet. A `NETWORK=mainnet CHAIN=cardano` or `CHAIN=prime` image serves that one chain. A `NETWORK=multi` image ([bursa#1187](https://github.com/blinklabs-io/bursa/pull/1187)) serves three scopes on one device: every testnet, `cardano-mainnet` and `prime-mainnet`, with profile names ending `@cardano-mainnet` or `@prime-mainnet`. Each scope needs its own host key: a testnet key never signs or provisions for a mainnet profile, nor a Cardano key for a Prime one. The firmware README in the Bursa repository describes the multi image.
 
 To add a pool, load the provisioning image and repeat [Import the cold key](#import-the-cold-key) with a free object, [Create the profile](#create-the-profile) with a free slot, and [Pin the pool registration](#pin-the-pool-registration). The device signs nothing while the provisioning image runs, so every pool on it waits until the signing image is back.
 
-The signer takes one armory backend per profile. They share the device address, identity key and host key, and each pool's cold key gets its own `keys` entry:
+The signer takes one armory backend per profile. They share the device address and identity key, and each pool's cold key gets its own `keys` entry. Backends in one scope share its host key; on a multi image, backends of different scopes each name their scope's key in `host_key_file`:
 
 ```yaml
   backends:
@@ -878,7 +880,7 @@ At startup the signer reads each profile's keys from the device and refuses to s
 Before putting several pools on one device:
 
 - One device failure, theft, lost log card or bad firmware image stops every pool on it. Each cold key needs its own mnemonic backup.
-- A registered host key can sign for every pool on the device, and the signing log on the card records all of them. Keep pools of different owners on separate devices.
+- A registered host key can sign for every pool of its scope on the device, which on a single-scope image is every pool, and the signing log on the card records all of them. Keep pools of different owners on separate devices.
 - A second device holding the same pools can only be a spare that you switch to by hand: each device keeps its own opcert floor, so two active devices could issue the same counter.
 
 On Preview, two pools on one armory got their opcerts through one signer at the same time (2026-11-04), each byte-identical to the pool's running certificate.
