@@ -447,7 +447,7 @@ It writes `device/pool-cold.vkey` and `device/owner.vkey`, and prints the pool I
 
 Start the node now without the block-producer settings, so it syncs and Bursa has a socket for Steps 4 and 5. Add the block-producer settings below after [Step 5](#step-5-the-first-operational-certificate) writes `node.cert`.
 
-The block producer needs `vrf.skey`, `kes.skey` and `node.cert`. Dingo refuses key files readable by group or others:
+The block producer needs `vrf.skey`, `kes.skey` and `node.cert`. Dingo refuses a VRF or KES key file readable by group or others. The opcert is not secret, but keep it with them:
 
 ```sh
 chmod 400 vrf.skey kes.skey node.cert
@@ -593,7 +593,7 @@ signer:
       keys: ["<pool id hex>"]
 ```
 
-Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. `protocol: "2"` makes the signer ask the device for its signing summary and refuse firmware that cannot give one; the default, `"1"`, does not ask for it. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
+Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. `protocol: "2"` makes the signer ask the device for its signing summary when it signs a transaction body, and refuse firmware that cannot give one; the default, `"1"`, does not ask for it. It does not change opcert requests, so with only `opcert` allowed, as here, it has no effect yet. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
 
 The `watermark` keeps the signer's own counter records for each cold key, besides the device's: the chain counter the operator last reported, as a floor, and the last issue number it signed. In `enforce` mode it refuses with HTTP 409 a chain counter below its floor or above the last issued counter, and an issue number below the last issued counter. After signing it writes both records in one transaction. `warn` mode logs such a request and signs it; see the [watermark section of the signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md#7-anti-double-sign-watermark). The signer also answers a request the armory refuses for its floor, its last issued counter or a backdated reissue with HTTP 409, whatever the mode.
 
@@ -647,7 +647,7 @@ bursa tx assemble --tx-file reward-reg.tx --witness-file payer.wit --witness-fil
 bursa tx submit --socket-path "$SOCKET" --network preview --tx-file reward-reg.signed
 ```
 
-`bursa tx witness` needs no network: make `reward.wit` on the offline machine from a copy of `reward-reg.tx`, and carry the witness back. `bursa query stake-address --socket-path "$SOCKET" --network preview --address stake_test1...` shows `registered: true` once it is on chain.
+`bursa tx witness` needs no network: make `reward.wit` on the offline machine from a copy of `reward-reg.tx`, and carry the witness back. `bursa query stake-address --socket-path "$SOCKET" --network preview --address stake_test1...` shows `"registered": true` once it is on chain.
 
 ### One transaction for the pool
 
