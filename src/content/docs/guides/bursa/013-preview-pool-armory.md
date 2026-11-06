@@ -188,7 +188,11 @@ make imx WIPE=1
 
 Never build with `TESTNET=1` for keys that matter: it adds bring-up key tests and an unfiltered signing endpoint. Neither the provisioning nor the wipe image can be built with `TESTNET=1`.
 
+These commands build the default `NETWORK=testnet` images, which serve every testnet. `NETWORK=mainnet CHAIN=cardano` or `CHAIN=prime` builds images for one mainnet chain, named `armory-cardano-mainnet.imx` and so on, and `NETWORK=multi` builds `armory-multi.imx` and its provisioning and wipe images, which serve testnets and both mainnet chains (see [More than one pool](#more-than-one-pool)).
+
 Build the firmware and the host tools from the same Bursa commit, and load the new signing image before you use the new `armory-pool`. `armory-pool witness` asks the device for a signing summary (protocol version 2), and firmware built before that change refuses it. If the signing image is on the eMMC, write the new one there too.
+
+Never load an image older than the one a device has run. Older images do not know the second block of cold key objects or the record of which scope owns each one: their device wipe leaves those keys on the chip, and their provisioning image can import into an object another scope owns. To go back to older firmware, wipe the device with the current wipe image first.
 
 A board with nothing on its eMMC and no microSD card boots into USB recovery mode. Load an image into RAM with [armory-boot](https://github.com/usbarmory/armory-boot), the provisioning image first:
 
