@@ -28,7 +28,7 @@ for the main runtime choices.
 | Area | Main settings | Purpose |
 | --- | --- | --- |
 | Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Select a Cardano network and locate node, topology, and data files. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
@@ -146,8 +146,13 @@ network.
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Tracing collector endpoint | `tracingEndpoint` | `--tracing-endpoint` | `DINGO_TRACING_ENDPOINT` | Empty by default. Set an OTLP HTTP collector URL to enable tracing. When empty, the `tracing` setting controls tracing and the standard `OTEL_EXPORTER_OTLP_*` environment variables select the destination. |
-| Tracing service name | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | `dingo` by default. Sets the service name for exported traces. |
+| Tracing service name | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | Empty by default. Sets the service name for exported telemetry. Dingo uses the configured value first, then `OTEL_SERVICE_NAME`, then `dingo`. |
 | Tracing sample ratio | `tracingSampleRatio` | `--tracing-sample-ratio` | `DINGO_TRACING_SAMPLE_RATIO` | `1` by default. Set a value from `0` through `1`, inclusive. Dingo rejects values outside this range during configuration validation. |
+| Always sampled stake pools | `tracingAlwaysSamplePools` | `--tracing-always-sample-pools` | `DINGO_TRACING_ALWAYS_SAMPLE_POOLS` | An empty list by default. Set stake pool IDs as Bech32 values, including uppercase Bech32, or as 56-character hexadecimal key hashes. Dingo samples blocks from listed pools regardless of `tracingSampleRatio`. |
+| OpenTelemetry service name | — | — | `OTEL_SERVICE_NAME` | Dingo uses this value when `tracingServiceName` is empty. The precedence is `tracingServiceName`, then `OTEL_SERVICE_NAME`, then `dingo`. |
+| OpenTelemetry resource attributes | — | — | `OTEL_RESOURCE_ATTRIBUTES` | Dingo applies these attributes to exported telemetry. Malformed entries produce a warning without failing startup. |
+| OpenTelemetry log exporter | — | — | `OTEL_LOGS_EXPORTER` | An unset or empty value, or `none`, disables OTLP log export. A configured value enables optional OTLP log export. Invalid exporter configuration produces a warning without stopping startup, and stdout logging remains available. |
+| OpenTelemetry metric exporter | — | — | `OTEL_METRICS_EXPORTER` | An unset or empty value, or `none`, disables OTLP metric export. A configured value enables optional OTLP export of the Prometheus registry. Invalid exporter configuration produces a warning without stopping startup; the Prometheus `/metrics` endpoint remains available. |
 
 ### DMQ configuration
 
@@ -486,6 +491,8 @@ Dingo rejects a source that sets both the literal form and the file form.
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
 | `node-parity from-genesis` Koios API key file | — | `--koios-api-key-file` | — | Use instead of `--koios-api-key`. The file supplies the API key used for the Koios request. |
 | `node-parity from-genesis` boundary capture directory | — | `--boundary-capture-dir` | — | Optional directory where the `from-genesis` UTxO comparison flow stores boundary captures when UTxO comparison is enabled. |
+| `node-parity from-genesis` transaction info batch size | — | `--koios-tx-info-batch-size` | — | `40` by default. Controls the number of transaction hashes in each `/tx_info` request. The valid range is `1` through `999`. The public host rejects request bodies over `5120` bytes, so use a larger value only with a host that accepts larger requests. |
+| `node-parity from-genesis` transaction info concurrency | — | `--koios-tx-info-concurrency` | — | `8` by default. Controls the number of `/tx_info` requests kept in flight. The valid range is `1` through `64`. |
 
 Every file-backed value must meet these requirements:
 
