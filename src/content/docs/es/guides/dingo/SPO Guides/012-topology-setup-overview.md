@@ -63,7 +63,7 @@ Las raíces locales se utilizan para los pares que el nodo debe mantener siempre
 
 <h3 id="bootstrapping">Pares de arranque</h3>
 
-Los pares de arranque son útiles después de una interrupción prolongada. El nodo se sincroniza desde esos pares y otros pares de confianza, y utiliza los pares del ledger cuando alcanza la punta.
+Los pares de arranque son útiles después de una interrupción prolongada: el nodo se sincroniza desde esos pares y utiliza los pares del ledger cuando alcanza la punta.
 
 <h3 id="advertise">Opción advertise</h3>
 
@@ -75,9 +75,9 @@ Los puntos de acceso pertenecen a un grupo `localRoots`. Así puedes mantener ad
 
 <h3 id="trustable">Opción trustable</h3>
 
-Los pares de confianza incluyen los pares de arranque y las raíces locales marcadas como de confianza. De forma predeterminada, las raíces locales no son de confianza.
+Dingo acepta `trustable` para que los archivos de topología de cardano-node se carguen sin cambios, pero no utiliza la opción. Una raíz local con `trustable` no ayuda a un nodo retrasado respecto a la punta a salir de la selección de cadena Genesis.
 
-Configura tus propios relays y el productor de bloques con `"trustable": true`.
+En mainnet, preprod y preview, el valor predeterminado `genesisBootstrap.corroborationPeers: 0` desactiva la comprobación de corroboración durante la selección de cadena Genesis. Un valor positivo de `corroborationPeers` activa explícitamente esta comprobación. Dingo no añade grupos de control específicos de la red cuando falta `genesisBootstrap.controlGroups` en `dingo.yaml`; el operador debe configurar este campo explícitamente para definir un conjunto fijo. Cuando el operador configura `controlGroups`, solo cuentan los endpoints listados, agrupados por su `identity`.
 
 <h2 id="relay">Ejemplo de topología de relay</h2>
 
@@ -87,7 +87,7 @@ Para una distribución típica de dos relays y un productor de bloques, utiliza 
 - Configura `"advertise": false,` en el grupo que contiene al productor para mantenerlo privado.
 - Como hay un relay adicional, dos en total, establece `"valency": 1`. Con dos relays adicionales, tres en total, utiliza `"valency": 2`, y así sucesivamente.
 - Dingo admite `hotValency` como alias de `valency`; si aparecen ambas claves, `valency` tiene prioridad. Para los grupos de topología no vacíos, valida `warmValency` frente al número de puntos de acceso.
-- Configura los relays con `"trustable": true` para poder sincronizar si te alejas demasiado de la punta.
+- Mantén `useLedgerAfterSlot` en el valor de tu red, para que el relay pueda ponerse al día si se queda atrás respecto a la punta.
 - El modo Genesis/snapshot utiliza `peerSnapshotFile` en lugar de los pares de arranque o junto con ellos.
 - Deja vacías las raíces públicas mediante `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 
@@ -138,15 +138,14 @@ En el siguiente ejemplo, sustituye `relay2.Address` y `blockProducerAddress` por
 
 <h2 id="bp">Ejemplo de topología de productor de bloques</h2>
 
-Un productor de bloques debe conectarse únicamente a tus propios relays. Utiliza esta configuración:
+Un productor de bloques mantiene tus propios relays como sus únicas raíces locales. Utiliza esta configuración:
 
 - Establece `"bootstrapPeers": null`.
 - Establece `"advertise": false,`, porque estas raíces locales del productor deben permanecer privadas.
-- Configura los relays con `"trustable": true,`.
 - Este ejemplo utiliza dos relays y establece `"valency": 2`. Con tres relays, utiliza `3`.
 - Deja vacías las raíces públicas mediante `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
-- Establece `"useLedgerAfterSlot": -1` para impedir que el productor intente conectarse a otros nodos mediante los pares del ledger.
-- El productor no necesita `peerSnapshotFile` ni `bootstrapPeers`, porque no debe sincronizar desde la red pública.
+- Establece `useLedgerAfterSlot` en el valor de tu red, igual que en los relays.
+- El productor no necesita `peerSnapshotFile` ni `bootstrapPeers`.
 
 Ejemplo de archivo JSON de topología del productor de bloques:
 
@@ -176,11 +175,11 @@ Ejemplo de archivo JSON de topología del productor de bloques:
       "advertise": false
     }
   ],
-  "useLedgerAfterSlot": -1
+  "useLedgerAfterSlot": 119231973
 }
 ```
 
-Después de guardar cada archivo de topología, indica su ruta a Dingo, reinicia el nodo y comprueba que el productor de bloques mantenga conexiones hot únicamente con tus relays.
+Después de guardar cada archivo de topología, indica su ruta a Dingo, reinicia el nodo y comprueba que el productor de bloques mantenga conexiones hot con tus relays.
 
 Añade lo siguiente al archivo `/etc/dingo/dingo.yaml` existente, sin sobrescribirlo:
 

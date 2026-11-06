@@ -22,7 +22,7 @@ Descarga la última versión desde [GitHub](https://github.com/blinklabs-io/ding
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.89.0/dingo-v0.89.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.5/dingo-v0.90.5-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 Comprueba que el binario funcione:
@@ -82,6 +82,8 @@ Repite el mismo comando para reanudarla. `--reset` requiere `--data-dir` y vuelv
 
 La primera ejecución persistente requiere un directorio vacío. Dingo rechaza otra ejecución que utilice el mismo directorio mientras el nodo esté activo. Usa las claves y la red incluidas únicamente para pruebas locales, nunca con fondos reales.
 
+📝 `--data-dir` puede estar bajo directorios antecesores que ya sean enlaces simbólicos, incluidos los de la ruta de directorios temporales del sistema. Sin embargo, Dingo rechaza cualquier enlace simbólico o elemento que no sea un directorio y que forme parte de la propia ruta de estado, incluso si otro proceso sustituye un elemento durante la preparación. En un directorio persistente existente, Dingo comprueba primero el marcador y la versión reconocidos de DevNet; después restringe los permisos para que solo el propietario pueda acceder. Si el directorio no se reconoce, el inicio falla, Dingo deja intactos sus permisos y no incorpora datos existentes arbitrarios.
+
 Dingo proporciona `faucet.skey`, `faucet.vkey` y `faucet.addr` en `cardano/keys/`. La dirección incluida en `faucet.addr`, `addr_test1vztc80na8320zymhjekl40yjsnxkcvhu58x59mc2fuwvgkc332vxv`, recibe `900,000` ADA de prueba (`900_000_000_000` lovelace) en la génesis para realizar transacciones locales.
 
 - En una ejecución temporal de `./dingo devnet`, Dingo muestra el directorio temporal. Su carpeta `cardano/keys/` contiene los archivos del faucet hasta que termina el proceso.
@@ -92,7 +94,7 @@ Al reanudar una devnet persistente sin `--reset`, Dingo solo restaura o actualiz
 
 ## Paso 2 - Crear dingo.yaml
 
-Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.89.0. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example) de esa versión como punto de partida.
+Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.90.5. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example) de esa versión como punto de partida.
 
 Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod, mainnet y DijkstraNet. Selecciona DijkstraNet con la opción de red `dijkstra`; DijkstraNet utiliza la magia de red `6`. No necesitas descargarlas por separado.
 
@@ -231,7 +233,7 @@ plugins:
 
 📝 Establece conjuntamente `midnight.authTokenPolicyId` y `midnight.authTokenAssetName` o deja ambos sin configurar. Un par incompleto hace fallar la validación de configuración y de inicio. Un identificador de política configurado debe tener exactamente 56 caracteres hexadecimales, 28 bytes decodificados. La comparación utiliza el identificador y el nombre de activo exactos.
 
-💡 Establecer `block-cache-size` e `index-cache-size` en 0 con `compression: false` utiliza la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB, reduciendo mucho el uso de memoria.
+💡 En el modo Core, configura `plugins.storage.blob.config.blockCacheSize` e `plugins.storage.blob.config.indexCacheSize` en `0`, y `plugins.storage.blob.config.compression` en `false` para usar la caché de páginas del sistema operativo (mmap) en lugar de las cachés internas de BadgerDB y reducir mucho el uso de memoria. La compresión en disco requiere un valor positivo para `plugins.storage.blob.config.blockCacheSize`; con el valor `0`, la configuración falla.
 
 ## Paso 3 - Abrir los puertos de red
 

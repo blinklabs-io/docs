@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.89.0 Configuration Reference
-description: Complete, release-specific Dingo v0.89.0 configuration reference and example.
+title: Dingo v0.90.5 Configuration Reference
+description: Complete, release-specific Dingo v0.90.5 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.89.0. The complete
+This page covers the configuration shipped with Dingo v0.90.5. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.89.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.89.0 source](https://github.com/blinklabs-io/dingo/blob/v0.89.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example).
+The same file is available in the [Dingo v0.90.5 source](https://github.com/blinklabs-io/dingo/blob/v0.90.5/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -32,11 +32,72 @@ for the main runtime choices.
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
-| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
+| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
+
+### Cardano node transaction submission
+
+Set this key in the Cardano node configuration file. Dingo does not expose this
+key through a native CLI flag or environment variable.
+
+| Setting | Cardano node configuration key | Default and behavior |
+| --- | --- | --- |
+| Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+
+### Cardano node Version 2 envelope configuration
+
+Dingo accepts both the existing flat Cardano node configuration and the Version 2
+envelope format. A document with a top-level `Version` or `Configuration` key
+uses the envelope format and must include both keys. The supported sections map
+their fields to the corresponding Cardano node settings:
+
+- `Configuration.Protocol` supplies protocol settings, including genesis file
+  paths and hashes.
+- `Configuration.Testing` supplies testing genesis settings and hard fork
+  overrides.
+- `Configuration.Consensus` supplies consensus settings such as
+  `ConsensusMode`.
+- `Configuration.Network` supplies network settings. Same-name fields remain
+  in this section, including `PeerSharing`.
+
+```yaml
+Version: 2
+Configuration:
+  Protocol:
+    ByronGenesisFile: byron-genesis.json
+  Testing:
+    DijkstraGenesisFile: dijkstra-genesis.json
+  Consensus:
+    ConsensusMode: GenesisMode
+  Network:
+    PeerSharing: false
+    DeadlineTargetNumberOfRootPeers: 7
+```
+
+The four `Configuration.Network.DeadlineTargetNumberOf*Peers` fields map to the
+existing `TargetNumberOf*Peers` settings:
+
+- `DeadlineTargetNumberOfRootPeers` maps to `TargetNumberOfRootPeers`.
+- `DeadlineTargetNumberOfKnownPeers` maps to `TargetNumberOfKnownPeers`.
+- `DeadlineTargetNumberOfEstablishedPeers` maps to
+  `TargetNumberOfEstablishedPeers`.
+- `DeadlineTargetNumberOfActivePeers` maps to `TargetNumberOfActivePeers`.
+
+The flat format remains valid and continues to use its existing top-level
+fields. `Version` must be an integer with the value `2`, and the envelope must
+contain an object in `Configuration`. Each supported section must also contain
+an object. Dingo rejects an envelope that omits either required key or gives a
+required value a different shape. Dingo also rejects duplicate keys in the
+envelope root,
+`Configuration`, or supported sections, including duplicates that resolve to
+the same flat field, such as `TargetNumberOfRootPeers` and
+`DeadlineTargetNumberOfRootPeers`. The envelope applies the same
+`TxSubmissionLogicVersion` validation as the flat format, so Dingo rejects
+invalid transaction submission logic in both formats. This format does not add
+support for unrelated or unknown cardano-node settings.
 
 ### Consensus provider
 
@@ -98,17 +159,29 @@ network.
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
-| N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N port. A nonzero value does not activate peer listening or dialing in the current DMQ stack. |
+| N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N peer port. A nonzero value activates DMQ node-to-node listening and peer management when `dmq.maxPeers` is also nonzero. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
 | IPv6 peer listener address | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv6 literal when this field is set. |
 | DMQ peer topology file | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Unset | When configuration sets this field, the path must contain no `..` traversal and identify an existing regular file. Dingo loads and validates the file before opening the DMQ socket. |
-| Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no required peers. The current DMQ stack does not enforce the minimum peer count. |
-| Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no peers when `minPeers` is also `0`. The current DMQ stack does not enforce the maximum peer count. |
+| Minimum DMQ peers | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no required outbound peers. Only outbound or dialed peers count toward this minimum; inbound sessions cannot satisfy it. |
+| Maximum DMQ peers | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Dingo requires `dmq.minPeers <= dmq.maxPeers`; `0` allows no peers when `minPeers` is also `0`. This is the total connection capacity for inbound and outbound peers. Dingo reserves capacity for outbound peers using the larger of `minPeers` and local-root valency, capped at `maxPeers`. |
 
 Dingo validates these six peer settings when DMQ starts. With `dmq.n2nPort: 0`,
 Dingo skips listener address validation. When `dmq.n2nPort` is nonzero, each
-configured listener address must use its matching IP version. The peer manager
-and transport do not use the topology file for dialing yet.
+configured listener address must use its matching IP version. When both
+`dmq.n2nPort` and `dmq.maxPeers` are nonzero, Dingo listens on the configured
+IPv4 and IPv6 addresses and maintains peers within `dmq.minPeers` and
+`dmq.maxPeers`. A configured topology supplies peers to the manager, which
+attempts local roots before public roots; the enabled topic can also discover
+ledger relay peers through its DNS SRV prefix. When either `dmq.n2nPort` or
+`dmq.maxPeers` is `0`, Dingo accepts or dials no peers.
+
+DMQ derives the inbound admission limit from the capacity remaining after it
+reserves the larger of `dmq.minPeers` and the local roots' total valency, capped
+at `dmq.maxPeers`. The limit applies only to inbound sessions; Dingo still counts
+only outbound or dialed peers toward `dmq.minPeers`. Dingo does not expose this
+derived limit as a `dmq.maxInbound` YAML key, CLI flag, or environment variable.
+If the outbound reserve consumes all `dmq.maxPeers`, Dingo refuses inbound peers.
 
 When configuration sets `dmq.topologyFile`, Dingo applies these topology rules
 before it opens the DMQ socket:
@@ -158,7 +231,8 @@ chunk, and integrity requirements.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `1` by default. One independent peer must report the same recent blocks before a fast source can drive Genesis selection. Set `0` explicitly to disable the corroboration gate for an intentional single-peer or test topology. |
+| Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` by default, which disables the corroboration gate. Set a positive value to explicitly enable the required corroboration behavior. |
+| Genesis control groups | `genesisBootstrap.controlGroups` | — | — | Dingo no longer supplies network-specific control groups implicitly. Configure this field explicitly to use a fixed control-group set. |
 
 For Musashi, a Cardano node configuration with `ConsensusMode: PraosMode`
 disables Genesis chain selection, even when `genesisBootstrap` is enabled and
@@ -308,6 +382,9 @@ An explicit YAML value overrides either mode default, including an explicit
 
 | Setting | Provider YAML key | Default | Validation and behavior |
 | --- | --- | --- | --- |
+| Block cache size | `plugins.storage.blob.config.blockCacheSize` | `0` in Core mode; `256 MiB` in API mode | For a non-empty on-disk Badger data directory, Dingo rejects the configuration and returns an error when compression is enabled and `blockCacheSize` is `0`; set a positive `blockCacheSize` for compression. |
+| Index cache size | `plugins.storage.blob.config.indexCacheSize` | `0` in Core mode and API mode | Set a byte count for the index cache. |
+| Compression | `plugins.storage.blob.config.compression` | `false` in Core mode; enabled in API mode | Dingo accepts a zero `blockCacheSize` when compression is disabled. |
 | Memtable size | `plugins.storage.blob.config.memTableSize` | `512 MiB` only when storage mode is `core` and run mode is `sync`; all other storage and run mode combinations use `128 MiB` when configuration omits this setting or sets it to `0` | Set a byte count. An explicit value overrides the built-in default. No top-level CLI flag or environment variable exists. |
 | Value-log GC interval | `plugins.storage.blob.config.gcInterval` | `5m` | A zero interval selects the `5m` default. Dingo rejects negative intervals. |
 | Value-log GC discard ratio | `plugins.storage.blob.config.gcDiscardRatio` | `0.5` | The value must be strictly greater than `0` and less than `1`. |
@@ -383,9 +460,16 @@ error.
 | Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` when set to `0`. The budget covers all anonymous `ArchiveService` callers. Dingo rejects negative values. |
 | Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
 
-Dingo charges the full `FetchBlock` reference batch against both budgets. When
-either budget cannot cover the batch, Dingo refuses the whole request with
-`RESOURCE_EXHAUSTED` before it performs archive or cloud lookups.
+Dingo charges one base lookup to both budgets for each `FetchBlock` reference.
+For a batch containing height references, Dingo also reserves `66` lookup units
+once to resolve the highest indexed block and reserves additional lookup units
+for each height reference based on binary-search probes up to that bound. Dingo
+reserves the budget for each stale-tail retry during bound resolution and each
+stale interior index skip during a height search before performing that work.
+The base and additional charges apply to both the global and per-caller
+budgets. If either budget cannot cover the required charge, Dingo refuses the
+request with `RESOURCE_EXHAUSTED` before the corresponding archive or cloud
+lookup. Large batches containing height references may need to be split.
 
 ### File-backed secret and parity inputs
 
@@ -401,6 +485,7 @@ Dingo rejects a source that sets both the literal form and the file form.
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
 | `node-parity from-genesis` Koios API key file | — | `--koios-api-key-file` | — | Use instead of `--koios-api-key`. The file supplies the API key used for the Koios request. |
+| `node-parity from-genesis` boundary capture directory | — | `--boundary-capture-dir` | — | Optional directory where the `from-genesis` UTxO comparison flow stores boundary captures when UTxO comparison is enabled. |
 
 Every file-backed value must meet these requirements:
 
@@ -416,27 +501,29 @@ Every file-backed value must meet these requirements:
   users. Windows ACLs can allow only the owner, Administrators, and SYSTEM.
 - Dingo identifies the value or path in errors but never includes file contents.
 
-### Token registry manifest authentication
+### Token registry source and manifest authentication
 
-When configuration enables token registry sync, Dingo requires a signed manifest
-URL and the trusted public key used to verify it.
+When token registry sync is enabled, Dingo uses the public registry archive for
+the configured network when `manifestUrl` is empty. A signed operator mirror
+requires `manifestUrl` and `trustedManifestKey` together; setting only one makes
+the configuration invalid.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Signed manifest URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Empty by default. Required when token registry sync is enabled. Set an absolute HTTPS URL. |
-| Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Required when token registry sync is enabled. Set a hex-encoded 32-byte Ed25519 public key. |
-| Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. Set `true` only for an intentional publisher rollback. |
+| Signed manifest URL | `tokenRegistry.manifestUrl` | `--token-registry-manifest-url` | `DINGO_TOKEN_REGISTRY_MANIFEST_URL` | Empty by default. Leave empty for public archive sync. Set an absolute HTTPS URL only with `trustedManifestKey` for a signed mirror. |
+| Trusted manifest key | `tokenRegistry.trustedManifestKey` | `--token-registry-trusted-manifest-key` | `DINGO_TOKEN_REGISTRY_TRUSTED_MANIFEST_KEY` | Empty by default. Leave empty for public archive sync. Set a hex-encoded 32-byte Ed25519 public key only with `manifestUrl` for a signed mirror. |
+| Allow manifest rollback | `tokenRegistry.allowRollback` | `--token-registry-allow-rollback` | `DINGO_TOKEN_REGISTRY_ALLOW_ROLLBACK` | `false` by default. For signed manifest mirrors, set `true` only for an intentional publisher rollback. |
 
-If `tokenRegistry.sourceUrl` has an explicit value, Dingo also requires it to
-be an absolute HTTPS URL. Before Dingo applies a snapshot, it verifies the
-signed manifest against the configured archive URL, exact compressed size, and
-BLAKE2b-256 digest. The manifest also supplies the sequence used for rollback
-checks.
+If `tokenRegistry.sourceUrl` has an explicit value, Dingo requires an absolute
+HTTPS URL and uses it as the archive source instead of the network default.
 
-Dingo rejects unauthenticated, mismatched, or incomplete snapshots. Dingo
-also rejects a lower sequence unless `allowRollback` is `true`, and rejects a
-same-sequence digest change. A rejected snapshot does not replace the last
-accepted snapshot.
+When both signed mirror fields are set, Dingo verifies the signed manifest
+against the configured archive URL, exact compressed size, and BLAKE2b-256
+digest. The manifest also supplies the sequence used for rollback checks. Dingo
+rejects unauthenticated, mismatched, or incomplete signed-manifest snapshots.
+Dingo also rejects a lower sequence unless `allowRollback` is `true`, and
+rejects a same-sequence digest change. A rejected signed-manifest snapshot does
+not replace the last accepted snapshot.
 
 ### Token registry header credentials
 
@@ -463,8 +550,8 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.77.1 removes `ForgePrimaryChainTipToleranceSlots` and
-`forgePrimaryChainTipToleranceSlots` from YAML, the CLI, and environment
+Dingo v0.90.5 does not support `ForgePrimaryChainTipToleranceSlots` or
+`forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
 

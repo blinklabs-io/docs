@@ -66,7 +66,7 @@ Local roots are designed for peers that the node should always keep as hot or wa
 ***
 
 <h3 id="bootstrapping">Bootstrapping Peers</h3>
-Bootstrapping peers are good for when your node has had an extended outage, the node syncs from those peers and other trustable peers, then uses ledger peers once it is on tip.
+Bootstrapping peers are good for when your node has had an extended outage: the node syncs from those peers, then uses ledger peers once it is on tip.
 
 ***
 
@@ -81,11 +81,11 @@ Access points sit inside a `localRoots` group. Why would you want to use this? T
 ***
 
 <h3 id="trustable">Trustable Flag</h3>
-Trustable peers consist of the bootstrap peers and the trustable local root peers. By default, local root peers are not trustable.  
+Dingo accepts `trustable` so that cardano-node topology files load unchanged, but it does not use the flag. A trustable local root does not help a node that is behind the tip leave Genesis chain selection.
 
 <br>
 
-Your own relays and BP should be set to `"trustable": true`
+On mainnet, preprod and preview, Genesis chain selection uses `genesisBootstrap.corroborationPeers: 0` by default, so a node can advance Genesis selection with a single upstream peer. Set `genesisBootstrap.corroborationPeers` to a positive value to enable the corroboration gate and require independent corroborating peers before the node follows a chain. Dingo does not inject network-specific control groups when configuration omits `genesisBootstrap.controlGroups`. To require a fixed control-group set, configure `genesisBootstrap.controlGroups` explicitly in `dingo.yaml`; Dingo counts only the listed endpoints and groups them by the `identity` each endpoint specifies.
 
 ***
 
@@ -96,7 +96,7 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 - Set `"advertise": false,` on the group that contains the BP, to keep the BP private.
 - Because there is one additional relay, (2 relays in total) set "valency": 1, if you had two additional relays (3 relays in total), you would set "valency": 2, and so on.
 - Dingo accepts `hotValency` as an alias for `valency`; when both keys are present, `valency` takes precedence. For non-empty topology groups, Dingo validates `warmValency` against the number of access points.
-- Set your Relays to "trustable": true, so you can sync if you get too far off the tip.
+- Keep `useLedgerAfterSlot` at your network's value, so the relay can catch up after falling behind the tip.
 - Genesis/snapshot mode uses `peerSnapshotFile` instead of (or in addition to) bootstrap peers.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
 
@@ -148,15 +148,14 @@ For a typical 2 relay and BP setup, for the topology on your relay use:
 ***
 
 <h2 id="bp">BP Sample Topology File</h2>
-A block producer should connect only to your own relays. Use the following configuration:
+A block producer keeps your own relays as its only local roots. Use the following configuration:
 
 - Set `"bootstrapPeers": null`.
 - Set `"advertise": false,` since these are the BP's local roots and should stay private.
-- Set your Relays to `"trustable": true,`.
 - This example uses 2 relays, so it sets `"valency": 2`. With three relays, set it to `3`.
 - Leave Public roots blank by using `"publicRoots": [{ "accessPoints": [], "advertise": false }]`.
-- Set `"useLedgerAfterSlot": -1` so the BP doesn't try to connect to other nodes using ledger peer data.
-- The BP does not need `peerSnapshotFile` or `bootstrapPeers` because it should not sync from the public network.
+- Set `useLedgerAfterSlot` to your network's value, as on the relays. With `-1`, a BP with one relay, or with relays that share one IPv4 /24 or IPv6 /64, may need ledger peers to catch up after a restart if it falls behind the tip (<a href="https://github.com/blinklabs-io/dingo/issues/5831" target="_blank">dingo#5831</a>). The default `genesisBootstrap.corroborationPeers: 0` does not prevent Genesis chain selection in this topology. When `genesisBootstrap.corroborationPeers` has a positive value, ensure the BP can reach the required peers. The BP then also connects to ledger peers.
+- The BP does not need `peerSnapshotFile` or `bootstrapPeers`.
 
 Sample BP Topology JSON FILE: 
 ```
@@ -185,13 +184,13 @@ Sample BP Topology JSON FILE:
       "advertise": false
     }
   ],
-  "useLedgerAfterSlot": -1
+  "useLedgerAfterSlot": 119231973
 }
 ```
 
 ***
 
-After you save each topology file, point Dingo at it, restart the node, and confirm the block producer has hot connections only to your relays.
+After you save each topology file, point Dingo at it, restart the node, and confirm the block producer has hot connections to your relays.
 
 Add this to the existing `/etc/dingo/dingo.yaml` (do not overwrite the file):
 
