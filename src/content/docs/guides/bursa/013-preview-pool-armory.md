@@ -286,7 +286,7 @@ Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The
 
 From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `pins`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile`, `cold` or `signlog`.
 
-To revoke a key, send the same `host-key.json` from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys.
+To revoke a key, send the same `host-key.json` from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys. The device refuses to revoke its last host key ([bursa#1241](https://github.com/blinklabs-io/bursa/pull/1241)): only a device wipe removes it.
 
 ```sh
 armory-pool -host-key host.skey provision host-key/revoke < host-key.json
@@ -795,7 +795,7 @@ You do not need to track whether the pool forged with the current opcert. The no
 | One lower | The pool has not forged with the current opcert | The same counter again |
 | `null` | The pool has never forged | See [A new pool](#a-new-pool) |
 
-The armory always issues the on-chain counter plus one, so the host only reports the chain. Reissuing the same counter burns nothing, and the counter on chain never skips. The device remembers the highest counter the host has reported (its floor) and refuses a request that reports a lower one. A reissue of the latest counter in the signing log, for the same profile and cold key, may not take a KES period below the logged one: both opcerts stay valid until one forges, so an earlier period would only extend an older KES key's window.
+The armory always issues the on-chain counter plus one, so the host only reports the chain. Reissuing the same counter burns nothing, and the counter on chain never skips. The device remembers the highest counter the host has reported (its floor) and refuses a request that reports a lower one. Once it has issued an opcert, it also refuses a chain counter above the last one it issued, since the chain only holds counters the device issued ([bursa#1160](https://github.com/blinklabs-io/bursa/pull/1160)). A reissue of the latest counter in the signing log, for the same profile and cold key, may not take a KES period below the logged one: both opcerts stay valid until one forges, so an earlier period would only extend an older KES key's window.
 
 To rotate:
 
@@ -934,6 +934,8 @@ A pool that already forges can move its cold key onto the armory.
 A `404` from a `/provision/` endpoint means the signing image is running; a `404` from `armory-pool` means the provisioning image is. See [Build the firmware](#build-the-firmware).
 
 An opcert request below the floor is refused with `chain counter below the recorded on-chain counter`. If a rollback lowered the chain counter, or a host reported a wrong, higher counter, reset the floor with the provisioning image as in [Rollbacks](#rollbacks).
+
+An opcert request that reports a chain counter above the last counter the device issued is refused with `chain counter above the last counter the device issued`. Check the counter with `bursa query pool`. If the pool forged with an opcert from another device, such as a spare, set the floor to the real on-chain counter with the provisioning image; that also clears the device's record of its last issued counter.
 
 A reissue of the device's last counter at a KES period below the logged one is refused with `KES period below the logged opcert at this counter`. Take the period from `bursa query pool`. `opcert-check` sends the certificate's own KES period, so after a reissue of the same counter at a later period, the older certificate cannot be checked this way.
 
