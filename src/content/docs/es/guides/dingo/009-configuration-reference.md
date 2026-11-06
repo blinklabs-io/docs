@@ -47,7 +47,7 @@ Dingo rechaza los datos del formato envolvente si falta `Version` o `Configurati
 | Zona | Ajustes principales | Propósito |
 | --- | --- | --- |
 | Redes y rutas | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Selecciona una red Cardano y las rutas de configuración del nodo, topología y datos. |
-| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. |
+| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. |
 | Registro y TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Selecciona la salida de registros y protege los servicios compatibles de API o Bark. |
 | Almacenamiento y API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Elige el historial almacenado, proveedores de almacenamiento, orden de transacciones y API de aplicaciones. |
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
@@ -97,8 +97,12 @@ El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un p
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Endpoint del recopilador | `tracingEndpoint` | `--tracing-endpoint` | `DINGO_TRACING_ENDPOINT` | Vacío de forma predeterminada. Establece la URL de un recopilador OTLP HTTP para activar las trazas. Si está vacío, `tracing` controla su activación y las variables estándar `OTEL_EXPORTER_OTLP_*` seleccionan el destino. |
-| Nombre del servicio de trazas | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | `dingo` de forma predeterminada. Define el nombre del servicio de las trazas exportadas. |
+| Nombre del servicio de trazas | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME`, `OTEL_SERVICE_NAME` | `dingo` de forma predeterminada. Dingo utiliza primero `tracingServiceName` cuando se configura de forma explícita, después `OTEL_SERVICE_NAME` y finalmente `dingo`. Define el nombre del servicio de la telemetría exportada. |
 | Proporción de muestreo | `tracingSampleRatio` | `--tracing-sample-ratio` | `DINGO_TRACING_SAMPLE_RATIO` | `1` de forma predeterminada. Admite valores de `0` a `1`, ambos incluidos. La validación rechaza los valores fuera de ese intervalo. |
+| Pools que siempre se muestrean | `tracingAlwaysSamplePools` | `--tracing-always-sample-pools` | `DINGO_TRACING_ALWAYS_SAMPLE_POOLS` | Lista vacía de forma predeterminada. Acepta identificadores de pool en Bech32, incluido Bech32 en mayúsculas, o hashes de clave hexadecimales de `56` caracteres. Dingo muestrea los bloques de los pools enumerados independientemente de `tracingSampleRatio`. |
+| Atributos de recurso de OpenTelemetry | — | — | `OTEL_RESOURCE_ATTRIBUTES` | Dingo aplica los atributos analizables a la telemetría exportada. Dingo avisa sobre las entradas que no puede analizar sin hacer fallar el inicio. |
+| Exportador de registros OpenTelemetry | — | — | `OTEL_LOGS_EXPORTER` | Activa la exportación OTLP opcional de registros. Un valor vacío o `none` la desactiva. Dingo avisa sobre una configuración de exportador no válida en lugar de hacer fallar el inicio y mantiene disponibles los registros de salida estándar. |
+| Exportador de métricas OpenTelemetry | — | — | `OTEL_METRICS_EXPORTER` | Activa la exportación OTLP opcional de las métricas del registro Prometheus. Un valor vacío o `none` la desactiva. Dingo avisa sobre una configuración de exportador no válida en lugar de hacer fallar el inicio; la exportación no altera el extremo Prometheus `/metrics`. |
 
 ### Configuración DMQ
 
@@ -317,6 +321,8 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
 | Archivo de clave Koios de `node-parity from-genesis` | — | `--koios-api-key-file` | — | Sustituye a `--koios-api-key`. Aporta la clave API de la solicitud Koios. |
+| Tamaño de lote de transacciones de `node-parity from-genesis` | — | `--koios-tx-info-batch-size` | — | `40` de forma predeterminada. Solo `node-parity from-genesis` admite esta opción. Controla el número de hashes de transacción por solicitud `/tx_info` y acepta valores de `1` a `999`. El host público rechaza cuerpos de solicitud de más de `5120` bytes. |
+| Concurrencia de transacciones de `node-parity from-genesis` | — | `--koios-tx-info-concurrency` | — | `8` de forma predeterminada. Solo `node-parity from-genesis` admite esta opción. Controla el número de solicitudes `/tx_info` que Dingo mantiene simultáneamente y acepta valores de `1` a `64`. |
 | Directorio de captura de límites de `node-parity from-genesis` | — | `--boundary-capture-dir` | — | El operador puede indicar un directorio de capturas de límites para la comparación de UTxO desde génesis. |
 
 Cada valor respaldado por archivos debe cumplir estos requisitos:
