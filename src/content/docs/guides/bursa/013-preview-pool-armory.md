@@ -825,7 +825,7 @@ To recover:
 
 3. Start the signing image again: switch toward eMMC with the log card in, then plug the board in. Issue a new opcert and install it.
 
-In `Auto` mode the reset clears only the device's records. The signer's watermark still holds the higher chain counter as its floor and refuses the lower one with HTTP 409, which the operator reports as `IssueFailed`. Set the producer to `Assisted`, issue the recovery opcert with `armory-pool opcert` as in step 3, and replace the Secret's contents. The signer accepts the chain counter again once the pool forges with that opcert.
+In `Auto` mode the reset clears only the device's records. The signer's watermark still holds the higher chain counter as its floor and refuses the lower one with HTTP 409, which the operator reports as `IssueFailed`. Set the producer to `Assisted`, issue the recovery opcert with `armory-pool opcert` as in step 3, and replace the Secret's contents. The signer accepts the chain counter again once the pool forges with that opcert; then switch back to `Auto`.
 
 Rotate several KES periods before expiry, as the operator's `renewBeforePeriods: 8` does. A rotation then rarely lands right after a fresh block, and a mistake leaves time to recover.
 
