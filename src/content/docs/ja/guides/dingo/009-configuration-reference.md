@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.90.5 設定リファレンス
-description: Dingo v0.90.5 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.91.0 設定リファレンス
+description: Dingo v0.91.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.90.5 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.5 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.5/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.91.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.91.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -426,7 +426,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.90.5 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
