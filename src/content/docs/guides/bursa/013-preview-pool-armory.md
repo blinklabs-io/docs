@@ -892,7 +892,13 @@ The signer takes one armory backend per profile. They share the device address a
       keys: ["<pool A id hex>", "<pool B id hex>"]
 ```
 
-At startup the signer reads each profile's keys from the device and refuses to start if two backends list the same key. A profile that is removed from the device keeps the signer from starting, so remove its backend first. In Kubernetes, each producer sets its own `coldKeyHash` and uses the same `endpoint` and `mtlsSecretRef`.
+At startup the signer reads each profile's keys from the device. A profile that is removed from the device keeps the signer from starting, so remove its backend first. In Kubernetes, each producer sets its own `coldKeyHash` and uses the same `endpoint` and `mtlsSecretRef`.
+
+One pool can run on several networks with the same cold key, one profile per network on the device (for example `mypool@preview` and `mypool@preprod`). The signer then takes one backend per profile listing the same key. It refuses to start if two backends with the same profile, or a backend without a profile, list a key that another backend also lists ([bursa#1249](https://github.com/blinklabs-io/bursa/pull/1249)):
+
+- Leave the key's `backend` field empty: when set, the signer refuses any request whose profile selects a different backend.
+- A request for such a key must name its profile. Without one the signer refuses it with HTTP 400, and a profile none of the backends has with HTTP 404.
+- The signer keeps the watermark records of such a key for each profile. Records a signer before v0.22.0 wrote carry no profile and are ignored once a second backend lists the key. Before adding the second profile, stop the signer and migrate them as the [profile routing section of the signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md#profile-routing) describes.
 
 Before putting several pools on one device:
 
