@@ -561,8 +561,6 @@ host, Dingo removes the configured credentials before following it.
 Dingo v0.92.0 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
-`forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
-variables.
 Remove these settings rather than replacing them with another field.
 
 Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
