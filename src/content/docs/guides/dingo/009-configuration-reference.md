@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.91.0 Configuration Reference
-description: Complete, release-specific Dingo v0.91.0 configuration reference and example.
+title: Dingo v0.92.0 Configuration Reference
+description: Complete, release-specific Dingo v0.92.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.91.0. The complete
+This page covers the configuration shipped with Dingo v0.92.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.91.0 source](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.92.0 source](https://github.com/blinklabs-io/dingo/blob/v0.92.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -380,8 +380,9 @@ Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
 Dingo uses `1 MiB` as the default for
-`plugins.storage.blob.config.valueThreshold`, except during Core-mode `sync`
-and Mithril sync, when Dingo uses `1 KiB`.
+`plugins.storage.blob.config.valueThreshold` generally. For `runMode: sync`,
+Dingo uses `1 KiB` in both Core and API storage modes. Core Leios also uses
+`1 KiB`; API Leios and all other run modes use `1 MiB`.
 An explicit YAML value overrides either mode default, including an explicit
 `0`.
 
@@ -557,7 +558,9 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.91.0 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.92.0 does not support `ForgePrimaryChainTipToleranceSlots` or
+`forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
+variables.
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
