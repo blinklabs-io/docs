@@ -73,7 +73,7 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 | コンセンサスとプラグインの選択 | `plugins.consensus` | ノードで使用するコンセンサスプロバイダーを選択します。 |
 | ブートストラップと同期 | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | スナップショットまたはジェネシスからのブートストラップ、同期、過去のデータの検証を設定します。 |
 | ピア管理 | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | ピア数の目標、取得元ごとの割り当て、着信ピアのポリシーを設定します。 |
-| ブロック生成と台帳ルール | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | ブロック生成鍵、安全性のしきい値、オプションの台帳動作を設定します。 |
+| ブロック生成と台帳ルール | `blockProducer`, `shelley*`, `forge*`, `cip0203Enabled`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | ブロック生成鍵、安全性のしきい値、オプションの台帳動作を設定します。 |
 | アーカイブとデータベースのライフサイクル | `bark*`, `historyExpiry`, `databaseLifecycle` | アーカイブデータの配信や取得、ローカル履歴の期限切れ、スナップショットの管理を設定します。 |
 | 任意のインデックスと診断 | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | 任意のインデックス作成、認証付きレジストリ更新、パリティ診断、キャッシュ、起動時検証を設定します。 |
 
@@ -438,6 +438,10 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 Dingo v0.92.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
+| --- | --- | --- | --- | --- |
+| CIP-0203 リリースバージョン通知 | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false`（無効）。有効にすると、フォージしたヘッダーで CIP-0203 のリリースバージョン通知を使用します。ビルド時にリンカーで設定された有効なセマンティックリリースバージョンが必要です。バージョンが欠落、形式不正、または範囲外の場合はエラーになります。無効時は従来の識別子 `69` を維持します。 |
 
 <a id="shelley-kes-agent-socket"></a>
 
