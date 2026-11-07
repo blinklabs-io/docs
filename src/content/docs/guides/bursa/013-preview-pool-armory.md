@@ -64,10 +64,10 @@ Every signature comes back with a second signature, from the same key, over the 
 Commands run in three places:
 
 - **Offline machine:** the pool mnemonic, key derivation and armory provisioning (Steps 1 and 2). Plug the armory in here to provision it.
-- **Host:** online, with the node socket and the payer wallet. It builds, signs with the armory and submits (Steps 4 and 5). Plug the armory in here to sign.
+- **Host:** online, with the node socket and the payer wallet. It generates the VRF and KES keys, builds, signs with the armory and submits (Steps 4 and 5). Plug the armory in here to sign.
 - **Block producer:** the node, `vrf.skey`, `kes.skey` and `node.cert` (Step 3).
 
-Only verification keys, transaction files, witnesses and certificates move to the host. The cold and owner signing keys never leave the offline machine.
+Only verification keys, transaction files, witnesses and certificates cross between the offline machine and the host. The cold and owner signing keys never leave the offline machine, and the VRF and KES signing keys never touch it.
 
 Set the network once for Bursa:
 
@@ -140,7 +140,9 @@ This is a plain Ed25519 key. Its key hash and reward address differ from those o
 
 ### VRF and KES keys
 
-These end up on the block producer and need no paper backup. Generate them with Bursa on the machine where you run it, then move the signing keys into place. `bursa key vrf` and `bursa key kes` derive keys from a mnemonic, so generate a throwaway one, derive the keys and delete it. Never use the pool mnemonic: it re-derives the cold key, so it stays offline.
+Run this on the host, not the offline machine. The VRF and KES signing keys are hot: the producer needs `vrf.skey` and `kes.skey` online to forge, so they live on online machines and never touch the offline machine. Never derive them from the pool mnemonic, which re-derives the cold key.
+
+`bursa key vrf` and `bursa key kes` derive keys from a mnemonic, so derive them from a throwaway one and delete it. It is not a backup:
 
 ```sh
 tmp=$(mktemp -d)
@@ -152,18 +154,20 @@ bursa key kes --mnemonic-file "$tmp/seed.txt" \
 rm -rf "$tmp"
 ```
 
-Keep the verification keys where Bursa runs, and move the signing keys and the opcert to the producer:
-
-| File | Stays or moves | Used for |
+| File | Goes to | Used for |
 |---|---|---|
-| `vrf.vkey` | Stays with Bursa | The pool registration ([Step 4](#step-4-register-the-pool)) |
-| `kes.vkey` | Stays with Bursa | The opcert request ([Step 5](#step-5-the-first-operational-certificate)) |
-| `vrf.skey`, `kes.skey` | Move to the producer | Forging. Delete the local copies once they are in place. |
-| `node.cert` | Moves to the producer after Step 5 | Forging, next to `kes.skey` |
+| `vrf.skey` | Producer | Forging: the leader check in every slot. The registration names its key, so it lasts as long as the registration. |
+| `kes.skey` | Producer | Forging: signs block headers. Replaced at every rotation. |
+| `vrf.vkey` | Host, and a copy on the offline machine | The pins ([Pin the pool registration](#pin-the-pool-registration)) and the registration ([Step 4](#step-4-register-the-pool)) |
+| `kes.vkey` | Host | The opcert request ([Step 5](#step-5-the-first-operational-certificate)) |
+| `node.cert` | Producer, after Step 5 | Forging, with the `kes.skey` it certifies |
 
-Copy them over an encrypted channel such as `scp`, and set the permissions on the producer as [Step 3](#step-3-run-the-node) shows.
+Copy `vrf.skey` and `kes.skey` to the producer over an encrypted channel such as `scp`, set their permissions as [Step 3](#step-3-run-the-node) shows, and delete them from the host. Losing one does not lose the pool:
 
-The pool registration names the VRF key. If `vrf.skey` is lost, generate a new one and register the pool again with it; to avoid that, keep an encrypted copy. KES keys are replaced at every rotation, so a lost one only means rotating early. In Kubernetes `Auto` mode the operator generates each new KES key itself.
+- **`vrf.skey`:** generate a new VRF key and register the pool again with it, after new pins if the pins fix the VRF key hash. To avoid that, keep one encrypted copy off the producer. Anyone holding `vrf.skey` can compute which slots the pool leads, so treat the copy like the producer's own key.
+- **`kes.skey`:** rotate early, with a new KES key and opcert. Keep no copy.
+
+In Kubernetes `Auto` mode the operator generates each new KES key itself; `vrf.skey` still comes from here and goes into the keys Secret.
 
 ### Reward account key
 
@@ -819,10 +823,10 @@ The armory always issues the on-chain counter plus one, so the host only reports
 
 To rotate:
 
-1. Generate a new KES key with Bursa from a new throwaway mnemonic, as in [VRF and KES keys](#vrf-and-kes-keys), and keep `kes.vkey` for the opcert.
+1. On the host, generate a new KES key from a new throwaway mnemonic, as in [VRF and KES keys](#vrf-and-kes-keys). Keep `kes.vkey` for the opcert.
 2. Query the pool for `on_chain_counter` and `current_kes_period`.
 3. Get the opcert from the armory with `armory-pool opcert`, as in Step 5.
-4. Move the new `kes.skey` and `node.cert` into place on the producer, delete the local `kes.skey`, and restart the producer. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
+4. Move the new `kes.skey` and `node.cert` to the producer, delete `kes.skey` from the host, and restart the producer. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
 
 ### Rollbacks
 
@@ -999,8 +1003,8 @@ From chart 0.4.1, a node whose tip stops moving shows the `TipNotAdvancing` reas
 | Pool mnemonic words | Paper, checked | Keep. The only backup of the cold and owner keys. |
 | `pool/seed.txt` | Offline machine | Delete once the armory is provisioned and the paper is checked. |
 | `pool-cold.skey`, `owner.skey`, other files in `pool/` | Offline machine | Delete after import. |
-| `vrf.skey` copy | Encrypted file | Optional. Without it, a lost VRF key means registering the pool again with a new one. |
-| `vrf.skey`, `kes.skey` | Block producer | Only on the producer. Delete other copies. |
+| `vrf.skey` | Block producer | Keep while the registration names its key. One encrypted copy off the producer is optional and spares a re-registration if the producer is lost. Delete the host copy. |
+| `kes.skey` | Block producer | Only the current one, only on the producer. Delete the host copy. |
 | `node.cert` (the opcert) | Block producer | Keep the current one with its `kes.skey`. Not secret, but with that `kes.skey` and `vrf.skey` it forges blocks, so after a rotation delete the old `node.cert` and `kes.skey` together. |
 | `kes.vkey` | Host | Needed only to issue its opcert. Delete it with its `kes.skey` at the next rotation. |
 | `reward.skey` | Offline | Keep offline, or re-derive from the mnemonic (account 1) when you withdraw rewards. |
@@ -1058,7 +1062,7 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 | Armory | No new signatures | Restore the cold key and owner key from the pool mnemonic on a new device, with the same reward account. The pool, owner and pledge address stay the same. |
 | Pool mnemonic | No backup of the cold key | The armory keeps signing, but the SE050 cannot export the key. If the armory is lost too, the pool is gone and a new pool needs a new cold key. |
 | Pledge hardware wallet | Pledge funds | Restore from the pledge mnemonic. |
-| Block producer | No blocks | Restore `vrf.skey` from its encrypted copy, or generate a new VRF key and register the pool again with it. Generate a new KES key and issue a new opcert. |
+| Block producer | No blocks | Restore `vrf.skey` from its encrypted copy, or generate a new VRF key, update the pins if they fix it, and register the pool again. Generate a new KES key on the host and issue a new opcert. |
 
 ## Testing on Preview
 
