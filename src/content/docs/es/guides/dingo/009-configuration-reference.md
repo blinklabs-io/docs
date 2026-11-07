@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.91.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.91.0.
+title: "Referencia de configuración de Dingo v0.92.0"
+description: Referencia y ejemplo completo de configuración de Dingo v0.92.0.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.91.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.91.0](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.92.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.92.0](https://github.com/blinklabs-io/dingo/blob/v0.92.0/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -53,7 +53,7 @@ Dingo rechaza los datos del formato envolvente si falta `Version` o `Configurati
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
 | Arranque y sincronización | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configura el arranque desde instantáneas o génesis, la sincronización y la validación histórica. |
 | Gestión de los pares | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Establece objetivos de pares, cuotas de origen y políticas de pares entrantes. |
-| Producción de bloques y reglas del ledger | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
+| Producción de bloques y reglas del ledger | `blockProducer`, `shelley*`, `forge*`, `cip0203Enabled`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
 | Archivo y ciclo de vida de bases de datos | `bark*`, `historyExpiry`, `databaseLifecycle` | Sirve o consume datos de archivo, hace caducar el historial local y gestiona instantáneas. |
 | Índices opcionales y diagnósticos | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configura índices opcionales, actualizaciones autenticadas del registro, diagnósticos de paridad, caché y validación de inicio. |
 
@@ -251,7 +251,7 @@ Establece ambos campos o deja ambos vacíos. Un par incompleto hace fallar la va
 
 Configura estas claves YAML bajo `plugins.storage.blob.config` para el proveedor Badger. No añaden opciones CLI ni variables de entorno de nivel superior.
 
-Dingo utiliza `1 MiB` como valor predeterminado de `plugins.storage.blob.config.valueThreshold`, salvo durante `sync` en modo core y la sincronización Mithril, donde utiliza `1 KiB`. Un valor YAML explícito sustituye cualquiera de esos valores, incluido un `0` explícito.
+Dingo establece `1 MiB` como valor predeterminado general de `plugins.storage.blob.config.valueThreshold`; `runMode: sync` selecciona `1 KiB` en los almacenamientos `core` y `api`, y el modo Core Leios también selecciona `1 KiB`. API Leios y los demás modos de ejecución conservan `1 MiB`. Un valor YAML explícito sustituye el valor predeterminado seleccionado, incluido un `0` explícito.
 
 | Configuración | Clave YAML del proveedor | Valor predeterminado | Validación y comportamiento |
 | --- | --- | --- | --- |
@@ -363,9 +363,13 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.91.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.92.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
+| --- | --- | --- | --- | --- |
+| Señalización de versión de lanzamiento CIP-0203 para cabeceras forjadas | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false`, desactivada. Al activarla, las cabeceras forjadas incluyen la señalización de versión de lanzamiento de CIP-0203 y la compilación debe incluir una versión semántica de lanzamiento válida que proporciona el enlazador. La validación rechaza versiones ausentes, mal formadas o fuera de rango. Si permanece desactivada, el identificador `69` de la versión menor del protocolo sigue vigente en las cabeceras forjadas. |
 
 #### Socket del agente KES de Shelley
 
