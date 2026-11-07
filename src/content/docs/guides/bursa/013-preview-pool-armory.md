@@ -8,7 +8,7 @@ description: Set up a Preview stake pool from scratch with Bursa and a USB armor
 This guide takes a Preview stake pool from nothing to forging blocks. Bursa builds and submits the transactions. A USB armory Mk II with an NXP SE050 secure element holds the pool's cold key and owner key. Dingo runs the block producer as a local install, a Docker container, or a Kubernetes workload.
 
 :::caution[Draft]
-This guide describes work in progress. Build the firmware from Bursa `main`.
+This guide describes work in progress. Build the firmware and the armory tools from Bursa v0.22.0 or later.
 
 The armory firmware and signing service ([bursa#1085](https://github.com/blinklabs-io/bursa/pull/1085)), profiles and the response binding in Bursa's signer ([bursa#1086](https://github.com/blinklabs-io/bursa/pull/1086)), `bursa tx build`, `bursa tx submit`, `bursa query` ([bursa#1105](https://github.com/blinklabs-io/bursa/pull/1105)), `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)), firmware builds fixed to one network ([bursa#1121](https://github.com/blinklabs-io/bursa/pull/1121)), host keys ([bursa#1123](https://github.com/blinklabs-io/bursa/pull/1123), [bursa#1126](https://github.com/blinklabs-io/bursa/pull/1126)), mainnet builds that refuse to sign until a host key is registered ([bursa#1131](https://github.com/blinklabs-io/bursa/pull/1131)), `armory-pool host-key` printing the registration request ([bursa#1133](https://github.com/blinklabs-io/bursa/pull/1133)), opcerts issued from the on-chain counter ([bursa#1124](https://github.com/blinklabs-io/bursa/pull/1124)), the signer's armory backend ([bursa#1125](https://github.com/blinklabs-io/bursa/pull/1125)), the device's signing summary printed by `armory-pool witness` ([bursa#1132](https://github.com/blinklabs-io/bursa/pull/1132), [bursa#1137](https://github.com/blinklabs-io/bursa/pull/1137)), the wipe image ([bursa#1134](https://github.com/blinklabs-io/bursa/pull/1134)), `opcert-check -host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)), the signing log on the microSD card ([bursa#1138](https://github.com/blinklabs-io/bursa/pull/1138)), resetting its head from the wipe image ([bursa#1143](https://github.com/blinklabs-io/bursa/pull/1143)), the Bluetooth module held in reset ([bursa#1140](https://github.com/blinklabs-io/bursa/pull/1140)), pool registration pins ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)), the signer bounding both opcert request forms by the last counter it issued ([bursa#1235](https://github.com/blinklabs-io/bursa/pull/1235)), the device refusing an opcert reissue at an earlier KES period, with signing log format version 2 ([bursa#1236](https://github.com/blinklabs-io/bursa/pull/1236)), the device refusing an opcert chain counter above the last one it issued ([bursa#1160](https://github.com/blinklabs-io/bursa/pull/1160)), host keys and profile wipes scoped to the image's network ([bursa#1166](https://github.com/blinklabs-io/bursa/pull/1166)), a required ttl in signed bodies ([bursa#1168](https://github.com/blinklabs-io/bursa/pull/1168)), 32 cold key objects, images serving several chains and `/wipe/cold` ([bursa#1187](https://github.com/blinklabs-io/bursa/pull/1187)), the device refusing to revoke its last host key ([bursa#1241](https://github.com/blinklabs-io/bursa/pull/1241)), a device simulator for host testing, `armory-sim` ([bursa#1186](https://github.com/blinklabs-io/bursa/pull/1186)), the signer's `counter-reset` command ([bursa#1248](https://github.com/blinklabs-io/bursa/pull/1248)) and sign requests routed by profile ([bursa#1249](https://github.com/blinklabs-io/bursa/pull/1249)) are in Bursa [v0.22.0](https://github.com/blinklabs-io/bursa/releases/tag/v0.22.0). Automatic opcert rotation is on the operator's `main` branch ([dingo-operator#101](https://github.com/blinklabs-io/dingo-operator/pull/101), [dingo-operator#109](https://github.com/blinklabs-io/dingo-operator/pull/109)), and the `dingo-operator` chart 0.4.1 pins an operator image built from it ([helm-charts#535](https://github.com/blinklabs-io/helm-charts/pull/535)).
 
@@ -53,9 +53,9 @@ Every signature comes back with a second signature, from the same key, over the 
 
 - A USB armory Mk II with an SE050, and a host with a free USB port
 - Bursa v0.22.0 or later: `go install github.com/blinklabs-io/bursa/cmd/bursa@v0.22.0` (Go 1.26.10 or later)
-- `armory-pool` and `opcert-check`, the host tools that talk to the armory. Build them, with `signlog-verify`, from the Bursa repository: `cd armory && go build -o . ./cmd/armory-pool ./cmd/opcert-check ./cmd/signlog-verify`
+- `armory-pool`, `opcert-check` and `signlog-verify`, the tools that talk to the armory, on both the offline machine and the host. The `armory` directory is its own Go module: `git clone --branch v0.22.0 https://github.com/blinklabs-io/bursa.git && cd bursa/armory && go build -o . ./cmd/armory-pool ./cmd/opcert-check ./cmd/signlog-verify`
 - `armory-boot-usb`, to load the firmware: `go install github.com/usbarmory/armory-boot/cmd/armory-boot-usb@latest`. Without a udev rule for the board, run it with `sudo`.
-- `jq` and `curl`
+- `jq` and `curl` on both machines, `xxd` and `b2sum` on the offline machine for the registration pins, and `openssl` for the signer's certificates
 - A synced Preview node whose socket Bursa can reach, for Steps 4 and 5. Start it as a relay early ([Step 3](#step-3-run-the-node) shows the three setups) and set `SOCKET` to its socket path. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers from v0.90.0.
 - A payer wallet Bursa can sign with. `bursa wallet create --output payer` writes `payer/payment.skey` and the address `payer/payment.addr`. Fund that address from the [Cardano testnet faucet](https://docs.cardano.org/cardano-testnets/tools/faucet): a new pool needs at least the 500 ada pool deposit, two 2 ada stake key deposits and fees.
 - A hardware wallet for the pledge funds
@@ -63,11 +63,11 @@ Every signature comes back with a second signature, from the same key, over the 
 
 Commands run in three places:
 
-- **Offline machine:** the pool mnemonic, key derivation and armory provisioning (Steps 1 and 2). Plug the armory in here to provision it.
+- **Offline machine:** the pool mnemonic, key derivation, and every provisioning and wipe request, signed with its own host key (Steps 1 and 2, and later changes). Plug the armory in here to provision or wipe it.
 - **Host:** online, with the node socket and the payer wallet. It generates the VRF and KES keys, builds, signs with the armory and submits (Steps 4 and 5). Plug the armory in here to sign.
 - **Block producer:** the node, `vrf.skey`, `kes.skey` and `node.cert` (Step 3).
 
-Only verification keys, transaction files, witnesses and certificates cross between the offline machine and the host. The cold and owner signing keys never leave the offline machine, and the VRF and KES signing keys never touch it.
+Only verification keys, host key registration requests, transaction files, witnesses and certificates cross between the offline machine and the host: `pool-cold.vkey` and `reward.vkey` go to the host, and `vrf.vkey` and the host's `host-key.json` go to the offline machine. The cold, owner, reward and provisioning host keys never leave the offline machine, and the VRF, KES and signing host keys never touch it.
 
 Set the network once for Bursa:
 
@@ -114,8 +114,6 @@ bursa wallet create --output ./pool
 
 This writes `seed.txt` (24 words) and a full wallet of derived keys, the extended cold key among them. Write the words down and delete everything in `pool/` except `seed.txt`.
 
-Check the paper copy before you rely on it: type the words into a new `seed.txt` on the same machine, derive `pool-cold.vkey` from it as below, and compare. The armory cannot export the cold key, so the paper is its only backup.
-
 Derive the cold key as a plain Ed25519 key the SE050 can import:
 
 ```sh
@@ -127,6 +125,19 @@ bursa key pool-cold --mnemonic-file pool/seed.txt \
 Pass file paths. With `-` Bursa prints the extended `pool_xsk` key instead, which the SE050 cannot import.
 
 The pool ID is the blake2b-224 hash of `pool-cold.vkey`.
+
+Check the paper copy before you rely on it. Type the words from the paper into a new file, derive the cold key into a separate directory and compare:
+
+```sh
+mkdir check
+# type the 24 words from the paper into check/seed.txt
+bursa key pool-cold --mnemonic-file check/seed.txt \
+  --signing-key-file check/pool-cold.skey --verification-key-file check/pool-cold.vkey
+cmp pool-cold.vkey check/pool-cold.vkey && echo match
+rm -rf check
+```
+
+The armory cannot export the cold key, so the paper is its only backup.
 
 Derive the owner key the same way, from the stake key path of the pool mnemonic:
 
@@ -177,10 +188,12 @@ The reward account can be any stake key. This example derives it from the pool m
 bursa key stake --mnemonic-file pool/seed.txt --account-index 1 \
   --signing-key-file reward.skey --verification-key-file reward.vkey
 armory-pool address -stake-vkey reward.vkey -network preview -type reward
-armory-pool reward-hex stake_test1...
+armory-pool reward-hex "$(armory-pool address -stake-vkey reward.vkey -network preview -type reward)"
 ```
 
 `address` prints the reward address (`stake_test1...`), and `reward-hex` prints it in the hex form the device profile needs. The pool registration names the reward address, and the device pins the hex. `reward.skey` signs the reward account's registration in Step 4 and later withdrawals; it is not on the armory.
+
+Copy `pool-cold.vkey` and `reward.vkey` to the host for Step 4.
 
 ## Step 2: Prepare the armory
 
@@ -235,7 +248,7 @@ The device answers with its bring-up report in plain text: the board model, the 
 
 Every `POST` below sends `Content-Type: application/json` and goes to `10.0.0.1` by address. The firmware refuses a `POST` without that content type ([bursa#1165](https://github.com/blinklabs-io/bursa/pull/1165)), and any request whose `Host` is not `10.0.0.1`, so that a web page open on the host cannot reach the device.
 
-The setup steps below go out unsigned with `curl`, which a device accepts only until its first host key is registered ([Register a host key](#register-a-host-key)). After that, provisioning and wipe requests must be signed with a host key ([bursa#1172](https://github.com/blinklabs-io/bursa/pull/1172)), and `armory-pool` sends them.
+The setup steps below go out unsigned with `curl`, which a device accepts only until its first host key is registered ([Register host keys](#register-host-keys)). After that, provisioning and wipe requests must be signed with a host key ([bursa#1172](https://github.com/blinklabs-io/bursa/pull/1172)), and `armory-pool` sends them.
 
 ### Create the identity key
 
@@ -276,46 +289,68 @@ jq -n --slurpfile owner owner.skey '{
   network_id: 0,
   slot: 0,
   cold_key_id: 551878672,
-  reward_account: "e0<28-byte stake key hash in hex>",
+  reward_account: "<armory-pool reward-hex output>",
   owner_signing_key: $owner[0].cborHex
-}' | curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/profile --data-binary @-
+}' | curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/profile --data-binary @- |
+  tee profile.json
 ```
 
 - `network_id` is 0 for every testnet.
 - `cold_key_id` is the object the import above used.
 - `slot` is a free profile slot, 0 to 31.
-- `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`, with the provisioning image and a host key: `armory-pool -host-key host.skey provision reward`.
+- `reward_account` is the hex from `armory-pool reward-hex`. The device refuses pool registrations that name a different one. Change it later only through `/provision/reward`, with the provisioning image and the provisioning host key: `armory-pool -host-key provision.skey provision reward`.
 - `owner_signing_key` is the `cborHex` of `owner.skey`, read from the file as for the cold key. Like the cold key, it is never overwritten: a retry with the same key is confirmed and a different key is refused. Without it the device generates the owner key, which no backup can restore.
 - Leave out `chain_counter` for a new pool. For a pool that has already forged, set it to the on-chain counter (see [Migrating an existing pool](#migrating-an-existing-pool)).
 
-The response holds the owner key: `owner_public_key` (base64) and `owner_key_hash`. Check the key against `owner.vkey`, then delete `owner.skey` from the offline machine.
+The response, saved in `profile.json`, holds the owner key: `owner_public_key` (base64) and `owner_key_hash`. Check the key against `owner.vkey`, then delete `owner.skey` from the offline machine:
 
-### Register a host key
+```sh
+[ "$(jq -r .owner_public_key profile.json | base64 -d | od -An -tx1 -v | tr -d ' \n')" = \
+  "$(jq -r .cborHex owner.vkey | cut -c5-)" ] && echo match
+```
+
+### Register host keys
 
 Without a host key, the device signs for any host on its USB link. Once one is registered, it refuses every signing request not signed by a registered host key. A mainnet build refuses to sign until one is registered.
 
-Create the key on the host that will sign. `armory-pool host-key` writes the private key and prints the registration request for its public key; send that request to the device:
+Register two keys: `provision.skey` on the offline machine, which signs every later provisioning and wipe request, and `host.skey` on the host, which signs transactions and opcerts. The device holds up to four, one per machine: the offline machine, a laptop, a Bursa signer service. `armory-pool host-key` writes a key mode 600 and prints the registration request for its public key; `armory-pool` refuses a key file with any group or other permission.
+
+On the offline machine, create the provisioning key and register it while the device still accepts unsigned requests:
+
+```sh
+armory-pool host-key -out provision.skey > provision-key.json
+curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/host-key --data-binary @provision-key.json
+```
+
+On the host, create the signing key:
 
 ```sh
 armory-pool host-key -out host.skey > host-key.json
-curl -s -X POST -H 'Content-Type: application/json' http://10.0.0.1/provision/host-key --data-binary @host-key.json
 ```
 
-The response lists the registered keys in `host_keys`. The device holds up to four, one per host that signs: a laptop, a Bursa signer service. `host.skey` is created mode 600, and `armory-pool` refuses a key file with any group or other permission.
-
-Pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
-
-From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `pins`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile`, `cold` or `signlog`.
-
-To revoke a key, send the same `host-key.json` from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys. The device refuses to revoke its last host key ([bursa#1241](https://github.com/blinklabs-io/bursa/pull/1241)): only a device wipe removes it.
+Copy `host-key.json`, which holds only the public key, to the offline machine and register it there, signed with the provisioning key:
 
 ```sh
-armory-pool -host-key host.skey provision host-key/revoke < host-key.json
+armory-pool -host-key provision.skey provision host-key < host-key.json
+```
+
+The response lists the registered keys in `host_keys`.
+
+On the host, pass `-host-key host.skey` to `armory-pool` with `-identity` and `-profile`. The Bursa signer service takes the same file as `host_key_file` in its armory backend configuration.
+
+From now on the provisioning and wipe images refuse unsigned requests too, except `/wipe/device` and `/wipe/objects`. `armory-pool` fetches a challenge, signs the request read from standard input with the host key and sends it. `provision` takes `profile`, `floor`, `reward`, `pins`, `cold`, `identity`, `host-key` or `host-key/revoke`; `wipe` takes `objects`, `device`, `profile`, `cold` or `signlog`. Send them from the offline machine with `-host-key provision.skey`.
+
+To revoke a key, send its registration request from the provisioning image, signed with a registered host key. Revoking a key never touches the pool keys. The device refuses to revoke its last host key ([bursa#1241](https://github.com/blinklabs-io/bursa/pull/1241)): only a device wipe removes it.
+
+```sh
+armory-pool -host-key provision.skey provision host-key/revoke < host-key.json
 ```
 
 ### Pin the pool registration
 
-Without pins, the device checks only that a pool registration names the profile's cold key, owner and reward account. A host that can request signatures could then register another VRF key, other relays or another metadata URL, or set pledge, cost and margin freely. Pins fix them to values you choose now ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)). They need the provisioning image and a host key.
+Without pins, the device checks only that a pool registration names the profile's cold key, owner and reward account. A host that can request signatures could then register another VRF key, other relays or another metadata URL, or set pledge, cost and margin freely. Pins fix them to values you choose now ([bursa#1169](https://github.com/blinklabs-io/bursa/pull/1169)). They need the provisioning image and the provisioning host key, so send them from the offline machine, with a copy of `vrf.vkey` from the host.
+
+If the pool publishes metadata, write `pool.json` now ([CIP-6](https://cips.cardano.org/cip/CIP-6): `name`, `description`, `ticker`, `homepage`) and upload it unchanged to the URL you will register: the pins fix its hash. Without metadata, leave out the `-metadata-*` flags here and in Step 4.
 
 Choose the values the pool registers in [Step 4](#certificates), then print the request with `armory-pool pins-request` and send it:
 
@@ -327,7 +362,7 @@ armory-pool pins-request -profile mypool@preview \
   -relay relay.example.com:3001 \
   -metadata-url https://example.com/pool.json \
   -metadata-hash "$(bursa hash metadata pool.json)" > pins.json
-armory-pool -host-key host.skey provision pins < pins.json
+armory-pool -host-key provision.skey provision pins < pins.json
 ```
 
 - `-vrf-key-hash` is the Blake2b-256 hash of the VRF verification key; the pipeline above computes it from `vrf.vkey`. The registration's VRF key must match it exactly.
@@ -433,7 +468,7 @@ If the card is pulled while the signing image runs, the device refuses to sign. 
 The signing and provisioning images never reset the head, so a lost, failed or full card leaves the device refusing to sign. A device wipe deletes the head with the identity key. To keep the keys, load the wipe image and delete only the head:
 
 ```sh
-echo '{"identity_public_key": "<identity public key>"}' | armory-pool -host-key host.skey wipe signlog
+echo '{"identity_public_key": "<identity public key>"}' | armory-pool -host-key provision.skey wipe signlog
 ```
 
 The signing image then formats a zeroed card and numbers entries from 1 again under the same identity. Keep the old card, or zero it before reuse: the device refuses a card with an old log once the head is reset.
@@ -452,7 +487,7 @@ While the card is in and the switch points toward microSD, the board boots the p
 
 ### Read the device keys
 
-`armory-pool` checks the device's key list against the identity key you recorded, then writes the keys as files Bursa can use:
+On the host, with the signing image running (the provisioning image does not serve the key list), `armory-pool` checks the device's key list against the identity key you recorded, then writes the keys as files Bursa can use:
 
 ```sh
 armory-pool -identity <identity public key> -profile mypool@preview keys -out-dir device
@@ -579,7 +614,7 @@ helm upgrade --install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/cha
 
 `rbac.readSecretNames` (chart 0.5.0) limits read access to the named Secrets plus `keySecretNames`, instead of every Secret in the namespace. List every Secret the operator reads: each producer's `keys.secretRef` and the signer client certificate in `mtlsSecretRef`. Leave it out to keep read access to every Secret there.
 
-Run the signer on the host the armory is plugged into, with an armory backend and a host key registered on the device (see [Register a host key](#register-a-host-key)). The operator connects with a TLS client certificate, so the signer needs a server certificate and the CA that issued the client certificate. Use a CA that issues only this client certificate: the signer accepts any certificate from `client_ca_cert` whose subject matches a caller, so a shared cluster issuer lets any workload that can get a `dingo-operator` certificate request opcerts. Listen only on the address the operator reaches, not `0.0.0.0`. Allow the pool's cold key only `opcert` requests, and only for that client:
+Run the signer on the host the armory is plugged into, with an armory backend and a host key registered on the device (see [Register host keys](#register-host-keys)). The operator connects with a TLS client certificate, so the signer needs a server certificate and the CA that issued the client certificate. Use a CA that issues only this client certificate: the signer accepts any certificate from `client_ca_cert` whose subject matches a caller, so a shared cluster issuer lets any workload that can get a `dingo-operator` certificate request opcerts. Listen only on the address the operator reaches, not `0.0.0.0`. Allow the pool's cold key only `opcert` requests, and only for that client:
 
 ```yaml
 signer:
@@ -610,7 +645,18 @@ signer:
       keys: ["<pool id hex>"]
 ```
 
-Start it with `bursa signer --config signer.yaml`. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. `protocol: "2"` makes the signer ask the device for its signing summary when it signs a transaction body, and refuse firmware that cannot give one; the default, `"1"`, does not ask for it. It does not change opcert requests, so with only `opcert` allowed, as here, it has no effect yet. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
+Create the watermark's directory first, owned by the user the signer runs as; the signer does not create it: `sudo install -d -m 700 -o <signer user> /var/lib/bursa/signer`. Then start it with `bursa signer --config signer.yaml`. It also serves metrics on `127.0.0.1:8081` by default. The caller `subject` is the client certificate's first URI SAN, else its first DNS SAN, else its common name. `protocol: "2"` makes the signer ask the device for its signing summary when it signs a transaction body, and refuse firmware that cannot give one; the default, `"1"`, does not ask for it. It does not change opcert requests, so with only `opcert` allowed, as here, it has no effect yet. [Bursa's signer documentation](https://github.com/blinklabs-io/bursa/tree/main/docs/signer) covers the other settings.
+
+Before pointing the operator at it, request an opcert with the operator's client certificate. `chain_counter` is the pool's on-chain counter, 0 for a pool that has never forged. The signature must match the `node.cert` the armory issued for the same KES key, counter and period:
+
+```sh
+jq -n --arg key "<pool id hex>" --arg kes "$(jq -r .cborHex kes.vkey | cut -c5-)" \
+  '{type: "opcert", key: $key, kes_vkey: $kes, chain_counter: 0, kes_period: <current_kes_period>}' |
+  curl -s --cacert signer-ca.crt --cert client.crt --key client.key \
+    -H 'Content-Type: application/json' --data-binary @- https://<listen address>:8090/v1/sign
+```
+
+A client certificate whose subject is not a caller gets HTTP 403. `/readyz` also needs a client certificate.
 
 The `watermark` keeps the signer's own counter records for each cold key, besides the device's: the chain counter the operator last reported, as a floor, and the last issue number it signed. In `enforce` mode it refuses with HTTP 409 a chain counter below its floor or above the last issued counter, and an issue number below the last issued counter. After signing it writes both records in one transaction. `warn` mode logs such a request and signs it; see the [watermark section of the signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md#7-anti-double-sign-watermark). The signer also answers a request the armory refuses for its floor, its last issued counter or a backdated reissue with HTTP 409, whatever the mode.
 
@@ -780,7 +826,7 @@ armory-pool -identity <identity public key> -profile mypool@preview -host-key ho
 
 The device signs `kes_vkey || issue || period` with the cold key and returns the issue number it chose. `armory-pool` prints `issue counter N`, checks the signature and binding, and writes `node.cert` in the same format as `bursa cert op-cert`.
 
-To check a certificate against the device later, `opcert-check` has the device reproduce its signature. Like every opcert request, it raises the device floor to the chain counter it reports. Once a host key is registered, pass it with `-host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)); without it the device refuses the check:
+To check a certificate against the device later, `opcert-check` has the device reproduce its signature. It is an opcert request: the device signs, logs it and raises its floor to the chain counter it reports. Check only the current `node.cert`: checking an older one at the same counter and KES period issues an opcert for that certificate's KES key again. Once a host key is registered, pass it with `-host-key` ([bursa#1136](https://github.com/blinklabs-io/bursa/pull/1136)); without it the device refuses the check:
 
 ```sh
 opcert-check -vkey "$(jq -r .cborHex pool-cold.vkey)" -cert "$(jq -r .cborHex node.cert)" \
@@ -841,12 +887,12 @@ If you rotate just after the pool forged a block, and that block is later rolled
 To recover:
 
 1. Confirm the real counter with `bursa query pool`.
-2. Unplug the board, load the provisioning image (with the signing image on the eMMC: switch toward microSD, card out), and reset the device floor to it:
+2. Unplug the board, plug it into the offline machine, load the provisioning image (with the signing image on the eMMC: switch toward microSD, card out), and reset the device floor to it:
 
    ```sh
    armory-boot-usb -i armory-provision.imx
    echo '{"profile": "mypool@preview", "chain_counter": <on-chain counter>}' |
-     armory-pool -host-key host.skey provision floor
+     armory-pool -host-key provision.skey provision floor
    ```
 
 3. Start the signing image again: switch toward eMMC with the log card in, then plug the board in. Issue a new opcert and install it.
@@ -858,7 +904,7 @@ bursa signer counter-reset --config signer.yaml --profile mypool@preview \
   --key <pool id hex> --chain-counter <on-chain counter> --yes
 ```
 
-Without `--yes` it prints the change and writes nothing. It sets the floor to the counter you give and clears the last issued counter, so once the signing image is back (step 3) the operator's next retry issues and installs the opcert itself.
+Without `--yes` it prints the change, writes nothing and exits non-zero. It can run while the signer runs: the signer's next request reads the new records. It sets the floor to the counter you give and clears the last issued counter, so once the signing image is back (step 3) the operator's next retry issues and installs the opcert itself.
 
 Rotate several KES periods before expiry, as the operator's `renewBeforePeriods: 8` does. A rotation then rarely lands right after a fresh block, and a mistake leaves time to recover.
 
@@ -868,7 +914,27 @@ All of these use the same flow: build with `bursa tx build`, sign the body with 
 
 - **Change pool parameters.** Build a new `pool-registration` certificate. No deposit is charged for a pool that is already registered. The armory still requires the pinned reward account and the device owner.
 - **Vote as an SPO.** `bursa tx build --vote-pool-id pool1... --vote-gov-action <txid>#<index> --vote yes|no|abstain`. The armory signs with the cold key, and only for its own pool.
-- **Retire.** `bursa cert pool-retirement --cold-vkey pool-cold.vkey --epoch <epoch>`. The deposit returns to the reward account.
+- **Retire.** See [Retire the pool](#retire-the-pool).
+
+### Retire the pool
+
+The retirement epoch must be after the current one and at most the `poolRetireMaxEpoch` protocol parameter ahead. Only the cold key signs a retirement, so the armory gives one witness:
+
+```sh
+bursa cert pool-retirement --cold-vkey pool-cold.vkey --epoch <epoch> -o pool-ret.cert
+bursa tx build --socket-path "$SOCKET" --network preview \
+  --change-address "$(cat payer/payment.addr)" --certificate-file pool-ret.cert --out-file pool-ret.tx
+bursa tx witness --tx-file pool-ret.tx --signing-key-file payer/payment.skey --out-file payer.wit
+armory-pool -identity <identity public key> -profile mypool@preview -host-key host.skey \
+  witness -role pool -tx-file pool-ret.tx -out pool.wit
+bursa tx assemble --tx-file pool-ret.tx --witness-file payer.wit --witness-file pool.wit \
+  --out-file pool-ret.signed
+bursa tx submit --socket-path "$SOCKET" --network preview --tx-file pool-ret.signed
+```
+
+The device summary reads `pool-retire epoch=<epoch>`, and `bursa query pool` shows `retiring_epoch` once the transaction is on chain. A new registration certificate before that epoch cancels the retirement.
+
+At the retirement epoch the 500 ada deposit goes to the reward account. The armory refuses to sign withdrawals, and `bursa tx build` cannot build one, so withdraw it with another tool, signed with `reward.skey` and a payment key. On Preview and mainnet a reward account must delegate its vote to a DRep before it can withdraw.
 
 ## More than one pool
 
@@ -948,7 +1014,7 @@ A pool that already forges can move its cold key onto the armory.
 
 | Message | Cause | Fix |
 |---|---|---|
-| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `armory-pool -host-key host.skey provision reward` on the provisioning image |
+| `pool registration reward account is not the profile's reward account` | The certificate's `--reward-account` differs from the pinned one | Use the pinned account, or change it with `armory-pool -host-key provision.skey provision reward` on the provisioning image |
 | `a second pool registration in one body` | The body carries two pool registration certificates; the second would replace the first's parameters on chain | Put one `pool-registration` certificate in the transaction |
 | `pool owners must be exactly the device owner` | The certificate lists another owner, or more than one | Pass only `device/owner.vkey` as `--owner-stake-vkey` |
 | `pool registration for another operator` | `--cold-vkey` is not this profile's cold key | Use `pool-cold.vkey` for this profile |
@@ -1031,14 +1097,14 @@ Remove one profile: its owner key, its cold key, its registration pins and its r
 
 ```sh
 echo '{"identity_public_key": "<identity public key>", "profile": "mypool@preview"}' |
-  armory-pool -host-key host.skey wipe profile
+  armory-pool -host-key provision.skey wipe profile
 ```
 
 Remove a cold key that no profile names, for example one imported for a profile you never created ([bursa#1187](https://github.com/blinklabs-io/bursa/pull/1187)). `cold_key_id` is the object's number in decimal. A key that a profile names is refused: remove the profile instead.
 
 ```sh
 echo '{"identity_public_key": "<identity public key>", "cold_key_id": 551878672}' |
-  armory-pool -host-key host.skey wipe cold
+  armory-pool -host-key provision.skey wipe cold
 ```
 
 Delete only the signing log head, to start a new log on a zeroed card: see [The signing log card](#the-signing-log-card).
@@ -1065,6 +1131,8 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 | Block producer | No blocks | Restore `vrf.skey` from its encrypted copy, or generate a new VRF key, update the pins if they fix it, and register the pool again. Generate a new KES key on the host and issue a new opcert. |
 
 ## Testing on Preview
+
+Without hardware, `armory-sim` in the Bursa repository ([bursa#1186](https://github.com/blinklabs-io/bursa/pull/1186)) runs the device service with a simulated secure element and log card on the host; `armory/e2e/sim-signer-opcert.sh` drives it through provisioning, the signer and an opcert. Point `armory-pool` at it with `-signer` and `-source`.
 
 `armory/e2e/preview-pool-registration.sh` in the Bursa repository runs this guide against Preview and checks each step against the chain:
 
