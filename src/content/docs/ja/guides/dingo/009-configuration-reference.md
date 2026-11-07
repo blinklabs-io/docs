@@ -306,7 +306,7 @@ MySQL のスナップショットと復元は、接続を機会的 TLS に弱め
 
 Badger プロバイダーでは、`plugins.storage.blob.config` の下にこれらの YAML キーを設定します。対応するトップレベルの CLI フラグや環境変数はありません。
 
-`plugins.storage.blob.config.valueThreshold` の既定値は一般に `1 MiB` です。`runMode: sync` では、Core と API の両方のストレージモードで `1 KiB` を使用します。Core Leios も `1 KiB` を使用し、API Leios とその他すべての実行モードでは `1 MiB` を使用します。明示した YAML 値は、明示的な `0` を含め、いずれのモードの既定値にも優先します。
+`plugins.storage.blob.config.valueThreshold` の通常の既定値は `1 MiB` です。`runMode: sync` では、Core と API の両方のストレージモードで `1 KiB` を使用します。Core Leios も `1 KiB` を使用し、API Leios とその他すべての実行モードでは `1 MiB` を使用します。明示した YAML 値は、明示的な `0` を含め、いずれのモードの既定値にも優先します。
 
 | 設定 | プロバイダーの YAML キー | 既定値 | 検証と動作 |
 | --- | --- | --- | --- |
