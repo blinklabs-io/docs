@@ -59,7 +59,7 @@ Every signature comes back with a second signature, from the same key, over the 
 - A synced Preview node whose socket Bursa can reach, for Steps 4 and 5. Start it as a relay early ([Step 3](#step-3-run-the-node) shows the three setups) and set `SOCKET` to its socket path. `bursa query pool` uses the `GetPoolState` query, which cardano-node answers and Dingo answers from v0.90.0.
 - A payer wallet Bursa can sign with. `bursa wallet create --output payer` writes `payer/payment.skey` and the address `payer/payment.addr`. Fund that address from the [Cardano testnet faucet](https://docs.cardano.org/cardano-testnets/tools/faucet): a new pool needs at least the 500 ada pool deposit, two 2 ada stake key deposits and fees.
 - A hardware wallet for the pledge funds
-- Paper, or a metal backup, for two mnemonics, or three with the optional hot mnemonic
+- Paper, or a metal backup, for two mnemonics
 
 Commands run in three places:
 
@@ -77,25 +77,24 @@ export CARDANO_NETWORK=preview
 
 Bursa defaults to `mainnet` when `CARDANO_NETWORK` is unset.
 
-## Step 1: Mnemonics
+## Step 1: Two mnemonics
 
-Use separate recovery phrases. The first two are required; the third is optional.
+Use two separate recovery phrases.
 
 1. **Pledge mnemonic, on the hardware wallet.** It holds the payment key for the pledge funds. It never touches the armory or the block producer.
 2. **Pool mnemonic, written down offline.** It derives the pool cold key and the owner key. Both are imported into the armory, and the paper copy is the recovery path.
-3. **Hot mnemonic, optional.** It derives the VRF and KES keys for the block producer, and it cannot derive the cold key. It is only a backup: nothing checks keys against it. The key worth backing up is the VRF key, which the pool registration names; losing it without a copy means registering the pool again with a new VRF key. KES keys are replaced at every rotation, and in Kubernetes `Auto` mode the operator generates each new KES key itself, so the hot mnemonic is never used there. Instead of keeping the words, you can back up `vrf.skey` as an encrypted file.
 
-![A paper slip holds the 24-word pool mnemonic. Bursa derives the pool cold key and the owner key, which are imported into the armory, and the reward key, kept offline. A separate hot mnemonic derives the VRF and KES keys, which go to the block producer.](/bursa-pool-mnemonic-slip.svg)
+The VRF and KES keys for the block producer come from neither: they are generated fresh (see [VRF and KES keys](#vrf-and-kes-keys)).
 
-The pool slip restores the cold, owner and reward keys; the hot mnemonic, if you keep it, restores the VRF and KES keys:
+![A paper slip holds the 24-word pool mnemonic. Bursa derives the pool cold key and the owner key, which are imported into the armory, and the reward key, kept offline. The VRF and KES keys are generated fresh, not from the slip, and go to the block producer.](/bursa-pool-mnemonic-slip.svg)
+
+The pool slip restores the cold, owner and reward keys:
 
 | Key | Path | Command | Goes to |
 |---|---|---|---|
 | Pool cold key | `m/1853'/1815'/0'/0'` ([CIP-1853](https://cips.cardano.org/cip/CIP-1853)) | [`bursa key pool-cold`](/guides/bursa/008-key-commands/#pool-cold-key) | Armory |
 | Owner key | `m/1852'/1815'/0'/2/0` ([CIP-1852](https://cips.cardano.org/cip/CIP-1852)) | `bursa key pool-owner` ([bursa#1111](https://github.com/blinklabs-io/bursa/pull/1111)) | Armory |
 | Reward key | `m/1852'/1815'/1'/2/0` | [`bursa key stake`](/guides/bursa/008-key-commands/#stake-key) | Offline |
-| VRF key | Bursa seed rule, hot mnemonic | [`bursa key vrf`](/guides/bursa/008-key-commands/#vrf-verifiable-random-function-key-pair) | Block producer |
-| KES keys | Bursa seed rule, hot mnemonic, one `--index` per rotation | [`bursa key kes`](/guides/bursa/008-key-commands/#kes-key-pair) | Block producer |
 
 The words come from [`bursa wallet create`](/guides/bursa/003-commands/#use-command-line-to-create-a-wallet-and-output-wallet-files), a 24-word [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic. Bursa turns the words into a root key as [CIP-3](https://cips.cardano.org/cip/CIP-3) describes (Icarus), then derives each key along its path.
 
@@ -141,20 +140,19 @@ This is a plain Ed25519 key. Its key hash and reward address differ from those o
 
 ### VRF and KES keys
 
-These live on the block producer. Derive them from a separate mnemonic, never the pool mnemonic: the pool mnemonic re-derives the cold key, so it stays offline.
+These live on the block producer and need no paper backup. `bursa key vrf` and `bursa key kes` derive keys from a mnemonic, so generate a throwaway one, derive the keys and delete it. Never use the pool mnemonic: it re-derives the cold key, so it stays offline.
 
 ```sh
-bursa wallet create --output ./hot
-bursa key vrf --mnemonic-file hot/seed.txt \
+tmp=$(mktemp -d)
+bursa wallet create --output "$tmp"
+bursa key vrf --mnemonic-file "$tmp/seed.txt" \
   --signing-key-file vrf.skey --verification-key-file vrf.vkey
-bursa key kes --mnemonic-file hot/seed.txt --index 0 \
+bursa key kes --mnemonic-file "$tmp/seed.txt" \
   --signing-key-file kes.skey --verification-key-file kes.vkey
+rm -rf "$tmp"
 ```
 
-Bursa derives VRF and KES seeds with its own rule, so only Bursa can re-derive them from the mnemonic. Then either:
-
-- **Keep the hot mnemonic.** Write the words down, keep `hot/seed.txt` where manual KES rotations are done, apart from the pool mnemonic, and use a new `--index` for each rotation.
-- **Discard it.** Back up `vrf.skey` as an encrypted file, then delete `hot/seed.txt`. For a manual KES rotation, derive the new KES key from a new throwaway mnemonic and delete that too.
+The pool registration names the VRF key. If `vrf.skey` is lost, generate a new one and register the pool again with it; to avoid that, keep an encrypted copy. KES keys are replaced at every rotation, so a lost one only means rotating early. In Kubernetes `Auto` mode the operator generates each new KES key itself.
 
 ### Reward account key
 
@@ -810,7 +808,7 @@ The armory always issues the on-chain counter plus one, so the host only reports
 
 To rotate:
 
-1. Generate a new KES key: from the hot mnemonic with the next `--index`, or from a new throwaway mnemonic.
+1. Generate a new KES key from a new throwaway mnemonic, as in [VRF and KES keys](#vrf-and-kes-keys).
 2. Query the pool for `on_chain_counter` and `current_kes_period`.
 3. Get the opcert from the armory with `armory-pool opcert`, as in Step 5.
 4. Replace `kes.skey` and `node.cert` on the producer and restart it. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
@@ -990,9 +988,7 @@ From chart 0.4.1, a node whose tip stops moving shows the `TipNotAdvancing` reas
 | Pool mnemonic words | Paper, checked | Keep. The only backup of the cold and owner keys. |
 | `pool/seed.txt` | Offline machine | Delete once the armory is provisioned and the paper is checked. |
 | `pool-cold.skey`, `owner.skey`, other files in `pool/` | Offline machine | Delete after import. |
-| Hot mnemonic words (optional) | Paper | Keep if you use it. The backup of the VRF and KES keys. |
-| `hot/seed.txt` | Where KES rotations are done | Keep if you use the hot mnemonic for manual rotations; otherwise delete it once `vrf.skey` is backed up. It cannot derive the cold key. |
-| `vrf.skey` backup | Encrypted file | Keep if you do not keep the hot mnemonic. Without it, a lost VRF key means registering the pool again. |
+| `vrf.skey` copy | Encrypted file | Optional. Without it, a lost VRF key means registering the pool again with a new one. |
 | `vrf.skey`, `kes.skey` | Block producer | Only on the producer. Delete other copies. |
 | `node.cert` (the opcert) | Block producer | Keep the current one with its `kes.skey`. Not secret, but with that `kes.skey` and `vrf.skey` it forges blocks, so after a rotation delete the old `node.cert` and `kes.skey` together. |
 | `kes.vkey` | Host | Needed only to issue its opcert. Delete it with its `kes.skey` at the next rotation. |
@@ -1051,7 +1047,7 @@ Deleted keys cannot be recovered from the device. Before removing a profile, che
 | Armory | No new signatures | Restore the cold key and owner key from the pool mnemonic on a new device, with the same reward account. The pool, owner and pledge address stay the same. |
 | Pool mnemonic | No backup of the cold key | The armory keeps signing, but the SE050 cannot export the key. If the armory is lost too, the pool is gone and a new pool needs a new cold key. |
 | Pledge hardware wallet | Pledge funds | Restore from the pledge mnemonic. |
-| Block producer | No blocks | Restore VRF and KES keys from the hot mnemonic, then issue a new opcert. |
+| Block producer | No blocks | Restore `vrf.skey` from its encrypted copy, or generate a new VRF key and register the pool again with it. Generate a new KES key and issue a new opcert. |
 
 ## Testing on Preview
 

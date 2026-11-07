@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
-  <title id="t">The pool mnemonic and the hot mnemonic</title>
-  <desc id="d">A paper slip holds the 24-word pool mnemonic. Bursa derives three keys from it: the pool cold key on path m/1853'/1815'/0'/0' and the owner key on m/1852'/1815'/0'/2/0, both imported into the armory, and the reward key on m/1852'/1815'/1'/2/0, kept offline. A separate hot mnemonic derives the VRF and KES keys, which go to the block producer.</desc>
+  <title id="t">What the pool mnemonic derives</title>
+  <desc id="d">A paper slip holds the 24-word pool mnemonic. Bursa derives three keys from it: the pool cold key on path m/1853'/1815'/0'/0' and the owner key on m/1852'/1815'/0'/2/0, both imported into the armory, and the reward key on m/1852'/1815'/1'/2/0, kept offline. The VRF and KES keys are generated fresh, not from the slip, and go to the block producer.</desc>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#5d6068"/>
@@ -47,10 +47,10 @@
   <path class="ln" d="M330 280 L392 280"/>
   <path class="ln" d="M392 74 L392 280"/>
 
-  <!-- hot mnemonic -->
-  <rect x="346" y="404" width="64" height="62" rx="8" fill="#fff" stroke="#0f8a5f" stroke-width="2"/>
-  <text class="s" x="378" y="430" text-anchor="middle" font-size="11">hot</text>
-  <text class="s" x="378" y="448" text-anchor="middle" style="font-size:10.5px">mnemonic</text>
+  <!-- fresh keys, not from the slip -->
+  <rect x="346" y="404" width="64" height="62" rx="8" fill="#fff" stroke="#0f8a5f" stroke-width="2" stroke-dasharray="4 3"/>
+  <text class="s" x="378" y="430" text-anchor="middle" font-size="11">fresh,</text>
+  <text class="s" x="378" y="448" text-anchor="middle" style="font-size:10.5px">no backup</text>
   <path class="ln" d="M410 435 L416 435"/>
   <path class="ln" d="M416 383 L416 486"/>
 
@@ -77,13 +77,13 @@
     <path class="ln" d="M416 383 L430 383" marker-end="url(#a)"/>
     <rect x="432" y="349" width="380" height="68" rx="12" fill="#dff3ea" stroke="#0f8a5f" stroke-width="2"/>
     <text class="h" x="450" y="375">VRF key</text>
-    <text class="m" x="450" y="399">Bursa seed rule · bursa key vrf</text>
+    <text class="m" x="450" y="399">generated once · bursa key vrf</text>
   </g>
   <g>
     <path class="ln" d="M416 486 L430 486" marker-end="url(#a)"/>
     <rect x="432" y="452" width="380" height="68" rx="12" fill="#dff3ea" stroke="#0f8a5f" stroke-width="2"/>
     <text class="h" x="450" y="478">KES keys</text>
-    <text class="m" x="450" y="502">one --index per rotation · bursa key kes</text>
+    <text class="m" x="450" y="502">new key per rotation · bursa key kes</text>
   </g>
 
   <!-- destinations -->
