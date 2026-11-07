@@ -5,8 +5,8 @@ description: Choose a Dingo node role and find the matching configuration option
 
 Use the [quick start](/guides/dingo/002-quick-start-overview/) to install Dingo
 and start a node. This page explains the main configuration choices. Read the
-[complete Dingo v0.90.5 configuration reference](/guides/dingo/009-configuration-reference/)
-and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example).
+[complete Dingo v0.91.0 configuration reference](/guides/dingo/009-configuration-reference/)
+and download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example).
 
 ## Choose a node role
 
@@ -21,6 +21,8 @@ and download the release-matched [`dingo.yaml.example`](https://raw.githubuserco
 providers require `api` mode, including the optional built-in Kupo-compatible
 API. Setting an individual provider port to `0` disables that listener. Storage
 mode does not enable block production.
+Complete historical epoch output totals require `api` mode. `core` mode prunes
+spent outputs and cannot provide those totals.
 
 Dingo block production is intended for test networks and private devnets in
 current releases. Follow the pool key and certificate guidance in the [SPO
@@ -46,7 +48,7 @@ Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
 provider name. The example file documents the providers and options for Dingo
-v0.90.5. When `plugins.storage.metadata.provider` is `sqlite`, the root
+v0.91.0. When `plugins.storage.metadata.provider` is `sqlite`, the root
 `databasePath` must be non-empty. If the provider is unset, it defaults to
 `sqlite`, and Dingo rejects the configuration at startup when `databasePath` is
 empty. Environment variables use the

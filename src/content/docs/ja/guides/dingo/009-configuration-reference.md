@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.90.5 設定リファレンス
-description: Dingo v0.90.5 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.91.0 設定リファレンス
+description: Dingo v0.91.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.90.5 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.90.5/dingo.yaml.example)にあります。同じファイルは [Dingo v0.90.5 のソース](https://github.com/blinklabs-io/dingo/blob/v0.90.5/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.91.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.91.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -67,7 +67,7 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 | 分野 | 主な設定 | 用途 |
 | --- | --- | --- |
 | ネットワークとパス | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Cardano ネットワークを選択し、ノード、トポロジー、データの各ファイルの場所を指定します。 |
-| リスナーと診断 | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `localStateQueryViewMaxLifetime` | ノードとプライベートリスナー、メトリクス、ヘルスプローブ、プロファイリング、トレーシング、LocalStateQuery スナップショットの有効期間を設定します。 |
+| リスナーと診断 | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | ノードとプライベートリスナー、メトリクス、ヘルスプローブ、プロファイリング、トレーシング、LocalStateQuery スナップショットの有効期間を設定します。 |
 | ログと TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | ログ出力を選択し、対応する API または Bark リスナーを保護します。 |
 | ストレージと API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | 保存する履歴、ストレージプロバイダー、トランザクションの順序、アプリケーション API を選択します。 |
 | コンセンサスとプラグインの選択 | `plugins.consensus` | ノードで使用するコンセンサスプロバイダーを選択します。 |
@@ -125,8 +125,13 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
 | トレースコレクターのエンドポイント | `tracingEndpoint` | `--tracing-endpoint` | `DINGO_TRACING_ENDPOINT` | 既定では空です。OTLP HTTP コレクターの URL を設定するとトレーシングが有効になります。空の場合は `tracing` 設定で有効化を制御し、標準の `OTEL_EXPORTER_OTLP_*` 環境変数で送信先を選択します。 |
-| トレースのサービス名 | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | 既定値は `dingo` です。エクスポートするトレースのサービス名を設定します。 |
+| トレースのサービス名 | `tracingServiceName` | `--tracing-service-name` | `DINGO_TRACING_SERVICE_NAME` | 明示した `tracingServiceName` を優先し、未設定時は `OTEL_SERVICE_NAME`、それも未設定時は `dingo` を使用します。エクスポートするテレメトリーのサービス名を設定します。 |
 | トレースのサンプリング率 | `tracingSampleRatio` | `--tracing-sample-ratio` | `DINGO_TRACING_SAMPLE_RATIO` | 既定値は `1` です。`0` 以上 `1` 以下に設定します。範囲外の値は設定検証で拒否されます。 |
+| 常時サンプリングするステークプール | `tracingAlwaysSamplePools` | `--tracing-always-sample-pools` | `DINGO_TRACING_ALWAYS_SAMPLE_POOLS` | 既定値は空のリストです。ステークプール ID を Bech32 または 56 文字の 16 進数鍵ハッシュで指定します。大文字の Bech32 も使用できます。Dingo は指定したプールのブロックを `tracingSampleRatio` に関係なくサンプリングします。 |
+| OpenTelemetry サービス名 | — | — | `OTEL_SERVICE_NAME` | OpenTelemetry の標準サービス名環境変数です。`tracingServiceName` を設定しない場合に参照します。 |
+| OpenTelemetry リソース属性 | — | — | `OTEL_RESOURCE_ATTRIBUTES` | Dingo はリソース属性を、エクスポートするトレース、ログ、メトリクスに適用します。解析できない属性は警告として報告し、ノードを起動します。 |
+| OpenTelemetry ログエクスポーター | — | — | `OTEL_LOGS_EXPORTER` | 未設定または `none` の場合、OTLP ログエクスポートを無効にします。Dingo は無効なエクスポーター設定を警告し、標準出力ログを維持してノードを起動します。 |
+| OpenTelemetry メトリクスエクスポーター | — | — | `OTEL_METRICS_EXPORTER` | 未設定または `none` の場合、OTLP メトリクスエクスポートを無効にします。Dingo は無効なエクスポーター設定を警告し、ノードを起動します。OTLP エクスポートの設定は Prometheus の `/metrics` エンドポイントに影響しません。 |
 
 <a id="dmq-configuration"></a>
 
@@ -382,6 +387,10 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
 | `node-parity from-genesis` Koios API 鍵ファイル | — | `--koios-api-key-file` | — | `--koios-api-key` の代わりに使用します。Koios リクエストに使用する API 鍵をファイルで指定します。 |
 | `node-parity from-genesis` の境界キャプチャディレクトリ | — | `--boundary-capture-dir` | — | from-genesis の UTxO 比較で使用する、任意の境界キャプチャディレクトリを指定します。 |
+| `node-parity from-genesis` の `/tx_info` バッチサイズ | — | `--koios-tx-info-batch-size` | — | 既定値は `40` です。各 `/tx_info` リクエストに含めるトランザクションハッシュ数を `1` から `999` の範囲で指定します。公開ホストはリクエスト本文が `5120` バイトを超えると拒否するため、より大きな値はそれを受け入れるホストでのみ使用します。 |
+| `node-parity from-genesis` の `/tx_info` 同時実行数 | — | `--koios-tx-info-concurrency` | — | 既定値は `8` です。同時に処理する `/tx_info` リクエスト数を `1` から `64` の範囲で指定します。 |
+
+`--koios-tx-info-batch-size` と `--koios-tx-info-concurrency` は Dingo ノード本体ではなく、`node-parity from-genesis` サブコマンドでのみ使用できます。これらに YAML キーや環境変数はありません。
 
 ファイルから読み取る値は、次の要件を満たす必要があります。
 
@@ -426,7 +435,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.90.5 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
