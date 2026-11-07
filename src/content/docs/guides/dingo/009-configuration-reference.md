@@ -571,7 +571,7 @@ corroborated upstream target exists and ignores it when the target is unknown.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| CIP-0203 release-version signalling | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false` (disabled) by default. When enabled, Dingo opts forged headers into CIP-0203 release-version signalling and requires the build to contain a valid semantic release version populated at link time. Dingo rejects missing, malformed, or out-of-range versions during configuration validation. When disabled, forged headers retain the legacy identifier `69`. |
+| CIP-0203 release-version signalling | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false` by default (disabled). When enabled, Dingo opts forged headers into CIP-0203 release-version signalling and requires the build to contain a valid semantic release version populated at link time. Dingo rejects missing, malformed, or out-of-range versions during configuration validation. When disabled, forged headers retain the legacy identifier `69`. |
 
 #### Shelley KES agent socket
 
