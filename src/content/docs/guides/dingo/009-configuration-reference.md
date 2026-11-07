@@ -379,10 +379,10 @@ Configure these provider YAML keys under `plugins.storage.blob.config` for the
 Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
-Dingo uses `1 MiB` as the default for
-`plugins.storage.blob.config.valueThreshold` generally. For `runMode: sync`,
-Dingo uses `1 KiB` in both Core and API storage modes. Core Leios also uses
-`1 KiB`; API Leios and all other run modes use `1 MiB`.
+Dingo generally uses `1 MiB` as the default for
+`plugins.storage.blob.config.valueThreshold`. For `runMode: sync` in both Core
+and API storage modes, Dingo uses `1 KiB`. Core Leios also uses `1 KiB`; API
+Leios and all other run modes use `1 MiB`.
 An explicit YAML value overrides either mode default, including an explicit
 `0`.
 
