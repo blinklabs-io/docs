@@ -140,7 +140,7 @@ This is a plain Ed25519 key. Its key hash and reward address differ from those o
 
 ### VRF and KES keys
 
-These live on the block producer and need no paper backup. `bursa key vrf` and `bursa key kes` derive keys from a mnemonic, so generate a throwaway one, derive the keys and delete it. Never use the pool mnemonic: it re-derives the cold key, so it stays offline.
+These end up on the block producer and need no paper backup. Generate them with Bursa on the machine where you run it, then move the signing keys into place. `bursa key vrf` and `bursa key kes` derive keys from a mnemonic, so generate a throwaway one, derive the keys and delete it. Never use the pool mnemonic: it re-derives the cold key, so it stays offline.
 
 ```sh
 tmp=$(mktemp -d)
@@ -151,6 +151,17 @@ bursa key kes --mnemonic-file "$tmp/seed.txt" \
   --signing-key-file kes.skey --verification-key-file kes.vkey
 rm -rf "$tmp"
 ```
+
+Keep the verification keys where Bursa runs, and move the signing keys and the opcert to the producer:
+
+| File | Stays or moves | Used for |
+|---|---|---|
+| `vrf.vkey` | Stays with Bursa | The pool registration ([Step 4](#step-4-register-the-pool)) |
+| `kes.vkey` | Stays with Bursa | The opcert request ([Step 5](#step-5-the-first-operational-certificate)) |
+| `vrf.skey`, `kes.skey` | Move to the producer | Forging. Delete the local copies once they are in place. |
+| `node.cert` | Moves to the producer after Step 5 | Forging, next to `kes.skey` |
+
+Copy them over an encrypted channel such as `scp`, and set the permissions on the producer as [Step 3](#step-3-run-the-node) shows.
 
 The pool registration names the VRF key. If `vrf.skey` is lost, generate a new one and register the pool again with it; to avoid that, keep an encrypted copy. KES keys are replaced at every rotation, so a lost one only means rotating early. In Kubernetes `Auto` mode the operator generates each new KES key itself.
 
@@ -808,10 +819,10 @@ The armory always issues the on-chain counter plus one, so the host only reports
 
 To rotate:
 
-1. Generate a new KES key from a new throwaway mnemonic, as in [VRF and KES keys](#vrf-and-kes-keys).
+1. Generate a new KES key with Bursa from a new throwaway mnemonic, as in [VRF and KES keys](#vrf-and-kes-keys), and keep `kes.vkey` for the opcert.
 2. Query the pool for `on_chain_counter` and `current_kes_period`.
 3. Get the opcert from the armory with `armory-pool opcert`, as in Step 5.
-4. Replace `kes.skey` and `node.cert` on the producer and restart it. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
+4. Move the new `kes.skey` and `node.cert` into place on the producer, delete the local `kes.skey`, and restart the producer. On Kubernetes in `Assisted` mode, replace the Secret's contents and the operator rolls the pod. In `Auto` mode the operator does all of this through the cold signer.
 
 ### Rollbacks
 
