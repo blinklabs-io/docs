@@ -369,7 +369,7 @@ Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applie
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
-| Señalización de versión de lanzamiento CIP-0203 para cabeceras forjadas | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false`, desactivada. Al activarla, las cabeceras forjadas incluyen la señalización de versión de lanzamiento de CIP-0203 y la compilación debe incluir una versión semántica de lanzamiento válida que proporciona el enlazador. La validación rechaza versiones ausentes, mal formadas o fuera de rango. Si permanece desactivada, el identificador de minor de protocolo forjado sigue siendo `69`. |
+| Señalización de versión de lanzamiento CIP-0203 para cabeceras forjadas | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false`, desactivada. Al activarla, las cabeceras forjadas incluyen la señalización de versión de lanzamiento de CIP-0203 y la compilación debe incluir una versión semántica de lanzamiento válida que proporciona el enlazador. La validación rechaza versiones ausentes, mal formadas o fuera de rango. Si permanece desactivada, el identificador `69` de la versión menor del protocolo sigue vigente en las cabeceras forjadas. |
 
 #### Socket del agente KES de Shelley
 
