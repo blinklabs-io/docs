@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">USB armory Mk II boot switch</title>
+  <desc id="d">The underside of the USB armory Mk II. The boot switch sits beside the eMMC chip, near the USB-C plug, under an orange film. Slid toward the plug it selects eMMC: the board boots the image on the eMMC, then falls back to microSD and USB recovery mode. Slid toward the microSD slot it selects microSD: with no card, the board goes to USB recovery mode, ready for armory-boot-usb.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5d6068"/>
+    </marker>
+  </defs>
+  <style>
+    .t{fill:#1c1d21;font-size:14px}
+    .s{fill:#5d6068;font-size:12px}
+    .h{fill:#1c1d21;font-size:15px;font-weight:700}
+    .m{font-family:ui-monospace, Menlo, monospace;font-size:12px;fill:#1c1d21}
+    .ln{stroke:#5d6068;stroke-width:2;fill:none}
+    .pcb{fill:#e8e8e8;font-size:11px}
+  </style>
+  <rect width="1000" height="520" rx="16" fill="#f6f5f1"/>
+  <text class="h" x="40" y="44">Underside of the board</text>
+  <text class="s" x="40" y="64">Plug on the left, as in the usbarmory wiki photo</text>
+
+  <!-- USB-C plug -->
+  <rect x="40" y="128" width="110" height="74" rx="14" fill="#c9ccd2" stroke="#7a7f88" stroke-width="2"/>
+  <rect x="62" y="150" width="66" height="30" rx="8" fill="#9ea3ab"/>
+  <text class="s" x="58" y="226">USB-C plug</text>
+
+  <!-- board -->
+  <rect x="150" y="84" width="700" height="162" rx="12" fill="#1f2228"/>
+  <!-- eMMC chip -->
+  <rect x="180" y="100" width="150" height="124" rx="4" fill="#2b2d33" stroke="#4a4d55"/>
+  <text x="255" y="160" text-anchor="middle" fill="#a8acb4" font-size="13">eMMC</text>
+  <text x="255" y="178" text-anchor="middle" fill="#7a7f88" font-size="11">16 GB</text>
+  <!-- switch -->
+  <text class="pcb" x="346" y="104">← eMMC</text>
+  <text class="pcb" x="418" y="104">µSD →</text>
+  <rect x="350" y="112" width="110" height="46" rx="4" fill="#3a3326" stroke="#ff9a5c" stroke-width="2"/>
+  <rect x="356" y="118" width="98" height="34" rx="3" fill="#c96a1b" opacity="0.85"/>
+  <rect x="364" y="122" width="34" height="26" rx="3" fill="#ffcfae"/>
+  <!-- microSD slot -->
+  <rect x="560" y="102" width="190" height="130" rx="6" fill="#8a8f98" stroke="#5d6068"/>
+  <rect x="580" y="120" width="150" height="90" rx="4" fill="#6f747d"/>
+  <text x="655" y="170" text-anchor="middle" fill="#eef0f3" font-size="12">microSD slot</text>
+  <text class="s" x="770" y="270">USB-C socket end</text>
+
+  <!-- callout to switch -->
+  <path class="ln" d="M405 160 L405 300" marker-end="url(#a)"/>
+  <text class="h" x="300" y="324">Boot switch, under an orange film</text>
+  <text class="s" x="300" y="344">Reach it through the window in the case bottom with a pin or paper clip.</text>
+
+  <!-- two positions -->
+  <g>
+    <rect x="40" y="370" width="440" height="124" rx="12" fill="#fbeadf" stroke="#c2410c" stroke-width="2"/>
+    <text class="h" x="58" y="398">Toward eMMC (toward the plug)</text>
+    <text class="t" x="58" y="424">Boots the image on the eMMC.</text>
+    <text class="s" x="58" y="446">Falls back to microSD, then USB recovery mode,</text>
+    <text class="s" x="58" y="464">only when the eMMC holds no valid image.</text>
+    <text class="m" x="58" y="484">signing image, day to day</text>
+  </g>
+  <g>
+    <rect x="520" y="370" width="440" height="124" rx="12" fill="#e6eefb" stroke="#2f6fd6" stroke-width="2"/>
+    <text class="h" x="538" y="398">Toward microSD (away from the plug)</text>
+    <text class="t" x="538" y="424">No card: USB recovery mode.</text>
+    <text class="s" x="538" y="446">Load any image with armory-boot-usb,</text>
+    <text class="s" x="538" y="464">whatever the eMMC holds.</text>
+    <text class="m" x="538" y="484">provisioning, armory-ums, reflashing</text>
+  </g>
+</svg>
