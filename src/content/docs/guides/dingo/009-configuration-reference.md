@@ -569,6 +569,10 @@ Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
 `0`, which disables the bound. Dingo evaluates the bound only when a
 corroborated upstream target exists and ignores it when the target is unknown.
 
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| CIP-0203 release-version signalling | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false` (disabled) by default. When enabled, Dingo opts forged headers into CIP-0203 release-version signalling and requires a valid linker-populated semantic release version. Missing, malformed, or out-of-range versions fail configuration validation. When disabled, forged headers retain the legacy identifier `69`. |
+
 #### Shelley KES agent socket
 
 The `--shelley-kes-agent-socket` flag supports filesystem socket paths and
