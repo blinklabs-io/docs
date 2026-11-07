@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.91.0 設定リファレンス
-description: Dingo v0.91.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.92.0 設定リファレンス
+description: Dingo v0.92.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.91.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.91.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.92.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.92.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.92.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -306,7 +306,7 @@ MySQL のスナップショットと復元は、接続を機会的 TLS に弱め
 
 Badger プロバイダーでは、`plugins.storage.blob.config` の下にこれらの YAML キーを設定します。対応するトップレベルの CLI フラグや環境変数はありません。
 
-`plugins.storage.blob.config.valueThreshold` の既定値は `1 MiB` です。ただし、Core モードの `sync` と Mithril 同期では `1 KiB` を使用します。明示した YAML 値は、`0` も含め、どちらのモードの既定値にも優先します。
+`plugins.storage.blob.config.valueThreshold` の既定値は一般に `1 MiB` です。`runMode: sync` では、Core と API の両方のストレージモードで `1 KiB` を使用します。Core Leios も `1 KiB` を使用し、API Leios とその他すべての実行モードでは `1 MiB` を使用します。明示した YAML 値は、明示的な `0` を含め、いずれのモードの既定値にも優先します。
 
 | 設定 | プロバイダーの YAML キー | 既定値 | 検証と動作 |
 | --- | --- | --- | --- |
@@ -435,7 +435,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.92.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
