@@ -251,7 +251,7 @@ Establece ambos campos o deja ambos vacíos. Un par incompleto hace fallar la va
 
 Configura estas claves YAML bajo `plugins.storage.blob.config` para el proveedor Badger. No añaden opciones CLI ni variables de entorno de nivel superior.
 
-Dingo utiliza `1 MiB` como valor predeterminado de `plugins.storage.blob.config.valueThreshold` en general. En `runMode: sync`, tanto el almacenamiento `core` como `api` utilizan `1 KiB`; Core Leios también utiliza `1 KiB`. API Leios y los demás modos de ejecución utilizan `1 MiB`. Un valor YAML explícito sustituye el valor predeterminado seleccionado, incluido un `0` explícito.
+Dingo establece `1 MiB` como valor predeterminado general de `plugins.storage.blob.config.valueThreshold`. Cuando `runMode` es `sync`, los almacenamientos `core` y `api` utilizan `1 KiB`; Core Leios también utiliza `1 KiB`. API Leios y los demás modos de ejecución utilizan `1 MiB`. Un valor YAML explícito sustituye el valor predeterminado seleccionado, incluido un `0` explícito.
 
 | Configuración | Clave YAML del proveedor | Valor predeterminado | Validación y comportamiento |
 | --- | --- | --- | --- |
