@@ -1,9 +1,9 @@
 ---
-title: Dingo v0.91.0 Configuration Reference
-description: Complete, release-specific Dingo v0.91.0 configuration reference and example.
+title: Dingo v0.92.1 Configuration Reference
+description: Complete, release-specific Dingo v0.92.1 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.91.0. The complete
+This page covers the configuration shipped with Dingo v0.92.1. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
 release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example).
