@@ -125,7 +125,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 ## ステップ2 - dingo.yaml構成ファイルを作成する
 
-すべての Dingo v0.91.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
+すべての Dingo v0.92.1 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.1/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
 Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 
