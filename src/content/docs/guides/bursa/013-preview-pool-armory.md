@@ -596,7 +596,7 @@ The operator checks every key bundle before it rolls it out: the opcert signatur
 
 Auto mode cannot issue the first opcert of a new pool. See [A new pool](#a-new-pool).
 
-The operator lets only one block producer forge per pool ([dingo-operator#133](https://github.com/blinklabs-io/dingo-operator/pull/133), chart 0.5.2). When two DingoNodes name the same pool, in any namespace, or the same keys Secret, the older one keeps the keys. The newer one gets `Ready=False` with reason `DuplicateForger`, its StatefulSet is scaled to zero, and it resumes only after the older DingoNode is gone and its pods have finished. Deleting a DingoNode does not stop its pod at once. To move a producer, create the new DingoNode and delete the old one; the new one waits until the old pod is gone. Across namespaces, the newer node is halted only when the older node's keys Secret holds the KES key its opcert certifies. If the older node only names the pool, the newer one is refused but not scaled to zero. A refused producer whose keys Secret is switched to another pool's keys is scaled to zero too, since a restart of its pod would stage them. A KES rotation for the same pool does not halt it. The operator reads pods for these checks, which the chart grants from 0.5.1. The full rules are in the operator's [README](https://github.com/blinklabs-io/dingo-operator#features).
+The operator lets only one block producer forge per pool on a network ([dingo-operator#133](https://github.com/blinklabs-io/dingo-operator/pull/133), chart 0.5.2; [dingo-operator#137](https://github.com/blinklabs-io/dingo-operator/pull/137), chart 0.5.3). When two DingoNodes name the same pool on the same network, in any namespace, or the same keys Secret, on any network, the older one keeps the keys. The newer one gets `Ready=False` with reason `DuplicateForger`, its StatefulSet is scaled to zero, and it resumes only after the older DingoNode is gone and its pods have finished. Deleting a DingoNode does not stop its pod at once. To move a producer, create the new DingoNode and delete the old one; the new one waits until the old pod is gone. Across namespaces, the newer node is halted only when the older node's keys Secret holds the KES key its opcert certifies. If the older node only names the pool, the newer one is refused but not scaled to zero. A refused producer whose keys Secret is switched to another pool's keys is scaled to zero too, since a restart of its pod would stage them. A KES rotation for the same pool does not halt it. The network is the one the node's environment gives Dingo, `spec.environment` overrides included. The operator reads pods for these checks, which the chart grants from 0.5.1. The full rules are in the operator's [README](https://github.com/blinklabs-io/dingo-operator#features).
 
 #### Auto rotation with the armory
 
@@ -611,7 +611,7 @@ helm upgrade --install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/cha
   --set rbac.keySecretsUpdate=true \
   --set 'rbac.keySecretNames={producer-pool-keys}' \
   --set 'rbac.readSecretNames={bursa-signer-mtls}' \
-  --version 0.5.2
+  --version 0.5.3
 ```
 
 `rbac.readSecretNames` (chart 0.5.0) limits read access to the named Secrets plus `keySecretNames`, instead of every Secret in the namespace. List every Secret the operator reads: each producer's `keys.secretRef` and the signer client certificate in `mtlsSecretRef`. Leave it out to keep read access to every Secret there.
@@ -982,7 +982,7 @@ At startup the signer reads each profile's keys from the device. A profile that 
 One pool can run on several networks with the same cold key, one profile per network on the device (for example `mypool@preview` and `mypool@preprod`). The signer then takes one backend per profile listing the same key. It refuses to start if two backends with the same profile, or a backend without a profile, list a key that another backend also lists ([bursa#1249](https://github.com/blinklabs-io/bursa/pull/1249)):
 
 - Leave the key's `backend` field empty: when set, the signer refuses any request whose profile selects a different backend.
-- A request for such a key must name its profile. Without one the signer refuses it with HTTP 400, and a profile none of the backends has with HTTP 404. In Kubernetes, set the producer's `coldSigner.profile` to that profile.
+- A request for such a key must name its profile. Without one the signer refuses it with HTTP 400, and a profile none of the backends has with HTTP 404. In Kubernetes, set the producer's `coldSigner.profile` to that profile. Chart 0.5.2 refuses the newer of two producers of one pool on different networks with `DuplicateForger`; use 0.5.3 or later.
 - The signer keeps the watermark records of such a key for each profile. Records a signer before v0.22.0 wrote carry no profile and are ignored once a second backend lists the key. Before adding the second profile, stop the signer and migrate them as the [profile routing section of the signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md#profile-routing) describes.
 
 Before putting several pools on one device:
