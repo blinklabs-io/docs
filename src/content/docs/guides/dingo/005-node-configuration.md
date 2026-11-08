@@ -48,7 +48,7 @@ Providers are configured under `plugins`: storage providers keep block data
 and metadata, mempool providers order pending transactions, and API providers
 serve client requests. Provider-specific configuration lives alongside the
 provider name. The example file documents the providers and options for Dingo
-v0.91.0. When `plugins.storage.metadata.provider` is `sqlite`, the root
+v0.92.1. When `plugins.storage.metadata.provider` is `sqlite`, the root
 `databasePath` must be non-empty. If the provider is unset, it defaults to
 `sqlite`, and Dingo rejects the configuration at startup when `databasePath` is
 empty. Environment variables use the
