@@ -5,10 +5,10 @@ description: Run the published Dingo image, persist its data, and check node hea
 
 Dingo publishes container images to GitHub Container Registry. The versioned
   image tag omits the leading `v` from the matching Dingo release tag. This
-  example uses Dingo `v0.91.0`:
+  example uses Dingo `v0.92.1`:
 
 ```sh
-  docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+  docker pull ghcr.io/blinklabs-io/dingo:0.92.1
 ```
 
 ## Start a Preview node
