@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.91.0 Configuration Reference
-description: Complete, release-specific Dingo v0.91.0 configuration reference and example.
+title: Dingo v0.92.0 Configuration Reference
+description: Complete, release-specific Dingo v0.92.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.91.0. The complete
+This page covers the configuration shipped with Dingo v0.92.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.91.0 source](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.92.0 source](https://github.com/blinklabs-io/dingo/blob/v0.92.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -34,7 +34,7 @@ for the main runtime choices.
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
 | Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
-| Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
+| Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `cip0203Enabled`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
 
@@ -379,9 +379,10 @@ Configure these provider YAML keys under `plugins.storage.blob.config` for the
 Badger provider. These settings do not add top-level CLI flags or environment
 variables.
 
-Dingo uses `1 MiB` as the default for
-`plugins.storage.blob.config.valueThreshold`, except during Core-mode `sync`
-and Mithril sync, when Dingo uses `1 KiB`.
+Dingo generally uses `1 MiB` as the default for
+`plugins.storage.blob.config.valueThreshold`. For `runMode: sync` in both Core
+and API storage modes, Dingo uses `1 KiB`. Core Leios also uses `1 KiB`; API
+Leios and all other run modes use `1 MiB`.
 An explicit YAML value overrides either mode default, including an explicit
 `0`.
 
@@ -557,7 +558,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.91.0 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.92.0 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
@@ -567,6 +568,10 @@ Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` environment variable. Its default is
 `0`, which disables the bound. Dingo evaluates the bound only when a
 corroborated upstream target exists and ignores it when the target is unknown.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| CIP-0203 release-version signalling | `cip0203Enabled` | `--cip-0203-enabled` | `DINGO_CIP0203_ENABLED` | `false` by default (disabled). When enabled, Dingo opts forged headers into CIP-0203 release-version signalling and requires the build to contain a valid semantic release version populated at link time. Dingo rejects missing, malformed, or out-of-range versions during configuration validation. When disabled, forged headers retain the legacy identifier `69`. |
 
 #### Shelley KES agent socket
 
