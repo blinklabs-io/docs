@@ -104,6 +104,12 @@ El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un p
 | Exportador de registros OpenTelemetry | — | — | `OTEL_LOGS_EXPORTER` | Activa la exportación OTLP opcional de registros. Un valor vacío o `none` la desactiva. Dingo avisa sobre una configuración de exportador no válida en lugar de hacer fallar el inicio y mantiene disponibles los registros de salida estándar. |
 | Exportador de métricas OpenTelemetry | — | — | `OTEL_METRICS_EXPORTER` | Activa la exportación OTLP opcional de las métricas del registro Prometheus. Un valor vacío o `none` la desactiva. Dingo avisa sobre una configuración de exportador no válida en lugar de hacer fallar el inicio; la exportación no altera el extremo Prometheus `/metrics`. |
 
+### Conexión local confiable de nodo a cliente
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
+| --- | --- | --- | --- | --- | --- |
+| Tiempo de inactividad de NtC local confiable | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0` | `0` desactiva el límite de inactividad. Un valor positivo hace que Dingo cierre las conexiones locales confiables que permanecen inactivas después de esa duración. Dingo rechaza los valores negativos. |
+
 ### Configuración DMQ
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
@@ -120,7 +126,7 @@ El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un p
 | Archivo de topología DMQ | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Sin configurar | Si se configura, la ruta no puede incluir recorridos `..` y debe identificar un archivo regular existente. Dingo lo carga y valida antes de abrir el socket DMQ. |
 | Mínimo de pares DMQ | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` permite no requerir pares. Solo las conexiones salientes cuentan para cumplir este mínimo; las conexiones entrantes no lo satisfacen. |
 | Máximo de pares DMQ | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` no permite pares cuando `minPeers` también es `0`. Limita el total de conexiones y reserva espacio para las conexiones salientes según `minPeers` y la valencia total de las raíces locales. |
-| Intervalo mínimo entre mensajes del mismo pool | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` segundos | Dingo separa los anuncios de mensajes del mismo pool durante el intervalo configurado y añade `1` segundo de margen. `0` desactiva el pacing. El valor no puede superar `dmq.messageTtl`. |
+| Intervalo mínimo entre mensajes del mismo pool | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` segundos | Dingo separa los anuncios de mensajes del mismo pool durante el intervalo configurado y añade `1` segundo de margen. `0` desactiva el espaciado. Dingo rechaza un valor mayor que `dmq.messageTtl`. |
 
 Dingo valida estos seis ajustes de pares al iniciar DMQ. Con `dmq.n2nPort: 0`, omite la validación de las direcciones de escucha. Si `dmq.n2nPort` no es cero, cada dirección debe utilizar su versión IP correspondiente. Cuando `dmq.n2nPort` y `dmq.maxPeers` son distintos de cero, Dingo escucha en las direcciones configuradas y el gestor mantiene los pares dentro de `dmq.minPeers` y `dmq.maxPeers`. El archivo de topología configurado proporciona pares al gestor, que intenta primero las raíces locales y después las raíces públicas. El tema activado también puede descubrir pares relay del ledger mediante registros SRV de DNS asociados al prefijo del tema.
 
@@ -330,7 +336,7 @@ Cada valor respaldado por archivos debe cumplir estos requisitos:
 
 - La ruta debe identificar un archivo regular. Dingo rechaza directorios, dispositivos y otros caminos no regulares.
 - Dingo acepta como máximo `64 KiB` de contenido. Elimina los caracteres `CR` y `LF` finales y rechaza el contenido vacío o compuesto únicamente de espacios.
-- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, deben pertenecer al usuario que ejecuta el proceso o a root; además, Dingo rechaza los directorios no sticky que permitan escritura al grupo o a otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
+- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, el usuario que ejecuta el proceso o root debe ser propietario del archivo y de cada entrada ancestral. Cada directorio ancestral que permita la escritura al grupo o a otros usuarios debe tener el sticky bit (`chmod +t`). El bit setgid por sí solo, incluido el de la raíz de un volumen de Kubernetes con `fsGroup`, no impide que otros miembros del grupo renombren entradas. Como alternativa, el operador puede eliminar los permisos de escritura del grupo y de otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
 - Los errores identifican el valor o la ruta, pero nunca incluyen el contenido del archivo.
 
 ### Autenticación de manifiestos del registro de tokens
@@ -364,7 +370,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.91.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.92.3 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
