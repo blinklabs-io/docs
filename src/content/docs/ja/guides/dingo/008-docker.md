@@ -6,7 +6,7 @@ description: 公開された Dingo イメージを実行し、データを永続
 Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.92.3` を使用します。
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.92.3
 ```
 
 <a id="start-a-preview-node"></a>
