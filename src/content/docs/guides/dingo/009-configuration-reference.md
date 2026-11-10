@@ -415,7 +415,7 @@ even when the Badger provider configuration sets
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. Any ancestor writable by the group or others must have the sticky bit; a directory with only the setgid bit, including a Kubernetes `fsGroup` volume root, does not satisfy this requirement. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
+| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. Any ancestor writable by the group or others must have the sticky bit; setgid alone, including a Kubernetes `fsGroup` volume root, does not stop other group members from renaming entries. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
 
 Dingo keeps configured snapshot roots and generated local snapshot and staging
 paths private. Unix directories use `0700` permissions and files use `0600`.
@@ -508,10 +508,9 @@ Every file-backed value must meet these requirements:
   and other non-regular paths.
 - On Unix, Dingo requires the file and every ancestor path entry to belong to
   the Dingo process user or root. Any ancestor writable by the group or others
-  must have the sticky bit. A directory with only the setgid bit, including a
-  Kubernetes `fsGroup` volume root, does not satisfy this requirement because
-  other group members can still rename entries. Add the sticky bit with
-  `chmod +t` or remove group and other write access.
+  must have the sticky bit. Setgid alone, including a Kubernetes `fsGroup`
+  volume root, does not stop other group members from renaming entries. Add the
+  sticky bit with `chmod +t` or remove group and other write access.
 - Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
   and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix
