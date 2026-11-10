@@ -130,6 +130,17 @@ The `software`/`file` signer backend loads plaintext private key material into p
 
 For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
 
+## Signer JWT authentication
+
+Configure at most one signer bearer-token trust source. Bursa requires a non-empty audience whenever `signer.jwt_secret` or `signer.jwks_url` is configured, and every bearer token must carry the same value in its `aud` claim. Bursa fails startup without the audience and rejects a token with a missing or mismatched audience. `signer.jwt_issuer` remains optional; when it is unset, Bursa accepts any issuer and logs a warning.
+
+| Configuration path | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `signer.jwt_secret` | `SIGNER_JWT_SECRET` | Authenticates bearer tokens with an HS256 secret. | Use instead of `signer.jwks_url`; provide at least 32 bytes. |
+| `signer.jwks_url` | `SIGNER_JWKS_URL` | Authenticates bearer tokens through a JWKS endpoint. | Use instead of `signer.jwt_secret`. |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | Matches the required `aud` claim in bearer tokens. | Required when `signer.jwt_secret` or `signer.jwks_url` is configured. |
+| `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | Restricts the issuer that bearer tokens can contain. | Optional when any issuer is acceptable. |
+
 ## Signer watermark
 
 Configure `signer.watermark` to store signer safety watermarks and operational certificate issue counters. The `mem` backend keeps this state in memory, `file` stores it in SQLite, and `postgres` stores it in a durable PostgreSQL database that multiple signer replicas can share.
