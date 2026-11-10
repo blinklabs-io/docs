@@ -77,6 +77,12 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 | アーカイブとデータベースのライフサイクル | `bark*`, `historyExpiry`, `databaseLifecycle` | アーカイブデータの配信や取得、ローカル履歴の期限切れ、スナップショットの管理を設定します。 |
 | 任意のインデックスと診断 | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | 任意のインデックス作成、認証付きレジストリ更新、パリティ診断、キャッシュ、起動時検証を設定します。 |
 
+### リスナーと診断
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
+| --- | --- | --- | --- | --- |
+| プライベートリスナーのポート | `privatePort` | — | — | 既定値は `0` です。`0` にすると NtC TCP リスナーを無効にしますが、Unix ソケットは引き続き使用できます。TCP アクセスには 0 以外のポートを明示的に設定します。 |
+
 <a id="consensus-provider"></a>
 
 ### コンセンサスプロバイダー
