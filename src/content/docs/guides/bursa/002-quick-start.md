@@ -92,7 +92,7 @@ chmod +x bursa
 
 <br>
 
-The API listens on `127.0.0.1:8080` by default. Local clients can connect through `localhost:8080` without a firewall rule. To permit remote access, set `api.address` in YAML or `API_LISTEN_ADDRESS`, and apply the required TLS and bearer authentication protections in the [configuration reference](../009-configuration-reference). When `API_JWT_SECRET` or `API_JWKS_URL` is configured for a non-loopback API, also set a non-empty `API_JWT_AUDIENCE`/`api.jwt_audience`; every bearer token must contain the same value in its `aud` claim.
+The API listens on `127.0.0.1:8080` by default. Local clients can connect through `localhost:8080` without a firewall rule. To permit remote access, set `api.address` in YAML or `API_LISTEN_ADDRESS`, and apply the required TLS and bearer authentication protections in the [configuration reference](../009-configuration-reference). When a non-loopback API uses `API_JWT_SECRET` or `API_JWKS_URL` for bearer authentication, also set a non-empty `API_JWT_AUDIENCE`/`api.jwt_audience`; every bearer token must contain the same value in its `aud` claim.
 
 ***
 
