@@ -242,17 +242,45 @@ signer:
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley ジェネシスの開始時刻です。 | RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Shelley 開始時点の絶対スロットです。 | `shelley_start_time` と組み合わせて、20 秒スロットの Byron 期を持つネットワークで指定します。 |
+| `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | `shelley_start_slot` に対応する時刻です。 | RFC3339 のタイムスタンプを指定します。 |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES 期間のスロット数です。 | `0` より大きい値を指定します。 |
+| `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | ホストの時計より先に進んだヘッダーのスロットを許容する範囲です。 | Go の期間で指定します。既定値は `5s` です。 |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | 運用証明書の進化回数を制限します。 | 既定値は `62` です。 |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | スケジューラーの間隔を `1m` などの Go の期間で指定します。 | 既定値は `1m`。Go の期間を指定します。 |
 | `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加する KES 期間ガードを永続的なパスに保存します。 | 永続的なパスを指定します。 |
+| `kes_agent.profiles` | YAML のみ | 複数のプールを 1 つのエージェントで処理します。 | 指定すると単一プール用のフィールドを置き換えます。プロファイル名は 1〜64 文字で、先頭に ASCII 英字または数字、その後に ASCII 英字、数字、`.`、`_`、`-` を使用します。重複名は拒否されます。 |
+| `kes_agent.store.type` | YAML のみ | KES 期間ガードとスロット記録の共有ストアを選択します。 | `postgres` を指定すると PostgreSQL を使用します。未設定時はファイルストアです。 |
+| `kes_agent.store.dsn_env` | YAML のみ | PostgreSQL DSN を格納する環境変数名です。 | `store.type` が `postgres` の場合に必須です。非ループバック接続には `sslmode=verify-full` が必要です。 |
+| `kes_agent.store.age_recipients` | YAML のみ | 共有 KES 鍵を封印する age 受信者です。 | `age_identity_file` と同時に指定します。 |
+| `kes_agent.store.age_identity_file` | YAML のみ | 共有 KES 鍵を復号する age ID ファイルです。 | `age_recipients` と同時に指定します。グループやその他のユーザーから読み取れないようにします。 |
+| `kes_agent.store.key_poll_interval` | YAML のみ | 共有ストアに新しい KES 鍵が登録されたか確認する間隔です。 | Go の期間で指定します。既定値は `10s` です。 |
+| `kes_agent.attested_listen_address` | — | リモートプロデューサー向けのアテステーション付き署名リスナーです。 | `sign` モードで 1 プロファイルの場合に使用します。 |
+| `kes_agent.attested_tls_cert_file` | — | アテステーション付きリスナーの TLS 証明書です。 | `attested_tls_key_file` と組み合わせます。 |
+| `kes_agent.attested_tls_key_file` | — | アテステーション付きリスナーの TLS 秘密鍵です。 | `attested_tls_cert_file` と組み合わせます。 |
+| `kes_agent.attested_client_ca_file` | — | クライアント証明書を検証する CA ファイルです。 | 設定した場合だけクライアント証明書を要求します。 |
+| `kes_agent.attested_plaintext` | — | アテステーション付きリスナーを平文 TCP で提供します。 | `true` の場合、TLS ファイルを設定できません。 |
+| `kes_agent.attestation_provider` | — | アテステーション証拠を提供する方式です。 | `nitro`、`confidential-space`、`none` を指定します。 |
+| `kes_agent.attester_address` | — | ローカルのアテスターアダプターのエンドポイントです。 | `nitro` または `confidential-space` で指定します。 |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | ヘルス、準備状態、Prometheus メトリクス用のリスナーアドレスです。 | ループバックアドレスだけを指定します。既定値は `127.0.0.1` です。 |
+| `metrics.port` | `METRICS_LISTEN_PORT` | ヘルス、準備状態、Prometheus メトリクス用のポートです。 | `0` で 3 つのエンドポイントを無効にします。 |
 
 サービスソケットと制御ソケットには異なるパスが必要です。8 進数の権限モードを指定でき、両方の既定値は所有者のみの `0600` です。異なるユーザー ID で動くプロデューサーのため、サービスソケットにはグループアクセスを許可できますが、その他のユーザーに書き込みは許可できません。制御ソケットは KES 鍵のインストールや削除を受け付けるため、書き込みは所有者のみに制限する必要があります。
 
-`cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、永続的な `guard_file` のパスも必要です。
+`cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。単一プール設定の起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、永続的な `guard_file` のパスも必要です。`shelley_start_slot` と `shelley_start_time` を指定すると、`system_start` からではなく Shelley のアンカーから絶対スロットを計算します。時計より先のスロットは `max_clock_skew` の範囲を超えると拒否します。
 
-`kes_agent.guard_file` が空の場合、KES エージェントは起動を拒否します。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。このガードをメモリ内で代替する機能はありません。
+`kes_agent.guard_file` と `kes_agent.store.type: postgres` は同時に指定できません。どちらかの永続ストアを指定してください。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。PostgreSQL ストアを使用すると、期間ガードと署名済みスロットの記録を複数のエージェントで共有できます。
+
+`profiles` を指定すると、`cold_vkey_file`、`cold_vkey_hex`、`system_start`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file` の単一プール用フィールドを各プロファイル内で指定します。`slot_length` と `max_kes_evolutions` は省略するか既定値のままにします。各プロファイルは鍵、スケジュール、期間ガード、最後に署名したスロットの状態を個別に保持し、`sign` モードはヘッダーのコールド検証鍵と運用証明書の KES 鍵でプロファイルを選択します。`serve-key` モードとアテステーション付きリスナーは 1 プロファイルだけを受け付けます。単一プール設定と `profiles` の併用は拒否されます。
+
+PostgreSQL ストアでは、`age_recipients` と `age_identity_file` を両方指定すると、各プロファイルのステージ済みおよびインストール済み KES 鍵を共有できます。ID ファイルはグループやその他のユーザーから読み取れないようにします。`key_poll_interval` ごとに新しい鍵を確認します。age の ID を持つ対象はデータベースの封印済み鍵を復号できるため、データベースとバックアップを保護してください。
+
+`attested_listen_address` は TLS 1.3 または平文 TCP でリモートプロデューサーを受け付けます。`attested_tls_cert_file` と `attested_tls_key_file` を設定するとサーバー証明書を使用し、`attested_client_ca_file` も設定した場合だけクライアント証明書を要求します。`attested_plaintext: true` は TLS ファイルと併用できません。`attestation_provider` に `nitro` または `confidential-space` を指定する場合は `attester_address` が必要です。`none` はアテスターを使用せず、空の証拠を返します。
+
+`metrics.address` はループバックアドレスだけを受け付けます。`metrics.port` が 0 以外の場合、`/healthz` はプロセスの生存性、`/readyz` は署名可能な準備状態、`/metrics` は Prometheus メトリクスを返します。ポート `0` は 3 つすべてを無効にします。
+
+KES エージェントは 1 スロットにつき 1 つのヘッダー本文だけを署名します。同じ本文の再試行は許可しますが、署名済みスロットへの別本文と、より低いスロットは拒否します。ガード記録は設定したファイルまたは共有 PostgreSQL ストアに永続化されます。アテステーション付きリスナーはハンドシェイクを 10 秒で打ち切り、保留中のハンドシェイクを全体で 64 件、送信元ごとに 4 件まで受け付けます。送信元の制限は IPv4 アドレスまたは IPv6 の `/64` 単位です。上限に達すると最も古い保留を破棄します。保留中のハンドシェイクは認証済みスロットを消費しません。
 
 ```yaml
 kes_agent:
@@ -289,10 +317,10 @@ kes_agent:
 | `api.jwt_secret` | `API_JWT_SECRET` | HS256 シークレットで Bearer トークンを認証します。 | `api.jwks_url` の代わりに使用し、32 バイト以上を指定します。 |
 | `api.jwks_url` | `API_JWKS_URL` | JWKS エンドポイントで Bearer トークンを認証します。 | `api.jwt_secret` の代わりに使用します。ループバックでの開発を除き HTTPS が必須です。 |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Bearer トークンの issuer を制限します。 | 受け入れる issuer を制限する場合に設定します。 |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの audience を制限します。 | 受け入れる audience を制限する場合に設定します。 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの対象 audience を指定します。 | `api.jwt_secret` または `api.jwks_url` を設定する場合は空でない値が必須です。トークンの `aud` と一致させます。 |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続化したウォレットの管理用 JWT subject の、空でない許可リストです。 | いずれかのウォレットストレージを設定する場合、1 つ以上の空でない subject が必要です。リストが空または未設定なら起動を拒否します。 |
 
-ループバック以外の従来の API リスナーには、読み取り可能な TLS ファイルの両方と、Bearer の信頼元 `api.jwt_secret` または `api.jwks_url` のちょうど一方が必要です。信頼元がちょうど 1 つでなければ起動を拒否します。HS256 シークレットは 32 バイト以上が必要です。JWKS URL は HTTPS を使用し、ループバックでの開発に限り HTTP を使用できます。
+ループバック以外の従来の API リスナーには、読み取り可能な TLS ファイルの両方と、Bearer の信頼元 `api.jwt_secret` または `api.jwks_url` のちょうど一方が必要です。信頼元がちょうど 1 つでなければ起動を拒否します。どちらかの信頼元を設定する場合は `api.jwt_audience` も必須で、すべての Bearer トークンの `aud` クレームを同じ値にします。audience がない、または一致しないトークンは認証に失敗します。HS256 シークレットは 32 バイト以上が必要です。JWKS URL は HTTPS を使用し、ループバックでの開発に限り HTTP を使用できます。
 
 API は既定でループバックを使用します。TLS ファイルを省略したループバックでの開発は平文で利用できますが、ループバック以外のリスナーでは TLS と Bearer 認証が必須です。
 
