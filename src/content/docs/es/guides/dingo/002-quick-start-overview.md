@@ -184,7 +184,7 @@ storageMode: "core"
 EOF
 ```
 
-📝 `privatePort: 0` desactiva el listener TCP de nodo a cliente (NtC), mientras el socket Unix configurado en `socketPath` sigue disponible. Para acceder mediante TCP, configura `privatePort` con un puerto distinto de `0`.
+📝 Con `privatePort: 0`, Dingo desactiva el listener TCP de nodo a cliente (NtC) y mantiene disponible el socket Unix configurado en `socketPath`. Configura un puerto distinto de `0` en `privatePort` para habilitar el acceso TCP.
 
 📝 Deja `debugPort` en `0` salvo que necesites perfiles. Controla un servicio pprof opcional, independiente de `metricsPort`, y permanece desactivado con `0`.
 
