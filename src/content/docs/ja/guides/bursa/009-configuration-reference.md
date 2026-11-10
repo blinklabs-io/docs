@@ -105,7 +105,7 @@ Nitro では `root_ca_file` と PCR の検証に加えて、`host_key_file` に�
 | `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | トークンの対象 audience を指定します。 | 空でない値を指定します。 |
 | `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | トークンの issuer を制限します。 | 任意です。設定した場合はトークンの `iss` と一致させます。 |
 
-`signer.jwt_secret` または `signer.jwks_url` のいずれかを設定した場合、`signer.jwt_audience` も必ず設定します。すべてのトークンは同じ値を `aud` クレームに含める必要があります。audience がない場合、または値が一致しない場合、起動または認証に失敗します。JWT 信頼元を両方設定した場合や、どちらも設定しない場合も起動を拒否します。
+`signer.jwt_secret` または `signer.jwks_url` のいずれかを設定した場合、`signer.jwt_audience` も必ず設定します。すべてのトークンは同じ値を `aud` クレームに含める必要があります。audience がない場合、または値が一致しない場合、起動または認証に失敗します。JWT を使用する場合、信頼元は `jwt_secret` と `jwks_url` のどちらか一方だけを設定します。
 
 ### Nitro の永続化
 
@@ -230,7 +230,7 @@ signer:
 
 ## `kes_agent`
 
-`kes_agent` YAML キーにデーモンを設定します。各フィールドは、対応する `KESAGENT_*` 環境変数でも指定できます。
+`kes_agent` YAML キーにデーモンを設定します。環境変数に対応するフィールドは、対応する `KESAGENT_*` 環境変数でも指定できます。`YAML のみ` と記載したフィールドは YAML で指定します。
 
 | YAML キー | 環境変数 | 用途 | 既定値または要件 |
 | --- | --- | --- | --- |
@@ -268,7 +268,7 @@ signer:
 
 サービスソケットと制御ソケットには異なるパスが必要です。8 進数の権限モードを指定でき、両方の既定値は所有者のみの `0600` です。異なるユーザー ID で動くプロデューサーのため、サービスソケットにはグループアクセスを許可できますが、その他のユーザーに書き込みは許可できません。制御ソケットは KES 鍵のインストールや削除を受け付けるため、書き込みは所有者のみに制限する必要があります。
 
-`cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。単一プール設定の起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、永続的な `guard_file` のパスも必要です。`shelley_start_slot` と `shelley_start_time` を指定すると、`system_start` からではなく Shelley のアンカーから絶対スロットを計算します。時計より先のスロットは `max_clock_skew` の範囲を超えると拒否します。
+`cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。単一プール設定の起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、`guard_file` または PostgreSQL ストアの設定が必要です。`shelley_start_slot` と `shelley_start_time` を指定すると、`system_start` からではなく Shelley のアンカーから絶対スロットを計算します。時計より先のスロットは `max_clock_skew` の範囲を超えると拒否します。
 
 `kes_agent.guard_file` と `kes_agent.store.type: postgres` は同時に指定できません。どちらかの永続ストアを指定してください。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。PostgreSQL ストアを使用すると、期間ガードと署名済みスロットの記録を複数のエージェントで共有できます。
 
@@ -317,7 +317,7 @@ kes_agent:
 | `api.jwt_secret` | `API_JWT_SECRET` | HS256 シークレットで Bearer トークンを認証します。 | `api.jwks_url` の代わりに使用し、32 バイト以上を指定します。 |
 | `api.jwks_url` | `API_JWKS_URL` | JWKS エンドポイントで Bearer トークンを認証します。 | `api.jwt_secret` の代わりに使用します。ループバックでの開発を除き HTTPS が必須です。 |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Bearer トークンの issuer を制限します。 | 受け入れる issuer を制限する場合に設定します。 |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの対象 audience を指定します。 | `api.jwt_secret` または `api.jwks_url` を設定する場合は空でない値が必須です。トークンの `aud` と一致させます。 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの対象 audience を指定します。 | 空でない値を指定します。 |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続化したウォレットの管理用 JWT subject の、空でない許可リストです。 | いずれかのウォレットストレージを設定する場合、1 つ以上の空でない subject が必要です。リストが空または未設定なら起動を拒否します。 |
 
 ループバック以外の従来の API リスナーには、読み取り可能な TLS ファイルの両方と、Bearer の信頼元 `api.jwt_secret` または `api.jwks_url` のちょうど一方が必要です。信頼元がちょうど 1 つでなければ起動を拒否します。どちらかの信頼元を設定する場合は `api.jwt_audience` も必須で、すべての Bearer トークンの `aud` クレームを同じ値にします。audience がない、または一致しないトークンは認証に失敗します。HS256 シークレットは 32 バイト以上が必要です。JWKS URL は HTTPS を使用し、ループバックでの開発に限り HTTP を使用できます。
