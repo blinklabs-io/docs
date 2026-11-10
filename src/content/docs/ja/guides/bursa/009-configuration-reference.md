@@ -276,9 +276,9 @@ signer:
 
 PostgreSQL ストアでは、`age_recipients` と `age_identity_file` を両方指定すると、各プロファイルのステージ済みおよびインストール済み KES 鍵を共有できます。ID ファイルはグループやその他のユーザーから読み取れないようにします。`key_poll_interval` ごとに新しい鍵を確認します。age の ID を持つ対象はデータベースの封印済み鍵を復号できるため、データベースとバックアップを保護してください。
 
-`attested_listen_address` は TLS 1.3 または平文 TCP でリモートプロデューサーを受け付けます。`attested_tls_cert_file` と `attested_tls_key_file` を設定するとサーバー証明書を使用し、`attested_client_ca_file` も設定した場合だけクライアント証明書を要求します。`attested_plaintext: true` は TLS ファイルと併用できません。`attestation_provider` に `nitro` または `confidential-space` を指定する場合は `attester_address` が必要です。`none` はアテスターを使用せず、空の証拠を返します。
+`attested_listen_address` は TLS 1.3 または平文 TCP でリモートプロデューサーを受け付けます。`attested_tls_cert_file` と `attested_tls_key_file` を設定するとサーバー証明書を使用し、`attested_client_ca_file` も設定した場合だけクライアント証明書を要求します。`attested_plaintext: true` は TLS ファイルと併用できません。`attestation_provider` に `nitro` または `confidential-space` を指定する場合は `attester_address` が必要です。`none` は `attester_address` を設定せずにアテスターを使用せず、空の証拠を返します。
 
-`metrics.address` はループバックアドレスだけを受け付けます。`metrics.port` が 0 以外の場合、`/healthz` はプロセスの生存性、`/readyz` は署名可能な準備状態、`/metrics` は Prometheus メトリクスを返します。ポート `0` は 3 つすべてを無効にします。
+`metrics.address` はループバックアドレスだけを受け付けます。`metrics.port` が 0 以外の場合、`/healthz` はプロセスの生存性、`/readyz` はエージェントの準備状態、`/metrics` は Prometheus メトリクスを返します。準備状態を満たさない場合、`/readyz` は HTTP `503` を返します。ポート `0` は 3 つすべてを無効にします。
 
 KES エージェントは 1 スロットにつき 1 つのヘッダー本文だけを署名します。同じ本文の再試行は許可しますが、署名済みスロットへの別本文と、より低いスロットは拒否します。ガード記録は設定したファイルまたは共有 PostgreSQL ストアに永続化されます。アテステーション付きリスナーはハンドシェイクを 10 秒で打ち切り、保留中のハンドシェイクを全体で 64 件、送信元ごとに 4 件まで受け付けます。送信元の制限は IPv4 アドレスまたは IPv6 の `/64` 単位です。上限に達すると最も古い保留を破棄します。保留中のハンドシェイクは認証済みスロットを消費しません。
 
