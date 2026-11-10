@@ -79,7 +79,7 @@ echo $DINGO_ARCH
 
 ```
 cd $DINGO_HOME
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 バイナリのバージョンを確認してから、システム全体からアクセスできるように`/usr/local/bin/`にコピーします：
@@ -97,7 +97,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 ### ステップ3 - Leios Cardano-CLIバイナリのダウンロード
 
- Musashiには、ネットワークに対応するLeiosプロトタイプリリースの`cardano-cli`が必要です。ネットワークのバージョンは、Musashiの<a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>の`MinNodeVersion`フィールドで確認できます。たとえば、`11.2.0.164-rc-2026w44`は<a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leiosリリース</a>ページの`rc-2026w44`リリースに対応します。
+Musashiには、ネットワークに対応するLeiosプロトタイプリリースの`cardano-cli`が必要です。ネットワークのバージョンは、Musashiの<a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>の`MinNodeVersion`フィールドで確認できます。たとえば、`11.2.0.164-rc-2026w44`は<a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leiosリリース</a>ページの`rc-2026w44`リリースに対応します。
 
 ディレクトリを作成して移動します：
 
@@ -108,7 +108,7 @@ mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
 LeiosリリースのLinuxビルドの名前は`x86_64`と`aarch64`です。リリースタグとアーキテクチャを設定し、アーカイブとそのチェックサムをダウンロードします：
 
 ```
- LEIOS_RELEASE=rc-2026w44
+LEIOS_RELEASE=rc-2026w44
 LEIOS_ARCH=$(uname -m)
 [ "$LEIOS_ARCH" = arm64 ] && LEIOS_ARCH=aarch64
 wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
