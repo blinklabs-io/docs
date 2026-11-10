@@ -52,8 +52,8 @@ Ajusta la ruta del enlace a la ruta correcta para la versión que deseas descarg
 > Consejo: Puedes descargar la última versión de Bursa desde la página <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a>.
 
 ```
-wget -O bursa-v0.21.1-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.21.1/bursa-v0.21.1-linux-amd64.tar.gz
-tar xzf bursa-v0.21.1-linux-amd64.tar.gz
+wget -O bursa-v0.23.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.23.0/bursa-v0.23.0-linux-amd64.tar.gz
+tar xzf bursa-v0.23.0-linux-amd64.tar.gz
 ```
 
 Las descargas de CLI para Linux y FreeBSD usan archivos `.tar.gz` específicos para cada arquitectura. Las descargas de CLI para Windows siguen usando archivos `.exe`, y Bursa distribuye el monedero de escritorio para Windows como un instalador `.msi` firmado y específico para cada arquitectura. El instalador MSI puede incluir el bootstrapper de WebView2 Evergreen cuando la versión incluye ese paquete opcional y el runtime no está instalado. Las descargas de CLI para macOS siguen usando archivos `.zip`, y Bursa distribuye el monedero de escritorio para macOS como un instalador `.pkg` notarizado y específico para cada arquitectura.
@@ -90,7 +90,7 @@ chmod +x bursa
 
 De forma predeterminada, la API de Bursa escucha en `127.0.0.1:8080`. Los clientes locales se conectan a `localhost:8080` sin abrir un puerto del firewall.
 
-Para aceptar conexiones remotas, configura explícitamente `api.address` en el archivo YAML o `API_LISTEN_ADDRESS`. Cuando Bursa escucha fuera del loopback, requiere un certificado y una clave TLS, además de exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. `API_JWKS_URL` debe usar `https://` fuera del loopback. Consulta la [referencia de configuración](../009-configuration-reference) para configurar estos ajustes.
+Para aceptar conexiones remotas, configura explícitamente `api.address` en el archivo YAML o `API_LISTEN_ADDRESS`. Cuando Bursa escucha fuera del loopback, requiere un certificado y una clave TLS, además de exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. La configuración de `API_JWT_SECRET` o `API_JWKS_URL` también requiere un valor no vacío en `API_JWT_AUDIENCE` o `api.jwt_audience`; los tokens bearer deben incluir ese mismo valor en `aud`. `API_JWKS_URL` debe usar `https://` fuera del loopback. Consulta la [referencia de configuración](../009-configuration-reference) para configurar estos ajustes.
 
 ***
 
