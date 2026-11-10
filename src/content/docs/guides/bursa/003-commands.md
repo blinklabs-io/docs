@@ -95,6 +95,14 @@ Start the KES agent daemon for a Cardano block producer with a YAML configuratio
 
 The `--config` flag selects the YAML configuration file. When the flag is omitted, Bursa uses the `BURSA_CONFIG` environment variable. Configure the `kes_agent.mode` value as `serve-key` or `sign`. Use the [configuration reference](../009-configuration-reference) for the `kes_agent` YAML fields and environment variables, including the mode and required socket, key, and timing settings.
 
+Check KES agent readiness without starting the daemon:
+
+```
+./bursa kes-agent ready --config /path/to/kes-agent.yaml
+```
+
+The command exits successfully only when the KES agent is ready and exits with a failure status otherwise. Use it as an `exec` readiness probe.
+
 ***
 
 <a name="tx"></a>
@@ -162,6 +170,59 @@ The `signer` command serves authenticated remote signing requests with configure
 ```
 
 When `--config` is omitted, `BURSA_CONFIG` selects the YAML file. Configure at least one authentication mode; JWT bearer, mTLS client certificates, and authorized-key request signatures are supported. Before starting the service, follow the [signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) and adapt the [example signer configuration](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/signer.example.yaml) for custody, authentication, TLS, caller permissions, and durable watermarks. The [signer overview](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/README.md) links the API specification and security guidance.
+
+The `signer` command accepts no positional arguments. Bursa rejects unknown or misspelled subcommands before it starts the signing service.
+
+Reset an operational certificate counter with the signer configuration and the current chain counter:
+
+```
+./bursa signer counter-reset --config /path/to/signer.yaml \
+  --key <56-character cold key hash> --chain-counter 10 --yes
+```
+
+Use `--profile <configured-profile>` when the selected backend has a profile, including a SOPS backend. When the configuration contains profiled backends and the selected backend has no profile, use `--unprofiled`. A configuration with no profiled backend needs neither selector. Bursa refuses requests without a profile or with a mismatched profile when the selected backend requires one. See the [signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) for the complete reset procedure.
+
+## Custody command references
+
+### Confidential Space workload
+
+Start a Confidential Space workload with repeatable profile options:
+
+```
+./bursa confidential-space-workload \
+  --listen :8080 \
+  --profile pool@mainnet \
+  --profile pool@preview \
+  --create-profile-counter pool@mainnet \
+  --create-profile-counter pool@preview
+```
+
+Repeat `--profile` for each explicitly configured profile and repeat `--create-profile-counter <profile>` for each profile that needs a counter. Bursa isolates each profile in its own Cloud Storage counter object. During active-key startup, Bursa does not silently recreate a missing profile counter; specify that profile with `--create-profile-counter` when adding it.
+
+### Nitro enclave
+
+Start the Nitro enclave with separate provisioning and signer authority files:
+
+```
+./bursa nitro enclave \
+  --server-cert-file /etc/bursa/nitro/server.pem \
+  --server-key-file /etc/bursa/nitro/server-key.pem \
+  --client-ca-file /etc/bursa/nitro/proxy-ca.pem \
+  --provision-authority-file /etc/bursa/nitro/provision-authority.hex \
+  --signer-authority-file /etc/bursa/nitro/signer-authority.hex
+```
+
+The provisioning and signer authorities must not be the same.
+
+### Nitro proxy
+
+Set `--socket-mode` when the proxy socket requires group access:
+
+```
+./bursa nitro proxy --socket /run/bursa/nitro.sock --socket-mode 0660
+```
+
+Mode `0660` supports owner and group access. Bursa rejects world-writable socket modes.
 
 ***
 

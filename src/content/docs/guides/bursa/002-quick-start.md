@@ -52,8 +52,8 @@ For Linux or FreeBSD CLI archive downloads, copy the path from Blinklabs and run
 > 💡 Tip: You can download the latest Bursa release from the <a href="https://github.com/blinklabs-io/bursa/releases" target="_blank"> https://github.com/blinklabs-io/bursa/releases</a> page.
 
 ```
-wget -O bursa-v0.21.1-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.21.1/bursa-v0.21.1-linux-amd64.tar.gz
-tar xzf bursa-v0.21.1-linux-amd64.tar.gz
+wget -O bursa-v0.23.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.23.0/bursa-v0.23.0-linux-amd64.tar.gz
+tar xzf bursa-v0.23.0-linux-amd64.tar.gz
 ```
 
 Linux and FreeBSD CLI downloads use per-architecture `.tar.gz` archives. Windows CLI downloads remain `.exe` files. The official Windows desktop wallet release provides a signed, architecture-specific `.msi` installer. The installer can include the WebView2 Evergreen bootstrapper only when the release includes the optional bundle and the runtime is missing. macOS CLI downloads remain `.zip` files. The official macOS desktop wallet release provides a notarized, architecture-specific `.pkg` installer.
@@ -92,7 +92,7 @@ chmod +x bursa
 
 <br>
 
-The API listens on `127.0.0.1:8080` by default. Local clients can connect through `localhost:8080` without a firewall rule. To permit remote access, set `api.address` in YAML or `API_LISTEN_ADDRESS`, and apply the required TLS and bearer authentication protections in the [configuration reference](../009-configuration-reference).
+The API listens on `127.0.0.1:8080` by default. Local clients can connect through `localhost:8080` without a firewall rule. To permit remote access, set `api.address` in YAML or `API_LISTEN_ADDRESS`, and apply the required TLS and bearer authentication protections in the [configuration reference](../009-configuration-reference). When a non-loopback API uses `API_JWT_SECRET` or `API_JWKS_URL` for bearer authentication, also set a non-empty `API_JWT_AUDIENCE` environment variable or `api.jwt_audience` configuration value; every bearer token must contain the same value in its `aud` claim.
 
 ***
 

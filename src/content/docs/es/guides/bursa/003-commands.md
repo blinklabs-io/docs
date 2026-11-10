@@ -97,6 +97,14 @@ El subcomando `kes-agent` ejecuta el agente KES para un productor de bloques de 
 
 La opción `--config` especifica la ruta al archivo de configuración YAML. Como alternativa, use la variable de entorno `BURSA_CONFIG` para indicar la ruta.
 
+Compruebe la preparación del agente con el siguiente comando:
+
+```bash
+./bursa kes-agent ready --config /path/to/kes-agent.yaml
+```
+
+El comando termina correctamente solo cuando el agente está preparado. El comando sirve como una prueba de preparación `exec`.
+
 Consulte la [referencia de configuración](../009-configuration-reference) para `kes_agent.mode`, `kes_agent.service_socket`, `kes_agent.control_socket`, `kes_agent.service_socket_mode`, `kes_agent.control_socket_mode`, `kes_agent.cold_vkey_file`, `kes_agent.cold_vkey_hex`, `kes_agent.system_start`, `kes_agent.slot_length`, `kes_agent.slots_per_kes_period`, `kes_agent.max_kes_evolutions`, `kes_agent.evolve_interval` y `kes_agent.guard_file`.
 
 <a name="tx"></a>
@@ -166,6 +174,45 @@ El comando `signer` atiende solicitudes autenticadas de firma remota con los bac
 ```
 
 Si se omite `--config`, `BURSA_CONFIG` selecciona el archivo YAML. Configura al menos un modo de autenticación: se admiten JWT bearer, certificados de cliente mTLS y firmas de solicitudes con claves autorizadas. Antes de iniciar el servicio, sigue la [guía operativa del firmante](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) y adapta el [ejemplo de configuración](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/signer.example.yaml) para la custodia, autenticación, TLS, permisos de clientes y marcas persistentes. La [descripción del firmante](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/README.md) enlaza la especificación de la API y la guía de seguridad.
+
+`bursa signer` no acepta argumentos posicionales. El comando rechaza cualquier subcomando desconocido o escrito incorrectamente antes de iniciar el servicio.
+
+### Restablecer el contador de certificados operativos
+
+Use `counter-reset` para restablecer el contador de un firmante:
+
+```sh
+./bursa signer counter-reset --config /path/to/signer.yaml \
+  --key <hash hexadecimal de 56 caracteres> --chain-counter <contador> --yes
+```
+
+Cuando la configuración incluye backends con perfil, use `--profile <perfil-configurado>` para seleccionar el perfil correspondiente, incluidos los backends `sops`. Para seleccionar un backend sin perfil en una configuración que también tiene backends con perfil, use `--unprofiled`. Ninguna de las dos opciones es necesaria cuando ningún backend tiene perfil. Consulte la [guía operativa del firmante](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) para conocer el procedimiento completo.
+
+### Custodia con Confidential Space
+
+`bursa confidential-space-workload` acepta las opciones repetibles `--profile` y `--create-profile-counter` para servir la misma clave en perfiles independientes y crear explícitamente los contadores de perfiles que faltan. Cada perfil usa un objeto separado de Cloud Storage para sus contadores. Una carga de trabajo con una envoltura activa no vuelve a crear silenciosamente un contador de perfil eliminado.
+
+```sh
+./bursa confidential-space-workload \
+  --profile pool@mainnet --profile pool@preview \
+  --create-profile-counter pool@mainnet
+```
+
+### Custodia Nitro
+
+El comando `bursa nitro enclave` requiere `--signer-authority-file` junto con `--provision-authority-file`. Los dos archivos deben contener autoridades distintas:
+
+```sh
+bursa nitro enclave \
+  --provision-authority-file /etc/bursa/nitro/provision-authority.hex \
+  --signer-authority-file /etc/bursa/nitro/signer-authority.hex
+```
+
+`bursa nitro proxy` admite `--socket-mode` para controlar el acceso al socket. Use, por ejemplo, `--socket-mode 0660` para permitir el acceso al grupo; el comando rechaza los modos con permisos de escritura para todo el mundo:
+
+```sh
+bursa nitro proxy --socket-mode 0660
+```
 
 ***
 

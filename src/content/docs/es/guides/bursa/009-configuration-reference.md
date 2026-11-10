@@ -5,7 +5,7 @@ description: Referencia de YAML y variables de entorno para los firmantes, el ag
 
 ## Descripción general
 
-Esta guía describe la configuración de los firmantes, de `bursa kes-agent` y de la API heredada de Bursa. `signer.backends` admite los backends `pkcs11`, `nitro` y `confidential-space`. Bursa lee un archivo YAML y después aplica las variables de entorno; las variables de entorno tienen prioridad sobre los valores YAML.
+Esta guía describe la configuración de los firmantes, de `bursa kes-agent` y de la API heredada de Bursa. `signer.backends` admite los backends `pkcs11`, `nitro`, `confidential-space` y `sops`. Bursa lee un archivo YAML y después aplica las variables de entorno; las variables de entorno tienen prioridad sobre los valores YAML.
 
 La [guía de línea de comandos](../003-commands) incluye los comandos disponibles de Bursa.
 
@@ -66,8 +66,9 @@ Una entrada de backend en `signer.backends` selecciona el backend mediante `type
 
 | Ruta de configuración | Propósito | Validación |
 | --- | --- | --- |
-| `signer.backends[].type` | Selecciona el backend de firma. | Usa `pkcs11`, `nitro` o `confidential-space`. |
+| `signer.backends[].type` | Selecciona el backend de firma. | Usa `pkcs11`, `nitro`, `confidential-space` o `sops`. |
 | `signer.backends[].address` | Especifica el endpoint del backend `nitro` o `confidential-space`. | El backend acepta una dirección con `http://`, `https://` o `unix:///`. |
+| `signer.backends[].profile` | Vincula un backend `confidential-space` o `sops` a un perfil de red. | Bursa valida nombres de 1 a 32 caracteres con letras, números, `.`, `_`, `@` o `-`; `nitro` no admite este campo. |
 | `signer.backends[].module` | Especifica la ruta al módulo `PKCS#11`, incluido el archivo `.so`. | Establece este campo. Bursa rechaza un valor vacío. |
 | `signer.backends[].token_label` | Selecciona el token o el slot mediante su etiqueta. | Establece este campo o `slot`. Bursa requiere al menos un campo de selección. |
 | `signer.backends[].slot` | Selecciona un slot mediante su ID de slot explícito. | Establece este campo o `token_label`. Bursa requiere al menos un campo de selección. |
@@ -77,9 +78,31 @@ Una entrada de backend en `signer.backends` selecciona el backend mediante `type
 | `signer.backends[].keys[].type` | Asigna un tipo de clave de Cardano al objeto del token coincidente. | Establece este campo para cada entrada de `keys`. Usa `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool` o `policy`. |
 | `signer.backends[].root_ca_file` | Especifica el archivo PEM del certificado raíz de AWS Nitro Enclaves. | Para `nitro`, Bursa requiere el certificado raíz de AWS Nitro fijado por el firmante. |
 | `signer.backends[].pcrs` | Define los valores PCR esperados para `nitro`. | Para `nitro`, configura PCR0 (`0`) con un valor distinto de cero. |
+| `signer.backends[].host_key_file` | Especifica la clave de autoridad del firmante para las solicitudes Nitro. | Bursa exige para `nitro` un archivo de clave legible solo por su propietario y separa esta autoridad de la autoridad de aprovisionamiento. |
 | `signer.backends[].audience` | Define la audiencia configurada para el token de atestación de `confidential-space`. | Bursa requiere este valor para `confidential-space`. |
 | `signer.backends[].image_digest` | Identifica la imagen de contenedor configurada para `confidential-space`. | Bursa requiere este valor con el formato `sha256:` seguido de 64 caracteres hexadecimales. |
 | `signer.backends[].jwks_url` | Especifica el endpoint de las claves de firma de tokens de `confidential-space`. | Bursa usa las claves de firma de tokens publicadas por Google cuando no se establece este valor opcional. |
+
+Cuando una misma clave fría aparece en varios backends con perfiles, cada backend debe tener un perfil distinto. Bursa enruta una solicitud al backend cuyo perfil coincide con el perfil de la solicitud y conserva por separado los registros de contador y de emisión de cada perfil. Una solicitud sin perfil usa el único backend que contiene la clave; Bursa rechaza una solicitud sin perfil cuando existen varios titulares.
+
+Los backends `confidential-space` y `sops` aceptan perfiles. El backend Nitro no implementa perfiles y debe dejar `signer.backends[].profile` sin establecer.
+
+### Autenticación JWT del firmante
+
+| Ruta de configuración | Variable de entorno | Valor predeterminado | Uso y validación |
+| --- | --- | --- | --- |
+| `signer.jwt_secret` | `SIGNER_JWT_SECRET` | `""` | Bursa usa esta fuente HS256; exige al menos 32 bytes y la excluye junto con `signer.jwks_url`. |
+| `signer.jwks_url` | `SIGNER_JWKS_URL` | `""` | Bursa usa este endpoint JWKS para tokens RS256, ES256 o EdDSA y lo excluye junto con `signer.jwt_secret`. |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | `""` | Bursa exige un valor no vacío cuando una fuente de confianza está configurada y valida el mismo valor en `aud`. |
+| `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | `""` | Bursa restringe opcionalmente el emisor aceptado; registra una advertencia cuando acepta cualquier emisor con este campo vacío. |
+
+Cuando `signer.jwt_secret` o `signer.jwks_url` tiene un valor, Bursa exige un `signer.jwt_audience` no vacío y el mismo valor en `aud` de cada token. Bursa rechaza el inicio si falta la audiencia y rechaza la autenticación si falta o no coincide el valor de `aud`. El sujeto `sub` del token determina la identidad del llamador.
+
+### Persistencia operativa de Nitro
+
+El rol de AWS que Nitro usa durante el servicio necesita `secretsmanager:GetSecretValue`, `secretsmanager:DescribeSecret` y `secretsmanager:PutSecretValue`. Nitro guarda el estado del contador sellado en Secrets Manager con cada firma, por lo que el rol debe conservar `PutSecretValue` mientras el servicio atiende solicitudes. Un fallo de persistencia detiene las firmas posteriores hasta que el operador reinicia o recarga el proxy. El operador puede reintentar una solicitud con el mismo contenido usando el contador almacenado; Nitro rechaza un contenido diferente para ese contador.
+
+El estado sellado tiene una versión. Un proxy o enclave anterior no puede consumir un estado que una combinación más nueva escribió. Para una reducción de versión, el operador debe restaurar en el secreto la versión anterior que solo contiene el sobre antes de iniciar la combinación anterior.
 
 ## Requisitos de compilación
 
@@ -163,7 +186,7 @@ Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CO
 
 ## Configuración de `kes_agent`
 
-El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT_*` correspondiente. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
+El daemon se configura bajo `kes_agent`; solo los campos con una variable de entorno asignada admiten la variable `KESAGENT_*` correspondiente. Los campos marcados como `Solo YAML` deben permanecer en YAML. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
 
 | Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
@@ -175,13 +198,48 @@ El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `""` | Ruta opcional a la clave de verificación fría. Admite un sobre de texto de `cardano-cli`, hexadecimal o 32 bytes sin procesar. Bursa requiere esta clave o `kes_agent.cold_vkey_hex`. |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | `""` | Clave de verificación fría en hexadecimal. Bursa requiere esta clave o `kes_agent.cold_vkey_file`; si aparecen ambas, Bursa usa este valor hexadecimal. |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | `""` | Requerida. La configuración debe indicar el inicio del sistema Shelley con formato `RFC3339`. |
+| `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | `0` | Define el primer slot Shelley del ancla de la red cuando la era Byron usaba slots de 20 segundos. Bursa cuenta los slots desde este valor en `shelley_start_time`; sin el ancla, Bursa cuenta desde el slot `0` en `system_start`. |
+| `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | `""` | Define la hora RFC3339 que corresponde a `shelley_start_slot`; ambos valores deben coincidir con el ancla Shelley de la red. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | `1` | Duración de cada slot en segundos. El valor debe ser positivo. |
+| `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | `5s` | Adelanto máximo permitido entre el slot de un encabezado y el reloj del agente. El agente rechaza un encabezado que supere este margen. |
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | `0` | Requerida. La configuración debe indicar un número mayor que `0` de slots por periodo KES. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | `62` | Número máximo de evoluciones del certificado operativo. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | `1m` | Intervalo del planificador como cadena de duración de Go. El valor predeterminado es `1m`. |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida. La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida salvo que `kes_agent.store.type` sea `postgres`. La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
+| `kes_agent.profiles` | Solo YAML | `[]` | Sustituye los campos de un solo grupo por una lista de perfiles. Cada perfil define su clave fría, calendario, guardia y estado de slot; los comandos de control reciben el nombre del perfil. Bursa exige nombres únicos de 1 a 64 caracteres: el primer carácter debe ser una letra o un dígito ASCII y los siguientes deben ser letras, dígitos, `.`, `_` o `-`. No combine `profiles` con los campos de grupo único; elimine también `slot_length` y `max_kes_evolutions` o déjelos en sus valores predeterminados. |
+| `kes_agent.store.type` | Solo YAML | `file` | Selecciona el almacén de guardia. `file` usa `guard_file`; `postgres` comparte entre réplicas la marca de periodo y los registros de slots firmados. PostgreSQL requiere dejar `guard_file` sin establecer. |
+| `kes_agent.store.dsn_env` | Solo YAML | `""` | Indica la variable de entorno que contiene el DSN de PostgreSQL cuando `store.type` es `postgres`. Un host remoto requiere `sslmode=verify-full`. |
+| `kes_agent.store.age_recipients` | Solo YAML | `[]` | Destinatarios `age` que sellan las claves KES compartidas del almacén PostgreSQL. El operador debe configurarlo junto con `age_identity_file`. |
+| `kes_agent.store.age_identity_file` | Solo YAML | `""` | Archivo de identidad `age` para abrir las claves KES compartidas. El operador debe configurarlo junto con `age_recipients`; Bursa rechaza un archivo legible por el grupo o por otros usuarios. |
+| `kes_agent.store.key_poll_interval` | Solo YAML | `10s` | Intervalo con el que una réplica comprueba si PostgreSQL contiene una clave instalada nueva. Solo aplica al almacén PostgreSQL con claves selladas mediante `age`. |
+| `kes_agent.attested_listen_address` | Solo YAML | `""` | Habilita el listener atestado en modo `sign`. Solo admite exactamente un perfil. El listener aplica el protocolo `bursa-attested-kes/1`. |
+| `kes_agent.attested_tls_cert_file` | Solo YAML | `""` | Certificado TLS 1.3 del listener atestado. Configúralo junto con `attested_tls_key_file` para el transporte TLS. |
+| `kes_agent.attested_tls_key_file` | Solo YAML | `""` | Clave privada TLS del listener atestado. Configúralo junto con `attested_tls_cert_file`. |
+| `kes_agent.attested_client_ca_file` | Solo YAML | `""` | CA que emite los certificados de cliente. El agente exige un certificado de cliente solo cuando el operador configura este archivo. |
+| `kes_agent.attested_plaintext` | Solo YAML | `false` | Usa TCP sin cifrado para el listener atestado cuando otra capa proporciona la seguridad de transporte. No lo combines con ninguno de los tres archivos TLS. |
+| `kes_agent.attestation_provider` | Solo YAML | `""` | Selecciona `nitro`, `confidential-space` o `none`. `none` no usa un atestador y devuelve evidencia vacía; Bursa exige `attester_address` con `nitro` o `confidential-space`. |
+| `kes_agent.attester_address` | Solo YAML | `""` | Dirección del adaptador que produce evidencia de atestación nueva para cada desafío. Bursa rechaza este campo con el proveedor `none`. |
 
-La clave de verificación fría debe proceder de `cold_vkey_file` o `cold_vkey_hex` y resolver a 32 bytes. Antes del inicio también se requieren `system_start` en RFC3339, `slot_length` positivo, `slots_per_kes_period` distinto de cero y una ruta durable `guard_file`. El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia conserva el periodo KES autorizado más alto, lo restaura después de un reinicio y rechaza una reducción del periodo. Bursa no usa una alternativa en memoria para este guardia.
+La clave de verificación fría debe proceder de `cold_vkey_file` o `cold_vkey_hex` y resolver a 32 bytes. Antes del inicio, el agente también exige `system_start` en RFC3339, `slot_length` positivo y `slots_per_kes_period` distinto de cero. El agente exige una ruta durable `guard_file` cuando `store.type` no es `postgres`. En redes cuyo Byron usaba slots de 20 segundos, `shelley_start_slot` y `shelley_start_time` deben anclar el conteo a Shelley. El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia o el almacén compartido conserva el periodo KES autorizado más alto y los registros de slots, los restaura después de un reinicio y rechaza una reducción del periodo.
+
+`kes_agent.profiles` solo funciona en YAML. Bursa sustituye con esta lista `cold_vkey_file` o `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew` y `guard_file` de nivel superior. Cada perfil tiene sus propias claves, horarios, guardia y estado de slots. El agente enruta cada encabezado mediante la clave fría emisora y la clave KES del certificado operativo. Bursa rechaza un perfil que no coincide. El modo `serve-key` y el listener atestado requieren exactamente un perfil; una configuración sin `profiles` conserva un único perfil llamado `default`.
+
+El almacén `postgres` comparte de forma durable los guardias entre réplicas y también puede compartir las claves KES si el operador configura `age_recipients`, `age_identity_file` y, opcionalmente, `key_poll_interval`. El agente rechaza `store.type: postgres` junto con `guard_file`. La identidad `age` debe ser legible solo por su propietario; los respaldos de la base de datos y cualquier proceso que posea esa identidad pueden leer las claves selladas.
+
+El listener atestado admite TLS 1.3 con autenticación del servidor, TLS 1.3 con certificados de cliente o TCP sin cifrado mediante `attested_plaintext`. El agente rechaza la combinación de `attested_plaintext` con `attested_tls_cert_file`, `attested_tls_key_file` o `attested_client_ca_file`. El proveedor `none` no usa un atestador ni permite `attester_address`, y responde al desafío con evidencia vacía. El agente solicita certificados de cliente únicamente cuando el operador configura `attested_client_ca_file`.
+
+El listener atestado aplica una fecha límite de 10 segundos para el saludo, admite como máximo 64 saludos pendientes en total y 4 por origen, donde una red IPv6 usa su prefijo `/64`. El agente expulsa el saludo pendiente más antiguo cuando alcanza cualquiera de esos límites. Los saludos pendientes no consumen slots autenticados.
+
+El agente firma como máximo un cuerpo de encabezado por slot. Puede repetir un cuerpo idéntico; rechaza un cuerpo distinto para un slot ya firmado y rechaza también los slots inferiores. Los registros de guardia permanecen durables en `guard_file` o compartidos en PostgreSQL según la configuración.
+
+Los ajustes de `metrics` usan un listener de bucle local dedicado:
+
+| Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
+| --- | --- | --- | --- |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | `127.0.0.1` | Dirección de bucle local sin puerto para el listener de salud y métricas. |
+| `metrics.port` | `METRICS_LISTEN_PORT` | `8082` | Puerto del listener. El valor `0` deshabilita todos sus endpoints. |
+
+El agente expone `GET /healthz` para indicar que el proceso está vivo, `GET /readyz` para indicar que puede firmar y `GET /metrics` para métricas Prometheus. `/readyz` devuelve `503` cuando PostgreSQL no responde a una escritura de prueba en tres segundos o cuando una réplica no puede cargar una clave compartida instalada; devuelve `200` cuando el agente está listo. `metrics.port: 0` deshabilita los tres endpoints.
 
 ```yaml
 kes_agent:
@@ -229,12 +287,12 @@ Configura la API bajo la clave YAML `api`.
 | `api.jwt_secret` | `API_JWT_SECRET` | `""` | Fuente de confianza bearer con HS256. El secreto debe tener al menos 32 bytes. El secreto debe permanecer en un gestor de secretos o en una variable de entorno, no en un archivo YAML. |
 | `api.jwks_url` | `API_JWKS_URL` | `""` | Fuente de confianza bearer mediante un endpoint `JWKS`. La URL debe usar `https://`; HTTP solo está permitido para desarrollo en loopback. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | `""` | Restricción opcional del emisor aceptado en los tokens bearer. |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | `""` | Restricción opcional de la audiencia aceptada en los tokens bearer. |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | `""` | Bursa exige esta audiencia cuando `api.jwt_secret` o `api.jwks_url` tiene un valor y valida el mismo valor en `aud` de cada token bearer. |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | `[]` | Lista no vacía de sujetos JWT autorizados para administrar billeteras persistidas cuando se configura cualquier backend de almacenamiento de billeteras. |
 
 Para una dirección de escucha que no sea de loopback, Bursa se niega a iniciar si no encuentra los dos archivos TLS y exactamente una fuente de confianza bearer: `API_JWT_SECRET` o `API_JWKS_URL`. La configuración no debe incluir ambas fuentes. La URL `API_JWKS_URL` debe usar `https://` fuera de loopback.
 
-La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando se configura TLS, la configuración debe incluir el certificado y la clave privada juntos. `api.jwt_issuer` y `api.jwt_audience` son restricciones opcionales que Bursa aplica cuando una fuente de confianza bearer está configurada.
+La escucha de loopback permite el desarrollo mediante texto sin cifrar y puede omitir los archivos TLS y la fuente de confianza bearer. Cuando el operador configura TLS, debe incluir el certificado y la clave privada juntos. Cuando `api.jwt_secret` o `api.jwks_url` tiene un valor, Bursa exige un `api.jwt_audience` no vacío y el mismo valor en `aud` de cada token bearer; Bursa rechaza el inicio sin audiencia y rechaza la autenticación cuando falta o no coincide `aud`. `api.jwt_issuer` sigue siendo una restricción opcional que Bursa aplica cuando el operador lo configura.
 
 Cuando se configura cualquier backend de almacenamiento de billeteras, Bursa exige al menos un sujeto administrador no vacío en `api.jwt_admin_subjects`. Una lista ausente o vacía impide el inicio. Bursa protege las rutas `/api/wallet/list`, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete`: cada solicitud debe incluir un encabezado `Authorization: Bearer <JWT>` válido, y el sujeto del token debe coincidir con un sujeto de la lista de administradores.
 Si la billetera solicitada no existe, `/api/wallet/get`, `/api/wallet/update` y `/api/wallet/delete` devuelven HTTP `404` con el cuerpo estructurado `api.ErrorResponse` definido en OpenAPI.

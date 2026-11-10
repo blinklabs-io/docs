@@ -103,6 +103,14 @@ http://localhost:8080/swagger/index.html
 
 `kes_agent.mode` に `serve-key` または `sign` を設定します。`kes_agent` YAML のフィールドと環境変数、および必須のソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
 
+### `kes-agent` の準備状態を確認
+
+以下のコマンドはエージェントが準備完了の場合にのみ正常終了します。exec readiness probeとして利用できます。
+
+```sh
+bursa kes-agent ready --config /path/to/kes-agent.yaml
+```
+
 ***
 
 <a name="tx"></a>
@@ -196,7 +204,46 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 ./bursa signer --config /path/to/signer.yaml
 ```
 
+`bursa signer` は位置引数を受け付けません。未知のサブコマンドや誤記したサブコマンドは、サービスの起動前にエラーになります。
+
+### `signer counter-reset`
+
+```sh
+./bursa signer counter-reset --config /path/to/signer.yaml \
+  --key <56文字のコールドキーのハッシュ> --chain-counter 10 --yes
+```
+
+プロファイル付きバックエンド（SOPSを含む）のカウンターを選択する場合は、設定済みのプロファイルを `--profile <configured-profile>` で指定します。プロファイル付きバックエンドが存在し、プロファイルなしのバックエンドを選択する場合は `--unprofiled` を指定します。プロファイル付きバックエンドが存在しない設定では、どちらのセレクターも必要ありません。完全な手順は[署名サービス運用ガイド](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md)を参照してください。
+
 `--config` を省略すると、`BURSA_CONFIG` がYAMLファイルを選択します。認証方式を少なくとも1つ設定してください。JWT Bearer、mTLSクライアント証明書、登録鍵によるリクエスト署名に対応しています。起動前に[署名サービス運用ガイド](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md)を参照し、[設定例](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/signer.example.yaml)のカストディ、認証、TLS、呼び出し元の権限、永続ウォーターマークを調整してください。[署名サービス概要](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/README.md)にはAPI仕様とセキュリティガイドへのリンクがあります。
+
+### Confidential Spaceワークロード
+
+`bursa confidential-space-workload` の `--profile <name>` と `--create-profile-counter <name>` はそれぞれ繰り返し指定できます。各プロファイルのカウンターは別々のCloud Storageオブジェクトを使用します。アクティブな鍵で起動するワークロードは、欠落したプロファイルのカウンターを自動的に再作成しません。欠落したカウンターを作成する場合は、対象のプロファイルを `--create-profile-counter` で明示して起動します。
+
+```sh
+./bursa confidential-space-workload \
+  --profile pool@mainnet --profile pool@preview \
+  --create-profile-counter pool@preview
+```
+
+### Nitro enclave
+
+`bursa nitro enclave` では、プロビジョニング権限ファイルに加えて、`--signer-authority-file <file>` を指定する必要があります。2つの権限ファイルには、それぞれ別のプロビジョニング権限と署名者権限を指定してください。
+
+```sh
+./bursa nitro enclave \
+  --provision-authority-file /etc/bursa/nitro/provision-authority.hex \
+  --signer-authority-file /etc/bursa/nitro/signer-authority.hex
+```
+
+### Nitro proxy
+
+`bursa nitro proxy` の `--socket-mode` は、グループアクセス用に `0660` などを指定できます。Bursaは全ユーザーが書き込めるモードを拒否します。
+
+```sh
+./bursa nitro proxy --socket-mode 0660
+```
 
 ***
 
