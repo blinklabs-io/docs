@@ -197,7 +197,7 @@ signer:
 
 ## `kes_agent`
 
-Configure the daemon under the `kes_agent` YAML key. Each field also accepts the corresponding `KESAGENT_*` environment variable.
+Configure the daemon under the `kes_agent` YAML key. Only fields with a documented environment mapping accept the corresponding `KESAGENT_*` variable; fields marked `YAML only` must remain in YAML.
 
 | YAML key | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
@@ -216,7 +216,7 @@ Configure the daemon under the `kes_agent` YAML key. Each field also accepts the
 | `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | Limit how far a requested header may be ahead of the agent clock. | Bursa uses `5s` by default; set a Go duration. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Limit the number of operational certificate evolutions. | Bursa uses `62` by default. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Set the scheduler interval as a Go duration, such as `1m`. | Bursa uses `1m` by default; set a Go duration. |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path unless `kes_agent.store.type: postgres` is configured. |
 | `kes_agent.profiles` | YAML only | Define multiple KES pools in one agent. | Profiles replace the single-pool fields. Each name is 1 to 64 characters, starts with an ASCII letter or digit, and then uses ASCII letters, digits, `.`, `_`, or `-`. |
 | `kes_agent.store.type` | YAML only | Select the shared KES guard and key store. | Set `postgres` to share state across replicas; the default is the file store. |
 | `kes_agent.store.dsn_env` | YAML only | Names the environment variable containing the PostgreSQL DSN. | Required with `store.type: postgres`; a non-loopback database requires `sslmode=verify-full`. |
@@ -235,9 +235,9 @@ Configure the daemon under the `kes_agent` YAML key. Each field also accepts the
 
 The daemon requires different service and control socket paths. It accepts octal socket modes and defaults both modes to owner-only `0600` access. A service socket can grant group access when the producer needs a different user ID, but it cannot grant write access to other users. The control socket must remain owner-only for write access because it accepts commands that can install or remove KES keys.
 
-The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and a durable `guard_file` path before startup can continue.
+The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and either a durable `guard_file` path or `kes_agent.store.type: postgres` before startup can continue.
 
-Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
+Bursa refuses KES-agent startup when neither `kes_agent.guard_file` nor `kes_agent.store.type: postgres` is configured. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
 
 Set `shelley_start_slot` together with `shelley_start_time` when the network used a different slot length before Shelley. The agent derives absolute KES periods from that anchor. The agent refuses a header more than `max_clock_skew` ahead of its clock before it evolves the key or persists guard state.
 
