@@ -108,7 +108,7 @@ http://localhost:8080/swagger/index.html
 以下のコマンドはエージェントが準備完了の場合にのみ正常終了します。exec readiness probeとして利用できます。
 
 ```sh
-./bursa kes-agent ready --config /path/to/kes-agent.yaml
+bursa kes-agent ready --config /path/to/kes-agent.yaml
 ```
 
 ***
@@ -219,7 +219,7 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 
 ### Confidential Spaceワークロード
 
-`bursa confidential-space-workload` の `--profile <name>` と `--create-profile-counter <name>` はそれぞれ繰り返し指定できます。各プロファイルのカウンターは別々のCloud Storageオブジェクトを使用します。アクティブなワークロードは、欠落したプロファイルのカウンターを自動的に再作成しません。欠落したカウンターを作成する場合は、対象のプロファイルを `--create-profile-counter` で明示して起動します。
+`bursa confidential-space-workload` の `--profile <name>` と `--create-profile-counter <name>` はそれぞれ繰り返し指定できます。各プロファイルのカウンターは別々のCloud Storageオブジェクトを使用します。アクティブな鍵で起動するワークロードは、欠落したプロファイルのカウンターを自動的に再作成しません。欠落したカウンターを作成する場合は、対象のプロファイルを `--create-profile-counter` で明示して起動します。
 
 ```sh
 ./bursa confidential-space-workload \
