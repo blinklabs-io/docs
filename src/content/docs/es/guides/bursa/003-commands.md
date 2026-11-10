@@ -179,7 +179,7 @@ Si se omite `--config`, `BURSA_CONFIG` selecciona el archivo YAML. Configura al 
 
 ### Restablecer el contador de certificados operativos
 
-Use `counter-reset` para restablecer el contador de un firmante detenido:
+Use `counter-reset` para restablecer el contador de un firmante:
 
 ```sh
 ./bursa signer counter-reset --config /path/to/signer.yaml \
@@ -190,7 +190,7 @@ Cuando la configuración incluye backends con perfil, use `--profile <perfil-con
 
 ### Custodia con Confidential Space
 
-`bursa confidential-space-workload` acepta varias opciones `--profile` para servir la misma clave en perfiles independientes. Cada perfil usa un objeto separado de Cloud Storage para sus contadores. Use `--create-profile-counter` también de forma repetible para crear explícitamente los contadores de perfiles que faltan antes de iniciar una carga de trabajo con una envoltura activa; la carga de trabajo no vuelve a crear silenciosamente un contador de perfil eliminado.
+`bursa confidential-space-workload` acepta las opciones repetibles `--profile` y `--create-profile-counter` para servir la misma clave en perfiles independientes y crear explícitamente los contadores de perfiles que faltan. Cada perfil usa un objeto separado de Cloud Storage para sus contadores. Una carga de trabajo con una envoltura activa no vuelve a crear silenciosamente un contador de perfil eliminado.
 
 ```sh
 ./bursa confidential-space-workload \
