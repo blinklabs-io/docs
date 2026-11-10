@@ -162,7 +162,7 @@ databaseLifecycle:
 EOF
 ```
 
-📝 Con `privatePort: 0`, el oyente TCP de NtC está desactivado de forma predeterminada, pero el socket Unix configurado en `socketPath` sigue disponible. Configura un valor distinto de cero para `privatePort` cuando necesites conexiones TCP.
+📝 Con `privatePort: 0`, Dingo no inicia el oyente TCP de NtC de forma predeterminada y mantiene disponible el socket Unix configurado en `socketPath`. Configura un valor distinto de cero para `privatePort` cuando necesites conexiones TCP.
 
 📝 Mithril exige `HTTPS` de forma predeterminada y rechaza los destinos locales, privados o no públicos. El arranque Mithril v2 solo acepta orígenes de artefactos y redirecciones del agregador configurado o del origen GCS oficial de Mithril, `storage.googleapis.com`. Aplica comprobaciones agregadas de seguridad de descarga y extracción, verifica el archivo auxiliar firmado antes de extraer y utiliza únicamente contenido autenticado del ledger. Establece `mithril.allowInsecureHttp: true` solo para desarrollo o pruebas locales; no lo actives en producción.
 
