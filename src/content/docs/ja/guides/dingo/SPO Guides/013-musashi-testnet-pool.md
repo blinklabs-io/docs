@@ -227,7 +227,7 @@ plugins:
 EOF"
 ```
 
-> 💡 `plugins.mempool`ブロックは、mempoolをDingoのデフォルトの1 MiBから、DingoがLeiosで使う25 MiBに引き上げます。1 MiBではMusashiでmempoolが満杯になり、トランザクションが取り込まれる前に期限切れになります。
+> 💡 Musashiでは、Dingo v0.92.3のmempoolのデフォルト容量は25 MiBです。`plugins.mempool`ブロックでこの容量を明示的に設定します。
 
 以下を実行して`dingo.yaml`ファイルを表示し、確認できます：
 
@@ -769,6 +769,8 @@ plugins:
       capacity: 26214400
 EOF"
 ```
+
+> 💡 Musashiでは、Dingo v0.92.3のmempoolのデフォルト容量は25 MiBです。`plugins.mempool`ブロックでこの容量を明示的に設定します。
 
 > 💡 `leiosVoteSigningKeyFile`を設定しない場合でもプールはブロックを生成しますが、Leiosのエンドーサーブロックには投票しません。
 
