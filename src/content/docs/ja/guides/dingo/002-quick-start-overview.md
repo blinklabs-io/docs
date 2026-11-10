@@ -216,7 +216,7 @@ storageMode: "core"
 EOF
 ```
 
-> `privatePort: 0` では NtC TCP リスナーが無効になり、`socketPath` で設定した Unix ソケットは引き続き利用できます。TCP 接続には、`privatePort` に `0` 以外のポートを設定してください。
+> `privatePort: 0` を設定すると NtC TCP リスナーが無効になり、`socketPath` で設定した Unix ソケットは引き続き利用できます。TCP 接続が必要な場合は、`privatePort` に `0` 以外のポートを設定してください。
 
 > `debugPort`を`0`に置き、profilingが要求されなければ残して下さい。`debugPort`は任意pprofのリスナーを制御し、`metricsPort`と別々にとどまり、`0`で無効に残ります。
 
