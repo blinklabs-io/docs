@@ -226,7 +226,7 @@ plugins:
 EOF"
 ```
 
-> 💡 Musashi uses a 25 MiB mempool by default in Dingo v0.92.3. The `plugins.mempool` block sets the default capacity explicitly.
+> 💡 In Dingo v0.92.3, Musashi uses a 25 MiB mempool by default. The `plugins.mempool` block sets the default capacity explicitly.
 
 You can view and verify the `dingo.yaml` file by running:
 
@@ -768,7 +768,7 @@ plugins:
 EOF"
 ```
 
-> 💡 The Musashi mempool default in Dingo v0.92.3 is 25 MiB. Without `leiosVoteSigningKeyFile`, the pool still forges blocks but does not vote on Leios endorser blocks.
+> 💡 For Musashi, the Dingo v0.92.3 mempool default is 25 MiB. Without `leiosVoteSigningKeyFile`, the pool still forges blocks but does not vote on Leios endorser blocks.
 
 You can view and verify the `dingo.yaml` file by running:
 
