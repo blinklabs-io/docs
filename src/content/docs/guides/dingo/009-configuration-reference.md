@@ -45,7 +45,7 @@ key through a native CLI flag or environment variable.
 
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
-| Transaction submission logic | `TxSubmissionLogicVersion` | The embedded Musashi configuration uses `TxSubmissionLogicV2` for transaction submission. |
+| Transaction submission logic | `TxSubmissionLogicVersion` | The embedded Musashi configuration sets `TxSubmissionLogicVersion` to `TxSubmissionLogicV2`. |
 
 ### Cardano node Version 2 envelope configuration
 
@@ -95,9 +95,9 @@ envelope root,
 `Configuration`, or supported sections, including duplicates that resolve to
 the same flat field, such as `TargetNumberOfRootPeers` and
 `DeadlineTargetNumberOfRootPeers`. The envelope uses the same
-`TxSubmissionLogicVersion` setting as the flat format. The embedded Musashi
-configuration uses `TxSubmissionLogicV2` for transaction submission. This
-format does not add support for unrelated or unknown cardano-node settings.
+`TxSubmissionLogicVersion` setting as the flat format, including
+`TxSubmissionLogicV2` for the embedded Musashi configuration. This format does
+not add support for unrelated or unknown cardano-node settings.
 
 ### Consensus provider
 
