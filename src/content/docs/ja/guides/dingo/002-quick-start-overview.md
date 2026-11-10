@@ -37,7 +37,7 @@ Go に書かれている Cardano ブロックチェーンノードは、ミニ�
 ```
 mkdir -p ~/dingo
 cd ~/dingo
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.91.0/dingo-v0.91.0-linux-amd64.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 実行中のバイナリの動作を確認することができます。
@@ -125,7 +125,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 ## ステップ2 - dingo.yaml構成ファイルを作成する
 
-すべての Dingo v0.91.0 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
+すべての Dingo v0.92.3 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.3/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
 Dingoは、プレビュー、プリプロド、メインネット、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 
@@ -198,7 +198,7 @@ healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 # Total NtC connection limit. Dingo ignores non-positive values.
@@ -215,6 +215,8 @@ storageMode: "core"
 
 EOF
 ```
+
+> `privatePort: 0` を設定すると NtC TCP リスナーが無効になり、`socketPath` で設定した Unix ソケットは引き続き利用できます。NtC TCP 接続には、`privatePort` に `0` 以外のポートを設定してください。
 
 > `debugPort`を`0`に置き、profilingが要求されなければ残して下さい。`debugPort`は任意pprofのリスナーを制御し、`metricsPort`と別々にとどまり、`0`で無効に残ります。
 
