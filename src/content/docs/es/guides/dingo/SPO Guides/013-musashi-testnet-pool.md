@@ -218,8 +218,8 @@ socketPath: \"$DINGO_HOME/dingo.socket\"
 # Path to the topology configuration file for Cardano node
 topology: \"$DINGO_HOME/config/topology.json\"
 
-# Mempool: Dingo v0.92.3 uses the 25 MiB default when the network
-# is Musashi or the run mode is Leios.
+# Mempool: Dingo v0.92.3 uses the 25 MiB default when the
+# network is Musashi or the run mode is Leios.
 plugins:
   mempool:
     config:
@@ -761,8 +761,8 @@ shelleyOperationalCertificate: \"$DINGO_HOME/keys/node.cert\"
 # Leios voting: the BLS key registered with your pool in Step 9
 leiosVoteSigningKeyFile: \"$DINGO_HOME/keys/bls.skey\"
 
-# Mempool: Dingo v0.92.3 uses the 25 MiB default when the network
-# is Musashi or the run mode is Leios.
+# Mempool: Dingo v0.92.3 uses the 25 MiB default when the
+# network is Musashi or the run mode is Leios.
 plugins:
   mempool:
     config:
