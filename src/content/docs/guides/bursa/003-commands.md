@@ -171,7 +171,7 @@ The `signer` command serves authenticated remote signing requests with configure
 
 When `--config` is omitted, `BURSA_CONFIG` selects the YAML file. Configure at least one authentication mode; JWT bearer, mTLS client certificates, and authorized-key request signatures are supported. Before starting the service, follow the [signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) and adapt the [example signer configuration](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/signer.example.yaml) for custody, authentication, TLS, caller permissions, and durable watermarks. The [signer overview](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/README.md) links the API specification and security guidance.
 
-The `signer` command accepts no positional arguments. Unknown or misspelled subcommands are rejected before the signing service starts.
+The `signer` command accepts no positional arguments. Bursa rejects unknown or misspelled subcommands before it starts the signing service.
 
 Reset an operational certificate counter with the signer configuration and the current chain counter:
 
@@ -180,30 +180,24 @@ Reset an operational certificate counter with the signer configuration and the c
   --key <56-character cold key hash> --chain-counter 10 --yes
 ```
 
-Use `--profile <configured-profile>` when the selected backend has a profile, including a SOPS backend. When the configuration contains profiled backends and the selected backend has no profile, use `--unprofiled`. A configuration with no profiled backend needs neither selector. Bursa refuses profile-less or mismatched requests when the selected backend requires a profile. See the [signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) for the complete reset procedure.
+Use `--profile <configured-profile>` when the selected backend has a profile, including a SOPS backend. When the configuration contains profiled backends and the selected backend has no profile, use `--unprofiled`. A configuration with no profiled backend needs neither selector. Bursa refuses requests without a profile or with a mismatched profile when the selected backend requires one. See the [signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) for the complete reset procedure.
 
 ## Custody command references
 
 ### Confidential Space workload
 
-Start a Confidential Space workload with one or more named profiles:
+Start a Confidential Space workload with named profiles and explicitly create their counters:
 
 ```
 ./bursa confidential-space-workload \
   --listen :8080 \
   --profile pool@mainnet \
-  --profile pool@preview
-```
-
-Repeat `--profile` for each explicitly configured profile. Repeat `--create-profile-counter <profile>` only for profiles whose counters must be created, for example:
-
-```
-./bursa confidential-space-workload \
-  --profile pool@mainnet --profile pool@preview \
+  --profile pool@preview \
+  --create-profile-counter pool@mainnet \
   --create-profile-counter pool@preview
 ```
 
-Each profile uses an isolated Cloud Storage counter object. An active workload does not silently recreate a missing profile counter; name a profile with `--create-profile-counter` when adding its counter.
+Repeat `--profile` for each explicitly configured profile and repeat `--create-profile-counter <profile>` for each profile whose counter must be created. Each profile uses an isolated Cloud Storage counter object. An active workload does not silently recreate a missing profile counter; name that profile with `--create-profile-counter` when adding its counter.
 
 ### Nitro enclave
 
