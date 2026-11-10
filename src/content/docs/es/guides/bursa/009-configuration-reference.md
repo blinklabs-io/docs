@@ -186,7 +186,7 @@ Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CO
 
 ## Configuración de `kes_agent`
 
-El daemon se configura bajo `kes_agent`; solo los campos con una asignación de entorno admiten la variable `KESAGENT_*` correspondiente. Los campos marcados como `Solo YAML` deben permanecer en YAML. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
+El daemon se configura bajo `kes_agent`; solo los campos con una variable de entorno asignada admiten la variable `KESAGENT_*` correspondiente. Los campos marcados como `Solo YAML` deben permanecer en YAML. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
 
 | Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
