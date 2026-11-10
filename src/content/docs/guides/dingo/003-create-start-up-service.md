@@ -182,7 +182,7 @@ databaseLifecycle:
 EOF
 ```
 
-> 📝 The default `privatePort: 0` disables the NtC TCP listener and leaves the Unix socket at `socketPath` available. Set a nonzero `privatePort` to enable TCP access.
+> 📝 The default `privatePort: 0` keeps the Unix socket at `socketPath` available and disables the NtC TCP listener. Set a nonzero `privatePort` to enable TCP access.
 
 > 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Mithril v2 bootstrap accepts artifact origins and redirects only from the configured aggregator or the official Mithril GCS origin (`storage.googleapis.com`), enforces aggregate download and extraction safety checks, performs signed ancillary preflight before extraction, and uses only authenticated ledger content. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
 
