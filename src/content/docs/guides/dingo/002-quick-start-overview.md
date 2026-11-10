@@ -230,7 +230,7 @@ storageMode: "core"
 EOF
 ```
 
-> 📝 `privatePort: 0` disables the NtC TCP listener while keeping the Unix socket available. Set `privatePort` to a nonzero port when TCP access is required.
+> 📝 Set `privatePort` to `0` to disable the NtC TCP listener. The Unix socket remains available, and TCP access requires a nonzero `privatePort`.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
