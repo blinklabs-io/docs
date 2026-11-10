@@ -144,7 +144,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | ネットワークマジック | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | 未設定の場合、トピックと Cardano ネットワークから導出します。 | 省略すると、トピックと Cardano ネットワークから値を導出します。明示した値は導出した値に優先します。ネットワークにそのトピックの既定値がない場合に設定してください。 |
 | ソケットパス | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | 有効な場合、空ではなく、Cardano の `socketPath` とは異なる値が必要です。 |
 | メッセージの TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` 秒 | 有効な場合、`9223372036` 秒以下の正の値が必要です。 |
-| メモリプールメッセージの最小間隔 | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60s` | `0` はペーシングを無効にします。正の値はメモリプールメッセージの送信間隔を制限します。既定値は `60s` で、`1s` の余裕を残します。値は `dmq.messageTtl` より少なくとも `1s` 短くする必要があります。 |
+| メモリプールメッセージの最小間隔 | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60s` | `0` はペーシングを無効にします。正の値を設定すると、Dingo はメモリプールメッセージの送信間隔を制限します。既定値は `60s` です。Dingo は `dmq.messageTtl` より少なくとも `1s` 短い正の値だけを受け付けます。 |
 | メモリプールの最大サイズ | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | 有効な場合、`8796093022207` MB 以下の正の値が必要です。 |
 | N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定し、かつ `dmq.maxPeers` が 0 以外の場合、DMQ のノード間リスナーとピア管理を有効にします。 |
 | IPv4 ピアリスナーのアドレス | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv4 リテラルが必要です。 |
@@ -171,7 +171,7 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値 | 検証と動作 |
 | --- | --- | --- | --- | --- | --- |
-| 信頼されたローカル NtC のアイドルタイムアウト | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0`（無効） | `0` はアイドル時間の制限を無効にします。正の期間を設定すると、信頼されたローカル NtC 接続のアイドル時間の上限を設定します。Dingo は負の値を設定検証で拒否します。 |
+| 信頼されたローカル NtC のアイドルタイムアウト | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0`（無効） | `0` はアイドル時間の制限を無効にします。正の期間を設定すると、Dingo は信頼されたローカル NtC 接続のアイドル時間をその期間までに制限します。Dingo は負の値を設定検証で拒否します。 |
 
 <a id="immutabledb-source"></a>
 
