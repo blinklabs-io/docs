@@ -3,7 +3,7 @@ title: Ejecutar Dingo en un contenedor
 description: Ejecuta la imagen publicada de Dingo, conserva sus datos y comprueba el estado del nodo.
 ---
 
-Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.91.0`:
+Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.92.3`:
 
 ```sh
  docker pull ghcr.io/blinklabs-io/dingo:0.91.0
