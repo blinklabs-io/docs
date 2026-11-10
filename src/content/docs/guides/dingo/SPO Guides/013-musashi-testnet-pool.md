@@ -97,7 +97,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 ### Step 3 - Download the Leios Cardano-CLI Binary
 
-Musashi needs the `cardano-cli` from the Leios prototype release that matches the network. Find the network's version in the `MinNodeVersion` field of the Musashi <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>. For example, `11.1.0.164-prototype-2026w42` matches the `rc-2026w42` release on the <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leios releases</a> page.
+Musashi needs the `cardano-cli` from the Leios prototype release that matches the network. Find the network's version in the `MinNodeVersion` field of the Musashi <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>. For example, `11.2.0.164-rc-2026w44` matches the `rc-2026w44` release on the <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leios releases</a> page.
 
 Make a directory and move into it:
 
@@ -108,7 +108,7 @@ mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
 The Leios release names its Linux builds `x86_64` and `aarch64`. Set the release tag and your architecture, then download the archive and its checksum:
 
 ```
-LEIOS_RELEASE=rc-2026w42
+LEIOS_RELEASE=rc-2026w44
 LEIOS_ARCH=$(uname -m)
 [ "$LEIOS_ARCH" = arm64 ] && LEIOS_ARCH=aarch64
 wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
