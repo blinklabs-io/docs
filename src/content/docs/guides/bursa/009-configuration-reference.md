@@ -209,11 +209,29 @@ Configure the daemon under the `kes_agent` YAML key. Each field also accepts the
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | Load the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Load the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Set the Shelley genesis system start. | Set an RFC3339 timestamp. |
+| `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Set the first Shelley slot for networks whose earlier era used a different slot length. | Set this with `shelley_start_time` when the target network requires a Shelley anchor. |
+| `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | Set the wall clock time of `shelley_start_slot`. | Set this with `shelley_start_slot` when the target network requires a Shelley anchor. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Set the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | Set the number of slots in one KES period. | Set a value greater than `0`. |
+| `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | Limit how far a requested header may be ahead of the agent clock. | Bursa uses `5s` by default; set a Go duration. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Limit the number of operational certificate evolutions. | Bursa uses `62` by default. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Set the scheduler interval as a Go duration, such as `1m`. | Bursa uses `1m` by default; set a Go duration. |
 | `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path. |
+| `kes_agent.profiles` | YAML only | Define multiple KES pools in one agent. | Profiles replace the single-pool fields. Each name is 1 to 64 characters, starts with an ASCII letter or digit, and then uses ASCII letters, digits, `.`, `_`, or `-`. |
+| `kes_agent.store.type` | YAML only | Select the shared KES guard and key store. | Set `postgres` to share state across replicas; the default is the file store. |
+| `kes_agent.store.dsn_env` | YAML only | Names the environment variable containing the PostgreSQL DSN. | Required with `store.type: postgres`; a non-loopback database requires `sslmode=verify-full`. |
+| `kes_agent.store.age_recipients` | YAML only | Lists age recipients for sealing shared KES keys. | Optional; use only with `store.type: postgres` and with `age_identity_file`. |
+| `kes_agent.store.age_identity_file` | YAML only | Identifies the age key used to unseal shared KES keys. | Optional; use only with `store.type: postgres` and with `age_recipients`. The file must not be readable by group or other users. |
+| `kes_agent.store.key_poll_interval` | YAML only | Sets how often replicas check for an installed shared KES key. | Optional; Bursa uses `10s` by default. |
+| `kes_agent.attested_listen_address` | `KESAGENT_ATTESTED_LISTEN_ADDRESS` | Enables the attested remote signing listener. | Use only in `sign` mode with exactly one profile. |
+| `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | Provides the attested listener's TLS certificate. | Use with `attested_tls_key_file`; omit both for plaintext transport. |
+| `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | Provides the attested listener's TLS private key. | Use with `attested_tls_cert_file`; omit both for plaintext transport. |
+| `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | Identifies the CA for attested listener client certificates. | Optional; the agent requests and verifies client certificates only when set. |
+| `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | Enables plain TCP for the attested listener. | Do not combine with any attested TLS or client CA file. |
+| `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | Selects the evidence provider. | Use `nitro`, `confidential-space`, or `none`. `none` returns empty evidence and requires no attester. |
+| `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | Sets the provider adapter endpoint. | Required for `nitro` and `confidential-space`; omit it for `none`. |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | Sets the dedicated health and metrics listener address. | Loopback only; Bursa uses `127.0.0.1` by default. |
+| `metrics.port` | `METRICS_LISTEN_PORT` | Sets the dedicated health and metrics listener port. | Set `0` to disable the listener and its endpoints. |
 
 The daemon requires different service and control socket paths. It accepts octal socket modes and defaults both modes to owner-only `0600` access. A service socket can grant group access when the producer needs a different user ID, but it cannot grant write access to other users. The control socket must remain owner-only for write access because it accepts commands that can install or remove KES keys.
 
