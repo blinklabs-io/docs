@@ -166,7 +166,7 @@ healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 # Total NtC connection limit. Dingo ignores non-positive values.
@@ -183,6 +183,8 @@ storageMode: "core"
 
 EOF
 ```
+
+📝 `privatePort: 0` desactiva el listener TCP de nodo a cliente (NtC), mientras el socket Unix configurado en `socketPath` sigue disponible. Para acceder mediante TCP, configura `privatePort` con un puerto distinto de `0`.
 
 📝 Deja `debugPort` en `0` salvo que necesites perfiles. Controla un servicio pprof opcional, independiente de `metricsPort`, y permanece desactivado con `0`.
 
