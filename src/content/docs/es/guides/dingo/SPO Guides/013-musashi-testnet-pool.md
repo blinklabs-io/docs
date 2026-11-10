@@ -770,7 +770,7 @@ plugins:
 EOF"
 ```
 
-> 💡 Sin `leiosVoteSigningKeyFile`, el pool sigue forjando bloques pero no vota los endorser blocks de Leios. La red Musashi usa 25 MiB como capacidad predeterminada del mempool en Dingo v0.92.3.
+> 💡 Sin `leiosVoteSigningKeyFile`, el pool sigue forjando bloques pero no vota los endorser blocks de Leios. Para Musashi, el valor predeterminado del mempool de Dingo v0.92.3 es 25 MiB.
 
 Puedes ver y verificar el archivo `dingo.yaml` ejecutando:
 
