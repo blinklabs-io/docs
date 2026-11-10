@@ -237,7 +237,7 @@ The daemon requires different service and control socket paths. It accepts octal
 
 The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and either a durable `guard_file` path or `kes_agent.store.type: postgres` before startup can continue.
 
-Bursa refuses KES-agent startup when neither `kes_agent.guard_file` nor `kes_agent.store.type: postgres` is configured. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
+Bursa refuses KES-agent startup when the configuration has neither a durable `kes_agent.guard_file` nor `kes_agent.store.type: postgres`. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
 
 Set `shelley_start_slot` together with `shelley_start_time` when the network used a different slot length before Shelley. The agent derives absolute KES periods from that anchor. The agent refuses a header more than `max_clock_skew` ahead of its clock before it evolves the key or persists guard state.
 
