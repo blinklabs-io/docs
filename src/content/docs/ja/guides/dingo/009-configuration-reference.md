@@ -171,7 +171,7 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値 | 検証と動作 |
 | --- | --- | --- | --- | --- | --- |
-| 信頼されたローカル NtC のアイドルタイムアウト | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0`（無効） | `0` はアイドル時間の制限を無効にします。正の期間は、信頼されたローカル NtC 接続のアイドル時間の上限を設定します。負の値は設定検証で拒否されます。 |
+| 信頼されたローカル NtC のアイドルタイムアウト | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0`（無効） | `0` はアイドル時間の制限を無効にします。正の期間を設定すると、信頼されたローカル NtC 接続のアイドル時間の上限を設定します。Dingo は負の値を設定検証で拒否します。 |
 
 <a id="immutabledb-source"></a>
 
