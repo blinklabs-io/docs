@@ -186,7 +186,7 @@ Use `--profile <configured-profile>` when the selected backend has a profile, in
 
 ### Confidential Space workload
 
-Start a Confidential Space workload with named profiles and explicitly create their counters:
+Start a Confidential Space workload with repeatable profile options:
 
 ```
 ./bursa confidential-space-workload \
@@ -197,7 +197,7 @@ Start a Confidential Space workload with named profiles and explicitly create th
   --create-profile-counter pool@preview
 ```
 
-Repeat `--profile` for each explicitly configured profile and repeat `--create-profile-counter <profile>` for each profile whose counter must be created. Each profile uses an isolated Cloud Storage counter object. An active workload does not silently recreate a missing profile counter; name that profile with `--create-profile-counter` when adding its counter.
+Repeat `--profile` for each explicitly configured profile and repeat `--create-profile-counter <profile>` for each profile that needs a counter. Bursa isolates each profile in its own Cloud Storage counter object. During active-key startup, Bursa does not silently recreate a missing profile counter; specify that profile with `--create-profile-counter` when adding it.
 
 ### Nitro enclave
 
