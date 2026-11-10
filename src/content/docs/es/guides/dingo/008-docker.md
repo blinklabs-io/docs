@@ -6,7 +6,7 @@ description: Ejecuta la imagen publicada de Dingo, conserva sus datos y comprueb
 Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.92.3`:
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.92.3
 ```
 
 ## Iniciar un nodo de Preview
