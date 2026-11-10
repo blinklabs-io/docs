@@ -239,6 +239,20 @@ The daemon requires one cold verification key from `cold_vkey_file` or `cold_vke
 
 Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
 
+Set `shelley_start_slot` together with `shelley_start_time` when the network used a different slot length before Shelley. The agent derives absolute KES periods from that anchor. A header more than `max_clock_skew` ahead of the agent clock is refused before key evolution or guard persistence.
+
+Use `kes_agent.profiles` for multiple pools or networks. Profiles replace the single-pool cold key, schedule, guard, and slot settings; do not combine `profiles` with those single-pool fields. Top-level `slot_length` and `max_kes_evolutions` must be omitted or remain at their defaults. Each profile has its own cold verification key, schedule, guard, staged and active key, operational certificate, period floor, and signed-slot state. In `sign` mode, the agent routes a header by its issuer and KES key. A profile name must be unique and follow the validation shown in the table.
+
+Set `kes_agent.store.type: postgres` and `dsn_env` to share period and signed-slot records across replicas. Leave `guard_file` unset because PostgreSQL and a guard file are mutually exclusive. `age_recipients`, `age_identity_file`, and `key_poll_interval` optionally share age-sealed KES keys; configure the recipient and identity together, restrict the identity file to its owner, and use these fields only with PostgreSQL. The stored key remains readable to anything holding the age identity and does not retain KES forward security as it evolves.
+
+Set `attested_listen_address` to enable remote attested signing. Configure both TLS files for TLS, or set `attested_plaintext` without any TLS or client CA file for plain TCP. Set `attested_client_ca_file` to require and verify client certificates. Set `attestation_provider` to `none` when no platform evidence is available; unset `attester_address` in that mode, and the agent returns empty evidence. `nitro` and `confidential-space` require `attester_address`.
+
+The loopback-only `metrics` listener serves unauthenticated `GET /healthz`, `GET /readyz`, and `GET /metrics`. `/healthz` returns `200` while the process runs. `/readyz` returns `200` when the agent can sign and `503` when its configured store or shared key is unavailable. `bursa kes-agent ready --config <file>` checks `/readyz` and exits `0` when ready or `1` otherwise. Set `metrics.port` to `0` to disable the listener and all three endpoints.
+
+The KES slot guard persists the last signed slot and header body in the configured guard state. The agent may retry a slot with an identical header body, refuses a different body as equivocation, and refuses a lower slot as rollback. PostgreSQL shares these records across replicas; a guard file persists them for one agent state.
+
+The attested listener gives each TLS handshake a 10-second deadline and permits at most 64 pending handshakes globally and 4 from one source. The source means an IPv4 address or an IPv6 `/64`. When the limit is full, the listener evicts the oldest pending handshake. Pending handshakes do not consume authenticated slots.
+
 ```yaml
 kes_agent:
   mode: sign
@@ -270,10 +284,10 @@ Configure the legacy API under the `api` YAML key.
 | `api.jwt_secret` | `API_JWT_SECRET` | Authenticate bearer tokens with an HS256 secret. | Use instead of `api.jwks_url`; provide at least 32 bytes. |
 | `api.jwks_url` | `API_JWKS_URL` | Authenticate bearer tokens through a JWKS endpoint. | Use instead of `api.jwt_secret`; Bursa requires HTTPS except for loopback development. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Constrain the issuer that bearer tokens can contain. | Set to constrain the accepted issuer. |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Constrain the audience that bearer tokens can contain. | Set to constrain the accepted audience. |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Matches the required `aud` claim in bearer tokens. | Required when `api.jwt_secret` or `api.jwks_url` is configured. |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | Defines the non-empty JWT subject allowlist for persisted wallet administration. | Whenever any wallet-storage backend is configured, include at least one non-empty subject. Bursa refuses startup when the list is empty or missing. |
 
-A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
+A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. When either trust source is configured, `api.jwt_audience` is mandatory and every bearer token must carry the same value in its `aud` claim; Bursa rejects a missing or mismatched audience. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
