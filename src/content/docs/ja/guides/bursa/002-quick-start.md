@@ -98,7 +98,7 @@ chmod +x bursa
 
 <br>
 
-APIはデフォルトで`127.0.0.1:8080`で待ち受けます。ローカルクライアントは `localhost:8080` に、ファイアウォールでポートを開かずに接続できます。リモートアクセスが必要な場合は、YAMLの`api.address`または環境変数`API_LISTEN_ADDRESS`で非ループバックアドレスを明示的に設定してください。非ループバックで待ち受ける場合は、TLSとBearer認証を含むセキュリティ要件を適用します。非ループバックAPIで`API_JWT_SECRET`または`API_JWKS_URL`を設定する場合は、`API_JWT_AUDIENCE`（YAMLでは`api.jwt_audience`）を空でない値に設定し、Bearerトークンの`aud`クレームに同じ値を含めてください。設定の詳細は[設定リファレンス](../009-configuration-reference)を参照してください。
+APIはデフォルトで`127.0.0.1:8080`で待ち受けます。ローカルクライアントは `localhost:8080` に、ファイアウォールでポートを開かずに接続できます。リモートアクセスが必要な場合は、YAMLの`api.address`または環境変数`API_LISTEN_ADDRESS`で非ループバックアドレスを明示的に設定してください。非ループバックで待ち受ける場合は、TLSとBearer認証を含むセキュリティ要件を適用します。非ループバックAPIで`API_JWT_SECRET`または`API_JWKS_URL`を設定する場合は、`API_JWT_AUDIENCE`（YAMLでは`api.jwt_audience`）に空でない値を設定し、Bearerトークンの`aud`クレームに同じ値を含めてください。設定の詳細は[設定リファレンス](../009-configuration-reference)を参照してください。
 
 ***
 
