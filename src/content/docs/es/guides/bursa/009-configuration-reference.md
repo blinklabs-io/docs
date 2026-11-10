@@ -186,7 +186,7 @@ Si `--config` no especifica una ruta, `bursa kes-agent` usa la ruta de `BURSA_CO
 
 ## Configuración de `kes_agent`
 
-El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT_*` correspondiente. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
+El daemon se configura bajo `kes_agent`; solo los campos con una asignación de entorno admiten la variable `KESAGENT_*` correspondiente. Los campos marcados como `Solo YAML` deben permanecer en YAML. Los sockets de servicio y control deben tener rutas distintas; `service_socket` identifica el socket del productor.
 
 | Clave YAML | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
@@ -205,20 +205,20 @@ El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | `0` | Requerida. La configuración debe indicar un número mayor que `0` de slots por periodo KES. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | `62` | Número máximo de evoluciones del certificado operativo. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | `1m` | Intervalo del planificador como cadena de duración de Go. El valor predeterminado es `1m`. |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida. La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida salvo que `kes_agent.store.type` sea `postgres`. La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
 | `kes_agent.profiles` | Solo YAML | `[]` | Sustituye los campos de un solo grupo por una lista de perfiles. Cada perfil define su clave fría, calendario, guardia y estado de slot; los comandos de control reciben el nombre del perfil. Bursa exige nombres únicos de 1 a 64 caracteres: el primer carácter debe ser una letra o un dígito ASCII y los siguientes deben ser letras, dígitos, `.`, `_` o `-`. No combine `profiles` con los campos de grupo único; elimine también `slot_length` y `max_kes_evolutions` o déjelos en sus valores predeterminados. |
 | `kes_agent.store.type` | Solo YAML | `file` | Selecciona el almacén de guardia. `file` usa `guard_file`; `postgres` comparte entre réplicas la marca de periodo y los registros de slots firmados. PostgreSQL requiere dejar `guard_file` sin establecer. |
 | `kes_agent.store.dsn_env` | Solo YAML | `""` | Indica la variable de entorno que contiene el DSN de PostgreSQL cuando `store.type` es `postgres`. Un host remoto requiere `sslmode=verify-full`. |
 | `kes_agent.store.age_recipients` | Solo YAML | `[]` | Destinatarios `age` que sellan las claves KES compartidas del almacén PostgreSQL. El operador debe configurarlo junto con `age_identity_file`. |
 | `kes_agent.store.age_identity_file` | Solo YAML | `""` | Archivo de identidad `age` para abrir las claves KES compartidas. El operador debe configurarlo junto con `age_recipients`; Bursa rechaza un archivo legible por el grupo o por otros usuarios. |
 | `kes_agent.store.key_poll_interval` | Solo YAML | `10s` | Intervalo con el que una réplica comprueba si PostgreSQL contiene una clave instalada nueva. Solo aplica al almacén PostgreSQL con claves selladas mediante `age`. |
-| `kes_agent.attested_listen_address` | `KESAGENT_ATTESTED_LISTEN_ADDRESS` | `""` | Habilita el listener atestado en modo `sign`. Solo admite exactamente un perfil. El listener aplica el protocolo `bursa-attested-kes/1`. |
-| `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | `""` | Certificado TLS 1.3 del listener atestado. Configúralo junto con `attested_tls_key_file` para el transporte TLS. |
-| `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | `""` | Clave privada TLS del listener atestado. Configúralo junto con `attested_tls_cert_file`. |
-| `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | `""` | CA que emite los certificados de cliente. El agente exige un certificado de cliente solo cuando el operador configura este archivo. |
-| `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | `false` | Usa TCP sin cifrado para el listener atestado cuando otra capa proporciona la seguridad de transporte. No lo combines con ninguno de los tres archivos TLS. |
-| `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | `""` | Selecciona `nitro`, `confidential-space` o `none`. `none` no usa un atestador y devuelve evidencia vacía; Bursa exige `attester_address` con `nitro` o `confidential-space`. |
-| `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | `""` | Dirección del adaptador que produce evidencia de atestación nueva para cada desafío. Bursa rechaza este campo con el proveedor `none`. |
+| `kes_agent.attested_listen_address` | Solo YAML | `""` | Habilita el listener atestado en modo `sign`. Solo admite exactamente un perfil. El listener aplica el protocolo `bursa-attested-kes/1`. |
+| `kes_agent.attested_tls_cert_file` | Solo YAML | `""` | Certificado TLS 1.3 del listener atestado. Configúralo junto con `attested_tls_key_file` para el transporte TLS. |
+| `kes_agent.attested_tls_key_file` | Solo YAML | `""` | Clave privada TLS del listener atestado. Configúralo junto con `attested_tls_cert_file`. |
+| `kes_agent.attested_client_ca_file` | Solo YAML | `""` | CA que emite los certificados de cliente. El agente exige un certificado de cliente solo cuando el operador configura este archivo. |
+| `kes_agent.attested_plaintext` | Solo YAML | `false` | Usa TCP sin cifrado para el listener atestado cuando otra capa proporciona la seguridad de transporte. No lo combines con ninguno de los tres archivos TLS. |
+| `kes_agent.attestation_provider` | Solo YAML | `""` | Selecciona `nitro`, `confidential-space` o `none`. `none` no usa un atestador y devuelve evidencia vacía; Bursa exige `attester_address` con `nitro` o `confidential-space`. |
+| `kes_agent.attester_address` | Solo YAML | `""` | Dirección del adaptador que produce evidencia de atestación nueva para cada desafío. Bursa rechaza este campo con el proveedor `none`. |
 
 La clave de verificación fría debe proceder de `cold_vkey_file` o `cold_vkey_hex` y resolver a 32 bytes. Antes del inicio, el agente también exige `system_start` en RFC3339, `slot_length` positivo y `slots_per_kes_period` distinto de cero. El agente exige una ruta durable `guard_file` cuando `store.type` no es `postgres`. En redes cuyo Byron usaba slots de 20 segundos, `shelley_start_slot` y `shelley_start_time` deben anclar el conteo a Shelley. El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia o el almacén compartido conserva el periodo KES autorizado más alto y los registros de slots, los restaura después de un reinicio y rechaza una reducción del periodo.
 
