@@ -186,7 +186,7 @@ databaseLifecycle:
 EOF
 ```
 
-> 📝 `privatePort` が `0` の場合、NtC の TCP リスナーは無効になり、設定した Unix ソケットは引き続き利用できます。TCP 接続が必要な場合は、`privatePort` に `0` 以外のポートを設定してください。
+> 📝 `privatePort` を `0` に設定すると、NtC の TCP リスナーは無効になりますが、設定した Unix ソケットは引き続き利用できます。TCP 接続が必要な場合は、`privatePort` に `0` 以外のポートを設定してください。
 
 > 📝 既定で Mithril は `HTTPS` を必須とし、ローカル、プライベート、その他の非公開の接続先を拒否します。Mithril v2 ブートストラップは、設定したアグリゲーターまたは公式 Mithril GCS オリジン（`storage.googleapis.com`）からのアーティファクトとリダイレクトのみを受け入れます。ダウンロード全体と展開の安全性を検査し、展開前に署名付き付属データの事前検証を行い、認証済みの台帳内容のみを使用します。`mithril.allowInsecureHttp: true` はローカル開発やテストに限って設定し、本番環境では有効にしないでください。
 
