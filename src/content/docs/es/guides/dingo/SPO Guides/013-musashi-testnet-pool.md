@@ -79,7 +79,7 @@ Después descarga y extrae la versión:
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 Verifica la versión del binario y cópialo a `/usr/local/bin/` para que sea accesible a nivel de sistema:
@@ -97,7 +97,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 ### Paso 3 - Descargar el binario Cardano-CLI de Leios
 
-Musashi necesita el `cardano-cli` de la versión del prototipo de Leios que corresponde a la red. Encuentra la versión de la red en el campo `MinNodeVersion` del <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a> de Musashi. Por ejemplo, `11.1.0.164-prototype-2026w42` corresponde a la versión `rc-2026w42` de la página de <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">versiones de ouroboros-leios</a>.
+Musashi necesita el `cardano-cli` de la versión del prototipo de Leios que corresponde a la red. Encuentra la versión de la red en el campo `MinNodeVersion` del <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a> de Musashi. Por ejemplo, `11.2.0.164-rc-2026w44` corresponde a la versión `rc-2026w44` de la página de <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">versiones de ouroboros-leios</a>.
 
 Crea un directorio y entra en él:
 
@@ -108,7 +108,7 @@ mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
 La versión de Leios nombra sus builds de Linux `x86_64` y `aarch64`. Define la etiqueta de la versión y tu arquitectura, y después descarga el archivo comprimido y su checksum:
 
 ```
-LEIOS_RELEASE=rc-2026w42
+LEIOS_RELEASE=rc-2026w44
 LEIOS_ARCH=$(uname -m)
 [ "$LEIOS_ARCH" = arm64 ] && LEIOS_ARCH=aarch64
 wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
