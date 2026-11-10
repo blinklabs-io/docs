@@ -5,7 +5,7 @@ description: YAML and environment-variable reference for Bursa `kes-agent` and l
 
 ## Overview
 
-This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, and `confidential-space` signer backends.
+This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, `confidential-space`, and `sops` signer backends.
 
 ## Load a configuration file
 
@@ -60,7 +60,7 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
-| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, or `confidential-space`. |
+| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, `confidential-space`, or `sops`. |
 | `signer.backends[].address` | Specifies the endpoint for an attested signer backend. | Set to an `http://`, `https://`, or `unix:///` endpoint. |
 | `signer.backends[].module` | Specifies the path to the `PKCS#11` module, including the `.so` file. | Set this field. Bursa rejects an empty value. |
 | `signer.backends[].token_label` | Selects the token or slot by its label. | Set this field or `slot`. Bursa requires at least one selection field. |
@@ -69,11 +69,21 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 | `signer.backends[].keys[]` | Defines an optional allowlist of token objects. | When present, give every entry a `name` and `type`. |
 | `signer.backends[].keys[].name` | Matches the token object's `CKA_LABEL`. | Set this field for each `keys` entry. |
 | `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Set this field for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
+| `signer.backends[].profile` | Binds a Confidential Space or SOPS backend to a profile. | Optional. Use 1 to 32 letters, digits, `.`, `_`, `@`, or `-`. Leave unset for Nitro because its enclave protocol does not implement profile binding. |
 | `signer.backends[].root_ca_file` | Specifies the AWS Nitro Enclaves root certificate. | Required for `nitro`; use the pinned AWS Nitro root certificate. |
 | `signer.backends[].pcrs` | Specifies expected Nitro PCR index and hexadecimal value pairs. | Required for `nitro`; PCR0 must be present and nonzero. |
+| `signer.backends[].host_key_file` | Supplies the signer authority key for Nitro challenge-bound signing. | Required for `nitro`; use an owner-only key file. The signer authority must differ from the provisioning authority. |
 | `signer.backends[].audience` | Specifies the audience that a Confidential Space attestation token must contain. | Required for `confidential-space`. |
 | `signer.backends[].image_digest` | Specifies the required Confidential Space container image digest. | Required for `confidential-space`; use a `sha256:` digest. |
 | `signer.backends[].jwks_url` | Specifies the token-signing key set for Confidential Space attestation tokens. | Optional for `confidential-space`; defaults to Google's published token-signing set. |
+
+Profile routing applies to Confidential Space and SOPS backends. A request must select the matching profile. A request without a profile is usable only when one backend unambiguously holds the key. Each profile keeps independent counter and record scope. Nitro does not support `profile`; leave it unset.
+
+### Nitro custody persistence
+
+The Nitro proxy role requires `secretsmanager:GetSecretValue`, `secretsmanager:DescribeSecret`, and `secretsmanager:PutSecretValue` while it serves. The proxy persists sealed counter state with every signature. If that persistence write fails or times out, the proxy stops later signing until it restarts or reloads; after recovery, it accepts a retry only when the payload is identical to the payload at the stored counter.
+
+The sealed counter state is versioned. An older enclave or proxy cannot consume a newer state. To downgrade, restore the prior envelope-only Secrets Manager secret version documented for Nitro custody before starting the older components.
 
 ### Wallet storage and encryption
 
