@@ -163,7 +163,7 @@ network.
 | Network magic | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | Derived from the topic and Cardano network when unset. | When omitted, Dingo derives the value from the topic and Cardano network. An explicit value overrides the derived value. Set it when the Cardano network has no default for the topic. |
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
-| Minimum pool message interval | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60s` | `0` disables pacing. Dingo paces pool messages at the configured interval and allows one second of pacing slack. Dingo validates the interval against `dmq.messageTtl`. |
+| Minimum pool message interval | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60s` | `0` disables pacing. Dingo uses the configured interval to pace pool messages and permits one second of pacing slack when it validates the interval against `dmq.messageTtl`. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N peer port. A nonzero value activates DMQ node-to-node listening and peer management when `dmq.maxPeers` is also nonzero. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
@@ -415,7 +415,7 @@ even when the Badger provider configuration sets
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. Every group- or other-writable ancestor in the path must have the sticky bit; a setgid-only ancestor, including a Kubernetes `fsGroup` volume root, does not satisfy this requirement. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
+| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. Any ancestor writable by the group or others must have the sticky bit; a directory with only the setgid bit, including a Kubernetes `fsGroup` volume root, does not satisfy this requirement. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
 
 Dingo keeps configured snapshot roots and generated local snapshot and staging
 paths private. Unix directories use `0700` permissions and files use `0600`.
@@ -507,11 +507,11 @@ Every file-backed value must meet these requirements:
 - The path must identify a regular file. Dingo rejects directories, devices,
   and other non-regular paths.
 - On Unix, Dingo requires the file and every ancestor path entry to belong to
-  the Dingo process user or root. Every group- or other-writable ancestor must
-  have the sticky bit. A setgid-only ancestor, including a Kubernetes `fsGroup`
-  volume root, does not satisfy this requirement because other group members
-  can still rename entries. Add the sticky bit with `chmod +t` or remove group
-  and other write access.
+  the Dingo process user or root. Any ancestor writable by the group or others
+  must have the sticky bit. A directory with only the setgid bit, including a
+  Kubernetes `fsGroup` volume root, does not satisfy this requirement because
+  other group members can still rename entries. Add the sticky bit with
+  `chmod +t` or remove group and other write access.
 - Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
   and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix
