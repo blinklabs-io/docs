@@ -9,6 +9,7 @@ description: Plutigo Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.12.1 - *[View Release Notes](../v0-12-1)*
 - Version: v0.12.0 - *[View Release Notes](../v0-12-0)*
 - Version: v0.11.6 - *[View Release Notes](../v0-11-6)*
 - Version: v0.11.5 - *[View Release Notes](../v0-11-5)*
