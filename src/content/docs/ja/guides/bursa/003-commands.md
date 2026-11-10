@@ -105,7 +105,7 @@ http://localhost:8080/swagger/index.html
 
 ### `kes-agent` の準備状態を確認
 
-以下のコマンドはエージェントが準備完了の場合にのみ正常終了します。exec readiness probeとして使用できます。
+以下のコマンドはエージェントが準備完了の場合にのみ正常終了します。exec readiness probeとして利用できます。
 
 ```sh
 ./bursa kes-agent ready --config /path/to/kes-agent.yaml
@@ -204,7 +204,7 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 ./bursa signer --config /path/to/signer.yaml
 ```
 
-`bursa signer` は位置引数を受け付けません。未知または入力を誤ったサブコマンドは、サービスの起動前にエラーになります。
+`bursa signer` は位置引数を受け付けません。未知のサブコマンドや誤記したサブコマンドは、サービスの起動前にエラーになります。
 
 ### `signer counter-reset`
 
@@ -239,7 +239,7 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 
 ### Nitro proxy
 
-`bursa nitro proxy` の `--socket-mode` は、グループアクセス用に `0660` などを指定できます。全ユーザーが書き込めるモードは拒否されます。
+`bursa nitro proxy` の `--socket-mode` は、グループアクセス用に `0660` などを指定できます。Bursaは全ユーザーが書き込めるモードを拒否します。
 
 ```sh
 ./bursa nitro proxy --socket-mode 0660
