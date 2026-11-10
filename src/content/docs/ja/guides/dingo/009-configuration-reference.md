@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.91.0 設定リファレンス
-description: Dingo v0.91.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.92.3 設定リファレンス
+description: Dingo v0.92.3 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.91.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.91.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.92.3 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.3/dingo.yaml.example)にあります。同じファイルは [Dingo v0.92.3 のソース](https://github.com/blinklabs-io/dingo/blob/v0.92.3/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -144,6 +144,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | ネットワークマジック | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | 未設定の場合、トピックと Cardano ネットワークから導出します。 | 省略すると、トピックと Cardano ネットワークから値を導出します。明示した値は導出した値に優先します。ネットワークにそのトピックの既定値がない場合に設定してください。 |
 | ソケットパス | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | 有効な場合、空ではなく、Cardano の `socketPath` とは異なる値が必要です。 |
 | メッセージの TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` 秒 | 有効な場合、`9223372036` 秒以下の正の値が必要です。 |
+| メモリプールメッセージの最小間隔 | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60s` | `0` はペーシングを無効にします。正の値はメモリプールメッセージの送信間隔を制限します。既定値は `60s` で、`1s` の余裕を残します。値は `dmq.messageTtl` より少なくとも `1s` 短くする必要があります。 |
 | メモリプールの最大サイズ | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | 有効な場合、`8796093022207` MB 以下の正の値が必要です。 |
 | N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定し、かつ `dmq.maxPeers` が 0 以外の場合、DMQ のノード間リスナーとピア管理を有効にします。 |
 | IPv4 ピアリスナーのアドレス | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv4 リテラルが必要です。 |
@@ -396,7 +397,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 
 - パスは通常ファイルを指定する必要があります。ディレクトリ、デバイス、その他の通常ファイル以外は拒否されます。
 - ファイル内容は最大 `64 KiB` です。末尾の `CR` と `LF` を除去し、空または空白のみの内容を拒否します。
-- 権限または ACL はプラットフォームのセキュリティポリシーを満たす必要があります。Unix ではファイルとパスのすべての祖先ディレクトリをプロセスユーザーまたは root が所有している必要があります。sticky bit のないディレクトリがグループまたは他のユーザーによって書き込み可能な場合は拒否します。sticky bit のあるディレクトリはこの書き込み条件の対象外ですが、所有者の確認は行います。ファイルは所有者とグループのアクセスを許可できますが、その他のユーザーには許可できません。Windows の ACL では所有者、Administrators、SYSTEM のみを許可できます。
+- 権限または ACL はプラットフォームのセキュリティポリシーを満たす必要があります。Unix ではファイルとパスのすべての祖先ディレクトリをプロセスユーザーまたは root が所有している必要があります。ファイルによる信頼またはブートストラップの確認に関係する祖先ディレクトリがグループまたは他のユーザーに書き込み可能な場合、sticky bit が必要です。setgid だけでは不十分で、Kubernetes の `fsGroup` によるボリュームルートも、他のグループメンバーがエントリの名前を変更できるため要件を満たしません。sticky bit を設定するか、グループと他のユーザーの書き込み権限を削除してください。sticky bit のあるディレクトリはこの書き込み条件を満たしますが、所有者の確認は引き続き行います。ファイルは所有者とグループのアクセスを許可できますが、その他のユーザーには許可できません。Windows の ACL では所有者、Administrators、SYSTEM のみを許可できます。
 - エラーでは値またはパスを示しますが、ファイル内容は含めません。
 
 <a id="token-registry-manifest-authentication"></a>
@@ -435,7 +436,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.92.3 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
