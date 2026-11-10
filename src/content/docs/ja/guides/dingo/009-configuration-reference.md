@@ -58,7 +58,7 @@ Dingo は各セクションの設定を既存の Cardano ノード設定フィ�
 - `DeadlineTargetNumberOfEstablishedPeers` → `TargetNumberOfEstablishedPeers`
 - `DeadlineTargetNumberOfActivePeers` → `TargetNumberOfActivePeers`
 
-Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。Dingo は `Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値を拒否します。Dingo はルート、`Configuration`、セクション内の重複キーを拒否し、別のキーで同じ設定フィールドを指定する衝突も拒否します。従来のフラット形式は引き続き使用できます。エンベロープでも、表に示す `TxSubmissionLogicVersion` の検証を適用します。
+Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。Dingo は `Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値を拒否します。Dingo はルート、`Configuration`、セクション内の重複キーを拒否し、別のキーで同じ設定フィールドを指定する衝突も拒否します。従来のフラット形式は引き続き使用できます。エンベロープでも、表に示す `TxSubmissionLogicVersion` の検証を適用し、`TxSubmissionLogicV2` を指定できます。
 
 <a id="configuration-areas"></a>
 
