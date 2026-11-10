@@ -28,7 +28,7 @@ for the main runtime choices.
 | Area | Main settings | Purpose |
 | --- | --- | --- |
 | Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Select a Cardano network and locate node, topology, and data files. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `trustedNtCIdleTimeout`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, trusted local node-to-client idle handling, and LocalStateQuery snapshot lifetime. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `trustedNtCIdleTimeout`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, trusted local node-to-client idle handling, and LocalStateQuery snapshot lifetime. `privatePort` defaults to `0`; `0` disables the NtC TCP listener while the Unix socket remains available. TCP access requires a configured nonzero port. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
@@ -45,7 +45,7 @@ key through a native CLI flag or environment variable.
 
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
-| Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+| Transaction submission logic | `TxSubmissionLogicVersion` | The embedded Musashi configuration uses `TxSubmissionLogicV2` for transaction submission. |
 
 ### Cardano node Version 2 envelope configuration
 
@@ -94,10 +94,10 @@ required value a different shape. Dingo also rejects duplicate keys in the
 envelope root,
 `Configuration`, or supported sections, including duplicates that resolve to
 the same flat field, such as `TargetNumberOfRootPeers` and
-`DeadlineTargetNumberOfRootPeers`. The envelope applies the same
-`TxSubmissionLogicVersion` validation as the flat format, so Dingo rejects
-invalid transaction submission logic in both formats. This format does not add
-support for unrelated or unknown cardano-node settings.
+`DeadlineTargetNumberOfRootPeers`. The envelope uses the same
+`TxSubmissionLogicVersion` setting as the flat format. The embedded Musashi
+configuration uses `TxSubmissionLogicV2` for transaction submission. This
+format does not add support for unrelated or unknown cardano-node settings.
 
 ### Consensus provider
 
