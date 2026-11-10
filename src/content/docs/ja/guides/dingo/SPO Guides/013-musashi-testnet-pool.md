@@ -912,3 +912,14 @@ curl -s 127.0.0.1:12798/metrics | grep -E '^dingo_metrics_leios_(committee_size|
 <br>
 
 > 元のガイドと追加リソースはこちらです：<a href="https://leios.cardano-scaling.org/docs/testnet/getting-started" target="_blank">Getting started</a>と<a href="https://leios.cardano-scaling.org/docs/testnet/register-stake-pool" target="_blank">Register a stake pool</a>
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
