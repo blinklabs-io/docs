@@ -227,7 +227,7 @@ plugins:
 EOF"
 ```
 
-> 💡 El bloque `plugins.mempool` aumenta el mempool del valor por defecto de Dingo, 1 MiB, a 25 MiB, el tamaño que Dingo usa para Leios. Con 1 MiB el mempool se llena en Musashi y las transacciones expiran antes de incluirse.
+> 💡 En Musashi, Dingo v0.92.3 usa un mempool de 25 MiB de forma predeterminada.
 
 Puedes ver y verificar el archivo `dingo.yaml` ejecutando:
 
@@ -770,7 +770,7 @@ plugins:
 EOF"
 ```
 
-> 💡 Sin `leiosVoteSigningKeyFile`, el pool sigue forjando bloques pero no vota los endorser blocks de Leios.
+> 💡 Sin `leiosVoteSigningKeyFile`, el pool sigue forjando bloques pero no vota los endorser blocks de Leios. En Musashi, Dingo v0.92.3 usa un mempool de 25 MiB de forma predeterminada.
 
 Puedes ver y verificar el archivo `dingo.yaml` ejecutando:
 
