@@ -227,7 +227,7 @@ plugins:
 EOF"
 ```
 
-> 💡 Musashiでは、Dingo v0.92.3のmempoolのデフォルト容量は25 MiBです。`plugins.mempool`ブロックでこの容量を明示的に設定します。
+> 💡 Musashiでは、Dingo v0.92.3がmempoolのデフォルト容量として25 MiBを使用します。`plugins.mempool`ブロックでこの容量を明示的に設定します。
 
 以下を実行して`dingo.yaml`ファイルを表示し、確認できます：
 
@@ -770,7 +770,7 @@ plugins:
 EOF"
 ```
 
-> 💡 ブロックプロデューサーの設定でも、MusashiではDingo v0.92.3のmempoolのデフォルト容量は25 MiBです。
+> 💡 ブロックプロデューサーの設定でも、Dingo v0.92.3はMusashiのmempoolに25 MiBのデフォルト容量を使用します。
 
 > 💡 `leiosVoteSigningKeyFile`を設定しない場合でもプールはブロックを生成しますが、Leiosのエンドーサーブロックには投票しません。
 
