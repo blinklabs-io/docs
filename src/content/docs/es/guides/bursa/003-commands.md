@@ -103,7 +103,7 @@ Compruebe la preparación del agente con el siguiente comando:
 ./bursa kes-agent ready --config /path/to/kes-agent.yaml
 ```
 
-El comando termina correctamente solo cuando el agente está preparado. Puede usarse como una prueba de preparación `exec`.
+El comando termina correctamente solo cuando el agente está preparado. El comando sirve como una prueba de preparación `exec`.
 
 Consulte la [referencia de configuración](../009-configuration-reference) para `kes_agent.mode`, `kes_agent.service_socket`, `kes_agent.control_socket`, `kes_agent.service_socket_mode`, `kes_agent.control_socket_mode`, `kes_agent.cold_vkey_file`, `kes_agent.cold_vkey_hex`, `kes_agent.system_start`, `kes_agent.slot_length`, `kes_agent.slots_per_kes_period`, `kes_agent.max_kes_evolutions`, `kes_agent.evolve_interval` y `kes_agent.guard_file`.
 
