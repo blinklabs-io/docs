@@ -6,7 +6,7 @@ description: Bursa の kes-agent と従来の API のセキュリティに関す
 
 ## 概要
 
-このガイドは Bursa の署名サービスと KES エージェントの設定を説明します。`signer.backends` は `pkcs11`、`nitro`、`confidential-space` の署名バックエンドに対応します。
+このガイドは Bursa の署名サービスと KES エージェントの設定を説明します。`signer.backends` は `pkcs11`、`nitro`、`confidential-space`、`sops` の署名バックエンドに対応します。
 
 <a id="load-a-configuration-file"></a>
 
@@ -73,8 +73,9 @@ PUT /wallet/settings/history-expiry
 
 | 設定パス | 用途 | 検証 |
 | --- | --- | --- |
-| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、`confidential-space` を指定します。 |
+| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、`confidential-space`、`sops` を指定します。 |
 | `signer.backends[].address` | アテステーション付き署名バックエンドのエンドポイントです。 | `http://`、`https://`、`unix:///` のエンドポイントを指定します。 |
+| `signer.backends[].profile` | Confidential Space または SOPS バックエンドをネットワークのプロファイルに結び付けます。 | 1〜32 文字で、英字、数字、`.`、`_`、`@`、`-` を使用します。`nitro` では設定できません。 |
 | `signer.backends[].module` | `.so` ファイルを含む `PKCS#11` モジュールのパスです。 | 必須です。空の値は拒否されます。 |
 | `signer.backends[].token_label` | ラベルでトークンまたはスロットを選択します。 | このフィールドまたは `slot` の少なくとも一方が必須です。 |
 | `signer.backends[].slot` | スロット ID を明示して選択します。 | このフィールドまたは `token_label` の少なくとも一方が必須です。 |
@@ -84,9 +85,33 @@ PUT /wallet/settings/history-expiry
 | `signer.backends[].keys[].type` | 一致するトークンオブジェクトに Cardano の鍵の種類を割り当てます。 | 各 `keys` 項目に必須です。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、`policy` を使用します。 |
 | `signer.backends[].root_ca_file` | AWS Nitro Enclaves のルート証明書です。 | `nitro` で必須です。固定された AWS Nitro ルート証明書を使用します。 |
 | `signer.backends[].pcrs` | 期待する Nitro PCR インデックスと 16 進数値の組です。 | `nitro` で必須です。PCR0 が存在し、0 以外である必要があります。 |
+| `signer.backends[].host_key_file` | Nitro への署名要求を認可する署名者権限鍵ファイルです。 | `nitro` で必須です。所有者だけが読み取れるファイルを指定します。プロビジョニング権限鍵とは別の鍵を使用します。 |
 | `signer.backends[].audience` | Confidential Space アテステーショントークンに必要な audience です。 | `confidential-space` で必須です。 |
 | `signer.backends[].image_digest` | 必要な Confidential Space コンテナイメージのダイジェストです。 | `confidential-space` で必須です。`sha256:` ダイジェストを使用します。 |
 | `signer.backends[].jwks_url` | Confidential Space アテステーショントークンの署名鍵セットです。 | `confidential-space` で任意です。既定では Google の公開トークン署名セットを使用します。 |
+
+プロファイルを指定したバックエンドは、要求の `profile` と一致する場合だけその要求を処理します。同じ鍵を複数のプロファイルで保持する場合も、各プロファイルのカウンター、ウォーターマーク、発行済み記録を別々に保持します。プロファイルを指定しない要求は、その鍵を保持するバックエンドが 1 つだけの場合に限り処理します。`nitro` バックエンドはプロファイルをサポートしないため、`profile` を設定しないでください。
+
+Nitro では `root_ca_file` と PCR の検証に加えて、`host_key_file` に署名者権限の秘密鍵を設定します。この鍵は所有者だけが読み取れるようにし、エンクレーブの測定済みイメージに登録する署名者権限公開鍵に対応させます。プロビジョニング権限は別の鍵であり、プロビジョニング専用に管理します。
+
+### 署名サービスの JWT 認証
+
+署名サービスでは、次のいずれか 1 つの JWT 信頼元を設定します。
+
+| 設定パス | 環境変数 | 用途 | 既定値または要件 |
+| --- | --- | --- | --- |
+| `signer.jwt_secret` | `SIGNER_JWT_SECRET` | HS256 で Bearer トークンを検証します。 | `signer.jwks_url` と同時に設定せず、32 バイト以上のシークレットを指定します。 |
+| `signer.jwks_url` | `SIGNER_JWKS_URL` | JWKS エンドポイントの鍵で Bearer トークンを検証します。 | `signer.jwt_secret` と同時に設定しません。 |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | トークンの対象 audience を指定します。 | `jwt_secret` または `jwks_url` を設定する場合は空でない値が必須です。トークンの `aud` と一致させます。 |
+| `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | トークンの issuer を制限します。 | 任意です。設定した場合はトークンの `iss` と一致させます。 |
+
+`signer.jwt_secret` または `signer.jwks_url` のいずれかを設定した場合、`signer.jwt_audience` も必ず設定します。すべてのトークンは同じ値を `aud` クレームに含める必要があります。audience がない場合、または値が一致しない場合、起動または認証に失敗します。JWT 信頼元を両方設定した場合や、どちらも設定しない場合も起動を拒否します。
+
+### Nitro の永続化
+
+Nitro の署名プロキシには、稼働中に `secretsmanager:GetSecretValue`、`secretsmanager:DescribeSecret`、`secretsmanager:PutSecretValue` の権限が必要です。プロキシは署名ごとに封印したカウンター状態を保存します。保存に失敗すると後続の署名を停止し、再起動または再読み込みまで署名を再開しません。同じペイロードは保存済みカウンターで再試行できますが、同じカウンターの別のペイロードは拒否されます。
+
+封印状態にはバージョンがあり、新しい状態を古いプロキシとエンクレーブの組み合わせで読み取ることはできません。ダウングレードする場合は、アップグレード前に保存した封印状態を含まないエンベロープだけの Secrets Manager のバージョンを復元してから、以前の組み合わせを起動します。
 
 <a id="wallet-storage-and-encryption"></a>
 
