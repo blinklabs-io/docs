@@ -17,7 +17,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Este es el único valor aceptado y corresponde a la estrategia heredada de recepción por par implementada por Dingo. Dingo rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
+| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | La configuración integrada de Musashi utiliza `TxSubmissionLogicV2` para el envío de transacciones. |
 
 El archivo de configuración del nodo Cardano admite tanto el formato plano existente como el formato envolvente con `Version: 2`. En el formato envolvente, `Version` debe ser el entero `2` y `Configuration` debe ser un objeto. Un ejemplo compacto es:
 
@@ -40,14 +40,14 @@ Configuration:
 
 Dingo asigna las secciones `Protocol`, `Testing`, `Consensus` y `Network` a los campos existentes de configuración del nodo. `Protocol` contiene la configuración de los archivos y hashes de génesis; `Testing` contiene la configuración de génesis de Dijkstra y las anulaciones de épocas de bifurcación; `Consensus` contiene `ConsensusMode`; y `Network` contiene los ajustes de red, incluido `PeerSharing` y los objetivos de pares. En `Network`, Dingo asigna `DeadlineTargetNumberOfRootPeers`, `DeadlineTargetNumberOfKnownPeers`, `DeadlineTargetNumberOfEstablishedPeers` y `DeadlineTargetNumberOfActivePeers` respectivamente a `TargetNumberOfRootPeers`, `TargetNumberOfKnownPeers`, `TargetNumberOfEstablishedPeers` y `TargetNumberOfActivePeers`.
 
-Dingo rechaza los datos del formato envolvente si falta `Version` o `Configuration`, si `Version` no es el entero `2`, si `Configuration` o una sección admitida no es un objeto, o si el archivo usa una versión no admitida. Dingo también rechaza cualquier clave duplicada, incluidas las que aparecen en distintas secciones o las que establecen el mismo campo efectivo, como un objetivo `TargetNumberOf*Peers` y su alias `DeadlineTargetNumberOf*Peers`. Dentro del formato envolvente, Dingo aplica igualmente la validación de `TxSubmissionLogicVersion`: solo acepta `TxSubmissionLogicV1` y rechaza los valores no válidos, incluido `TxSubmissionLogicV2`, durante la carga.
+Dingo rechaza los datos del formato envolvente si falta `Version` o `Configuration`, si `Version` no es el entero `2`, si `Configuration` o una sección admitida no es un objeto, o si el archivo usa una versión no admitida. Dingo también rechaza cualquier clave duplicada, incluidas las que aparecen en distintas secciones o las que establecen el mismo campo efectivo, como un objetivo `TargetNumberOf*Peers` y su alias `DeadlineTargetNumberOf*Peers`. Dentro del formato envolvente, Dingo aplica igualmente la configuración de `TxSubmissionLogicVersion`; la configuración integrada de Musashi utiliza `TxSubmissionLogicV2`.
 
 ## Áreas de configuración
 
 | Zona | Ajustes principales | Propósito |
 | --- | --- | --- |
 | Redes y rutas | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Selecciona una red Cardano y las rutas de configuración del nodo, topología y datos. |
-| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. |
+| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. `privatePort` vale `0` de forma predeterminada; `0` desactiva el listener TCP NtC y mantiene disponible el socket Unix. Para habilitar el acceso TCP, configura un puerto distinto de cero. |
 | Registro y TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Selecciona la salida de registros y protege los servicios compatibles de API o Bark. |
 | Almacenamiento y API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Elige el historial almacenado, proveedores de almacenamiento, orden de transacciones y API de aplicaciones. |
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
