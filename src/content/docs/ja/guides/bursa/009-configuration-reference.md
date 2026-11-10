@@ -102,7 +102,7 @@ Nitro では `root_ca_file` と PCR の検証に加えて、`host_key_file` に�
 | --- | --- | --- | --- |
 | `signer.jwt_secret` | `SIGNER_JWT_SECRET` | HS256 で Bearer トークンを検証します。 | `signer.jwks_url` と同時に設定せず、32 バイト以上のシークレットを指定します。 |
 | `signer.jwks_url` | `SIGNER_JWKS_URL` | JWKS エンドポイントの鍵で Bearer トークンを検証します。 | `signer.jwt_secret` と同時に設定しません。 |
-| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | トークンの対象 audience を指定します。 | `jwt_secret` または `jwks_url` を設定する場合は空でない値が必須です。トークンの `aud` と一致させます。 |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | トークンの対象 audience を指定します。 | 空でない値を指定します。 |
 | `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | トークンの issuer を制限します。 | 任意です。設定した場合はトークンの `iss` と一致させます。 |
 
 `signer.jwt_secret` または `signer.jwks_url` のいずれかを設定した場合、`signer.jwt_audience` も必ず設定します。すべてのトークンは同じ値を `aud` クレームに含める必要があります。audience がない場合、または値が一致しない場合、起動または認証に失敗します。JWT 信頼元を両方設定した場合や、どちらも設定しない場合も起動を拒否します。
