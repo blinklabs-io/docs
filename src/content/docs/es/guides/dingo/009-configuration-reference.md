@@ -1,6 +1,6 @@
 ---
-title: "Referencia de configuración de Dingo v0.91.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.91.0.
+title: "Referencia de configuración de Dingo v0.93.0"
+description: Referencia y ejemplo completo de configuración de Dingo v0.93.0.
 ---
 
 Esta página describe la configuración incluida en Dingo v0.91.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.91.0](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
