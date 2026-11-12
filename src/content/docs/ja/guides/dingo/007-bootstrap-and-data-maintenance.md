@@ -32,7 +32,7 @@ dingo mithril serve --config ./dingo.yaml
 
 作成や配信の前に `mithril.server.artifactStore` を設定します。`mithril.server.publicBaseUrl` には、認証情報、パス、クエリ、フラグメントを含まない有効な絶対オリジンを指定し、スキームには `http://` または `https://` を使用します。配信ポートは `mithril.server.port` です。サーバーはアーティファクトの読み取りを公開し、クライアントは HTTP Range リクエストでダウンロードできます。
 
-公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)を参照してください。
+公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。署名者の登録と登録の終了は匿名で実行できるため、オペレーター用のトークンを構成する必要はありません。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)を参照してください。
 
 Mithril v2 ブートストラップは、設定されたアグリゲーターのオリジンまたは公式の `storage.googleapis.com` Mithril オリジンからの取得先とリダイレクトのみを受け入れます。`https://` の要件と、ループバック宛てのローカル開発例外は維持されます。各ブートストラップは、アーティファクトとリダイレクトのリクエスト数およびバイト数をまとめて全体予算に計上し、24 時間のダウンロード期限を適用します。immutable アーカイブは 100000 個に制限し、アーティファクトの各構成要素の取得先を重複排除して最大 4 個に制限します。展開時もエントリー数と展開後のバイト数を制限し、必要な空き領域を予約します。これらの保護には組み込みの上限を適用します。
 
