@@ -52,7 +52,7 @@ plugins:
 
 El proveedor integrado de Blockfrost escucha en `127.0.0.1` de forma predeterminada. No hereda el `bindAddr` raíz salvo que `plugins.api.blockfrost.config.host` esté explícitamente vacío. Establece un host concreto para exponerlo en otra interfaz.
 
-Las solicitudes de modificación son anónimas y no requieren `authToken`. Los valores predeterminados son `4` para `maxConcurrentMutations` y `1` para `maxConcurrentMutationsPerClient`. Establece ambos valores en enteros positivos y mantén `maxConcurrentMutationsPerClient` menor o igual que `maxConcurrentMutations`.
+Las solicitudes de modificación son anónimas y no requieren credenciales. Los valores predeterminados son `4` para `maxConcurrentMutations` y `1` para `maxConcurrentMutationsPerClient`. Establece ambos valores en enteros positivos y mantén `maxConcurrentMutationsPerClient` menor o igual que `maxConcurrentMutations`.
 
 Las siguientes rutas aceptan solicitudes anónimas:
 
@@ -72,7 +72,7 @@ Este sitio incluye la referencia de configuración completa de v0.92.4 y el arch
 
 La dirección de escucha compartida de las API se aplica a los proveedores seleccionados, incluido Kupo. El proveedor integrado de UTxO RPC escucha en `127.0.0.1` de forma predeterminada. Una dirección de escucha compartida más amplia no cambia este valor. Para permitir el acceso remoto, establece explícitamente `plugins.api.utxorpc.config.host`. Los ajustes `api.tls` y `api.auth` definen valores predeterminados compartidos. Cada proveedor puede sustituir cualquiera de estas políticas en su bloque `plugins.api.<name>.config`. La configuración TLS específica del proveedor tiene prioridad sobre la compartida.
 
-La autenticación compartida de las API está desactivada de forma predeterminada. Las rutas de modificación del proveedor integrado de Blockfrost aceptan solicitudes anónimas y no requieren `authToken`. Los límites de admisión de modificaciones solo se aplican a esas rutas de Blockfrost, no a todas las rutas del servicio.
+La autenticación compartida de las API está desactivada de forma predeterminada. Las rutas de modificación del proveedor integrado de Blockfrost aceptan solicitudes anónimas. Los límites de admisión de modificaciones solo se aplican a esas rutas de Blockfrost, no a todas las rutas del servicio.
 
 Cuando actives la autenticación por token, envía `Authorization: Bearer <token>`. Las rutas HTTP y Connect/gRPC de UTxO RPC también utilizan el token Bearer.
 
