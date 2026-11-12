@@ -103,7 +103,7 @@ plugins:
         # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: "127.0.0.1"
         # Blockfrost の変異ルートは匿名で利用できます。
-        # 以下の同時実行数制限は引き続き適用されます。
+        # `maxConcurrentMutations` と `maxConcurrentMutationsPerClient` の制限は引き続き適用されます。
         # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
         # Per-client concurrent mutation limit. Default: 1.
