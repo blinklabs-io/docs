@@ -18,4 +18,4 @@ gOuroboros リポジトリには、Go アプリケーションから Cardano ノ
 | [tx-monitor](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples/tx-monitor) | ノードのローカルメモリプール内のトランザクションを監視します。 |
 | [tx-submission](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples/tx-submission) | ローカルノードにトランザクションを送信します。 |
 
-サンプルは gOuroboros モジュール内の Go プログラムで、Go 1.26.11　以降が必要です。ダウンロードを展開した後、README に従って修正済みのサンプルを対応する v0.211.0 モジュールにコピーし、テストを実行してノード接続を設定してください。各ソースファイルの環境設定と接続設定に従い、パッケージの詳細はモジュールの [API ドキュメント](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)を参照してください。
+サンプルは gOuroboros モジュール内の Go プログラムで、Go 1.26.11 以降が必要です。ダウンロードを展開した後、README に従って修正済みのサンプルを対応する v0.211.0 モジュールにコピーし、テストを実行してノード接続を設定してください。各ソースファイルの環境設定と接続設定に従い、パッケージの詳細はモジュールの [API ドキュメント](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)を参照してください。
