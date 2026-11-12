@@ -3,10 +3,10 @@ title: Ejecutar Dingo en un contenedor
 description: Ejecuta la imagen publicada de Dingo, conserva sus datos y comprueba el estado del nodo.
 ---
 
-Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.91.0`:
+Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.92.4`:
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
 ## Iniciar un nodo de Preview
@@ -20,7 +20,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.91.0
+    ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
 El puerto `3001` acepta conexiones Ouroboros de nodo a nodo. En este ejemplo, las métricas del puerto `12798` y el servicio de estado del puerto `12799` se publican en la interfaz de loopback del host. De forma predeterminada, la imagen mantiene las métricas en el loopback del contenedor, por lo que `DINGO_METRICS_BIND_ADDR=0.0.0.0` permite acceder desde el host al puerto de métricas publicado, mientras que el extremo del host permanece limitado a `127.0.0.1`. Utiliza un volumen con nombre distinto para cada red.
@@ -36,7 +36,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.91.0 \
+     ghcr.io/blinklabs-io/dingo:0.92.4 \
   --config /tmp/dingo.yaml serve
 ```
 
@@ -53,15 +53,24 @@ sudo chown 1000:1000 ./dingo-snapshots
 
 Las rutas de `snapshotDir` bajo `/data/db` ya están preparadas para `UID:GID 1000:1000`. Si el bind mount usa otro directorio del host, asígnale esa propiedad antes de montarlo y configura `snapshotDir` con la ruta de destino; Dingo falla al iniciar si la ruta no permite escritura.
 
-### Proteger las métricas publicadas
+### Configurar las métricas publicadas
 
-Añade la siguiente opción al comando `docker run` para exigir un token Bearer en los servicios de métricas del nodo y de Mithril:
+Los extremos de métricas del nodo y de Mithril aceptan solicitudes anónimas. No configures `DINGO_METRICS_AUTH_TOKEN` ni credenciales Bearer en Prometheus.
+
+La imagen mantiene las métricas en el loopback del contenedor de forma predeterminada. Para publicarlas, establece `DINGO_METRICS_BIND_ADDR=0.0.0.0` y publica el puerto de métricas, como en el ejemplo anterior. Las métricas se sirven mediante HTTP sin cifrar; limita el acceso con controles de red, un proxy inverso con TLS o un túnel cifrado cuando el puerto se exponga fuera de una red de confianza.
+
+### Añadir registros a un archivo existente
+
+Configura `DINGO_LOG_FILE` junto con `DINGO_LOG_FILE_APPEND=true` para que el contenedor reutilice el mismo archivo de registros:
 
 ```sh
---env DINGO_METRICS_AUTH_TOKEN='replace-with-secret' \
+docker run --detach --name dingo-logging \
+  --env DINGO_LOG_FILE=/data/dingo.log \
+  --env DINGO_LOG_FILE_APPEND=true \
+  ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
-Configura Prometheus con un `authorization.credentials_file` que contenga el mismo token. Consulta la [guía de paneles de Grafana](/es/guides/dingo/spo-guides/008-grafana-dashboard/) para configurar Prometheus. El servicio protegido por token sigue usando HTTP sin cifrar, por lo que el transporte remoto requiere un proxy inverso con TLS o un túnel cifrado y autenticado.
+El valor de `DINGO_LOG_FILE_APPEND` debe ser exactamente `true`. Con este valor, el contenedor añade registros a un archivo regular existente, crea el archivo si falta y conserva los permisos del archivo existente. Si el archivo no está vacío y su última línea no termina en salto de línea, el contenedor inserta uno antes de añadir los registros. El contenedor rechaza enlaces simbólicos y archivos que no sean regulares. Si `DINGO_LOG_FILE_APPEND` no tiene exactamente el valor `true`, el comportamiento predeterminado exige que `DINGO_LOG_FILE` indique un archivo nuevo.
 
 ## Comprobar y gestionar el contenedor
 
