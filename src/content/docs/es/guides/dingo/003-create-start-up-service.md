@@ -78,8 +78,8 @@ plugins:
         # Blockfrost uses this provider-specific host independently of bindAddr.
         # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: "127.0.0.1"
-        # Las rutas de mutación son anónimas.
-        # Los límites maxConcurrentMutations y maxConcurrentMutationsPerClient siguen aplicando.
+        # Las rutas de mutación aceptan solicitudes anónimas.
+        # Los límites maxConcurrentMutations y maxConcurrentMutationsPerClient siguen vigentes.
         # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
         # Per-client concurrent mutation limit. Default: 1.
