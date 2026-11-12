@@ -100,9 +100,7 @@ API bind address alone does not expose this listener. The `api.tls` and
 policy under its own `plugins.api.<name>.config` block.
 Provider-specific TLS settings take precedence over the shared TLS defaults.
 Shared API authentication is disabled by default. The built-in Blockfrost
-mutation policy is separate: its mutation routes accept anonymous requests,
-subject to mutation admission limits, even when shared API authentication
-remains disabled. The mutation admission limits apply only to those
+mutation policy is separate: its mutation admission limits apply only to those
 Blockfrost mutation routes, not to every route on the listener.
 When token authentication is enabled for a provider, send
 `Authorization: Bearer <token>`. UTxO RPC's HTTP and Connect/gRPC routes use
@@ -127,7 +125,7 @@ maintenance](/guides/dingo/007-bootstrap-and-data-maintenance/).
 
 Bark has no built-in authentication for ordinary archive traffic. Keep it on a
 trusted network. Ordinary archive traffic remains separate from the optional
-LifecycleService, whose RPCs require mutual TLS.
+LifecycleService.
 
 ### Bark LifecycleService
 
@@ -136,34 +134,20 @@ operations. The service is disabled by default. Enable it with
 `barkLifecycleEnabled: true`, `--bark-lifecycle-enabled`, or
 `DINGO_BARK_LIFECYCLE_ENABLED=true`.
 
-Before starting the node, configure these settings:
+Before starting the node, configure these settings as needed:
 
 - Set `barkPort` to a nonzero port with `--bark-port` or
   `DINGO_BARK_PORT`.
-- Set `barkClientCaFilePath` to the PEM CA bundle that verifies client
-  certificates with `--bark-client-ca-file-path` or
-  `DINGO_BARK_CLIENT_CA_FILE_PATH`.
-- Set both `tlsCertFilePath` and `tlsKeyFilePath` for the Bark server
-  certificate and private key. Use `--tls-cert-file-path` and
-  `--tls-key-file-path`, or the environment variables `TLS_CERT_FILE_PATH`
-  and `TLS_KEY_FILE_PATH`.
-- Add one or more SHA-256 client certificate fingerprints to
-  `barkLifecycleOperatorCertificateFingerprints` with
-  `--bark-lifecycle-operator-certificate-fingerprints` or
-  `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS`. This allowlist is
-  separate from the DatabaseService operator allowlist.
 
-The configured CA must verify the client certificate for every LifecycleService
-RPC. `GetStatus` is read-only and needs only this verified certificate. `Stop`
-and `Restart` are destructive: `Stop` requests a graceful stop, while
-`Restart` requests a graceful stop followed by a restart. Both require a
-certificate fingerprint from `barkLifecycleOperatorCertificateFingerprints`.
+LifecycleService accepts `GetStatus`, `Stop`, and `Restart` over plaintext HTTP
+without client certificates or operator allowlists. Use network-layer controls
+to restrict access when exposing the service beyond a trusted network.
 `Restart` is unsupported on non-Unix platforms.
 
 When the service is enabled and `barkHost` is empty, Bark binds to loopback by
 default. Set `barkHost`, `--bark-host`, or `DINGO_BARK_HOST` to expose it on a
-different interface. A wider bind address does not replace client certificate
-verification or the lifecycle operator allowlist.
+different interface. Use network-layer controls to restrict access when
+exposing it beyond a trusted network.
 
 Bark accepts signed block download URLs only when their normalized HTTPS origin
 matches the configured normalized HTTPS origin or an explicitly allowed
