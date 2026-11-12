@@ -127,7 +127,7 @@ Dingo は `cardano/keys/` ディレクトリに `faucet.skey`、`faucet.vkey`、
 
 すべての Dingo v0.92.4 の設定、デフォルト、および環境、またはコマンドラインのオーバーライドについては、[構成リファレンス](/ja/guides/dingo/009-configuration-reference/)を参照してください。 リリースマッチした [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)をダウンロードし、自分の設定の開始点として使用してください。
 
-Dingoは、プレビュー、プリプロド、メインネット、`prime-mainnet`、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。`prime-mainnet` を選択するには、`network: "prime-mainnet"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
+Dingoは、プレビュー、プリプロド、メインネット、`prime-mainnet`、およびテストネットであるDijkstraNetの組み込みCardanoネットワーク構成（genesisファイル、config.json）を提供します。`dijkstra` を選択するには、`network: "dijkstra"` を設定します。ネットワークに `prime-mainnet` を指定するには、`network: "prime-mainnet"` を設定します。ネットワークマジックには `6` を使用します。これらを別々にダウンロードする必要はありません。
 
 dingo ディレクトリに `dingo.yaml` ファイルを作成します。`$HOME` 変数は、自動的にホームディレクトリパスに展開します。
 
