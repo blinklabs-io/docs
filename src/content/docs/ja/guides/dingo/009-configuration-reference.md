@@ -116,7 +116,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | メトリクスの認証トークン | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | 既定では空です。プロセス引数が他のユーザーに見える可能性があるため、CLI フラグはありません。Dingo は設定値を認証に使用せず、効果を持ちません。 |
 | メトリクスポート | `metricsPort` | `--metrics-port` | — | 既定値は `12798` です。`0` にすると Prometheus リスナーが無効になります。 |
 
-メトリクスエンドポイントは認証なしでアクセスできます。
+ノードと Mithril のメトリクスエンドポイントは認証なしでアクセスできます。
 
 <a id="tracing"></a>
 
@@ -356,10 +356,10 @@ Bark のリモートライフサイクルサービスは既定で無効です。
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と要件 |
 | --- | --- | --- | --- | --- |
 | ライフサイクルサービスの有効化 | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`。有効にするには、0 以外の `barkPort` が必要です。`barkClientCaFilePath`、`tlsCertFilePath`、`tlsKeyFilePath`、`barkLifecycleOperatorCertificateFingerprints` は不要です。サーバー TLS の証明書と鍵は任意で設定できます。 |
-| ライフサイクルオペレーターの証明書 | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用しません。 |
+| ライフサイクルオペレーターの証明書 | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。 |
 | ブロックダウンロードのプライベートまたは特殊用途アドレス | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`。`true` にすると、Bark のブロックダウンロード先で、名前解決後のプライベートまたは特殊用途アドレスを許可します。オリジン許可リスト、HTTPS 要件、リダイレクト検証、プロキシ無効化は維持されます。ブロックダウンロードにのみ影響し、Bark RPC 通信には影響しません。 |
 
-`GetStatus`、`Stop`、`Restart` は、認証情報やクライアント証明書なしの平文 HTTP リクエストを受け付けます。`barkClientCaFilePath` は従来の入力として受け付けますが、Dingo は認証に使用しません。DatabaseService のオペレーター認証情報は独立しており、ライフサイクルアクセスを認可しません。`Restart` は Unix で使用でき、それ以外では未対応操作のエラーを返します。
+`GetStatus`、`Stop`、`Restart` は、認証情報やクライアント証明書なしの平文 HTTP リクエストを受け付けます。`barkClientCaFilePath` は従来の入力として受け付けますが、Dingo は認証に使用せず、効果を持ちません。DatabaseService のオペレーター認証情報は独立しており、ライフサイクルアクセスを認可しません。`Restart` は Unix で使用でき、それ以外では未対応操作のエラーを返します。
 
 <a id="bark-archive-lookup-budgets"></a>
 
