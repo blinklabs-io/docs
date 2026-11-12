@@ -19,3 +19,14 @@ El repositorio gOuroboros incluye programas ejecutables que demuestran cómo las
 | [tx-submission](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples/tx-submission) | Envía una transacción a un nodo local. |
 
 Los ejemplos son programas Go del módulo gOuroboros y requieren Go 1.26.11 o más reciente. Después de extraer la descarga, siga su README para copiar los ejemplos corregidos en el módulo v0.211.0, ejecute las pruebas y configure una conexión de nodo. Siga la configuración de entorno y conexión en cada archivo fuente, y utiliza la [documentación de la API](https://pkg.go.dev/github.com/blinklabs-io/gouroboros) del módulo para obtener detalles adicionales del paquete.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

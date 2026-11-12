@@ -29,3 +29,14 @@ connection. Follow the environment and connection settings in each source
 file, and use the module's [API
 documentation](https://pkg.go.dev/github.com/blinklabs-io/gouroboros) for
 additional package details.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

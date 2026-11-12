@@ -19,3 +19,14 @@ gOuroboros リポジトリには、Go アプリケーションから Cardano ノ
 | [tx-submission](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples/tx-submission) | ローカルノードにトランザクションを送信します。 |
 
 サンプルは gOuroboros モジュール内の Go プログラムで、Go 1.26.11 以降が必要です。ダウンロードを展開した後、README に従って修正済みのサンプルを対応する v0.211.0 モジュールにコピーし、テストを実行してノード接続を設定してください。各ソースファイルの環境設定と接続設定に従い、パッケージの詳細はモジュールの [API ドキュメント](https://pkg.go.dev/github.com/blinklabs-io/gouroboros)を参照してください。
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
