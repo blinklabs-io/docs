@@ -9,7 +9,7 @@ files.
 
 ## Run the examples
 
-Install Go 1.26.5 or newer. From the directory containing this README and
+Install Go 1.26.11 or newer. From the directory containing this README and
 `examples/`, download the matching gOuroboros source and copy the corrected
 examples into its root module:
 
