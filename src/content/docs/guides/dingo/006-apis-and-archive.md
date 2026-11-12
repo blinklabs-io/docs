@@ -140,9 +140,8 @@ Before starting the node, configure these settings as needed:
   `DINGO_BARK_PORT`.
 
 LifecycleService accepts `GetStatus`, `Stop`, and `Restart` over plaintext HTTP
-without client certificates or operator allowlists. Use network-layer controls
-to restrict access when exposing the service beyond a trusted network.
-`Restart` is unsupported on non-Unix platforms.
+without client certificates or operator allowlists. `Restart` is unsupported on
+non-Unix platforms.
 
 When the service is enabled and `barkHost` is empty, Bark binds to loopback by
 default. Set `barkHost`, `--bark-host`, or `DINGO_BARK_HOST` to expose it on a
