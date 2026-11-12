@@ -95,7 +95,7 @@ Antes de iniciar el nodo, configura estos ajustes:
 - Establece `barkPort` en un puerto distinto de cero mediante `--bark-port` o `DINGO_BARK_PORT`.
 - Establece `barkHost` para elegir la interfaz de red mediante `--bark-host` o `DINGO_BARK_HOST`. Si queda vacío, Bark escucha en `0.0.0.0`.
 
-El `LifecycleService` está disponible mediante HTTP sin TLS y no requiere certificados de cliente ni listas de operadores para `GetStatus`, `Stop` ni `Restart`. Protege el acceso con controles en la capa de red. `GetStatus` es de solo lectura. `Stop` y `Restart` son operaciones destructivas: `Stop` solicita una parada ordenada y `Restart` solicita una parada ordenada seguida de un reinicio. `Restart` no está disponible en plataformas que no sean Unix.
+El `LifecycleService` está disponible mediante HTTP sin TLS y no requiere certificados de cliente ni listas de operadores para `GetStatus`, `Stop` ni `Restart`. `GetStatus` es de solo lectura. `Stop` y `Restart` son operaciones destructivas: `Stop` solicita una parada ordenada y `Restart` solicita una parada ordenada seguida de un reinicio. `Restart` no está disponible en plataformas que no sean Unix.
 
 Cuando `barkHost` expone el servicio fuera de loopback, aplica controles de red para limitar el acceso al `LifecycleService`.
 
