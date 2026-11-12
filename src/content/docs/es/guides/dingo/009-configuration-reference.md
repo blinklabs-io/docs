@@ -90,7 +90,7 @@ Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos 
 | Token de autenticación de métricas | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Entrada heredada que Dingo ignora y que no tiene efecto. Los extremos de métricas aceptan solicitudes anónimas y no requieren token, `Authorization: Bearer` ni TLS. |
 | Puerto de métricas | `metricsPort` | `--metrics-port` | — | `12798` de forma predeterminada. `0` desactiva el servicio Prometheus. |
 
-El servicio de métricas utiliza HTTP sin cifrar. Aplica controles de red cuando el tráfico atraviesa una red que no sea de confianza.
+El servicio de métricas utiliza HTTP sin cifrar. Dingo aplica controles de red cuando el tráfico atraviesa una red que no sea de confianza.
 
 ### Trazas
 
@@ -295,7 +295,7 @@ El servicio remoto de ciclo de vida de Bark está desactivado de forma predeterm
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y requisitos |
 | --- | --- | --- | --- | --- |
 | Activar el servicio de ciclo de vida | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Requiere `barkPort` distinto de cero. |
-| Certificados de operadores de ciclo de vida | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Entrada heredada que Dingo ignora y que no tiene efecto. Dingo no requiere huellas de certificados para el ciclo de vida. |
+| Certificados de operadores de ciclo de vida | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Entrada heredada sin efecto. No configura autorización ni requiere huellas para el ciclo de vida. |
 | Direcciones privadas o especiales para descargas | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. Con `true`, permite direcciones resueltas privadas o de uso especial para las descargas de bloques Bark. Mantiene la lista de orígenes permitidos, HTTPS, la validación de redirecciones y la desactivación de proxies. Solo afecta a las descargas, no al tráfico RPC. |
 
 `GetStatus`, `Stop` y `Restart` aceptan solicitudes HTTP anónimas sin cifrar. Dingo ignora las entradas heredadas `barkClientCaFilePath`, `barkOperatorCertificateFingerprints` y `barkLifecycleOperatorCertificateFingerprints`; no requiere certificados de cliente, certificados ni claves de servidor, ni huellas de operadores para estas operaciones. `Restart` está disponible únicamente en Unix; las demás plataformas devuelven un error de operación no admitida.
