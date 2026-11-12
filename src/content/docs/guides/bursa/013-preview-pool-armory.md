@@ -124,7 +124,7 @@ bursa key pool-cold --mnemonic-file pool/seed.txt \
 
 Pass file paths. With `-` Bursa prints the extended `pool_xsk` key instead, which the SE050 cannot import.
 
-The pool ID is the blake2b-224 hash of `pool-cold.vkey`.
+The pool ID is the blake2b-224 hash of the raw 32-byte verification key: the `cborHex` field of `pool-cold.vkey` without its leading `5820` CBOR header, not the bytes of the JSON file.
 
 Check the paper copy before you rely on it. Type the words from the paper into a new file, derive the cold key into a separate directory and compare:
 
@@ -525,7 +525,8 @@ The same settings are available as flags (`--block-producer`, `--shelley-vrf-key
 Start from [Dingo with Docker](/guides/dingo/008-docker/), then mount the keys read-only and set the block-producer variables. The image runs as UID 1000.
 
 ```sh
-sudo chown 1000:1000 keys/*
+mkdir -p ipc
+sudo chown 1000:1000 ipc keys/*
 docker run -d --name dingo-bp \
   -p 3001:3001 \
   -v dingo-preview-data:/data/db \
@@ -539,7 +540,15 @@ docker run -d --name dingo-bp \
   ghcr.io/blinklabs-io/dingo:0.90.5
 ```
 
-The node socket is `ipc/dingo.socket` in the current directory: `SOCKET=$PWD/ipc/dingo.socket`. Until `node.cert` exists, leave out the `CARDANO_BLOCK_PRODUCER` and key variables.
+The node socket is `ipc/dingo.socket` in the current directory: `SOCKET=$PWD/ipc/dingo.socket`. Create `ipc` before the first run: if it does not exist, a rootful Docker daemon creates it owned by root, and Dingo, running as UID 1000, cannot create its socket there.
+
+Until `node.cert` exists, leave out the `CARDANO_BLOCK_PRODUCER` and key variables. After Step 5, replace that container with the producer: the name `dingo-bp` is still taken, so remove the old container first. The chain data stays in the `dingo-preview-data` volume.
+
+```sh
+docker rm -f dingo-bp
+```
+
+Then run the command above again with every variable set.
 
 ### Kubernetes
 
@@ -559,6 +568,24 @@ After Step 5, store the producer keys in a Secret:
 kubectl create namespace cardano
 kubectl create secret generic producer-pool-keys -n cardano \
   --from-file=vrf.skey --from-file=kes.skey --from-file=opcert.cert=node.cert
+```
+
+Create a relay for the producer to peer with. `topology.relayRefs` names relay DingoNodes in the producer's namespace; a local or Docker relay outside the cluster does not count:
+
+```yaml
+apiVersion: dingo.blinklabs.io/v1alpha1
+kind: DingoNode
+metadata:
+  name: relay
+  namespace: cardano
+spec:
+  role: relay
+  network: preview
+  storageMode: core
+  persistence:
+    size: 120Gi
+  mithril:
+    enabled: true
 ```
 
 Create the producer:
@@ -688,7 +715,7 @@ Then set the producer's rotation to `Auto`:
         coldKeyHash: <pool id hex>
 ```
 
-- `nodeToClient.enabled` lets the operator read the on-chain counter from the node.
+- `nodeToClient.enabled` lets the operator read the on-chain counter from the node. The NetworkPolicy the operator renders admits the node-to-client port only from pods labelled `dingo.blinklabs.io/node-to-client=allowed`, and from another namespace only when that namespace carries the label too. The chart labels the operator pod; label its namespace yourself: `kubectl label namespace dingo-operator-system dingo.blinklabs.io/node-to-client=allowed`.
 - `endpoint` must be an `https` URL.
 - `coldKeyHash` is the pool ID in hex, as `armory-pool keys` prints it. The operator refuses any other value.
 - `renewBeforePeriods` is how many KES periods before expiry the operator rotates.
