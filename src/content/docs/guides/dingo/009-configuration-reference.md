@@ -313,7 +313,7 @@ download locations.
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Artifact server port | `mithril.server.port` | `--mithril-server-port` | `DINGO_MITHRIL_SERVER_PORT` | `8081`. `dingo mithril serve` listens on this port and the root `bindAddr`. |
-| Public snapshot origin | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Required by `dingo mithril serve`. Set an absolute HTTP or HTTPS origin without credentials, a path, a query, or a fragment. |
+| Public snapshot origin | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Dingo requires this setting for `dingo mithril serve`. Set an absolute HTTP or HTTPS origin without credentials, a path, a query, or a fragment. |
 | Artifact store | `mithril.server.artifactStore` | `--mithril-server-artifact-store` | `DINGO_MITHRIL_SERVER_ARTIFACT_STORE` | Empty. Set a filesystem directory, `s3://bucket/prefix`, or `gcs://bucket/prefix`. The latter two require a build with `dingo_extra_plugins`. |
 | Redirect base URL | `mithril.server.redirectBaseUrl` | `--mithril-server-redirect-base-url` | `DINGO_MITHRIL_SERVER_REDIRECT_BASE_URL` | Empty. When set, archive requests redirect to this base URL plus the object key instead of streaming the object. Use it only when the remote objects are publicly readable. |
 | Snapshot retention | `mithril.server.keepSnapshots` | `--mithril-server-keep-snapshots` | `DINGO_MITHRIL_SERVER_KEEP_SNAPSHOTS` | `0` keeps every produced snapshot. A positive value retains that many newest snapshots. |
@@ -325,7 +325,7 @@ download locations.
 | STM lottery size | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | `0` until configured. Set a positive value when the aggregator is enabled. |
 | STM win probability | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | `0` until configured. Set a value greater than `0` and no greater than `1`. |
 | Aggregator genesis signing key | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | Required when the aggregator is enabled. Set an Ed25519 Mithril JSON hex key. |
-| Aggregator operator token | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Dingo accepts this legacy value for compatibility but ignores it; it has no effect. The setting is not required when the aggregator is enabled. |
+| Aggregator operator token | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Dingo accepts this legacy value for compatibility but ignores it; it has no effect. The aggregator does not require this setting. |
 
 ### SQLite metadata storage validation
 
@@ -437,15 +437,14 @@ expose it on another interface.
 | Setting | YAML key | CLI flag | Environment variable | Default and requirements |
 | --- | --- | --- | --- | --- |
 | Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`. TLS certificate and key files are optional. |
-| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Dingo accepts legacy values for compatibility but ignores them; they have no effect. The values are not required for lifecycle requests. |
+| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Dingo accepts legacy values for compatibility but ignores them; they have no effect. Lifecycle requests do not require these values. |
 | Private or special-use addresses for block downloads | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. When `true`, Dingo permits private or special-use resolved addresses for Bark block-download destinations. Dingo still checks the origin allowlist, requires HTTPS, validates redirects, and disables proxy use. This setting affects block downloads only, not Bark RPC traffic. |
 
 Bark accepts `GetStatus`, `Stop`, and `Restart` without client certificates or
-operator allowlists over plaintext HTTP. Configured `barkClientCaFilePath` and
-`barkLifecycleOperatorCertificateFingerprints` values are legacy inputs that
-Bark ignores. DatabaseService operator credentials remain separate and do not
-grant lifecycle access. `Restart` is available on Unix platforms; other
-platforms return an unsupported operation error.
+operator allowlists over plaintext HTTP. Bark ignores configured
+`barkClientCaFilePath` values. DatabaseService operator credentials remain
+separate and do not grant lifecycle access. `Restart` is available on Unix
+platforms; other platforms return an unsupported operation error.
 
 ### Bark archive lookup budgets
 
