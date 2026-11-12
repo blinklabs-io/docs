@@ -577,12 +577,12 @@ preserves `@`-prefixed abstract addresses, rejects literal NUL-prefixed
 addresses at client construction, and enforces platform socket-length limits.
 
 Remote KES agent settings use a host and port instead of the local agent
-socket. The remote address selects sign mode and cannot be combined with a
-local `shelleyKesKey` or `shelleyKesAgentSocket`.
+socket. The address selects sign mode; remote operation cannot use `serve-key`
+mode or a local `shelleyKesKey` or `shelleyKesAgentSocket`.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation/behavior |
 | --- | --- | --- | --- | --- |
-| Remote agent address | `shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `CARDANO_SHELLEY_KES_AGENT_ADDRESS` | Empty. Set a `host:port` address with a port from `1` through `65535`. The address selects remote sign mode; remote operation cannot use `serve-key` mode. Every other remote setting requires this address. |
+| Remote agent address | `shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `CARDANO_SHELLEY_KES_AGENT_ADDRESS` | Empty. Set a `host:port` address with a port from `1` through `65535`. Every other remote setting requires this address. |
 | TLS client certificate | `shelleyKesAgentClientCertFile` | `--shelley-kes-agent-client-cert-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | Empty. Optional PEM certificate for TLS client authentication. Set it together with `shelleyKesAgentClientKeyFile`; plaintext transport cannot use either file. |
 | TLS client key | `shelleyKesAgentClientKeyFile` | `--shelley-kes-agent-client-key-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | Empty. Optional PEM private key for the TLS client certificate. Set it together with `shelleyKesAgentClientCertFile`; plaintext transport cannot use either file. |
 | TLS server SPKI SHA-256 pin | `shelleyKesAgentServerSpkiSha256` | `--shelley-kes-agent-server-spki-sha256` | `CARDANO_SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | Empty. Optional 64-character hexadecimal pin for the remote TLS server key. Without a pin, Dingo verifies the server certificate against the system trust store and the address hostname. Plaintext transport cannot use the pin. |
