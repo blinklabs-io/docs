@@ -63,14 +63,7 @@ Prometheus necesita conocer la ubicación del nodo Dingo. Añade lo siguiente ba
     - targets: ['localhost:9100']
 ```
 
-Establece el token en el YAML de Dingo mediante `metricsAuthToken` o `DINGO_METRICS_AUTH_TOKEN`; Dingo no proporciona una opción CLI para este secreto. Añade lo siguiente al trabajo de recopilación `dingo`:
-
-```yaml
-  authorization:
-    credentials_file: /run/secrets/dingo-metrics-token
-```
-
-`credentials_file` debe contener únicamente el valor del token configurado, sin el prefijo literal `Bearer `. El mismo token protege las métricas de Mithril, así que utiliza la misma configuración de credenciales de Prometheus para recopilarlas. El servicio utiliza HTTP sin cifrar; protege el tráfico remoto del token con un proxy inverso TLS o un túnel cifrado y autenticado.
+El servicio utiliza HTTP sin cifrar; protege la exposición remota con controles de red.
 
 Vuelve a cargar Prometheus para aplicar los cambios:
 
