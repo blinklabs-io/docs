@@ -5,10 +5,10 @@ description: Run the published Dingo image, persist its data, and check node hea
 
 Dingo publishes container images to GitHub Container Registry. The versioned
   image tag omits the leading `v` from the matching Dingo release tag. This
-  example uses Dingo `v0.91.0`:
+  example uses Dingo `v0.92.4`:
 
 ```sh
-  docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+  docker pull ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
 ## Start a Preview node
@@ -24,7 +24,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.91.0
+    ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
 Port `3001` accepts Ouroboros node-to-node connections. Metrics on `12798` and
@@ -46,7 +46,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.91.0 \
+     ghcr.io/blinklabs-io/dingo:0.92.4 \
   --config /tmp/dingo.yaml serve
 ```
 
@@ -65,20 +65,34 @@ separate host bind mount, set that host directory's ownership to UID:GID
 `1000:1000` and prepare it before starting Dingo. Otherwise, Dingo fails
 startup with a writability or permission error.
 
-### Protect published metrics
+### Configure published metrics
 
-Add the following option to the `docker run` command to require a Bearer token
-for the node and Mithril metrics endpoints:
+The node and Mithril metrics endpoints accept anonymous requests. Metrics remain
+on container loopback by default. To make node metrics reachable from the host,
+set `DINGO_METRICS_BIND_ADDR=0.0.0.0` and publish the metrics port as shown in
+the example above.
+
+The metrics endpoints use plain HTTP. Apply network-level controls when
+exposing them beyond a trusted network.
+
+### Append to an existing log file
+
+Set `DINGO_LOG_FILE` together with `DINGO_LOG_FILE_APPEND=true` to reuse a log
+file across container restarts:
 
 ```sh
---env DINGO_METRICS_AUTH_TOKEN='replace-with-secret' \
+docker run --detach --name dingo-logged \
+  --env DINGO_LOG_FILE=/tmp/dingo.log \
+  --env DINGO_LOG_FILE_APPEND=true \
+  ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
-Configure Prometheus with `authorization.credentials_file` containing the same
-token. See the [Grafana dashboards guide](/guides/dingo/spo-guides/008-grafana-dashboard/)
-for the Prometheus configuration. The token-protected listener still uses
-plain HTTP, so remote transport requires a TLS reverse proxy or an
-authenticated encrypted tunnel.
+Append mode activates only when `DINGO_LOG_FILE_APPEND` equals the exact string
+`true`. Dingo appends to an existing regular file, creates the file when it is
+missing, preserves existing permissions, and inserts a newline before new
+output when the final line has no newline. Dingo rejects symlinks and
+non-regular files. When `DINGO_LOG_FILE_APPEND` is unset or has any other
+value, `DINGO_LOG_FILE` must name a new file.
 
 ## Check and manage the container
 
