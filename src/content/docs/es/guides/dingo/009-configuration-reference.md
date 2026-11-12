@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.91.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.91.0.
+title: "Referencia de configuración de Dingo v0.93.0"
+description: Referencia y ejemplo completo de configuración de Dingo v0.93.0.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.91.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.91.0](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.93.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.93.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.93.0](https://github.com/blinklabs-io/dingo/blob/v0.93.0/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -363,13 +363,28 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.91.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.93.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
 #### Socket del agente KES de Shelley
 
 La opción `--shelley-kes-agent-socket` admite rutas de sockets del sistema de archivos y direcciones abstractas de Linux. Dingo resuelve las rutas relativas una vez al construir el cliente y reutiliza la ruta resuelta al reconectar. Conserva las direcciones abstractas con prefijo `@`, rechaza las direcciones literales con prefijo NUL al construir el cliente y aplica los límites de longitud de sockets de la plataforma.
+
+#### Agente KES remoto y recarga de credenciales
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
+| --- | --- | --- | --- | --- | --- |
+| Dirección del agente KES remoto | `shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `CARDANO_SHELLEY_KES_AGENT_ADDRESS` | Vacía | Configura una dirección `host:port` para seleccionar el agente remoto e implica el modo `sign`. Las demás opciones remotas requieren esta dirección. No la combines con `shelleyKesKey` ni con `shelleyKesAgentSocket`. |
+| Archivo del certificado de cliente | `shelleyKesAgentClientCertFile` | `--shelley-kes-agent-client-cert-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | Vacío | Configura un archivo PEM opcional para el certificado TLS de cliente. Dingo exige también `shelleyKesAgentClientKeyFile`. Dingo exige `shelleyKesAgentAddress`. |
+| Archivo de la clave de cliente | `shelleyKesAgentClientKeyFile` | `--shelley-kes-agent-client-key-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | Vacío | Configura un archivo PEM opcional para la clave TLS de cliente. Dingo exige también `shelleyKesAgentClientCertFile`. Dingo exige `shelleyKesAgentAddress`. |
+| Fijación SPKI SHA-256 del servidor | `shelleyKesAgentServerSpkiSha256` | `--shelley-kes-agent-server-spki-sha256` | `CARDANO_SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | Vacía | Configura opcionalmente la fijación TLS de la clave pública del servidor con `64` caracteres hexadecimales. Dingo exige `shelleyKesAgentAddress`. No combines este ajuste con `shelleyKesAgentPlaintext`. |
+| Conexión de texto sin cifrar | `shelleyKesAgentPlaintext` | `--shelley-kes-agent-plaintext` | `CARDANO_SHELLEY_KES_AGENT_PLAINTEXT` | `false` | Selecciona TCP sin cifrar. Requiere `shelleyKesAgentAddress`. No combines este ajuste con `shelleyKesAgentServerSpkiSha256`, el certificado TLS ni la clave TLS de cliente. El agente remoto solo admite el modo `sign`. |
+| Intervalo de observación de claves de Shelley | `shelleyKeyWatchInterval` | `--shelley-key-watch-interval` | `CARDANO_SHELLEY_KEY_WATCH_INTERVAL` | `0`, desactivado | Configura un valor distinto de cero de al menos `1s`. Dingo observa los archivos de credenciales y los recarga en su lugar con archivos de claves locales o con un agente KES en modo `sign`. En modo `serve-key`, Dingo ignora el ajuste y registra una advertencia. |
+
+Con una dirección remota, Dingo utiliza TLS 1.3 de forma predeterminada. La fijación del servidor y el certificado y la clave PEM del cliente son opcionales; Dingo verifica el certificado del servidor cuando la configuración no incluye la fijación y exige el par completo de credenciales del cliente cuando la configuración incluye una de ellas. `shelleyKesAgentPlaintext` selecciona la alternativa TCP sin cifrar y no admite esos ajustes TLS.
+
+Con `shelleyKeyWatchInterval`, Dingo espera dos sondeos consecutivos con el mismo cambio antes de aplicarlo. `SIGHUP` también inicia una recarga, y una oferta de certificado operativo más reciente de un agente remoto inicia la recarga en modo `sign`. Dingo valida las nuevas credenciales antes de sustituir las activas; si cambia la clave VRF, Dingo exige reiniciar el nodo. Si falla una recarga de archivos, Dingo conserva el cambio pendiente y reintenta la recarga en el siguiente sondeo.
 
 ### Proveedor Kupo
 
