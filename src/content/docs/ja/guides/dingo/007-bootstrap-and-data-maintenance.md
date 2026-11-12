@@ -30,7 +30,7 @@ dingo mithril snapshot create --db-dir <cardano-node db>
 dingo mithril serve --config ./dingo.yaml
 ```
 
-作成や配信の前に `mithril.server.artifactStore` を設定します。`mithril.server.publicBaseUrl` には、認証情報、パス、クエリ、フラグメントを含まない有効な絶対 `http://` または `https://` オリジンを指定します。配信ポートは `mithril.server.port` です。サーバーはアーティファクトの読み取りを公開し、クライアントは HTTP Range リクエストでダウンロードできます。
+作成や配信の前に `mithril.server.artifactStore` を設定します。`mithril.server.publicBaseUrl` には、認証情報、パス、クエリ、フラグメントを含まない有効な絶対オリジンを指定し、スキームには `http://` または `https://` を使用します。配信ポートは `mithril.server.port` です。サーバーはアーティファクトの読み取りを公開し、クライアントは HTTP Range リクエストでダウンロードできます。
 
 公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)を参照してください。
 
