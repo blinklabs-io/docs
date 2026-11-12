@@ -590,11 +590,10 @@ mode or a local `shelleyKesKey` or `shelleyKesAgentSocket`.
 | Credential file watch interval | `shelleyKeyWatchInterval` | `--shelley-key-watch-interval` | `CARDANO_SHELLEY_KEY_WATCH_INTERVAL` | `0` disables polling. A nonzero duration must be at least `1s`. Polling applies to local credential files and KES agent sign mode; Dingo ignores it and logs a warning in serve-key mode. |
 
 Sign mode can also reload credentials in place after `SIGHUP` or when a remote
-agent offers a newer operational certificate. File polling waits for the file
-material to remain stable for two polls before attempting a reload. Dingo
-validates the credentials before installing them, retries a failed file change
-on the next poll, and rejects a changed VRF identity because that requires a
-restart.
+agent offers a newer operational certificate. File polling waits for two
+consecutive stable observations before attempting a reload. Dingo validates
+the credentials before installing them. A failed file reload remains pending
+and retries on the next poll; a changed VRF identity requires a restart.
 
 ### Kupo provider
 
