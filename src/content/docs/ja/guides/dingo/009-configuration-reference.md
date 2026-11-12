@@ -113,7 +113,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
 | メトリクスのバインドアドレス | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`。`bindAddr` とは独立しており、既定ではループバックです。スクレーパーがコンテナまたはホストの外で動作する場合は、ワイルドカードまたはリモートから到達できるアドレスを明示的に設定します。 |
-| メトリクスの認証トークン | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | 既定では空です。プロセス引数が他のユーザーに見える可能性があるため、CLI フラグはありません。設定しても無視され、効果はありません。ノードと Mithril のメトリクスエンドポイントは認証なしでアクセスできます。 |
+| メトリクスの認証トークン | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | 既定では空です。プロセス引数が他のユーザーに見える可能性があるため、CLI フラグはありません。Dingo は設定値を認証に使用せず、効果を持ちません。 |
 | メトリクスポート | `metricsPort` | `--metrics-port` | — | 既定値は `12798` です。`0` にすると Prometheus リスナーが無効になります。 |
 
 メトリクスエンドポイントは認証なしでアクセスできます。
@@ -195,12 +195,12 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 
 ### Blockfrost プロバイダー
 
-組み込みの Blockfrost プロバイダーは、既定でループバックで待ち受けます。読み取り専用 API リクエストには Blockfrost の変更操作の受け入れ制限は適用されず、API リクエストは認証なしでアクセスできます。
+組み込みの Blockfrost プロバイダーは、既定でループバックで待ち受けます。読み取り専用 API リクエストには Blockfrost の変更操作の受け入れ制限は適用されません。Dingo は API リクエストに認証を要求しません。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
 | ホスト | `plugins.api.blockfrost.config.host` | — | — | 既定値は `127.0.0.1` です。明示的に空にするとルートの `bindAddr` を使用します。別のインターフェイスで公開するにはホストを設定します。 |
-| 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、無視され、効果はありません。トランザクションの送信と評価に必要ありません。 |
+| 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。トランザクションの送信と評価に必要ありません。 |
 | 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | 既定値は `4` です。正の値が必要で、プロバイダー全体のトランザクション送信と評価を制限します。 |
 | クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | 既定値は `1` です。正の値かつ `maxConcurrentMutations` 以下である必要があり、1 つのリモートアドレスからの処理を制限します。 |
 
@@ -271,7 +271,7 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | STM 抽選数 | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | 設定されるまでは `0` です。アグリゲーターを有効にする場合は正の値を指定します。 |
 | STM 当選確率 | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | 設定されるまでは `0` です。`0` より大きく `1` 以下の値を指定します。 |
 | アグリゲーターのジェネシス署名鍵 | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | アグリゲーターを有効にする場合は必須です。Ed25519 Mithril JSON hex 鍵を指定します。 |
-| アグリゲーターのオペレータートークン | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | 既定では空です。アグリゲーターを有効にする場合も不要です。設定しても従来互換のため受け付けますが、無視され、効果はありません。 |
+| アグリゲーターのオペレータートークン | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | 既定では空です。アグリゲーターを有効にする場合も不要です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。 |
 
 <a id="sqlite-metadata-storage-validation"></a>
 
@@ -356,10 +356,10 @@ Bark のリモートライフサイクルサービスは既定で無効です。
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と要件 |
 | --- | --- | --- | --- | --- |
 | ライフサイクルサービスの有効化 | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`。有効にするには、0 以外の `barkPort` が必要です。`barkClientCaFilePath`、`tlsCertFilePath`、`tlsKeyFilePath`、`barkLifecycleOperatorCertificateFingerprints` は不要です。サーバー TLS の証明書と鍵は任意で設定できます。 |
-| ライフサイクルオペレーターの証明書 | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | 既定では空です。設定しても従来互換のため受け付けますが、無視され、効果はありません。 |
+| ライフサイクルオペレーターの証明書 | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用しません。 |
 | ブロックダウンロードのプライベートまたは特殊用途アドレス | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`。`true` にすると、Bark のブロックダウンロード先で、名前解決後のプライベートまたは特殊用途アドレスを許可します。オリジン許可リスト、HTTPS 要件、リダイレクト検証、プロキシ無効化は維持されます。ブロックダウンロードにのみ影響し、Bark RPC 通信には影響しません。 |
 
-`GetStatus`、`Stop`、`Restart` は、認証情報やクライアント証明書なしの平文 HTTP リクエストを受け付けます。`barkClientCaFilePath` とライフサイクルの証明書フィンガープリントは従来の入力として受け付けますが、無視され、効果はありません。DatabaseService のオペレーター認証情報は独立しており、ライフサイクルアクセスを認可しません。`Restart` は Unix で使用でき、それ以外では未対応操作のエラーを返します。
+`GetStatus`、`Stop`、`Restart` は、認証情報やクライアント証明書なしの平文 HTTP リクエストを受け付けます。`barkClientCaFilePath` は従来の入力として受け付けますが、Dingo は認証に使用しません。DatabaseService のオペレーター認証情報は独立しており、ライフサイクルアクセスを認可しません。`Restart` は Unix で使用でき、それ以外では未対応操作のエラーを返します。
 
 <a id="bark-archive-lookup-budgets"></a>
 
