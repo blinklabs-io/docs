@@ -60,7 +60,7 @@ docker run --detach --name dingo-custom \
 
 ## ログファイルへの追記
 
-既存のログファイルに追記するには、`DINGO_LOG_FILE` と `DINGO_LOG_FILE_APPEND=true` を設定します。`DINGO_LOG_FILE_APPEND` は、値が完全に `true` の場合にだけ有効です。
+既存のログファイルに追記するには、`DINGO_LOG_FILE` と `DINGO_LOG_FILE_APPEND=true` を設定します。`DINGO_LOG_FILE_APPEND` は、値が `true` と完全に一致する場合にだけ有効です。
 
 ```sh
 docker run --detach --name dingo-preview \
