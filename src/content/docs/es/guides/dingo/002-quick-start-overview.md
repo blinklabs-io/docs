@@ -96,7 +96,7 @@ Al reanudar una devnet persistente sin `--reset`, Dingo solo restaura o actualiz
 
 Consulta la [referencia de configuración](/es/guides/dingo/009-configuration-reference/) para conocer todos los ajustes, valores predeterminados y sustituciones mediante entorno o línea de comandos de Dingo v0.92.4. Descarga el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) de esa versión como punto de partida.
 
-Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod, mainnet, DijkstraNet y `prime-mainnet`. Selecciona DijkstraNet con la opción de red `dijkstra`; DijkstraNet utiliza la magia de red `6`. Para usar `prime-mainnet`, establece `network: "prime-mainnet"` en `dingo.yaml`. No necesitas descargarlas por separado.
+Dingo incorpora las configuraciones de red de Cardano, incluidos los archivos de génesis y config.json, para preview, preprod, mainnet, DijkstraNet y `prime-mainnet`. Selecciona DijkstraNet con la opción de red `dijkstra`; DijkstraNet utiliza la magia de red `6`. Para seleccionar `prime-mainnet`, configura `network: "prime-mainnet"` en `dingo.yaml`. No necesitas descargarlas por separado.
 
 Crea `dingo.yaml` en el directorio de Dingo. `$HOME` se expande automáticamente a tu directorio personal:
 
