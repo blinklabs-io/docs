@@ -557,7 +557,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.91.0 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.93.0 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
