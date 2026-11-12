@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.91.0 Configuration Reference
-description: Complete, release-specific Dingo v0.91.0 configuration reference and example.
+title: Dingo v0.93.0 Configuration Reference
+description: Complete, release-specific Dingo v0.93.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.91.0. The complete
+This page covers the configuration shipped with Dingo v0.93.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.91.0 source](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.93.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.93.0 source](https://github.com/blinklabs-io/dingo/blob/v0.93.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -575,6 +575,26 @@ Linux abstract socket addresses. Dingo resolves a relative filesystem path
 once at client construction and reuses the resolved path across reconnects. It
 preserves `@`-prefixed abstract addresses, rejects literal NUL-prefixed
 addresses at client construction, and enforces platform socket-length limits.
+
+Remote KES agent settings use a host and port instead of the local agent
+socket. The remote address selects sign mode and cannot be combined with a
+local `shelleyKesKey` or `shelleyKesAgentSocket`.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation/behavior |
+| --- | --- | --- | --- | --- |
+| Remote agent address | `shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `CARDANO_SHELLEY_KES_AGENT_ADDRESS` | Empty. Set a `host:port` address with a port from `1` through `65535`. The address selects remote sign mode; remote operation cannot use `serve-key` mode. Every other remote setting requires this address. |
+| TLS client certificate | `shelleyKesAgentClientCertFile` | `--shelley-kes-agent-client-cert-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | Empty. Optional PEM certificate for TLS client authentication. Set it together with `shelleyKesAgentClientKeyFile`; plaintext transport cannot use either file. |
+| TLS client key | `shelleyKesAgentClientKeyFile` | `--shelley-kes-agent-client-key-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | Empty. Optional PEM private key for the TLS client certificate. Set it together with `shelleyKesAgentClientCertFile`; plaintext transport cannot use either file. |
+| TLS server SPKI SHA-256 pin | `shelleyKesAgentServerSpkiSha256` | `--shelley-kes-agent-server-spki-sha256` | `CARDANO_SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | Empty. Optional 64-character hexadecimal pin for the remote TLS server key. Without a pin, Dingo verifies the server certificate against the system trust store and the address hostname. Plaintext transport cannot use the pin. |
+| Plaintext remote transport | `shelleyKesAgentPlaintext` | `--shelley-kes-agent-plaintext` | `CARDANO_SHELLEY_KES_AGENT_PLAINTEXT` | `false`. Selects plain TCP instead of the default TLS 1.3 transport. Do not combine it with the TLS pin or client certificate and key; use it only when another layer secures the link. |
+| Credential file watch interval | `shelleyKeyWatchInterval` | `--shelley-key-watch-interval` | `CARDANO_SHELLEY_KEY_WATCH_INTERVAL` | `0` disables polling. A nonzero duration must be at least `1s`. Polling applies to local credential files and KES agent sign mode; Dingo ignores it and logs a warning in serve-key mode. |
+
+Sign mode can also reload credentials in place after `SIGHUP` or when a remote
+agent offers a newer operational certificate. File polling waits for the file
+material to remain stable for two polls before attempting a reload. Dingo
+validates the credentials before installing them, retries a failed file change
+on the next poll, and rejects a changed VRF identity because that requires a
+restart.
 
 ### Kupo provider
 
