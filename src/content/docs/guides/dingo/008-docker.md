@@ -67,10 +67,9 @@ startup with a writability or permission error.
 
 ### Configure published metrics
 
-The node and Mithril metrics endpoints accept anonymous requests. Metrics remain
-on container loopback by default. To make node metrics reachable from the host,
-set `DINGO_METRICS_BIND_ADDR=0.0.0.0` and publish the metrics port as shown in
-the example above.
+The node and Mithril metrics endpoints accept anonymous requests. Keep the
+bind address and host port mapping shown above when metrics should remain
+reachable only from the host.
 
 The metrics endpoints use plain HTTP. Apply network-level controls when
 exposing them beyond a trusted network.
