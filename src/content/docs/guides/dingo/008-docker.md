@@ -8,7 +8,7 @@ Dingo publishes container images to GitHub Container Registry. The versioned
   example uses Dingo `v0.93.0`:
 
 ```sh
-  docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+  docker pull ghcr.io/blinklabs-io/dingo:0.93.0
 ```
 
 ## Start a Preview node
