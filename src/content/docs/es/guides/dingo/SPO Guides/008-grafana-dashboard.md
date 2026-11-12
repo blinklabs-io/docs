@@ -63,7 +63,7 @@ Prometheus necesita conocer la ubicación del nodo Dingo. Añade lo siguiente ba
     - targets: ['localhost:9100']
 ```
 
-El servicio utiliza HTTP sin cifrar; protege la exposición remota con controles de red.
+El servicio utiliza HTTP sin cifrar; protege la exposición remota mediante controles de red.
 
 Vuelve a cargar Prometheus para aplicar los cambios:
 
