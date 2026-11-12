@@ -106,10 +106,10 @@ When token authentication is enabled for a provider, send
 `Authorization: Bearer <token>`. UTxO RPC's HTTP and Connect/gRPC routes use
 the bearer token as well.
 
-Authentication applies to every route on that listener, including health
-checks. Configure a probe to send the token or use a TCP check when the probe
-cannot attach credentials. Dingo rejects incomplete TLS certificate/key pairs
-at startup and does not log token or key contents.
+For providers that use token authentication, it applies to every route on that
+listener, including health checks. Configure a probe to send the token or use
+a TCP check when the probe cannot attach credentials. Dingo rejects incomplete
+TLS certificate/key pairs at startup and does not log token or key contents.
 
 You can also put API listeners behind a reverse proxy or API gateway. Choose
 one place to terminate TLS and authenticate requests, and configure Dingo's
