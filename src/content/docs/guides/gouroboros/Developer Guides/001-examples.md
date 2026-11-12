@@ -22,7 +22,7 @@ with corrections listed in the bundle README.
 | [tx-monitor](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples/tx-monitor) | Monitor transactions in the node's local mempool. |
 | [tx-submission](https://github.com/blinklabs-io/gouroboros/tree/v0.211.0/examples/tx-submission) | Submit a transaction to a local node. |
 
-The examples are Go programs in the gOuroboros module and require Go 1.26.5 or
+The examples are Go programs in the gOuroboros module and require Go 1.26.11 or
 newer. After extracting the download, follow its README to copy the corrected
 examples into the matching v0.211.0 module, run the tests, and configure a node
 connection. Follow the environment and connection settings in each source
