@@ -67,9 +67,9 @@ startup with a writability or permission error.
 
 ### Configure published metrics
 
-The node and Mithril metrics endpoints accept anonymous requests. Keep the
-bind address and host port mapping shown above when metrics should remain
-reachable only from the host.
+The node and Mithril metrics endpoints accept anonymous requests. Use the bind
+address and host port mapping shown above to keep metrics reachable only from
+the host.
 
 The metrics endpoints use plain HTTP. Apply network-level controls when
 exposing them beyond a trusted network.
