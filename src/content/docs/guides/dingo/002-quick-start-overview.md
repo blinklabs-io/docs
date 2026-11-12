@@ -142,7 +142,13 @@ overrides, see the [configuration reference](/guides/dingo/009-configuration-ref
 Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)
 to use as a starting point for your own settings.
 
-Dingo ships with embedded Cardano network configurations for `preview`, `preprod`, `mainnet`, DijkstraNet (`dijkstra`), and `prime-mainnet`. You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`. Set `network: "prime-mainnet"` to select Prime Mainnet.
+Dingo ships with embedded Cardano network configurations for `preview`, `preprod`, `mainnet`, DijkstraNet (`dijkstra`), and `prime-mainnet`. You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
+
+Set the network value as follows to select Prime Mainnet:
+
+```yaml
+network: "prime-mainnet"
+```
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
