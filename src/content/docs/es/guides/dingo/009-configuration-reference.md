@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.91.0"
-description: Referencia y ejemplo completo de configuración de Dingo v0.91.0.
+title: "Referencia de configuración de Dingo v0.92.4"
+description: Referencia y ejemplo completo de configuración de Dingo v0.92.4.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.91.0. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.91.0](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.92.4. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.92.4](https://github.com/blinklabs-io/dingo/blob/v0.92.4/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -87,10 +87,10 @@ Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Dirección de escucha de métricas | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. Es independiente de `bindAddr` y utiliza loopback de forma predeterminada. Establece explícitamente una dirección comodín o accesible remotamente si el recopilador está fuera del contenedor o del host. |
-| Token de autenticación de métricas | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Vacío de forma predeterminada, sin autenticación. No existe opción CLI porque otros usuarios pueden ver los argumentos del proceso. Si se configura, los clientes deben enviar `Authorization: Bearer <token>` tanto a las métricas del nodo como a las de Mithril. |
+| Token de autenticación de métricas | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Entrada heredada que Dingo ignora y que no tiene efecto. Los extremos de métricas aceptan solicitudes anónimas y no requieren token, `Authorization: Bearer` ni TLS. |
 | Puerto de métricas | `metricsPort` | `--metrics-port` | — | `12798` de forma predeterminada. `0` desactiva el servicio Prometheus. |
 
-El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un proxy inverso TLS o un túnel cifrado y autenticado cuando el tráfico atraviese una red que no sea de confianza.
+El servicio de métricas utiliza HTTP sin cifrar y acepta solicitudes anónimas. Aplica controles de red cuando el tráfico atraviesa una red que no sea de confianza.
 
 ### Trazas
 
@@ -158,16 +158,16 @@ Configura explícitamente el host cuando el proveedor deba aceptar conexiones UT
 
 ### Proveedor Blockfrost
 
-El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada. Las solicitudes de solo lectura no están sujetas a los límites de admisión de modificaciones, aunque puede aplicarse la autenticación compartida de API si está configurada.
+El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada. Las solicitudes de solo lectura no están sujetas a los límites de admisión de modificaciones.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` de forma predeterminada. Un valor explícitamente vacío utiliza el `bindAddr` raíz. Configura un host para exponer el proveedor en otra interfaz. |
-| Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Vacío de forma predeterminada. El envío y la evaluación de transacciones requieren este token en `project_id`, `X-Blockfrost-Project-Id` o `Authorization: Bearer <token>`. Las credenciales ausentes o no válidas devuelven HTTP `401`. |
+| Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Entrada heredada que Dingo ignora y que no tiene efecto; no es obligatoria. El envío y la evaluación de transacciones aceptan solicitudes anónimas. |
 | Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` de forma predeterminada. Debe ser positivo y limita el envío y la evaluación de transacciones en todo el proveedor. |
 | Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` de forma predeterminada. Debe ser positivo y no superar `maxConcurrentMutations`; limita el trabajo de una dirección remota. |
 
-Cuando `authToken` está configurado y el proveedor escucha fuera de loopback, configura TLS de servidor mediante `plugins.api.blockfrost.config.tls`. Dingo rechaza el inicio del acceso autenticado de modificación sin TLS. Tras autenticar y antes de leer el cuerpo, aplica ambos límites de modificaciones. Si alguno se agota, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
+Dingo no exige TLS para el acceso de modificación de Blockfrost. Antes de leer el cuerpo, aplica ambos límites de modificaciones. Si alguno se agota, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
 
 ### Agente de usuario HTTP saliente compartido
 
@@ -207,12 +207,12 @@ Cuando `mithril.downloadMaxBytes` es `0`, Dingo utiliza estos límites integrado
 
 ### Servidor de artefactos Mithril
 
-Los ajustes de `mithril.server` controlan `dingo mithril snapshot create` y `dingo mithril serve`. La lectura de los artefactos de instantáneas es pública. El registro de firmantes y el cierre del registro del agregador requieren el token Bearer de `mithril.server.aggregator.operatorTokenFile`. El agregador requiere TLS si escucha fuera de loopback. Establece `mithril.server.publicBaseUrl` en el origen público de las descargas; exige HTTPS salvo para un origen HTTP de loopback.
+Los ajustes de `mithril.server` controlan `dingo mithril snapshot create` y `dingo mithril serve`. La lectura de los artefactos de instantáneas es pública. El registro de firmantes y el cierre del registro del agregador aceptan solicitudes anónimas. Dingo conserva `mithril.server.aggregator.operatorTokenFile` y sus entradas CLI y de entorno por compatibilidad, pero ignora sus valores y no exige el token. El agregador no exige TLS. Establece `mithril.server.publicBaseUrl` en el origen público de las descargas.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Puerto del servidor de artefactos | `mithril.server.port` | `--mithril-server-port` | `DINGO_MITHRIL_SERVER_PORT` | `8081`. `dingo mithril serve` escucha en este puerto y en el `bindAddr` raíz. |
-| Origen público de las instantáneas | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Obligatorio para `dingo mithril serve`. Debe ser un origen sin credenciales, ruta, consulta ni fragmento. Requiere HTTPS salvo para HTTP de loopback. |
+| Origen público de las instantáneas | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Obligatorio para `dingo mithril serve`. Acepta un origen absoluto HTTP o HTTPS sin credenciales, ruta, consulta ni fragmento. |
 | Almacén de artefactos | `mithril.server.artifactStore` | `--mithril-server-artifact-store` | `DINGO_MITHRIL_SERVER_ARTIFACT_STORE` | Vacío. Configura un directorio, `s3://bucket/prefix` o `gcs://bucket/prefix`. Los dos últimos requieren una compilación con `dingo_extra_plugins`. |
 | URL base de redirección | `mithril.server.redirectBaseUrl` | `--mithril-server-redirect-base-url` | `DINGO_MITHRIL_SERVER_REDIRECT_BASE_URL` | Vacía. Si se configura, las solicitudes de archivos se redirigen a esta URL base más la clave del objeto, en lugar de transmitir el objeto. Úsala solo si los objetos remotos son públicos. |
 | Retención de instantáneas | `mithril.server.keepSnapshots` | `--mithril-server-keep-snapshots` | `DINGO_MITHRIL_SERVER_KEEP_SNAPSHOTS` | `0` conserva todas las instantáneas producidas. Un valor positivo conserva esa cantidad de las más recientes. |
@@ -224,7 +224,7 @@ Los ajustes de `mithril.server` controlan `dingo mithril snapshot create` y `din
 | Tamaño de la lotería STM | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | `0` hasta configurarlo. Debe ser positivo si el agregador está activo. |
 | Probabilidad de victoria STM | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | `0` hasta configurarlo. Debe ser mayor que `0` y menor o igual que `1`. |
 | Clave de firma de génesis del agregador | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | Obligatoria si el agregador está activo. Configura una clave Ed25519 de Mithril en formato JSON hexadecimal. |
-| Token del operador del agregador | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Obligatorio si el agregador está activo. Configura un archivo con al menos 32 bytes aleatorios. |
+| Token del operador del agregador | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Entrada heredada que Dingo ignora y que no tiene efecto. No es obligatoria y no requiere un archivo con un token. |
 
 ### Validación del almacenamiento de metadatos SQLite
 
@@ -294,11 +294,11 @@ El servicio remoto de ciclo de vida de Bark está desactivado de forma predeterm
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y requisitos |
 | --- | --- | --- | --- | --- |
-| Activar el servicio de ciclo de vida | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Requiere `barkPort` distinto de cero, `barkClientCaFilePath`, `tlsCertFilePath`, `tlsKeyFilePath` y al menos un valor en `barkLifecycleOperatorCertificateFingerprints`. |
-| Certificados de operadores de ciclo de vida | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Vacío de forma predeterminada. Cada valor es la huella SHA-256 hexadecimal de los bytes DER del certificado de cliente; admite dos puntos e ignora mayúsculas y minúsculas. Estas credenciales solo autorizan `Stop` y `Restart`. |
+| Activar el servicio de ciclo de vida | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Requiere `barkPort` distinto de cero. |
+| Certificados de operadores de ciclo de vida | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Entrada heredada que Dingo ignora y que no tiene efecto. No se requieren huellas de certificados para el ciclo de vida. |
 | Direcciones privadas o especiales para descargas | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. Con `true`, permite direcciones resueltas privadas o de uso especial para las descargas de bloques Bark. Mantiene la lista de orígenes permitidos, HTTPS, la validación de redirecciones y la desactivación de proxies. Solo afecta a las descargas, no al tráfico RPC. |
 
-Todas las operaciones de ciclo de vida requieren un certificado de cliente verificado con `barkClientCaFilePath`. `Stop` y `Restart` también requieren una huella coincidente de la lista de operadores. `GetStatus` requiere mTLS, pero no pertenecer a esa lista. Las credenciales de operadores de DatabaseService son independientes y no conceden acceso al ciclo de vida. `Restart` está disponible en Unix; las demás plataformas devuelven un error de operación no admitida.
+`GetStatus`, `Stop` y `Restart` aceptan solicitudes HTTP anónimas sin cifrar. Dingo ignora las entradas heredadas `barkClientCaFilePath`, `barkOperatorCertificateFingerprints` y `barkLifecycleOperatorCertificateFingerprints`; no requiere certificados de cliente, certificados ni claves de servidor, ni huellas de operadores para estas operaciones. `Restart` está disponible únicamente en Unix; las demás plataformas devuelven un error de operación no admitida.
 
 ### Presupuestos de consulta de archivos Bark
 
@@ -363,7 +363,7 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.91.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.92.4 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
