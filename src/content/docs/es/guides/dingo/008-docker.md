@@ -57,7 +57,7 @@ Las rutas de `snapshotDir` bajo `/data/db` ya están preparadas para `UID:GID 10
 
 Los extremos de métricas del nodo y de Mithril aceptan solicitudes anónimas. No configures `DINGO_METRICS_AUTH_TOKEN` ni credenciales Bearer en Prometheus.
 
-La imagen mantiene las métricas en el loopback del contenedor de forma predeterminada. Para publicarlas, establece `DINGO_METRICS_BIND_ADDR=0.0.0.0` y publica el puerto de métricas, como en el ejemplo anterior. Las métricas se sirven mediante HTTP sin cifrar; limita el acceso con controles de red, un proxy inverso con TLS o un túnel cifrado cuando el puerto se exponga fuera de una red de confianza.
+Para publicar las métricas, establece `DINGO_METRICS_BIND_ADDR=0.0.0.0` y publica el puerto de métricas, como en el ejemplo anterior. El nodo y Mithril sirven las métricas mediante HTTP sin cifrar; limita el acceso con controles de red, un proxy inverso con TLS o un túnel cifrado si el puerto queda accesible fuera de una red de confianza.
 
 ### Añadir registros a un archivo existente
 
