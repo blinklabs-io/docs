@@ -134,7 +134,7 @@ before chain data import.
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Metrics bind address | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. This address is independent of `bindAddr` and defaults to loopback. Set it explicitly to a wildcard or remotely reachable address when a scraper runs outside the container or host. |
-| Metrics authentication token | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Legacy value accepted for compatibility but ignored and has no effect. Metrics endpoints accept anonymous requests. Dingo provides no CLI flag because process arguments can be visible to other users. |
+| Metrics authentication token | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. Metrics endpoints accept anonymous requests. Dingo provides no CLI flag because process arguments can be visible to other users. |
 | Metrics port | `metricsPort` | `--metrics-port` | — | `12798` by default. Set it to `0` to disable the Prometheus listener. |
 
 ### Tracing
@@ -258,7 +258,7 @@ requests are not subject to the Blockfrost mutation admission limits.
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` by default. An explicitly empty value uses the root `bindAddr`; set a host to expose the provider on another interface. |
-| Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Legacy value accepted for compatibility but ignored and has no effect. It is not required; transaction submission and evaluation accept anonymous requests. |
+| Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. The setting is not required, and transaction submission and evaluation accept anonymous requests. |
 | Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` by default. The value must be positive and limits transaction submission and evaluation across the provider. |
 | Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` by default. The value must be positive and no greater than `maxConcurrentMutations`; it limits work from one remote address. |
 
@@ -325,7 +325,7 @@ download locations.
 | STM lottery size | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | `0` until configured. Set a positive value when the aggregator is enabled. |
 | STM win probability | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | `0` until configured. Set a value greater than `0` and no greater than `1`. |
 | Aggregator genesis signing key | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | Required when the aggregator is enabled. Set an Ed25519 Mithril JSON hex key. |
-| Aggregator operator token | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Legacy value accepted for compatibility but ignored and has no effect. It is not required when the aggregator is enabled. |
+| Aggregator operator token | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Dingo accepts this legacy value for compatibility but ignores it; it has no effect. The setting is not required when the aggregator is enabled. |
 
 ### SQLite metadata storage validation
 
@@ -437,7 +437,7 @@ expose it on another interface.
 | Setting | YAML key | CLI flag | Environment variable | Default and requirements |
 | --- | --- | --- | --- | --- |
 | Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`. TLS certificate and key files are optional. |
-| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Legacy values accepted for compatibility but ignored and have no effect. They are not required for lifecycle requests. |
+| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Dingo accepts legacy values for compatibility but ignores them; they have no effect. The values are not required for lifecycle requests. |
 | Private or special-use addresses for block downloads | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. When `true`, Dingo permits private or special-use resolved addresses for Bark block-download destinations. Dingo still checks the origin allowlist, requires HTTPS, validates redirects, and disables proxy use. This setting affects block downloads only, not Bark RPC traffic. |
 
 Bark accepts `GetStatus`, `Stop`, and `Restart` without client certificates or
