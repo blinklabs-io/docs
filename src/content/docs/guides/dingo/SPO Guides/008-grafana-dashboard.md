@@ -65,7 +65,7 @@ Prometheus needs to know where to find your Dingo node. Add the following to you
     - targets: ['localhost:9100']
 ```
 
-The metrics listener uses plain HTTP; control remote exposure at the network layer.
+Control remote exposure at the network layer because the metrics listener uses plain HTTP.
 
 Then reload Prometheus to apply the change:
 
