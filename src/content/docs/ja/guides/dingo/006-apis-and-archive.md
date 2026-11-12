@@ -58,7 +58,7 @@ plugins:
 
 変更リクエストは認証なしで受け付けます。`maxConcurrentMutations` の既定値は `4`、`maxConcurrentMutationsPerClient` の既定値は `1` です。両方を正の整数に設定し、`maxConcurrentMutationsPerClient` が `maxConcurrentMutations` 以下になるようにしてください。
 
-次のルートに変更リクエストの受け入れ制限を適用します。
+次の 3 つのルートに変更リクエストの受け入れ制限を適用します。
 
 | ルート | 認証と受け入れ制限の動作 |
 | --- | --- |
