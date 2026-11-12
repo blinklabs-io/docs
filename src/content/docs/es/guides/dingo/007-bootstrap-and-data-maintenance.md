@@ -27,7 +27,7 @@ dingo mithril snapshot create --db-dir <cardano-node db>
 dingo mithril serve --config ./dingo.yaml
 ```
 
-Configura `mithril.server.artifactStore` antes de crear o servir artefactos. Establece `mithril.server.publicBaseUrl` en un origen absoluto válido `http://` o `https://`, sin credenciales, ruta, consulta ni fragmento. Configura el puerto del servicio en `mithril.server.port`. El servidor permite leer los artefactos públicamente, y los clientes pueden descargarlos mediante solicitudes de rangos HTTP.
+Configura `mithril.server.artifactStore` antes de crear o servir artefactos. Establece `mithril.server.publicBaseUrl` en un origen absoluto válido con el esquema `http://` o `https://`, sin credenciales, ruta, consulta ni fragmento. Configura el puerto del servicio en `mithril.server.port`. El servidor permite leer los artefactos públicamente, y los clientes pueden descargarlos mediante solicitudes de rangos HTTP.
 
 Usa `mithril.server.redirectBaseUrl` para redirigir las solicitudes de archivos a un almacén público de objetos, `mithril.server.tlsEnabled` para activar HTTPS con el certificado compartido de Dingo y `mithril.server.keepSnapshots` para conservar un número determinado de las instantáneas más recientes. Activa los ajustes opcionales de `mithril.server.aggregator` cuando Dingo deba recopilar firmas y certificar instantáneas. Consulta la [referencia de configuración de `mithril`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) para ver todos los ajustes de `server` y `aggregator`.
 
