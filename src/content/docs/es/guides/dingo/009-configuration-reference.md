@@ -371,6 +371,21 @@ Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applie
 
 La opción `--shelley-kes-agent-socket` admite rutas de sockets del sistema de archivos y direcciones abstractas de Linux. Dingo resuelve las rutas relativas una vez al construir el cliente y reutiliza la ruta resuelta al reconectar. Conserva las direcciones abstractas con prefijo `@`, rechaza las direcciones literales con prefijo NUL al construir el cliente y aplica los límites de longitud de sockets de la plataforma.
 
+#### Agente KES remoto y recarga de credenciales
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
+| --- | --- | --- | --- | --- | --- |
+| Dirección del agente KES remoto | `shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `CARDANO_SHELLEY_KES_AGENT_ADDRESS` | Vacía | Configura una dirección `host:port` para seleccionar el agente remoto e implica el modo `sign`. Las demás opciones remotas requieren esta dirección. No la combines con `shelleyKesKey` ni con `shelleyKesAgentSocket`. |
+| Archivo del certificado de cliente | `shelleyKesAgentClientCertFile` | `--shelley-kes-agent-client-cert-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | Vacío | Archivo PEM opcional para el certificado TLS de cliente. Debe configurarse junto con `shelleyKesAgentClientKeyFile`. Requiere `shelleyKesAgentAddress`. |
+| Archivo de la clave de cliente | `shelleyKesAgentClientKeyFile` | `--shelley-kes-agent-client-key-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | Vacío | Archivo PEM opcional para la clave TLS de cliente. Debe configurarse junto con `shelleyKesAgentClientCertFile`. Requiere `shelleyKesAgentAddress`. |
+| Fijación SPKI SHA-256 del servidor | `shelleyKesAgentServerSpkiSha256` | `--shelley-kes-agent-server-spki-sha256` | `CARDANO_SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | Vacía | Fijación TLS opcional de la clave pública del servidor, expresada como `64` caracteres hexadecimales. Requiere `shelleyKesAgentAddress` y no puede combinarse con `shelleyKesAgentPlaintext`. |
+| Conexión de texto sin cifrar | `shelleyKesAgentPlaintext` | `--shelley-kes-agent-plaintext` | `CARDANO_SHELLEY_KES_AGENT_PLAINTEXT` | `false` | Selecciona TCP sin cifrar. Requiere `shelleyKesAgentAddress` y no puede combinarse con `shelleyKesAgentServerSpkiSha256` ni con el certificado o la clave TLS de cliente. El agente remoto solo admite el modo `sign`. |
+| Intervalo de observación de claves de Shelley | `shelleyKeyWatchInterval` | `--shelley-key-watch-interval` | `CARDANO_SHELLEY_KEY_WATCH_INTERVAL` | `0`, desactivado | Un valor distinto de cero debe ser de al menos `1s`. Dingo observa los archivos de credenciales y los recarga en su lugar con archivos de claves locales o con un agente KES en modo `sign`. En modo `serve-key`, ignora el ajuste y registra una advertencia. |
+
+Con una dirección remota, Dingo utiliza TLS 1.3 de forma predeterminada. La fijación del servidor y el certificado y la clave PEM del cliente son opcionales; Dingo verifica el certificado del servidor cuando no se configura la fijación, y exige el par completo de credenciales del cliente cuando se utiliza. `shelleyKesAgentPlaintext` selecciona la alternativa TCP sin cifrar y no admite esos ajustes TLS.
+
+Con `shelleyKeyWatchInterval`, Dingo espera dos sondeos consecutivos con el mismo cambio antes de aplicarlo. `SIGHUP` también inicia una recarga, y una oferta de certificado operativo más reciente de un agente remoto inicia la recarga en modo `sign`. Dingo valida las nuevas credenciales antes de sustituir las activas; un cambio de la clave VRF requiere reiniciar el nodo. Si falla una recarga de archivos, Dingo conserva el cambio pendiente y lo reintenta en el siguiente sondeo.
+
 ### Proveedor Kupo
 
 El proveedor Kupo opcional se configura bajo `plugins.api.kupo`. Utiliza `provider: "builtin"` para seleccionar el integrado. Kupo requiere `storageMode: api`; `--kupo-provider` selecciona el proveedor desde CLI. Un valor `0` en `plugins.api.kupo.config.port` desactiva el servicio.
