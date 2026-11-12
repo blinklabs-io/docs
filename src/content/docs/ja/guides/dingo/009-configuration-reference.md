@@ -460,7 +460,7 @@ Dingo v0.93.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTip
 | リモートエージェントの平文接続 | `shelleyKesAgentPlaintext` | `--shelley-kes-agent-plaintext` | `CARDANO_SHELLEY_KES_AGENT_PLAINTEXT` | 既定値は `false` です。`true` にすると TLS を使用せずに TCP で接続します。`shelleyKesAgentAddress` が必要で、サーバー SPKI ピンまたはクライアント証明書と併用できません。リモートエージェントは署名モードでのみ使用できます。 |
 | Shelley 認証情報の監視間隔 | `shelleyKeyWatchInterval` | `--shelley-key-watch-interval` | `CARDANO_SHELLEY_KEY_WATCH_INTERVAL` | 既定値は `0`（無効）です。`0` または `1s` 以上の間隔を指定します。ローカル認証情報ファイルと KES エージェントの署名モードに適用します。エージェントの serve-key モードでは無視し、警告を記録します。 |
 
-リモート設定では、クライアント証明書とクライアント鍵を組にして指定します。`shelleyKesAgentPlaintext` を有効にする場合は、TLS 用のサーバー SPKI ピン、クライアント証明書、クライアント鍵を指定しないでください。`shelleyKeyWatchInterval` を有効にすると、認証情報ファイルの内容が 2 回連続して安定した後に変更を適用します。`SIGHUP` も再読み込みを開始し、リモート署名エージェントがより新しい運用証明書を提示した場合も再読み込みします。Dingo は認証情報を入れ替える前に検証し、VRF 鍵の変更には再起動を要求します。ファイル変更の再読み込みに失敗した場合、変更を保留して次の監視間隔で再試行します。
+`shelleyKeyWatchInterval` を有効にすると、認証情報ファイルの内容が 2 回連続して安定した後に変更を適用します。`SIGHUP` も再読み込みを開始し、リモート署名エージェントがより新しい運用証明書を提示した場合も再読み込みします。Dingo は認証情報を入れ替える前に検証し、VRF 鍵の変更には再起動を要求します。ファイル変更の再読み込みに失敗した場合、変更を保留して次の監視間隔で再試行します。
 
 <a id="kupo-provider"></a>
 
