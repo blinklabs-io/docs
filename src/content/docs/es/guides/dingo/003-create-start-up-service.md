@@ -232,7 +232,7 @@ network: preprod
 # Red de pruebas Dijkstra (network magic 6)
 network: dijkstra
 
-# Mainnet de Prime
+# Red principal de Prime
 network: prime-mainnet
 
 # Mainnet - NOT CURRENTLY RECOMMENDED
