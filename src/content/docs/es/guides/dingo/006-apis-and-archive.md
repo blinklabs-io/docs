@@ -64,7 +64,7 @@ Las siguientes rutas aceptan solicitudes anónimas:
 
 Conserva la validación de las solicitudes. Dingo comprueba la capacidad antes de leer el cuerpo de la solicitud y solo acepta la solicitud cuando existe capacidad tanto en el límite global del servidor como en el del cliente remoto. Si se supera, devuelve HTTP `429` con `Retry-After: 1`.
 
-Las rutas de modificación aceptan acceso HTTP sin TLS de servidor específico de Blockfrost. Conserva el host de loopback predeterminado salvo que decidas expresamente permitir el acceso externo a estas operaciones.
+Las rutas de modificación aceptan acceso HTTP sin TLS. Conserva el host de loopback predeterminado salvo que decidas expresamente permitir el acceso externo a estas operaciones.
 
 Este sitio incluye la referencia de configuración completa de v0.92.4 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
 
