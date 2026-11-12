@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.91.0 設定リファレンス
-description: Dingo v0.91.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.93.0 設定リファレンス
+description: Dingo v0.93.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.91.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.91.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.93.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.93.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.93.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.93.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -435,7 +435,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.93.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
@@ -444,6 +444,23 @@ Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTip
 #### Shelley KES エージェントソケット
 
 `--shelley-kes-agent-socket` はファイルシステムのソケットパスと Linux の抽象ソケットアドレスに対応します。相対パスはクライアント構築時に一度解決し、再接続でもそのパスを再利用します。`@` で始まる抽象アドレスは保持し、NUL 文字で始まるアドレスは構築時に拒否します。プラットフォームのソケット長制限も適用します。
+
+<a id="shelley-kes-agent-remote"></a>
+
+#### リモート Shelley KES エージェント
+
+リモートエージェントを使用すると、ブロックプロデューサーはローカルの KES 鍵の代わりに、Bursa KES エージェントのリモート署名リスナーへ接続します。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値、検証、動作 |
+| --- | --- | --- | --- | --- |
+| リモートエージェントのアドレス | `shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `CARDANO_SHELLEY_KES_AGENT_ADDRESS` | 既定値は空です。`host:port` 形式のアドレスを指定します。設定すると署名モードを選択し、リモートエージェントの署名リスナーを使用します。アドレス以外のリモート設定にはこのアドレスが必要です。ローカルの `shelleyKesKey` または `shelleyKesAgentSocket` とは併用できません。 |
+| リモートエージェントのクライアント証明書 | `shelleyKesAgentClientCertFile` | `--shelley-kes-agent-client-cert-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | 既定値は空です。リモートエージェントへの接続に使用する PEM 形式の TLS クライアント証明書ファイルを指定します。任意ですが、指定する場合は `shelleyKesAgentClientKeyFile` と同時に指定します。 |
+| リモートエージェントのクライアント鍵 | `shelleyKesAgentClientKeyFile` | `--shelley-kes-agent-client-key-file` | `CARDANO_SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | 既定値は空です。PEM 形式の TLS クライアント鍵ファイルを指定します。任意ですが、指定する場合は `shelleyKesAgentClientCertFile` と同時に指定します。 |
+| リモートエージェントのサーバー SPKI SHA-256 ピン | `shelleyKesAgentServerSpkiSha256` | `--shelley-kes-agent-server-spki-sha256` | `CARDANO_SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | 既定値は空です。TLS サーバー鍵の SHA-256 値を 16 進数で指定します。任意で、指定する場合は 64 文字が必要です。TLS では TLS 1.3 を使用し、このピンを省略するとサーバー証明書を標準の証明書検証で確認します。 |
+| リモートエージェントの平文接続 | `shelleyKesAgentPlaintext` | `--shelley-kes-agent-plaintext` | `CARDANO_SHELLEY_KES_AGENT_PLAINTEXT` | 既定値は `false` です。`true` にすると TLS を使用せずに TCP で接続します。`shelleyKesAgentAddress` が必要で、サーバー SPKI ピンまたはクライアント証明書と併用できません。リモートエージェントは署名モードでのみ使用できます。 |
+| Shelley 認証情報の監視間隔 | `shelleyKeyWatchInterval` | `--shelley-key-watch-interval` | `CARDANO_SHELLEY_KEY_WATCH_INTERVAL` | 既定値は `0`（無効）です。`0` または `1s` 以上の間隔を指定します。ローカル認証情報ファイルと KES エージェントの署名モードに適用します。エージェントの serve-key モードでは無視し、警告を記録します。 |
+
+リモート設定では、クライアント証明書とクライアント鍵を組にして指定します。`shelleyKesAgentPlaintext` を有効にする場合は、TLS 用のサーバー SPKI ピン、クライアント証明書、クライアント鍵を指定しないでください。`shelleyKeyWatchInterval` を有効にすると、認証情報ファイルの内容が 2 回連続して安定した後に変更を適用します。`SIGHUP` も再読み込みを開始し、リモート署名エージェントがより新しい運用証明書を提示した場合も再読み込みします。Dingo は認証情報を入れ替える前に検証し、VRF 鍵の変更には再起動を要求します。ファイル変更の再読み込みに失敗した場合、変更を保留して次の監視間隔で再試行します。
 
 <a id="kupo-provider"></a>
 
