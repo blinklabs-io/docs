@@ -9,7 +9,7 @@ files.
 
 ## Run the examples
 
-Install Go 1.26.5 or newer. From the directory containing this README and
+Install Go 1.26.11 or newer. From the directory containing this README and
 `examples/`, download the matching gOuroboros source and copy the corrected
 examples into its root module:
 
@@ -34,3 +34,14 @@ example, `ping` also accepts `CARDANO_NODE_ADDRESS` for a TCP connection;
 `block-fetch` uses the `BLOCK_FETCH_` prefix instead of `CARDANO_NODE_`.
 
 The bundled source is distributed under the included Apache 2.0 `LICENSE`.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
