@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.91.0 設定リファレンス
-description: Dingo v0.91.0 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.92.4 設定リファレンス
+description: Dingo v0.92.4 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.91.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.91.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.92.4 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)にあります。同じファイルは [Dingo v0.92.4 のソース](https://github.com/blinklabs-io/dingo/blob/v0.92.4/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -113,10 +113,10 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
 | メトリクスのバインドアドレス | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`。`bindAddr` とは独立しており、既定ではループバックです。スクレーパーがコンテナまたはホストの外で動作する場合は、ワイルドカードまたはリモートから到達できるアドレスを明示的に設定します。 |
-| メトリクスの認証トークン | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | 既定では空で、メトリクス認証は行いません。プロセス引数が他のユーザーに見える可能性があるため、CLI フラグはありません。設定した場合、クライアントはノードと Mithril の両方のメトリクスエンドポイントに `Authorization: Bearer <token>` を送信する必要があります。 |
+| メトリクスの認証トークン | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | 既定では空です。プロセス引数が他のユーザーに見える可能性があるため、CLI フラグはありません。Dingo は設定値を認証に使用せず、効果を持ちません。 |
 | メトリクスポート | `metricsPort` | `--metrics-port` | — | 既定値は `12798` です。`0` にすると Prometheus リスナーが無効になります。 |
 
-メトリクスリスナーは平文 HTTP を使用します。信頼できないネットワークを通過する場合は、TLS リバースプロキシまたは認証付きの暗号化トンネルでトークンを保護してください。
+ノードと Mithril のメトリクスエンドポイントは認証なしでアクセスできます。
 
 <a id="tracing"></a>
 
@@ -195,16 +195,16 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 
 ### Blockfrost プロバイダー
 
-組み込みの Blockfrost プロバイダーは、既定でループバックで待ち受けます。読み取り専用 API リクエストには Blockfrost の変更操作の受け入れ制限は適用されませんが、設定されていれば共有 API 認証は適用されます。
+組み込みの Blockfrost プロバイダーは、既定でループバックで待ち受けます。読み取り専用 API リクエストには Blockfrost の変更操作の受け入れ制限は適用されません。Dingo は API リクエストに認証を要求しません。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
 | ホスト | `plugins.api.blockfrost.config.host` | — | — | 既定値は `127.0.0.1` です。明示的に空にするとルートの `bindAddr` を使用します。別のインターフェイスで公開するにはホストを設定します。 |
-| 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。トランザクションの送信と評価には、`project_id`、`X-Blockfrost-Project-Id`、`Authorization: Bearer <token>` のいずれかでこのトークンを送信します。認証情報がないか無効な場合は HTTP `401` を返します。 |
+| 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。トランザクションの送信と評価に必要ありません。 |
 | 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | 既定値は `4` です。正の値が必要で、プロバイダー全体のトランザクション送信と評価を制限します。 |
 | クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | 既定値は `1` です。正の値かつ `maxConcurrentMutations` 以下である必要があり、1 つのリモートアドレスからの処理を制限します。 |
 
-`authToken` を設定し、ループバック以外で待ち受ける場合は、`plugins.api.blockfrost.config.tls` でサーバー TLS を設定します。Dingo はサーバー TLS なしの認証付き変更アクセスでの起動を拒否します。認証後、本文を読む前に両方の変更操作制限を適用し、どちらかの空きがない場合は、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。
+変更操作には認証は必要ありません。Dingo は本文を読む前に両方の変更操作制限を適用し、どちらかの空きがない場合は、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。
 
 <a id="shared-outbound-http-user-agent"></a>
 
@@ -254,12 +254,12 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 
 ### Mithril アーティファクトサーバー
 
-`mithril.server` は `dingo mithril snapshot create` と `dingo mithril serve` を制御します。スナップショットアーティファクトの読み取りは公開されます。アグリゲーターの署名者登録と登録締め切りには、`mithril.server.aggregator.operatorTokenFile` の Bearer トークンが必要です。ループバック以外へのアグリゲーターのバインドには TLS が必要です。スナップショットのダウンロード場所に現れる公開オリジンを `mithril.server.publicBaseUrl` に設定します。HTTP ループバックオリジンを除き、HTTPS を使用してください。
+`mithril.server` は `dingo mithril snapshot create` と `dingo mithril serve` を制御します。スナップショットアーティファクトの読み取りは公開されます。アグリゲーターの署名者登録と登録締め切りは認証なしでアクセスできます。アーティファクトサーバーの TLS は任意です。スナップショットのダウンロード場所に現れる公開オリジンを `mithril.server.publicBaseUrl` に設定します。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
 | アーティファクトサーバーのポート | `mithril.server.port` | `--mithril-server-port` | `DINGO_MITHRIL_SERVER_PORT` | `8081`。`dingo mithril serve` はこのポートとルートの `bindAddr` で待ち受けます。 |
-| スナップショットの公開オリジン | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | `dingo mithril serve` で必須です。認証情報、パス、クエリ、フラグメントを含まないオリジンを指定します。ループバック HTTP を除き HTTPS が必要です。 |
+| スナップショットの公開オリジン | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | `dingo mithril serve` で必須です。認証情報、パス、クエリ、フラグメントを含まない絶対 HTTP または HTTPS オリジンを指定します。パスは空または `/` にできます。 |
 | アーティファクトストア | `mithril.server.artifactStore` | `--mithril-server-artifact-store` | `DINGO_MITHRIL_SERVER_ARTIFACT_STORE` | 空です。ファイルシステムのディレクトリ、`s3://bucket/prefix`、`gcs://bucket/prefix` を指定します。後者 2 つには `dingo_extra_plugins` を有効にしたビルドが必要です。 |
 | リダイレクト先の基底 URL | `mithril.server.redirectBaseUrl` | `--mithril-server-redirect-base-url` | `DINGO_MITHRIL_SERVER_REDIRECT_BASE_URL` | 空です。設定すると、アーカイブリクエストはオブジェクトをストリーム配信せず、この URL にオブジェクトキーを加えた場所へリダイレクトします。リモートオブジェクトが公開読み取り可能な場合のみ使用します。 |
 | スナップショットの保持数 | `mithril.server.keepSnapshots` | `--mithril-server-keep-snapshots` | `DINGO_MITHRIL_SERVER_KEEP_SNAPSHOTS` | `0` は生成したすべてのスナップショットを保持します。正の値は、最新のスナップショットをその件数だけ保持します。 |
@@ -271,7 +271,7 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | STM 抽選数 | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | 設定されるまでは `0` です。アグリゲーターを有効にする場合は正の値を指定します。 |
 | STM 当選確率 | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | 設定されるまでは `0` です。`0` より大きく `1` 以下の値を指定します。 |
 | アグリゲーターのジェネシス署名鍵 | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | アグリゲーターを有効にする場合は必須です。Ed25519 Mithril JSON hex 鍵を指定します。 |
-| アグリゲーターのオペレータートークン | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | アグリゲーターを有効にする場合は必須です。32 バイト以上のランダム値を含むファイルを指定します。 |
+| アグリゲーターのオペレータートークン | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | 既定では空です。アグリゲーターを有効にする場合も不要です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。 |
 
 <a id="sqlite-metadata-storage-validation"></a>
 
@@ -355,11 +355,11 @@ Bark のリモートライフサイクルサービスは既定で無効です。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と要件 |
 | --- | --- | --- | --- | --- |
-| ライフサイクルサービスの有効化 | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`。有効にするには、0 以外の `barkPort`、`barkClientCaFilePath`、`tlsCertFilePath` と `tlsKeyFilePath` の両方、および 1 つ以上の `barkLifecycleOperatorCertificateFingerprints` が必要です。 |
-| ライフサイクルオペレーターの証明書 | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | 既定では空です。各値はクライアント証明書の DER バイト列の SHA-256 フィンガープリントを 16 進数で指定します。コロンを含めることができ、大文字と小文字は区別しません。この認証情報が認可するのは `Stop` と `Restart` のみです。 |
+| ライフサイクルサービスの有効化 | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`。有効にするには、0 以外の `barkPort` が必要です。`barkClientCaFilePath`、`tlsCertFilePath`、`tlsKeyFilePath`、`barkLifecycleOperatorCertificateFingerprints` は不要です。サーバー TLS の証明書と鍵は任意で設定できます。 |
+| ライフサイクルオペレーターの証明書 | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。 |
 | ブロックダウンロードのプライベートまたは特殊用途アドレス | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`。`true` にすると、Bark のブロックダウンロード先で、名前解決後のプライベートまたは特殊用途アドレスを許可します。オリジン許可リスト、HTTPS 要件、リダイレクト検証、プロキシ無効化は維持されます。ブロックダウンロードにのみ影響し、Bark RPC 通信には影響しません。 |
 
-すべてのライフサイクル操作に、`barkClientCaFilePath` に対して検証されたクライアント証明書が必要です。`Stop` と `Restart` には、さらにオペレーターリスト内のフィンガープリントとの一致が必要です。`GetStatus` には mTLS が必要ですが、この許可リストは不要です。DatabaseService のオペレーター認証情報は独立しており、ライフサイクルアクセスを認可しません。`Restart` は Unix で使用でき、それ以外では未対応操作のエラーを返します。
+`GetStatus`、`Stop`、`Restart` は、認証情報やクライアント証明書なしの平文 HTTP リクエストを受け付けます。`barkClientCaFilePath` は従来の入力として受け付けますが、Dingo は認証に使用せず、効果を持ちません。DatabaseService のオペレーター認証情報は独立しており、ライフサイクルアクセスを認可しません。`Restart` は Unix で使用でき、それ以外では未対応操作のエラーを返します。
 
 <a id="bark-archive-lookup-budgets"></a>
 
@@ -435,7 +435,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.91.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.92.4 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 

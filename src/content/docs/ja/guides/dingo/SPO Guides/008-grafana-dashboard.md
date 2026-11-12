@@ -65,14 +65,7 @@ Dingo の場所を指定するため、`prometheus.yml` の `scrape_configs` に
     - targets: ['localhost:9100']
 ```
 
-Dingo の YAML の `metricsAuthToken` または `DINGO_METRICS_AUTH_TOKEN` でトークンを設定します。この秘密情報用の CLI フラグはありません。次を `dingo` 収集ジョブに追加します。
-
-```yaml
-  authorization:
-    credentials_file: /run/secrets/dingo-metrics-token
-```
-
-`credentials_file` には設定したトークンの値だけを格納し、`Bearer ` 接頭辞を付けないでください。同じトークンが Mithril メトリクスも保護するため、そちらの収集にも同じ Prometheus 認証設定を使用します。メトリクスリスナーは平文 HTTP です。リモートでトークンを送る場合、TLS リバースプロキシまたは認証付き暗号化トンネルで通信を保護してください。
+メトリクスリスナーは平文 HTTP で動作します。リモート公開時は、ネットワーク層のアクセス制御で保護します。
 
 設定を反映するため Prometheus を再読み込みします。
 

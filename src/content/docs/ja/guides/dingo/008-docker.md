@@ -3,10 +3,10 @@ title: コンテナで Dingo を実行する
 description: 公開された Dingo イメージを実行し、データを永続化してノードの状態を確認します。
 ---
 
-Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.91.0` を使用します。
+Dingo は GitHub Container Registry にコンテナイメージを公開しています。バージョン付きのイメージタグは、対応する Dingo リリースタグから先頭の `v` を除いたものです。この例では Dingo `v0.92.4` を使用します。
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.91.0
+ docker pull ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
 <a id="start-a-preview-node"></a>
@@ -22,7 +22,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.91.0
+    ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
 ポート `3001` は Ouroboros のノード間接続を受け付けます。この例では、メトリクスの `12798` とヘルスエンドポイントの `12799` をホストのループバックインターフェイスに公開します。イメージは既定でメトリクスをコンテナのループバックにバインドするため、`DINGO_METRICS_BIND_ADDR=0.0.0.0` で上書きして、ホストから公開メトリクスポートに接続できるようにします。ホスト側の公開先は `127.0.0.1` のままです。ネットワークごとに別々の名前付きボリュームを使用してください。
@@ -40,7 +40,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.91.0 \
+     ghcr.io/blinklabs-io/dingo:0.92.4 \
   --config /tmp/dingo.yaml serve
 ```
 
@@ -50,17 +50,26 @@ docker run --detach --name dingo-custom \
 
 イメージは `/data/db` 配下を UID:GID `1000:1000` 向けに準備しています。`databaseLifecycle.snapshotDir` に `/data/db` とは別のホストディレクトリをバインドマウントする場合は、マウント前にホスト側の所有者を UID:GID `1000:1000` に設定してください。所有者を設定しないと、起動時の書き込み可能性の検証に失敗します。
 
-<a id="protect-published-metrics"></a>
+<a id="access-published-metrics"></a>
 
-### 公開メトリクスの保護
+### 公開メトリクスへのアクセス
 
-ノードと Mithril のメトリクスエンドポイントで Bearer トークンを必須にするには、`docker run` コマンドに次のオプションを追加します。
+ノードと Mithril のメトリクスエンドポイントは、匿名リクエストを受け付けます。メトリクスリスナーは平文 HTTP を使用するため、信頼できないネットワークに公開する場合は、ネットワーク層でアクセスを制御してください。
+
+<a id="append-to-log-file"></a>
+
+## ログファイルへの追記
+
+既存のログファイルに追記するには、`DINGO_LOG_FILE` と `DINGO_LOG_FILE_APPEND=true` を設定します。`DINGO_LOG_FILE_APPEND` は、値が `true` と完全に一致する場合にだけ有効です。
 
 ```sh
---env DINGO_METRICS_AUTH_TOKEN='replace-with-secret' \
+docker run --detach --name dingo-preview \
+  --env DINGO_LOG_FILE=/data/db/dingo.log \
+  --env DINGO_LOG_FILE_APPEND=true \
+  ghcr.io/blinklabs-io/dingo:0.92.4
 ```
 
-同じトークンを格納した `authorization.credentials_file` を Prometheus に設定します。Prometheus の設定については、[Grafana ダッシュボードガイド](/ja/guides/dingo/spo-guides/008-grafana-dashboard/)を参照してください。トークンで保護したリスナーも平文 HTTP を使用するため、リモート通信には TLS リバースプロキシまたは認証付きの暗号化トンネルが必要です。
+追記モードでは、既存の通常ファイルに追記し、存在しないファイルを作成します。既存ファイルのアクセス権を保持し、ファイルの末尾が改行で終わっていない場合は、追記前に改行を挿入します。シンボリックリンクや通常ファイル以外のパスは拒否します。`DINGO_LOG_FILE_APPEND` が未設定または `true` 以外の場合は、既定の動作（新しいファイル名が必要）を維持します。
 
 <a id="check-and-manage-the-container"></a>
 

@@ -102,9 +102,8 @@ plugins:
         # Blockfrost uses this provider-specific host independently of bindAddr.
         # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: "127.0.0.1"
-        # Set authToken to protect transaction submission and evaluation mutations.
-        # authToken: ""
-        # Authenticated mutation access on a non-loopback host requires server TLS.
+        # Blockfrost の変異ルートは匿名で利用できます。
+        # Dingo は `maxConcurrentMutations` と `maxConcurrentMutationsPerClient` の制限を引き続き適用します。
         # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
         # Per-client concurrent mutation limit. Default: 1.
@@ -260,6 +259,9 @@ network: preview
 
 # Pre-production testnet
 network: preprod
+
+# Prime メインネット
+network: prime-mainnet
 
 # Mainnet - NOT CURRENTLY RECOMMENDED
 network: mainnet

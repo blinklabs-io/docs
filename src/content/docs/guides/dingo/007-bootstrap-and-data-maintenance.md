@@ -38,8 +38,8 @@ dingo mithril serve --config ./dingo.yaml
 ```
 
 Configure `mithril.server.artifactStore` before creating or serving artifacts.
-Set `mithril.server.publicBaseUrl` to a public `https://` origin; Dingo accepts
-an `http://` origin only on loopback. Set `mithril.server.port` for the serving
+Set `mithril.server.publicBaseUrl` to an absolute HTTP or HTTPS origin without
+credentials, a path, query, or fragment. Set `mithril.server.port` for the serving
 port. The server exposes artifact reads publicly, and clients can use HTTP range
 requests for artifact downloads.
 
@@ -47,10 +47,9 @@ Use `mithril.server.redirectBaseUrl` to redirect archive requests to a public
 object store, `mithril.server.tlsEnabled` to enable HTTPS with the shared Dingo
 certificate, and `mithril.server.keepSnapshots` to retain a defined number of
 newest snapshots. Enable the optional `mithril.server.aggregator` settings when Dingo
-must collect signatures and certify snapshots. Configure
-`mithril.server.aggregator.operatorTokenFile` for the bearer token used by registration
-and signature operations; non-loopback aggregator binds also require TLS. See
-the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example)
+must collect signatures and certify snapshots. The registration and closure
+endpoints accept anonymous requests. Dingo accepts the legacy
+`operatorTokenFile` setting but ignores it. See the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)
 for the complete `server` and `aggregator` settings.
 
 Mithril v2 bootstrap accepts artifact locations and redirects only from the configured
@@ -174,9 +173,9 @@ retaining ledger indexes and metadata. Reads for those blocks then need a
 configured [Bark archive](/guides/dingo/006-apis-and-archive/) or return an
 expired-history error. An archive service uses an object storage provider that
 can issue signed download URLs. Configure expiry frequency, archive storage,
-and download host allowlists in the Dingo v0.91.0 release
-[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example). Use this example
-only with Dingo v0.91.0; configuration options can change between versions.
+and download host allowlists in the Dingo v0.92.4 release
+[example configuration](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example). Use this example
+only with Dingo v0.92.4; configuration options can change between versions.
 
 Configure the compressed download limit for each Mithril object with `mithril.downloadMaxBytes` in `dingo.yaml`, `--mithril-download-max-bytes` on the command line, or `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` in the environment. Set the value to `0` to use the built-in limits. The `v1` limit is `512 GiB`; `v2` uses `1 GiB` for immutable archives, `256 MiB` for the digest list, and `64 GiB` for ancillary data. A positive byte value replaces the built-in limit for each downloaded object. A negative value is invalid and causes configuration validation to fail.
 

@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.91.0 Configuration Reference
-description: Complete, release-specific Dingo v0.91.0 configuration reference and example.
+title: Dingo v0.92.4 Configuration Reference
+description: Complete, release-specific Dingo v0.92.4 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.91.0. The complete
+This page covers the configuration shipped with Dingo v0.92.4. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.91.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.91.0 source](https://github.com/blinklabs-io/dingo/blob/v0.91.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example).
+The same file is available in the [Dingo v0.92.4 source](https://github.com/blinklabs-io/dingo/blob/v0.92.4/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -134,12 +134,8 @@ before chain data import.
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Metrics bind address | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. This address is independent of `bindAddr` and defaults to loopback. Set it explicitly to a wildcard or remotely reachable address when a scraper runs outside the container or host. |
-| Metrics authentication token | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Empty by default, which keeps metrics unauthenticated. Dingo provides no CLI flag because process arguments can be visible to other users. When set, clients must send `Authorization: Bearer <token>` to both the node metrics endpoint and the Mithril metrics endpoint. |
+| Metrics authentication token | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. Metrics endpoints accept anonymous requests. Dingo provides no CLI flag because process arguments can be visible to other users. |
 | Metrics port | `metricsPort` | `--metrics-port` | — | `12798` by default. Set it to `0` to disable the Prometheus listener. |
-
-The metrics listener uses plain HTTP. Protect the token with a TLS reverse
-proxy or an authenticated encrypted tunnel when traffic crosses an untrusted
-network.
 
 ### Tracing
 
@@ -257,22 +253,18 @@ connections from another host or interface.
 ### Blockfrost provider
 
 The built-in Blockfrost provider listens on loopback by default. Read-only API
-requests are not subject to the Blockfrost mutation admission limits, although
-shared API authentication can still apply when configured.
+requests are not subject to the Blockfrost mutation admission limits.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` by default. An explicitly empty value uses the root `bindAddr`; set a host to expose the provider on another interface. |
-| Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Empty by default. Transaction submission and evaluation require this token in `project_id`, `X-Blockfrost-Project-Id`, or `Authorization: Bearer <token>`. Missing or invalid credentials return HTTP `401`. |
+| Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. The setting is not required, and transaction submission and evaluation accept anonymous requests. |
 | Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` by default. The value must be positive and limits transaction submission and evaluation across the provider. |
 | Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` by default. The value must be positive and no greater than `maxConcurrentMutations`; it limits work from one remote address. |
 
-When `authToken` is configured and the provider listens on a non-loopback host,
-configure server TLS through `plugins.api.blockfrost.config.tls`. Dingo
-refuses to start authenticated mutation access without server TLS. After
-authentication and before reading the request body, the provider applies both
-mutation limits. When either limit is exhausted, it returns HTTP `429` with
-`Retry-After: 1` without reading the body.
+Before reading the request body, the provider applies both mutation limits.
+When either limit is exhausted, it returns HTTP `429` with `Retry-After: 1`
+without reading the body.
 
 ### Shared outbound HTTP user agent
 
@@ -314,16 +306,14 @@ When `mithril.downloadMaxBytes` is `0`, Dingo uses these built-in compressed lim
 
 The `mithril.server` settings control `dingo mithril snapshot create` and
 `dingo mithril serve`. Snapshot artifact reads are public. Aggregator signer
-registration and registration closure require the bearer token in
-`mithril.server.aggregator.operatorTokenFile`. A non-loopback aggregator bind
-requires TLS. Set `mithril.server.publicBaseUrl` to the public origin that
-appears in snapshot download locations; use HTTPS except for an HTTP loopback
-origin.
+registration and registration closure accept anonymous requests. Set
+`mithril.server.publicBaseUrl` to the public origin that appears in snapshot
+download locations.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Artifact server port | `mithril.server.port` | `--mithril-server-port` | `DINGO_MITHRIL_SERVER_PORT` | `8081`. `dingo mithril serve` listens on this port and the root `bindAddr`. |
-| Public snapshot origin | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Required by `dingo mithril serve`. Set an origin without credentials, a path, a query, or a fragment. HTTPS is required except for loopback HTTP. |
+| Public snapshot origin | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Dingo requires this setting for `dingo mithril serve`. Set an absolute HTTP or HTTPS origin without credentials, a path, a query, or a fragment. |
 | Artifact store | `mithril.server.artifactStore` | `--mithril-server-artifact-store` | `DINGO_MITHRIL_SERVER_ARTIFACT_STORE` | Empty. Set a filesystem directory, `s3://bucket/prefix`, or `gcs://bucket/prefix`. The latter two require a build with `dingo_extra_plugins`. |
 | Redirect base URL | `mithril.server.redirectBaseUrl` | `--mithril-server-redirect-base-url` | `DINGO_MITHRIL_SERVER_REDIRECT_BASE_URL` | Empty. When set, archive requests redirect to this base URL plus the object key instead of streaming the object. Use it only when the remote objects are publicly readable. |
 | Snapshot retention | `mithril.server.keepSnapshots` | `--mithril-server-keep-snapshots` | `DINGO_MITHRIL_SERVER_KEEP_SNAPSHOTS` | `0` keeps every produced snapshot. A positive value retains that many newest snapshots. |
@@ -335,7 +325,7 @@ origin.
 | STM lottery size | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | `0` until configured. Set a positive value when the aggregator is enabled. |
 | STM win probability | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | `0` until configured. Set a value greater than `0` and no greater than `1`. |
 | Aggregator genesis signing key | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | Required when the aggregator is enabled. Set an Ed25519 Mithril JSON hex key. |
-| Aggregator operator token | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Required when the aggregator is enabled. Set a file containing at least 32 random bytes. |
+| Aggregator operator token | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Dingo accepts this legacy value for compatibility but ignores it; it has no effect. The aggregator does not require this setting. |
 
 ### SQLite metadata storage validation
 
@@ -446,17 +436,15 @@ expose it on another interface.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and requirements |
 | --- | --- | --- | --- | --- |
-| Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`, `barkClientCaFilePath`, both `tlsCertFilePath` and `tlsKeyFilePath`, and at least one `barkLifecycleOperatorCertificateFingerprints` value. |
-| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Empty by default. Each value must be the SHA-256 fingerprint of the client certificate DER bytes, encoded as hexadecimal; colons are accepted and matching ignores case. These credentials authorize `Stop` and `Restart` only. |
+| Enable lifecycle service | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Enabling it requires a nonzero `barkPort`. TLS certificate and key files are optional. |
+| Lifecycle operator certificates | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Dingo accepts legacy values for compatibility but ignores them; they have no effect. Lifecycle requests do not require these values. |
 | Private or special-use addresses for block downloads | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. When `true`, Dingo permits private or special-use resolved addresses for Bark block-download destinations. Dingo still checks the origin allowlist, requires HTTPS, validates redirects, and disables proxy use. This setting affects block downloads only, not Bark RPC traffic. |
 
-All lifecycle operations require a client certificate verified against
-`barkClientCaFilePath`. `Stop` and `Restart` additionally require a matching
-certificate fingerprint from the lifecycle operator list. `GetStatus` requires
-mTLS but does not require that allowlist. DatabaseService operator
-credentials remain separate and do not grant lifecycle access. `Restart` is
-available on Unix platforms; other platforms return an unsupported operation
-error.
+Bark accepts `GetStatus`, `Stop`, and `Restart` without client certificates or
+operator allowlists over plaintext HTTP. Bark ignores configured
+`barkClientCaFilePath` values. DatabaseService operator credentials remain
+separate and do not grant lifecycle access. `Restart` is available on Unix
+platforms; other platforms return an unsupported operation error.
 
 ### Bark archive lookup budgets
 
@@ -557,7 +545,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.91.0 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.92.4 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
