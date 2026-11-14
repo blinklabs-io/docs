@@ -101,20 +101,22 @@ Consulte la [referencia de configuración](../009-configuration-reference) para 
 
 ### Controlar un agente KES en ejecución
 
-`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Cuando no aparece `--socket`, el comando lee `kes_agent.control_socket` del archivo YAML que selecciona `--config`. Cuando tampoco aparece `--config`, el comando usa `BURSA_CONFIG` para seleccionar el archivo.
+`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Cuando se omite, el comando consulta `kes_agent.control_socket` en el archivo YAML seleccionado por `--config` o `BURSA_CONFIG`.
 
 Las opciones de control son:
 
-- `--config`: selecciona el archivo YAML del agente; `BURSA_CONFIG` actúa como alternativa.
+- `--config`: selecciona el archivo YAML del agente.
 - `--socket`: ruta explícita del socket de control; sustituye la ruta obtenida de la configuración.
 - `--profile`: selecciona el perfil sobre el que actúa el comando cuando el agente tiene varios perfiles. El comando permite omitir esta opción con un solo perfil. `info` sin `--profile` muestra todos los perfiles.
 
 Los subcomandos disponibles son:
 
-- `info`: muestra el estado de las claves del agente. El comando devuelve la respuesta como JSON y codifica en hexadecimal los campos de bytes.
+- `info`: muestra el estado de las claves del agente.
 - `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; con esta opción, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El comando no sobrescribe un archivo existente.
 - `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
 - `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
+
+Cada subcomando imprime la respuesta del agente como JSON y codifica en hexadecimal los campos de bytes.
 
 El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación detiene de inmediato la lectura o escritura bloqueada del socket.
 
