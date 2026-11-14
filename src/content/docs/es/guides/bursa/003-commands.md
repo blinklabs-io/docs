@@ -99,6 +99,34 @@ La opción `--config` especifica la ruta al archivo de configuración YAML. Como
 
 Consulte la [referencia de configuración](../009-configuration-reference) para `kes_agent.mode`, `kes_agent.service_socket`, `kes_agent.control_socket`, `kes_agent.service_socket_mode`, `kes_agent.control_socket_mode`, `kes_agent.cold_vkey_file`, `kes_agent.cold_vkey_hex`, `kes_agent.system_start`, `kes_agent.slot_length`, `kes_agent.slots_per_kes_period`, `kes_agent.max_kes_evolutions`, `kes_agent.evolve_interval` y `kes_agent.guard_file`.
 
+### Controlar un agente KES en ejecución
+
+`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Si se omite, el comando lee `kes_agent.control_socket` del archivo YAML seleccionado por `--config` o, cuando se omite `--config`, por `BURSA_CONFIG`. Consulte la [referencia de configuración](../009-configuration-reference) para los campos YAML y los permisos del socket.
+
+Las opciones de control son:
+
+- `--config`: ruta al archivo YAML del agente; `BURSA_CONFIG` actúa como alternativa.
+- `--socket`: ruta explícita del socket de control; sustituye la ruta obtenida de la configuración.
+- `--profile`: perfil sobre el que actúa el comando cuando el agente tiene varios perfiles. Un agente con un solo perfil permite omitir esta opción. `info` sin `--profile` muestra todos los perfiles.
+
+Los subcomandos disponibles son:
+
+- `info`: muestra el estado de las claves del agente. El comando devuelve la respuesta como JSON y codifica en hexadecimal los campos de bytes.
+- `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; cuando se proporciona, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El archivo existente no se sobrescribe.
+- `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
+- `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
+
+El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación también detiene de inmediato la lectura o escritura bloqueada del socket.
+
+La rotación de una clave KES sigue este orden: generar la clave staged, emitir sin conexión su certificado operativo con la clave fría del pool, instalar el certificado y comprobar el resultado con `info`. El agente no emite el certificado operativo.
+
+```bash
+./bursa kes-agent control --config /path/to/kes-agent.yaml gen-staged-key --out kes.vkey
+# Emitir node.cert sin conexión para kes.vkey con la clave fría del pool
+./bursa kes-agent control --config /path/to/kes-agent.yaml install-key --opcert node.cert
+./bursa kes-agent control --config /path/to/kes-agent.yaml info
+```
+
 <a name="tx"></a>
 
 ## Operaciones de transacciones sin conexión
