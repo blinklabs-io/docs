@@ -103,7 +103,7 @@ Use `bursa kes-agent control` to send a command to a running local KES agent thr
 ./bursa kes-agent control [--config /path/to/kes-agent.yaml] [--socket /run/bursa/kes-agent-control.sock] [--profile PROFILE] <command>
 ```
 
-The command uses an explicit `--socket` value first. Without `--socket`, it reads `kes_agent.control_socket` from the YAML file selected by `--config`; when `--config` is omitted, `BURSA_CONFIG` selects that file. The command does not discover a control socket from another source. See the [configuration reference](../009-configuration-reference) for `kes_agent.control_socket`, socket permissions, and configuration-file selection.
+An explicit `--socket` value takes precedence. Without `--socket`, the command reads `kes_agent.control_socket` from the YAML file selected by `--config`; when `--config` is omitted, `BURSA_CONFIG` selects that file. The command does not discover a control socket from another source. See the [configuration reference](../009-configuration-reference) for `kes_agent.control_socket`, socket permissions, and configuration-file selection.
 
 Use `--profile` to select the profile affected when the agent serves several profiles. Without `--profile`, `info` lists every profile; a single-profile agent can omit the profile name.
 
@@ -114,7 +114,7 @@ The control command provides these subcommands:
 - `install-key --opcert FILE` installs a staged key from a `NodeOperationalCertificate` `cardano-cli` envelope. The command requires the `--opcert` flag.
 - `drop-key --target VALUE` drops key material. The `--target` flag is required and accepts only `staged`, `active`, or `all`.
 
-The command prints agent replies as JSON and represents byte fields as hexadecimal. An agent refusal causes a non-zero CLI exit. Each control request has a 30-second limit, and cancellation ends blocked socket input or output promptly.
+The command prints agent replies as JSON and represents byte fields as hexadecimal. An agent refusal causes a non-zero CLI exit. Each control request has a 30-second limit, and cancellation ends blocked socket I/O promptly.
 
 Rotate a KES key in three steps:
 
