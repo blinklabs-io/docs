@@ -101,6 +101,42 @@ http://localhost:8080/swagger/index.html
 
 `--config` にはYAML設定ファイルのパスを指定します。フラグを省略した場合は、`BURSA_CONFIG` 環境変数で設定ファイルのパスを指定できます。
 
+<a id="kes-agent-control"></a>
+### `kes-agent` の制御コマンド
+
+稼働中の `kes-agent` にローカル制御ソケット経由でコマンドを送るには、`bursa kes-agent control` を使用します。制御ソケットは次の規則で選択します。
+
+- `--socket <path>` を指定すると、そのパスを使用します。この指定は設定ファイルの値より優先されます。
+- `--socket` を省略すると、`--config <path>` で指定した YAML ファイルの `kes_agent.control_socket` を使用します。
+- `--config` も省略した場合は、`BURSA_CONFIG` が選択する YAML ファイルの `kes_agent.control_socket` を使用します。これ以外の方法では制御ソケットを検出しません。
+
+`--profile <name>` は、複数のプロファイルを持つエージェントでコマンドを実行するプロファイルを指定します。プロファイルを指定しない `info` はすべてのプロファイルを一覧表示し、単一プロファイルのエージェントでは `--profile` を省略できます。
+
+次のサブコマンドを使用できます。
+
+- `info` はエージェントの鍵の状態を表示します。
+- `gen-staged-key [--out <path>]` はステージ済み KES 鍵を生成し、検証鍵を表示します。`--out` を指定すると、検証鍵を `cardano-cli` エンベロープとして指定したファイルに書き込みます。エージェントからの応答を先に表示し、既存のファイルは置き換えません。
+- `install-key --opcert <path>` は、必須の `--opcert` で指定した `NodeOperationalCertificate` の `cardano-cli` エンベロープを読み込み、ステージ済み鍵をインストールします。
+- `drop-key --target <value>` は、必須の `--target` で指定した鍵を削除します。`<value>` には `staged`、`active`、`all` のいずれかだけを指定できます。
+
+各サブコマンドは応答を JSON で出力し、バイト列のフィールドを 16 進数で表示します。エージェントがコマンドを拒否した場合、CLI は応答を表示したうえで 0 以外の終了コードを返します。1 回の制御要求は 30 秒で打ち切られ、要求をキャンセルすると、待機中のソケット入出力も直ちに停止します。
+
+#### KES 鍵のローテーション
+
+次の順序で KES 鍵をローテーションします。運用証明書はエージェントではなく、プールのコールド鍵を使ってオフラインで発行します。
+
+1. `gen-staged-key` でステージ済み鍵を生成します。
+2. 生成した検証鍵に対する運用証明書を、プールのコールド鍵でオフライン発行します。
+3. `install-key` で運用証明書をインストールします。
+4. `info` でエージェントの状態を確認します。
+
+```sh
+./bursa kes-agent control --config /path/to/kes-agent.yaml gen-staged-key --out kes.vkey
+# kes.vkey に対する運用証明書をプールのコールド鍵でオフライン発行し、node.cert として保存
+./bursa kes-agent control --config /path/to/kes-agent.yaml install-key --opcert node.cert
+./bursa kes-agent control --config /path/to/kes-agent.yaml info
+```
+
 `kes_agent.mode` に `serve-key` または `sign` を設定します。`kes_agent` YAML のフィールドと環境変数、および必須のソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
 
 ***
