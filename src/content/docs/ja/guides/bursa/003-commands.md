@@ -108,7 +108,7 @@ http://localhost:8080/swagger/index.html
 
 - `--socket <path>` を指定すると、そのパスを使用します。この指定は設定ファイルの値より優先されます。
 - `--socket` を省略すると、`--config <path>` で指定した YAML ファイルの `kes_agent.control_socket` を使用します。
-- `--config` も省略した場合は、`BURSA_CONFIG` が選択する YAML ファイルの `kes_agent.control_socket` を使用します。これ以外の方法では制御ソケットを検出しません。
+- `--config` も省略した場合は、環境変数 `BURSA_CONFIG` で選択した YAML ファイルの `kes_agent.control_socket` を使用します。これ以外の方法では制御ソケットを検出しません。
 
 `--profile <name>` は、複数のプロファイルを持つエージェントでコマンドを実行するプロファイルを指定します。プロファイルを指定しない `info` はすべてのプロファイルを一覧表示し、単一プロファイルのエージェントでは `--profile` を省略できます。
 
