@@ -9,6 +9,7 @@ description: Notas de la versión de Bursa
 
 Cada versión enlaza a las notas completas. La versión más reciente aparece primero.
 
+- Versión: v0.25.0 - *[Ver notas de la versión](../v0-25-0)*
 - Versión: v0.24.0 - *[Ver notas de la versión](../v0-24-0)*
 - Versión: v0.21.1 - *[Ver notas de la versión](../v0-21-1)*
 - Versión: v0.20.0 - *[Ver notas de la versión](../v0-20-0)*

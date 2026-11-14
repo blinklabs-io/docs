@@ -95,6 +95,44 @@ Start the KES agent daemon for a Cardano block producer with a YAML configuratio
 
 The `--config` flag selects the YAML configuration file. When the flag is omitted, Bursa uses the `BURSA_CONFIG` environment variable. Configure the `kes_agent.mode` value as `serve-key` or `sign`. Use the [configuration reference](../009-configuration-reference) for the `kes_agent` YAML fields and environment variables, including the mode and required socket, key, and timing settings.
 
+### Control the KES agent
+
+Use `bursa kes-agent control` to send a command to a running local KES agent through its control socket:
+
+```
+./bursa kes-agent control [--config /path/to/kes-agent.yaml] [--socket /run/bursa/kes-agent-control.sock] [--profile PROFILE] <command>
+```
+
+An explicit `--socket` value takes precedence. Without `--socket`, the command reads `kes_agent.control_socket` from the YAML file selected by `--config`; when `--config` is omitted, `BURSA_CONFIG` selects that file. The command does not discover a control socket from another source. See the [configuration reference](../009-configuration-reference) for `kes_agent.control_socket`, socket permissions, and configuration-file selection.
+
+Use `--profile` to select the profile affected when the agent serves several profiles. Without `--profile`, `info` lists every profile; a single-profile agent can omit the profile name.
+
+The control command provides these subcommands:
+
+- `info` prints the agent state. It does not require additional flags.
+- `gen-staged-key [--out FILE]` generates a staged key. The optional `--out` flag writes the KES verification key as a `cardano-cli` envelope, prints the JSON reply before attempting the write, and refuses to overwrite an existing file.
+- `install-key --opcert FILE` installs a staged key from a `NodeOperationalCertificate` `cardano-cli` envelope. The command requires the `--opcert` flag.
+- `drop-key --target VALUE` drops key material. The `--target` flag is required and accepts only `staged`, `active`, or `all`.
+
+The command prints agent replies as JSON and represents byte fields as hexadecimal. An agent refusal causes a non-zero CLI exit. Each control request has a 30-second limit, and cancellation ends blocked socket I/O promptly.
+
+Rotate a KES key in three steps:
+
+1. Generate the staged key and write its verification key to an envelope:
+
+   ```
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml gen-staged-key --out kes.vkey
+   ```
+
+2. Issue an operational certificate for `kes.vkey` offline with the pool cold key. The agent does not issue the certificate.
+
+3. Install the certificate and inspect the result:
+
+   ```
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml install-key --opcert node.cert
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml info
+   ```
+
 ***
 
 <a name="tx"></a>
