@@ -101,7 +101,7 @@ Consulte la [referencia de configuración](../009-configuration-reference) para 
 
 ### Controlar un agente KES en ejecución
 
-`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Cuando se omite, el comando consulta `kes_agent.control_socket` en el archivo YAML seleccionado por `--config` o `BURSA_CONFIG`.
+`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Sin `--socket`, el comando consulta `kes_agent.control_socket` en el archivo YAML seleccionado por `--config` o `BURSA_CONFIG`.
 
 Las opciones de control son:
 
