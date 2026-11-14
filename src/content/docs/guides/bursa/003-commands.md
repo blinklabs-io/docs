@@ -111,7 +111,7 @@ The control command provides these subcommands:
 
 - `info` prints the agent state. It does not require additional flags.
 - `gen-staged-key [--out FILE]` generates a staged key. The optional `--out` flag writes the KES verification key as a `cardano-cli` envelope, prints the JSON reply before attempting the write, and refuses to overwrite an existing file.
-- `install-key --opcert FILE` installs a staged key from a `NodeOperationalCertificate` `cardano-cli` envelope. The `--opcert` flag is required.
+- `install-key --opcert FILE` installs a staged key from a `NodeOperationalCertificate` `cardano-cli` envelope. The command requires the `--opcert` flag.
 - `drop-key --target VALUE` drops key material. The `--target` flag is required and accepts only `staged`, `active`, or `all`.
 
 The command prints agent replies as JSON and represents byte fields as hexadecimal. An agent refusal causes a non-zero CLI exit. Each control request has a 30-second limit, and cancellation ends blocked socket input or output promptly.
