@@ -101,22 +101,22 @@ Consulte la [referencia de configuración](../009-configuration-reference) para 
 
 ### Controlar un agente KES en ejecución
 
-`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Si se omite, el comando lee `kes_agent.control_socket` del archivo YAML seleccionado por `--config` o, cuando se omite `--config`, por `BURSA_CONFIG`. Consulte la [referencia de configuración](../009-configuration-reference) para los campos YAML y los permisos del socket.
+`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Cuando no aparece `--socket`, el comando lee `kes_agent.control_socket` del archivo YAML que selecciona `--config`. Cuando tampoco aparece `--config`, el comando usa `BURSA_CONFIG` para seleccionar el archivo.
 
 Las opciones de control son:
 
-- `--config`: ruta al archivo YAML del agente; `BURSA_CONFIG` actúa como alternativa.
+- `--config`: selecciona el archivo YAML del agente; `BURSA_CONFIG` actúa como alternativa.
 - `--socket`: ruta explícita del socket de control; sustituye la ruta obtenida de la configuración.
-- `--profile`: perfil sobre el que actúa el comando cuando el agente tiene varios perfiles. Un agente con un solo perfil permite omitir esta opción. `info` sin `--profile` muestra todos los perfiles.
+- `--profile`: selecciona el perfil sobre el que actúa el comando cuando el agente tiene varios perfiles. El comando permite omitir esta opción con un solo perfil. `info` sin `--profile` muestra todos los perfiles.
 
 Los subcomandos disponibles son:
 
 - `info`: muestra el estado de las claves del agente. El comando devuelve la respuesta como JSON y codifica en hexadecimal los campos de bytes.
-- `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; cuando se proporciona, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El archivo existente no se sobrescribe.
+- `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; con esta opción, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El comando no sobrescribe un archivo existente.
 - `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
 - `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
 
-El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación también detiene de inmediato la lectura o escritura bloqueada del socket.
+El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación detiene de inmediato la lectura o escritura bloqueada del socket.
 
 La rotación de una clave KES sigue este orden: generar la clave staged, emitir sin conexión su certificado operativo con la clave fría del pool, instalar el certificado y comprobar el resultado con `info`. El agente no emite el certificado operativo.
 
