@@ -289,8 +289,9 @@ requests are not subject to the Blockfrost mutation admission limits.
 | Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0` or unset by default, which disables the per client bound. Set a positive value to limit work from one remote address. When `maxConcurrentMutations` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
 
 Before reading the request body, the provider applies each configured positive
-mutation limit. When an active global or per client limit is exhausted, it
-returns HTTP `429` with `Retry-After: 1` without reading the body.
+mutation limit. When concurrent work reaches an active global or per-client
+limit, the provider returns HTTP `429` with `Retry-After: 1` without reading
+the body.
 
 ### Shared outbound HTTP user agent
 
@@ -313,7 +314,7 @@ The shared outbound HTTP user agent has no YAML key or CLI flag.
 | Managed Mithril synchronization | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false` (off). In `serve` with core storage, Dingo can synchronize from a certified Mithril v2 tip and falls back to Ouroboros synchronization when managed Mithril synchronization fails. Manual Mithril synchronization commands work regardless of this setting. |
 | Mithril artifact backend | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2` (empty also selects `v2`). Dingo rejects `v1` and v1 CLI paths. The v2 backend uses incremental Cardano database artifacts, requires verified ancillary ledger state and immutable digests during bootstrap, and treats the v2 artifact layout as authoritative. |
 | Mithril pinned digest | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Empty by default. When configuration sets this value for a fresh bootstrap, the value must identify a v2 Cardano database artifact. Dingo rejects v1 snapshot pins and digests. |
-| Cleanup after Mithril load | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true` by default. When enabled, Dingo retires extracted immutable chunks incrementally after their blocks are committed. If a load is interrupted, the internal `mithril_immutable_retired_below` resume marker lets the next run start after chunks already retired. |
+| Cleanup after Mithril load | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true` by default. When enabled, Dingo retires extracted immutable chunks incrementally after committing their blocks. If a load stops before completion, Dingo reads the internal `mithril_immutable_retired_below` resume marker and starts the next run after the chunks it already retired. |
 
 ### Mithril download limit
 
