@@ -602,8 +602,7 @@ certificate paths.
 Pools may share a remote KES listener address only when each pool names a
 different `shelleyKesAgentProfile`. A missing or duplicated profile makes the
 configuration invalid. The single address and ordered address list remain
-available as `shelleyKesAgentAddress` and `shelleyKesAgentAddresses`; their
-CLI and environment bindings apply to the top level pool only.
+available as `shelleyKesAgentAddress` and `shelleyKesAgentAddresses`.
 
 #### Shelley KES agent socket
 
@@ -623,7 +622,7 @@ CLI and environment bindings apply only to the top-level pool.
 | --- | --- | --- | --- | --- |
 | Single remote KES agent address | `shelleyKesAgentAddress` or `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Empty. Use a `host:port` address for a remote signing listener; the setting selects sign mode. Use either this field or `shelleyKesAgentAddresses`, not both. |
 | Ordered remote KES agent addresses | `shelleyKesAgentAddresses` or `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Empty. Enter an ordered list of `host:port` addresses. Dingo uses the list order for remote signing and validates every address. |
-| Remote KES agent profile | `shelleyKesAgentProfile` or `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Empty. A profile requires a remote agent address. When pools share a remote listener, each pool must set a different profile. |
+| Remote KES agent profile | `shelleyKesAgentProfile` or `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Empty. A profile requires a remote agent address. Shared remote listener addresses require a distinct profile for each pool; missing or duplicate profiles are invalid. |
 
 ### Kupo provider
 
