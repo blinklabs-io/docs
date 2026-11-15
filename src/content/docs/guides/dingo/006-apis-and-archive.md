@@ -83,9 +83,10 @@ capacity:
 | `POST /api/v0/utils/txs/evaluate` | Accepts anonymous requests and consumes configured global and per-client mutation admission capacity. |
 | `POST /api/v0/utils/txs/evaluate/utxos` | Accepts anonymous requests and consumes configured global and per-client mutation admission capacity. |
 
-Admission control applies only to bounds enabled with positive values. Dingo
-checks enabled bounds before it reads the request body. When an enabled bound
-is exhausted, the request returns HTTP `429` with `Retry-After: 1`.
+Admission control applies only to bounds that operators enable with positive
+values. Dingo checks configured bounds before it reads the request body. When a
+configured bound reaches capacity, Dingo returns HTTP `429` with
+`Retry-After: 1`.
 
 Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
