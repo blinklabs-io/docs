@@ -99,7 +99,7 @@ El servicio de métricas utiliza HTTP sin cifrar. Dingo aplica controles de red 
 | Fracción de muestreo de mutex | `debugMutexProfileFraction` | `--debug-mutex-profile-fraction` | `DINGO_DEBUG_MUTEX_PROFILE_FRACTION` | `0`, desactivada. Muestrea, en promedio, un evento de contención de mutex de cada `N` para el perfil pprof de mutex. |
 | Tasa de perfilado de bloqueos | `debugBlockProfileRate` | `--debug-block-profile-rate` | `DINGO_DEBUG_BLOCK_PROFILE_RATE` | `0`, desactivada. Muestrea un evento de bloqueo por cada `N` nanosegundos bloqueado; `1` registra todos los eventos. |
 
-Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Una tasa configurada sin un puerto de depuración activo no se aplica; Dingo muestra una advertencia.
+Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Dingo ignora una tasa configurada sin un puerto de depuración activo y muestra una advertencia.
 
 ### Trazas
 
@@ -117,7 +117,9 @@ Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Una ta
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
-| Modo de permisos del socket Cardano | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600`. Introduce un modo octal para el socket Unix del nodo. Dingo aplica `0600` independientemente de `umask`; en Unix rechaza los modos que permiten escritura a otros usuarios. El directorio padre debe pertenecer al usuario actual o a root y no permitir escritura al grupo ni a otros usuarios. |
+| Modo de permisos del socket Cardano | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600`. Introduce un modo octal para el socket Unix del nodo. |
+
+Dingo aplica a `socketMode` y `dmq.socketMode` un valor predeterminado de `0600` independiente de `umask`. En Unix, Dingo rechaza los modos que permiten escritura a otros usuarios. El directorio padre de cada socket debe pertenecer al usuario actual o a root y no permitir escritura al grupo ni a otros usuarios.
 
 ### Configuración DMQ
 
@@ -132,7 +134,7 @@ Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Una ta
 | Puerto de pares N2N | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` desactiva el puerto N2N. Un puerto distinto de cero activa la escucha entre nodos DMQ y la gestión de pares cuando `dmq.maxPeers` también es distinto de cero. |
 | Dirección IPv4 de escucha | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | Si `dmq.n2nPort` no es cero y se configura este campo, exige un literal IPv4. |
 | Dirección IPv6 de escucha | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | Si `dmq.n2nPort` no es cero y se configura este campo, exige un literal IPv6. |
-| Modo de permisos del socket DMQ | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600` | Introduce un modo octal. Dingo aplica `0600` independientemente de `umask` y, en Unix, rechaza los modos que permiten escritura a otros usuarios. El directorio padre del socket debe pertenecer al usuario actual o a root y no permitir escritura al grupo ni a otros usuarios. |
+| Modo de permisos del socket DMQ | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600` | Introduce un modo octal para el socket DMQ. |
 | Archivo de topología DMQ | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Sin configurar | Si se configura, la ruta no puede incluir recorridos `..` y debe identificar un archivo regular existente. Dingo lo carga y valida antes de abrir el socket DMQ. |
 | Mínimo de pares DMQ | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` permite no requerir pares. Solo las conexiones salientes cuentan para cumplir este mínimo; las conexiones entrantes no lo satisfacen. |
 | Máximo de pares DMQ | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` no permite pares cuando `minPeers` también es `0`. Limita el total de conexiones y reserva espacio para las conexiones salientes según `minPeers` y la valencia total de las raíces locales. |
