@@ -56,10 +56,17 @@ kes_agent:
 
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
 `cold_vkey_hex`, `system_start`, `slots_per_kes_period`, `guard_file`) unset at
-the top level. To run several agent replicas, replace the per-profile guard
-files with a shared PostgreSQL store under `kes_agent.store`. Its
-`age_recipients` and `age_identity_file` settings let the replicas share each
-profile's sealed KES key.
+the top level.
+
+With guard files, the agent keeps each KES key in memory only. A guard file
+keeps the profile's KES period floor across a restart, not its key. After the
+agent restarts, no profile has an active key, and the node cannot sign until
+you install a new key and certificate as described in
+[Rotate the KES key](#rotate-the-kes-key). To keep keys across restarts,
+replace the guard files with a PostgreSQL store under `kes_agent.store` and set
+its `age_recipients` and `age_identity_file`. The agent then seals each
+profile's key in the database and loads it again at startup. This works with
+one replica, and it is also how several replicas share a key.
 
 The agent logs its server key fingerprint at startup as `server_spki_sha256`.
 That value is the pin the node uses. You can also compute it from the server
@@ -144,7 +151,9 @@ that was installed in the agent.
 
 Rotate before the current key runs out of KES periods. Run the agent commands
 inside the agent's container: the control socket is local to the agent. Pass
-`--profile` to select the pool.
+`--profile` to select the pool. Work in a new, empty directory for each
+rotation: `--out` refuses to overwrite an existing file, and it does so only
+after the agent has staged the key.
 
 1. Generate a staged key in the agent and save its verification key:
 
@@ -156,8 +165,9 @@ inside the agent's container: the control socket is local to the agent. Pass
 2. Issue an operational certificate for `kes.vkey` with the pool's cold key,
    offline. Start it at the current KES period, which is the current slot
    divided by the slots per KES period. The ledger accepts a counter equal to
-   the pool's on-chain counter or one above it. Use one above to retire the
-   previous key:
+   the pool's on-chain counter or one above it. Use one above. When the pool
+   has not forged a block since its current certificate was issued, that is
+   the current certificate's counter again:
 
    ```sh
    bursa cert op-cert --kes-vkey kes.vkey --cold-skey cold.skey \
@@ -188,10 +198,18 @@ inside the agent's container: the control socket is local to the agent. Pass
 5. Put the same `node.cert` into the keys Secret as `opcert.cert`. The
    operator validates the bundle and delivers it to the pod.
 
-Install first, then update the Secret. Once the agent serves the new
-certificate, the running node picks it up at its next connection to the agent:
-the certificate is for the same cold key with a higher counter. Dingo logs
-`block producer credentials reloaded` with `source` set to `kes agent`. The
-Secret then catches up to match it. In the reverse order, the Secret would
-hold a certificate the agent does not serve yet, and a restart in between
-would leave the node unable to sign.
+Install first, then update the Secret, and do both in one sitting. From
+`install-key` on, the agent signs only headers that carry the new
+certificate, so the node cannot sign until it has switched over:
+
+- **The new counter is higher than the node's.** The running node picks up
+  the agent's certificate at its next connection to the agent, and logs
+  `block producer credentials reloaded` with `source` set to `kes agent`. The
+  Secret update then makes a restart load the same certificate.
+- **The counter is unchanged,** because the pool has not forged since the
+  previous rotation. Dingo does not take a same-counter certificate from the
+  agent, and does not reload one in place. The operator restarts the pod when
+  the Secret changes, and the restarted node loads the new certificate.
+
+In the reverse order, the Secret would hold a certificate the agent does not
+serve yet, and a restart in between would leave the node unable to sign.
