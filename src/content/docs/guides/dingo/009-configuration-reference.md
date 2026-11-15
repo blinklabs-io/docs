@@ -242,16 +242,16 @@ original and rewind errors, and the database requires recovery before another
 load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
 
-Ledger-state imports support Conway and later current eras only. Shelley through
-Babbage snapshots fail during parsing with `ErrPreConwaySnapshotUnsupported`,
-before Dingo writes ledger state. See the bootstrap and data maintenance guide
-for the supported import workflow.
+Dingo supports ledger-state imports only for Conway and later current eras.
+Shelley through Babbage snapshots fail during parsing with
+`ErrPreConwaySnapshotUnsupported`, before Dingo writes ledger state. See the
+bootstrap and data maintenance guide for the supported import workflow.
 
 ### Historical validation and ledger-state imports
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Historical validation | `validateHistorical` | `--validate-historical` | `CARDANO_VALIDATE_HISTORICAL` | `false`. When false, Dingo skips full historical validation, but non-trusted peer-sourced historical blocks still receive inbound envelope checks and operational-certificate counter checks. Trusted replay and Mithril-certified history skip those specific checks. |
+| Historical validation | `validateHistorical` | `--validate-historical` | `CARDANO_VALIDATE_HISTORICAL` | `false`. When false, Dingo skips full historical validation. However, Dingo still checks non-trusted peer-sourced historical blocks against inbound envelope rules and operational-certificate counter rules. Trusted replay and Mithril-certified history skip those specific checks. |
 
 ### Genesis bootstrap corroboration
 
