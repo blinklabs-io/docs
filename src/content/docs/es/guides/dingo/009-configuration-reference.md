@@ -18,7 +18,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Este es el único valor aceptado y corresponde a la estrategia heredada de recepción por par implementada por Dingo. Dingo rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
-| Antelación mínima de oferta Leios | `LeiosMinOfferLead` | — | — | Clave del archivo de configuración del nodo Cardano. Indica cuántos slots debe estar un bloque endorser por encima de la punta inmutable para que Dingo lo ofrezca a un par. Dingo utiliza `3600` slots cuando la clave está ausente. |
+| Antelación mínima de oferta Leios | `LeiosMinOfferLead` | — | — | Clave del archivo de configuración del nodo Cardano. Indica cuántos `slots` debe estar un bloque endorser por encima de la punta inmutable para que Dingo lo ofrezca a un par. Dingo utiliza `3600` `slots` cuando la clave está ausente. |
 
 El archivo de configuración del nodo Cardano admite tanto el formato plano existente como el formato envolvente con `Version: 2`. En el formato envolvente, `Version` debe ser el entero `2` y `Configuration` debe ser un objeto. Un ejemplo compacto es:
 
@@ -120,7 +120,7 @@ Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Dingo 
 | --- | --- | --- | --- | --- |
 | Modo de permisos del socket Cardano | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600`. Introduce un modo octal para el socket Unix del nodo. |
 
-Dingo aplica a `socketMode` y `dmq.socketMode` un valor predeterminado de `0600` independiente de `umask`. En Unix, Dingo rechaza los modos que permiten escritura a otros usuarios. El directorio padre de cada socket debe pertenecer al usuario actual o a root. Dingo acepta la escritura del grupo o de otros usuarios únicamente cuando el directorio tiene el sticky bit; rechaza un directorio padre escribible sin ese bit. Para corregirlo, ejecuta `chmod +t` o elimina el permiso de escritura del grupo y de otros usuarios.
+Dingo aplica a `socketMode` y `dmq.socketMode` un valor predeterminado de `0600` independiente de `umask`. En Unix, Dingo rechaza los modos que permiten escritura a otros usuarios. El directorio padre de cada socket debe pertenecer al usuario actual o a root. Dingo acepta la escritura del grupo o de otros usuarios únicamente cuando el directorio tiene el `sticky bit`; rechaza un directorio padre escribible sin ese bit. Para corregirlo, ejecuta `chmod +t` o elimina el permiso de escritura del grupo y de otros usuarios.
 
 ### Configuración DMQ
 
