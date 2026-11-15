@@ -99,7 +99,7 @@ El servicio de métricas utiliza HTTP sin cifrar. Dingo aplica controles de red 
 | Fracción de muestreo de mutex | `debugMutexProfileFraction` | `--debug-mutex-profile-fraction` | `DINGO_DEBUG_MUTEX_PROFILE_FRACTION` | `0`, desactivada. Muestrea, en promedio, un evento de contención de mutex de cada `N` para el perfil pprof de mutex. |
 | Tasa de perfilado de bloqueos | `debugBlockProfileRate` | `--debug-block-profile-rate` | `DINGO_DEBUG_BLOCK_PROFILE_RATE` | `0`, desactivada. Muestrea un evento de bloqueo por cada `N` nanosegundos bloqueado; `1` registra todos los eventos. |
 
-Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Si se configura una tasa sin un puerto de depuración activo, Dingo ignora la tasa y muestra una advertencia.
+Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Una tasa configurada sin un puerto de depuración activo no se aplica; Dingo muestra una advertencia.
 
 ### Trazas
 
@@ -402,6 +402,8 @@ La opción `--shelley-kes-agent-socket` admite rutas de sockets del sistema de a
 | --- | --- | --- | --- | --- |
 | Direcciones del agente KES remoto | `shelleyKesAgentAddresses` o `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Sin configurar. Introduce una lista ordenada de direcciones `host:port`; Dingo valida cada entrada y utiliza la lista para el cambio ordenado entre agentes. No combines este campo con `shelleyKesAgentAddress`. |
 | Perfil del agente KES remoto | `shelleyKesAgentProfile` o `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Sin configurar. El perfil selecciona la sesión de firma del agente remoto. Un perfil requiere `shelleyKesAgentAddress` o `shelleyKesAgentAddresses`; los pools que comparten un listener remoto deben usar perfiles distintos. |
+
+Las opciones CLI y las variables de entorno de estos dos campos configuran únicamente los ajustes de nivel superior; los pools utilizan sus claves YAML correspondientes.
 
 ### Proveedor Kupo
 
