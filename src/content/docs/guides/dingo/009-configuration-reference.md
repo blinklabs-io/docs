@@ -584,6 +584,27 @@ Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
 `0`, which disables the bound. Dingo evaluates the bound only when a
 corroborated upstream target exists and ignores it when the target is unknown.
 
+#### Multiple block producer pools
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Multiple block producer pools | `blockProducerPools` | — | — | Absent or empty by default. Dingo then uses the existing top level single pool `shelley*` key and KES settings. A populated list replaces those top level settings and configures each pool from its list entry. The list and its nested values are YAML only; no separate CLI flags or environment variables apply to list entries. |
+
+Each `blockProducerPools` entry requires `shelleyVrfKey`,
+`shelleyOperationalCertificate`, and exactly one KES source:
+`shelleyKesKey`, `shelleyKesAgentSocket`, or a remote
+`shelleyKesAgentAddress` or `shelleyKesAgentAddresses`. The top level
+`shelleyKesAgentSignTimeout` and `shelleyKeyWatchInterval` settings apply to
+all pools. Dingo rejects a populated list that also sets legacy top level
+single pool `shelley*` key or KES settings, and rejects duplicate operational
+certificate paths.
+
+Pools may share a remote KES listener address only when each pool names a
+different `shelleyKesAgentProfile`. A missing or duplicated profile makes the
+configuration invalid. The single address and ordered address list remain
+available as `shelleyKesAgentAddress` and `shelleyKesAgentAddresses`; their
+CLI and environment bindings apply to the top level pool only.
+
 #### Shelley KES agent socket
 
 The `--shelley-kes-agent-socket` flag supports filesystem socket paths and
