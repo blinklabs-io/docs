@@ -144,8 +144,6 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | OpenTelemetry ログエクスポーター | — | — | `OTEL_LOGS_EXPORTER` | 未設定または `none` の場合、OTLP ログエクスポートを無効にします。Dingo は無効なエクスポーター設定を警告し、標準出力ログを維持してノードを起動します。 |
 | OpenTelemetry メトリクスエクスポーター | — | — | `OTEL_METRICS_EXPORTER` | 未設定または `none` の場合、OTLP メトリクスエクスポートを無効にします。Dingo は無効なエクスポーター設定を警告し、ノードを起動します。OTLP エクスポートの設定は Prometheus の `/metrics` エンドポイントに影響しません。 |
 
-<a id="dmq-configuration"></a>
-
 <a id="unix-socket-modes"></a>
 
 ### Unix ソケットの権限
@@ -155,7 +153,9 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
 | ノード間クライアントソケットのモード | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600`。8 進数で指定します。グループ共有が必要な場合は、要件に合うモードを明示します。 |
-| DMQ ソケットのモード | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600`。8 進数で指定します。Unix では他のユーザーによる書き込みを許可する値を拒否します。 |
+| DMQ ソケットのモード | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600`。8 進数で指定します。 |
+
+<a id="dmq-configuration"></a>
 
 ### DMQ の設定
 
@@ -191,6 +191,11 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 ### ImmutableDB の取得元
 
 `immutableDbPath` と `dingo load` の位置引数には、ローカルディレクトリまたはリモート URL を指定できます。リモート取得元には `https://` が必要です。`http://` はループバックホストでのみ使用でき、それ以外の HTTP は拒否されます。HTTPS では、最初の URL、すべてのリダイレクト、各接続時の DNS 解決について、プライベートまたは特殊用途の接続先を拒否します。リモートインポートでは環境の HTTP プロキシ設定を無視します。リモートのルートは `tip.json` と、番号付きの `.chunk`、`.primary`、`.secondary` の 3 ファイル組を提供します。不一致または不完全な公開チャンクデータは拒否されます。要求したチャンク範囲から、転送バイト数、キャッシュとステージング、空き領域の予約、並行処理の合計上限を導出します。上限を超えるか空き領域が不足すると、エラーを報告してインポートに失敗し、ステージングファイルを削除します。リモートインポートで、コピー済み immutable ブロックが台帳適用済みの先端を越えた後に信頼済み再実行または処理が失敗した場合、元のエラーを返す前に未適用ブロックをその先端まで巻き戻します。このため、ステージングの後処理だけが行われて未適用の immutable ブロックが台帳の先端より先に残ることはありません。ストレージバックエンドが巻き戻しを拒否した場合は、元のエラーと巻き戻しエラーの両方を返し、次のロード前にデータベースの復旧が必要になります。取得元、チャンク、整合性の要件はブートストラップとデータ保守ガイドを参照してください。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| 過去ブロックの検証 | `validateHistorical` | `--validate-historical` | `DINGO_VALIDATE_HISTORICAL` | `false` にしても、信頼済みリプレイまたは Mithril 認証済み履歴以外のピア由来の過去ブロックでは、ブロックエンベロープと運用証明書カウンターの検証を省略しません。完全な過去トランザクション検証だけを無効にします。 |
+| 台帳状態のインポート対応範囲 | — | — | — | 現在の台帳時代が `Conway` 以降の状態だけをインポートできます。`Shelley` から `Babbage` までの状態は `ErrPreConwaySnapshotUnsupported` を返し、状態を永続化する前に拒否します。 |
 
 <a id="genesis-bootstrap-corroboration"></a>
 
@@ -458,7 +463,7 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
- Dingo v0.94.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+Dingo v0.94.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
 
