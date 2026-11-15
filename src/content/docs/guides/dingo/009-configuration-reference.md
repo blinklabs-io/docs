@@ -150,6 +150,19 @@ before chain data import.
 | OpenTelemetry log exporter | — | — | `OTEL_LOGS_EXPORTER` | An unset or empty variable, or `none`, disables OTLP log export. A valid exporter value enables optional OTLP log export. Invalid exporter configuration produces a warning without stopping startup, and stdout logging remains available. |
 | OpenTelemetry metric exporter | — | — | `OTEL_METRICS_EXPORTER` | An unset or empty variable, or `none`, disables OTLP metric export. A valid exporter value enables optional OTLP export of the Prometheus registry. Invalid exporter configuration produces a warning without stopping startup; the Prometheus `/metrics` endpoint remains available. |
 
+### Debug profiling
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Mutex profile sampling fraction | `debugMutexProfileFraction` | `--debug-mutex-profile-fraction` | `DINGO_DEBUG_MUTEX_PROFILE_FRACTION` | `0` (off). A nonzero value samples mutex contention events for the pprof mutex profile. Dingo applies the setting only when `debugPort` is nonzero; the setting does not enable pprof by itself. |
+| Block profile sampling rate | `debugBlockProfileRate` | `--debug-block-profile-rate` | `DINGO_DEBUG_BLOCK_PROFILE_RATE` | `0` (off). A nonzero value samples blocking events for the pprof block profile. Dingo applies the setting only when `debugPort` is nonzero; the setting does not enable pprof by itself. |
+
+### Unix socket permissions
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Node-to-client socket mode | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. The parent directory for a managed pathname socket must belong to the current user or root and must not be group or world writable. Linux abstract sockets retain their platform behavior; Windows skips the Unix write restriction. |
+
 ### DMQ configuration
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
@@ -158,6 +171,7 @@ before chain data import.
 | Topic | `dmq.topic` | `--dmq-topic` | `DINGO_DMQ_TOPIC` | `mithril` | When enabled, Dingo requires the value `mithril`; no other value is valid. |
 | Network magic | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | Derived from the topic and Cardano network when unset. | When omitted, Dingo derives the value from the topic and Cardano network. An explicit value overrides the derived value. Set it when the Cardano network has no default for the topic. |
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
+| Socket mode | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N peer port. A nonzero value activates DMQ node-to-node listening and peer management when `dmq.maxPeers` is also nonzero. |
