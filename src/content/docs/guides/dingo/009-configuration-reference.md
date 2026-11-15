@@ -571,7 +571,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.92.4 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.94.0 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
@@ -589,6 +589,18 @@ Linux abstract socket addresses. Dingo resolves a relative filesystem path
 once at client construction and reuses the resolved path across reconnects. It
 preserves `@`-prefixed abstract addresses, rejects literal NUL-prefixed
 addresses at client construction, and enforces platform socket-length limits.
+
+#### Remote Shelley KES agents
+
+The top-level remote KES settings accept the CLI flags and environment
+variables shown below. Each `blockProducerPools` entry also accepts the YAML
+keys, but the CLI and environment bindings apply only to the top-level pool.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Single remote KES agent address | `shelleyKesAgentAddress` or `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Empty. Use a `host:port` address for a remote signing listener; the setting selects sign mode. Do not set this field together with `shelleyKesAgentAddresses`. |
+| Ordered remote KES agent addresses | `shelleyKesAgentAddresses` or `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Empty. Enter an ordered list of `host:port` addresses. Dingo uses the list order for remote signing and validates every address. Do not set this field together with `shelleyKesAgentAddress`. |
+| Remote KES agent profile | `shelleyKesAgentProfile` or `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Empty. A profile requires a remote agent address. When pools share a remote listener, each pool must set a different profile. |
 
 ### Kupo provider
 
