@@ -34,7 +34,7 @@ for the main runtime choices.
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
 | Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.chainSyncJumping`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
-| Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
+| Block production and ledger rules | `blockProducer`, `blockProducerPools`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, multiple pool identities, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
 
@@ -285,12 +285,12 @@ requests are not subject to the Blockfrost mutation admission limits.
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` by default. An explicitly empty value uses the root `bindAddr`; set a host to expose the provider on another interface. |
 | Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. The setting is not required, and transaction submission and evaluation accept anonymous requests. |
-| Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` by default. The value must be positive and limits transaction submission and evaluation across the provider. |
-| Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` by default. The value must be positive and no greater than `maxConcurrentMutations`; it limits work from one remote address. |
+| Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0` or unset by default, which disables the global bound. Set a positive value to limit transaction submission and evaluation across the provider. |
+| Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0` or unset by default, which disables the per client bound. Set a positive value to limit work from one remote address. When `maxConcurrentMutations` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
 
-Before reading the request body, the provider applies both mutation limits.
-When either limit is exhausted, it returns HTTP `429` with `Retry-After: 1`
-without reading the body.
+Before reading the request body, the provider applies each configured positive
+mutation limit. When an active global or per client limit is exhausted, it
+returns HTTP `429` with `Retry-After: 1` without reading the body.
 
 ### Shared outbound HTTP user agent
 
@@ -313,6 +313,7 @@ The shared outbound HTTP user agent has no YAML key or CLI flag.
 | Managed Mithril synchronization | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false` (off). In `serve` with core storage, Dingo can synchronize from a certified Mithril v2 tip and falls back to Ouroboros synchronization when managed Mithril synchronization fails. Manual Mithril synchronization commands work regardless of this setting. |
 | Mithril artifact backend | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2` (empty also selects `v2`). Dingo rejects `v1` and v1 CLI paths. The v2 backend uses incremental Cardano database artifacts, requires verified ancillary ledger state and immutable digests during bootstrap, and treats the v2 artifact layout as authoritative. |
 | Mithril pinned digest | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Empty by default. When configuration sets this value for a fresh bootstrap, the value must identify a v2 Cardano database artifact. Dingo rejects v1 snapshot pins and digests. |
+| Cleanup after Mithril load | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true` by default. When enabled, Dingo retires extracted immutable chunks incrementally after their blocks are committed. If a load is interrupted, the internal `mithril_immutable_retired_below` resume marker lets the next run start after chunks already retired. |
 
 ### Mithril download limit
 
@@ -476,8 +477,8 @@ platforms; other platforms return an unsupported operation error.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` when set to `0`. The budget covers all anonymous `ArchiveService` callers. Dingo rejects negative values. |
-| Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
+| Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0` or unset by default, which is unlimited. Set a positive value to limit all anonymous `ArchiveService` callers. Dingo rejects negative values. |
+| Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0` or unset by default, which is unlimited. Set a positive value to limit one caller address or IPv6 `/64`. Dingo rejects negative values. |
 
 Dingo charges one base lookup to both budgets for each `FetchBlock` reference.
 For a batch containing height references, Dingo also reserves `66` lookup units
