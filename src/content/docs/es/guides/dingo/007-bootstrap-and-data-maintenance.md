@@ -58,7 +58,7 @@ Dingo comprueba que el slot y el hash del bloque de la punta cargada coincidan c
 
 ### Validación de la importación del estado del ledger
 
-Dingo rechaza durante el análisis las instantáneas cuya era actual sea anterior a Conway, desde Shelley hasta Babbage, y devuelve `ErrPreConwaySnapshotUnsupported`. Esta comprobación ocurre antes de persistir cualquier estado parcial del ledger o UTxO. Dingo admite la importación de instantáneas de Conway y eras posteriores; para el resto de la validación, comprueba la anchura del hash de la punta y de los nonces, los certificados e instantáneas de stake, la distribución de pools y el estado de gobernanza, los parámetros del protocolo y las relaciones entre las reservas de comisiones.
+Dingo rechaza de inmediato, al analizar, las instantáneas cuya era actual sea anterior a Conway (Shelley hasta Babbage) y devuelve `ErrPreConwaySnapshotUnsupported`. Esta comprobación ocurre antes de persistir cualquier estado parcial del ledger o UTxO. Dingo admite únicamente la importación de instantáneas de Conway y eras posteriores; para el resto de la validación, comprueba la anchura del hash de la punta y de los nonces, los certificados e instantáneas de stake, la distribución de pools y el estado de gobernanza, los parámetros del protocolo y las relaciones entre las reservas de comisiones.
 
 ## Crear instantáneas, restaurar y truncar
 
