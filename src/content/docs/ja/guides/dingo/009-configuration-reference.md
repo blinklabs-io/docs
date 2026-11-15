@@ -229,10 +229,10 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | --- | --- | --- | --- | --- |
 | ホスト | `plugins.api.blockfrost.config.host` | — | — | 既定値は `127.0.0.1` です。明示的に空にするとルートの `bindAddr` を使用します。別のインターフェイスで公開するにはホストを設定します。 |
 | 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。トランザクションの送信と評価に必要ありません。 |
-| 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | 既定値は `4` です。正の値が必要で、プロバイダー全体のトランザクション送信と評価を制限します。 |
-| クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | 既定値は `1` です。正の値かつ `maxConcurrentMutations` 以下である必要があり、1 つのリモートアドレスからの処理を制限します。 |
+| 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、プロバイダー全体のトランザクション送信と評価の同時実行数に上限を設けます。 |
+| クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの処理に上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
 
-変更操作には認証は必要ありません。Dingo は本文を読む前に両方の変更操作制限を適用し、どちらかの空きがない場合は、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。
+変更操作には認証は必要ありません。Dingo は本文を読む前に、設定した変更操作の上限を適用します。設定した上限を使い切った場合だけ、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。上限を設定していない場合、変更操作の受け入れ制限はありません。
 
 <a id="shared-outbound-http-user-agent"></a>
 
@@ -261,6 +261,7 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | 自動管理の Mithril 同期 | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false`（無効）。core ストレージでの `serve` では、認証済み Mithril v2 の先端から同期でき、自動管理の Mithril 同期が失敗すると Ouroboros 同期に切り替えます。手動の Mithril 同期コマンドはこの設定に関係なく使用できます。 |
 | Mithril アーティファクトのバックエンド | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2`（空の場合も `v2`）。`v1` と v1 CLI パスは拒否されます。v2 は増分 Cardano データベースアーティファクトを使用し、ブートストラップ時に検証済みの付属台帳状態と immutable ダイジェストを要求します。v2 アーティファクトの配置を正とします。 |
 | Mithril の固定ダイジェスト | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | 既定では空です。新規ブートストラップで設定する場合は、v2 Cardano データベースアーティファクトを識別する値が必要です。v1 スナップショットの固定値やダイジェストは拒否されます。 |
+| ロード後の Mithril チャンククリーンアップ | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true`（有効）。ブロックを blob ストアに永続的にコミットした後、抽出済み ImmutableDB チャンクのうち、保持する再開アンカーより前のチャンクを削除します。同期が中断した場合は、内部の `mithril_immutable_retired_below` マーカーを使い、削除済みチャンクを再取得せずに保持された境界から再開します。このマーカーは内部の再開専用で、編集対象ではありません。 |
 
 <a id="mithril-download-limit"></a>
 
@@ -395,8 +396,8 @@ Bark のリモートライフサイクルサービスは既定で無効です。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
-| アーカイブ検索全体の毎秒上限 | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0` の場合は `200`。すべての匿名 `ArchiveService` 呼び出し元に適用します。負の値は拒否されます。 |
-| 呼び出し元ごとのアーカイブ検索の毎秒上限 | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0` の場合は `50`。IPv4 アドレスまたは IPv6 `/64` を呼び出し元の識別に使用します。負の値は拒否されます。 |
+| アーカイブ検索全体の毎秒上限 | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0`（未設定も同じ）は無制限です。正の値を設定すると、すべての匿名 `ArchiveService` 呼び出し元に適用する上限になります。負の値は拒否されます。 |
+| 呼び出し元ごとのアーカイブ検索の毎秒上限 | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0`（未設定も同じ）は無制限です。正の値を設定すると、IPv4 アドレスまたは IPv6 `/64` ごとの上限になります。負の値は拒否されます。 |
 
 Dingo は各参照に基本検索コストを 1 件ずつ計上し、グローバル制限と呼び出し元ごとの制限の両方に適用します。高さを含む参照がバッチにある場合は、インデックスの上限を解決するための 1 回限りの追加料金 `66` ルックアップ単位をバッチ単位で計上し、各高さ参照には、解決した上限に基づく二分探索の追加プローブ分を計上します。境界解決中の古い末尾の再試行や、探索中に古い内部インデックス項目をスキップする処理にも、実行前に追加予算を確保します。予算が不足すると、対応するアーカイブまたはクラウド検索を開始する前に、`RESOURCE_EXHAUSTED` で拒否します。高さ参照を含む大きなバッチは分割してください。
 
@@ -466,6 +467,18 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 Dingo v0.94.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
+
+#### 複数プールのブロック生成
+
+`blockProducerPools` は YAML 専用です。CLI フラグや環境変数のバインディングはありません。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| 複数プールのブロック生成 | `blockProducerPools` | — | — | 省略または空リストの場合は、既存のトップレベルの単一プール設定を使用します。1 つ以上のエントリを指定すると、関連するトップレベルの `shelley*` 鍵と KES 設定を各エントリの設定で置き換えます。 |
+
+各エントリには `shelleyVrfKey`、`shelleyOperationalCertificate`、および KES ソースを 1 つ指定します。KES ソースには、`shelleyKesKey`、`shelleyKesAgentSocket`、`shelleyKesAgentAddress`、`shelleyKesAgentAddresses` のいずれかを使用します。`shelleyKesAgentAddress` と `shelleyKesAgentAddresses` は同時に指定できません。リモート KES ソースの接続設定には、`shelleyKesAgentMode`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile`、`shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentPlaintext`、`shelleyKesAgentProfile` を使用できます。これらのネストしたキーにも個別の CLI フラグや環境変数のバインディングはありません。
+
+リストにエントリを指定する場合、関連するトップレベルの `shelleyVrfKey`、`shelleyKesKey`、`shelleyOperationalCertificate`、`shelleyKesAgentSocket`、`shelleyKesAgentMode`、`shelleyKesAgentAddress`、`shelleyKesAgentAddresses`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile`、`shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentPlaintext`、`shelleyKesAgentProfile` との混在は拒否されます。運用証明書のパスはプール間で重複できません。複数のプールが同じリモート KES リスナーを使用する場合は、各プールに異なる `shelleyKesAgentProfile` を設定します。プロファイルが異なれば、リモートアドレスの共有自体は拒否されません。トップレベルの `shelleyKesAgentSignTimeout` と `shelleyKeyWatchInterval` はすべてのプールに適用されます。
 
 #### リモート KES エージェント
 
