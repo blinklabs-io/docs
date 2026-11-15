@@ -36,7 +36,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.92.4 \
+     ghcr.io/blinklabs-io/dingo:0.94.0 \
   --config /tmp/dingo.yaml serve
 ```
 
@@ -67,7 +67,7 @@ Configura `DINGO_LOG_FILE` junto con `DINGO_LOG_FILE_APPEND=true` para que el co
 docker run --detach --name dingo-logging \
   --env DINGO_LOG_FILE=/data/dingo.log \
   --env DINGO_LOG_FILE_APPEND=true \
-  ghcr.io/blinklabs-io/dingo:0.92.4
+  ghcr.io/blinklabs-io/dingo:0.94.0
 ```
 
 El valor de `DINGO_LOG_FILE_APPEND` debe ser exactamente `true`. Con este valor, el contenedor añade registros a un archivo regular existente, crea el archivo si falta y conserva los permisos del archivo existente. Si el archivo no está vacío y su última línea no termina en salto de línea, el contenedor inserta uno antes de añadir los registros. El contenedor rechaza enlaces simbólicos y archivos que no sean regulares. Si `DINGO_LOG_FILE_APPEND` no tiene exactamente el valor `true`, el comportamiento predeterminado exige que `DINGO_LOG_FILE` indique un archivo nuevo.
