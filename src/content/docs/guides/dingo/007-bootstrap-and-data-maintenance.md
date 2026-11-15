@@ -117,8 +117,7 @@ progress to the tip.
 Before persisting imported ledger state, Dingo validates consensus inputs such
 as tip hash and nonce widths, certificate and stake snapshots, pool distribution
 and governance state, protocol parameters, and fee-pot relationships. Dingo
-stops a failed preflight before the UTxO phase and writes no partial ledger or
-UTxO state.
+stops a failed preflight before the UTxO phase.
 Dingo refuses current-era snapshots from Shelley through Babbage during parsing
 with `ErrPreConwaySnapshotUnsupported`, before it writes partial ledger or UTxO
 state. Dingo supports Conway and later snapshots. Dingo continues to refuse Byron
