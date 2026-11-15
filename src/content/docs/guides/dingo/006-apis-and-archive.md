@@ -69,10 +69,10 @@ when omitted or set to `0`. A positive `maxConcurrentMutations` enables the
 global admission bound, and a positive `maxConcurrentMutationsPerClient`
 enables the per-client admission bound. The `4` and `1` values in the example
 above are operator-supplied limits for a capped deployment, not defaults.
-When a positive global limit is configured,
+When an operator configures a positive global limit,
 `maxConcurrentMutationsPerClient` must not exceed
-`maxConcurrentMutations`. A positive per-client limit can be used while the
-global limit remains unlimited.
+`maxConcurrentMutations`. Operators can set a positive per-client limit while
+leaving the global limit unlimited.
 
 The following routes accept anonymous requests and consume mutation admission
 capacity:
