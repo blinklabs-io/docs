@@ -85,8 +85,8 @@ over-capacity request returns HTTP `429` with `Retry-After: 1`.
 Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
 
-The complete v0.92.4 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) are
+The complete v0.94.0 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
