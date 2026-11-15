@@ -18,7 +18,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Este es el único valor aceptado y corresponde a la estrategia heredada de recepción por par implementada por Dingo. Dingo rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
-| Distancia mínima de oferta Leios | `LeiosMinOfferLead` | — | — | Clave del archivo de configuración del nodo Cardano. Indica cuántos slots debe estar por encima de la punta inmutable un bloque endorser para que Dingo lo ofrezca a un par. Si se omite, Dingo utiliza `3600` slots. |
+| Antelación mínima de oferta Leios | `LeiosMinOfferLead` | — | — | Clave del archivo de configuración del nodo Cardano. Indica cuántos slots debe estar un bloque endorser por encima de la punta inmutable para que Dingo lo ofrezca a un par. Dingo utiliza `3600` slots cuando la clave está ausente. |
 
 El archivo de configuración del nodo Cardano admite tanto el formato plano existente como el formato envolvente con `Version: 2`. En el formato envolvente, `Version` debe ser el entero `2` y `Configuration` debe ser un objeto. Un ejemplo compacto es:
 
