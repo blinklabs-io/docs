@@ -66,7 +66,7 @@ Conserva la validación de las solicitudes. Dingo comprueba la capacidad antes d
 
 Las rutas de modificación aceptan acceso HTTP sin TLS. Conserva el host de loopback predeterminado salvo que decidas expresamente permitir el acceso externo a estas operaciones.
 
-Este sitio incluye la referencia de configuración completa de v0.92.4 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
+Este sitio incluye la referencia de configuración completa de v0.94.0 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
 
 ## Acceso seguro a las API
 
