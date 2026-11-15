@@ -6,7 +6,7 @@ description: Ejecuta la imagen publicada de Dingo, conserva sus datos y comprueb
 Dingo publica imágenes de contenedores en GitHub Container Registry. Las etiquetas de las imágenes omiten la `v` inicial de la versión correspondiente de Dingo. Este ejemplo utiliza Dingo `v0.94.0`:
 
 ```sh
- docker pull ghcr.io/blinklabs-io/dingo:0.92.4
+ docker pull ghcr.io/blinklabs-io/dingo:0.94.0
 ```
 
 ## Iniciar un nodo de Preview
@@ -20,7 +20,7 @@ docker run --detach --name dingo-preview \
   --publish 127.0.0.1:12799:12799 \
   --env DINGO_METRICS_BIND_ADDR=0.0.0.0 \
   --volume dingo-preview-data:/data/db \
-    ghcr.io/blinklabs-io/dingo:0.92.4
+    ghcr.io/blinklabs-io/dingo:0.94.0
 ```
 
 El puerto `3001` acepta conexiones Ouroboros de nodo a nodo. En este ejemplo, las métricas del puerto `12798` y el servicio de estado del puerto `12799` se publican en la interfaz de loopback del host. De forma predeterminada, la imagen mantiene las métricas en el loopback del contenedor, por lo que `DINGO_METRICS_BIND_ADDR=0.0.0.0` permite acceder desde el host al puerto de métricas publicado, mientras que el extremo del host permanece limitado a `127.0.0.1`. Utiliza un volumen con nombre distinto para cada red.
