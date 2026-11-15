@@ -19,6 +19,12 @@ dingo serve --config ./dingo.yaml
 
 初回実行の詳しい手順は[クイックスタート](/ja/guides/dingo/002-quick-start-overview/)を参照してください。スナップショットのサイズ、ディスク使用量、ロード時間はネットワークによって異なり、チェーンの進行とともに増えます。インポート中は、ダウンロードファイルとデータベースの両方に必要な空き領域を確保してください。
 
+### Mithril ロード時のクリーンアップと再開
+
+`mithril.cleanupAfterLoad` は既定で有効です。有効にすると、Dingo は Mithril の ImmutableDB をロードするとき、各チャンクのブロックを blob ストアへ永続的にコミットした後、そのチャンクより前の抽出済み `.chunk`、`.primary`、`.secondary` ファイルを段階的に削除します。最新のコミット済みチャンクは再開用の基準として保持するため、抽出済みツリーと blob ストアがチェーン全体を同時に保持する期間を短縮できます。
+
+ロードが中断した場合、Dingo は内部の一時的な `mithril_immutable_retired_below` 境界を使って、最初に保持したチャンクから再開し、すでに削除したチャンクを再ダウンロードしません。この境界はインポート完了時に自動的に削除されます。設定項目ではないため、手動で編集しないでください。動作を変更する場合は、`mithril.cleanupAfterLoad`、`--mithril-cleanup-after-load`、または `DINGO_MITHRIL_CLEANUP` を使用します。
+
 <a id="produce-and-serve-mithril-artifacts"></a>
 
 ### Mithril アーティファクトの作成と配信
