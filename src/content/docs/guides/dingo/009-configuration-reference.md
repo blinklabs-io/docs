@@ -242,11 +242,23 @@ original and rewind errors, and the database requires recovery before another
 load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
 
+Ledger-state imports support Conway and later current eras only. Shelley through
+Babbage snapshots fail during parsing with `ErrPreConwaySnapshotUnsupported`,
+before Dingo writes ledger state. See the bootstrap and data maintenance guide
+for the supported import workflow.
+
+### Historical validation and ledger-state imports
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Historical validation | `validateHistorical` | `--validate-historical` | `CARDANO_VALIDATE_HISTORICAL` | `false`. When false, Dingo skips full historical validation, but non-trusted peer-sourced historical blocks still receive inbound envelope checks and operational-certificate counter checks. Trusted replay and Mithril-certified history skip those specific checks. |
+
 ### Genesis bootstrap corroboration
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` by default, which disables the corroboration gate. Set a positive value to explicitly enable the required corroboration behavior. |
+| ChainSync Jumping | `genesisBootstrap.chainSyncJumping` | `--genesis-csj` | `DINGO_GENESIS_CSJ` | `true` by default. Dingo uses ChainSync Jumping while Genesis selection is active. |
 | Genesis control groups | `genesisBootstrap.controlGroups` | — | — | Dingo no longer supplies network-specific control groups implicitly. Configure this field explicitly to use a fixed control-group set. |
 
 For Musashi, a Cardano node configuration with `ConsensusMode: PraosMode`
