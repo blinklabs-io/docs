@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.92.4 設定リファレンス
-description: Dingo v0.92.4 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.94.0 設定リファレンス
+description: Dingo v0.94.0 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.92.4 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example)にあります。同じファイルは [Dingo v0.92.4 のソース](https://github.com/blinklabs-io/dingo/blob/v0.92.4/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.94.0 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example)にあります。同じファイルは [Dingo v0.94.0 のソース](https://github.com/blinklabs-io/dingo/blob/v0.94.0/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -66,12 +66,12 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 
 | 分野 | 主な設定 | 用途 |
 | --- | --- | --- |
-| ネットワークとパス | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Cardano ネットワークを選択し、ノード、トポロジー、データの各ファイルの場所を指定します。 |
-| リスナーと診断 | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | ノードとプライベートリスナー、メトリクス、ヘルスプローブ、プロファイリング、トレーシング、LocalStateQuery スナップショットの有効期間を設定します。 |
+| ネットワークとパス | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Cardano ネットワークを選択し、ノード、トポロジー、データの各ファイルの場所を指定します。 |
+| リスナーと診断 | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | ノードとプライベートリスナー、メトリクス、ヘルスプローブ、プロファイリング、トレーシング、LocalStateQuery スナップショットの有効期間を設定します。 |
 | ログと TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | ログ出力を選択し、対応する API または Bark リスナーを保護します。 |
 | ストレージと API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | 保存する履歴、ストレージプロバイダー、トランザクションの順序、アプリケーション API を選択します。 |
 | コンセンサスとプラグインの選択 | `plugins.consensus` | ノードで使用するコンセンサスプロバイダーを選択します。 |
-| ブートストラップと同期 | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | スナップショットまたはジェネシスからのブートストラップ、同期、過去のデータの検証を設定します。 |
+| ブートストラップと同期 | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `genesisBootstrap.chainSyncJumping`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | スナップショットまたはジェネシスからのブートストラップ、同期、過去のデータの検証を設定します。 |
 | ピア管理 | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | ピア数の目標、取得元ごとの割り当て、着信ピアのポリシーを設定します。 |
 | ブロック生成と台帳ルール | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | ブロック生成鍵、安全性のしきい値、オプションの台帳動作を設定します。 |
 | アーカイブとデータベースのライフサイクル | `bark*`, `historyExpiry`, `databaseLifecycle` | アーカイブデータの配信や取得、ローカル履歴の期限切れ、スナップショットの管理を設定します。 |
@@ -118,6 +118,17 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 
 ノードと Mithril のメトリクスエンドポイントは認証なしでアクセスできます。
 
+<a id="debug-pprof-sampling"></a>
+
+### pprof サンプリング
+
+`debugPort` が `0` 以外の場合に、次の設定で pprof のミューテックスプロファイルとブロックプロファイルのサンプリングを有効にします。`debugPort` が `0` の場合、サンプリング値を設定しても適用しません。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| ミューテックスプロファイルのサンプリング割合 | `debugMutexProfileFraction` | `--debug-mutex-profile-fraction` | `DINGO_DEBUG_MUTEX_PROFILE_FRACTION` | `0`（無効）。競合するミューテックスイベントを平均して 1 件に 1/N の割合でサンプリングします。 |
+| ブロックプロファイルのサンプリングレート | `debugBlockProfileRate` | `--debug-block-profile-rate` | `DINGO_DEBUG_BLOCK_PROFILE_RATE` | `0`（無効）。ブロックに費やしたナノ秒数 N ごとに 1 件をサンプリングします。`1` はすべてのイベントを記録します。 |
+
 <a id="tracing"></a>
 
 ### トレーシング
@@ -134,6 +145,17 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | OpenTelemetry メトリクスエクスポーター | — | — | `OTEL_METRICS_EXPORTER` | 未設定または `none` の場合、OTLP メトリクスエクスポートを無効にします。Dingo は無効なエクスポーター設定を警告し、ノードを起動します。OTLP エクスポートの設定は Prometheus の `/metrics` エンドポイントに影響しません。 |
 
 <a id="dmq-configuration"></a>
+
+<a id="unix-socket-modes"></a>
+
+### Unix ソケットの権限
+
+管理対象のパス名 Unix ソケットは、プロセスの umask に関係なく既定で所有者だけがアクセスできる `0600` で作成します。値は 8 進数の Unix パーミッションモードで指定し、Unix では他のユーザーによる書き込みを許可する値を拒否します。ソケットの親ディレクトリは現在のユーザーまたは root が所有し、グループまたは他のユーザーによる書き込みを許可しない必要があります。
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| ノード間クライアントソケットのモード | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600`。8 進数で指定します。グループ共有が必要な場合は、要件に合うモードを明示します。 |
+| DMQ ソケットのモード | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600`。8 進数で指定します。Unix では他のユーザーによる書き込みを許可する値を拒否します。 |
 
 ### DMQ の設定
 
@@ -178,6 +200,7 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 | --- | --- | --- | --- | --- |
 | 裏付け確認用ピア | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | 既定値は `0` です。裏付け確認ゲートは既定で無効です。必要な場合は、正の値を明示的に設定して有効にします。 |
 | Genesis の control group | `genesisBootstrap.controlGroups` | — | — | ネットワーク固有の control group は暗黙には提供されません。固定の control group のセットが必要な場合は、このフィールドを明示的に設定します。 |
+| Genesis ChainSync Jumping | `genesisBootstrap.chainSyncJumping` | `--genesis-csj` | `DINGO_GENESIS_CSJ` | `true`（有効）。Genesis のチェーン選択中に、識別された発信ホットピア 1 つがヘッダーをストリームし、他の発信ホットピアは `MsgFindIntersect` でそのチェーンを確認します。Genesis 選択が有効な場合に適用されます。 |
 
 Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genesis チェーン選択を無効にします。`genesisBootstrap` が有効で、交差ポイントなしに起点から起動した場合も同じです。この場合、Dingo は Genesis の密度、裏付け確認、patience による選択を適用せず、Cardano の設定に従います。
 
@@ -435,9 +458,18 @@ Dingo は出力する設定とエラーからヘッダー値を秘匿します�
 
 ### ブロック生成
 
-Dingo v0.92.4 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
+ Dingo v0.94.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTipToleranceSlots` を YAML、CLI、環境変数でサポートしていません。別のフィールドに置き換えるのではなく、これらの設定を削除してください。
 
 任意の `forgeAppliedTipStalenessSlots` は、YAML、CLI フラグ `--forge-applied-tip-staleness-slots`、環境変数 `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` で設定します。既定値の `0` は上限を無効にします。裏付け確認済みの上流ターゲットがある場合のみ評価し、ターゲットが不明な場合は無視します。
+
+#### リモート KES エージェント
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
+| --- | --- | --- | --- | --- |
+| リモート KES エージェントアドレス一覧 | `shelleyKesAgentAddresses`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | 既定値は空のリストです。順序付きの `host:port` リストを指定します。各要素には空でないホストと `1` から `65535` のポートが必要です。`shelleyKesAgentAddress` と同時には設定できず、ローカルの `shelleyKesKey` または `shelleyKesAgentSocket` とも併用できません。 |
+| リモート KES エージェントプロファイル | `shelleyKesAgentProfile`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | 既定値は空です。リモートアドレスなしでは設定できません。同じリモートリスナーを共有するプールはそれぞれこの値を設定し、異なるプロファイル名を使用します。CLI フラグと環境変数はトップレベル設定に適用します。 |
+
+`blockProducerPools` の `shelleyKesAgentAddresses` と `shelleyKesAgentProfile` は YAML で各プールに設定します。リモートアドレスを 1 つだけ使用するプールでは、プロファイルを省略できます。
 
 <a id="shelley-kes-agent-socket"></a>
 
