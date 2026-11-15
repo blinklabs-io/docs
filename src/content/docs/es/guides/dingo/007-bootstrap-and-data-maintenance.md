@@ -16,6 +16,10 @@ dingo serve --config ./dingo.yaml
 
 Usa los comandos de instantáneas admitidos por la versión de Dingo instalada; ejecuta `dingo mithril --help` para consultar las opciones exactas. La verificación de instantáneas de Mithril comprueba la cadena de certificados y los datos firmados. Tras la importación, Dingo valida los bloques a partir del punto importado. El modo de almacenamiento API también completa los datos históricos de consulta después de cargar la instantánea; el modo core conserva el estado de consenso y los datos de bloques sin el índice histórico completo de las API.
 
+Con `mithril.cleanupAfterLoad` habilitado, valor predeterminado `true`, Dingo retira de forma incremental los fragmentos inmutables extraídos después de comprometer sus bloques de forma duradera en el almacén de blobs. Elimina los archivos `.chunk`, `.primary` y `.secondary` anteriores, conserva el fragmento más reciente comprometido como ancla de reanudación y reduce el almacenamiento duplicado durante la carga. Configura esta opción en YAML con `mithril.cleanupAfterLoad`, mediante `--mithril-cleanup-after-load` o con `DINGO_MITHRIL_CLEANUP`.
+
+Si una carga se interrumpe, Dingo registra internamente `mithril_immutable_retired_below` y reanuda en el primer fragmento conservado, sin volver a descargar los fragmentos ya retirados. Dingo utiliza este marcador solo para reanudar, lo elimina al completar la importación y no requiere que el operador lo configure ni lo edite.
+
 Consulta el [inicio rápido](/es/guides/dingo/002-quick-start-overview/) para seguir todo el proceso de la primera ejecución. El tamaño de las instantáneas, el uso de disco y el tiempo de carga varían entre redes y aumentan a medida que avanza la cadena; deja espacio tanto para los archivos descargados como para la base de datos durante la importación.
 
 ### Crear y servir artefactos de Mithril
