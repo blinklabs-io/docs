@@ -53,7 +53,7 @@ Dingo rechaza los datos del formato envolvente si falta `Version` o `Configurati
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
 | Arranque y sincronización | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `genesisBootstrap.chainSyncJumping`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configura el arranque desde instantáneas o génesis, la sincronización y la validación histórica. |
 | Gestión de los pares | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Establece objetivos de pares, cuotas de origen y políticas de pares entrantes. |
-| Producción de bloques y reglas del ledger | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
+| Producción de bloques y reglas del ledger | `blockProducer`, `blockProducerPools`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
 | Archivo y ciclo de vida de bases de datos | `bark*`, `historyExpiry`, `databaseLifecycle` | Sirve o consume datos de archivo, hace caducar el historial local y gestiona instantáneas. |
 | Índices opcionales y diagnósticos | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configura índices opcionales, actualizaciones autenticadas del registro, diagnósticos de paridad, caché y validación de inicio. |
 
@@ -189,10 +189,10 @@ El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` de forma predeterminada. Un valor explícitamente vacío utiliza el `bindAddr` raíz. Configura un host para exponer el proveedor en otra interfaz. |
 | Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Entrada heredada que Dingo ignora y que no tiene efecto; no es obligatoria. El envío y la evaluación de transacciones aceptan solicitudes anónimas. |
-| Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` de forma predeterminada. Debe ser positivo y limita el envío y la evaluación de transacciones en todo el proveedor. |
-| Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` de forma predeterminada. Debe ser positivo y no superar `maxConcurrentMutations`; limita el trabajo de una dirección remota. |
+| Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite global para el envío y la evaluación de transacciones. |
+| Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite por cliente; puede combinarse con `maxConcurrentMutations: 0`. Cuando el límite global es positivo, el límite por cliente no puede superarlo. |
 
-Dingo no exige TLS para el acceso de modificación de Blockfrost. Antes de leer el cuerpo, aplica ambos límites de modificaciones. Si alguno se agota, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
+Dingo no exige TLS para el acceso de modificación de Blockfrost. Antes de leer el cuerpo, aplica los límites de modificaciones que tengan un valor positivo. Si se agota un límite configurado y activo, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
 
 ### Agente de usuario HTTP saliente compartido
 
@@ -213,6 +213,7 @@ El agente de usuario HTTP saliente compartido no tiene clave YAML ni opción CLI
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Sincronización Mithril gestionada | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false`, desactivada. En `serve` con almacenamiento core puede sincronizar desde una punta certificada de Mithril v2 y recurrir a Ouroboros si falla. Los comandos manuales funcionan independientemente de este ajuste. |
+| Limpieza después de cargar Mithril | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true`. Después de confirmar de forma duradera cada lote de bloques, retira los fragmentos extraídos anteriores que ya están comprometidos en el almacén de blobs. Si la sincronización se interrumpe, reanuda desde el primer fragmento conservado mediante el marcador interno `mithril_immutable_retired_below`; este marcador solo sirve para reanudar y no requiere edición manual. |
 | Backend de artefactos Mithril | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2`; un valor vacío también selecciona `v2`. Dingo rechaza `v1` y sus rutas CLI. El backend v2 utiliza artefactos incrementales de bases de datos Cardano y requiere estado auxiliar del ledger y resúmenes de inmutables verificados durante el arranque. La estructura v2 es la referencia autoritativa. |
 | Resumen fijado de Mithril | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Vacío de forma predeterminada. Si se configura para un arranque nuevo, debe identificar un artefacto v2 de base de datos Cardano. Dingo rechaza las fijaciones y resúmenes de instantáneas v1. |
 
@@ -331,8 +332,8 @@ El servicio remoto de ciclo de vida de Bark está desactivado de forma predeterm
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
-| Consultas globales de archivo por segundo | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` cuando vale `0`. Cubre todos los llamadores anónimos de `ArchiveService`. Se rechazan los valores negativos. |
-| Consultas de archivo por llamador y segundo | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` cuando vale `0`. Identifica a los llamadores por dirección IPv4 o prefijo IPv6 `/64`. Se rechazan los valores negativos. |
+| Consultas globales de archivo por segundo | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las consultas de todos los llamadores anónimos de `ArchiveService`. Se rechazan los valores negativos. |
+| Consultas de archivo por llamador y segundo | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las consultas de un llamador identificado por dirección IPv4 o prefijo IPv6 `/64`. Se rechazan los valores negativos. |
 
 Dingo cobra en ambos presupuestos un cargo base por cada referencia de `FetchBlock`. Cuando el lote contiene referencias por altura, reserva por adelantado en ambos presupuestos, una sola vez, el coste de resolver el límite superior (`66` unidades de consulta). Después, reserva en ambos presupuestos el trabajo de búsqueda binaria de cada referencia según el límite resuelto. Los reintentos por un tramo final obsoleto del índice y los saltos de entradas interiores obsoletas también reservan por adelantado, en ambos presupuestos, el coste de cada operación. Si alguno de los dos presupuestos no cubre el siguiente trabajo, Dingo rechaza la solicitud con `RESOURCE_EXHAUSTED` antes de iniciar la resolución, búsqueda o lectura correspondiente del archivo o del almacenamiento en nube. Los lotes grandes que contienen referencias por altura pueden necesitar dividirse.
 
@@ -394,6 +395,16 @@ Dingo v0.94.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryCha
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
 
+### Pools de productores de bloques en YAML
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Pools de productores de bloques | `blockProducerPools` | — | — | Solo YAML. Si falta la lista o está vacía, Dingo conserva la configuración de un solo pool en las claves de nivel superior. Una lista con elementos sustituye las claves de nivel superior `shelley*` y los ajustes de origen KES relacionados; cada entrada define su propio pool. |
+
+Cada entrada de `blockProducerPools` requiere `shelleyVrfKey`, `shelleyOperationalCertificate` y exactamente un origen KES: `shelleyKesKey`, `shelleyKesAgentSocket` o `shelleyKesAgentAddress`/`shelleyKesAgentAddresses`. `shelleyKesAgentSignTimeout` y `shelleyKeyWatchInterval` de nivel superior se aplican a todos los pools. Las entradas anidadas no tienen opciones CLI ni variables de entorno independientes.
+
+Dingo rechaza una lista con ajustes de pool único heredados de nivel superior, rutas duplicadas de certificados operativos y configuraciones remotas compartidas sin perfiles distintos. Varios pools pueden usar el mismo listener remoto cuando cada uno define un valor diferente para `shelleyKesAgentProfile`; Dingo rechaza un perfil ausente o repetido para ese listener.
+
 #### Socket del agente KES de Shelley
 
 La opción `--shelley-kes-agent-socket` admite rutas de sockets del sistema de archivos y direcciones abstractas de Linux. Dingo resuelve las rutas relativas una vez al construir el cliente y reutiliza la ruta resuelta al reconectar. Conserva las direcciones abstractas con prefijo `@`, rechaza las direcciones literales con prefijo NUL al construir el cliente y aplica los límites de longitud de sockets de la plataforma.
@@ -402,8 +413,9 @@ La opción `--shelley-kes-agent-socket` admite rutas de sockets del sistema de a
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
-| Direcciones del agente KES remoto | `shelleyKesAgentAddresses` o `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Sin configurar. Introduce una lista ordenada de direcciones `host:port`; Dingo valida cada entrada y utiliza la lista para el cambio ordenado entre agentes. No combines este campo con `shelleyKesAgentAddress`. |
-| Perfil del agente KES remoto | `shelleyKesAgentProfile` o `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Sin configurar. El perfil selecciona la sesión de firma del agente remoto. Un perfil requiere `shelleyKesAgentAddress` o `shelleyKesAgentAddresses`; los pools que comparten un listener remoto deben usar perfiles distintos. |
+| Dirección del agente KES remoto | `shelleyKesAgentAddress` o `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Sin configurar. Introduce una dirección `host:port` para firmar mediante un agente remoto. En cada entrada de `blockProducerPools`, esta clave es una de las fuentes KES mutuamente excluyentes. |
+| Direcciones del agente KES remoto | `shelleyKesAgentAddresses` o `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Sin configurar. Introduce una lista ordenada de direcciones `host:port`; Dingo valida cada entrada y utiliza la lista para el cambio ordenado entre agentes. No combines este campo con `shelleyKesAgentAddress` en el mismo nivel. |
+| Perfil del agente KES remoto | `shelleyKesAgentProfile` o `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Sin configurar. El perfil selecciona la sesión de firma del agente remoto. Un perfil requiere `shelleyKesAgentAddress` o `shelleyKesAgentAddresses` del mismo nivel; los pools que comparten un listener remoto deben usar perfiles distintos. |
 
 Las opciones CLI y las variables de entorno de estos dos campos configuran únicamente los ajustes de nivel superior; los pools utilizan sus claves YAML correspondientes.
 
