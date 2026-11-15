@@ -63,24 +63,29 @@ The built-in Blockfrost provider listens on `127.0.0.1` by default. It does
 not inherit the root `bindAddr` unless `plugins.api.blockfrost.config.host` is
 explicitly empty. Set a specific host to expose it on another interface.
 
-Blockfrost mutation routes accept anonymous requests. The provider uses `4` for
-`maxConcurrentMutations` and `1` for
-`maxConcurrentMutationsPerClient` by default. Set both values to positive
-integers, and keep `maxConcurrentMutationsPerClient` no greater than
-`maxConcurrentMutations`.
+Blockfrost mutation routes accept anonymous requests. Both
+`maxConcurrentMutations` and `maxConcurrentMutationsPerClient` are unlimited
+when omitted or set to `0`. A positive `maxConcurrentMutations` enables the
+global admission bound, and a positive `maxConcurrentMutationsPerClient`
+enables the per-client admission bound. The `4` and `1` values in the example
+above are operator-supplied limits for a capped deployment, not defaults.
+When a positive global limit is configured,
+`maxConcurrentMutationsPerClient` must not exceed
+`maxConcurrentMutations`. A positive per-client limit can be used while the
+global limit remains unlimited.
 
 The following routes accept anonymous requests and consume mutation admission
 capacity:
 
 | Route | Authentication and admission behavior |
 | --- | --- |
-| `POST /api/v0/tx/submit` | Accepts anonymous requests and consumes global and per-client mutation admission capacity. |
-| `POST /api/v0/utils/txs/evaluate` | Accepts anonymous requests and consumes global and per-client mutation admission capacity. |
-| `POST /api/v0/utils/txs/evaluate/utxos` | Accepts anonymous requests and consumes global and per-client mutation admission capacity. |
+| `POST /api/v0/tx/submit` | Accepts anonymous requests and consumes configured global and per-client mutation admission capacity. |
+| `POST /api/v0/utils/txs/evaluate` | Accepts anonymous requests and consumes configured global and per-client mutation admission capacity. |
+| `POST /api/v0/utils/txs/evaluate/utxos` | Accepts anonymous requests and consumes configured global and per-client mutation admission capacity. |
 
-Dingo accepts a request only when the global and per-client limits have
-capacity. It checks capacity before it reads the request body; an
-over-capacity request returns HTTP `429` with `Retry-After: 1`.
+Admission control applies only to bounds enabled with positive values. Dingo
+checks enabled bounds before it reads the request body. When an enabled bound
+is exhausted, the request returns HTTP `429` with `Retry-After: 1`.
 
 Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
