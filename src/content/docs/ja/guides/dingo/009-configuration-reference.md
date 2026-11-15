@@ -21,7 +21,7 @@ Cardano ノード設定ファイル（YAML または JSON）に記載する項�
 | 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値、検証、動作 |
 | --- | --- | --- | --- | --- |
 | トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
-| エンドーサーブロックの最小オファー先行スロット数 | `LeiosMinOfferLead` | — | — | Cardano ノード設定ファイルのキーです。送信するエンドーサーブロックをピアにオファーする前に、ノードの immutable tip より先行している必要があるスロット数を指定します。省略すると `3600` スロットを使用します。 |
+| エンドーサーブロックの最小オファー先行スロット数 | `LeiosMinOfferLead` | — | — | Cardano ノード設定ファイルのキーです。エンドーサーブロックをピアにオファーするには、ノードの immutable tip より何スロット先行している必要があるかを指定します。省略すると既定値は `3600` スロットです。 |
 
 Dingo は、Cardano ノード設定に従来のフラット形式と cardano-node の Version 2 エンベロープ形式の両方を受け付けます。Version 2 形式では、トップレベルに整数の `Version: 2` を置き、`Configuration` の下に設定を配置します。
 
