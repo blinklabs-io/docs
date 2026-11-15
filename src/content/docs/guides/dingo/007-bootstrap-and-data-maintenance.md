@@ -15,9 +15,9 @@ dingo mithril sync --config ./dingo.yaml
 dingo serve --config ./dingo.yaml
 ```
 
-When `mithril.cleanupAfterLoad` is enabled, which is the default, `dingo mithril sync` retires extracted immutable chunks as it loads them. After Dingo durably commits a chunk's blocks to the blob store, it removes the earlier `.chunk`, `.primary`, and `.secondary` files and keeps the chunk containing the newest committed block as the resume anchor. This incremental cleanup prevents the extracted tree from retaining an unnecessary second full copy of the chain during the load. A successful load still performs the normal cleanup of temporary files.
+Dingo enables `mithril.cleanupAfterLoad` by default. During `dingo mithril sync`, Dingo retires extracted immutable chunks incrementally. After Dingo durably commits a chunk's blocks to the blob store, it removes the earlier `.chunk`, `.primary`, and `.secondary` files and keeps the chunk containing the newest committed block as the resume anchor. This cleanup prevents the extracted tree from retaining an unnecessary second full copy of the chain during the load. Dingo still performs the normal cleanup of temporary files after a successful load.
 
-If the load is interrupted after Dingo retires chunks, the internal `mithril_immutable_retired_below` marker records the first chunk still needed. A resumed `dingo mithril sync` honors that marker and starts at the first retained chunk instead of downloading chunks that Dingo already retired. The marker is transient, and Dingo clears it when the import completes; operators do not set it manually.
+If an interruption occurs after Dingo retires chunks, Dingo records the internal `mithril_immutable_retired_below` marker with the first chunk still needed. A resumed `dingo mithril sync` honors that marker and starts at the first retained chunk instead of downloading chunks that Dingo already retired. The marker is transient. Dingo clears it when the import completes, and operators do not set it manually.
 
 Use the snapshot commands supported by your installed Dingo version; run
 `dingo mithril --help` for the exact flags. Mithril snapshot verification
