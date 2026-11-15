@@ -171,7 +171,7 @@ En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva 
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Validación histórica | `validateHistorical` | `--validate-historical` | — | `true` de forma predeterminada. `false` omite la validación histórica completa, pero Dingo mantiene las comprobaciones del sobre de entrada y del contador del certificado operativo para bloques históricos recibidos de pares no confiables. Solo el replay confiable y el historial certificado por Mithril omiten esas comprobaciones. |
+| Validación histórica | `validateHistorical` | `--validate-historical` | `CARDANO_VALIDATE_HISTORICAL` | `true` de forma predeterminada. `false` omite la validación histórica completa, pero Dingo mantiene las comprobaciones del sobre de entrada y del contador del certificado operativo para bloques históricos recibidos de pares no confiables. Solo el replay confiable y el historial certificado por Mithril omiten esas comprobaciones. |
 
 ### Proveedor UTxO RPC
 
