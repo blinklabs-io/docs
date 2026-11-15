@@ -162,7 +162,7 @@ before chain data import.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Node-to-client socket mode | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. The parent directory for a managed pathname socket must belong to the current user or root. Dingo allows group or other write access only when the sticky bit is set and rejects a writable parent without the sticky bit. Set the sticky bit with `chmod +t` or remove group or other write access. Linux abstract sockets retain their platform behavior; Windows skips the Unix write restriction. |
+| Node-to-client socket mode | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. The parent directory for a managed pathname socket must belong to the current user or root. Dingo accepts group or other writable access only when the sticky bit is set; it rejects a writable parent without the sticky bit. Set the sticky bit with `chmod +t` or remove group or other write access. Linux abstract sockets retain their platform behavior; Windows skips the Unix write restriction. |
 
 ### DMQ configuration
 
