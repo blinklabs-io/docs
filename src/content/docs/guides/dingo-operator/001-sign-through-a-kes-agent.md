@@ -80,7 +80,9 @@ openssl x509 -in tls.crt -pubkey -noout \
 
 ## Configure the DingoNode
 
-Create two Secrets in the `DingoNode`'s namespace:
+Create two Secrets in the same namespace as the `DingoNode` resource. The
+examples use the `cardano` namespace from the operator's quick start; use
+whichever namespace your `DingoNode` runs in.
 
 - The keys Secret holds `vrf.skey` and the operational certificate as
   `opcert.cert`. The operator also accepts the name `node.cert`, which the
@@ -90,9 +92,9 @@ Create two Secrets in the `DingoNode`'s namespace:
   CA in the agent's `attested_client_ca_file`.
 
 ```sh
-kubectl -n pools create secret generic producer-pool-keys \
+kubectl -n cardano create secret generic producer-pool-keys \
   --from-file=vrf.skey --from-file=opcert.cert
-kubectl -n pools create secret tls kes-agent-client \
+kubectl -n cardano create secret tls kes-agent-client \
   --cert=client.crt --key=client.key
 ```
 
@@ -103,7 +105,7 @@ apiVersion: dingo.blinklabs.io/v1alpha1
 kind: DingoNode
 metadata:
   name: producer
-  namespace: pools
+  namespace: cardano
 spec:
   role: blockProducer
   network: preview
