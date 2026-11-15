@@ -592,14 +592,14 @@ addresses at client construction, and enforces platform socket-length limits.
 
 #### Remote Shelley KES agents
 
-The top-level remote KES settings accept the CLI flags and environment
-variables shown below. Each `blockProducerPools` entry also accepts the YAML
-keys, but the CLI and environment bindings apply only to the top-level pool.
+The CLI flags and environment variables below configure the top-level remote
+KES settings. Each `blockProducerPools` entry accepts the YAML keys, but the
+CLI and environment bindings apply only to the top-level pool.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Single remote KES agent address | `shelleyKesAgentAddress` or `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Empty. Use a `host:port` address for a remote signing listener; the setting selects sign mode. Do not set this field together with `shelleyKesAgentAddresses`. |
-| Ordered remote KES agent addresses | `shelleyKesAgentAddresses` or `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Empty. Enter an ordered list of `host:port` addresses. Dingo uses the list order for remote signing and validates every address. Do not set this field together with `shelleyKesAgentAddress`. |
+| Single remote KES agent address | `shelleyKesAgentAddress` or `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Empty. Use a `host:port` address for a remote signing listener; the setting selects sign mode. Use either this field or `shelleyKesAgentAddresses`, not both. |
+| Ordered remote KES agent addresses | `shelleyKesAgentAddresses` or `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Empty. Enter an ordered list of `host:port` addresses. Dingo uses the list order for remote signing and validates every address. |
 | Remote KES agent profile | `shelleyKesAgentProfile` or `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Empty. A profile requires a remote agent address. When pools share a remote listener, each pool must set a different profile. |
 
 ### Kupo provider
