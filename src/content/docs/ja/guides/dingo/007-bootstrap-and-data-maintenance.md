@@ -63,7 +63,7 @@ NNNNN.secondary
 
 ### 台帳状態のインポート検証
 
-インポートした台帳状態を永続化する前に、先端ハッシュと nonce の幅、証明書とステークスナップショット、プール分布とガバナンス状態、プロトコルパラメーター、手数料ポット間の関係などのコンセンサス入力を検証します。現在の era が Conway より前（Shelley から Babbage）のスナップショットは、解析時に `ErrPreConwaySnapshotUnsupported` で直ちに拒否されます。この検証は台帳状態や UTxO 状態を部分的に永続化する前に実行され、Conway 以降のスナップショットだけをインポートできます。
+インポートした台帳状態を永続化する前に、先端ハッシュと nonce の幅、証明書とステークスナップショット、プール分布とガバナンス状態、プロトコルパラメーター、手数料ポット間の関係などのコンセンサス入力を検証します。現在の era が Conway より前（Shelley から Babbage）のスナップショットは、解析中に `ErrPreConwaySnapshotUnsupported` で直ちに拒否されます。Dingo は台帳状態や UTxO 状態を部分的に永続化する前にこの検証を実行するため、Conway 以降のスナップショットだけをインポートできます。
 
 <a id="snapshot-restore-and-truncate"></a>
 
