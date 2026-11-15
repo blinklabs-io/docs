@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.92.4 Configuration Reference
-description: Complete, release-specific Dingo v0.92.4 configuration reference and example.
+title: Dingo v0.94.0 Configuration Reference
+description: Complete, release-specific Dingo v0.94.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.92.4. The complete
+This page covers the configuration shipped with Dingo v0.94.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example).
-The same file is available in the [Dingo v0.92.4 source](https://github.com/blinklabs-io/dingo/blob/v0.92.4/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.94.0 source](https://github.com/blinklabs-io/dingo/blob/v0.94.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -27,12 +27,12 @@ for the main runtime choices.
 
 | Area | Main settings | Purpose |
 | --- | --- | --- |
-| Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Select a Cardano network and locate node, topology, and data files. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
+| Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Select a Cardano network and locate node, topology, data files, and the node-to-client socket mode. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
-| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
+| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.chainSyncJumping`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
 | Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
