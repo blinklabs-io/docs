@@ -261,7 +261,7 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | 自動管理の Mithril 同期 | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false`（無効）。core ストレージでの `serve` では、認証済み Mithril v2 の先端から同期でき、自動管理の Mithril 同期が失敗すると Ouroboros 同期に切り替えます。手動の Mithril 同期コマンドはこの設定に関係なく使用できます。 |
 | Mithril アーティファクトのバックエンド | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2`（空の場合も `v2`）。`v1` と v1 CLI パスは拒否されます。v2 は増分 Cardano データベースアーティファクトを使用し、ブートストラップ時に検証済みの付属台帳状態と immutable ダイジェストを要求します。v2 アーティファクトの配置を正とします。 |
 | Mithril の固定ダイジェスト | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | 既定では空です。新規ブートストラップで設定する場合は、v2 Cardano データベースアーティファクトを識別する値が必要です。v1 スナップショットの固定値やダイジェストは拒否されます。 |
-| ロード後の Mithril チャンククリーンアップ | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true`（有効）。ブロックを blob ストアに永続的にコミットした後、抽出済み ImmutableDB チャンクのうち、保持する再開アンカーより前のチャンクを削除します。同期が中断した場合は、内部の `mithril_immutable_retired_below` マーカーを使い、削除済みチャンクを再取得せずに保持された境界から再開します。このマーカーは内部の再開専用で、編集対象ではありません。 |
+| ロード後の Mithril チャンククリーンアップ | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true`（有効）。Dingo はブロックを blob ストアに永続的にコミットした後、抽出済み ImmutableDB チャンクのうち、保持する再開アンカーより前のチャンクを削除します。同期が中断すると、Dingo は内部の `mithril_immutable_retired_below` マーカーを使い、削除済みチャンクを再取得せずに保持された境界から再開します。このマーカーは内部の再開専用で、設定変更には使用しません。 |
 
 <a id="mithril-download-limit"></a>
 
@@ -396,8 +396,8 @@ Bark のリモートライフサイクルサービスは既定で無効です。
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
-| アーカイブ検索全体の毎秒上限 | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0`（未設定も同じ）は無制限です。正の値を設定すると、すべての匿名 `ArchiveService` 呼び出し元に適用する上限になります。負の値は拒否されます。 |
-| 呼び出し元ごとのアーカイブ検索の毎秒上限 | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0`（未設定も同じ）は無制限です。正の値を設定すると、IPv4 アドレスまたは IPv6 `/64` ごとの上限になります。負の値は拒否されます。 |
+| アーカイブ検索全体の毎秒上限 | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0`（未設定も同じ）は無制限です。正の値を設定すると、すべての匿名 `ArchiveService` 呼び出し元に適用する上限になります。Dingo は負の値を拒否します。 |
+| 呼び出し元ごとのアーカイブ検索の毎秒上限 | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0`（未設定も同じ）は無制限です。正の値を設定すると、IPv4 アドレスまたは IPv6 `/64` ごとの上限になります。Dingo は負の値を拒否します。 |
 
 Dingo は各参照に基本検索コストを 1 件ずつ計上し、グローバル制限と呼び出し元ごとの制限の両方に適用します。高さを含む参照がバッチにある場合は、インデックスの上限を解決するための 1 回限りの追加料金 `66` ルックアップ単位をバッチ単位で計上し、各高さ参照には、解決した上限に基づく二分探索の追加プローブ分を計上します。境界解決中の古い末尾の再試行や、探索中に古い内部インデックス項目をスキップする処理にも、実行前に追加予算を確保します。予算が不足すると、対応するアーカイブまたはクラウド検索を開始する前に、`RESOURCE_EXHAUSTED` で拒否します。高さ参照を含む大きなバッチは分割してください。
 
@@ -470,15 +470,13 @@ Dingo v0.94.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTip
 
 #### 複数プールのブロック生成
 
-`blockProducerPools` は YAML 専用です。CLI フラグや環境変数のバインディングはありません。
-
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
-| 複数プールのブロック生成 | `blockProducerPools` | — | — | 省略または空リストの場合は、既存のトップレベルの単一プール設定を使用します。1 つ以上のエントリを指定すると、関連するトップレベルの `shelley*` 鍵と KES 設定を各エントリの設定で置き換えます。 |
+| 複数プールのブロック生成 | `blockProducerPools` | — | — | YAML 専用です。省略または空リストの場合、Dingo は既存のトップレベルの単一プール設定を使用します。1 つ以上のエントリを指定すると、Dingo は関連するトップレベルの `shelley*` 鍵と KES 設定を各エントリの設定で置き換えます。 |
 
-各エントリには `shelleyVrfKey`、`shelleyOperationalCertificate`、および KES ソースを 1 つ指定します。KES ソースには、`shelleyKesKey`、`shelleyKesAgentSocket`、`shelleyKesAgentAddress`、`shelleyKesAgentAddresses` のいずれかを使用します。`shelleyKesAgentAddress` と `shelleyKesAgentAddresses` は同時に指定できません。リモート KES ソースの接続設定には、`shelleyKesAgentMode`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile`、`shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentPlaintext`、`shelleyKesAgentProfile` を使用できます。これらのネストしたキーにも個別の CLI フラグや環境変数のバインディングはありません。
+各エントリには `shelleyVrfKey`、`shelleyOperationalCertificate`、および KES ソースを 1 つ指定します。KES ソースには、`shelleyKesKey`、`shelleyKesAgentSocket`、`shelleyKesAgentAddress`、`shelleyKesAgentAddresses` のいずれかを使用します。Dingo は `shelleyKesAgentAddress` と `shelleyKesAgentAddresses` の同時指定を拒否します。リモート KES ソースの接続設定には、`shelleyKesAgentMode`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile`、`shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentPlaintext`、`shelleyKesAgentProfile` を使用できます。これらのネストしたキーには個別の CLI フラグや環境変数のバインディングがありません。
 
-リストにエントリを指定する場合、関連するトップレベルの `shelleyVrfKey`、`shelleyKesKey`、`shelleyOperationalCertificate`、`shelleyKesAgentSocket`、`shelleyKesAgentMode`、`shelleyKesAgentAddress`、`shelleyKesAgentAddresses`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile`、`shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentPlaintext`、`shelleyKesAgentProfile` との混在は拒否されます。運用証明書のパスはプール間で重複できません。複数のプールが同じリモート KES リスナーを使用する場合は、各プールに異なる `shelleyKesAgentProfile` を設定します。プロファイルが異なれば、リモートアドレスの共有自体は拒否されません。トップレベルの `shelleyKesAgentSignTimeout` と `shelleyKeyWatchInterval` はすべてのプールに適用されます。
+リストにエントリを指定する場合、Dingo は関連するトップレベルの `shelleyVrfKey`、`shelleyKesKey`、`shelleyOperationalCertificate`、`shelleyKesAgentSocket`、`shelleyKesAgentMode`、`shelleyKesAgentAddress`、`shelleyKesAgentAddresses`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile`、`shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentPlaintext`、`shelleyKesAgentProfile` との混在を拒否します。Dingo は運用証明書のパスの重複を拒否します。複数のプールが同じリモート KES リスナーを使用する場合は、各プールに異なる `shelleyKesAgentProfile` を設定します。プロファイルが異なれば、Dingo はリモートアドレスの共有を拒否しません。トップレベルの `shelleyKesAgentSignTimeout` と `shelleyKeyWatchInterval` はすべてのプールに適用されます。
 
 #### リモート KES エージェント
 
