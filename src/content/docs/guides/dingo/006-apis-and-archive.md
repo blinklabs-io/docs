@@ -92,7 +92,7 @@ Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
 
 The complete v0.94.1 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example) are
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
