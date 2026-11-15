@@ -15,9 +15,9 @@ dingo mithril sync --config ./dingo.yaml
 dingo serve --config ./dingo.yaml
 ```
 
-Dingo enables `mithril.cleanupAfterLoad` by default. During `dingo mithril sync`, Dingo retires extracted immutable chunks incrementally. After Dingo durably commits a chunk's blocks to the blob store, it removes the earlier `.chunk`, `.primary`, and `.secondary` files and keeps the chunk containing the newest committed block as the resume anchor. This cleanup prevents the extracted tree from retaining an unnecessary second full copy of the chain during the load. Dingo still performs the normal cleanup of temporary files after a successful load.
+Dingo enables `mithril.cleanupAfterLoad` by default. During `dingo mithril sync`, Dingo retires extracted immutable chunks incrementally: after it durably commits a chunk's blocks to the blob store, it removes all earlier `.chunk`, `.primary`, and `.secondary` files and keeps the chunk containing the newest committed block as the resume anchor. This prevents the extracted tree from retaining an unnecessary second full copy of the chain during the load. Dingo also removes temporary files after a successful load.
 
-If an interruption occurs after Dingo retires chunks, Dingo records the internal `mithril_immutable_retired_below` marker with the first chunk still needed. A resumed `dingo mithril sync` honors that marker and starts at the first retained chunk instead of downloading chunks that Dingo already retired. The marker is transient. Dingo clears it when the import completes, and operators do not set it manually.
+If an interruption occurs after Dingo retires chunks, Dingo records the internal `mithril_immutable_retired_below` marker as the first chunk still needed. On resume, `dingo mithril sync` honors the marker and starts at the first retained chunk instead of downloading chunks that Dingo already retired. Dingo clears the transient marker when the import completes; operators do not set it manually.
 
 Use the snapshot commands supported by your installed Dingo version; run
 `dingo mithril --help` for the exact flags. Mithril snapshot verification
