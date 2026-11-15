@@ -482,10 +482,18 @@ Dingo v0.94.0 は `ForgePrimaryChainTipToleranceSlots` と `forgePrimaryChainTip
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と検証 |
 | --- | --- | --- | --- | --- |
+| リモート KES エージェントアドレス | `shelleyKesAgentAddress`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | 既定値は空です。リモート署名リスナーの `host:port` アドレスを指定します。この設定は sign モードを選択します。`shelleyKesAgentAddresses` と同時には設定できず、ローカルの `shelleyKesKey` または `shelleyKesAgentSocket` とも併用できません。 |
 | リモート KES エージェントアドレス一覧 | `shelleyKesAgentAddresses`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | 既定値は空のリストです。順序付きの `host:port` リストを指定します。各要素には空でないホストと `1` から `65535` のポートが必要です。`shelleyKesAgentAddress` と同時には設定できず、ローカルの `shelleyKesKey` または `shelleyKesAgentSocket` とも併用できません。 |
 | リモート KES エージェントプロファイル | `shelleyKesAgentProfile`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | 既定値は空です。リモートアドレスなしでは設定できません。同じリモートリスナーを共有するプールはそれぞれこの値を設定し、異なるプロファイル名を使用します。CLI フラグと環境変数はトップレベル設定に適用します。 |
+| リモート KES エージェントのサーバー鍵ピン | `shelleyKesAgentServerSpkiSha256`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-server-spki-sha256` | `SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | 既定値は空です。エージェントの TLS 証明書の SubjectPublicKeyInfo の SHA-256 を 16 進数で指定します。この値はエージェントが起動時に `server_spki_sha256` としてログに出力します。Dingo は前後の空白を除去し、ちょうど 64 文字の 16 進数を要求します。設定した場合、Dingo は認証局ではなくこのピンのみでエージェントを認証します。空の場合、Dingo はアドレスのホスト名に対してシステムのルート証明書による標準の x509 検証を行います。Unix では `SSL_CERT_FILE` と `SSL_CERT_DIR` でプライベート CA を指定できます。`shelleyKesAgentPlaintext` とは併用できません。 |
+| リモート KES エージェントのクライアント証明書 | `shelleyKesAgentClientCertFile`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-client-cert-file` | `SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | 既定値は空です。リモートエージェントに提示するこのノードの PEM 形式の TLS クライアント証明書のパスです。任意の設定で、`shelleyKesAgentClientKeyFile` と組で設定するか、両方とも空にします。両方を設定すると相互 TLS を使用し、設定しない場合はクライアント証明書を送信しません。`shelleyKesAgentPlaintext` とは併用できません。 |
+| リモート KES エージェントのクライアント鍵 | `shelleyKesAgentClientKeyFile`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-client-key-file` | `SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | 既定値は空です。リモートエージェントに使用するこのノードの PEM 形式の TLS クライアント鍵のパスです。Dingo はクライアント証明書のないクライアント鍵、および鍵のない証明書を拒否します。 |
+| リモート KES エージェントの平文 TCP | `shelleyKesAgentPlaintext`（トップレベルまたは `blockProducerPools` の各エントリ） | `--shelley-kes-agent-plaintext` | `SHELLEY_KES_AGENT_PLAINTEXT` | 既定値は `false` です。`true` にすると、リモートエージェントとの接続に TLS ではなく平文 TCP を使用します。サービスメッシュのサイドカーなど、別の仕組みが接続を保護する構成向けです。エージェント側の対応する設定は `kes_agent.attested_plaintext` です。サーバー鍵ピンとクライアント証明書には TLS が必要なため、Dingo はこの設定と `shelleyKesAgentServerSpkiSha256`、`shelleyKesAgentClientCertFile`、`shelleyKesAgentClientKeyFile` の併用を拒否します。 |
+| KES エージェントの署名タイムアウト | `shelleyKesAgentSignTimeout`（トップレベルのみ） | `--shelley-kes-agent-sign-timeout` | `SHELLEY_KES_AGENT_SIGN_TIMEOUT` | 既定値は `0` で、クライアントの既定値 `500ms` を使用します。KES エージェントとの sign モードの 1 回の往復を制限します。`1s` 未満の正の期間を指定します。Dingo は負の値または `1s` 以上の値を設定検証時に拒否します。ブロック生成はスロットに合わせたループ上で署名処理を同期的に呼び出すため、タイムアウトは 1 スロット未満にする必要があります。すべてのプールに適用されます。 |
 
-`blockProducerPools` の `shelleyKesAgentAddresses` と `shelleyKesAgentProfile` は YAML で各プールに設定します。リモートアドレスを 1 つだけ使用するプールでは、プロファイルを省略できます。
+`blockProducerPools` では、`shelleyKesAgentSignTimeout` 以外のこの表の設定を YAML で各プールに設定します。リモートアドレスを 1 つだけ使用するプールでは、プロファイルを省略できます。
+
+リモートエージェントとの接続は既定で TLS 1.3 を使用します。Dingo はサーバー鍵ピンが設定されていればそのピンで、設定されていなければ標準の x509 検証でエージェントを認証します。アドレス以外のこの表の各設定は、`shelleyKesAgentAddresses` のすべてのアドレスに適用されます。サーバー鍵ピン、クライアント証明書、クライアント鍵、平文 TCP、プロファイルには `shelleyKesAgentAddress` または `shelleyKesAgentAddresses` が必要です。アドレスがない場合、Dingo はこれらの設定を拒否します。
 
 <a id="shelley-kes-agent-socket"></a>
 
