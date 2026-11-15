@@ -52,7 +52,7 @@ plugins:
 
 El proveedor integrado de Blockfrost escucha en `127.0.0.1` de forma predeterminada. No hereda el `bindAddr` raíz salvo que `plugins.api.blockfrost.config.host` esté explícitamente vacío. Establece un host concreto para exponerlo en otra interfaz.
 
-Las solicitudes de modificación son anónimas y no requieren credenciales. Los valores predeterminados son `4` para `maxConcurrentMutations` y `1` para `maxConcurrentMutationsPerClient`. Establece ambos valores en enteros positivos y mantén `maxConcurrentMutationsPerClient` menor o igual que `maxConcurrentMutations`.
+Las solicitudes de modificación son anónimas y no requieren credenciales. Dingo deja sin límite cada opción que se omite o se establece en `0`: `maxConcurrentMutations` controla el límite global y `maxConcurrentMutationsPerClient`, el límite por cliente. Un valor positivo activa el límite correspondiente. Dingo permite configurar un límite positivo por cliente aunque el límite global permanezca desactivado. Cuando `maxConcurrentMutations` es positivo, `maxConcurrentMutationsPerClient` debe ser menor o igual que ese valor.
 
 Las siguientes rutas aceptan solicitudes anónimas:
 
@@ -62,11 +62,11 @@ Las siguientes rutas aceptan solicitudes anónimas:
 | `POST /api/v0/utils/txs/evaluate` | Acepta solicitudes anónimas y consume capacidad de admisión de modificaciones. |
 | `POST /api/v0/utils/txs/evaluate/utxos` | Acepta solicitudes anónimas y consume capacidad de admisión de modificaciones. |
 
-Conserva la validación de las solicitudes. Dingo comprueba la capacidad antes de leer el cuerpo de la solicitud y solo acepta la solicitud cuando existe capacidad tanto en el límite global del servidor como en el del cliente remoto. Si se supera, devuelve HTTP `429` con `Retry-After: 1`.
+Conserva la validación de las solicitudes. Dingo comprueba la capacidad antes de leer el cuerpo de la solicitud y solo acepta la solicitud cuando todos los límites habilitados tienen capacidad: el límite global del servidor y, si se configura, el límite del cliente remoto. Si se agota un límite habilitado, Dingo devuelve HTTP `429` con `Retry-After: 1`. Cuando ambos límites se omiten o se establecen en `0`, Dingo no devuelve este `429` por admisión.
 
 Las rutas de modificación aceptan acceso HTTP sin TLS. Conserva el host de loopback predeterminado salvo que decidas expresamente permitir el acceso externo a estas operaciones.
 
-Este sitio incluye la referencia de configuración completa de v0.92.4 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
+Este sitio incluye la referencia de configuración completa de v0.94.0 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
 
 ## Acceso seguro a las API
 

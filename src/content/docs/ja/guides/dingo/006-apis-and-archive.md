@@ -56,7 +56,7 @@ plugins:
 
 組み込みの Blockfrost プロバイダーは、既定では `127.0.0.1` で待ち受けます。`plugins.api.blockfrost.config.host` を明示的に空にした場合にのみ、ルートの `bindAddr` を継承します。別のインターフェイスで公開するには、ホストを明示的に設定します。
 
-変更リクエストは認証なしで受け付けます。`maxConcurrentMutations` の既定値は `4`、`maxConcurrentMutationsPerClient` の既定値は `1` です。両方を正の整数に設定し、`maxConcurrentMutationsPerClient` が `maxConcurrentMutations` 以下になるようにしてください。
+変更リクエストは認証なしで受け付けます。これらの値は組み込みの既定値ではありません。`0` または省略すると、対応する制限を無効にして無制限にします。正の値を設定すると、`maxConcurrentMutations` はサーバー全体、`maxConcurrentMutationsPerClient` はリモートクライアントごとの変更リクエスト数を制限します。`maxConcurrentMutations` が正の値の場合、`maxConcurrentMutationsPerClient` はその値以下にしてください。サーバー全体の制限が `0` または省略されていても、クライアント単位の制限には正の値を設定できます。
 
 次の 3 つのルートに変更リクエストの受け入れ制限を適用します。
 
@@ -66,11 +66,11 @@ plugins:
 | `POST /api/v0/utils/txs/evaluate` | 認証なしで利用でき、変更リクエストの受け入れ枠を消費します。 |
 | `POST /api/v0/utils/txs/evaluate/utxos` | 認証なしで利用でき、変更リクエストの受け入れ枠を消費します。 |
 
-サーバー全体とリモートクライアントごとの両方の制限に空きがある場合にのみ、Dingo はリクエストを受け入れます。リクエスト本文を読み取る前に空きを確認し、制限を超える場合は `Retry-After: 1` を含む HTTP `429` を返します。
+有効にした制限の範囲内でのみ、Dingo はリクエストを受け入れます。リクエスト本文を読み取る前に有効な制限の空きを確認し、明示的に有効にした制限が枯渇している場合は `Retry-After: 1` を含む HTTP `429` を返します。両方の値を `0` または省略した場合、Dingo は変更リクエストの受け入れ制限を適用しません。
 
 外部からの変更アクセスを意図的に公開する場合は、ネットワーク層のアクセス制御を設定してください。意図しない公開を避けるため、既定のループバックホストを維持してください。
 
-このサイトでは、完全な v0.92.4 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
+このサイトでは、完全な v0.94.0 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
 
 <a id="secure-api-access"></a>
 

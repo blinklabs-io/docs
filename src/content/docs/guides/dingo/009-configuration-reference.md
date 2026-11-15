@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.92.4 Configuration Reference
-description: Complete, release-specific Dingo v0.92.4 configuration reference and example.
+title: Dingo v0.94.0 Configuration Reference
+description: Complete, release-specific Dingo v0.94.0 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.92.4. The complete
+This page covers the configuration shipped with Dingo v0.94.0. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.4/dingo.yaml.example).
-The same file is available in the [Dingo v0.92.4 source](https://github.com/blinklabs-io/dingo/blob/v0.92.4/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example).
+The same file is available in the [Dingo v0.94.0 source](https://github.com/blinklabs-io/dingo/blob/v0.94.0/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -27,14 +27,14 @@ for the main runtime choices.
 
 | Area | Main settings | Purpose |
 | --- | --- | --- |
-| Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Select a Cardano network and locate node, topology, and data files. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
+| Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Select a Cardano network and locate node, topology, data files, and the node-to-client socket mode. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
-| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
+| Bootstrap and synchronization | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.chainSyncJumping`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configure snapshot or genesis bootstrap, synchronization, and historical validation. |
 | Peer management | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Set peer targets, source quotas, and inbound peer policy. |
-| Block production and ledger rules | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, safety thresholds, and optional ledger behaviors. |
+| Block production and ledger rules | `blockProducer`, `blockProducerPools`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configure forging keys, multiple pool identities, safety thresholds, and optional ledger behaviors. |
 | Archives and database lifecycle | `bark*`, `historyExpiry`, `databaseLifecycle` | Serve or consume archive data, expire local history, and manage snapshots. |
 | Optional indexes and diagnostics | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configure optional indexing, authenticated registry refresh, parity diagnostics, caching, and startup validation. |
 
@@ -150,6 +150,19 @@ before chain data import.
 | OpenTelemetry log exporter | — | — | `OTEL_LOGS_EXPORTER` | An unset or empty variable, or `none`, disables OTLP log export. A valid exporter value enables optional OTLP log export. Invalid exporter configuration produces a warning without stopping startup, and stdout logging remains available. |
 | OpenTelemetry metric exporter | — | — | `OTEL_METRICS_EXPORTER` | An unset or empty variable, or `none`, disables OTLP metric export. A valid exporter value enables optional OTLP export of the Prometheus registry. Invalid exporter configuration produces a warning without stopping startup; the Prometheus `/metrics` endpoint remains available. |
 
+### Debug profiling
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Mutex profile sampling fraction | `debugMutexProfileFraction` | `--debug-mutex-profile-fraction` | `DINGO_DEBUG_MUTEX_PROFILE_FRACTION` | `0` (off). A nonzero value samples mutex contention events for the pprof mutex profile. Dingo applies the setting only when `debugPort` is nonzero; the setting does not enable pprof by itself. |
+| Block profile sampling rate | `debugBlockProfileRate` | `--debug-block-profile-rate` | `DINGO_DEBUG_BLOCK_PROFILE_RATE` | `0` (off). A nonzero value samples blocking events for the pprof block profile. Dingo applies the setting only when `debugPort` is nonzero; the setting does not enable pprof by itself. |
+
+### Unix socket permissions
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Node-to-client socket mode | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. The parent directory for a managed pathname socket must belong to the current user or root and must not be group or world writable. Linux abstract sockets retain their platform behavior; Windows skips the Unix write restriction. |
+
 ### DMQ configuration
 
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
@@ -158,6 +171,7 @@ before chain data import.
 | Topic | `dmq.topic` | `--dmq-topic` | `DINGO_DMQ_TOPIC` | `mithril` | When enabled, Dingo requires the value `mithril`; no other value is valid. |
 | Network magic | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | Derived from the topic and Cardano network when unset. | When omitted, Dingo derives the value from the topic and Cardano network. An explicit value overrides the derived value. Set it when the Cardano network has no default for the topic. |
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
+| Socket mode | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N peer port. A nonzero value activates DMQ node-to-node listening and peer management when `dmq.maxPeers` is also nonzero. |
@@ -228,11 +242,23 @@ original and rewind errors, and the database requires recovery before another
 load. See the bootstrap and data maintenance guide for the remote source,
 chunk, and integrity requirements.
 
+Dingo supports ledger-state imports only for Conway and later current eras.
+Shelley through Babbage snapshots fail during parsing with
+`ErrPreConwaySnapshotUnsupported`, before Dingo writes ledger state. See the
+bootstrap and data maintenance guide for the supported import workflow.
+
+### Historical validation and ledger-state imports
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Historical validation | `validateHistorical` | `--validate-historical` | `CARDANO_VALIDATE_HISTORICAL` | `false`. When false, Dingo skips full historical validation. However, Dingo still checks non-trusted peer-sourced historical blocks against inbound envelope rules and operational-certificate counter rules. Trusted replay and Mithril-certified history skip those specific checks. |
+
 ### Genesis bootstrap corroboration
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
 | Corroborating peers | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` by default, which disables the corroboration gate. Set a positive value to explicitly enable the required corroboration behavior. |
+| ChainSync Jumping | `genesisBootstrap.chainSyncJumping` | `--genesis-csj` | `DINGO_GENESIS_CSJ` | `true` by default. Dingo uses ChainSync Jumping while Genesis selection is active. |
 | Genesis control groups | `genesisBootstrap.controlGroups` | — | — | Dingo no longer supplies network-specific control groups implicitly. Configure this field explicitly to use a fixed control-group set. |
 
 For Musashi, a Cardano node configuration with `ConsensusMode: PraosMode`
@@ -259,12 +285,13 @@ requests are not subject to the Blockfrost mutation admission limits.
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` by default. An explicitly empty value uses the root `bindAddr`; set a host to expose the provider on another interface. |
 | Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. The setting is not required, and transaction submission and evaluation accept anonymous requests. |
-| Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` by default. The value must be positive and limits transaction submission and evaluation across the provider. |
-| Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` by default. The value must be positive and no greater than `maxConcurrentMutations`; it limits work from one remote address. |
+| Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0` or unset by default, which disables the global bound. Set a positive value to limit transaction submission and evaluation across the provider. |
+| Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0` or unset by default, which disables the per client bound. Set a positive value to limit work from one remote address. When `maxConcurrentMutations` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
 
-Before reading the request body, the provider applies both mutation limits.
-When either limit is exhausted, it returns HTTP `429` with `Retry-After: 1`
-without reading the body.
+Before reading the request body, the provider applies each configured positive
+mutation limit. When concurrent work reaches an active global or per-client
+limit, the provider returns HTTP `429` with `Retry-After: 1` without reading
+the body.
 
 ### Shared outbound HTTP user agent
 
@@ -287,6 +314,7 @@ The shared outbound HTTP user agent has no YAML key or CLI flag.
 | Managed Mithril synchronization | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false` (off). In `serve` with core storage, Dingo can synchronize from a certified Mithril v2 tip and falls back to Ouroboros synchronization when managed Mithril synchronization fails. Manual Mithril synchronization commands work regardless of this setting. |
 | Mithril artifact backend | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2` (empty also selects `v2`). Dingo rejects `v1` and v1 CLI paths. The v2 backend uses incremental Cardano database artifacts, requires verified ancillary ledger state and immutable digests during bootstrap, and treats the v2 artifact layout as authoritative. |
 | Mithril pinned digest | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Empty by default. When configuration sets this value for a fresh bootstrap, the value must identify a v2 Cardano database artifact. Dingo rejects v1 snapshot pins and digests. |
+| Cleanup after Mithril load | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true` by default. When enabled, Dingo retires extracted immutable chunks incrementally after committing their blocks. If a load stops before completion, Dingo reads the internal `mithril_immutable_retired_below` resume marker and starts the next run after the chunks it already retired. |
 
 ### Mithril download limit
 
@@ -450,8 +478,8 @@ platforms; other platforms return an unsupported operation error.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` when set to `0`. The budget covers all anonymous `ArchiveService` callers. Dingo rejects negative values. |
-| Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` when set to `0`. Dingo keys callers by IPv4 address or IPv6 `/64` and rejects negative values. |
+| Global archive lookups per second | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `0` or unset by default, which is unlimited. Set a positive value to limit all anonymous `ArchiveService` callers. Dingo rejects negative values. |
+| Per-caller archive lookups per second | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `0` or unset by default, which is unlimited. Set a positive value to limit one caller address or IPv6 `/64`. Dingo rejects negative values. |
 
 Dingo charges one base lookup to both budgets for each `FetchBlock` reference.
 For a batch containing height references, Dingo also reserves `66` lookup units
@@ -545,7 +573,7 @@ host, Dingo removes the configured credentials before following it.
 
 ### Block production
 
-Dingo v0.92.4 does not support `ForgePrimaryChainTipToleranceSlots` or
+Dingo v0.94.0 does not support `ForgePrimaryChainTipToleranceSlots` or
 `forgePrimaryChainTipToleranceSlots` in YAML, the CLI, or environment
 variables.
 Remove these settings rather than replacing them with another field.
@@ -556,6 +584,26 @@ Set the optional `forgeAppliedTipStalenessSlots` setting in YAML, with the
 `0`, which disables the bound. Dingo evaluates the bound only when a
 corroborated upstream target exists and ignores it when the target is unknown.
 
+#### Multiple block producer pools
+
+| Setting | YAML key | CLI flag | Environment variable | Default and behavior |
+| --- | --- | --- | --- | --- |
+| Multiple block producer pools | `blockProducerPools` | — | — | Absent or empty by default. Dingo then uses the existing top level single pool `shelley*` key and KES settings. A populated list replaces those top level settings and configures each pool from its list entry. The list and its nested values are YAML only; no separate CLI flags or environment variables apply to list entries. |
+
+Each `blockProducerPools` entry requires `shelleyVrfKey`,
+`shelleyOperationalCertificate`, and exactly one KES source:
+`shelleyKesKey`, `shelleyKesAgentSocket`, or a remote
+`shelleyKesAgentAddress` or `shelleyKesAgentAddresses`. The top level
+`shelleyKesAgentSignTimeout` and `shelleyKeyWatchInterval` settings apply to
+all pools. Dingo rejects a populated list that also sets legacy top level
+single pool `shelley*` key or KES settings, and rejects duplicate operational
+certificate paths.
+
+Pools may share a remote KES listener address only when each pool names a
+different `shelleyKesAgentProfile`. A missing or duplicated profile makes the
+configuration invalid. The single address and ordered address list remain
+available as `shelleyKesAgentAddress` and `shelleyKesAgentAddresses`.
+
 #### Shelley KES agent socket
 
 The `--shelley-kes-agent-socket` flag supports filesystem socket paths and
@@ -563,6 +611,18 @@ Linux abstract socket addresses. Dingo resolves a relative filesystem path
 once at client construction and reuses the resolved path across reconnects. It
 preserves `@`-prefixed abstract addresses, rejects literal NUL-prefixed
 addresses at client construction, and enforces platform socket-length limits.
+
+#### Remote Shelley KES agents
+
+The CLI flags and environment variables below configure the top-level remote
+KES settings. Each `blockProducerPools` entry accepts the YAML keys, but the
+CLI and environment bindings apply only to the top-level pool.
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Single remote KES agent address | `shelleyKesAgentAddress` or `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Empty. Use a `host:port` address for a remote signing listener; the setting selects sign mode. Use either this field or `shelleyKesAgentAddresses`, not both. |
+| Ordered remote KES agent addresses | `shelleyKesAgentAddresses` or `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Empty. Enter an ordered list of `host:port` addresses. Dingo uses the list order for remote signing and validates every address. |
+| Remote KES agent profile | `shelleyKesAgentProfile` or `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Empty. A profile requires a remote agent address. Shared remote listener addresses require a distinct profile for each pool; missing or duplicate profiles are invalid. |
 
 ### Kupo provider
 
