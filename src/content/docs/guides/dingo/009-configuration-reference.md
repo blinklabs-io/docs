@@ -46,7 +46,7 @@ these keys through a native CLI flag or environment variable.
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
 | Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
-| Minimum endorser-block offer lead | `LeiosMinOfferLead` | When omitted, Dingo uses a `3600`-slot lead above the immutable tip before it offers an endorser block to a peer. |
+| Minimum endorser-block offer lead | `LeiosMinOfferLead` | Sets the minimum slot lead above the immutable tip for an endorser block that Dingo offers to a peer. When omitted, Dingo uses `3600` slots. |
 
 ### Cardano node Version 2 envelope configuration
 
