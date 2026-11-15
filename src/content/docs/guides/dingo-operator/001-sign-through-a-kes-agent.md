@@ -55,8 +55,10 @@ kes_agent:
 ```
 
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
-`cold_vkey_hex`, `system_start`, `slots_per_kes_period`, `guard_file`) unset at
-the top level.
+`cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`,
+`slots_per_kes_period`, `max_clock_skew`, `guard_file`) unset at the top level,
+and leave `slot_length` and `max_kes_evolutions` at their defaults. Set them in
+each profile instead. See [Profiles](/guides/bursa/009-configuration-reference/#profiles).
 
 With guard files, the agent keeps each KES key in memory only. A guard file
 keeps the profile's KES period floor across a restart, not its key. After the
