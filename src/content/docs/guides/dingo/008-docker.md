@@ -46,7 +46,7 @@ docker run --detach --name dingo-custom \
   --publish 3001:3001 \
   --volume dingo-custom-data:/data/db \
   --mount type=bind,source="$(pwd)/dingo.yaml",target=/tmp/dingo.yaml,readonly \
-     ghcr.io/blinklabs-io/dingo:0.92.4 \
+     ghcr.io/blinklabs-io/dingo:0.94.0 \
   --config /tmp/dingo.yaml serve
 ```
 
@@ -83,7 +83,7 @@ file across container restarts:
 docker run --detach --name dingo-logged \
   --env DINGO_LOG_FILE=/tmp/dingo.log \
   --env DINGO_LOG_FILE_APPEND=true \
-  ghcr.io/blinklabs-io/dingo:0.92.4
+  ghcr.io/blinklabs-io/dingo:0.94.0
 ```
 
 Append mode activates only when `DINGO_LOG_FILE_APPEND` equals the exact string
