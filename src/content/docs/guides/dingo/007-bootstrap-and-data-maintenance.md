@@ -53,7 +53,7 @@ certificate, and `mithril.server.keepSnapshots` to retain a defined number of
 newest snapshots. Enable the optional `mithril.server.aggregator` settings when Dingo
 must collect signatures and certify snapshots. The registration and closure
 endpoints accept anonymous requests. Dingo accepts the legacy
-`operatorTokenFile` setting but ignores it. See the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example)
+`operatorTokenFile` setting but ignores it. See the [`mithril` configuration reference](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example)
 for the complete `server` and `aggregator` settings.
 
 Mithril v2 bootstrap accepts artifact locations and redirects only from the configured
