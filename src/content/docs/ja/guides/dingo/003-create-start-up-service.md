@@ -325,7 +325,7 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-`systemd`の停止猶予期間(`TimeoutStopSec`)は、設定済みの`shutdownTimeout`とdurable storageの終了に必要な時間を合わせてカバーできるように設定してください。Dingoは、Dingo自身の`shutdownTimeout`またはリモート要求の期限を超えても、BadgerとSQLメタデータのdurable closeが完了するまで停止処理を継続します。停止処理の進捗と期限超過はログに記録されます。停止処理がハングし、意図的に放棄する場合を除き、`SIGKILL`で中断しないでください。
+`systemd` の停止猶予期間 (`TimeoutStopSec`) は、設定済みの `shutdownTimeout` と durable storage（永続ストレージ）の終了に必要な時間を合わせてカバーできるように設定してください。Dingo は、Dingo 自身の `shutdownTimeout` またはリモート要求の期限を超えても、Badger と SQL メタデータの durable close が完了するまで停止処理を継続します。停止処理の進捗と期限超過の警告をログに記録します。停止処理がハングし、意図的に放棄する場合を除き、`SIGKILL` で中断しないでください。
 
 ***
 
