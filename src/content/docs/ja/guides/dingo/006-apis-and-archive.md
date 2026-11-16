@@ -43,8 +43,8 @@ plugins:
         host: 127.0.0.1
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
-         maxConcurrentPoolLists: 4
-         maxConcurrentPoolListsPerClient: 1
+        maxConcurrentPoolLists: 4
+        maxConcurrentPoolListsPerClient: 1
     utxorpc:
       provider: builtin
       config:
