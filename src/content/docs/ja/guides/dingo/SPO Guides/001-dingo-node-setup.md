@@ -241,7 +241,7 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-# TimeoutStopSec は shutdownTimeout と durable storage の close に必要な時間をカバーする値に設定します。
+# systemd の停止猶予期間は shutdownTimeout と durable storage の close に必要な時間をカバーする値に設定します。
 
 [Install]
 WantedBy=multi-user.target
