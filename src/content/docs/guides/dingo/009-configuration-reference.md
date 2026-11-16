@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.94.0 Configuration Reference
-description: Complete, release-specific Dingo v0.94.0 configuration reference and example.
+title: Dingo v0.94.1 Configuration Reference
+description: Complete, release-specific Dingo v0.94.1 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.94.0. The complete
+This page covers the configuration shipped with Dingo v0.94.1. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.0/dingo.yaml.example).
-The same file is available in the [Dingo v0.94.0 source](https://github.com/blinklabs-io/dingo/blob/v0.94.0/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example).
+The same file is available in the [Dingo v0.94.1 source](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -40,12 +40,13 @@ for the main runtime choices.
 
 ### Cardano node transaction submission
 
-Set this key in the Cardano node configuration file. Dingo does not expose this
-key through a native CLI flag or environment variable.
+Set these keys in the Cardano node configuration file. Dingo does not expose
+these keys through a native CLI flag or environment variable.
 
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
 | Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+| Minimum endorser-block offer lead | `LeiosMinOfferLead` | Sets the minimum slot lead above the immutable tip for an endorser block that Dingo offers to a peer. When omitted, Dingo uses `3600` slots. |
 
 ### Cardano node Version 2 envelope configuration
 
@@ -161,7 +162,7 @@ before chain data import.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Node-to-client socket mode | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. The parent directory for a managed pathname socket must belong to the current user or root and must not be group or world writable. Linux abstract sockets retain their platform behavior; Windows skips the Unix write restriction. |
+| Node-to-client socket mode | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. The parent directory for a managed pathname socket must belong to the current user or root. Dingo accepts group or other writable access only when the sticky bit is set; it rejects a writable parent without the sticky bit. Set the sticky bit with `chmod +t` or remove group or other write access. Linux abstract sockets retain their platform behavior; Windows skips the Unix write restriction. |
 
 ### DMQ configuration
 
