@@ -90,8 +90,8 @@ plugins:
     config:
       # capacity is an optional override, not a required setting.
       # Default: 1 MiB for Praos mode and normal serve mode.
-      # In Leios/Musashi, an omitted capacity uses 25 MiB only when the current committee can reach quorum; otherwise it uses 1 MiB.
-      # An explicitly configured capacity remains fixed regardless of quorum state.
+      # In Leios/Musashi, Dingo uses 25 MiB for an omitted capacity only when the current committee can reach quorum; otherwise it uses 1 MiB.
+      # An explicitly configured capacity remains fixed even when the quorum state changes.
       # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
       # revalidationDeltaCap is optional. Default: 64. The value must be positive.
