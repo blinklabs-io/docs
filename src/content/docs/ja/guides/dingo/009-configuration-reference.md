@@ -94,7 +94,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB` を使用します。`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合、現在の委員会が Leios quorum に到達可能なら `25 MiB`、到達不可能または判定不能なら `1 MiB` を使用します。この既定値は `serve` の Musashi にも適用し、状態に応じて動的に更新します。`plugins.mempool.config.capacity` を明示した場合は既定値を上書きし、委員会の状態によって変更されません。 |
+| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB` を使用します。`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合、現在の委員会が Leios quorum に到達可能なら `25 MiB`、到達不可能または判定不能なら `1 MiB` を使用します。この既定値は `serve` の Musashi にも適用します。Dingo は状態に応じてこの既定値を動的に更新します。`plugins.mempool.config.capacity` を明示した場合は既定値を上書きし、委員会の状態によって変更されません。 |
 
 <a id="ledger-processing"></a>
 
@@ -416,7 +416,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 | --- | --- | --- | --- | --- |
 | Dingo Koios パリティ API 鍵 | `koiosParity.apiKey` | 削除済み・無効: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | 既定では空です。YAML とこの環境変数では、リテラルの API 鍵を引き続き使用できます。 |
 | Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。CLI 入力にはこのファイル方式を使用します。ファイルを API 鍵の文字列として読み取ります。 |
-| Koios パリティの strict モード | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | `false`（無効）。`true` にすると、Koios の日次 tier quota 枯渇（HTTP `429` または `Exceeded Tier Limit`）を fatal ではなく ERROR として記録し、quota がリセットされるまで ERROR スケジュールで再試行します。sampling の `/tx_info` で発生した quota エラーも同じ扱いとし、fatal な `dingo_db_missing` には変換しません。ERROR 状態を永続化できない場合、Dingo は引き続き fatal として扱います。 |
+| Koios パリティの strict モード | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | `false`（無効）。`true` にすると、Koios の日次 tier quota 枯渇（HTTP `429` または `Exceeded Tier Limit`）を fatal ではなく ERROR として記録し、quota がリセットされるまで ERROR スケジュールで再試行します。Dingo は sampling の `/tx_info` で発生した quota エラーも同じ扱いにし、fatal な `dingo_db_missing` には変換しません。ERROR 状態を永続化できない場合、Dingo は引き続き fatal として扱います。 |
 | 汎用プラグイン設定フィールドのファイル | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>` の代わりに使用します。ファイルを通常の文字列として読み取り、YAML として解析しません。 |
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
