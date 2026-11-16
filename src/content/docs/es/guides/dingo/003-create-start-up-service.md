@@ -65,8 +65,11 @@ plugins:
     provider: "default"
     config:
       # capacity is an optional override, not a required setting.
-      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
-      # Leave the key commented or omit it to use the mode default.
+      # Predeterminado: 1 MiB en modo Praos y en el modo normal de `serve`.
+      # En modo Musashi, usa 25 MiB solo si el comité Leios actual puede alcanzar
+      # el quórum; si el quórum es imposible o no se puede resolver, usa 1 MiB.
+      # Una capacidad explícita permanece fija, independientemente del quórum.
+      # Deja la clave comentada u omítela para usar el valor predeterminado del modo.
       # capacity: 1048576
       # revalidationDeltaCap is optional. Default: 64. The value must be positive.
       # revalidationDeltaCap: 64
@@ -277,12 +280,13 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+⚠️ El periodo de gracia de systemd debe cubrir `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento durable; configura `TimeoutStopSec` con ese criterio y no con una duración fija de este ejemplo. El cierre puede durar más que el plazo de Dingo o de una solicitud remota. Dingo registra el progreso y el exceso de plazo. Un supervisor u operador no debe usar `SIGKILL` salvo que pretenda abandonar un cierre bloqueado.
 
 Visualiza y verifica `dingo.service`:
 
