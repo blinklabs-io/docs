@@ -50,8 +50,8 @@ plugins:
         host: 127.0.0.1
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
-         maxConcurrentPoolLists: 4
-         maxConcurrentPoolListsPerClient: 1
+        maxConcurrentPoolLists: 4
+        maxConcurrentPoolListsPerClient: 1
     utxorpc:
       provider: builtin
       config:
@@ -100,7 +100,7 @@ admission limits for pool list work. They apply to both the active pool list
 route, `GET /api/v0/pools`, and the retiring pool list route,
 `GET /api/v0/pools/retiring`. Omit either setting or set it to `0` to leave
 that limit unlimited. A positive value enables the corresponding global or
-per-client limit. When an enabled limit is exhausted, Dingo returns HTTP
+per-client limit. When requests reach an enabled limit, Dingo returns HTTP
 `429` with `Retry-After: 1`.
 
 The complete v0.94.1 configuration reference and release-matched
