@@ -186,12 +186,13 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+Configura `TimeoutStopSec` con un periodo de gracia que cubra `shutdownTimeout` y el tiempo esperado de cierre del almacenamiento durable. Dingo puede continuar el cierre después de `shutdownTimeout` o del plazo de una solicitud remota. Los avisos de progreso y de exceso de plazo son esperados; solo `SIGKILL` abandona un cierre bloqueado.
 
 ✅ Visualiza y comprueba el archivo `dingo.service`:
 
