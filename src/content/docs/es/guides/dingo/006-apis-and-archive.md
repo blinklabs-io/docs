@@ -41,8 +41,8 @@ plugins:
         host: 127.0.0.1
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
-         maxConcurrentPoolLists: 4
-         maxConcurrentPoolListsPerClient: 1
+        maxConcurrentPoolLists: 4
+        maxConcurrentPoolListsPerClient: 1
     utxorpc:
       provider: builtin
       config:
@@ -101,7 +101,7 @@ Antes de iniciar el nodo, configura estos ajustes:
 
 El `LifecycleService` está disponible mediante HTTP sin TLS y no requiere certificados de cliente ni listas de operadores para `GetStatus`, `Stop` ni `Restart`. `GetStatus` es de solo lectura. `Stop` y `Restart` son operaciones destructivas: `Stop` solicita una parada ordenada y `Restart` solicita una parada ordenada seguida de un reinicio. `Restart` no está disponible en plataformas que no sean Unix.
 
-Las operaciones remotas `Stop` y `Restart` pueden superar el plazo de la solicitud mientras Dingo cierra el almacenamiento durable. `Restart` solo continúa después de completar ese cierre. Configura el supervisor para permitir `shutdownTimeout` más el tiempo que necesita el almacenamiento durable para cerrarse. Dingo registra avisos de progreso mientras el cierre se prolonga y avisos cuando supera el plazo; `SIGKILL` es la única señal que puede abandonar por la fuerza un cierre bloqueado.
+Las operaciones remotas `Stop` y `Restart` pueden superar el plazo de la solicitud mientras Dingo cierra el almacenamiento durable. `Restart` solo continúa después de completar ese cierre. Configura el supervisor para permitir `shutdownTimeout` más el tiempo que necesita el almacenamiento durable para cerrarse. Dingo registra avisos de progreso mientras el cierre se prolonga y avisos cuando supera el plazo; solo `SIGKILL` puede interrumpir por la fuerza un cierre bloqueado.
 
 Cuando `barkHost` expone el servicio fuera de loopback, aplica controles de red para limitar el acceso al `LifecycleService`.
 
