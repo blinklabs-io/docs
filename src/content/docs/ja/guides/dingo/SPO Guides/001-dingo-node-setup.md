@@ -248,7 +248,7 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-⚠️ systemd の停止猶予期間は、Dingo に設定した `shutdownTimeout` と durable storage の close に必要な時間の合計をカバーするように設定します。終了処理は Dingo の `shutdownTimeout` や停止要求の期限を超えて継続することがあります。Dingo は処理中の進捗と期限超過の警告をログに記録します。close がハングした場合に close を放棄できるのは `SIGKILL` だけです。
+⚠️ 終了処理は Dingo の `shutdownTimeout` や停止要求の期限を超えて継続することがあります。Dingo は処理中の進捗と期限超過の警告をログに記録します。close がハングした場合に close を放棄できるのは `SIGKILL` だけです。
 
 ***
 
