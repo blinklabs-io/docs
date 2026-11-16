@@ -66,8 +66,9 @@ plugins:
     config:
       # capacity is an optional override, not a required setting.
       # Predeterminado: 1 MiB en modo Praos y en el modo normal de `serve`.
-      # En modo Musashi, usa 25 MiB solo si el comité Leios actual puede alcanzar
-      # el quórum; si el quórum es imposible o no se puede resolver, usa 1 MiB.
+      # En modo Musashi, el valor predeterminado es 25 MiB solo cuando el comité
+      # Leios actual puede alcanzar el quórum; si el quórum es imposible o no se
+      # puede resolver, el valor predeterminado vuelve a 1 MiB.
       # Una capacidad explícita permanece fija, independientemente del quórum.
       # Deja la clave comentada u omítela para usar el valor predeterminado del modo.
       # capacity: 1048576
@@ -286,7 +287,7 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-⚠️ El periodo de gracia de systemd debe cubrir `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento durable; configura `TimeoutStopSec` con ese criterio y no con una duración fija de este ejemplo. El cierre puede durar más que el plazo de Dingo o de una solicitud remota. Dingo registra el progreso y el exceso de plazo. Un supervisor u operador no debe usar `SIGKILL` salvo que pretenda abandonar un cierre bloqueado.
+⚠️ Establece `TimeoutStopSec` para que el periodo de gracia de systemd cubra `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento durable, en lugar de fijarlo con una duración numérica. El cierre puede prolongarse más allá del plazo de Dingo o de una solicitud remota. Dingo registra el progreso y el exceso de plazo. Un supervisor u operador no debe usar `SIGKILL` salvo que pretenda abandonar un cierre bloqueado.
 
 Visualiza y verifica `dingo.service`:
 
