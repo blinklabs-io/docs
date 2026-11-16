@@ -161,12 +161,12 @@ LifecycleService accepts `GetStatus`, `Stop`, and `Restart` over plaintext HTTP
 without client certificates or operator allowlists. `Restart` is unsupported on
 non-Unix platforms.
 
-Remote `Stop` and `Restart` can continue after the request deadline while Dingo
-closes durable storage. Dingo starts a restart only after shutdown completes.
+Remote `Stop` and `Restart` may outlast the request deadline while Dingo closes
+durable storage. Dingo starts a restart only after shutdown completes.
 The supervising process must allow the configured `shutdownTimeout` plus the
-time required to close durable storage. Dingo logs progress while the close
-continues and warns when shutdown exceeds its deadline. Use `SIGKILL` only to
-abandon a wedged storage close.
+time required to close durable storage. Dingo logs progress while durable
+storage closes and warns when shutdown exceeds its deadline. Use `SIGKILL` only
+to abandon a wedged storage close.
 
 When the service is enabled and `barkHost` is empty, Bark binds to loopback by
 default. Set `barkHost`, `--bark-host`, or `DINGO_BARK_HOST` to expose it on a
