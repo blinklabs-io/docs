@@ -72,7 +72,7 @@ Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos 
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. En modo Leios o en la red Musashi por nombre o por magic, Dingo usa `25 MiB` únicamente cuando el comité de Leios de la época actual puede alcanzar su umbral de quórum; si el quórum es imposible o no se puede resolver, mantiene `1 MiB`. Una capacidad explícita sustituye estos valores predeterminados y permanece fija; no cambia con el comité. |
+| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. En modo Leios o en la red Musashi por nombre o por magic, Dingo usa `25 MiB` únicamente cuando el comité de Leios de la época actual puede alcanzar su umbral de quórum; si el comité no puede alcanzar el quórum o Dingo no puede resolverlo, mantiene `1 MiB`. Una capacidad explícita sustituye estos valores predeterminados y permanece fija; no cambia con el comité. |
 
 ### Procesamiento del ledger
 
