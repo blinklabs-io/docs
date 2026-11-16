@@ -89,7 +89,9 @@ plugins:
     provider: "default"
     config:
       # capacity is an optional override, not a required setting.
-      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
+      # Default: 1 MiB for Praos mode and normal serve mode.
+      # In Leios/Musashi, an omitted capacity uses 25 MiB only when the current committee can reach quorum; otherwise it uses 1 MiB.
+      # An explicitly configured capacity remains fixed regardless of quorum state.
       # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
       # revalidationDeltaCap is optional. Default: 64. The value must be positive.
@@ -317,12 +319,13 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+`systemd`の停止猶予期間(`TimeoutStopSec`)は、設定済みの`shutdownTimeout`とdurable storageの終了に必要な時間を合わせてカバーできるように設定してください。Dingoは、Dingo自身の`shutdownTimeout`またはリモート要求の期限を超えても、BadgerとSQLメタデータのdurable closeが完了するまで停止処理を継続します。停止処理の進捗と期限超過はログに記録されます。停止処理がハングし、意図的に放棄する場合を除き、`SIGKILL`で中断しないでください。
 
 ***
 
