@@ -83,11 +83,11 @@ plugins:
     provider: "default"
     config:
       # capacity is an optional override, not a required setting.
-       # Default: 1 MiB for Praos and normal serve mode. In Musashi (Leios) mode,
-       # the default is 25 MiB only when the current Leios committee can reach quorum.
-       # When quorum is impossible or unresolved, the default falls back to 1 MiB.
-       # An explicit capacity override stays fixed regardless of quorum status.
-       # Leave the key commented or omit it to use the mode default.
+      # Default: 1 MiB for Praos and normal serve mode. In Musashi (Leios) mode,
+      # the default is 25 MiB only when the current Leios committee can reach quorum.
+      # When quorum is impossible or unresolved, the default falls back to 1 MiB.
+      # An explicit capacity override stays fixed regardless of quorum status.
+      # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
       # revalidationDeltaCap is optional. Default: 64. The value must be positive.
       # revalidationDeltaCap: 64
