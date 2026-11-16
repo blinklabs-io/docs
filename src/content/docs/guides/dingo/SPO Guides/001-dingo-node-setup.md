@@ -241,14 +241,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-# Set TimeoutStopSec to cover Dingo's shutdownTimeout and the time required to close durable storage.
+# Set TimeoutStopSec to cover Dingo's configured shutdownTimeout and the time required to close durable storage.
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
 
-> **Important:** Shutdown can continue after Dingo's `shutdownTimeout` or a remote request deadline. Configure the systemd grace period to cover that timeout and the expected durable storage close time. Progress messages and overrun warnings are expected during this period; only `SIGKILL` abandons a close.
+> **Important:** Set the systemd grace period long enough to cover Dingo's configured `shutdownTimeout` and the time required to close durable storage. Shutdown can continue after Dingo's `shutdownTimeout` or a remote request deadline, so progress messages and overrun warnings are expected. Only `SIGKILL` abandons a close.
 
 ***
 
