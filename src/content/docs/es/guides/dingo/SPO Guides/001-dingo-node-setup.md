@@ -192,7 +192,7 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-Configura `TimeoutStopSec` con un periodo de gracia que cubra `shutdownTimeout` y el tiempo esperado de cierre del almacenamiento durable. Dingo puede continuar el cierre después de `shutdownTimeout` o del plazo de una solicitud remota. Los avisos de progreso y de exceso de plazo son esperados; solo `SIGKILL` abandona un cierre bloqueado.
+Configura `TimeoutStopSec` con un periodo de gracia que cubra `shutdownTimeout` y el tiempo esperado de cierre del almacenamiento durable. Dingo puede continuar el cierre después de `shutdownTimeout` o del plazo de una solicitud remota. Dingo registra avisos de progreso y de exceso de plazo durante esta espera; solo `SIGKILL` abandona un cierre bloqueado.
 
 ✅ Visualiza y comprueba el archivo `dingo.service`:
 
