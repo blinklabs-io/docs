@@ -119,7 +119,7 @@ before chain data import.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. When Dingo uses the default capacity for Leios or Musashi, it selects `25 MiB` (`26214400` bytes) only when the current committee can reach the Leios quorum; Dingo uses `1 MiB` when the committee cannot reach quorum or Dingo cannot resolve quorum. Capacity supplied in YAML or by the provider overrides these defaults and remains fixed. |
+| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. When Dingo uses the default capacity for Leios or Musashi, it selects `25 MiB` (`26214400` bytes) only when the current committee can reach the Leios quorum; Dingo uses `1 MiB` when the committee cannot reach quorum or Dingo cannot resolve quorum. When YAML or the provider supplies capacity, Dingo uses that value instead of these defaults and does not change it with committee quorum. |
 
 ### Ledger processing
 
@@ -292,9 +292,11 @@ requests are not subject to the Blockfrost mutation admission limits.
 | Concurrent pool lists per client | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0` or unset by default, which disables the per client bound for `GET /api/v0/pools` and `GET /api/v0/pools/retiring`. Set a positive value to limit pool-list work from one remote address. When `maxConcurrentPoolLists` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
 
 Before reading the request body, the provider applies each configured positive
-mutation limit. When concurrent work reaches an active global or per-client
-limit, the provider returns HTTP `429` with `Retry-After: 1` without reading
-the body.
+mutation limit. For pool-list requests, the provider also applies each
+configured positive pool-list limit to `GET /api/v0/pools` and
+`GET /api/v0/pools/retiring`. When concurrent work reaches an enabled global or
+per-client limit, the provider returns HTTP `429` with `Retry-After: 1` without
+reading the body.
 
 ### Shared outbound HTTP user agent
 
