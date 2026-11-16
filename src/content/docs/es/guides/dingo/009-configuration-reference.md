@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.94.1"
-description: Referencia y ejemplo completo de configuración de Dingo v0.94.1.
+title: "Referencia de configuración de Dingo v0.94.2"
+description: Referencia y ejemplo completo de configuración de Dingo v0.94.2.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.94.1. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.94.1](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.94.2. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.94.2](https://github.com/blinklabs-io/dingo/blob/v0.94.2/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -72,7 +72,7 @@ Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos 
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. `25 MiB` cuando el modo es Leios o la red es Musashi por nombre o por magic, incluso en `serve`. Un valor explícito prevalece sobre ambos valores predeterminados. |
+| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. En modo Leios o en la red Musashi por nombre o por magic, Dingo usa `25 MiB` únicamente cuando el comité de Leios de la época actual puede alcanzar su umbral de quórum; si el quórum es imposible o no se puede resolver, mantiene `1 MiB`. Una capacidad explícita sustituye estos valores predeterminados y permanece fija; no cambia con el comité. |
 
 ### Procesamiento del ledger
 
@@ -192,8 +192,12 @@ El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada
 | Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Entrada heredada que Dingo ignora y que no tiene efecto; no es obligatoria. El envío y la evaluación de transacciones aceptan solicitudes anónimas. |
 | Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite global para el envío y la evaluación de transacciones. |
 | Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite por cliente. Un límite positivo por cliente puede coexistir con `maxConcurrentMutations: 0`; cuando el límite global es positivo, el límite por cliente no puede superarlo. |
+| Listas de pools concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las solicitudes simultáneas de `GET /api/v0/pools` y `GET /api/v0/pools/retiring`. |
+| Listas de pools concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las solicitudes simultáneas por cliente en esas dos rutas. Cuando el límite global es positivo, el límite por cliente no puede superarlo. |
 
 Dingo no exige TLS para el acceso de modificación de Blockfrost. Antes de leer el cuerpo, aplica los límites de modificaciones que tengan un valor positivo. Si se agota un límite configurado y activo, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
+
+Antes de procesar cada solicitud de lista de pools, Dingo aplica los límites de listas que tengan un valor positivo. Si se agota un límite habilitado, devuelve HTTP `429` con `Retry-After: 1`.
 
 ### Agente de usuario HTTP saliente compartido
 
@@ -346,6 +350,7 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 | --- | --- | --- | --- | --- |
 | Clave API de paridad Koios de Dingo | `koiosParity.apiKey` | Eliminada; no válida: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Vacía de forma predeterminada. YAML y esta variable de entorno siguen aceptando claves API literales. |
 | Archivo de clave API de paridad Koios de Dingo | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Vacío de forma predeterminada. La entrada CLI utiliza esta opción respaldada por archivo. El archivo se lee como una cadena de clave API. |
+| Modo estricto de paridad Koios | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | Al activarlo, un HTTP `429` de cuota diaria de Koios con el mensaje `Exceeded Tier Limit` no detiene el nodo. Dingo registra `ERROR` y reintenta según el calendario de errores hasta que se restablece la cuota, incluso durante el muestreo de información de transacciones. Si no puede persistir el estado `ERROR`, el fallo sigue siendo fatal. |
 | Archivo de campo genérico de configuración de plugins | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Sustituye a `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo lee el archivo como una cadena de texto, sin interpretarlo como YAML. |
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
