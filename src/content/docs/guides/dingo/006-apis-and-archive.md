@@ -103,7 +103,7 @@ that limit unlimited. A positive value enables the corresponding global or
 per-client limit. When requests reach an enabled limit, Dingo returns HTTP
 `429` with `Retry-After: 1`.
 
-The complete v0.94.1 configuration reference and release-matched
+The complete v0.94.2 configuration reference and release-matched
 [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
