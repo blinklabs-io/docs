@@ -314,7 +314,9 @@ WantedBy=multi-user.target
 ENDFILE
 ```
 
-> ⚠️ Set systemd's `TimeoutStopSec` to cover Dingo's configured `shutdownTimeout` plus the time needed to close durable storage. Shutdown may outlast Dingo's `shutdownTimeout` or a remote request deadline; Dingo logs progress and an overrun warning while durable storage closes. Do not use `SIGKILL` unless abandoning a wedged close is intentional.
+> ⚠️ Set systemd's `TimeoutStopSec` to cover Dingo's configured `shutdownTimeout` plus the time needed to close durable storage.
+> Shutdown may outlast Dingo's `shutdownTimeout` or a remote request deadline. Dingo logs progress and an overrun warning while durable storage closes.
+> Do not use `SIGKILL` unless abandoning a wedged close is intentional.
 
 ***
 
