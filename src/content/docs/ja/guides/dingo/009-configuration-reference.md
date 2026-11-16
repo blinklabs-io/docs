@@ -232,8 +232,8 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。トランザクションの送信と評価に必要ありません。 |
 | 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、プロバイダー全体のトランザクション送信と評価の同時実行数に上限を設けます。 |
 | クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの処理に上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
-| pool-list 全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、`GET /api/v0/pools` と `GET /api/v0/pools/retiring` の pool-list リクエスト全体に上限を設けます。 |
-| クライアントごとの pool-list 同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの `GET /api/v0/pools` と `GET /api/v0/pools/retiring` に上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
+| pool-list 全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、pool-list リクエスト全体に上限を設けます。 |
+| クライアントごとの pool-list 同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの pool-list リクエストに上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
 
 変更操作には認証は必要ありません。Dingo は本文を読む前に、設定した変更操作の上限を適用します。設定した上限を使い切った場合だけ、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。上限を設定していない場合、変更操作の受け入れ制限はありません。
 
