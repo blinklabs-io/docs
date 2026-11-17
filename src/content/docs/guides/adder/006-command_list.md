@@ -214,7 +214,7 @@ The `context` object identifies the transaction and its chain position:
 ### Governance event payload
 
 The `payload` object always contains `blockHash` and contains
-`transactionCbor` only when `--input-chainsync-include-cbor` is enabled. It can
+`transactionCbor` only when the input uses `--input-chainsync-include-cbor`. It can
 also contain the following arrays; Adder omits an array when it has no items:
 
 | Field | Meaning |
@@ -459,7 +459,7 @@ Use a stake address to follow an account's governance activity. The
   
 > sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The selected output's threshold also filters Adder application diagnostics on stderr.
 >
-> Configure the same setting through YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder removes the top-level `logging.level` YAML setting, `--logging-level` flag, `LOGGING_LEVEL` environment variable, and `Config.Logging` configuration. Set `--output-log-level` or the selected output's `output.log.level` instead.
+> Configure the same setting through YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. During YAML loading, Adder accepts the legacy top-level `logging.level` setting and migrates it to `plugins.output.log.level` only when the modern key is absent. An explicit `plugins.output.log.level` value takes precedence. Adder writes only the modern `plugins.output.log.level` form when it saves configuration. Invalid legacy values still cause a configuration error. The old `--logging-level` flag, `LOGGING_LEVEL` environment variable, and `Config.Logging` configuration remain unsupported. Set `--output-log-level`, `OUTPUT_LOG_LEVEL`, or `plugins.output.log.level` instead.
 <br />
 
 ```
@@ -499,6 +499,8 @@ Use a stake address to follow an account's governance activity. The
 > specifies the path to the service account file. This value must be non-empty when using `--output push`.
 >
 > The service-account JSON must contain `project_id` as a non-empty string. Missing, non-string, or empty `project_id` values cause startup/configuration failure.
+>
+> Push token acquisition and FCM delivery errors reach the output `ErrorChan`. Each FCM HTTP request has a 10-second limit.
 >
 <br />
 
