@@ -28,7 +28,7 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
   --managed-config-dir string
 ```
 
-> enables managed routing using this configuration directory (default empty)
+> path to the managed routing configuration directory (default empty)
 
 > The directory must contain a valid managed configuration bundle before managed mode starts.
 
