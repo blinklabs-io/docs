@@ -7,8 +7,8 @@ description: "AdderのKafka出力の設定と動作を説明します。"
 
 `kafka` outputは、選択したAdderイベントをJSONとして1つのKafka topicに配信します。
 
-- [コマンドリファレンス](./006-command_list)
-- [出力設定の概要](./006-command_list#output)
+- [コマンドリファレンス](./006-command_list.md)
+- [出力設定の概要](./008-output-integrations.md)
 
 ## 設定
 
