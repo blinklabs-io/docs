@@ -9,6 +9,8 @@ description: "AdderのClickHouse出力における設定とイベント保存動
 
 `clickhouse`出力は、選択したイベントをHTTP経由の`JSONEachRow`バッチとして、指定したClickHouseデータベースの`adder_events_v1`に保存します。この出力は、起動時に`MergeTree`テーブルを作成し、`event_time`の月単位でパーティションを分けます。
 
+関連情報は[コマンドリファレンス](./006-command_list.md)と[出力連携リファレンス](./008-output-integrations.md)を参照してください。
+
 ## 設定
 
 YAML設定では、`output`に`clickhouse`を指定し、`plugins.output.clickhouse`の下に接続情報とイベント種別を設定します。
