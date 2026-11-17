@@ -3,11 +3,11 @@ title: Adder OpenAPI Go Client
 description: Use the generated Adder OpenAPI client with the canonical Go module and import path.
 ---
 
-This page describes the generated Go client for the Adder OpenAPI service. The client uses the `github.com/blinklabs-io/adder/openapi` module path.
+The generated Go client provides access to the Adder OpenAPI service. Use the `github.com/blinklabs-io/adder/openapi` module path.
 
 ## Installation
 
-Install the dependencies listed by the generated client:
+Install the following dependencies from the generated client instructions:
 
 ```sh
 go get github.com/stretchr/testify/assert
@@ -28,11 +28,11 @@ module github.com/blinklabs-io/adder/openapi
 
 ## Migrate from the retired module path
 
-Replace `github.com/blinklabs-io/cardano-node-api/openapi` with `github.com/blinklabs-io/adder/openapi` in Go imports and `go.mod` module references:
+In Go imports and `go.mod` module references, replace `github.com/blinklabs-io/cardano-node-api/openapi` with `github.com/blinklabs-io/adder/openapi`:
 
 ```diff
 -import openapi "github.com/blinklabs-io/cardano-node-api/openapi"
 +import openapi "github.com/blinklabs-io/adder/openapi"
 ```
 
-After updating the references, rebuild the project so Go resolves the generated client from the Adder module.
+After updating the references, rebuild the project. Go then resolves the generated client from the Adder module.
