@@ -17,7 +17,7 @@ Use the macOS `.pkg` release artifact for both new installations and updates. Do
 
 The `Adder.app` bundle contains both the `adder` CLI and the `adder-tray` tray app.
 
-After installation, the installer makes a best effort to create `/usr/local/bin/adder` as a convenience symlink to the bundled CLI. It creates the symlink when that path has no command or already points to the bundled CLI, and it does not replace an unrelated command.
+After installation, the installer makes a best effort to create `/usr/local/bin/adder` as a convenience symlink to the bundled CLI. It creates the symlink when no entry exists at that path or an existing symlink already points to the bundled CLI, and it does not replace an unrelated command.
 
 ## Launch Adder
 
@@ -32,7 +32,7 @@ Run the following command to create a package for local testing:
 make pkg-macos-adhoc
 ```
 
-This command ad hoc signs the `Adder.app` bundle so local notifications work. The resulting `.pkg` remains unsigned and does not pass Gatekeeper, so use it for local testing only. A regular local package build without signing identities also skips signing and notarization with warnings and should not be treated as Gatekeeper accepted.
+This command ad hoc signs the `Adder.app` bundle so local notifications work. The resulting `.pkg` remains unsigned and does not pass Gatekeeper, so use it for local testing only. If a regular local package build has no signing identities, the build skips signing and notarization with warnings, and the resulting package does not have Gatekeeper acceptance.
 
 
 ---
