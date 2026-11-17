@@ -94,11 +94,11 @@ for later delivery.
 
 Adder checks each event timestamp before it adds the event to a batch. A
 timestamp outside the supported `DateTime64(9)` range produces an individual
-error, while other valid events continue through batching. Adder reports a
-failed HTTP or ClickHouse query, including an error discovered while reading
-the response body, and discards the batch locally. Adder logs and reports the
-failed batch. Adder does not automatically retry an ambiguous failed insert
-because repeating the request can create duplicate rows.
+error, while other valid events continue through batching. Adder logs and
+reports the batch when the HTTP request or ClickHouse query fails, including an
+error discovered while reading the response body, and then discards the batch
+locally. Adder does not automatically retry an ambiguous failed insert because
+repeating the request can create duplicate rows.
 
 ClickHouse keeps every row that it accepts successfully, including identical
 event duplicates. It also keeps rollback events as ordinary `input.rollback`
