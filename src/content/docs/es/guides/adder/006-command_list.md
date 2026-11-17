@@ -68,6 +68,29 @@ description: Lista de Comandos de Adder.
 >
 > Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder elimina los espacios al principio y al final de cada entrada separada por comas e ignora las entradas vacías.
 >
+> Cada filtro acepta varios valores separados por comas; los valores de una misma opción se combinan con OR. Por ejemplo:
+>
+> ```text
+> --filter-address <dirección-1>,<dirección-2>
+> --filter-pool <pool-1>,<pool-2>
+> --filter-drep <drep-1>,<drep-2>
+> ```
+>
+> Los filtros de tipos distintos se combinan con AND: el evento debe coincidir con todos los filtros configurados. La excepción combina `--filter-pool` y `--filter-drep` con OR; los demás filtros configurados siguen aplicándose con AND. `--filter-drep` no se aplica a los eventos `input.block`.
+>
+> **Correspondencia de filtros:**
+>
+> | Opción | Variable de entorno | Clave YAML |
+> | --- | --- | --- |
+> | `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+> | `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+> | `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+> | `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+> | `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+> | `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
+>
+> Las opciones usan una forma abreviada que omite el nombre del plugin. Las variables de entorno y las claves YAML incluyen el tipo y el nombre del plugin.
+>
 > **Tipos de Evento:**
 > 1. `input.block` - Se observó un nuevo bloque.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
@@ -78,6 +101,58 @@ description: Lista de Comandos de Adder.
 > 7. `input.drep-retirement` - Un DRep se retiró.
 >
 
+
+***
+
+## Eventos de gobernanza:
+
+La entrada `chainsync` emite un evento `input.governance` por cada transacción que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce un único evento de gobernanza que reúne todos sus datos de gobernanza. El evento se emite además del evento `input.transaction`; las transacciones sin datos de gobernanza no producen este evento.
+
+### Cuándo se emite
+
+`input.governance` se emite cuando la transacción contiene uno o más procedimientos de propuesta, procedimientos de votación o certificados de gobernanza: registro, actualización o retiro de DRep; delegación de voto; o autorización de clave activa y renuncia de clave fría del Comité Constitucional.
+
+### Contexto
+
+El objeto `context` contiene la posición de la transacción y de la cadena:
+
+| Campo | Tipo | Descripción |
+| --- | --- | --- |
+| `transactionHash` | string | Hash hexadecimal de la transacción. |
+| `blockNumber` | number | Altura del bloque que contiene la transacción. |
+| `slotNumber` | number | Slot del bloque que contiene la transacción. |
+| `transactionIdx` | number | Índice de la transacción dentro del bloque. |
+| `networkMagic` | number | Network magic del nodo conectado. |
+
+### Payload
+
+El objeto `payload` siempre contiene `blockHash` y puede contener `transactionCbor` cuando se habilita `--input-chainsync-include-cbor`. También puede contener las siguientes matrices; Adder omite cada matriz vacía:
+
+| Campo | Contenido |
+| --- | --- |
+| `proposalProcedures` | Acciones de gobernanza propuestas, con índice, depósito, cuenta de recompensa, tipo y datos específicos de la acción, además del ancla de metadatos. |
+| `votingProcedures` | Votos, con tipo, hash e identificador del votante, acción de gobernanza, voto y ancla. |
+| `drepCertificates` | Certificados de registro, actualización o retiro de DRep, con hash e identificador del DRep, depósito cuando corresponde y ancla. |
+| `voteDelegationCertificates` | Certificados de delegación de voto, con credencial de stake, tipo e identificador del DRep y, cuando corresponde, hash de la pool y depósito. |
+| `committeeCertificates` | Certificados `AuthHot` de autorización de clave activa o `ResignCold` de renuncia de clave fría, con las credenciales del comité y el ancla. |
+
+Los objetos `anchor` siempre aparecen en los elementos que los admiten; cuando no existe un ancla, sus campos `url` y `dataHash` son cadenas vacías. Los campos `deposit` de los certificados se omiten cuando su valor es cero.
+
+### Filtrado de eventos de gobernanza
+
+Los siguientes filtros se aplican a `input.governance` cuando cualquier dato correspondiente coincide con el valor filtrado:
+
+- `--filter-drep` coincide con certificados de DRep, delegaciones de voto hacia el DRep y procedimientos de votación cuyo votante es el DRep.
+- `--filter-pool` coincide con procedimientos de votación emitidos por la pool como SPO y certificados de delegación de voto que contienen el hash de clave de la pool.
+- `--filter-address` con una dirección de stake (`stake1…`) coincide con `rewardAccount` de propuestas, destinos de retiros del tesoro y la credencial de stake de certificados de delegación de voto. Con una dirección de pago (`addr1…`), coincide únicamente con destinos de retiros del tesoro.
+
+Los filtros `--filter-policy` y `--filter-asset` no se aplican a eventos de gobernanza y dejan pasar `input.governance` sin modificaciones.
+
+### Normalización de entradas DRep
+
+`--filter-drep` acepta las formas bech32 `drep1...` y `drep_script1...`. Adder espera una credencial de 28 bytes después de decodificarla; solo elimina el byte inicial cuando el payload decodificado tiene 29 bytes y no inspecciona ni valida ese byte. Ignora los payloads decodificados de cualquier otra longitud y descarta silenciosamente ese identificador del filtro.
+
+La forma hexadecimal debe contener únicamente los 56 caracteres hexadecimales de la credencial sin procesar. Adder no elimina ningún byte inicial de la entrada hexadecimal, por lo que un valor que incluya una cabecera no coincide.
 
 ***
 
@@ -324,7 +399,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
 >
-> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Adder eliminó el ajuste de nivel superior `logging.level`, la opción `--logging-level` y la variable `LOGGING_LEVEL`; las opciones `plugins.output.log.level`, `OUTPUT_LOG_LEVEL` y `--output-log-level` configuran el nivel.
+> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Al cargar YAML, Adder acepta el ajuste heredado de nivel superior `logging.level` y lo migra a `plugins.output.log.level` si la clave moderna no está presente. Si ambas claves están presentes, prevalece `plugins.output.log.level`; al guardar la configuración, solo se conserva la clave moderna. Los valores heredados no válidos siguen produciendo errores. La opción `--logging-level` y la variable `LOGGING_LEVEL` no son compatibles; los controles preferidos son `--output-log-level`, `OUTPUT_LOG_LEVEL` y `plugins.output.log.level`.
 <br />
 
 ```text
@@ -363,6 +438,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > especifica la ruta al archivo de cuenta de servicio
 > Cuando se selecciona `--output push`, `--output-push-serviceAccountFilePath` debe especificar una ruta no vacía. El JSON de cuenta de servicio indicado debe incluir `project_id` como una cadena no vacía. La configuración falla cuando falta `project_id`, no es una cadena o está vacío.
+> Los errores de token y FCM se entregan mediante `ErrorChan`. Cada solicitud HTTP a FCM tiene un tiempo de espera de 10 segundos.
 <br />
 
 ```text
