@@ -34,7 +34,7 @@ The setup screen reports whether Adder Tray registered the background activity a
 
 From the Adder Tray menu, select `Notification Rules...` to edit notification targets and categories for `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`. Select the notification categories that each target receives, or select `Monitor Everything` instead of individual targets. `Monitor Everything` is exclusive and cannot be selected with specific targets.
 
-Select `Apply` to persist the changes and immediately refresh notification rules and rate limits without restarting Adder Tray. Deleting a target requires confirmation. If applying changes displays a reconnect warning, the editor remains open with its inputs re-enabled so the changes can be retried.
+Select `Apply` to persist the changes and immediately refresh notification rules and rate limits without restarting Adder Tray. Deleting a target requires confirmation. If a reconnect warning appears while changes are applied, the editor remains open and re-enables its inputs so the editor can apply the changes again.
 
 ## View Adder Tray details
 
