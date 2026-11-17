@@ -62,7 +62,7 @@ Representa una acción de gobernanza propuesta, es decir, una propuesta nueva.
 | `rewardAccount` | string | Dirección de participación o recompensa donde se devolverá el depósito al finalizar. |
 | `actionType` | string | Uno de `ParameterChange`, `HardForkInitiation`, `TreasuryWithdrawal`, `NoConfidence`, `UpdateCommittee`, `NewConstitution` o `Info`; los tipos no reconocidos usan `Unknown`. |
 | `actionData` | object | Datos específicos de la acción; para las acciones reconocidas, un campo con la clave de la acción contiene los datos, por ejemplo `parameterChange`, `treasuryWithdrawal` o `newConstitution`. |
-| `anchor` | object | `{ "url", "dataHash" }`; ambas cadenas están vacías cuando no hay metadatos. |
+| `anchor` | object | `{ "url", "dataHash" }`; Adder deja ambas cadenas vacías cuando no hay metadatos. |
 
 ### `votingProcedures[]`
 
@@ -76,7 +76,7 @@ Representa un voto emitido sobre una propuesta activa.
 | `govActionTxId` | string | ID de la transacción de la acción de gobernanza sometida a votación. |
 | `govActionIndex` | number | Índice de la acción de gobernanza dentro de esa transacción. |
 | `vote` | string | Voto emitido: `Yes`, `No` o `Abstain`; los valores no reconocidos usan `Unknown`. |
-| `anchor` | object | `{ "url", "dataHash" }`; ambas cadenas están vacías cuando no hay metadatos del voto. |
+| `anchor` | object | `{ "url", "dataHash" }`; Adder deja ambas cadenas vacías cuando no hay metadatos del voto. |
 
 ### `drepCertificates[]`
 
@@ -88,7 +88,7 @@ Representa cambios en el estado de un DRep.
 | `drepHash` | string | Hash de la credencial del DRep, codificado en hexadecimal. |
 | `drepId` | string | ID Bech32 del DRep (`drep1...` o `drep_script1...`). |
 | `deposit` | `uint64` | Depósito en Lovelace requerido para el registro o reembolsado al retirar el registro; Adder omite el campo cuando su valor es cero. El consumidor debe deserializarlo como un entero sin signo de 64 bits y no aplicar un límite `MaxInt64`. |
-| `anchor` | object | `{ "url", "dataHash" }`; ambas cadenas están vacías cuando no hay metadatos del DRep. |
+| `anchor` | object | `{ "url", "dataHash" }`; Adder deja ambas cadenas vacías cuando no hay metadatos del DRep. |
 
 ### `voteDelegationCertificates[]`
 
@@ -101,7 +101,7 @@ Representa una delegación del poder de voto de una dirección de participación
 | `drepType` | string | Destino de la delegación: `KeyHash`, `ScriptHash`, `Abstain` o `NoConfidence`. |
 | `drepHash` | string | Hash de la credencial del DRep, codificado en hexadecimal; Adder omite el campo para `Abstain` y `NoConfidence`. |
 | `drepId` | string | ID Bech32 del DRep; Adder omite el campo para `Abstain` y `NoConfidence`. |
-| `poolKeyHash` | string | Hash de la clave del pool, codificado en hexadecimal; aparece solo para los tipos combinados de delegación de participación y voto. |
+| `poolKeyHash` | string | Hash de la clave del pool, codificado en hexadecimal; Adder incluye este campo solo para los tipos combinados de delegación de participación y voto. |
 | `deposit` | `uint64` | Importe del depósito en Lovelace para los tipos de registro y delegación; Adder omite el campo cuando su valor es cero. El consumidor debe deserializarlo como un entero sin signo de 64 bits y no aplicar un límite `MaxInt64`. |
 
 ### `committeeCertificates[]`
@@ -112,7 +112,7 @@ Representa cambios en las credenciales del Comité Constitucional.
 | :--- | :--- | :--- |
 | `certificateType` | string | `AuthHot` para autorizar una credencial activa o `ResignCold` para renunciar a una credencial fría. |
 | `coldCredential` | string | Hash de la credencial fría del comité, codificado en hexadecimal. |
-| `hotCredential` | string | Hash de la credencial activa del comité, codificado en hexadecimal; aparece solo para `AuthHot`. |
+| `hotCredential` | string | Hash de la credencial activa del comité, codificado en hexadecimal; Adder incluye este campo solo para `AuthHot`. |
 | `anchor` | object | Adder siempre serializa este objeto; las cadenas están vacías salvo cuando un certificado `ResignCold` proporciona metadatos. |
 
 ---
