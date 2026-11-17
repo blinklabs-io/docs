@@ -61,11 +61,11 @@ The Adder command‑line binary provides full access to Adder’s event‑proces
 
 ## 3. Adder Managed Routing (Opt In)
 
-Adder Managed Routing is an operator mode for deployments that send one `ChainSync` stream through separate customer filter paths to named destinations. Enable it with `--managed-config-dir`. Without this flag, Adder keeps the existing CLI and embedded pipeline behavior as the default.
+Adder Managed Routing is an operator mode for operators who need to route events from one `ChainSync` stream through separate customer filters to named destinations. Enable it with `--managed-config-dir`. Without this flag, Adder uses the existing CLI and embedded pipeline behavior by default.
 
-Use managed routing when multiple customers need isolated filters and destinations. Configure `chainsync` with `intersect-tip=true` and `auto-reconnect=true`. Do not configure `state-path` or `intersect-point`. Managed mode does not start the ordinary public `/events` API and rejects global filters.
+Use managed routing when multiple customers need isolated filters and destinations. Set `chainsync` to use `intersect-tip=true` and `auto-reconnect=true`, and leave `state-path` and `intersect-point` unset. Managed mode does not start the ordinary public `/events` API and rejects global filters.
 
-Managed mode exposes a private configuration and status API that requires authentication. It supports only the managed `log` and `webhook` adapters. Bounded queues keep one slow customer or destination from blocking other lanes; full queues record drops. See [Managed customer routing](014-managed-routing.md) for configuration, API, and limits.
+Managed mode exposes a private, authenticated configuration and status API. It supports only the managed `log` and `webhook` adapters. Bounded queues isolate customer and destination work; full queues record drops instead of blocking other routes. See [Managed customer routing](014-managed-routing.md) for configuration, API, and limits.
 
 ## Quick Decision Matrix
 
