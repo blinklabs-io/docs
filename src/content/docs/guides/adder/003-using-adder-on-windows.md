@@ -30,7 +30,7 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-The signed MSI is available for Windows x64 and arm64. It installs both the `adder.exe` command-line application and the `adder-tray.exe` tray application under `%ProgramFiles%\Adder`. Windows adds the installation to Add/Remove Programs, and the tray application is available from the Start Menu. The installer does not create a Scheduled Task.
+The signed MSI is available for Windows x64 and arm64. It installs both the `adder.exe` command-line application and the `adder-tray.exe` tray application in `%ProgramFiles%\Adder`. The installation appears in Windows Add/Remove Programs, and the tray application appears in the Start Menu. The installer does not create a Scheduled Task.
 
 ***
 
@@ -152,7 +152,7 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 
 Select `Notification Rules...` to edit notification targets in `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`, and use the notification category checkboxes to choose which alerts Adder sends. Select `Monitor Everything` to replace the per-target lists with monitoring for all supported target types; this mode cannot be combined with individual targets.
 
-Recent event links use the configured network. Links for transaction and governance events open the transaction identified by its transaction hash, while links for block events open the block identified by its block hash. Adder sends pool block notifications only for followed pools and DRep governance notifications only for followed DReps. When a governance event contains multiple votes, the notification displays the vote cast by the followed DRep.
+Recent event links use the selected network. Transaction and governance event links open the corresponding transaction using its transaction hash, while block event links use the block hash. Adder sends pool block notifications only for followed pools and DRep governance notifications only for followed DReps. When a governance event contains multiple votes, the notification displays the vote cast by the followed DRep.
 
 Applying changes saves the notification rules and immediately refreshes the running notification rules and rate limit without restarting Adder Tray. Deleting a target prompts for confirmation. If a soft reconnect warning appears, the editor remains open, re-enables its inputs, and supports a retry.
 
