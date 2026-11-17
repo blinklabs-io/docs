@@ -34,16 +34,14 @@ plugins:
       event-types: "blocks,rollbacks,governance"
 ```
 
-Store `access-token` in a secret-managed configuration source. The token must
-belong to an account that has joined each configured room and can send messages
-there. Adder sends the token as a bearer credential and does not expose it in
-the message body.
+Store `access-token` in a secret-managed configuration source. Adder sends the
+token as a bearer credential and does not expose it in the message body.
 
 ### Configuration fields
 
 | Field | Required | Default | Description |
 | --- | --- | --- | --- |
-| `homeserver-url` | Yes | None | Matrix homeserver base URL. Use HTTPS, or use HTTP only with `localhost`, `127.0.0.1`, or `::1` for loopback testing. |
+| `homeserver-url` | Yes | None | Matrix homeserver base URL. Configure HTTPS, or configure HTTP only with `localhost`, `127.0.0.1`, or `::1` for loopback testing. |
 | `access-token` | Yes | None | Access token for the Matrix account that sends the messages. |
 | `room-ids` | Yes | None | Comma separated Matrix room IDs. Provide at least one ID beginning with `!`. |
 | `event-types` | No | `blocks,rollbacks,governance` | Comma separated event names to send. |
@@ -54,16 +52,16 @@ Adder validates the configuration before it starts the output:
 
 - `homeserver-url` must be a valid HTTP URL without credentials, a query, or a
   fragment.
-- `homeserver-url` must use HTTPS for a remote homeserver. HTTP is allowed only
-  for loopback testing with `localhost`, `127.0.0.1`, or `::1`.
+- Configure `homeserver-url` with HTTPS for a remote homeserver. Configure HTTP
+  only for loopback testing with `localhost`, `127.0.0.1`, or `::1`.
 - `access-token` must not be empty.
 - `room-ids` must contain at least one room ID.
 - Each room ID must begin with `!` and must not contain spaces, tabs, carriage
   returns, or newlines.
 - Matrix room version 12 IDs can omit the legacy `:server` suffix.
 
-Validation accepts comma separated room IDs after Adder trims each entry. A
-room ID that fails validation prevents the output from starting.
+Adder trims comma separated room IDs before it validates each entry. A room ID
+that fails validation prevents the output from starting.
 
 ## Event selection
 
@@ -108,8 +106,8 @@ complete Adder event JSON. Adder creates a transaction ID for each room and
 event. It reuses that same transaction ID for every retry of that room and
 event, while sends to different rooms use different transaction IDs.
 
-A successful room send means the homeserver accepted the request and returned
-the event successfully. It does not confirm that a user received or read the
+The homeserver accepts a successful room send and returns the event
+successfully. That response does not confirm that a user received or read the
 message.
 
 ## Retry and rate limit behavior
@@ -129,15 +127,15 @@ decimal delay in seconds or an HTTP date. Adder also accepts the legacy
 cannot exceed one minute. If no usable rate limit hint exists, Adder uses its
 bounded backoff instead.
 
-Other HTTP `4xx` responses are permanent delivery failures and are not retried.
+Other HTTP `4xx` responses permanently fail delivery and do not trigger retries.
 After the retry limit, Adder reports the delivery failure in the `output.matrix`
 logs and sends it through the output error channel.
 
 ## Shutdown and restart behavior
 
 Shutdown cancels in flight Matrix requests and any retry backoff waits. Adder
-does not maintain a persistent queue for Matrix messages. Events that remain in
-flight when Adder stops can be lost, and Adder does not replay them after a
+does not maintain a persistent queue for Matrix messages. Stopping Adder can
+lose events that remain in flight, and Adder does not replay them after a
 restart.
 
 ## Live check
