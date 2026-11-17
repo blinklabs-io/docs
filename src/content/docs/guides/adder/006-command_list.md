@@ -102,7 +102,7 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
   --filter-address string
 ```
   
-> specifies address to filter on
+> specifies address(es) to filter on (comma-separated)
 <br />
 
 
@@ -133,7 +133,7 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
   --filter-pool string
 ```
   
-> specifies Pool ID to filter on
+> specifies Pool ID(s) to filter on (comma-separated)
 <br />
 
 ```
@@ -152,8 +152,124 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 > 5. `input.drep-registration` - A DRep registration occurred.
 > 6. `input.drep-update` - Adder emits a DRep update event.
 > 7. `input.drep-retirement` - Adder emits a DRep retirement event.
+
+### Filter values and combinations
+
+Each filter option accepts a comma-separated list. Adder matches an event when
+it matches any value in that option.
+
+| Option | Example |
+| --- | --- |
+| `--filter-address` | `--filter-address addr1qyht4ja0zcn45qvyx477qlyp6j5ftu5ng0prt9608dxp6l2j2c79gy9l76sdg0xwhd7r0c0kna0tycz4y5s6mlenh8pq4jxtdy,addr1q88zh70hsfjkqnexte4u5ewsfpjq3dxrhlvr3ha7k99p3y8rtwtt945eg3tvmg09t8f4ug4dw24nednp598w4vlycgqsry583e` |
+| `--filter-pool` | `--filter-pool pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt,a81f156d98e1f02123abccdef5439a89d71fa9d8b76c8db028c7df0e` |
+| `--filter-drep` | `--filter-drep drep1p4h4ea7y70ede2wy7x3t83x4umm63wwq68308f94cmt7szexmnr,81f156d98e1f02123abccdef5439a89d71fa9d8b76c8db028c7df0e1` |
+
+Different filter kinds combine with **AND**. The one exception combines
+`--filter-pool` and `--filter-drep` with **OR**. Any other configured filter
+still combines with **AND**. For example, an event must match the address
+filter and either the pool or DRep filter when all three options are set.
+
+Adder applies each filter only to its supported event types. For example,
+`--filter-drep` does not apply to `input.block` events, so DRep filtering never
+removes a block event. A filter does not remove an event type to which it does
+not apply.
+
+### Filter flags, environment variables, and YAML keys
+
+Filter flags omit the plugin name, but environment variables and YAML keys use
+the plugin type and name. The shortened flag name therefore differs from the
+other two names.
+
+| Flag | Environment variable | YAML key |
+| --- | --- | --- |
+| `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+| `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+| `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+| `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+| `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+| `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
         
 ***
+
+## Governance events
+
+The chainsync input emits one `input.governance` event for each transaction
+that contains Conway-era governance data. The event collects all governance
+data from that transaction and appears in addition to its
+`input.transaction` event. Adder emits no governance event when a transaction
+contains no governance data.
+
+### Governance event context
+
+The `context` object identifies the transaction and its chain position:
+
+| Field | Meaning |
+| --- | --- |
+| `transactionHash` | Transaction hash in hexadecimal. |
+| `blockNumber` | Height of the containing block. |
+| `slotNumber` | Slot of the containing block. |
+| `transactionIdx` | Transaction index within the block. |
+| `networkMagic` | Network magic of the connected node. |
+
+### Governance event payload
+
+The `payload` object always contains `blockHash` and contains
+`transactionCbor` only when `--input-chainsync-include-cbor` is enabled. It can
+also contain the following arrays; Adder omits an array when it has no items:
+
+| Field | Meaning |
+| --- | --- |
+| `blockHash` | Hash of the containing block in hexadecimal. |
+| `transactionCbor` | Raw transaction CBOR in hexadecimal. |
+| `proposalProcedures` | Governance actions proposed in the transaction. |
+| `votingProcedures` | Votes cast in the transaction. |
+| `drepCertificates` | DRep registration, update, and retirement certificates. |
+| `voteDelegationCertificates` | Vote delegation certificates. |
+| `committeeCertificates` | Constitutional Committee hot key authorization and cold key resignation certificates. |
+
+Each `proposalProcedures` item contains `index`, `deposit` in lovelace,
+`rewardAccount`, `actionType`, action-specific `actionData`, and an `anchor`
+with `url` and `dataHash`. Each `votingProcedures` item contains `voterType`,
+`voterHash`, `voterId`, `govActionTxId`, `govActionIndex`, `vote`, and an
+`anchor` with `url` and `dataHash`.
+
+Each `drepCertificates` item contains `certificateType`, `drepHash`, `drepId`,
+an optional `deposit` in lovelace, and an `anchor`. Each
+`voteDelegationCertificates` item contains `certificateType`,
+`stakeCredential`, `drepType`, and, for key or script DReps, `drepHash` and
+`drepId`. Combined stake and vote delegation items also contain `poolKeyHash`
+and an optional `deposit`. Each `committeeCertificates` item contains
+`certificateType`, `coldCredential`, and, for hot key authorization,
+`hotCredential`, plus an `anchor`.
+
+Adder always serializes governance `anchor` objects. When no anchor exists,
+their `url` and `dataHash` values are empty strings. Adder omits zero-valued
+certificate `deposit` fields.
+
+### Filtering governance events
+
+The following filters inspect `input.governance` data:
+
+- `--filter-drep` checks DRep certificates, vote delegation certificates that
+  delegate to the DRep, and voting procedures where the DRep casts the vote.
+- `--filter-pool` checks SPO votes and pool references in vote delegation
+  certificates.
+- `--filter-address` checks different data for each address type:
+  - A stake address checks governance reward accounts, treasury withdrawal
+    destinations, and vote delegation credentials.
+  - A payment address checks treasury withdrawal destinations only.
+
+Use a stake address to follow an account's governance activity. The
+`--filter-policy` and `--filter-asset` options do not filter governance events.
+
+`--filter-drep` accepts these DRep forms:
+
+- `drep1...` and `drep_script1...` bech32 values decode to a credential hash.
+  Adder accepts a decoded payload of 28 bytes. When the decoded payload is 29
+  bytes, Adder removes the leading byte and uses the remaining 28 bytes. Adder
+  ignores all other decoded lengths.
+- Hex input must contain the raw 28-byte credential hash as exactly 56
+  hexadecimal characters. Adder does not remove a header byte from hex input.
 
 ## Input:
 
