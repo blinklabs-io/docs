@@ -412,7 +412,7 @@ El modo administrado restringe los destinos a `log` y `webhook`:
 | `log` | Habilitado para archivos JSON locales de anexado de confianza cuyo nombre base comienza por el ID del cliente propietario seguido de un punto. |
 | `webhook` | Habilitado para un destino que utiliza el formato `adder` o `discord`, credenciales propias de la instancia, transporte confinado, cuota de autoridad y reintentos acotados. |
 | `slack`, `telegram`, `discord`, `matrix`, `signal`, `push` | El modo administrado rechaza estos adaptadores porque el ciclo de vida del bot o servidor, el envío a varios destinos o las cuotas de cuentas de proveedores requieren un adaptador dedicado. |
-| `sns`, `sqs`, `pubsub`, `s3`, `kafka`, `nats`, `mqtt`, `rabbitmq`, `redis`, `postgres`, `clickhouse`, `elasticsearch` | El modo administrado rechaza estos adaptadores porque los búferes de SDK o broker, los reintentos, el descubrimiento de endpoints, las credenciales y los límites de cuota requieren un adaptador dedicado. |
+| `sns`, `sqs`, `pubsub`, `s3`, `kafka`, `nats`, `mqtt`, `rabbitmq`, `redis`, `postgres`, `clickhouse`, `elasticsearch` | El modo administrado rechaza estos adaptadores porque los búferes de las bibliotecas o del servidor, los reintentos, el descubrimiento de destinos, las credenciales y los límites de cuota requieren un adaptador dedicado. |
 | `notify`, `notify-json` | El modo administrado rechaza estos adaptadores porque los efectos secundarios de escritorio y de archivos no están aislados por cliente. |
 
 El registro de salidas por sí solo no hace que un adaptador esté disponible en
