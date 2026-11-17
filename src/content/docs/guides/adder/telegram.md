@@ -62,7 +62,7 @@ Send commands in the configured chat:
 | `/start` | Introduces the bot and points to `/help`. |
 | `/help` | Lists the available commands. |
 | `/status` | Reports the pipeline state as `running`, `stopped`, or `unavailable`. |
-| `/settings` | Shows whether `blocks`, `transactions`, `rollbacks`, and `governance` notifications are `on` or `off`. It also reports when `settings-file` is not configured. |
+| `/settings` | Shows whether `blocks`, `transactions`, `rollbacks`, and `governance` notifications are `on` or `off`. |
 | `/notify blocks\|transactions\|rollbacks\|governance on\|off` | Enables or disables the selected notification category and saves the change to the settings file. |
 
 The `/notify` command requires exactly one category and either `on` or `off`. For example:
