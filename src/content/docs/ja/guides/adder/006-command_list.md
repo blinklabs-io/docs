@@ -182,7 +182,7 @@ description: "Adderコマンドの一覧です。"
   --input-chainsync-state-path string
 ```
 
-> 再起動後もChainSyncカーソルを保持するSQLiteデータベースファイルへのパスを指定します。未設定の場合、カーソルは保持されません。
+> ChainSyncカーソルを再起動後も保持するSQLiteデータベースファイルのパスを指定します。未設定の場合、カーソルを保持しません。
 
 ***
 
