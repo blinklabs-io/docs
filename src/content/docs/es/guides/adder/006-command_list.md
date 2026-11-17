@@ -261,25 +261,25 @@ description: Lista de Comandos de Adder.
   --managed-credentials-dir string
 ```
 
-> directorio restringido para las credenciales administradas (predeterminado "")
+> especifica el directorio restringido para las credenciales administradas (predeterminado "")
 >
-> Debe ser un directorio accesible por el proceso y sus archivos de credenciales deben cumplir las restricciones de seguridad.
+> Requiere un directorio accesible por el proceso; sus archivos de credenciales deben cumplir las restricciones de seguridad.
 
 ```text
   --managed-log-dir string
 ```
 
-> directorio local de confianza para los archivos de eventos administrados (predeterminado "")
+> especifica el directorio local de confianza para los archivos de eventos administrados (predeterminado "")
 
-> Solo admite destinos de registro locales dentro del directorio configurado.
+> Los destinos de registro deben permanecer dentro del directorio configurado.
 
 ```text
   --managed-allow-hosts stringSlice
 ```
 
-> nombres de host de webhook aprobados por el operador (predeterminado "")
+> lista los nombres de host de webhook aprobados por el operador (predeterminado "")
 
-> Cada destino remoto debe usar un nombre de host aprobado y HTTPS.
+> Los destinos remotos requieren un nombre de host aprobado y HTTPS.
 
 ```text
   --managed-allow-local-targets
@@ -293,7 +293,7 @@ description: Lista de Comandos de Adder.
   --managed-address string
 ```
 
-> dirección del listener de la API privada administrada (predeterminado `127.0.0.1:8081`)
+> especifica la dirección del listener de la API privada administrada (predeterminado `127.0.0.1:8081`)
 
 > Debe usar una dirección IP literal de loopback.
 
@@ -301,9 +301,9 @@ description: Lista de Comandos de Adder.
   --managed-token-file string
 ```
 
-> archivo restringido que contiene el token de la API del operador (predeterminado "")
+> especifica el archivo restringido que contiene el token de la API del operador (predeterminado "")
 
-> Debe ser un archivo regular restringido y contener un token de al menos 32 caracteres.
+> Requiere un archivo regular restringido con un token de al menos 32 caracteres.
 
 ## Salida:
 
