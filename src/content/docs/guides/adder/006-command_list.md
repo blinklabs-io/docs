@@ -50,6 +50,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 
 > trusted local managed event file directory (default empty)
 
+> Managed event files must stay within this trusted local directory.
+
 <br />
 
 ```
