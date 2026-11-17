@@ -36,7 +36,7 @@ Este objetivo establece `ADHOC=1` y firma la aplicación de forma ad hoc. El ins
 
 Durante la configuración de Adder Tray, activa la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente al iniciar sesión o reiniciar macOS. El estado de actividad en segundo plano indica si Adder está registrado y en ejecución.
 
-Selecciona `Open Login Items Settings...` para abrir los ajustes correspondientes de macOS. También es posible consultar este estado en **System Settings > General > Login Items & Extensions**, en las secciones **Open at Login** y **App Background Activity**. Esta configuración sincroniza el inicio automático de Adder Tray con el elemento de inicio de sesión y el agente de lanzamiento de macOS.
+Selecciona `Open Login Items Settings...` para abrir los ajustes correspondientes de macOS. También es posible consultar este estado en **System Settings > General > Login Items & Extensions > Open at Login / App Background Activity**. Esta configuración sincroniza el inicio automático de Adder Tray con el elemento de inicio de sesión y el agente de lanzamiento de macOS.
 
 ## Editar las reglas de notificación
 
