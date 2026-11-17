@@ -546,7 +546,7 @@ description: List of Adder Commands.
   
 > comma-separated Discord event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported Discord event types.
 
 <br />
 
@@ -584,7 +584,7 @@ description: List of Adder Commands.
   
 > comma-separated Matrix event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported Matrix event types.
 
 <br />
 
@@ -628,7 +628,7 @@ description: List of Adder Commands.
   
 > comma-separated RabbitMQ event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported RabbitMQ event types.
 
 <br />
 
@@ -672,7 +672,7 @@ description: List of Adder Commands.
   
 > prefix for event topics (default `adder/events`)
 >
-> The value must satisfy MQTT topic prefix validation.
+> Use a non-empty topic prefix without wildcard characters.
 
 <br />
 
@@ -692,7 +692,7 @@ description: List of Adder Commands.
   
 > comma-separated MQTT event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported MQTT event types.
 
 <br />
 
@@ -718,7 +718,7 @@ description: List of Adder Commands.
   
 > comma-separated Pub/Sub event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported Pub/Sub event types.
 
 <br />
 
@@ -726,7 +726,7 @@ description: List of Adder Commands.
   --output-postgres-database-url string
 ```
   
-> PostgreSQL connection URL
+> PostgreSQL connection URL (default empty)
 
 <br />
 
@@ -736,7 +736,7 @@ description: List of Adder Commands.
   
 > comma-separated PostgreSQL event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
 >
-> Include at least one supported event type.
+> Select one or more supported PostgreSQL event types.
 
 <br />
 
@@ -820,7 +820,7 @@ description: List of Adder Commands.
   --output-s3-region string
 ```
   
-> AWS region
+> AWS region (default empty)
 
 <br />
 
@@ -828,7 +828,7 @@ description: List of Adder Commands.
   --output-s3-bucket string
 ```
   
-> S3 bucket
+> S3 bucket (default empty)
 
 <br />
 
@@ -846,7 +846,7 @@ description: List of Adder Commands.
   
 > comma-separated S3 event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
 >
-> Include at least one supported event type.
+> Select one or more supported S3 event types.
 
 <br />
 
@@ -880,7 +880,7 @@ description: List of Adder Commands.
   
 > comma-separated SQS event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported SQS event types.
 
 <br />
 
@@ -922,7 +922,7 @@ description: List of Adder Commands.
   
 > comma-separated SNS event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported SNS event types.
 
 <br />
 
@@ -968,7 +968,7 @@ description: List of Adder Commands.
   
 > Redis Stream key (default `adder.events`)
 >
-> This value is required.
+> Set a non-empty stream key.
 
 <br />
 
@@ -978,7 +978,7 @@ description: List of Adder Commands.
   
 > comma-separated Redis event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported Redis event types.
 
 <br />
 
@@ -1028,7 +1028,7 @@ description: List of Adder Commands.
   
 > comma-separated Kafka event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported Kafka event types.
 
 > See the [webhook durability reference](./webhook.md).
 ***
