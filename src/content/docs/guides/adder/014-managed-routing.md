@@ -61,7 +61,7 @@ remote operator access through a separately administered secure tunnel. The
 webhook receivers used in local tests. Other webhook targets require HTTPS,
 an approved hostname, and a public destination address.
 
-The operator token file must be a restricted regular file, contain one line
+The operator must store the token in a restricted regular file that contains one line
 with at least 32 characters, and remain outside URLs. On Unix, credential and
 operator token files require mode `0600` or stricter. On Windows, ownership
 must belong to the running account, `LocalSystem`, or `Administrators`, and
@@ -215,7 +215,7 @@ Credential references are instance-owned, confined to the credentials
 directory, and cannot be shared across customers. Adder does not allow the
 contents of an applied reference version to change, even when the customer
 revision advances. Publish a new version to rotate a credential. Credential
-files must be restricted in the same way as the operator token file.
+the operator must restrict credential files in the same way as the operator token file.
 
 Adder validates webhook targets, credential bindings, formats, approved
 hosts, local target exceptions, redirects, and provider quota groups. It
@@ -325,14 +325,14 @@ Status and process totals distinguish these counters:
 
 | Counter | Meaning |
 | --- | --- |
-| `input_dropped` | Events rejected while entering a customer lane. |
+| `input_dropped` | Counts events that a customer lane rejects during admission. |
 | `matched` | Rule matches, counted per rule. |
-| `destination_dropped` | Items rejected by a destination queue. |
+| `destination_dropped` | Counts items that a destination queue rejects. |
 | `submitted_to_plugin` | Items accepted by a managed plugin channel. |
 | `plugin_errors` | Plugin processing errors. |
 | `unknown_outcomes` | Submissions whose external result remains uncertain. |
 | `canceled` | Work canceled during revocation or shutdown. |
-| `diagnostic_dropped` | Metadata diagnostics dropped because the diagnostic queue filled. |
+| `diagnostic_dropped` | Counts metadata diagnostics that overflow the diagnostic queue. |
 
 Customer counters cover admission and matching. Destination counters cover
 submissions and outcomes. Process totals retain counts from removed
@@ -362,7 +362,7 @@ authority's shared limit group; another origin progresses independently. The
 configured `interval_ms` sets the minimum spacing between attempts, including
 retries. All destinations in one authority group must use the same interval.
 Pending provider delays survive route removal and interval changes at the
-configuration cutover. The pilot supports authority scoped quotas; an output
+configuration cutover. The pilot supports authority-scoped quotas; an output
 that needs quotas shared across distinct authorities requires a dedicated
 adapter.
 
@@ -374,7 +374,7 @@ Shutdown follows this sequence:
 4. Join canceled workers for up to five additional seconds, or the shorter
    configured shutdown timeout.
 
-An unfinished plugin returns a cleanup pending error, retains its resource
+An unfinished plugin returns a cleanup-pending error, retains its resource
 reservations, and prevents the same router from restarting until its worker
 finishes. Log files close only after their writer joins. Submitted operations
 can remain uncertain even when plugin processing finishes. Readiness is false
