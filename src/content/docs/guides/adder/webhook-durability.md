@@ -55,7 +55,7 @@ An HTTP `2xx` response confirms that the receiver accepted the request according
 
 ## Validation and errors
 
-Adder validates each webhook event before it sends the event. A nil payload, nil or unexpected context, unexpected payload type, or unknown event type produces an error on the plugin error channel, and Adder does not send that event. Webhook formatting and marshaling errors, invalid request setup, and transport errors also surface as errors instead of causing a panic. Adder handles the default HTTP transport safely when it prepares a request.
+Adder validates each webhook event before sending it. A nil payload, a nil or unexpected context for event types that require one, an unexpected payload type, or an unknown event type produces an error on the plugin error channel, and Adder does not send that event. Webhook formatting and marshaling errors, invalid request setup, and transport errors also surface as errors instead of causing a panic. Adder handles the default HTTP transport safely when it prepares a request.
 
 In non-durable mode, the plugin error channel reports these validation and delivery errors without persisting the event. In durable mode, Adder encounters validation and formatting errors before the SQLite append and does not queue them. Errors that occur after an entry reaches SQLite follow the durable retry and replay behavior described below, so a shutdown or failed delivery does not remove the persisted entry.
 
