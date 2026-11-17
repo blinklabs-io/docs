@@ -5,13 +5,13 @@ description: Configure restart-safe webhook delivery with bounded SQLite persist
 
 ## Overview
 
-Set `plugins.output.webhook.state-path` to enable durable webhook delivery. Adder stores each formatted request in a persistent SQLite queue before it sends the request, which allows pending deliveries to survive a restart.
+Set `plugins.output.webhook.state-path` to enable durable webhook delivery. Adder stores each formatted request in a persistent SQLite queue before sending it, so pending deliveries survive a restart.
 
 Durable delivery provides at-least-once attempts for events that reach the SQLite queue. It does not provide exactly-once effects, and it does not make the upstream event pipeline and the SQLite append one atomic operation.
 
 ## Configuration
 
-Configure the webhook output with a persistent SQLite filename and a bounded pending queue:
+Configure the webhook output with a persistent SQLite file and a bounded pending queue:
 
 ```yaml
 output: webhook
