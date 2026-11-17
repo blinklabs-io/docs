@@ -46,9 +46,9 @@ La API organiza las rutas de supervisión y eventos en la raíz, y las funciones
 | --- | --- | --- |
 | `GET` | `/ping` | Devuelve `pong` para confirmar que el servidor responde. También acepta `/ping/`. |
 | `GET` | `/healthcheck` | Devuelve el estado de salud en JSON. Responde con `200` cuando todos los componentes funcionan y con `503` cuando alguno falla. También acepta `/healthcheck/`. |
-| `GET` | `/events` | Entrega eventos mediante SSE cuando la solicitud no incluye cabeceras de actualización WebSocket. Con esas cabeceras, intenta establecer una conexión WebSocket y devuelve un error WebSocket si la actualización falla, sin cambiar a SSE. El servidor no aplica un límite de escritura para conservar las conexiones de streaming de larga duración. |
+| `GET` | `/events` | Entrega eventos mediante SSE cuando la solicitud no pide una actualización WebSocket. Cuando la solicitud incluye cabeceras de actualización WebSocket, intenta establecer una conexión WebSocket y devuelve un error WebSocket si no puede completarla, sin cambiar a SSE. El servidor no aplica un límite de escritura para conservar las conexiones de streaming de larga duración. |
 
-Las cabeceras de la solicitud determinan el protocolo de `/events`. El cliente debe tratar el error WebSocket como un rechazo de la actualización; `/events` no ofrece una respuesta SSE alternativa.
+El cliente debe interpretar el error WebSocket como el resultado final de la solicitud. El servidor no entrega una respuesta SSE alternativa.
 
 El servidor genera registros de acceso estructurados y recupera los errores inesperados de los controladores sin interrumpir el proceso.
 
