@@ -100,7 +100,7 @@ Trayが設定を適用すると、対象リストをエンジン設定へ書き�
 ウィザードの`Advanced — Rate Limiting`を開くと、レート制限を変更できます。
 
 - `Max notifications per window`には整数を入力します。
-- `Window duration (e.g. 5s, 30s, 1m)`には正のGo durationを入力します。入力例は`5s`、`30s`、`1m`です。
+- `Window duration (e.g. 5s, 30s, 1m)`には正の`Go duration`を入力します。入力例は`5s`、`30s`、`1m`です。
 - どちらかの入力欄を空にすると、その項目は既定値に戻ります。
 - 上限に負の整数を入力すると、通知のまとめ処理を無効にします。
 
