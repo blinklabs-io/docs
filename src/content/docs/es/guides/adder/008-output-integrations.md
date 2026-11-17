@@ -29,7 +29,7 @@ Cada sentencia tiene un plazo de diez segundos. La salida comunica las insercion
 
 ## MQTT
 
-La salida `mqtt` publica los eventos seleccionados de Adder como JSON en topics MQTT. Usa MQTT 5.
+La salida `mqtt` publica los eventos seleccionados de Adder como JSON en topics MQTT y usa MQTT 5.
 
 ```yaml
 output: mqtt
@@ -79,7 +79,7 @@ Una prueba en vivo requiere una cola durable, el exchange predeterminado configu
 
 ## Google Cloud Pub/Sub
 
-La salida `pubsub` envía los eventos seleccionados de Adder a un único topic de Pub/Sub existente. Usa [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+La salida `pubsub` envía los eventos seleccionados de Adder a un único topic de Pub/Sub existente y usa [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 ```yaml
 output: pubsub
@@ -122,7 +122,7 @@ La clave API requiere HTTPS y permisos para crear el índice e indexar documento
 
 ## S3
 
-La salida `s3` escribe cada evento seleccionado de Adder como un objeto JSON UTF-8 con `Content-Type: application/json` y una suma de comprobación SHA-256 de S3. Usa la cadena normal de credenciales de AWS y la región configurada. El bucket debe existir antes de iniciar Adder.
+La salida `s3` escribe cada evento seleccionado de Adder como un objeto JSON UTF-8 con `Content-Type: application/json` y una suma de comprobación SHA-256 de S3. La salida usa la cadena normal de credenciales de AWS y la región configurada. El bucket debe existir antes de iniciar Adder.
 
 ```yaml
 output: s3
@@ -137,7 +137,7 @@ plugins:
 
 La clave tiene el formato `<prefix>/YYYY/MM/DD/<UTC timestamp>-<SHA-256 of JSON>.json`. El JSON contiene los campos `timestamp`, `context`, `payload` y `type` de Adder. La fecha procede de la marca de tiempo del evento en UTC. Reproducir el mismo evento escribe los mismos bytes en la misma clave. Los eventos distintos con la misma marca de tiempo usan claves diferentes. Un rollback es un registro de archivo `input.rollback` ordinario; la salida no elimina ni reescribe los objetos archivados anteriormente. Los consumidores deben aplicar los registros de rollback al construir el estado de la cadena.
 
-La salida no usa un búfer de lotes ni un vaciado en segundo plano: espera la respuesta de cada `PutObject` antes de tomar otro evento. El canal de entrada compartido del plugin puede contener diez eventos; el productor espera a que haya espacio. Al detenerse, cancela la carga en curso y descarta los eventos en cola. El SDK de AWS reintenta los errores reintentables durante esa solicitud, con un límite total de 30 segundos para la solicitud. La salida registra un error y lo comunica mediante el canal de errores cuando hay espacio; los fallos persistentes pueden llenar su búfer de 16 entradas y provocar la pérdida de notificaciones posteriores. Adder no conserva un evento fallido para reproducirlo y un plazo agotado deja la entrega en estado incierto. Para reproducir eventos entre reinicios del proceso, usa una fuente ascendente que permita la reproducción.
+La salida no usa un búfer de lotes ni un vaciado en segundo plano: espera la respuesta de cada `PutObject` antes de tomar otro evento. El canal de entrada compartido del plugin puede contener diez eventos; el productor espera a que haya espacio. Al detenerse, cancela la carga en curso y descarta los eventos en cola. El SDK de AWS reintenta los errores reintentables durante esa solicitud, con un límite total de 30 segundos para la solicitud. La salida registra un error y lo comunica mediante el canal de errores cuando hay espacio; los fallos persistentes pueden llenar su búfer de 16 entradas y provocar la pérdida de notificaciones posteriores. Adder no conserva un evento fallido para reproducirlo y un plazo agotado deja la entrega en estado incierto. La reproducción de eventos entre reinicios del proceso requiere una fuente ascendente que permita la reproducción.
 
 El permiso de AWS requerido es `s3:PutObject` sobre el prefijo seleccionado. Si el bucket usa SSE-KMS administrado por el cliente, la configuración de AWS debe conceder los permisos de KMS necesarios. La referencia relevante es la [API PutObject](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html).
 
