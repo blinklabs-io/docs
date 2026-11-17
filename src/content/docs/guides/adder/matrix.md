@@ -156,7 +156,7 @@ token in a test configuration.
 ## Related references
 
 - [Command reference](./006-command_list.md) for the Matrix output CLI options.
-- [Output integration overview](./002-operating-mode-overview.md) for Adder's
+- [Output integration overview](./008-output-integrations.md) for Adder's
   CLI event pipeline and output integrations.
 
 ---
