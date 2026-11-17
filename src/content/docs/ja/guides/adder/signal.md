@@ -57,7 +57,7 @@ plugins:
 - `drep-update` — DRep更新イベント
 - `drep-retirement` — DRep退任イベント
 
-Adderは既定で`blocks`、`rollbacks`、`governance`を選択します。`event-types`に未対応の値を指定すると、設定を拒否します。空の値は少なくとも1つのイベントタイプを指定していないため、設定を拒否します。
+`event-types`に未対応の値を指定すると、設定を拒否します。空の値は少なくとも1つのイベントタイプを指定していないため、設定を拒否します。
 
 ## 送信動作
 
