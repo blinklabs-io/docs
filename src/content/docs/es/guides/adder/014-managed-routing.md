@@ -315,7 +315,7 @@ Los límites predeterminados del enrutamiento administrado son:
 | Clientes | `32` |
 | Reglas por cliente | `32` |
 | Destinos por cliente | `8` |
-| Instancias de plugins activas, preparadas o en retirada | `512` |
+| Instancias de componentes activas, preparadas o en retirada | `512` |
 | Cola de entrada por cliente | `256` items |
 | Cola de destino | `256` items |
 | Representación JSON del evento | `1 MiB` |
@@ -325,7 +325,7 @@ Los límites predeterminados del enrutamiento administrado son:
 Adder reserva la capacidad de las colas antes de cambiar una configuración.
 Cada cola utiliza un cargo conservador de ocho veces el tamaño del evento
 codificado más una sobrecarga fija. Los objetos de configuración, los metadatos
-de reglas coincidentes, las ranuras de canales de plugins, las credenciales
+de reglas coincidentes, las ranuras de canales de componentes, las credenciales
 decodificadas y las configuraciones retiradas con eventos en cola también
 consumen el presupuesto de todo el proceso. Estos son límites del trabajo de
 enrutamiento, no una garantía de memoria total del proceso; la sobrecarga del
@@ -362,11 +362,11 @@ e IDs de ocurrencia, pero nunca credenciales ni cargas útiles de eventos.
 ## Evidencia de entrega, errores y apagado
 
 La entrega administrada no es duradera ni exactamente una vez. El canal del
-plugin informa de la finalización del procesamiento, no de la entrega externa.
-El observador de finalización gestiona un evento de plugin pendiente a la vez y
-solo observa que el plugin terminó de procesarlo. Por tanto, la aceptación por
-el canal del plugin nunca demuestra que un proveedor haya aceptado, almacenado o
-entregado el evento.
+componente informa de la finalización del procesamiento, no de la entrega
+externa. El observador de finalización gestiona un evento de componente
+pendiente a la vez y solo observa que el componente terminó de procesarlo. Por
+tanto, la aceptación por el canal del componente nunca demuestra que un
+proveedor haya aceptado, almacenado o entregado el evento.
 
 Los resultados externos siguen siendo desconocidos, incluido un fallo de
 aceptación seguido de desconexión que puede causar un reintento y un envío
@@ -395,11 +395,11 @@ El apagado sigue esta secuencia:
 3. Cancele el trabajo restante.
 4. Espere a los trabajadores cancelados durante hasta cinco segundos adicionales, o durante el tiempo de espera de apagado configurado si es menor.
 
-Un plugin sin finalizar devuelve un error de limpieza pendiente, conserva sus
+Un componente sin finalizar devuelve un error de limpieza pendiente, conserva sus
 reservas de recursos e impide que el mismo enrutador se reinicie hasta que su
-trabajador termine. Los archivos de registro se cierran solo después de que su
-escritor termina. Las operaciones enviadas pueden seguir teniendo un resultado
-incierto aunque termine el procesamiento del plugin. La preparación es falsa
+trabajador termine. Adder cierra los archivos de registro solo después de que
+termina su escritor. Las operaciones enviadas pueden seguir teniendo un resultado
+incierto aunque termine el procesamiento del componente. La preparación es falsa
 durante el inicio y el apagado. Un destino degradado no termina la ruta de otro
 cliente ni reconecta la entrada.
 
