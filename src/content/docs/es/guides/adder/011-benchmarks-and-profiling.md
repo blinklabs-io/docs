@@ -17,7 +17,7 @@ done
 
 Cada operación envía y drena `4,096` sobres de eventos de bloque. `fast_output` drena de forma continua. `periodic_output_pause` espera 100 microsegundos después de cada 64 eventos para representar la contrapresión intermitente del sink. El benchmark informa `events/s`, además del tiempo y las asignaciones por operación de `4,096` eventos. El arranque queda fuera de la sección cronometrada. La carga no incluye un nodo de Cardano, decodificación, filtros, serialización, salida de red ni asignaciones de payload. La pausa representa una secuencia sintética, no la latencia medida de un sink. Las seis ejecuciones independientes equilibran los tres órdenes de búfer; `-v` imprime cada orden con los tiempos sin procesar. Compare el mismo caso con nombre entre las ejecuciones; completar antes la producción no implica por sí solo una entrega más rápida de extremo a extremo.
 
-La creación del canal queda fuera del temporizador, por lo que `B/op` no incluye el almacenamiento del búfer.
+El benchmark crea el canal fuera del temporizador, por lo que `B/op` no incluye el almacenamiento del búfer.
 
 Una ejecución local en Apple M5 con Go 1.27.3, `GOMAXPROCS=2` y otras tareas en la máquina produjo estas medianas en seis repeticiones:
 
