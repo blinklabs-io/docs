@@ -26,19 +26,18 @@ their tracked workers during `Stop`. Handlers must return on cancellation.
 Use the [plugin authoring contract](https://github.com/blinklabs-io/adder/blob/main/docs/plugin-authoring.md)
 for the complete API reference. Complete the migration with these changes:
 
-- Expose the `plugin.ManagedPlugin` contract through `StartContext(ctx)`,
-  `Stop`, `Failed`, `Failure`, `Role`, `ErrorChan`, `InputChan`, and
-  `OutputChan`.
-- Embed `plugin.Base` for common lifecycle state, event ports, run
-  cancellation, and terminal failure handling. Configure its
-  `plugin.BaseConfig` to match the ports that the plugin exposes.
+- Implement `plugin.ManagedPlugin` with `StartContext(ctx)`, `Stop`, `Failed`,
+  `Failure`, `Role`, `ErrorChan`, `InputChan`, and `OutputChan`.
+- Embed `plugin.Base` for shared lifecycle state, event ports, run cancellation,
+  and terminal failure handling. Configure its `plugin.BaseConfig` to match the
+  ports that the plugin exposes.
 - Remove uses of `plugin.PluginOption.Dest`, `plugin.ProcessConfig`, and
   `plugin.ProcessEnvVars`; these configuration helpers no longer exist.
 - Change `plugin.PluginEntry.NewFromOptionsFunc` to return
   `plugin.ManagedPlugin`. Create instances from resolved, immutable
   `plugin.Options` through `ResolveConfig` and `Configuration.New`.
-- Apply configuration in this order: defaults, YAML, environment variables,
-  then changed CLI flags. Later sources override earlier sources.
+- Apply configuration with this precedence: `defaults < YAML < environment
+  variables < changed CLI flags`. Later sources override earlier sources.
 
 ## Pipeline contract
 
