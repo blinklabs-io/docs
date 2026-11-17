@@ -2,7 +2,7 @@
 
 ## 概要
 
-AdderのOpenAPI GoクライアントをGoプロジェクトに追加する場合は、次のモジュールパスを使用します。
+AdderのOpenAPI GoクライアントをGoプロジェクトに追加するには、次のモジュールパスを使用します。
 
 ## インポート
 
@@ -12,4 +12,4 @@ import openapi "github.com/blinklabs-io/adder/openapi"
 
 ## 旧モジュールパスからの移行
 
-以前のモジュールパス `github.com/blinklabs-io/cardano-node-api/openapi` を使用しているプロジェクトは、`github.com/blinklabs-io/adder/openapi` に更新します。`openapi/go.mod` のモジュール名も `github.com/blinklabs-io/adder/openapi` です。
+以前のモジュールパス `github.com/blinklabs-io/cardano-node-api/openapi` を使用するプロジェクトは、`github.com/blinklabs-io/adder/openapi` へ移行します。`openapi/go.mod` では、モジュール名として `github.com/blinklabs-io/adder/openapi` を指定します。
