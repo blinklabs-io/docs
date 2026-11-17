@@ -5,8 +5,9 @@ description: Configure Adder to send selected events through a signal-cli JSON-R
 
 # Signal output
 
-The `signal` output sends selected Adder events through a separately managed
-[`signal-cli` HTTP JSON-RPC daemon](https://github.com/AsamK/signal-cli/blob/master/man/signal-cli-jsonrpc.5.adoc).
+The `signal` output sends selected Adder events through a
+[`signal-cli` HTTP JSON-RPC daemon](https://github.com/AsamK/signal-cli/blob/master/man/signal-cli-jsonrpc.5.adoc)
+that Adder does not manage.
 This page covers configuration, endpoint validation, supported events, and the
 delivery behavior that operators must account for.
 
@@ -78,8 +79,7 @@ The `event-types` option accepts these names:
 - `drep-update`
 - `drep-retirement`
 
-Adder sends the event JSON as the Signal message. Adder sends only the selected
-event types and ignores other events.
+Adder sends only the selected event types and ignores other events.
 
 ## Delivery contract
 
