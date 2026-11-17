@@ -5,7 +5,7 @@ description: "AdderのKafka出力の設定と動作を説明します。"
 
 # Kafka出力
 
-`kafka` outputは、選択したAdderイベントをJSONとして1つのKafka topicに配信します。Adderの起動前にtopicを作成してください。
+`kafka` outputは、選択したAdderイベントをJSONとして1つのKafka topicに配信します。
 
 ## 設定
 
@@ -31,12 +31,12 @@ plugins:
 
 各recordのvalueには、完全なAdder event JSONが入ります。keyは常に`adder.events`です。
 
-topicのpartition数を変更しない限り、1つのAdder producerのrecordは1つのpartitionに送られ、event typeが変わっても順序を維持します。この順序を使用する場合、topicのpartition数を増やさないでください。複数のAdder processは、全体で共有する順序を持ちません。
+1つのAdder producerはrecordを1つのpartitionに送り、topicのpartition数を変更しない限り、event typeが変わっても順序を維持します。この順序を使用する場合、topicのpartition数を増やさないでください。複数のAdder processは、全体で共有する順序を持ちません。
 
 producerは、すべてのin-sync replicaからacknowledgementを要求します（`acks=all`）。内部retryにはidempotent producerを使用します。acknowledgementとidempotenceの仕様については、[Apache Kafka producer configuration](https://kafka.apache.org/44/configuration/producer-configs/)を参照してください。
 
 Adderは、選択した次のeventを読み取る前に、各recordの結果を待ちます。各送信には10秒のdeadlineがあります。
 
-拒否されたdeliveryまたは不確実なdeliveryは、pluginのerror channelに報告されます。Adderは失敗したrecordをアプリケーションレベルで再送しません。replyを失う前にbrokerがrecordを受け取った可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
+Adderは、brokerが拒否したdeliveryまたは成否が不明なdeliveryをpluginのerror channelに報告します。Adderは失敗したrecordをアプリケーションレベルで再送しません。replyを失う前にbrokerがrecordを受け取った可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
 
 shutdownまたはrestartの後、buffered eventを復元しません。成功したacknowledgementは、consumer processingではなく、brokerの設定したreplication policyを確認します。
