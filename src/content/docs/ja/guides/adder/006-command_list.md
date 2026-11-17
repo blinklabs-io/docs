@@ -910,7 +910,6 @@ description: "Adderコマンドの一覧です。"
 
 ***
 
-<a id="notifications"></a>
 
 <a id="managed-routing"></a>
 
@@ -963,6 +962,8 @@ description: "Adderコマンドの一覧です。"
 ```
 
 > オペレーターAPIトークンを含む制限ファイルへのパスを指定します（デフォルトは空）。所有者だけがアクセスできる通常ファイルで、トークンは32文字以上でなければなりません。
+
+<a id="notifications"></a>
 
 ## 通知:
 
