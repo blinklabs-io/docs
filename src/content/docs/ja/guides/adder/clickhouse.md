@@ -71,7 +71,7 @@ plugins:
 
 ## 重複とロールバック
 
-正常に挿入した行はすべて保持します。同じイベントのJSONから生成した同じ`event_hash`を持つ行も保持します。出力は`deduplicate_insert=disable`と`insert_deduplicate=0`を指定してClickHouseの挿入重複排除を無効にするため、同一ブロックをロールバック後に再適用すると、別の発生として保存します。出力は`event_hash`を一意キーとして使用しません。
+正常に挿入した行はすべて保持します。同じイベントのJSONから生成した同じ`event_hash`を持つ行も保持します。出力は`deduplicate_insert=disable`と`insert_deduplicate=0`を指定してClickHouseの挿入重複排除を無効にするため、同一ブロックをロールバック後に再適用すると、別の発生として保存します。
 
 ロールバックは通常の`input.rollback`行として保存し、以前に保存した行を削除しません。
 
