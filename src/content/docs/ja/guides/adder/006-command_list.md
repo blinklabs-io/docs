@@ -451,6 +451,98 @@ description: "Adderコマンドの一覧です。"
 
 ***
 
+```
+  --output-telegram-settings-file string
+```
+
+> Telegram通知設定を保存するローカルYAMLファイルへのパスを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-telegram-operator-user-ids string
+```
+
+> グループ設定の変更を許可するTelegramユーザーIDをカンマ区切りで指定します（デフォルトは空）。各IDは正のTelegramユーザーIDである必要があります。
+<br />
+
+```
+  --output-slack-webhook-urls string
+```
+
+> Slack受信Webhook URLをカンマ区切りで指定します（デフォルトは空）。各URLはHTTPS URLである必要があります。
+<br />
+
+```
+  --output-slack-event-types string
+```
+
+> Slackへ配信するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance`）。
+<br />
+
+```
+  --output-discord-bot-token string
+```
+
+> Discordボットトークンを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-discord-application-id string
+```
+
+> DiscordアプリケーションIDを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-discord-guild-id string
+```
+
+> 許可するDiscordサーバーIDを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-discord-channel-id string
+```
+
+> 許可するDiscordチャンネルIDを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-discord-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-matrix-homeserver-url string
+```
+
+> MatrixホームサーバーのベースURLを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-matrix-access-token string
+```
+
+> Matrixアクセストークンを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-matrix-room-ids string
+```
+
+> MatrixルームIDをカンマ区切りで指定します（デフォルトは空）。少なくとも1つのルームが必要です。
+<br />
+
+```
+  --output-matrix-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+
+***
+
 <a id="notifications"></a>
 
 ## 通知:
