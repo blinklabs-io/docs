@@ -143,7 +143,7 @@ Los filtros aplican lógica **AND** entre tipos de filtro. Dentro de una lista d
     ```
   - Selecciona el output y el endpoint con las opciones registradas:
     ```bash
-    ./adder --output webhook --output-webhook-url="https://your-webhook-url.com"
+     ./adder --output webhook --output-webhook-url="https://your-webhook-url.com"
     ```
   - Usa las opciones registradas `--output-webhook-format`, `--output-webhook-username`, `--output-webhook-password`, `--output-webhook-tls-skip-verify`, `--output-webhook-state-path` y `--output-webhook-max-pending` según corresponda. El número de reintentos y el backoff forman parte del comportamiento interno y no se configuran mediante opciones CLI.
   - Los llamadores Go pueden usar `webhook.WithRetryConfig`; el comportamiento interno de reintentos no crea opciones CLI nuevas.
