@@ -9,8 +9,8 @@ description: Configure and operate Adder's ClickHouse output.
 
 The `clickhouse` output sends selected Adder events to the versioned
 `adder_events_v1` table in ClickHouse. Adder sends rows in `JSONEachRow`
-batches over the ClickHouse HTTP interface and stores each successfully
-inserted event as a separate row.
+batches over the ClickHouse HTTP interface, and ClickHouse receives each
+event as a separate row after a successful insert.
 
 ## Configuration
 
@@ -25,7 +25,7 @@ plugins:
       database: analytics
       username: adder
       password: YOUR_PASSWORD
-      event-types: blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement
+      event-types: blocks,transactions,rollbacks
 ```
 
 The output uses these defaults:
@@ -36,7 +36,7 @@ The output uses these defaults:
 | `database` | `default` | ClickHouse database name. |
 | `username` | `default` | ClickHouse user. |
 | `password` | Empty | Optional ClickHouse password. |
-| `event-types` | `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement` | Comma separated event selections. |
+| `event-types` | `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement` | Comma-separated event selections. |
 
 The `url` value must use `http` or `https`, include a host, and identify only
 an origin. Do not include credentials, a query, a fragment, or a path other
@@ -46,9 +46,8 @@ use `https` for a remote ClickHouse server; plain HTTP with a password works
 only for localhost or another loopback address. Protect the configuration and
 password with the same access controls used for ClickHouse credentials.
 
-The `event-types` value must name at least one supported selection. The
-default selects blocks, transactions, rollbacks, governance, DRep
-registrations, DRep updates, and DRep retirements.
+The `event-types` value must name at least one supported selection. If the
+value is omitted, the output uses the default shown in the table.
 
 ## Table and row format
 
@@ -89,9 +88,10 @@ failed batch and discards it locally. Adder does not automatically retry an
 ambiguous failed insert because repeating the request can create duplicate
 rows.
 
-ClickHouse keeps every successfully inserted row, including identical event
-duplicates. Rollbacks remain stored as ordinary `input.rollback` rows; Adder
-does not delete earlier rows when a rollback occurs. Query the retained rows
+ClickHouse keeps every row that it accepts successfully, including identical
+event duplicates. ClickHouse also keeps rollback events as ordinary
+`input.rollback` rows; Adder does not delete earlier rows when a rollback
+occurs. Query the retained rows
 with the event fields, for example:
 
 ```sql
