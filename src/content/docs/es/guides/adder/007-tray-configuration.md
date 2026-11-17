@@ -16,8 +16,8 @@ Adder Tray guarda el filtro en `adder-tray.yaml`. El filtro contiene un modo gen
 El asistente muestra las siguientes secciones para los objetivos:
 
 - `Watch Wallet` para direcciones Cardano que comienzan por `addr` o `stake`.
-- `Track DRep` para identificadores que comienzan por `drep1` o que contienen bytes hexadecimales.
-- `Monitor Pool` para identificadores que comienzan por `pool1` o que contienen bytes hexadecimales.
+- `Track DRep` para identificadores que comienzan por `drep1` o que contienen valores hexadecimales.
+- `Monitor Pool` para identificadores que comienzan por `pool1` o que contienen valores hexadecimales.
 - `Follow Asset` para huellas de activos que comienzan por `asset1`.
 - `Follow Policy` para identificadores de política hexadecimales de 56 caracteres.
 
@@ -72,7 +72,7 @@ filter:
 
 ## Persistencia y migración
 
-Adder Tray guarda el filtro estructurado bajo `filter` en `adder-tray.yaml`. El tray mantiene la semántica de coincidencia y las listas de objetivos; la configuración del motor auxiliar ya no actúa como fuente de las listas por objetivo.
+Adder Tray guarda el filtro estructurado bajo `filter` en `adder-tray.yaml`. Adder Tray mantiene las reglas de coincidencia y las listas de objetivos; la configuración del motor auxiliar ya no actúa como fuente de las listas por objetivo.
 
 Cuando una configuración existente no contiene un filtro estructurado, Adder Tray puede importar una configuración heredada que todavía contiene estos valores bajo `filter.cardano`:
 
