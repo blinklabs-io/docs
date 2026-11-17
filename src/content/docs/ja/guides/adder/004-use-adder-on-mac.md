@@ -6,7 +6,7 @@ description: MacでAdderを使用する方法。
 # MacでAdderを使う
 
 Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケージとして配布されます。
-このパッケージは、トレイ GUI と `adder` CLI を備えた `Adder.app` をインストールします。
+このパッケージは、トレイ GUI と `adder` CLI を備えた `Adder.app` を提供します。
 
 ## Adder をインストールする
 
@@ -31,7 +31,7 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 make pkg-macos-adhoc
 ```
 
-このコマンドは `ADHOC=1` を指定し、アプリバンドルにアドホック署名を付けます。生成した `.pkg` は署名されないため、Gatekeeper は承認しません。
+このコマンドは `ADHOC=1` を指定してアプリバンドルにアドホック署名を付けます。生成した `.pkg` は署名されないため、Gatekeeper は承認しません。
 
 
 ---
