@@ -17,7 +17,7 @@ La forma más sencilla de instalar Adder en Windows es utilizar el instalador MS
 
 Selecciona la versión adecuada para tu sistema: Windows x64 o Windows arm64.
 
-El MSI firmado es compatible con Windows x64 y arm64 e instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. La aplicación de bandeja está disponible en el menú Inicio, y la instalación aparece en **Agregar o quitar programas**. El instalador no crea ninguna tarea programada.
+El MSI firmado admite Windows x64 y arm64 e instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. El menú Inicio incluye un acceso a la aplicación de bandeja, y la instalación aparece en **Agregar o quitar programas**. El instalador no crea ninguna tarea programada.
 
 ### Paso 1.2 - Abrir el archivo .msi
 
