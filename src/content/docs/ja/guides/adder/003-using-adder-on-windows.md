@@ -157,7 +157,7 @@ Adderは、デスクトップ通知を提供するように既に設定されて
 `Finish Setup` をクリックします。
 
 ### 起動設定
-`Start Adder automatically on login / reboot`を選択すると、ログインまたは再起動時にAdderを自動的に起動します。`Background Activity:`で始まるステータス表示は、Adderのバックグラウンドアクティビティが登録済みか、実行中かを示します。
+`Start Adder automatically on login / reboot`を選択すると、ログインまたは再起動時にAdderを自動的に起動します。`Background Activity:`で始まるステータス表示は、Adderのバックグラウンドアクティビティの登録状態と実行状態を示します。
 
 `Open Login Items Settings...`をクリックすると、Windowsのスタートアップアプリ設定が開きます。
 
@@ -178,9 +178,9 @@ Adderは、デスクトップ通知を提供するように既に設定されて
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-`Notification Rules...`を選択すると、通知ルールエディターが開きます。このエディターでは、`Wallets`、`DReps`、`Pools`、`Assets`、`Policies`の監視対象を編集し、通知カテゴリを切り替えられます。個別の対象リストを指定する代わりに、排他的な`Monitor Everything`を選択して、サポートされるすべての対象を監視することもできます。
+`Notification Rules...`を選択すると、通知ルールエディターが開きます。このエディターでは、`Wallets`、`DReps`、`Pools`、`Assets`、`Policies`の監視対象を編集し、通知カテゴリを切り替えられます。`Monitor Everything`を選択すると、個別の対象リストを使わずに、サポートされるすべての対象を監視します。
 
-`Apply & Restart`をクリックすると、設定を保存し、`Adder Tray`を再起動せずに通知ルールとレート制限を更新します。対象を削除するときは確認が必要です。再接続の警告が表示された場合、Adderはエディターを開いたまま入力を再び有効にするため、設定を修正して再試行できます。
+`Apply & Restart`をクリックすると、設定を保存し、`Adder Tray`を再起動せずに通知ルールとレート制限を更新します。対象を削除するには確認が必要です。再接続の警告が表示された場合も、Adderはエディターを開いたまま入力を再び有効にします。設定を修正して再試行できます。
 
 `About`を選択すると、アプリ内のAboutダイアログが開きます。コミットメタデータを利用できる場合は`Version: <version> (commit: <hash>)`を表示し、利用できない場合はバージョンだけを表示します。
 
