@@ -75,7 +75,7 @@ docker compose down -v
 
 ## 4. macOS で Adder をネイティブ実行
 
-ヘルパーは [apple/container](https://github.com/apple/container) の `--publish-socket` を使用して、Dingo の `/ipc/node.socket` を `~/dingo-ipc/node.socket` として公開します。Adder は Mac 上でネイティブな Go プロセスとして実行されるため、ローカルデバッガーを接続できます。
+ヘルパーは [apple/container](https://github.com/apple/container) の `--publish-socket` を使用して、Dingo の `/ipc/node.socket` を `~/dingo-ipc/node.socket` として公開します。Adder は Mac 上でネイティブな Go プロセスとして動作するため、ローカルデバッガーを接続できます。
 
 ![ネイティブの Adder がホストのソケットリレーを通じて Dingo のゲストソケットに接続](diagrams/dingo-macos.svg)
 
