@@ -76,7 +76,7 @@ description: Lista de Comandos de Adder.
 > --filter-drep <drep-1>,<drep-2>
 > ```
 >
-> Los filtros de tipos distintos se combinan con AND: el evento debe coincidir con todos los filtros configurados. La excepción combina `--filter-pool` y `--filter-drep` con OR; los demás filtros configurados siguen aplicándose con AND. `--filter-drep` no se aplica a los eventos `input.block`.
+> Adder combina los filtros de tipos distintos con AND: el evento debe coincidir con todos los filtros configurados. Como excepción, Adder combina `--filter-pool` y `--filter-drep` con OR; Adder sigue aplicando los demás filtros configurados con AND. `--filter-drep` no se aplica a los eventos `input.block`.
 >
 > **Correspondencia de filtros:**
 >
