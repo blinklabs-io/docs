@@ -74,8 +74,8 @@ description: List of Adder Commands.
 > 3. `input.transaction` -	A transaction was seen in a block.
 > 4. `input.governance` -	A governance-related event (CIP-1694 era).
 > 5. `input.drep-registration` - A DRep registration occurred.
-> 6. `input.drep-update` - Adder reports a DRep update event.
-> 7. `input.drep-retirement` - Adder reports a DRep retirement event.
+> 6. `input.drep-update` - Adder emits a DRep update event.
+> 7. `input.drep-retirement` - Adder emits a DRep retirement event.
         
 ***
 
