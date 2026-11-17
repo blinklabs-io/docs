@@ -714,6 +714,100 @@ description: Lista de Comandos de Adder.
 
 > tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
 
+### Salida `s3`
+
+```text
+  --output-s3-region string
+```
+
+> región de AWS (predeterminado "")
+<br />
+
+```text
+  --output-s3-bucket string
+```
+
+> bucket de S3 (predeterminado "")
+<br />
+
+```text
+  --output-s3-prefix string
+```
+
+> prefijo relativo de la clave del objeto (predeterminado `adder/events`)
+<br />
+
+```text
+  --output-s3-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
+### Salida `sqs`
+
+```text
+  --output-sqs-region string
+```
+
+> región de AWS (predeterminado "")
+<br />
+
+```text
+  --output-sqs-group-id string
+```
+
+> ID del grupo de mensajes, obligatorio para una cola FIFO (predeterminado "")
+<br />
+
+```text
+  --output-sqs-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+<br />
+
+```text
+  --output-sqs-queue-url string
+```
+
+> URL de la cola SQS (predeterminado "")
+
+### Salida `sns`
+
+```text
+  --output-sns-region string
+```
+
+> región de AWS (predeterminado "")
+<br />
+
+```text
+  --output-sns-group-id string
+```
+
+> ID del grupo de mensajes, obligatorio para un topic FIFO (predeterminado "")
+<br />
+
+```text
+  --output-sns-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+<br />
+
+```text
+  --output-sns-topic-arn string
+```
+
+> ARN del topic SNS (predeterminado "")
+<br />
+
+```text
+  --output-sns-max-message-bytes int
+```
+
+> límite configurado de tamaño de mensaje del topic SNS (predeterminado `262144`)
+
 ***
 
 ## Notificaciones:
