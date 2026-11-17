@@ -912,7 +912,60 @@ description: "Adderコマンドの一覧です。"
 
 <a id="notifications"></a>
 
+<a id="managed-routing"></a>
+
+## 管理ルーティング:
+
+```
+  --managed-config-dir string
+```
+
+> [管理ルーティングの詳細](./014-managed-routing.md)。この設定ディレクトリを指定すると管理ルーティングが有効になります（デフォルトは空）。設定ディレクトリには有効なマニフェストが必要です。
+<br />
+
+```
+  --managed-credentials-dir string
+```
+
+> 管理モードで使用する認証情報ディレクトリを指定します（デフォルトは空）。認証情報ファイルはアクセス制限された通常ファイルでなければなりません。
+<br />
+
+```
+  --managed-log-dir string
+```
+
+> 管理イベントファイルを保存する信頼済みローカルディレクトリを指定します（デフォルトは空）。出力ファイル名は所有する顧客IDで始まる必要があります。
+<br />
+
+```
+  --managed-allow-hosts string
+```
+
+> Webhookで使用を許可するホスト名を指定します（デフォルトは空）。リモートWebhookのホスト名は許可リストに含まれている必要があります。
+<br />
+
+```
+  --managed-allow-local-targets
+```
+
+> ループバックのWebhook受信先を許可します（デフォルトは`false`）。ローカルテスト用の明示的なオプトインとして使用します。
+<br />
+
+```
+  --managed-address string
+```
+
+> 管理APIのプライベートリスナーアドレスを指定します（デフォルト `127.0.0.1:8081`）。リテラルのループバックアドレスだけを指定できます。
+<br />
+
+```
+  --managed-token-file string
+```
+
+> オペレーターAPIトークンを含む制限ファイルへのパスを指定します（デフォルトは空）。所有者だけがアクセスできる通常ファイルで、トークンは32文字以上でなければなりません。
+
 ## 通知:
+*** End Patch
 
 ```
 adder notifications validate --config <path> [--json]
