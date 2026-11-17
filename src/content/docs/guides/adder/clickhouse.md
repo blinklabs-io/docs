@@ -47,7 +47,7 @@ only for localhost or another loopback address. Protect the configuration and
 password with the same access controls used for ClickHouse credentials.
 
 The `event-types` value must name at least one supported selection. If the
-value is omitted, the output uses the default shown in the table.
+configuration omits the value, the output uses the default shown in the table.
 
 ## Table and row format
 
@@ -75,7 +75,7 @@ request. Adder waits for the HTTP request and ClickHouse query to finish
 before it treats the batch as successful.
 
 When Adder stops, it drains events already accepted into the output buffer and
-attempts one final flush. The final request has a ten second deadline. Adder
+attempts one final flush. The final request has a ten-second deadline. Adder
 does not maintain a durable queue, so events in a failed batch do not persist
 locally for later delivery.
 
