@@ -7,6 +7,9 @@ description: "AdderのKafka出力の設定と動作を説明します。"
 
 `kafka` outputは、選択したAdderイベントをJSONとして1つのKafka topicに配信します。
 
+- [コマンドリファレンス](./006-command_list)
+- [出力設定の概要](./006-command_list#output)
+
 ## 設定
 
 次のYAMLでKafka出力を設定します。
@@ -21,25 +24,35 @@ plugins:
       event-types: "blocks,rollbacks,governance"
 ```
 
-- `brokers`には、カンマ区切りのKafka bootstrap `host:port`アドレスを指定します。既定値は`127.0.0.1:9092`です。
-- `topic`にはKafka topicを指定します。既定値は`adder.events`です。Adderの起動前にtopicを作成してください。
-- `username`と`password`は、SASL PLAINの任意の認証情報です。既定値は空です。両方を設定し、認証情報を使用する場合は`tls: true`を指定してください。シークレット管理機能を通じて認証情報を渡します。
-- `tls`はブローカー接続でTLSを使用します。既定値は`false`です。
-- `event-types`には、カンマ区切りで配信するイベント種別を指定します。既定値は`blocks,rollbacks,governance`です。追加で`transactions`、`drep-registration`、`drep-update`、`drep-retirement`を指定できます。
+- `brokers`には、1つ以上のKafka bootstrapブローカーをカンマ区切りで指定します。各値は有効な`host:port`形式で、hostとportを含める必要があります。既定値は`127.0.0.1:9092`です。
+- `topic`にはKafka topicを指定します。topic名は1〜249文字のASCIIで、英数字、`.`、`_`、`-`だけを使用できます。`.`と`..`は指定できません。既定値は`adder.events`です。Adderを起動する前にtopicを作成してください。
+- `username`と`password`はSASL PLAINの認証情報です。既定値は空です。片方だけを設定した構成は無効です。両方を設定する場合は`tls: true`も指定してください。シークレット管理機能を通じて認証情報を渡します。
+- `tls`はブローカー接続でTLSを使用します。既定値は`false`です。SASL認証情報を使用する場合はTLSが必須です。
+- `event-types`には、カンマ区切りで配信するイベント種別を指定します。既定値は`blocks,rollbacks,governance`です。`blocks`、`transactions`、`rollbacks`、`governance`、`drep-registration`、`drep-update`、`drep-retirement`だけを指定できます。未対応のイベント種別を含む構成は拒否されます。
 
-## 配信動作
+## 起動・配信・終了
+
+### 起動
+
+`start()`はinput-reading loopを開始する前にブローカーへpingを送信します。pingが成功しない場合、Adderは配信ワーカーを開始しません。
+
+### 配信
 
 各recordのvalueには、完全なAdder event JSONが入ります。keyは常に`adder.events`です。
 
+producerは`RequiredAcks(kgo.AllISRAcks())`を使用し、すべてのin-sync replicaからacknowledgementを要求します（`acks=all`）。内部retryにはidempotent producerを使用します。これはproducer内部の再試行であり、Adderは失敗したrecordをアプリケーションレベルで再送しません。
+
+Adderは`ProduceSync(...).First()`で各recordの結果を同期的に待ってから、選択した次のeventを読み取ります。各recordには`kgo.RecordDeliveryTimeout`による10秒のdeadlineがあります。
+
 1つのAdder producerはrecordを1つのpartitionに送り、topicのpartition数を変更しない限り、event typeが変わっても順序を維持します。この順序を使用する場合、topicのpartition数を増やさないでください。複数のAdder processは、全体で共有する順序を持ちません。
 
-producerは、すべてのin-sync replicaからacknowledgementを要求します（`acks=all`）。内部retryにはidempotent producerを使用します。acknowledgementとidempotenceの仕様については、[Apache Kafka producer configuration](https://kafka.apache.org/44/configuration/producer-configs/)を参照してください。
+brokerがdeliveryを拒否した場合、またはdeliveryの成否が不明な場合、Adderはそのrecordをpluginのerror channelに報告します。`TrySendError`は不確実なdeliveryも報告しますが、Adderはアプリケーションレベルで再送しません。応答を失う前にbrokerがrecordを受け取っていた可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
 
-Adderは、選択した次のeventを読み取る前に、各recordの結果を待ちます。各送信には10秒のdeadlineがあります。
+成功したacknowledgementはconsumer processingの完了を示しません。brokerが設定したreplication policyを満たしたことだけを示します。
 
-Adderは、brokerが拒否したdeliveryまたは成否が不明なdeliveryをpluginのerror channelに報告します。Adderは失敗したrecordをアプリケーションレベルで再送しません。replyを失う前にbrokerがrecordを受け取った可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
+### 終了
 
-shutdownまたはrestartの後、buffered eventを復元しません。成功したacknowledgementは、consumer processingではなく、brokerの設定したreplication policyを確認します。
+shutdownまたは`Stop`の実行中、Adderはin-flight produceをキャンセルし、`Output.close`で`franz-go` clientを閉じます。shutdownまたはrestartの後、buffered eventを復元しません。
 
 ---
 
