@@ -26,7 +26,7 @@ Configure these parameters under `plugins.output.kafka`:
 | Parameter | Description |
 | --- | --- |
 | `brokers` | Comma separated Kafka bootstrap addresses in `host:port` format. The default is `127.0.0.1:9092`. Adder requires at least one valid address. |
-| `topic` | Kafka topic name. The default is `adder.events`. Use 1 to 249 ASCII letters, digits, dots, underscores, or hyphens, and do not use a dot only name. The topic must already exist. |
+| `topic` | Kafka topic name. The default is `adder.events`. Use 1 to 249 ASCII letters, digits, dots, underscores, or hyphens, and do not use a dot-only name. |
 | `username` | Optional SASL PLAIN username. Set it together with `password`. |
 | `password` | Optional SASL PLAIN password. Set it together with `username`. |
 | `tls` | Enables TLS for broker connections. The default is `false`. Set it to `true` when using SASL PLAIN credentials. |
@@ -42,7 +42,7 @@ Adder accepts these event type names:
 - `drep-update`
 - `drep-retirement`
 
-Adder rejects an unknown event type or an empty `event-types` value. Store SASL credentials through secret managed configuration, and enable TLS whenever credentials are present.
+Adder rejects an unknown event type or an empty `event-types` value. Store SASL credentials through secret-managed configuration.
 
 ## Delivery behavior
 
@@ -50,11 +50,11 @@ For every selected event, Adder sends one record with these properties:
 
 - The record value contains the complete event as JSON.
 - The record key is always `adder.events`.
-- Kafka receives the record with `acks=all`, so the producer waits for acknowledgement from all in sync replicas.
+- Kafka receives the record with `acks=all`, so the producer waits for acknowledgement from all in-sync replicas.
 - Adder waits for the result of each selected record before it reads the next selected event.
-- Each delivery has a ten second deadline.
+- Each delivery has a ten-second deadline.
 
-When Kafka rejects a record or Adder cannot determine whether Kafka accepted it, Adder reports the failure through the plugin error channel. Adder does not resend an uncertain record at the application level because Kafka may have accepted it before the response failed. A successful acknowledgement confirms the broker's configured replication policy, not consumer processing.
+When Kafka rejects a record or Adder cannot determine whether Kafka accepted it, Adder reports the failure through the plugin error channel. Adder does not resend an uncertain record at the application-level because Kafka may have accepted it before the response failed. A successful acknowledgement confirms the broker's configured replication policy, not consumer processing.
 
 ## Ordering
 
@@ -62,4 +62,4 @@ The fixed key sends records from one Adder process to one partition while the to
 
 ## Shutdown and restart
 
-Shutdown cancels in flight delivery work. Adder does not recover buffered records after shutdown or restart, and it does not provide application level resend for records whose delivery result remains uncertain.
+Shutdown cancels in-flight delivery work. Adder does not recover buffered records after shutdown or restart.
