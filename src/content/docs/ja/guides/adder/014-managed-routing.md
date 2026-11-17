@@ -248,7 +248,7 @@ HTTP試行の期限は5秒です。managed宛先の処理には、共有クォ�
 
 ## Managedアダプターの機能
 
-managed modeで使用できる宛先は`log`と`webhook`に限定されます。
+managed modeは`log`と`webhook`だけを宛先として受け付けます。
 
 | アダプター | managedでの扱い |
 | --- | --- |
@@ -258,7 +258,7 @@ managed modeで使用できる宛先は`log`と`webhook`に限定されます。
 | `sns`, `sqs`, `pubsub`, `s3`, `kafka`, `nats`, `mqtt`, `rabbitmq`, `redis`, `postgres`, `clickhouse`, `elasticsearch` | SDKまたはブローカーのバッファー、再試行、エンドポイント検出、認証情報、クォータ境界に専用アダプターが必要なため、managed modeでは拒否します。 |
 | `notify`, `notify-json` | デスクトップとファイルへの副作用を顧客ごとに分離できないため、managed modeでは拒否します。 |
 
-出力レジストリに登録されているだけでは、managed modeでアダプターを使用できません。managed modeで有効にするには、アダプターがライフサイクル、許可するイベント、複数宛先への配信、保持バッファー、レート制限、認証情報、宛先制限、観測可能な結果を定義する必要があります。
+出力レジストリに登録されているだけでは、managed modeはアダプターを使用しません。managed modeで有効にするには、アダプターがライフサイクル、許可するイベント、複数宛先への配信、保持バッファー、レート制限、認証情報、宛先制限、観測可能な結果を定義する必要があります。
 
 ---
 
