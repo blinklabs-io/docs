@@ -7,7 +7,7 @@ description: "Adderのmanagedカスタマールーティングを設定し、設
 
 ## 概要
 
-このリファレンスでは、Adderのオプトイン方式であるmanaged modeについて説明します。managed modeは1つのChainSync入力を読み取り、名前付き顧客ごとに独立したフィルターレーンを適用して、一致するイベントを顧客の宛先へ送信します。[動作モードの概要](./002-operating-mode-overview)では、managed modeとAdderの他の動作モードとの関係を説明します。[コマンドリファレンス](./006-command_list)には完全なCLIを記載しています。このページではmanaged modeのフラグと実行時の動作を説明します。
+このリファレンスでは、Adderのオプトイン方式であるmanaged modeを説明します。managed modeは1つのChainSync入力を読み取り、名前付き顧客ごとに独立したフィルターレーンを適用して、一致するイベントを顧客の宛先へ送信します。[動作モードの概要](./002-operating-mode-overview)では、managed modeとAdderの他の動作モードとの関係を説明します。[コマンドリファレンス](./006-command_list)には完全なCLIを記載しています。このページではmanaged modeのフラグと実行時の動作を説明します。
 
 `--managed-config-dir`を指定しない場合、managed modeは通常のAdder CLIや組み込みパイプラインを変更しません。これらのパイプラインでは、既存のフィルター、出力のバックプレッシャー、設定の優先順位、HTTP API、公開`/events`ストリームがそのまま動作します。
 
