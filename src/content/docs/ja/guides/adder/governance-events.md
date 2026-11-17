@@ -51,6 +51,8 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 
 ## 埋め込みデータ構造
 
+提案、DRep、投票委任の各`deposit`フィールドは`uint64`として値を保持します。Adderは0から18446744073709551615までの値を保持します。下流のコンシューマーは符号付き値としてデシリアライズしたり、`MaxInt64`でクランプしたりしないでください。
+
 ### `proposalProcedures[]`
 
 新しいガバナンス提案を表します。
@@ -58,7 +60,7 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `index` | number | トランザクション内の提案インデックス。 |
-| `deposit` | `uint64` | この提案のためにロックされたLovelaceのデポジット。`uint64`として値を保持し、符号付き整数や`MaxInt64`で制限しません。 |
+| `deposit` | `uint64` | この提案がロックするLovelaceのデポジット。Adderは`uint64`として値を保持します。 |
 | `rewardAccount` | string | 完了時にデポジットを返すステークまたは報酬アドレス。 |
 | `actionType` | string | `ParameterChange`、`HardForkInitiation`、`TreasuryWithdrawal`、`NoConfidence`、`UpdateCommittee`、`NewConstitution`、`Info`のいずれか。認識されないタイプには`Unknown`を使用します。 |
 | `actionData` | object | アクション固有のデータ。認識されたアクションでは、アクション名（`parameterChange`、`treasuryWithdrawal`、`newConstitution`など）をキーとする1つのフィールドに値を設定します。 |
@@ -87,7 +89,7 @@ DRepの状態変更を表します。
 | `certificateType` | string | `Registration`、`Update`、`Deregistration`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュを16進数でエンコードした値。 |
 | `drepId` | string | Bech32形式のDRep ID（`drep1...`または`drep_script1...`）。 |
-| `deposit` | `uint64` | 登録時に必要なLovelaceのデポジット、または登録解除時に返すLovelaceのデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。符号付き値への変換や`MaxInt64`でのクランプは行いません。 |
+| `deposit` | `uint64` | 登録時に必要なLovelaceのデポジット、または登録解除時に返すLovelaceのデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。 |
 | `anchor` | object | `{ "url", "dataHash" }`。DRepメタデータがない場合、両方の文字列は空です。 |
 
 ### `voteDelegationCertificates[]`
@@ -101,8 +103,8 @@ DRepの状態変更を表します。
 | `drepType` | string | 委任先。`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュを16進数でエンコードした値。`Abstain`または`NoConfidence`ではAdderはこのフィールドを省略します。 |
 | `drepId` | string | Bech32形式のDRep ID。`Abstain`または`NoConfidence`ではAdderはこのフィールドを省略します。 |
-| `poolKeyHash` | string | プールキーのハッシュを16進数でエンコードした値。ステーク委任と投票委任を組み合わせたタイプだけに含まれます。 |
-| `deposit` | `uint64` | 登録委任タイプのLovelaceデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。下流のコンシューマーは符号付き値としてデシリアライズしたり、`MaxInt64`でクランプしたりしないでください。 |
+| `poolKeyHash` | string | プールキーのハッシュを16進数でエンコードした値。Adderはステーク委任と投票委任を組み合わせたタイプだけこのフィールドを含めます。 |
+| `deposit` | `uint64` | 登録委任タイプのLovelaceデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。 |
 
 ### `committeeCertificates[]`
 
@@ -112,7 +114,7 @@ DRepの状態変更を表します。
 | :--- | :--- | :--- |
 | `certificateType` | string | ホット資格情報を承認する`AuthHot`、またはコールド資格情報を辞任する`ResignCold`。 |
 | `coldCredential` | string | 委員会のコールド資格情報ハッシュを16進数でエンコードした値。 |
-| `hotCredential` | string | 委員会のホット資格情報ハッシュを16進数でエンコードした値。`AuthHot`の場合だけ含まれます。 |
+| `hotCredential` | string | 委員会のホット資格情報ハッシュを16進数でエンコードした値。Adderは`AuthHot`の場合だけこのフィールドを含めます。 |
 | `anchor` | object | Adderは常にシリアライズします。`ResignCold`証明書がメタデータを提供しない場合、文字列は空です。 |
 
 ---
