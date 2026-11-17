@@ -49,7 +49,7 @@ Adder handles a durable event in this order:
 
 When Adder starts, it opens the state file and replays all pending entries in order before startup returns. If replay cannot complete, startup fails and the entries remain in SQLite. During normal operation, Adder also sends each newly appended entry and continues with the queue in order.
 
-Start and Stop coordinate the worker and its shared channels under a mutex. Stop waits for the worker to exit before it closes and clears the event and error channels. If Stop interrupts a retry wait, Adder cancels the wait and stops the delivery run instead of leaving the worker asleep. A shutdown cancellation is not a receiver response, so it does not acknowledge or remove a persisted entry; the entry remains available for replay according to the SQLite contract.
+Start and Stop coordinate the worker and its shared channels under a mutex. Stop waits for the worker to exit before it closes and clears the event and error channels. If Stop interrupts a retry wait, Adder cancels the wait and stops the delivery run instead of leaving the worker asleep. A shutdown cancellation is not a receiver response and does not acknowledge the entry, so the next start can replay it under the SQLite contract.
 
 An HTTP `2xx` response confirms that the receiver accepted the request according to HTTP semantics. It does not confirm that the receiver completed its own downstream work. Pending entries have no automatic age expiry. An entry remains until the receiver returns `2xx` or an operator removes it explicitly.
 
