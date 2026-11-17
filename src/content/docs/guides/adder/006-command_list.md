@@ -176,7 +176,7 @@ description: List of Adder Commands.
   
 > path to a SQLite database file for persisting the chainsync cursor across restarts (default empty)
 >
-> When unset, Adder does not persist the cursor. When set, Adder creates or reopens the SQLite cursor file and resumes from the persisted state after a restart.
+> Leave this option empty to disable cursor persistence. Set a SQLite filename to create or reopen the cursor file and resume from the persisted state after a restart.
 
 ***
 
@@ -414,7 +414,7 @@ description: List of Adder Commands.
   
 > comma-separated Signal recipient numbers or IDs (default empty)
 >
-> At least one recipient is required.
+> Set at least one recipient.
 
 <br />
 
@@ -494,7 +494,7 @@ description: List of Adder Commands.
   
 > comma-separated Slack incoming webhook URLs (default empty)
 >
-> At least one URL is required. Each URL must use HTTPS and cannot include credentials.
+> Provide at least one URL. Each URL must use HTTPS and cannot include credentials.
 
 <br />
 
@@ -574,7 +574,7 @@ description: List of Adder Commands.
   
 > comma-separated Matrix room IDs (default empty)
 >
-> At least one room ID is required, and every room ID must pass Matrix room ID validation.
+> Provide at least one room ID. Each room ID must pass Matrix room ID validation.
 
 <br />
 
