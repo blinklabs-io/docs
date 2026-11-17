@@ -42,7 +42,7 @@ Cuando una categoría está deshabilitada, Adder suprime los mensajes de Telegra
 | `/start` | Presenta el bot y dirige a `/help`. |
 | `/help` | Muestra la lista de comandos: `/status`, `/settings` y `/notify blocks\|transactions\|rollbacks\|governance on\|off`. |
 | `/status` | Informa el estado del pipeline de Adder: `running`, `stopped` o `unavailable`. |
-| `/settings` | Muestra el estado `on` u `off` de `blocks`, `transactions`, `rollbacks` y `governance`. Si falta `settings-file`, indica que se debe configurar `output.telegram.settings-file` para habilitar los cambios. |
+| `/settings` | Muestra el estado `on` u `off` de `blocks`, `transactions`, `rollbacks` y `governance`. Si falta `settings-file`, Adder indica que `output.telegram.settings-file` es necesario para habilitar los cambios. |
 | `/notify blocks on\|off` | Habilita o deshabilita los mensajes de bloques. |
 | `/notify transactions on\|off` | Habilita o deshabilita los mensajes de transacciones. |
 | `/notify rollbacks on\|off` | Habilita o deshabilita los mensajes de rollbacks. |
