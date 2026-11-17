@@ -260,7 +260,7 @@ cuerpos de configuración de reemplazo.
 
 La ruta administrada autenticada `/metrics` es independiente de las
 métricas del flujo normal descritas en la [referencia de
-métricas](./010-metrics). Los plugins de salida normales y su configuración
+métricas](./010-metrics). Los componentes de salida normales y su configuración
 habitual aparecen en la [guía de integraciones de salida](./008-output-integrations);
 el modo administrado no habilita esos adaptadores.
 
@@ -304,8 +304,8 @@ El despacho administrado utiliza colas acotadas por cliente y por destino. Cada
 cliente tiene un trabajador de filtros que conserva el orden de entrada,
 mientras los trabajadores de destino funcionan de forma independiente. Un
 cliente lento no consume la cuota de cola de otro cliente. Las reglas
-superpuestas se combinan en un único envío por ocurrencia y destino, con los IDs
-de reglas coincidentes ordenados. Adder ofrece una coincidencia de inmediato y
+Adder combina las reglas superpuestas en un único envío por ocurrencia y destino,
+con los IDs de reglas coincidentes ordenados. Adder ofrece una coincidencia de inmediato y
 no utiliza un temporizador de vaciado periódico.
 
 Los límites predeterminados del enrutamiento administrado son:
@@ -329,7 +329,7 @@ de reglas coincidentes, las ranuras de canales de componentes, las credenciales
 decodificadas y las configuraciones retiradas con eventos en cola también
 consumen el presupuesto de todo el proceso. Estos son límites del trabajo de
 enrutamiento, no una garantía de memoria total del proceso; la sobrecarga del
-runtime de Go, los búferes de plugins de entrada y las asignaciones temporales
+entorno de ejecución de Go, los búferes de las entradas y las asignaciones temporales
 del codificador quedan fuera de la garantía.
 
 Una cola llena descarta el elemento nuevo e incrementa los contadores de
@@ -347,8 +347,8 @@ El estado y los totales del proceso distinguen estos contadores:
 | `input_dropped` | Cuenta los eventos que un carril de cliente rechaza durante la admisión. |
 | `matched` | Cuenta las coincidencias de reglas por regla. |
 | `destination_dropped` | Cuenta los elementos que una cola de destino rechaza. |
-| `submitted_to_plugin` | Cuenta los elementos que acepta un canal de plugin administrado. |
-| `plugin_errors` | Cuenta los errores de procesamiento del plugin. |
+| `submitted_to_plugin` | Cuenta los elementos que acepta un canal de componente administrado. |
+| `plugin_errors` | Cuenta los errores de procesamiento del componente. |
 | `unknown_outcomes` | Cuenta los envíos cuyo resultado externo sigue siendo incierto. |
 | `canceled` | Cuenta el trabajo que la revocación o el apagado cancela. |
 | `diagnostic_dropped` | Cuenta los diagnósticos de metadatos que desbordan la cola de diagnósticos. |
