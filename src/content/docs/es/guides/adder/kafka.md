@@ -44,7 +44,7 @@ Adder no recupera los eventos almacenados en búfer después del apagado o reini
 ## Navegación
 
 - Consulte la [referencia de comandos](./006-command_list.md) para conocer las opciones de `kafka` disponibles en la línea de comandos.
-- Consulte el [resumen de los modos de funcionamiento](./002-operating-mode-overview.md) para ubicar las salidas dentro de Adder.
+- Consulte el [resumen de los modos de funcionamiento](./008-output-integrations.md) para ubicar las salidas dentro de Adder.
 
 ---
 
