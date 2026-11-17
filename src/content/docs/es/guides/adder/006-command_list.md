@@ -177,6 +177,8 @@ description: Lista de Comandos de Adder.
 ```
 
 > ruta a un archivo de base de datos SQLite para conservar el cursor de ChainSync entre reinicios; si no se establece, no se conserva ningún cursor (predeterminado "")
+>
+> Consulta la [referencia de persistencia del cursor de ChainSync](./chainsync-cursor-persistence.md) para obtener información sobre los reinicios, el vaciado cada cinco segundos y durante el apagado, los rollbacks y la API.
 
 ***
 
@@ -322,7 +324,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
 >
-> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Adder migra el ajuste YAML heredado de nivel superior `logging.level` a `plugins.output.log.level` cuando no existe un nivel de `output.log`. La opción de línea de comandos antigua `--logging-level` ya no existe y provoca un error si se proporciona. Adder eliminó la variable de entorno `LOGGING_LEVEL` y la ignora.
+> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Las configuraciones heredadas de nivel superior `logging.level`, `--logging-level` y `LOGGING_LEVEL` se eliminaron; usa `plugins.output.log.level`, `OUTPUT_LOG_LEVEL` o `--output-log-level` para configurar el nivel.
 <br />
 
 ```text
@@ -525,6 +527,8 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > tipos de eventos para la entrega a Slack separados por comas (predeterminado "blocks,transactions,rollbacks,governance")
+>
+> Consulta la [referencia de Slack](./slack.md).
 
 ### Salida `discord`
 
@@ -561,6 +565,8 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+>
+> Consulta la [referencia de Discord](./discord.md).
 
 ### Salida `matrix`
 
@@ -590,6 +596,8 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+>
+> Consulta la [referencia de Matrix](./matrix.md).
 
 ### Salida `rabbitmq`
 
@@ -749,6 +757,8 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+>
+> Consulta la [referencia de ClickHouse](./clickhouse.md).
 
 ### Salida `elasticsearch`
 
@@ -958,6 +968,8 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+>
+> Consulta la [referencia de Kafka](./kafka.md).
 
 ***
 
