@@ -7,7 +7,7 @@ description: Configura y verifica la salida Signal de Adder.
 
 ## Descripción general
 
-La salida `signal` envía los eventos seleccionados de Adder mediante un demonio HTTP JSON-RPC de [`signal-cli`](https://github.com/AsamK/signal-cli/blob/master/man/signal-cli-jsonrpc.5.adoc) administrado por separado. Signal no ofrece una API oficial para bots. Ejecuta un demonio de `signal-cli` mantenido con una cuenta vinculada o registrada, por ejemplo:
+La salida `signal` envía los eventos seleccionados de Adder mediante un demonio HTTP JSON-RPC independiente de [`signal-cli`](https://github.com/AsamK/signal-cli/blob/master/man/signal-cli-jsonrpc.5.adoc). Signal no ofrece una API oficial para bots. Ejecuta un demonio de `signal-cli` mantenido con una cuenta vinculada o registrada, por ejemplo:
 
 ```text
 signal-cli -a ACCOUNT daemon --http=127.0.0.1:8081
@@ -78,7 +78,7 @@ Una respuesta RPC correcta confirma que `signal-cli` aceptó el envío. No confi
 
 ## Reintentos y reinicio
 
-Adder no reintenta automáticamente las solicitudes. Un tiempo de espera puede producirse después de que Signal envíe el mensaje, y un reintento podría duplicarlo.
+Adder no reintenta automáticamente las solicitudes. Signal puede enviar el mensaje antes de que la solicitud agote el tiempo de espera, y un reintento podría duplicarlo.
 
 Adder no conserva los eventos pendientes después de un reinicio.
 
