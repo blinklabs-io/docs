@@ -63,7 +63,7 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 
 ***
 
-### Step 3.1 - Select a Cardano network that you want to monitor.
+### Step 3.1 - Select a Cardano network that you want to monitor. Available options include `Mainnet`, `Preprod`, `Preview`, and `Dijkstra` (`DijkstraNet`).
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -105,7 +105,7 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Select the checkboxes for the events for which you would like to receive a desktop alert.
+Select the desired event checkboxes. The `Chain rollbacks` checkbox controls chain rollback alerts independently of `Blocks minted`.
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
