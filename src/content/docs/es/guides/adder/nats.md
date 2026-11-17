@@ -28,7 +28,7 @@ La salida admite estas opciones:
 | `subject-prefix` | `adder.events` | Prefijo de los subjects de eventos. |
 | `event-types` | `blocks,rollbacks,governance` | Tipos de eventos separados por comas. |
 
-`servers` debe contener al menos una URL. Cada URL debe usar el esquema `nats://` o `tls://`, incluir un nombre de host y no incluir credenciales, parámetros de consulta ni fragmentos. La ruta debe estar vacía o ser `/`. Si se especifica un puerto, debe estar entre `1` y `65535`. Al proporcionar un `token`, utiliza TLS y suministra la credencial mediante una configuración administrada por secretos.
+`servers` debe contener al menos una URL. Cada URL debe usar el esquema `nats://` o `tls://`, incluir un nombre de host y no incluir credenciales, parámetros de consulta ni fragmentos. La ruta debe estar vacía o ser `/`. Cuando la configuración especifica un puerto, el puerto debe estar entre `1` y `65535`. Una configuración con `token` requiere TLS y una credencial suministrada mediante una configuración administrada por secretos.
 
 `subject-prefix` no puede estar vacío ni contener espacios, `/` o tokens comodín (`*`, `>`). No puede comenzar ni terminar con `.` ni contener `..`; cada token del subject debe ser no vacío.
 
@@ -62,11 +62,11 @@ Cada carga útil contiene el JSON completo del evento de Adder.
 
 Después de cada publicación, la salida hace flush de la conexión. Este recorrido de ida y vuelta por evento confirma la recepción explícita por parte del servidor y limita el rendimiento de recuperación a aproximadamente un evento por recorrido de ida y vuelta con el broker. Un flush correcto indica que el servidor procesó el comando de publicación; no confirma que un suscriptor haya recibido el evento.
 
-Las publicaciones, los flushes y los rechazos asíncronos del broker que fallen se informan mediante el canal de errores de la salida. La salida no reintenta un fallo de flush ambiguo porque el reintento podría duplicar el mensaje. El cliente se vuelve a conectar para eventos posteriores, pero la salida desactiva el almacenamiento temporal de publicaciones sin conexión. Los eventos publicados mientras la conexión está desconectada fallan en lugar de acumularse en una cola. Durante el cierre, la conexión se cierra y la salida no recupera los eventos pendientes en memoria.
+El canal de errores de la salida recibe los fallos de publicaciones, flushes y rechazos asíncronos del broker. La salida no reintenta un fallo de flush ambiguo porque el reintento podría duplicar el mensaje. El cliente vuelve a conectarse para eventos posteriores, pero la salida desactiva el almacenamiento temporal de publicaciones sin conexión. Los eventos publicados mientras la conexión está desconectada fallan en lugar de acumularse en una cola. Durante el cierre, la salida cierra la conexión y no recupera los eventos pendientes en memoria.
 
 ## Comprobación en vivo
 
-Para comprobar una implementación activa, suscríbete a `adder.events.>` y envía un evento seleccionado. Verifica el subject y la carga útil JSON. Después, desconecta el broker y confirma que la salida informa un error.
+Una comprobación activa requiere suscribirse a `adder.events.>` y enviar un evento seleccionado. La comprobación debe verificar el subject y la carga útil JSON. Después, la comprobación debe desconectar el broker y confirmar que la salida informa un error.
 
 La prueba del paquete utiliza un par local del protocolo Core NATS para verificar la correspondencia de subjects y la carga útil serializada sin un broker independiente.
 
