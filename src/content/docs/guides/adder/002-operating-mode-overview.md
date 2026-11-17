@@ -1,9 +1,9 @@
 ---
 title: Operating Mode Overview
-description: Adder Operating Mode Overview. Adder supports two primary operating modes, Adder Tray and Adder CLI.  
+description: Adder Operating Mode Overview. Adder supports three primary operating modes: Adder Tray, Adder CLI, and Adder Managed Routing.  
 ---
 
-Adder offers two distinct operating modes, each optimized for different types of users and deployment environment. Choosing the right mode ensures you get the correct balance of usability, configurability, and operational control.
+Adder offers three distinct operating modes, each optimized for different types of users and deployment environment. Choosing the right mode ensures you get the correct balance of usability, configurability, and operational control.
 
 ## 1. Adder Tray (Windows & macOS)
 
