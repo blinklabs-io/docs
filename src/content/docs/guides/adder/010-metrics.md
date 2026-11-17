@@ -9,7 +9,7 @@ This reference describes Adder's Prometheus endpoint and the pipeline metrics th
 
 ## Endpoint
 
-Adder exposes the Prometheus text format at:
+Adder serves Prometheus text format at:
 
 ```http
 GET /metrics
@@ -17,7 +17,7 @@ GET /metrics
 
 The `API_ADDRESS` and `API_PORT` settings configure the API listener. Adder uses `0.0.0.0:8080` by default.
 
-Unlike the versioned API routes, `/metrics` does not use the `/v1` route group. A scrape against the default listener uses the following command:
+Unlike the versioned API routes, `/metrics` does not use the `/v1` route group. Scrape the default listener with:
 
 ```bash
 curl http://127.0.0.1:8080/metrics
