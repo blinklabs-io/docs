@@ -255,7 +255,7 @@ Rollback records remain in the archive, and consumers apply them when deriving
 chain state. Adder does not delete or rewrite earlier objects.
 
 Adder waits for each `PutObject` response and does not use a batch buffer or
-background flush. AWS SDK retries apply to retryable errors within a
+background flush. The AWS SDK retries retryable errors within a
 thirty-second request limit. Adder reports failures, does not retain failed
 events for replay, and cancels an in-flight upload when it stops. A timeout can
 leave the upload result uncertain, and queued events do not survive shutdown.
