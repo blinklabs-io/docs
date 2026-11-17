@@ -17,14 +17,14 @@ go test -race ./plugins
 
 ## Migración del contrato
 
-Al adaptar un plugin personalizado, aplica este checklist:
+La migración de un plugin personalizado sigue este checklist:
 
-- Integra `plugin.Base` para reutilizar el contexto de ejecución, la cancelación, los canales y la coordinación de inicio y parada.
-- Implementa `plugin.ManagedPlugin` con `StartContext(ctx context.Context)`, `Stop`, `Role`, `ErrorChan`, `InputChan`, `OutputChan`, `Failed` y `Failure`. Declara los puertos que corresponden al rol del plugin.
-- Propaga los fallos terminales con `Fail(err)` y permite que el pipeline observe `Failed` y consulte `Failure()`.
-- Sustituye `plugin.PluginOption.Dest`, `plugin.ProcessConfig` y `plugin.ProcessEnvVars`, que ya no forman parte del contrato. Usa `ResolveConfig` y `Configuration.New` para construir la configuración.
-- Haz que cada fábrica devuelva `plugin.ManagedPlugin` y reciba `plugin.Options` inmutables ya resueltas.
-- Resuelve las opciones con esta precedencia: valores predeterminados < datos de YAML < variables de entorno < flags de CLI modificados. Una fuente posterior reemplaza el valor anterior.
+- `plugin.Base` centraliza el contexto de ejecución, la cancelación, los canales y la coordinación de inicio y parada.
+- `plugin.ManagedPlugin` define `StartContext(ctx context.Context)`, `Stop`, `Role`, `ErrorChan`, `InputChan`, `OutputChan`, `Failed` y `Failure`. Cada plugin declara los puertos que corresponden a su rol.
+- El plugin comunica los fallos terminales con `Fail(err)`, mientras el pipeline observa `Failed` y consulta `Failure()`.
+- La migración elimina `plugin.PluginOption.Dest`, `plugin.ProcessConfig` y `plugin.ProcessEnvVars`. `ResolveConfig` y `Configuration.New` construyen la configuración en su lugar.
+- Cada fábrica devuelve `plugin.ManagedPlugin` y recibe `plugin.Options` inmutables ya resueltas.
+- La resolución de opciones sigue esta precedencia: valores predeterminados < datos de YAML < variables de entorno < flags de CLI modificados. Una fuente posterior reemplaza el valor anterior.
 
 ## Comportamiento del pipeline
 
