@@ -526,6 +526,114 @@ description: Lista de Comandos de Adder.
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 
+### Salida `rabbitmq`
+
+```text
+  --output-rabbitmq-url string
+```
+
+> URL del broker AMQP (predeterminado `amqp://127.0.0.1:5672/`)
+<br />
+
+```text
+  --output-rabbitmq-exchange string
+```
+
+> exchange existente; un valor vacío usa el exchange predeterminado (predeterminado "")
+<br />
+
+```text
+  --output-rabbitmq-routing-key string
+```
+
+> clave de enrutamiento o nombre de cola para el exchange predeterminado (predeterminado `adder.events`); es obligatorio
+<br />
+
+```text
+  --output-rabbitmq-persistent
+```
+
+> publicar mensajes persistentes (predeterminado `true`)
+<br />
+
+```text
+  --output-rabbitmq-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `mqtt`
+
+```text
+  --output-mqtt-broker string
+```
+
+> URL TCP o TLS del broker MQTT 5 (predeterminado `mqtt://127.0.0.1:1883`)
+<br />
+
+```text
+  --output-mqtt-client-id string
+```
+
+> identificador del cliente MQTT (predeterminado `adder-output`); es obligatorio
+<br />
+
+```text
+  --output-mqtt-username string
+```
+
+> nombre de usuario MQTT opcional (predeterminado "")
+<br />
+
+```text
+  --output-mqtt-password string
+```
+
+> contraseña MQTT opcional (predeterminado "")
+<br />
+
+```text
+  --output-mqtt-topic-prefix string
+```
+
+> prefijo de los topics de eventos (predeterminado `adder/events`)
+<br />
+
+```text
+  --output-mqtt-qos int
+```
+
+> QoS de publicación MQTT (predeterminado `1`); los valores válidos son `0`, `1` y `2`
+<br />
+
+```text
+  --output-mqtt-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `pubsub`
+
+```text
+  --output-pubsub-project-id string
+```
+
+> ID del proyecto de Google Cloud (predeterminado "")
+<br />
+
+```text
+  --output-pubsub-topic-id string
+```
+
+> ID del topic de Pub/Sub (predeterminado "")
+<br />
+
+```text
+  --output-pubsub-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
 ***
 
 ## Notificaciones:
