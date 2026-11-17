@@ -21,7 +21,7 @@ Adderは次の4つのメトリクスを公開します。
 | メトリクス | 種類 | 内容 |
 | --- | --- | --- |
 | `adder_pipeline_received_events_total` | Counter | 入力プラグインの出力チャネルからパイプラインが読み取ったイベント数。 |
-| `adder_pipeline_processed_events_total` | Counter | 設定したすべての出力チャネルがイベントを受け入れた後、終端ステージが完了したイベント数。外部シンクへの配信完了は確認しません。 |
+| `adder_pipeline_processed_events_total` | Counter | 終端ステージが完了したイベント数。 |
 | `adder_pipeline_filtered_events_total` | Counter | フィルターによって破棄されたイベント数。組み込みフィルターは拒否した各イベントを報告します。 |
 | `adder_pipeline_processing_duration_seconds` | Histogram | パイプラインが入力イベントを読み取ってから、設定したすべての出力チャネルが受け入れるまでの時間。パイプラインへの入力時刻を保持する完了イベントを記録します。 |
 
