@@ -7,9 +7,9 @@ description: "Adderイベントを外部サービスへ配信する出力プラ�
 
 このリファレンスでは、Adderが選択したイベントをPostgreSQL、MQTT、RabbitMQ、Google Cloud Pub/Sub、Elasticsearch、S3、AWS SQS、AWS SNS、Redis Streamsへ配信する方法を説明します。各出力は`event-types`で対象イベントを選択し、利用できる既定値は出力ごとに異なります。
 
-## 関連リファレンス
+## 関連する出力リファレンス
 
-各出力の詳細な設定項目と配信動作は、次の個別リファレンスを参照してください。
+各出力の詳細な設定項目と配信動作は、次の個別ページで確認できます。
 
 - [Discordボット出力](./discord.md)
 - [Slack Webhook出力](./slack.md)
