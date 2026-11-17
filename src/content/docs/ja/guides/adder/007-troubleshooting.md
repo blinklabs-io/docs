@@ -163,7 +163,7 @@ Adderは設定を、**CLIフラグ、YAML設定ファイル、環境変数、デ
   * 実際に使用するWebhook URLと認証設定を指定します。
 
     ```bash
-    ./adder --output-webhook-url="https://your-webhook-url.com"
+     ./adder --output webhook --output-webhook-url="https://your-webhook-url.com"
     ```
 
 Webhookは初回送信を1回行い、デフォルトで最大3回再試行します。一時的な通信障害、HTTP `408`、`429`、`5xx`では、デフォルトで`1s`、`2s`、`4s`の指数バックオフを使用します。バックオフの上限は`30s`です。これらの再試行回数とバックオフは内部動作であり、登録済みのCLIフラグではありません。
