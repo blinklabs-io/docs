@@ -1030,7 +1030,7 @@ description: List of Adder Commands.
 >
 > Select one or more supported Kafka event types.
 
-> See the [webhook durability reference](./webhook.md).
+> See the [webhook durability reference](./webhook-durability.md).
 ***
 
 ## Notifications:
