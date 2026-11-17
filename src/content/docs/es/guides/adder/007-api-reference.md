@@ -1,11 +1,11 @@
 ---
 title: Referencia de API y eventos de Adder
-description: Referencia de `/events` y del contrato de apagado de la API Go de Adder.
+description: Referencia del endpoint `/events` y del contrato de apagado de la API Go de Adder.
 ---
 
 # Referencia de API y eventos
 
-Esta guía describe el parámetro opcional `replay` del endpoint `/events` y el contrato de apagado de la API Go de Adder.
+Esta guía documenta el parámetro opcional `replay` del endpoint `/events` y el contrato de apagado de la API Go de Adder.
 
 ## Endpoint `/events`
 
@@ -15,7 +15,7 @@ El endpoint `/events` acepta el parámetro de consulta opcional `replay`:
 GET /events?replay=false
 ```
 
-- Si se omite `replay`, Adder usa `replay=true` y activa la reproducción de eventos almacenados en el búfer.
+ - Sin `replay`, Adder usa `replay=true` y activa la reproducción de eventos almacenados en el búfer.
 - `replay=false` solicita una entrega solo de eventos en directo y excluye la reproducción de eventos almacenados en el búfer.
 - `replay=true` activa la reproducción de eventos almacenados en el búfer.
 
