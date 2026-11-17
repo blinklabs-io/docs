@@ -27,7 +27,7 @@ docker compose up --build -d
 
 ### ステップ A: 接続と intersection を確認
 
-`config-preview.yaml` では、デフォルトで `intersect-tip: true` を設定しています。この設定により、Adder は Genesis（slot 0）から開始する代わりに、Dingo ノードが現在報告している tip で ChainSync intersection を実行します。
+`config-preview.yaml` のデフォルト設定では、`intersect-tip: true` を有効にしています。この設定により、Adder は Genesis（slot 0）から開始する代わりに、Dingo ノードが現在報告している tip で ChainSync intersection を実行します。
 
 1. **初回同期を確認します。** 空のノードは genesis を報告する場合があり、同期中のノードはより古い tip を報告する場合があります。最初の slot は Dingo の現在の同期状態によって異なります。
 
@@ -39,7 +39,7 @@ docker compose up --build -d
 
    接続成功の記録と `BLOCK` レコードを確認します。README には [テキストイベント形式](../README.md#log-output-plugin) が記載されています。`TX`、`GOVERNANCE`、`ROLLBACK` もイベント形式に含まれます。イベントレコードを出力するには、ログレベルに `info` または `debug` が必要です。
 
-2. **ChainSync intersection（active tip）を検証します。** スタックを起動したまま、いくつかのブロックが同期されるまで待ちます（例: slot 100 以上）。その後、`adder` サービスだけを再起動します。
+2. **ChainSync intersection（active tip）を検証します。** スタックを起動したまま、Dingo がいくつかのブロックを同期するまで待ちます（例: slot 100 以上）。その後、`adder` サービスだけを再起動します。
 
    ```bash
    docker compose restart adder
