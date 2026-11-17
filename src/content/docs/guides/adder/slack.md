@@ -117,8 +117,7 @@ When Slack returns HTTP `429`, Adder reads `Retry-After` as a nonnegative whole
 number of seconds:
 
 1. For a delay from `0` through `60` seconds, Adder records a cooldown for each
-   destination
-   cooldown and retries the same message up to three times after the initial
+   destination and retries the same message up to three times after the initial
    request.
 2. The cooldown also applies to later events for that destination. If the retry
    budget ends, Adder reports the delivery failure but keeps the cooldown.
