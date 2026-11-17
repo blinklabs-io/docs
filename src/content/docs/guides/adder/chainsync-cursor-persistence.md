@@ -9,7 +9,7 @@ description: Configure optional SQLite cursor persistence for ChainSync and inte
 
 This guide describes optional ChainSync cursor persistence for Adder operators and Go integrators. A persisted cursor lets ChainSync resume from the most recently emitted block after a restart while keeping rollback handling aligned with emitted events.
 
-The state path defaults to an empty value.
+Configure a SQLite path when ChainSync should resume from saved progress after a restart.
 
 ## Operator configuration
 
