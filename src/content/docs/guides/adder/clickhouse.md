@@ -41,7 +41,8 @@ The output uses these defaults:
 The `url` value must use `http` or `https`, include a host, and identify only
 an origin. Do not include credentials, a query, a fragment, or a path other
 than `/`. The `database` value must be nonempty and cannot contain whitespace,
-`/`, or `\\`. The `username` value must be nonempty. When a password is set,
+`/`, or a backslash. The `username` value must be nonempty. When configuration
+sets a password,
 use `https` for a remote ClickHouse server; plain HTTP with a password works
 only for localhost or another loopback address. Protect the configuration and
 password with the same access controls used for ClickHouse credentials.
