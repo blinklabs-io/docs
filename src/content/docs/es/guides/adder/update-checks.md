@@ -20,7 +20,7 @@ La opción `Check for Updates...` inicia una comprobación independientemente de
 
 La ventana `Software Update` incluye la casilla `Check for updates weekly`. Activa o desactiva esta casilla para permitir o impedir las comprobaciones automáticas. La misma preferencia también aparece en el asistente de configuración, dentro de la sección `Software Updates`.
 
-Cuando la opción está activa, Adder comprueba si ha transcurrido aproximadamente una semana desde la última comprobación correcta. Si hay una versión nueva que no se ha omitido, Adder abre `Software Update` automáticamente. Si la opción está desactivada, Adder no realiza comprobaciones semanales.
+Cuando la opción está activa, Adder realiza una comprobación cuando han transcurrido siete días desde la última comprobación correcta. Si hay una versión nueva que no se ha omitido, Adder abre `Software Update` automáticamente. Si la opción está desactivada, Adder no realiza comprobaciones semanales.
 
 ### Estado guardado
 
@@ -30,9 +30,9 @@ Adder guarda el estado de las actualizaciones en `adder-tray.yaml`:
 - `last_update_check` conserva la fecha y hora de la última comprobación correcta.
 - `skipped_version` conserva la versión seleccionada para omitirla.
 
-Selecciona `Skip This Version` para cerrar la ventana y pedir a Adder que guarde la versión mostrada como omitida. Las comprobaciones semanales no vuelven a mostrar esa versión, pero una versión posterior puede activar una nueva notificación.
+Selecciona `Skip This Version` para cerrar la ventana; Adder guarda la versión mostrada como omitida. Las comprobaciones semanales no vuelven a mostrar esa versión, pero una versión posterior puede activar una nueva notificación.
 
-Las operaciones de configuración conservan `skipped_version` y `last_update_check`, por lo que volver a aplicar la configuración no restablece este estado.
+Al volver a aplicar la configuración, Adder conserva `skipped_version` y `last_update_check`, por lo que este estado no se restablece.
 
 ## Instalar una actualización
 
@@ -55,9 +55,9 @@ Si macOS o Windows no tienen un instalador para la arquitectura del equipo, Adde
 
 ### Linux y FreeBSD
 
-Adder no instala automáticamente las actualizaciones en Linux ni FreeBSD. Cuando hay una versión nueva, selecciona `Open Release Page` para abrir la página de versiones y descarga allí el paquete correspondiente. Completa la instalación mediante el procedimiento de la plataforma.
+En Linux y FreeBSD, Adder no instala automáticamente las actualizaciones. Cuando hay una versión nueva, selecciona `Open Release Page` para abrir la página de versiones y descarga allí el paquete correspondiente. Completa la instalación mediante el procedimiento de la plataforma.
 
-Adder no sustituye un paquete que falte por otro de una arquitectura distinta en ninguna plataforma.
+Adder no utiliza un paquete de sustitución de otra arquitectura si falta el paquete compatible.
 
 ---
 
