@@ -5,13 +5,13 @@ description: Run the Adder streaming benchmark and collect local CPU, memory, an
 
 ## Overview
 
-This guide covers the streaming and backpressure benchmark for the Adder pipeline and the local workflow for collecting CPU, memory, and scheduler profiles. The benchmark uses synthetic input buffers and output behavior to compare pipeline behavior; it does not establish throughput for a production deployment.
+This guide covers the streaming and backpressure benchmark for the Adder pipeline and the local workflow for collecting CPU, memory, and scheduler profiles. The benchmark uses synthetic input buffers and output behavior to compare pipeline behavior.
 
 Run all commands from the repository root.
 
 ## Run representative benchmarks
 
-Run the event flow, Cardano filter, and event JSON benchmarks from the repository root:
+Run the event flow, Cardano filter, and event JSON benchmarks:
 
 ```sh
 go test ./pipeline ./filter/cardano ./event -run '^$' -bench 'Benchmark(PipelineEventFlow|CardanoFilter|EventJSON)' -benchmem -benchtime=1s -count=5
