@@ -104,7 +104,7 @@ notify_rate_window: 5s
 | `notify_rate_limit` | Límite entero de notificaciones por ventana. Un valor positivo agrupa los avisos que superan el límite. `0` o la ausencia del campo utiliza el valor predeterminado `1`. Un valor negativo desactiva la agrupación. |
 | `notify_rate_window` | Duración de la ventana. `0` o la ausencia del campo utiliza el valor predeterminado `5s`. El valor debe ser positivo cuando se especifica. |
 
-Cuando un límite positivo recibe más coincidencias que las permitidas durante la ventana, Adder Tray conserva el límite y agrupa las coincidencias adicionales en una sola notificación `Multiple events occurred` al finalizar la ventana. Un límite negativo envía cada coincidencia de inmediato y desactiva la agrupación. Los valores omitidos o iguales a `0` utilizan una notificación cada `5s`.
+Cuando un límite positivo alcanza su máximo durante la ventana, Adder Tray agrupa las coincidencias adicionales en una sola notificación `Multiple events occurred` al finalizar la ventana. Un límite negativo envía cada coincidencia de inmediato y desactiva la agrupación.
 
 ### Configuración en el asistente
 
