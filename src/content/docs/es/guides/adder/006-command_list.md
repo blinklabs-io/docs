@@ -247,6 +247,8 @@ description: Lista de Comandos de Adder.
 
 ## Salida:
 
+Las opciones de cada plugin de salida también se pueden establecer en YAML bajo `plugins.output.<plugin>.<option>`. 
+
 ```text
   --output string
 ```
