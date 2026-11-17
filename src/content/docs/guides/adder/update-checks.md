@@ -34,7 +34,7 @@ When the window reports an available release, select `Skip This Version` to dism
 
 1. Open `Check for Updates...` from the Adder tray menu.
 2. Wait for the `Software Update` window to report an available release.
-3. Confirm that the window offers the `.pkg` installer for the current Mac architecture.
+3. Verify that the window offers the `.pkg` installer for the current Mac architecture.
 4. Select `Install and Relaunch`.
 5. Wait for Adder to download the installer and verify its SHA-256 digest.
 6. Select `Quit & Install` after Adder launches the installer. Adder quits so the installer can complete the update.
@@ -43,12 +43,12 @@ When the window reports an available release, select `Skip This Version` to dism
 
 1. Open `Check for Updates...` from the Adder tray menu.
 2. Wait for the `Software Update` window to report an available release.
-3. Confirm that the window offers the `.msi` installer for the current Windows architecture.
+3. Verify that the window offers the `.msi` installer for the current Windows architecture.
 4. Select `Install and Relaunch`.
 5. Wait for Adder to download the installer and verify its SHA-256 digest.
 6. Select `Quit & Install` after Adder launches the installer. Adder quits so the installer can complete the update.
 
-Adder downloads a matching installer only after the window presents an available release. Adder verifies the installer with its SHA-256 digest before launching it. A missing or invalid digest prevents installation.
+Adder downloads a matching `.pkg` or `.msi` installer only after the window presents an available release. Adder verifies the installer with its SHA-256 digest before launching it. A missing or invalid SHA-256 digest prevents installation.
 
 ## Update Linux and FreeBSD manually
 
