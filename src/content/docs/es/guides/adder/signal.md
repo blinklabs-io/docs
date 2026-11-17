@@ -69,7 +69,7 @@ Adder acepta la respuesta únicamente cuando todas estas condiciones son verdade
 - La respuesta HTTP tiene estado `200`.
 - La respuesta JSON-RPC usa la versión `2.0`.
 - El identificador de respuesta coincide con el identificador de la solicitud.
-- El resultado `send` contiene una marca de tiempo.
+- El resultado correcto de `send` contiene una marca de tiempo distinta de cero.
 - Cada resultado de destinatario informa `SUCCESS`.
 
 Cuando un destinatario falla, Adder informa el tipo de resultado de ese destinatario sin registrar el mensaje ni la dirección. Adder envía los errores al canal de errores de la salida.
