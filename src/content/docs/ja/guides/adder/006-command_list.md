@@ -663,6 +663,245 @@ description: "Adderコマンドの一覧です。"
 
 ***
 
+```
+  --output-clickhouse-url string
+```
+
+> ClickHouse HTTP originを指定します（デフォルト `http://127.0.0.1:8123`）。
+<br />
+
+```
+  --output-clickhouse-database string
+```
+
+> ClickHouseデータベースを指定します（デフォルト `default`）。
+<br />
+
+```
+  --output-clickhouse-username string
+```
+
+> ClickHouseユーザーを指定します（デフォルト `default`）。
+<br />
+
+```
+  --output-clickhouse-password string
+```
+
+> 任意のClickHouseパスワードを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-clickhouse-event-types string
+```
+
+> 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`）。
+<br />
+
+```
+  --output-elasticsearch-url string
+```
+
+> Elasticsearch origin URLを指定します（デフォルト `http://127.0.0.1:9200`）。
+<br />
+
+```
+  --output-elasticsearch-index string
+```
+
+> バージョン付きインデックス名を指定します（デフォルト `adder-events-v1`）。
+<br />
+
+```
+  --output-elasticsearch-api-key string
+```
+
+> 任意のElasticsearch APIキーを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-elasticsearch-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`）。
+<br />
+
+```
+  --output-s3-region string
+```
+
+> AWSリージョンを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-s3-bucket string
+```
+
+> S3バケットを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-s3-prefix string
+```
+
+> 相対オブジェクトキーのプレフィックスを指定します（デフォルト `adder/events`）。
+<br />
+
+```
+  --output-s3-event-types string
+```
+
+> 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`）。
+<br />
+
+```
+  --output-sqs-region string
+```
+
+> AWSリージョンを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-sqs-group-id string
+```
+
+> メッセージグループIDを指定します（FIFOでは必須）（デフォルトは空）。
+<br />
+
+```
+  --output-sqs-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-sqs-queue-url string
+```
+
+> SQSキューURLを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-sns-region string
+```
+
+> AWSリージョンを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-sns-group-id string
+```
+
+> メッセージグループIDを指定します（FIFOでは必須）（デフォルトは空）。
+<br />
+
+```
+  --output-sns-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-sns-topic-arn string
+```
+
+> SNSトピックARNを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-sns-max-message-bytes int
+```
+
+> SNSトピックに設定されたメッセージサイズ上限を指定します（デフォルト `262144`）。
+<br />
+
+```
+  --output-redis-address string
+```
+
+> RedisのTCP `host:port`アドレスを指定します（デフォルト `127.0.0.1:6379`）。
+<br />
+
+```
+  --output-redis-username string
+```
+
+> 任意のRedis ACLユーザー名を指定します（デフォルトは空）。
+<br />
+
+```
+  --output-redis-password string
+```
+
+> 任意のRedisパスワードを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-redis-tls
+```
+
+> Redis接続にTLSを使用します（デフォルト `false`）。Redisの認証情報を使用する場合はTLSを有効にする必要があります。
+<br />
+
+```
+  --output-redis-stream string
+```
+
+> Redis Streamキーを指定します（デフォルト `adder.events`）。
+<br />
+
+```
+  --output-redis-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-kafka-brokers string
+```
+
+> Kafka bootstrapの`host:port`アドレスをカンマ区切りで指定します（デフォルト `127.0.0.1:9092`）。
+<br />
+
+```
+  --output-kafka-topic string
+```
+
+> Kafkaトピックを指定します（デフォルト `adder.events`）。
+<br />
+
+```
+  --output-kafka-username string
+```
+
+> 任意のSASL PLAINユーザー名を指定します（デフォルトは空）。
+<br />
+
+```
+  --output-kafka-password string
+```
+
+> 任意のSASL PLAINパスワードを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-kafka-tls
+```
+
+> ブローカー接続にTLSを使用します（デフォルト `false`）。
+<br />
+
+```
+  --output-kafka-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+
+***
+
 <a id="notifications"></a>
 
 ## 通知:
