@@ -152,7 +152,7 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 
 Select `Notification Rules...` to edit notification targets in `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`, and use the notification category checkboxes to choose which alerts Adder sends. Select `Monitor Everything` to replace the per-target lists with monitoring for all supported target types; this mode cannot be combined with individual targets.
 
-Recent event links use the configured network. Links for transaction and governance events open the transaction identified by its transaction hash, while links for block events open the block identified by its block hash. Pool block notifications are limited to followed pools, and DRep governance notifications are limited to followed DReps. When a governance event contains multiple votes, the notification displays the vote cast by the followed DRep.
+Recent event links use the configured network. Links for transaction and governance events open the transaction identified by its transaction hash, while links for block events open the block identified by its block hash. Adder sends pool block notifications only for followed pools and DRep governance notifications only for followed DReps. When a governance event contains multiple votes, the notification displays the vote cast by the followed DRep.
 
 Applying changes saves the notification rules and immediately refreshes the running notification rules and rate limit without restarting Adder Tray. Deleting a target prompts for confirmation. If a soft reconnect warning appears, the editor remains open, re-enables its inputs, and supports a retry.
 
