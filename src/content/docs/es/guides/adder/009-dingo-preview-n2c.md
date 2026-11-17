@@ -92,7 +92,7 @@ Ejecutar Adder directamente como proceso Go de macOS y apuntarlo al socket UNIX 
 
 ```bash
 # Ejecutar Adder en Mac desde la raíz del repositorio y conectar directamente
-# con el archivo de socket conectado (el script de inicio también imprime este comando)
+# con el archivo de socket puenteado (el script de inicio también imprime este comando)
 go run ./cmd/adder --config config-preview.yaml --input chainsync \
   --input-chainsync-socket-path ~/dingo-ipc/node.socket \
   --input-chainsync-network preview \
