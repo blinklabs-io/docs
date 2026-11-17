@@ -115,7 +115,7 @@ Select the desired event checkboxes. The `Chain rollbacks` checkbox controls cha
 ### Step 3.5 - Startup & Background Activity
 Select `Start Adder automatically on login / reboot` to configure Adder Tray to start automatically when the system logs in or reboots.
 
-The background activity status text reports whether background activity is registered and running. Select `Open Login Items Settings...` to open the Windows startup app settings.
+The status text reports whether Adder's background activity is registered and running. Select `Open Login Items Settings...` to open the Windows startup app settings.
 
 ***
 
@@ -146,9 +146,9 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-Select `Notification Rules...` to edit notification targets for `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`, and to toggle notification categories with the available checkboxes. Select the exclusive `Monitor Everything` mode instead of configuring per-target lists.
+Select `Notification Rules...` to edit notification targets in `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`, and use the notification category checkboxes to choose which alerts Adder sends. Select `Monitor Everything` to replace the per-target lists with monitoring for all supported target types; this mode cannot be combined with individual targets.
 
-Applying changes persists the notification rules and refreshes the running notification rules and rate limit without requiring a tray process restart. Deleting a target prompts for confirmation. A soft reconnect warning leaves the editor open with its inputs re-enabled so the changes can be retried.
+Applying changes saves the notification rules and immediately refreshes the running notification rules and rate limit without restarting Adder Tray. Deleting a target prompts for confirmation. If a soft reconnect warning appears, the editor remains open and re-enables its inputs so the changes can be retried.
 
 Select `About` to open the in-app dialog. When commit metadata is available, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays the version alone.
 
