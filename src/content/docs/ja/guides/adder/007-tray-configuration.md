@@ -91,7 +91,7 @@ Trayが設定を適用すると、対象リストをエンジン設定へ書き�
 | キー | 内容 |
 | --- | --- |
 | `notify_rate_limit` | `notify_rate_window`内で即時に送信する通知の上限です。 |
-| `notify_rate_window` | 通知数を数える時間枠です。Go duration形式で指定します。 |
+| `notify_rate_window` | 通知数を数える時間枠です。`Go duration`形式で指定します。 |
 
 `notify_rate_limit`または`notify_rate_window`を省略するか、値を`0`にすると、既定値の1件の通知を5秒間隔で使用します。`notify_rate_limit`に正の値を指定すると、時間枠内の上限を超えた一致を1件のバッチ通知にまとめ、時間枠の終了時に送信します。`notify_rate_limit`に負の値を指定すると、まとめ処理を無効にし、各一致をすぐに通知します。
 
