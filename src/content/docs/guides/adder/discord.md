@@ -7,7 +7,7 @@ description: Configure Adder's Discord bot output and understand its runtime beh
 
 ## Overview
 
-The `discord` output runs a Discord bot that sends selected Adder events to one
+The `discord` output sends selected Adder events through a Discord bot to one
 configured server and channel. It also registers the read only commands
 `/adder-status` and `/adder-recent` for that server.
 
@@ -32,13 +32,13 @@ plugins:
       event-types: "blocks,rollbacks,governance"
 ```
 
-| Option | Default | Required value and behavior |
+| Option | Default | Requirement and behavior |
 | --- | --- | --- |
 | `bot-token` | Empty | Required. The secret token for the Discord bot. Adder uses it to authenticate REST requests and the Gateway session. |
 | `application-id` | Empty | Required. A positive Discord application ID. Adder uses it when it registers the slash commands and verifies interactions. |
 | `guild-id` | Empty | Required. A positive ID for the Discord server that can receive events and commands. |
 | `channel-id` | Empty | Required. A positive ID for the channel that receives events and accepts the commands. |
-| `event-types` | `blocks,rollbacks,governance` | Required when set explicitly and must contain at least one supported value: `blocks`, `transactions`, `rollbacks`, or `governance`. |
+| `event-types` | `blocks,rollbacks,governance` | Optional. When set, provide at least one supported value: `blocks`, `transactions`, `rollbacks`, or `governance`. |
 
 Transactions remain disabled by default. Add `transactions` to
 `event-types` when transaction messages are required. Adder rejects an empty
