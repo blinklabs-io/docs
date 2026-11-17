@@ -37,6 +37,25 @@ In Go imports and `go.mod` module references, replace `github.com/blinklabs-io/c
 
 Rebuild the project after updating the references. Go resolves the client from the Adder module.
 
+## API route reference
+
+The Adder API exposes the following routes:
+
+| Area | Method | Path | Behavior |
+| --- | --- | --- | --- |
+| Root | `GET` | `/ping` | Returns `pong` as plain text. |
+| Root | `GET` | `/healthcheck` | Returns health status as JSON. The server returns `503 Service Unavailable` when a registered health check reports an unhealthy component. |
+| Root | `GET` | `/events` | Opens a server sent events stream. The server upgrades requests with WebSocket upgrade headers to WebSocket connections. |
+| FCM | `POST` | `/v1/fcm` | Stores an FCM token from a JSON body containing a non empty `fcmToken` value. |
+| FCM | `GET` | `/v1/fcm/{token}` | Returns the stored FCM token. |
+| FCM | `DELETE` | `/v1/fcm/{token}` | Deletes the stored FCM token. |
+| QR setup | `GET` | `/v1/qrcode` | Returns the HTML page that generates a QR code for connecting to the Adder server. |
+| OpenAPI | `GET` | `/swagger/` | Opens the Swagger UI. Include the trailing slash in this URL. |
+
+The FCM and QR routes accept their documented trailing slash variants, such as `/v1/fcm/` and `/v1/qrcode/`. The root `/ping` and `/healthcheck` routes also accept a trailing slash. The `/events` stream preserves SSE and WebSocket behavior through the server middleware. Read and header timeouts limit connections, while the server leaves write timeouts unset so they do not interrupt active streams.
+
+An FCM request with malformed JSON or without a non empty `fcmToken` returns a JSON `400 Bad Request` response. Each request produces structured access log data, and panic recovery logs handler panics and returns `500 Internal Server Error` when the handler has not started a response.
+
 ---
 
 <!-- doc-holiday-watermark -->
