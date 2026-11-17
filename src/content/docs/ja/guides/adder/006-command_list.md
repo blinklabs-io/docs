@@ -918,9 +918,9 @@ description: "Adderコマンドの一覧です。"
 
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
 
-***
-
 > [Kafka出力の詳細](./kafka.md)を参照してください。
+
+***
 
 <a id="managed-routing"></a>
 
