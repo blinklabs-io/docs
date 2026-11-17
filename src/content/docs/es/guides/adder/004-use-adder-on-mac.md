@@ -25,7 +25,7 @@ Para crear una compilación local con notificaciones funcionando, ejecuta:
 make pkg-macos-adhoc
 ```
 
-Este objetivo usa `ADHOC=1` para firmar la aplicación de forma ad hoc. El paquete `.pkg` no está firmado y no se espera que Gatekeeper lo acepte. Si la compilación no tiene credenciales de firma de lanzamiento, también omite la firma y la notarización y muestra advertencias.
+Este objetivo establece `ADHOC=1` y firma la aplicación de forma ad hoc. El instalador deja el paquete `.pkg` sin firmar, por lo que Gatekeeper no lo acepta. Si la compilación no tiene credenciales de firma de lanzamiento, también omite la firma y la notarización y muestra advertencias.
 
 ## Abrir Adder
 
