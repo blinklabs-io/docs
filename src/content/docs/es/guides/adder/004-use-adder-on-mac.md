@@ -32,6 +32,27 @@ Este objetivo establece `ADHOC=1` y firma la aplicación de forma ad hoc. El ins
 - Abre `Adder` desde `/Applications`.
 - O ejecuta `open /Applications/Adder.app` en Terminal.
 
+## Configurar el inicio y la actividad en segundo plano
+
+Durante la configuración de Adder Tray, activa la casilla `Start Adder automatically on login / reboot` para iniciar Adder automáticamente al iniciar sesión o reiniciar macOS. El estado de actividad en segundo plano indica si Adder está registrado y en ejecución.
+
+Selecciona `Open Login Items Settings...` para abrir los ajustes correspondientes de macOS. También es posible consultar este estado en **System Settings > General > Login Items & Extensions**, en las secciones **Open at Login** y **App Background Activity**. Esta configuración sincroniza el inicio automático de Adder Tray con el elemento de inicio de sesión y el agente de lanzamiento de macOS.
+
+## Editar las reglas de notificación
+
+En el menú de Adder Tray, selecciona `Notification Rules...` para editar los destinos de `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`, así como las categorías de notificación de cada destino.
+
+- Activa o desactiva las categorías de notificación según las necesidades de cada destino.
+- Selecciona `Monitor Everything` para supervisar todo en lugar de configurar destinos individuales. Esta opción es exclusiva y no se combina con destinos específicos.
+- Selecciona `Apply` para guardar los cambios y actualizar inmediatamente las reglas y los límites de frecuencia de las notificaciones. No es necesario reiniciar el proceso de Adder Tray.
+- Al eliminar un destino, confirma la eliminación cuando el editor lo solicite.
+
+Si aparece una advertencia de reconexión después de aplicar los cambios, el editor permanece disponible y vuelve a habilitar sus controles para permitir otro intento cuando los datos de entrada estén habilitados.
+
+## Consultar la versión
+
+En el menú de Adder Tray, selecciona `About` para abrir el diálogo integrado de información. El diálogo muestra `Version: <version> (commit: <hash>)` cuando hay un hash de commit disponible; de lo contrario, muestra únicamente `Version: <version>`.
+
 
 
 ---
