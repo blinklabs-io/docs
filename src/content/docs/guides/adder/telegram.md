@@ -26,7 +26,7 @@ plugins:
 
 The `chat-id` value selects the only chat that receives event messages and command replies. The `settings-file` value selects the local YAML file that stores notification preferences. Adder must be able to write the file's parent directory.
 
-Set `operator-user-ids` to a comma separated list of positive Telegram user IDs when the configured chat is a group or supergroup. These users can change notification preferences in that chat. Leave the value empty for a private chat or when no group member should change preferences.
+Set `operator-user-ids` to a comma-separated list of positive Telegram user IDs when the configured chat is a group or supergroup. These users can change notification preferences in that chat. Leave the value empty for a private chat or when no group member should change preferences.
 
 ## Persisted notification settings
 
