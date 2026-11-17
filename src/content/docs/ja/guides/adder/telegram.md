@@ -91,3 +91,13 @@ Adder パイプラインの状態を返します。状態を取得できる場�
 - チャネルはイベントメッセージを受信できますが、これらのメッセージコマンドは使用できません。
 
 通知設定を変更できないユーザーが `/notify` を実行すると、Adder は設定済みチャットの所有者またはオペレーターだけが通知設定を変更できることを返します。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

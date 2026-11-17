@@ -40,3 +40,13 @@ Adderは、選択した次のeventを読み取る前に、各recordの結果を�
 Adderは、brokerが拒否したdeliveryまたは成否が不明なdeliveryをpluginのerror channelに報告します。Adderは失敗したrecordをアプリケーションレベルで再送しません。replyを失う前にbrokerがrecordを受け取った可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
 
 shutdownまたはrestartの後、buffered eventを復元しません。成功したacknowledgementは、consumer processingではなく、brokerの設定したreplication policyを確認します。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

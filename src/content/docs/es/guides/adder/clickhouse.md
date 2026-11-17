@@ -101,3 +101,13 @@ La salida trata los rollbacks como filas ordinarias con `event_type`
 `input.rollback`; no elimina las filas anteriores. El orden de ClickHouse
 facilita las consultas analíticas, pero no establece un orden global para
 reproducir la cadena.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

@@ -37,3 +37,13 @@ Adder espera el resultado de cada registro antes de leer el siguiente evento sel
 Adder no vuelve a enviar un registro fallido en el nivel de la aplicación. El broker puede haber recibido el registro antes de que el cliente pierda la respuesta, y un envío nuevo no compartiría el número de secuencia del productor original. El cliente puede reconectarse para procesar eventos posteriores.
 
 Adder no recupera los eventos almacenados en búfer después del apagado o reinicio. Una confirmación correcta confirma la política de replicación configurada en el broker, no el procesamiento por parte de los consumidores.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

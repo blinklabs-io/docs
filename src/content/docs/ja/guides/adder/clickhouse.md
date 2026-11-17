@@ -71,3 +71,13 @@ plugins:
 正常に挿入した行はすべて保持します。同じイベントのJSONから生成した同じ`event_hash`を持つ行も保持します。出力は`deduplicate_insert=disable`と`insert_deduplicate=0`を指定してClickHouseの挿入重複排除を無効にするため、同一ブロックをロールバック後に再適用すると、別の発生として保存します。
 
 ロールバックは通常の`input.rollback`行として保存し、以前に保存した行を削除しません。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

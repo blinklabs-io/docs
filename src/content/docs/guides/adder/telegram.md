@@ -94,3 +94,14 @@ Telegram privacy mode may require a group member to address a command to the bot
 - Adder reports that only the configured chat owner or an operator can change notifications when authorization fails.
 - Adder reports that `output.telegram.settings-file` must be configured when a preference change has no settings file.
 - If Adder cannot save a preference, it leaves the change unapplied and reports that it could not save the notification preferences.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

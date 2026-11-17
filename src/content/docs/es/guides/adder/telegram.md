@@ -63,3 +63,13 @@ Adder procesa comandos únicamente cuando el mensaje procede del `chat-id` confi
 El bot acepta un comando dirigido a su propio nombre de usuario, como `/status@YourBotName`, cuando la privacidad del grupo requiere esa forma. Ignora los comandos dirigidos a otro bot.
 
 Los canales pueden recibir mensajes de eventos, pero no pueden usar estos comandos de mensajes.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

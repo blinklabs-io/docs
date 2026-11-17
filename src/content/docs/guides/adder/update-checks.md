@@ -59,3 +59,13 @@ Adder does not install updates automatically on Linux or FreeBSD. When the `Soft
 3. Install the downloaded package using the platform's normal installation procedure.
 
 macOS and Windows also use `Open Release Page` when a release does not provide an installer for the current architecture. Adder never substitutes an installer for another architecture. The release page lists the supported platforms and architectures for manual installation.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
