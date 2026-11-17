@@ -46,7 +46,7 @@ When `monitor_everything` is `false`, configure at least one explicit target in 
 
 ## Persistence and migration
 
-Adder Tray saves `filter`, `notify_rate_limit`, and `notify_rate_window` in `adder-tray.yaml`. The tray uses these settings when it matches events for desktop notifications; changing per-target values in the engine configuration does not change tray matching.
+Adder Tray saves `filter`, `notify_rate_limit`, and `notify_rate_window` in `adder-tray.yaml`. Changing per-target values in the engine configuration does not change desktop notification matching.
 
 Older configurations may contain target values under the engine-side `filter.cardano` keys `address`, `drep`, `pool`, `asset`, or `policy`, or under older tray template and parameter settings. During migration, Adder Tray carries supported legacy values into the corresponding structured lists. It splits comma-separated values into individual targets.
 
