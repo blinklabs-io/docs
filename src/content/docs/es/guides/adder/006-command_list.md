@@ -147,7 +147,7 @@ description: Lista de Comandos de Adder.
   --input-chainsync-network string
 ```
 
-> especifica un nombre de red Cardano conocido (predeterminado "mainnet")
+> especifica un nombre de red Cardano conocido, como `mainnet`, `preprod`, `preview` o `dijkstra` (predeterminado "mainnet")
 <br />
 
 ```text
@@ -169,6 +169,12 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica la ruta al socket UNIX al que conectarse
+
+```
+  --input-chainsync-state-path string
+```
+
+> ruta a un archivo de base de datos SQLite para conservar el cursor de ChainSync entre reinicios; si no se establece, no se conserva ningún cursor (predeterminado "")
 
 ***
 
