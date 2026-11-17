@@ -408,7 +408,7 @@ description: "Adderコマンドの一覧です。"
 > 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。少なくとも1つのタイプが必要です。
 <br />
 
-> 詳細は[Signal出力](./signal.md)を参照してください。
+> [Signal出力の詳細](./signal.md)を参照してください。
 
 ```
   --output-nats-servers string
@@ -438,7 +438,7 @@ description: "Adderコマンドの一覧です。"
 > 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。少なくとも1つのタイプが必要です。
 <br />
 
-> 詳細は[NATS出力](./nats.md)を参照してください。
+> [NATS出力の詳細](./nats.md)を参照してください。
 
 ```
   --output-webhook-state-path string
@@ -453,7 +453,7 @@ description: "Adderコマンドの一覧です。"
 
 > 保持する保留中の配信の最大数を指定します（デフォルト `1024`）。`state-path`を設定する場合は`11`以上が必要です。
 
-> 詳細は[再起動安全なWebhook配信](./webhook-durability.md)を参照してください。
+> [再起動安全なWebhook配信の詳細](./webhook-durability.md)を参照してください。
 
 ***
 
