@@ -49,7 +49,15 @@ Adder handles a durable event in this order:
 
 When Adder starts, it opens the state file and replays all pending entries in order before startup returns. If replay cannot complete, startup fails and the entries remain in SQLite. During normal operation, Adder also sends each newly appended entry and continues with the queue in order.
 
+Start and Stop coordinate the worker and its shared channels under a mutex. Stop waits for the worker to exit before it closes and clears the event and error channels. If Stop interrupts a retry wait, Adder cancels the wait and stops the delivery run instead of leaving the worker asleep. A shutdown cancellation is not a receiver response, so it does not acknowledge or remove a persisted entry; the entry remains available for replay according to the SQLite contract.
+
 An HTTP `2xx` response confirms that the receiver accepted the request according to HTTP semantics. It does not confirm that the receiver completed its own downstream work. Pending entries have no automatic age expiry. An entry remains until the receiver returns `2xx` or an operator removes it explicitly.
+
+## Validation and errors
+
+Adder validates each webhook event before it sends the event. A nil payload, nil or unexpected context, unexpected payload type, or unknown event type produces an error on the plugin error channel, and Adder does not send that event. Webhook formatting and marshaling errors, invalid request setup, and transport errors also surface as errors instead of causing a panic. Adder handles the default HTTP transport safely when it prepares a request.
+
+In non-durable mode, these validation and delivery errors are reported without persisting the event. In durable mode, validation and formatting errors occur before the SQLite append and therefore are not queued. Errors that occur after an entry reaches SQLite follow the durable retry and replay behavior described below, so a shutdown or failed delivery does not remove the persisted entry.
 
 ## Retries and failures
 
