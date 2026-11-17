@@ -46,8 +46,8 @@ estos tipos.
 ## Esquema de `adder_events_v1`
 
 La salida crea `adder_events_v1` si la tabla todavía no existe. ClickHouse usa
-el motor `MergeTree`, particiona las filas por el mes de `event_time` y aplica
-el orden analítico `(event_time, event_type, event_hash)`.
+el motor `MergeTree`, particiona las filas por el mes de `event_time` y las
+ordena para las consultas mediante `(event_time, event_type, event_hash)`.
 
 | Campo | Tipo de ClickHouse | Descripción |
 | --- | --- | --- |
