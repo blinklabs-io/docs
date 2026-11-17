@@ -135,7 +135,7 @@ Pulsa `Finish Setup`.
 
 Para ver eventos recientes, ajustar la configuración o iniciar, detener o reiniciar la aplicación, haz clic derecho en Adder en la bandeja del sistema y elige la opción que necesites.
 
-Adder guarda el registro de la bandeja de Windows en `%LOCALAPPDATA%/Adder/Logs/adder-tray.log`, incluidos los detalles de los pánicos recuperados. Solo se ejecuta una instancia de la bandeja por sesión de inicio de sesión.
+Adder guarda el registro de la bandeja de Windows en `%LOCALAPPDATA%/Adder/Logs/adder-tray.log` y registra allí los detalles de los pánicos recuperados. Solo se ejecuta una instancia de la bandeja por sesión de inicio de sesión.
 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
