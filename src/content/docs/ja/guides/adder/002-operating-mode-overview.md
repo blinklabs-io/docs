@@ -1,6 +1,6 @@
 ---
 title: 動作モードの概要
-description: Adderの動作モードの概要。Adderには、Adder Tray、Adder CLI、およびManaged customer routingの3つの主要モードがあります。
+description: Adderの動作モードの概要。Adderには、Adder Tray、Adder CLIとManaged customer routingの3つの主要モードがあります。
 ---
 
 Adderには、利用者や導入環境に合わせた3つの動作モードがあります。使いやすさ、設定の柔軟性、運用上の制御を考慮して、適切なモードを選択してください。
