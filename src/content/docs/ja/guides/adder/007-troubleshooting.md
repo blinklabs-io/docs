@@ -257,6 +257,12 @@ GOEXPERIMENT=goroutineleakprofile go build -o adder ./cmd/adder
 プロファイラーを有効にし、debugポートを有効にすると、`net/http/pprof`のエンドポイントから`goroutine/leak`プロファイルを取得できます。
 
 ```bash
+GOEXPERIMENT=goroutineleakprofile ./adder \
+  --debug-address 127.0.0.1 \
+  --debug-port 6060
+```
+
+```bash
 go tool pprof http://localhost:6060/debug/pprof/goroutineleak
 ```
 
