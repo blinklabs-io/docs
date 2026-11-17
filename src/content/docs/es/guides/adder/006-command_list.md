@@ -74,8 +74,8 @@ description: Lista de Comandos de Adder.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
 > 5. `input.drep-registration` - Se registró un DRep.
-> 6. `input.drep-update` - Se actualizó un DRep.
-> 7. `input.drep-retirement` - Se retiró un DRep.
+> 6. `input.drep-update` - Un DRep actualizó su información.
+> 7. `input.drep-retirement` - Un DRep se retiró.
 >
 
 
