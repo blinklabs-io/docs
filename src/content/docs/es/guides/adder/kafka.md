@@ -21,7 +21,7 @@ Los parámetros admiten los siguientes valores:
 - `brokers`: lista de direcciones de bootstrap de Kafka separadas por comas, con el formato `host:port`. El valor predeterminado es `127.0.0.1:9092`.
 - `topic`: topic de Kafka que recibe los eventos. El valor predeterminado es `adder.events`.
 - `username` y `password`: credenciales opcionales de SASL PLAIN. Configure ambos valores juntos y active `tls`; cuando estas credenciales están presentes, Adder requiere TLS. Proporcione los secretos mediante una configuración administrada para secretos.
-- `tls`: activa TLS para las conexiones con los brokers cuando se establece en `true`. Use `true` para habilitar TLS. El valor predeterminado es `false`.
+- `tls`: activa TLS para las conexiones con los brokers. Establezca `tls` en `true` para habilitar TLS. El valor predeterminado es `false`.
 - `event-types`: tipos de eventos separados por comas. El valor predeterminado es `blocks,rollbacks,governance`. También puede seleccionar `transactions`, `drep-registration`, `drep-update` y `drep-retirement`.
 
 ## Entrega de eventos
@@ -34,6 +34,6 @@ El productor solicita confirmación de todas las réplicas en sincronización (`
 
 Adder espera el resultado de cada registro antes de leer el siguiente evento seleccionado. Cada envío tiene un plazo de diez segundos. Adder informa la entrega rechazada o incierta mediante el canal de errores del plugin.
 
-Adder no vuelve a enviar un registro fallido en el nivel de la aplicación. El broker puede haber recibido el registro antes de que se pierda la respuesta, y un envío nuevo no compartiría el número de secuencia del productor original. El cliente puede reconectarse para procesar eventos posteriores.
+Adder no vuelve a enviar un registro fallido en el nivel de la aplicación. El broker puede haber recibido el registro antes de que el cliente pierda la respuesta, y un envío nuevo no compartiría el número de secuencia del productor original. El cliente puede reconectarse para procesar eventos posteriores.
 
 Adder no recupera los eventos almacenados en búfer después del apagado o reinicio. Una confirmación correcta confirma la política de replicación configurada en el broker, no el procesamiento por parte de los consumidores.
