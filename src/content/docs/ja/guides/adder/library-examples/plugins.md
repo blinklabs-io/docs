@@ -14,9 +14,9 @@ sidebar:
 
 - `plugin.Plugin` ではなく `plugin.ManagedPlugin` を実装します。この契約は `StartContext`、`Stop`、`Role`、`ErrorChan`、`InputChan`、`OutputChan`、`Failed`、`Failure` を定義し、パイプラインは `StartContext` で実行を開始します。
 - `plugin.Base` を埋め込み、実行コンテキスト、入出力ポート、診断エラー、および終端失敗の共通処理を利用します。
-- `Role` で入力、フィルター、出力の種別を返し、各プラグインが使用するポートと一致させます。
+- `Role` で入力、フィルター、出力の種別を返し、各プラグインが使用するポート要件と一致させます。
 - リソースを取得する処理を `StartContext` に置き、`Stop` でキャンセルを伝播して追跡中のワーカーが終了するまで待機します。
-- 終端エラーを `plugin.Base` の `Fail` に渡します。パイプラインはその失敗を検出して実行をキャンセルし、`Pipeline.Failed` と `Pipeline.Failure` から結果を公開します。
+- 終端エラーを `plugin.Base` の `Fail` に渡します。パイプラインはその失敗を検出し、`Pipeline.Failed` で通知して実行をキャンセルします。
 
 ### 設定 API の移行
 
