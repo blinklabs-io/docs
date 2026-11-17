@@ -25,7 +25,7 @@ plugins:
 ```
 
 - `brokers`には、1つ以上のKafka bootstrapブローカーをカンマ区切りで指定します。各値は有効な`host:port`形式で、hostとportを含める必要があります。既定値は`127.0.0.1:9092`です。
-- `topic`にはKafka topicを指定します。topic名は1〜249文字のASCIIで、英数字、`.`、`_`、`-`だけを使用できます。`.`と`..`は指定できません。既定値は`adder.events`です。Adderを起動する前にtopicを作成してください。
+- `topic`にはKafka topicを指定します。topic名は1〜249文字のASCIIで、英数字、`.`、`_`、`-`だけを使用できます。`.`と`..`は指定できません。既定値は`adder.events`です。Adderを起動する前にtopicを作成します。
 - `username`と`password`はSASL PLAINの認証情報です。既定値は空です。片方だけを設定した構成は無効です。両方を設定する場合は`tls: true`も指定してください。シークレット管理機能を通じて認証情報を渡します。
 - `tls`はブローカー接続でTLSを使用します。既定値は`false`です。SASL認証情報を使用する場合はTLSが必須です。
 - `event-types`には、カンマ区切りで配信するイベント種別を指定します。既定値は`blocks,rollbacks,governance`です。`blocks`、`transactions`、`rollbacks`、`governance`、`drep-registration`、`drep-update`、`drep-retirement`だけを指定できます。Adderは未対応のイベント種別を含む構成を拒否します。
@@ -46,7 +46,7 @@ Adderは`ProduceSync(...).First()`で各recordの結果を同期的に待って�
 
 1つのAdder producerはrecordを1つのpartitionに送り、topicのpartition数を変更しない限り、event typeが変わっても順序を維持します。この順序を使用する場合、topicのpartition数を増やさないでください。複数のAdder processは、全体で共有する順序を持ちません。
 
-brokerがdeliveryを拒否した場合、またはdeliveryの成否が不明な場合、Adderはそのrecordをpluginのerror channelに報告します。`TrySendError`は不確実なdeliveryも報告しますが、Adderはアプリケーションレベルで再送しません。応答を失う前にbrokerがrecordを受け取っていた可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
+Adderは、brokerがdeliveryを拒否した場合、またはdeliveryの成否が不明な場合に、`TrySendError`を通じてそのrecordをpluginのerror channelに報告します。Adderはアプリケーションレベルで再送しません。応答を失う前にbrokerがrecordを受け取っていた可能性があり、新しい送信は元のproducer sequence numberを共有しないためです。clientは後続のeventで再接続できます。
 
 成功したacknowledgementはconsumer processingの完了を示しません。brokerが設定したreplication policyを満たしたことだけを示します。
 
