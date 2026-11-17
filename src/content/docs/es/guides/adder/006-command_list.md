@@ -372,7 +372,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos seleccionados separados por comas (predeterminado "blocks,rollbacks,governance"); debe incluir al menos un tipo admitido
 <br />
-> Consulta la [salida Signal](./signal.md).
+> Consulta la [referencia de Signal](./signal.md).
 
 ```text
   --output-nats-servers string
@@ -401,7 +401,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 <br />
-> Consulta la [salida NATS](./nats.md).
+> Consulta la [referencia de NATS](./nats.md).
 
 ```text
   --output-webhook-format string
@@ -449,7 +449,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > máximo de entregas pendientes persistentes (predeterminado `1024`); cuando `state-path` no está vacío, debe ser al menos `11`
-> Consulta la [entrega duradera de webhooks](./webhook-durability.md).
+> Consulta la [referencia de webhooks duraderos](./webhook-durability.md).
 
 ### Salida `slack`
 
