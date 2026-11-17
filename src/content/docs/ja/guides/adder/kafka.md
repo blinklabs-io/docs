@@ -28,19 +28,19 @@ plugins:
 - `topic`にはKafka topicを指定します。topic名は1〜249文字のASCIIで、英数字、`.`、`_`、`-`だけを使用できます。`.`と`..`は指定できません。既定値は`adder.events`です。Adderを起動する前にtopicを作成してください。
 - `username`と`password`はSASL PLAINの認証情報です。既定値は空です。片方だけを設定した構成は無効です。両方を設定する場合は`tls: true`も指定してください。シークレット管理機能を通じて認証情報を渡します。
 - `tls`はブローカー接続でTLSを使用します。既定値は`false`です。SASL認証情報を使用する場合はTLSが必須です。
-- `event-types`には、カンマ区切りで配信するイベント種別を指定します。既定値は`blocks,rollbacks,governance`です。`blocks`、`transactions`、`rollbacks`、`governance`、`drep-registration`、`drep-update`、`drep-retirement`だけを指定できます。未対応のイベント種別を含む構成は拒否されます。
+- `event-types`には、カンマ区切りで配信するイベント種別を指定します。既定値は`blocks,rollbacks,governance`です。`blocks`、`transactions`、`rollbacks`、`governance`、`drep-registration`、`drep-update`、`drep-retirement`だけを指定できます。Adderは未対応のイベント種別を含む構成を拒否します。
 
 ## 起動・配信・終了
 
 ### 起動
 
-`start()`はinput-reading loopを開始する前にブローカーへpingを送信します。pingが成功しない場合、Adderは配信ワーカーを開始しません。
+`start()`は入力読み取りループを開始する前にブローカーへpingを送信します。pingが成功しない場合、Adderは配信ワーカーを開始しません。
 
 ### 配信
 
 各recordのvalueには、完全なAdder event JSONが入ります。keyは常に`adder.events`です。
 
-producerは`RequiredAcks(kgo.AllISRAcks())`を使用し、すべてのin-sync replicaからacknowledgementを要求します（`acks=all`）。内部retryにはidempotent producerを使用します。これはproducer内部の再試行であり、Adderは失敗したrecordをアプリケーションレベルで再送しません。
+producerは`RequiredAcks(kgo.AllISRAcks())`を使用し、すべてのin-sync replicaからacknowledgementを要求します（`acks=all`）。内部retryにはidempotent producerを使用します。
 
 Adderは`ProduceSync(...).First()`で各recordの結果を同期的に待ってから、選択した次のeventを読み取ります。各recordには`kgo.RecordDeliveryTimeout`による10秒のdeadlineがあります。
 
