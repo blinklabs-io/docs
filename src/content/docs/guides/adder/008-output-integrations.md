@@ -20,6 +20,20 @@ Each output selects events with `event-types`. Supported values include
 selection. Adder rejects an empty selection and rejects event names that the
 selected plugin does not support.
 
+## Output references
+
+The dedicated references below document each output's configuration options and
+delivery contract:
+
+- [Discord bot output](./discord.md)
+- [Slack output](./slack.md)
+- [Matrix output](./matrix.md)
+- [ClickHouse output](./clickhouse.md)
+- [Kafka output](./kafka.md)
+- [NATS output](./nats.md)
+- [Signal output](./signal.md)
+- [Durable webhook delivery](./webhook-durability.md)
+
 ## PostgreSQL
 
 The `postgres` output appends selected events to an existing PostgreSQL
