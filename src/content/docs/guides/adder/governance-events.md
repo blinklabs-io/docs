@@ -13,7 +13,7 @@ Adder emits one `input.governance` event for each transaction that contains gove
 
 ## Event envelope
 
-The event contains these top level fields:
+The event contains these top-level fields:
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
@@ -28,10 +28,10 @@ The `context` object identifies the transaction and its position on the chain.
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| `transactionHash` | string | 32 byte transaction hash in hexadecimal form. |
+| `transactionHash` | string | 32-byte transaction hash in hexadecimal form. |
 | `blockNumber` | number | Absolute block height. |
 | `slotNumber` | number | Slot number of the block. |
-| `transactionIdx` | number | Zero based transaction index within the block. |
+| `transactionIdx` | number | Zero-based transaction index within the block. |
 | `networkMagic` | number | Network magic value for the connected node. |
 
 ### `payload`
@@ -57,7 +57,7 @@ Each item represents a proposed governance action.
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | `index` | number | Proposal index within the transaction. |
-| `deposit` | number (`uint64`) | Proposal deposit in Lovelaces. Adder emits a non negative unsigned 64 bit value and does not convert or clamp it to a signed integer. |
+| `deposit` | number (`uint64`) | Proposal deposit in Lovelaces. Adder emits the field as a non-negative unsigned 64-bit value. |
 | `rewardAccount` | string | Stake or reward address that receives the deposit after completion. |
 | `actionType` | string | One of `ParameterChange`, `HardForkInitiation`, `TreasuryWithdrawal`, `NoConfidence`, `UpdateCommittee`, `NewConstitution`, `Info`, or `Unknown`. |
 | `actionData` | object | Data for the selected action type. |
@@ -86,7 +86,7 @@ Each item represents a change to a DRep status.
 | `certificateType` | string | `Registration`, `Update`, or `Deregistration`. |
 | `drepHash` | string | DRep credential hash in hexadecimal form. |
 | `drepId` | string | Bech32 DRep ID, such as `drep1...` or `drep_script1...`. |
-| `deposit` | number (`uint64`) | Lovelace deposit for registration or deregistration. Adder emits a non negative unsigned 64 bit value when the field is present and does not convert or clamp it to a signed integer. Adder omits the field when its value is zero. |
+| `deposit` | number (`uint64`) | Lovelace deposit for registration or deregistration. Adder emits the field as a non-negative unsigned 64-bit value when present and omits it when its value is zero. |
 | `anchor` | object | DRep metadata with `url` and `dataHash` strings. |
 
 ### `voteDelegationCertificates[]`
@@ -101,7 +101,7 @@ Each item represents a stake address delegating voting power to a DRep or a pred
 | `drepHash` | string | DRep credential hash in hexadecimal form; Adder omits it for `Abstain` and `NoConfidence`. |
 | `drepId` | string | Bech32 DRep ID; Adder omits it for `Abstain` and `NoConfidence`. |
 | `poolKeyHash` | string | Pool key hash in hexadecimal form for combined stake and vote delegation types. |
-| `deposit` | number (`uint64`) | Lovelace deposit for registration and delegation types. Adder emits a non negative unsigned 64 bit value when the field is present and does not convert or clamp it to a signed integer. Adder omits the field when its value is zero. |
+| `deposit` | number (`uint64`) | Lovelace deposit for registration and delegation types. Adder emits the field as a non-negative unsigned 64-bit value when present and omits it when its value is zero. |
 
 ### `committeeCertificates[]`
 
@@ -116,7 +116,7 @@ Each item represents a Constitutional Committee credential change.
 
 ## Deposit values and deserialization
 
-JSON represents the three `deposit` fields as numeric values. The JSON format does not enforce a language specific integer type. Consumers must deserialize each present value as a non negative unsigned 64 bit integer and preserve the full range from `0` through `18,446,744,073,709,551,615`.
+JSON represents the three `deposit` fields as numeric values. The JSON format does not enforce a language-specific integer type. Consumers must deserialize each present value as a non-negative unsigned 64-bit integer and preserve the full range from `0` through `18,446,744,073,709,551,615`.
 
 Values greater than `9,223,372,036,854,775,807` exceed the signed 64 bit maximum. Consumers must not convert these values to signed integers or clamp them at that maximum.
 
