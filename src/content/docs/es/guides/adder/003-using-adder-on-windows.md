@@ -61,6 +61,8 @@ Al abrir *Adder Tray App*, verás la pantalla **Welcome**, que te guía para con
 
 ### Paso 3.1 - Seleccionar la red Cardano que quieres observar
 
+Selecciona una de las redes disponibles: `Mainnet`, `Preprod`, `Preview` o `Dijkstra` (`DijkstraNet`).
+
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -99,7 +101,7 @@ Pulsa `Next Step`.
 
 ### Paso 3.4 - Alertas de eventos
 
-Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio.
+Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio, incluida `Chain rollbacks` para recibir alertas de retrocesos de la cadena. Esta casilla controla las alertas de retrocesos de forma independiente de `Blocks minted`.
 
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
