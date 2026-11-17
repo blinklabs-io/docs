@@ -27,7 +27,7 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 
 セットアップウィザードで `Start Adder automatically on login / reboot` を有効にすると、ログイン時または再起動時に Adder が自動的に起動します。この設定は、Adder Tray の launch agent と macOS のログイン項目への登録を同期します。
 
-セットアップウィザードには、バックグラウンドアクティビティが登録済みで実行中かどうかを示す状態も表示されます。macOS の設定を確認または変更するには、`Open Login Items Settings...` を選択します。設定画面では `System Settings > General > Login Items & Extensions` を開き、`Open at Login` と `App Background Activity` を確認します。
+セットアップウィザードは、バックグラウンドアクティビティの登録状態と実行状態を示します。macOS の設定を確認または変更するには、`Open Login Items Settings...` を選択します。設定画面では `System Settings > General > Login Items & Extensions` を開き、`Open at Login` と `App Background Activity` を確認します。
 
 ## 通知ルールエディター
 
@@ -41,11 +41,11 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 
 通知カテゴリのトグルで、対象ごとに受け取る通知の種類を選択します。`Monitor Everything` を選択するとすべてを監視し、個別の監視対象指定とは併用できません。
 
-`Apply` を選択すると変更を保存し、通知ルールとレート制限を直ちに反映します。トレイプロセスの再起動は必要ありません。対象を削除するときは確認が表示されます。適用後の再接続で警告が表示された場合も、エディターは閉じずに入力欄を再び有効にするため、入力を有効にした状態で再試行できます。
+`Apply` を選択すると変更を保存し、通知ルールとレート制限を直ちに反映します。トレイプロセスの再起動は必要ありません。対象を削除する前に、エディターは確認を求めます。適用後の再接続でエディターが警告を示しても、エディターは閉じずに入力欄を再び有効にするため、入力を有効にした状態で再試行できます。
 
 ## About ダイアログ
 
-トレイメニューから `About` を選択すると、アプリ内の About ダイアログが開きます。コミットハッシュが利用できる場合は `Version: <version> (commit: <hash>)` と表示され、利用できない場合は `Version: <version>` のみ表示されます。
+トレイメニューから `About` を選択すると、アプリ内の About ダイアログが開きます。コミットハッシュを利用できる場合、ダイアログは `Version: <version> (commit: <hash>)` を示します。利用できない場合、ダイアログは `Version: <version>` のみを示します。
 
 ## ローカルでパッケージをビルドする
 
