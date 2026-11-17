@@ -61,7 +61,7 @@ Al abrir *Adder Tray App*, verás la pantalla **Welcome**, que te guía para con
 
 ### Paso 3.1 - Seleccionar la red Cardano que quieres observar
 
-Selecciona una de las redes disponibles: `Mainnet`, `Preprod`, `Preview` o `Dijkstra` (`DijkstraNet`).
+Selecciona `Mainnet`, `Preprod`, `Preview` o `Dijkstra`. La opción `Dijkstra` utiliza la red `DijkstraNet`.
 
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
