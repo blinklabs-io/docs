@@ -15,11 +15,11 @@ El endpoint `/events` acepta el parámetro de consulta opcional `replay`:
 GET /events?replay=false
 ```
 
- - Sin `replay`, Adder usa `replay=true` y activa la reproducción de eventos almacenados en el búfer.
+- Sin `replay`, Adder usa `replay=true` y activa la reproducción de eventos almacenados en el búfer.
 - `replay=false` solicita una entrega solo de eventos en directo y excluye la reproducción de eventos almacenados en el búfer.
 - `replay=true` activa la reproducción de eventos almacenados en el búfer.
 
-Adder Tray usa `replay=false` en la conexión inicial para recibir solo eventos en directo. Después de una reconexión, usa `replay=true` para activar la reproducción del búfer. Esta política pertenece a Adder Tray y no constituye un requisito para todos los clientes de la API.
+Adder Tray usa `replay=false` en la conexión inicial para recibir solo eventos en directo. Después de una reconexión, usa `replay=true` para activar la reproducción del búfer. Esta política de conexión pertenece a Adder Tray y no constituye un requisito para todos los clientes de la API.
 
 ## Contrato de apagado de la API Go
 
