@@ -11,7 +11,7 @@ This guide describes how to validate Adder against Dingo on the Cardano `preview
 
 - A checkout of the Adder repository.
 - Docker with Docker Compose support for the containerized workflow.
-- macOS with [`apple/container`](https://github.com/apple/container) installed from the official [Building from Source](https://github.com/apple/container#building-from-source) instructions for the native workflow.
+- Install [`apple/container`](https://github.com/apple/container) on macOS by following the official [Building from Source](https://github.com/apple/container#building-from-source) instructions for the native workflow.
 
 ## Preview N2C configuration
 
