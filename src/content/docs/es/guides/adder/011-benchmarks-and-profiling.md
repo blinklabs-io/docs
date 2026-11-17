@@ -5,6 +5,18 @@ description: Cómo comparar el rendimiento del streaming y recopilar perfiles lo
 
 Este documento describe cómo comparar las capacidades de los búferes de entrada de streaming y cómo recopilar perfiles locales acotados de Adder.
 
+## Benchmarks representativos
+
+Ejecute el siguiente comando desde la raíz del repositorio para ejecutar los benchmarks representativos del flujo de eventos, los filtros de Cardano y la serialización JSON:
+
+```sh
+go test ./pipeline ./filter/cardano ./event -run '^$' -bench 'Benchmark(PipelineEventFlow|CardanoFilter|EventJSON)' -benchmem -benchtime=1s -count=5
+```
+
+`BenchmarkPipelineEventFlow` mide el paso de un evento a la vez por un pipeline en ejecución con cero, uno o tres filtros de paso. `BenchmarkCardanoFilter` utiliza datos de prueba fijos para casos coincidentes y no coincidentes de filtros de direcciones, activos y pools de Cardano. `BenchmarkEventJSON` mide por separado la serialización y deserialización JSON de un evento de transacción, sin incluir una transacción completa del ledger ya decodificada.
+
+La preparación queda fuera de las secciones cronometradas relevantes. Las asignaciones y los tiempos dependen de la carga de trabajo; compare las ejecuciones únicamente con la misma máquina, la misma versión de Go y la misma carga de trabajo.
+
 ## Streaming y contrapresión
 
 La entrada de `ChainSync` tiene un búfer de salida de `2,048` eventos; los canales normales de los plugins tienen `10` slots de forma predeterminada. Compare búferes de entrada sintéticos de `10`, `256` y `2,048` slots con el mismo pipeline y la misma salida:
