@@ -38,7 +38,7 @@ Windows上でAdderをインストールする最も簡単な方法は、<a href=
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
-署名済みMSIはWindows x64およびWindows arm64に対応し、`%ProgramFiles%\Adder`にCLIの`adder.exe`とトレイアプリの`adder-tray.exe`をインストールします。トレイアプリはスタートメニューから起動でき、インストール情報はWindowsの「アプリと機能」（Add/Remove Programs）に表示されます。MSIはScheduled Taskを登録しません。
+署名済みMSIはWindows x64およびWindows arm64に対応し、`%ProgramFiles%\Adder`にCLIの`adder.exe`とトレイアプリの`adder-tray.exe`をインストールします。トレイアプリはスタートメニューから起動でき、MSIはWindowsの「アプリと機能」（Add/Remove Programs）にインストール情報を表示します。MSIはScheduled Taskを登録しません。
 
 ***
 
