@@ -194,10 +194,11 @@ other two names.
 ## Governance events
 
 The chainsync input emits one `input.governance` event for each transaction
-that contains Conway-era governance data. The event collects all governance
-data from that transaction and appears in addition to its
-`input.transaction` event. Adder emits no governance event when a transaction
-contains no governance data.
+that contains Conway-era governance data, including proposal procedures,
+voting procedures, DRep certificates, vote delegation certificates, or
+committee certificates. The event collects all governance data from that
+transaction and appears in addition to its `input.transaction` event. Adder
+emits no governance event when a transaction contains no governance data.
 
 ### Governance event context
 
@@ -227,20 +228,28 @@ also contain the following arrays; Adder omits an array when it has no items:
 | `voteDelegationCertificates` | Vote delegation certificates. |
 | `committeeCertificates` | Constitutional Committee hot key authorization and cold key resignation certificates. |
 
-Each `proposalProcedures` item contains `index`, `deposit` in lovelace,
-`rewardAccount`, `actionType`, action-specific `actionData`, and an `anchor`
-with `url` and `dataHash`. Each `votingProcedures` item contains `voterType`,
-`voterHash`, `voterId`, `govActionTxId`, `govActionIndex`, `vote`, and an
-`anchor` with `url` and `dataHash`.
+Each `proposalProcedures` item reports its transaction `index`, lovelace
+`deposit`, deposit return `rewardAccount`, `actionType`, action-specific
+`actionData`, and an `anchor` with `url` and `dataHash`. `actionType` identifies
+one of `ParameterChange`, `HardForkInitiation`, `TreasuryWithdrawal`,
+`NoConfidence`, `UpdateCommittee`, `NewConstitution`, `Info`, or `Unknown`.
 
-Each `drepCertificates` item contains `certificateType`, `drepHash`, `drepId`,
-an optional `deposit` in lovelace, and an `anchor`. Each
-`voteDelegationCertificates` item contains `certificateType`,
-`stakeCredential`, `drepType`, and, for key or script DReps, `drepHash` and
-`drepId`. Combined stake and vote delegation items also contain `poolKeyHash`
-and an optional `deposit`. Each `committeeCertificates` item contains
-`certificateType`, `coldCredential`, and, for hot key authorization,
-`hotCredential`, plus an `anchor`.
+Each `votingProcedures` item reports `voterType` (`DRep`, `SPO`, `CCHot`, or
+`Unknown`), the voter `voterHash` and `voterId`, the target governance action's
+`govActionTxId` and `govActionIndex`, its `vote` (`Yes`, `No`, `Abstain`, or
+`Unknown`), and an `anchor` with `url` and `dataHash`.
+
+Each `drepCertificates` item reports `certificateType` (`Registration`,
+`Update`, or `Deregistration`), the DRep `drepHash` and `drepId`, an optional
+lovelace `deposit`, and an `anchor`. Each `voteDelegationCertificates` item
+reports `certificateType`, the delegating `stakeCredential`, and `drepType`
+(`KeyHash`, `ScriptHash`, `Abstain`, or `NoConfidence`). Key and script DRep
+delegations also report `drepHash` and `drepId`. Combined stake and vote
+delegation types report `poolKeyHash` and an optional `deposit`.
+
+Each `committeeCertificates` item reports `certificateType` (`AuthHot` or
+`ResignCold`), the committee `coldCredential`, and `hotCredential` for
+`AuthHot`, plus an `anchor`.
 
 Adder always serializes governance `anchor` objects. When no anchor exists,
 their `url` and `dataHash` values are empty strings. Adder omits zero-valued
