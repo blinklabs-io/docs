@@ -148,7 +148,7 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 
 Select `Notification Rules...` to edit notification targets in `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`, and use the notification category checkboxes to choose which alerts Adder sends. Select `Monitor Everything` to replace the per-target lists with monitoring for all supported target types; this mode cannot be combined with individual targets.
 
-Applying changes saves the notification rules and immediately refreshes the running notification rules and rate limit without restarting Adder Tray. Deleting a target prompts for confirmation. If a soft reconnect warning appears, the editor remains open and re-enables its inputs so the changes can be retried.
+Applying changes saves the notification rules and immediately refreshes the running notification rules and rate limit without restarting Adder Tray. Deleting a target prompts for confirmation. If a soft reconnect warning appears, the editor remains open, re-enables its inputs, and supports a retry.
 
 Select `About` to open the in-app dialog. When commit metadata is available, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays the version alone.
 
