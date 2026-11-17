@@ -28,7 +28,7 @@ docker compose up --build -d
 
 ### Verificar la conexión y la intersección
 
-La configuración `config-preview.yaml` establece `intersect-tip: true`. Adder solicita una intersección de ChainSync en la punta actual de Dingo en lugar de comenzar desde el génesis, en el slot 0.
+La configuración activa la intersección de ChainSync en la punta actual de Dingo. Adder utiliza esa punta en lugar de comenzar desde el génesis, en el slot 0.
 
 Comprobar que Dingo se inició, que Adder se conectó al socket UNIX, que completó el protocolo de intersección y que procesa bloques:
 
@@ -50,7 +50,7 @@ Volver a consultar los registros:
 docker compose logs adder
 ```
 
-Adder solicita una nueva intersección en la punta que informa el nodo. Comparar los slots recientes anteriores y posteriores al reinicio. La llegada inmediata de eventos no está garantizada y un rollback puede producir legítimamente un slot inferior.
+Adder solicita una nueva intersección en la punta que informa el nodo. Comparar los slots recientes anteriores y posteriores al reinicio. Los eventos pueden no llegar de inmediato y un rollback puede producir legítimamente un slot inferior.
 
 ### Buscar anomalías
 
@@ -91,8 +91,8 @@ El script `./scripts/container-dingo-start.sh`, ubicado en la raíz del reposito
 Ejecutar Adder directamente como proceso Go de macOS y apuntarlo al socket UNIX conectado:
 
 ```bash
-# Execute Adder on Mac from the repository root, connecting directly to the
-# bridged socket file (this command is also printed by the start script!)
+# Ejecutar Adder en Mac desde la raíz del repositorio y conectar directamente
+# con el archivo de socket conectado (el script de inicio también imprime este comando)
 go run ./cmd/adder --config config-preview.yaml --input chainsync \
   --input-chainsync-socket-path ~/dingo-ipc/node.socket \
   --input-chainsync-network preview \
