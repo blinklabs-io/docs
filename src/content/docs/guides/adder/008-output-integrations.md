@@ -23,7 +23,7 @@ selected plugin does not support.
 ## Dedicated output references
 
 These pages provide the detailed configuration options and delivery contracts
-for the outputs listed below:
+for the following outputs:
 
 - [Discord bot output](./discord.md)
 - [Slack output](./slack.md)
