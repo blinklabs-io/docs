@@ -16,7 +16,7 @@ go get golang.org/x/net/context
 
 ## Migración de la ruta del módulo
 
-El cliente OpenAPI generado ahora usa el módulo `github.com/blinklabs-io/adder/openapi`. Actualiza las referencias existentes al módulo anterior:
+El cliente OpenAPI generado ahora pertenece al módulo `github.com/blinklabs-io/adder/openapi`. Sustituye cualquier referencia al módulo anterior:
 
 Antes:
 
@@ -30,7 +30,7 @@ Después:
 import openapi "github.com/blinklabs-io/adder/openapi"
 ```
 
-En `go.mod`, sustituye el nombre del módulo anterior por el siguiente:
+En `go.mod`, actualiza la declaración del módulo a la siguiente:
 
 ```go
 module github.com/blinklabs-io/adder/openapi
