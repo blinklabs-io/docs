@@ -178,6 +178,12 @@ description: "Adderコマンドの一覧です。"
 
 > 接続先UNIXソケットへのパスを指定します。
 
+```
+  --input-chainsync-state-path string
+```
+
+> 再起動後もChainSyncカーソルを保持するSQLiteデータベースファイルへのパスを指定します。未設定の場合、カーソルは保持されません。
+
 ***
 
 ```
