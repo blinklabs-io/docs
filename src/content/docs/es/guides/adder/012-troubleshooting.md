@@ -5,10 +5,10 @@ description: Cómo capturar perfiles locales de Adder de forma segura.
 
 ## El perfil de fugas de goroutines no está disponible mediante HTTP
 
-El listener de depuración de Adder no registra controladores HTTP `pprof`. Por
-eso, `http://localhost:6060/debug/pprof/goroutineleak` no es una ruta
-disponible. `GOEXPERIMENT=goroutineleakprofile` tampoco habilita un flujo HTTP
-compatible en Adder.
+El listener de depuración de Adder no registra controladores HTTP `pprof`.
+Adder no ofrece la ruta `http://localhost:6060/debug/pprof/goroutineleak`.
+`GOEXPERIMENT=goroutineleakprofile` tampoco habilita un flujo HTTP compatible
+en Adder.
 
 La captura local usa las herramientas de pruebas de Go y no abre un listener de
 red. Los perfiles pueden contener datos de la aplicación y rutas locales; un
@@ -16,7 +16,8 @@ directorio temporal privado limita su exposición.
 
 ## Capturar perfiles localmente
 
-Ejecuta cada perfil por separado a partir de un benchmark local acotado:
+Cada perfil requiere una ejecución separada a partir de un benchmark local
+acotado:
 
 ```sh
 profile_dir=$(mktemp -d)
@@ -35,10 +36,10 @@ retenido en el momento de la captura. `go tool trace` genera el perfil del
 planificador y muestra los retrasos de las goroutines listas para ejecutarse.
 
 La instrumentación cambia los tiempos, así que los perfiles no sirven como
-referencia de rendimiento. Mantén fijos la versión de Go, la máquina, la carga
-de trabajo y la duración del benchmark, y compara varias ejecuciones sin
-perfilado. Para obtener el procedimiento completo, consulta la página de
-[benchmarks y profiling](011-benchmarks).
+referencia de rendimiento. Una comparación fiable mantiene constantes la
+versión de Go, la máquina, la carga de trabajo y la duración del benchmark, y
+compara varias ejecuciones sin perfilado. La página de [benchmarks y
+profiling](011-benchmarks) describe el procedimiento completo.
 
 El listener de depuración permanece desactivado de forma predeterminada. El
 flujo local mantiene los archivos de perfil fuera de una interfaz pública.
