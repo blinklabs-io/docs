@@ -9,7 +9,7 @@ description: Configure optional SQLite cursor persistence for ChainSync and inte
 
 This guide describes optional ChainSync cursor persistence for Adder operators and Go integrators. A persisted cursor lets ChainSync resume from the most recently emitted block after a restart while keeping rollback handling aligned with emitted events.
 
-Cursor persistence is disabled by default. Adder does not write a cursor when the state path remains unset.
+The state path defaults to an empty value.
 
 ## Operator configuration
 
@@ -64,7 +64,7 @@ Go integrations can provide a state store directly or select a different key for
 
 ### Provide a state store
 
-Use `WithStateStore` with a `state.Store` implementation. The SQLite store provides a file backed implementation:
+Use `WithStateStore` with a `state.Store` implementation. The SQLite store provides a file-backed implementation:
 
 ```go
 package main
@@ -109,7 +109,7 @@ Each shared instance requires a distinct key to prevent one cursor from replacin
 ChainSync distinguishes stores that it creates from stores that a caller provides:
 
 - The `state-path` configuration creates an owned SQLite store. ChainSync closes the owned store during shutdown and reopens it for the next run.
-- `WithStateStore` supplies a caller owned store. ChainSync leaves that store open across `Stop` and `StartRun` so shared integrations can continue using it. The caller closes the store when all users finish.
+- `WithStateStore` supplies a caller-owned store. ChainSync leaves that store open across `Stop` and `StartRun` so shared integrations can continue using it. The caller closes the store when all users finish.
 
 This lifecycle applies to the store connection. The SQLite file remains available for later runs when the process closes the store.
 
