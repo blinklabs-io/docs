@@ -137,3 +137,13 @@ Dingo を正常に停止し、ローカルのソケットファイルを削除�
 ```bash
 ./scripts/container-dingo-stop.sh
 ```
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

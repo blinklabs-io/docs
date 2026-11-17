@@ -30,3 +30,13 @@ Adderは次の4つのメトリクスを公開します。
 - `adder_pipeline_processed_events_total`は、設定した出力チャネルがイベントを受け入れたことを示しますが、外部サービスやその他の外部シンクがイベントを受け取ったことを示しません。
 - Adderは、これらのメトリクスにイベントの内容やユーザーデータを含むラベルを使用しません。
 - Adderは、プロセスを再起動するとCounterとHistogramの値をリセットします。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

@@ -197,3 +197,13 @@ plugins:
 選択したイベントごとに、設定したStreamへ1つの`XADD`エントリを追加します。RedisがエントリIDを生成し、`type`フィールドにはAdderイベントタイプ、`event`フィールドにはイベント全体のJSONを設定します。Redisから成功応答を受け取った場合、Redisが追加を受け入れたことを確認しますが、ディスクへの永続化やコンシューマーによる消費は確認しません。エントリは[`XRANGE`](https://redis.io/docs/latest/commands/xrange/)で確認し、[`XREAD`](https://redis.io/docs/latest/commands/xread/)で読み取れます。
 
 各追加処理には5秒の期限があります。クライアントはコマンドを再試行せず、エラーをプラグインのエラーチャネルへ送信します。Redisがコマンドを受け取る前の接続失敗ではイベントを保存しませんが、応答を失うと配送結果が不明になります。`XADD *`を繰り返すと重複を作成する可能性があるため、Adderはどちらの場合も自動的に再生しません。後続イベントではクライアント接続プールを使用し、再接続する場合があります。停止または再起動後に保留イベントを復元しません。Streamのサイズと保持期間はRedis運用者が管理し、この出力はエントリをトリミングしません。
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

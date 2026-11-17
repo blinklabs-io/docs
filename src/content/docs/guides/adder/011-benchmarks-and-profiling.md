@@ -73,3 +73,14 @@ Profile instrumentation changes timings. Do not use profiled runs as the through
 ## Profiling safety boundary
 
 Adder disables its debug listener by default and does not register HTTP pprof handlers. The commands in this guide use Go's test profiler and open no network listener. Do not expose a profiling listener on a public interface; use this private local workflow instead of an HTTP pprof or goroutine leak listener workflow.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

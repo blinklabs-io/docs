@@ -35,3 +35,13 @@ Replace the host and port when the API listener uses different values. Restrict 
 | `adder_pipeline_processing_duration_seconds` | Measures the time from pipeline ingress until all configured output channels accept their event copies. This histogram does not measure delivery by an external sink. |
 
 The metrics do not include labels derived from events or user data. Metric values reset when the Adder process restarts.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

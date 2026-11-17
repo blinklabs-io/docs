@@ -43,3 +43,13 @@ profiling](011-benchmarks) describe el procedimiento completo.
 
 El listener de depuración permanece desactivado de forma predeterminada. El
 flujo local mantiene los archivos de perfil fuera de una interfaz pública.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

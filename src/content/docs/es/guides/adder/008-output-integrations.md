@@ -205,3 +205,13 @@ Cada evento seleccionado produce una entrada `XADD` en el Stream configurado. Re
 Cada adición tiene un plazo de cinco segundos. El cliente no reintenta los comandos; la salida envía el error al canal de errores del plugin. Si la conexión falla antes de que Redis reciba el comando, Redis no almacena el evento; si Redis pierde la respuesta, la entrega queda en estado incierto. Adder no reproduce automáticamente ninguno de los dos casos, porque repetir `XADD *` después de perder una respuesta puede crear un duplicado. Los eventos posteriores usan el grupo de conexiones del cliente y pueden volver a conectarse. La salida no recupera los eventos pendientes después de apagar o reiniciar el proceso. El operador de Redis administra el tamaño y la retención del Stream; esta salida no recorta las entradas.
 
 Una comprobación en vivo inicia Redis, publica un evento seleccionado de Adder y ejecuta `XRANGE adder.events - +` para comprobar los campos de ID, `type` y JSON `event`. Después detiene Redis y verifica que Adder comunica un error de salida.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

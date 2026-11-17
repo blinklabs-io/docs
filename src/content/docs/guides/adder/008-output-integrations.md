@@ -363,3 +363,13 @@ so Adder avoids repeating `XADD` and creating a possible duplicate. Later
 events can reconnect through the client connection pool, but pending events do
 not survive shutdown or restart. Stream size and retention remain the
 operator's responsibility.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
