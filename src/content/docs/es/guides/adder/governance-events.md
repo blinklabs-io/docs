@@ -40,7 +40,7 @@ El objeto `payload` contiene información del bloque y matrices de elementos rel
 | Campo | Tipo | Descripción |
 | :--- | :--- | :--- |
 | `blockHash` | string | Hash del bloque que contiene la transacción, codificado en hexadecimal. |
-| `transactionCbor` | string | CBOR sin procesar de la transacción en formato hexadecimal; aparece solo cuando se establece `--input-chainsync-include-cbor`. |
+| `transactionCbor` | string | CBOR sin procesar de la transacción en formato hexadecimal; Adder lo incluye solo cuando la configuración activa `--input-chainsync-include-cbor`. |
 | `proposalProcedures` | array | Lista de acciones de gobernanza propuestas en esta transacción. |
 | `votingProcedures` | array | Lista de votos emitidos en esta transacción. |
 | `drepCertificates` | array | Lista de certificados de registro, actualización o retiro de DRep. |
@@ -99,8 +99,8 @@ Representa una delegación del poder de voto de una dirección de participación
 | `certificateType` | string | Uno de `VoteDelegation`, `StakeVoteDelegation`, `VoteRegistrationDelegation` o `StakeVoteRegistrationDelegation`. |
 | `stakeCredential` | string | Hash de la credencial de participación del delegante, codificado en hexadecimal. |
 | `drepType` | string | Destino de la delegación: `KeyHash`, `ScriptHash`, `Abstain` o `NoConfidence`. |
-| `drepHash` | string | Hash de la credencial del DRep, codificado en hexadecimal; se omite para `Abstain` y `NoConfidence`. |
-| `drepId` | string | ID Bech32 del DRep; se omite para `Abstain` y `NoConfidence`. |
+| `drepHash` | string | Hash de la credencial del DRep, codificado en hexadecimal; Adder omite el campo para `Abstain` y `NoConfidence`. |
+| `drepId` | string | ID Bech32 del DRep; Adder omite el campo para `Abstain` y `NoConfidence`. |
 | `poolKeyHash` | string | Hash de la clave del pool, codificado en hexadecimal; aparece solo para los tipos combinados de delegación de participación y voto. |
 | `deposit` | `uint64` | Importe del depósito en Lovelace para los tipos de registro y delegación; Adder omite el campo cuando su valor es cero. El consumidor debe deserializarlo como un entero sin signo de 64 bits y no aplicar un límite `MaxInt64`. |
 
@@ -113,7 +113,7 @@ Representa cambios en las credenciales del Comité Constitucional.
 | `certificateType` | string | `AuthHot` para autorizar una credencial activa o `ResignCold` para renunciar a una credencial fría. |
 | `coldCredential` | string | Hash de la credencial fría del comité, codificado en hexadecimal. |
 | `hotCredential` | string | Hash de la credencial activa del comité, codificado en hexadecimal; aparece solo para `AuthHot`. |
-| `anchor` | object | Siempre se serializa; las cadenas están vacías salvo cuando un certificado `ResignCold` proporciona metadatos. |
+| `anchor` | object | Adder siempre serializa este objeto; las cadenas están vacías salvo cuando un certificado `ResignCold` proporciona metadatos. |
 
 ---
 
