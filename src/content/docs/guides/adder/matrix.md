@@ -84,7 +84,7 @@ least one supported event type when it is present.
 ## Matrix delivery contract
 
 For each selected event, Adder sends one request to every configured room. The
-output uses the Matrix Client Server API room send endpoint:
+output uses the Matrix Client-Server API room send endpoint:
 
 ```http
 PUT /_matrix/client/v3/rooms/{room}/send/m.room.message/{txnId}
@@ -106,8 +106,8 @@ complete Adder event JSON. Adder creates a transaction ID for each room and
 event. It reuses that same transaction ID for every retry of that room and
 event, while sends to different rooms use different transaction IDs.
 
-The homeserver accepts a successful room send and returns the event
-successfully. That response does not confirm that a user received or read the
+A successful `200` response with an `event_id` confirms that the homeserver
+accepted the request. It does not confirm that a user received or read the
 message.
 
 ## Retry and rate limit behavior
