@@ -43,11 +43,11 @@ Selecciona `Open Login Items Settings...` para abrir los ajustes correspondiente
 En el menú de Adder Tray, selecciona `Notification Rules...` para editar los destinos de `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`, así como las categorías de notificación de cada destino.
 
 - Activa o desactiva las categorías de notificación según las necesidades de cada destino.
-- Selecciona `Monitor Everything` para supervisar todo en lugar de configurar destinos individuales. Esta opción es exclusiva y no se combina con destinos específicos.
+- Selecciona `Monitor Everything` para supervisar todo en lugar de configurar destinos individuales. Esta opción excluye los destinos específicos.
 - Selecciona `Apply` para guardar los cambios y actualizar inmediatamente las reglas y los límites de frecuencia de las notificaciones. No es necesario reiniciar el proceso de Adder Tray.
 - Al eliminar un destino, confirma la eliminación cuando el editor lo solicite.
 
-Si aparece una advertencia de reconexión después de aplicar los cambios, el editor permanece disponible y vuelve a habilitar sus controles para permitir otro intento cuando los datos de entrada estén habilitados.
+Si aparece una advertencia de reconexión después de aplicar los cambios, el editor permanece disponible y vuelve a habilitar sus controles. Selecciona `Apply` para volver a intentarlo.
 
 ## Consultar la versión
 
