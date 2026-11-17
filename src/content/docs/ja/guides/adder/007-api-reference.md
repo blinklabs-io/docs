@@ -23,10 +23,10 @@ description: "AdderのイベントAPIとGo APIのシャットダウン契約を�
 
 ## Go API のシャットダウン契約
 
-`api.API` インターフェースには、次のメソッドが必要です。
+`api.API` を実装するコードは、次のメソッドを提供する必要があります。
 
 ```go
 Shutdown(context.Context) error
 ```
 
-`APIv1` はリスナーのシャットダウンを実装します。`api.API` を実装するコードと、このインターフェースを呼び出すコードは、`Shutdown(context.Context) error` を処理する必要があります。
+`APIv1` はリスナーのシャットダウンを実装します。`api.API` を呼び出すコードは、`Shutdown(context.Context) error` とそのエラーを処理する必要があります。
