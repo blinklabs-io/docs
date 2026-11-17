@@ -260,7 +260,7 @@ description: Lista de Comandos de Adder.
 
 > establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
 >
-> El mismo ajuste se puede configurar mediante YAML `plugins.output.log.level` o la variable de entorno `OUTPUT_LOG_LEVEL`. Adder migra el ajuste YAML heredado de nivel superior `logging.level` a `plugins.output.log.level` cuando no existe un nivel de `output.log`. La opción de línea de comandos antigua `--logging-level` ya no existe y provoca un error si se proporciona. Adder eliminó la variable de entorno `LOGGING_LEVEL` y la ignora.
+> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Adder migra el ajuste YAML heredado de nivel superior `logging.level` a `plugins.output.log.level` cuando no existe un nivel de `output.log`. La opción de línea de comandos antigua `--logging-level` ya no existe y provoca un error si se proporciona. Adder eliminó la variable de entorno `LOGGING_LEVEL` y la ignora.
 <br />
 
 ```text
@@ -835,7 +835,7 @@ description: Lista de Comandos de Adder.
   --output-redis-tls
 ```
 
-> usar TLS para la conexión a Redis (predeterminado `false`); las credenciales de Redis requieren TLS
+> usar TLS para la conexión a Redis (predeterminado `false`)
 <br />
 
 ```text
