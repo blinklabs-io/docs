@@ -241,12 +241,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+> **Important:** The sample uses [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) so systemd waits for durable storage to close. If you set a finite timeout, allow Dingo's configured `shutdownTimeout` plus the time required to close durable storage. Shutdown may continue after Dingo's `shutdownTimeout` or a remote request deadline. Progress messages and overrun warnings are expected during this period. Only `SIGKILL` abandons a close.
 
 ***
 

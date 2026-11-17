@@ -83,7 +83,10 @@ plugins:
     provider: "default"
     config:
       # capacity is an optional override, not a required setting.
-      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
+      # Default: 1 MiB for Praos and normal serve mode. In Musashi (Leios) mode,
+      # the default is 25 MiB only when the current Leios committee can reach quorum.
+      # When quorum is impossible or unresolved, the default falls back to 1 MiB.
+      # An explicit capacity override stays fixed regardless of quorum status.
       # Leave the key commented or omit it to use the mode default.
       # capacity: 1048576
       # revalidationDeltaCap is optional. Default: 64. The value must be positive.
@@ -307,12 +310,16 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+> ⚠️ The sample uses [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) so systemd waits for durable storage to close. If you set a finite timeout, allow Dingo's configured `shutdownTimeout` plus the time needed to close durable storage.
+> Shutdown may outlast Dingo's `shutdownTimeout` or a remote request deadline. Dingo logs progress and an overrun warning while durable storage closes.
+> Do not use `SIGKILL` unless abandoning a wedged close is intentional.
 
 ***
 

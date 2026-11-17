@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.94.1 設定リファレンス
-description: Dingo v0.94.1 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.94.2 設定リファレンス
+description: Dingo v0.94.2 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.94.1 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example)にあります。同じファイルは [Dingo v0.94.1 のソース](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.94.2 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example)にあります。同じファイルは [Dingo v0.94.2 のソース](https://github.com/blinklabs-io/dingo/blob/v0.94.2/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -100,7 +100,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB`、`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合は `25 MiB` です。この既定値は `serve` の Musashi にも適用します。明示した値はこれらの既定値に優先します。 |
+| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB` を使用します。`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合、現在の委員会が Leios quorum に到達可能なら `25 MiB`、到達不可能または判定不能なら `1 MiB` を使用します。この既定値は `serve` の Musashi にも適用します。Dingo は状態に応じてこの既定値を動的に更新します。`plugins.mempool.config.capacity` を明示した場合は既定値を上書きし、委員会の状態によって変更されません。 |
 
 <a id="ledger-processing"></a>
 
@@ -247,8 +247,12 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。トランザクションの送信と評価に必要ありません。 |
 | 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、プロバイダー全体のトランザクション送信と評価の同時実行数に上限を設けます。 |
 | クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの処理に上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
+| pool-list 全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、pool-list リクエスト全体に上限を設けます。 |
+| クライアントごとの pool-list 同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの pool-list リクエストに上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
 
 変更操作には認証は必要ありません。Dingo は本文を読む前に、設定した変更操作の上限を適用します。設定した上限を使い切った場合だけ、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。上限を設定していない場合、変更操作の受け入れ制限はありません。
+
+pool-list の受け入れ制限は、active pool を返す `GET /api/v0/pools` と retiring pool を返す `GET /api/v0/pools/retiring` に適用します。設定した pool-list 上限のいずれかを使い切ると、Dingo は本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。上限を設定していない場合、pool-list の受け入れ制限はありません。
 
 <a id="shared-outbound-http-user-agent"></a>
 
@@ -427,6 +431,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 | --- | --- | --- | --- | --- |
 | Dingo Koios パリティ API 鍵 | `koiosParity.apiKey` | 削除済み・無効: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | 既定では空です。YAML とこの環境変数では、リテラルの API 鍵を引き続き使用できます。 |
 | Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。CLI 入力にはこのファイル方式を使用します。ファイルを API 鍵の文字列として読み取ります。 |
+| Koios パリティの strict モード | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | `false`（無効）。`true` にすると、Koios の日次 tier quota 枯渇（HTTP `429` または `Exceeded Tier Limit`）を fatal ではなく ERROR として記録し、quota がリセットされるまで ERROR スケジュールで再試行します。Dingo は sampling の `/tx_info` で発生した quota エラーも同じ扱いにし、fatal な `dingo_db_missing` には変換しません。ERROR 状態を永続化できない場合、Dingo は引き続き fatal として扱います。 |
 | 汎用プラグイン設定フィールドのファイル | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>` の代わりに使用します。ファイルを通常の文字列として読み取り、YAML として解析しません。 |
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |

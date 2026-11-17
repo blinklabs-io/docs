@@ -50,6 +50,8 @@ plugins:
         host: 127.0.0.1
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
+        maxConcurrentPoolLists: 4
+        maxConcurrentPoolListsPerClient: 1
     utxorpc:
       provider: builtin
       config:
@@ -91,8 +93,18 @@ configured bound reaches capacity, Dingo returns HTTP `429` with
 Keep the default loopback host unless external mutation access is an
 intentional deployment decision.
 
-The complete v0.94.1 configuration reference and release-matched
-[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) are
+### Blockfrost pool list requests
+
+`maxConcurrentPoolLists` and `maxConcurrentPoolListsPerClient` are optional
+admission limits for pool list work. They apply to both the active pool list
+route, `GET /api/v0/pools`, and the retiring pool list route,
+`GET /api/v0/pools/retiring`. Omit either setting or set it to `0` to leave
+that limit unlimited. A positive value enables the corresponding global or
+per-client limit. When requests reach an enabled limit, Dingo returns HTTP
+`429` with `Retry-After: 1`.
+
+The complete v0.94.2 configuration reference and release-matched
+[`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example) are
 available on this site. Use configuration files with their matching release;
 provider options can change between versions.
 
@@ -148,6 +160,13 @@ Before starting the node, configure these settings as needed:
 LifecycleService accepts `GetStatus`, `Stop`, and `Restart` over plaintext HTTP
 without client certificates or operator allowlists. `Restart` is unsupported on
 non-Unix platforms.
+
+Remote `Stop` and `Restart` may outlast the request deadline while Dingo closes
+durable storage. Dingo starts a restart only after shutdown completes.
+The supervising process must allow the configured `shutdownTimeout` plus the
+time required to close durable storage. Dingo logs progress while durable
+storage closes and warns when shutdown exceeds its deadline. Use `SIGKILL` only
+to abandon a wedged storage close.
 
 When the service is enabled and `barkHost` is empty, Bark binds to loopback by
 default. Set `barkHost`, `--bark-host`, or `DINGO_BARK_HOST` to expose it on a

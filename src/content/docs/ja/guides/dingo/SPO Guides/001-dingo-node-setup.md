@@ -241,12 +241,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+この例では [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) を設定し、systemd が永続ストレージの終了を待つようにします。有限の停止期限を設定する場合は、`shutdownTimeout` とストレージの終了に必要な時間を確保してください。終了処理は Dingo やリモート要求の期限を超えて継続することがあり、Dingo は進捗と期限超過の警告を記録します。停止した終了処理を意図的に放棄する場合にのみ `SIGKILL` を使用してください。
 
 ***
 

@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.94.1 Configuration Reference
-description: Complete, release-specific Dingo v0.94.1 configuration reference and example.
+title: Dingo v0.94.2 Configuration Reference
+description: Complete, release-specific Dingo v0.94.2 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.94.1. The complete
+This page covers the configuration shipped with Dingo v0.94.2. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.94.1 source](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example).
+The same file is available in the [Dingo v0.94.2 source](https://github.com/blinklabs-io/dingo/blob/v0.94.2/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -119,7 +119,7 @@ before chain data import.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. `25 MiB` (`26214400` bytes) applies when the run mode is Leios or the network is Musashi, identified by name or network magic. An explicit YAML or provider capacity overrides both defaults. |
+| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. When Dingo uses the default capacity for Leios or Musashi, it selects `25 MiB` (`26214400` bytes) only when the current committee can reach the Leios quorum; Dingo uses `1 MiB` when the committee cannot reach quorum or Dingo cannot resolve quorum. When YAML or the provider supplies capacity, Dingo uses that value instead of these defaults and does not change it with committee quorum. |
 
 ### Ledger processing
 
@@ -289,11 +289,15 @@ requests are not subject to the Blockfrost mutation admission limits.
 | Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. The setting is not required, and transaction submission and evaluation accept anonymous requests. |
 | Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0` or unset by default, which disables the global bound. Set a positive value to limit transaction submission and evaluation across the provider. |
 | Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0` or unset by default, which disables the per client bound. Set a positive value to limit work from one remote address. When `maxConcurrentMutations` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
+| Total concurrent pool lists | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | `0` or unset by default, which disables the global bound for `GET /api/v0/pools` and `GET /api/v0/pools/retiring`. Set a positive value to limit active and retiring pool-list requests across the provider. |
+| Concurrent pool lists per client | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0` or unset by default, which disables the per client bound for `GET /api/v0/pools` and `GET /api/v0/pools/retiring`. Set a positive value to limit pool-list work from one remote address. When `maxConcurrentPoolLists` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
 
 Before reading the request body, the provider applies each configured positive
-mutation limit. When concurrent work reaches an active global or per-client
-limit, the provider returns HTTP `429` with `Retry-After: 1` without reading
-the body.
+mutation limit. For pool-list requests, the provider also applies each
+configured positive pool-list limit to `GET /api/v0/pools` and
+`GET /api/v0/pools/retiring`. When concurrent work reaches an enabled global or
+per-client limit, the provider returns HTTP `429` with `Retry-After: 1` without
+reading the body.
 
 ### Shared outbound HTTP user agent
 
@@ -511,6 +515,7 @@ Dingo rejects a source that sets both the literal form and the file form.
 | --- | --- | --- | --- | --- |
 | Dingo Koios parity API key | `koiosParity.apiKey` | Removed; invalid: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Empty by default. YAML and this environment variable continue to accept literal API keys. |
 | Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. CLI input uses this file-backed option. Dingo reads the file as the API key string. |
+| Koios parity strict mode | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | The release example sets this to `true`. When enabled, daily-tier quota exhaustion (`HTTP 429`, `Exceeded Tier Limit`) does not stop Dingo. Dingo records an `ERROR` state and retries on the `ERROR` schedule until Koios resets the daily quota, including quota errors from the sampled `/tx_info` path. Dingo does not turn these quota errors into `dingo_db_missing` results. If Dingo cannot persist the `ERROR` state, the failure remains fatal. |
 | Generic plugin configuration field file | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Use instead of `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo reads the file as a plain string and does not parse its contents as YAML. |
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
