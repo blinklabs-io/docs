@@ -20,9 +20,9 @@ Los parámetros admiten los siguientes valores y validaciones:
 
 - `brokers`: lista separada por comas de direcciones de bootstrap de Kafka válidas con el formato `host:port`. Cada entrada debe especificar un host y un puerto válidos. El valor predeterminado es `127.0.0.1:9092`.
 - `topic`: topic de Kafka que recibe los eventos. El nombre debe tener entre 1 y 249 caracteres ASCII, que solo pueden ser letras, dígitos, puntos, guiones bajos o guiones, y no puede ser `.` ni `..`. El valor predeterminado es `adder.events`.
-- `username` y `password`: credenciales opcionales de SASL PLAIN. La configuración debe incluir ambos valores y rechaza las credenciales incompletas. La configuración de estas credenciales exige `tls` en `true`. Proporcione los secretos mediante una configuración administrada para secretos.
+- `username` y `password`: credenciales opcionales de SASL PLAIN. La configuración requiere ambos valores y rechaza las credenciales incompletas. La configuración de estas credenciales exige `tls` en `true`. Proporcione los secretos mediante una configuración administrada para secretos.
 - `tls`: activa TLS para las conexiones con los brokers. Establezca `tls` en `true` para habilitar TLS. El valor predeterminado es `false`.
-- `event-types`: tipos de eventos separados por comas. Debe incluir al menos un tipo admitido; Adder rechaza los tipos desconocidos. El valor predeterminado es `blocks,rollbacks,governance`. También puede seleccionar `transactions`, `drep-registration`, `drep-update` y `drep-retirement`.
+- `event-types`: tipos de eventos separados por comas. La opción debe incluir al menos un tipo admitido; Adder rechaza los tipos desconocidos. El valor predeterminado es `blocks,rollbacks,governance`. También puede seleccionar `transactions`, `drep-registration`, `drep-update` y `drep-retirement`.
 
 Antes de iniciar la lectura de eventos, Adder hace ping a los brokers configurados para comprobar la conectividad. Si la comprobación falla, la salida no comienza a procesar eventos.
 
