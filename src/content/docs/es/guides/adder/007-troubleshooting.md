@@ -27,8 +27,8 @@ Estos problemas aparecen cuando el plugin de entrada `chainsync` no puede conect
 
 ### B. Diferencia en la selección de red
 
-* **Síntoma**: La conexión se establece, pero el handshake del protocolo falla de inmediato con errores como `handshake failed: network magic mismatch`.
-* **Causa**: El network magic configurado en Adder no coincide con el network magic del nodo Cardano en ejecución, por ejemplo, cuando Adder usa `mainnet` y el nodo usa `preview`.
+* **Síntoma**: La conexión se establece, pero el protocolo rechaza la negociación de inmediato con errores como `handshake failed: network magic mismatch`.
+* **Causa**: El network magic de Adder no coincide con el network magic del nodo Cardano en ejecución, por ejemplo, cuando Adder usa `mainnet` y el nodo usa `preview`.
 * **Resolución**: Alinea la configuración de red.
   - Establece la red correcta mediante una variable de entorno:
     ```bash
@@ -40,7 +40,7 @@ Estos problemas aparecen cuando el plugin de entrada `chainsync` no puede conect
 ### C. Selección de NtC y NtN
 
 * **Síntoma**: La conexión falla o Adder no puede resolver la dirección.
-* **Causa**: La configuración mezcla Node-to-Client (socket local) con Node-to-Node (TCP remoto).
+* **Causa**: La configuración mezcla Node-to-Client (socket local) y Node-to-Node (TCP remoto).
 * **Resolución**:
   - Para una conexión local al nodo mediante NtC, proporciona la ruta del socket UNIX.
   - Para una conexión remota mediante NtN, proporciona un host y un puerto, por ejemplo `relays-new.cardano-mainnet.iohk.io:3001`, y comprueba que el puerto TCP 3001 sea accesible:
