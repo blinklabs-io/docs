@@ -965,7 +965,6 @@ description: "Adderコマンドの一覧です。"
 > オペレーターAPIトークンを含む制限ファイルへのパスを指定します（デフォルトは空）。所有者だけがアクセスできる通常ファイルで、トークンは32文字以上でなければなりません。
 
 ## 通知:
-*** End Patch
 
 ```
 adder notifications validate --config <path> [--json]
