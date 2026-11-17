@@ -52,9 +52,9 @@ The Adder API exposes the following routes:
 | QR setup | `GET` | `/v1/qrcode` | Returns the HTML page that generates a QR code for connecting to the Adder server. |
 | OpenAPI | `GET` | `/swagger/` | Opens the Swagger UI. Include the trailing slash in this URL. |
 
-The FCM and QR routes accept their documented trailing slash variants, such as `/v1/fcm/` and `/v1/qrcode/`. The root `/ping` and `/healthcheck` routes also accept a trailing slash. The `/events` stream preserves SSE and WebSocket behavior through the server request handling. Read and header timeouts limit connections, while the server leaves write timeouts unset so they do not interrupt active streams.
+The FCM and QR routes accept their documented trailing slash variants, such as `/v1/fcm/` and `/v1/qrcode/`. The root `/ping` and `/healthcheck` routes also accept a trailing slash. The `/events` stream preserves SSE and WebSocket behavior during request processing. The server applies read, header, and idle timeouts without a write timeout, so active streams continue without interruption.
 
-An FCM request with malformed JSON or without a non-empty `fcmToken` returns a JSON `400 Bad Request` response. Each request produces structured access log data, and panic recovery logs handler panics and returns `500 Internal Server Error` when the handler has not started a response.
+An FCM request with malformed JSON or without a non-empty `fcmToken` returns a JSON `400 Bad Request` response. The server records each request in structured access logs. If a handler panics before sending a response, panic recovery logs the failure and returns `500 Internal Server Error`.
 
 ---
 
