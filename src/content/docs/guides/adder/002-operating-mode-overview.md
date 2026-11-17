@@ -61,11 +61,11 @@ The Adder command‑line binary provides full access to Adder’s event‑proces
 
 ## 3. Adder Managed Routing (Opt In)
 
-Adder Managed Routing is an operator mode for deployments that route one ChainSync stream to independent customer filter lanes and named destinations. Enable it by setting `--managed-config-dir`; without this flag, the existing CLI and embedded pipeline behavior remains the default.
+Adder Managed Routing is an operator mode for deployments that send one `ChainSync` stream through separate customer filter paths to named destinations. Enable it with `--managed-config-dir`. Without this flag, Adder keeps the existing CLI and embedded pipeline behavior as the default.
 
-Use managed routing when multiple customers need isolated filters and destinations. Configure `chainsync` with `intersect-tip=true` and `auto-reconnect=true`, and omit cursor state and an explicit intersect point. Managed mode does not start the ordinary public `/events` API and does not support global filters.
+Use managed routing when multiple customers need isolated filters and destinations. Configure `chainsync` with `intersect-tip=true` and `auto-reconnect=true`. Do not configure `state-path` or `intersect-point`. Managed mode does not start the ordinary public `/events` API and rejects global filters.
 
-Managed mode provides a private, authenticated configuration and status API. It supports only the managed `log` and `webhook` adapters. Bounded queues isolate each customer and destination; full queues record drops rather than blocking other lanes. See [Managed customer routing](014-managed-routing.md) for configuration, API, and limit details.
+Managed mode exposes a private configuration and status API that requires authentication. It supports only the managed `log` and `webhook` adapters. Bounded queues keep one slow customer or destination from blocking other lanes; full queues record drops. See [Managed customer routing](014-managed-routing.md) for configuration, API, and limits.
 
 ## Quick Decision Matrix
 
@@ -74,7 +74,7 @@ Managed mode provides a private, authenticated configuration and status API. It 
 | Simple notifications | **Adder Tray** |
 | No CLI experience | **Adder Tray** |
 | Full customization | **Adder CLI** |
-| Multiple customers with isolated routing | **Adder Managed Routing** |
+| Managed customer routing | **Adder Managed Routing** |
 | Default CLI or embedded pipeline behavior | **Adder CLI** |
 | YAML configuration | **Adder CLI** |
 | Webhooks / JSON outputs | **Adder CLI** |
