@@ -374,9 +374,9 @@ description: List of Adder Commands.
   --output-webhook-state-path string
 ```
   
-> SQLite file for restart safe pending webhook deliveries (default empty)
+> SQLite file for restart-safe pending webhook deliveries (default empty)
 >
-> Set a persistent filename to enable durable delivery. An empty value disables durable delivery.
+> Set a persistent filename to enable durable delivery. Leave the value empty to disable durable delivery.
 
 <br />
 
@@ -386,7 +386,7 @@ description: List of Adder Commands.
   
 > maximum persisted pending webhook deliveries (default `1024`)
 >
-> When `--output-webhook-state-path` is set, this value must be at least `11`.
+> Durable mode requires `--output-webhook-state-path` and a value of at least `11` for this option.
 
 <br />
 
@@ -424,7 +424,7 @@ description: List of Adder Commands.
   
 > comma-separated Signal event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more of `blocks`, `rollbacks`, or `governance`.
 >
 > See the [Signal output reference](./signal.md).
 
@@ -454,7 +454,7 @@ description: List of Adder Commands.
   
 > subject prefix for event subjects (default `adder.events`)
 >
-> The value must satisfy NATS subject prefix validation.
+> Use a non-empty, dot-separated prefix without whitespace, wildcards, or empty subject tokens.
 
 <br />
 
@@ -464,7 +464,7 @@ description: List of Adder Commands.
   
 > comma-separated NATS event types (default `blocks,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more of `blocks`, `rollbacks`, or `governance`.
 >
 > See the [NATS output reference](./nats.md).
 
@@ -492,7 +492,7 @@ description: List of Adder Commands.
   --output-slack-webhook-urls string
 ```
   
-> comma-separated Slack incoming webhook URLs
+> comma-separated Slack incoming webhook URLs (default empty)
 >
 > At least one URL is required. Each URL must use HTTPS and cannot include credentials.
 
@@ -504,7 +504,7 @@ description: List of Adder Commands.
   
 > comma-separated Slack event types (default `blocks,transactions,rollbacks,governance`)
 >
-> Include at least one supported event type.
+> Select one or more supported Slack event types.
 
 <br />
 
@@ -554,7 +554,7 @@ description: List of Adder Commands.
   --output-matrix-homeserver-url string
 ```
   
-> Matrix homeserver base URL
+> Matrix homeserver base URL (default empty)
 
 <br />
 
@@ -564,7 +564,7 @@ description: List of Adder Commands.
   
 > Matrix access token
 >
-> This value is required.
+> Set a non-empty access token.
 
 <br />
 
@@ -610,7 +610,7 @@ description: List of Adder Commands.
   
 > routing key or queue name for the default exchange (default `adder.events`)
 >
-> This value is required.
+> Set a non-empty routing key.
 
 <br />
 
@@ -646,7 +646,7 @@ description: List of Adder Commands.
   
 > MQTT client identifier (default `adder-output`)
 >
-> This value is required.
+> Set a non-empty client ID.
 
 <br />
 
