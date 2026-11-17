@@ -13,7 +13,7 @@ configuration, payloads, validation, delivery limits, and lifecycle behavior.
 
 - Create a Slack app with an incoming webhook for each destination channel. Follow
   the [Slack incoming webhook setup](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/).
-- Store each webhook URL in a secret managed configuration source. A webhook URL
+- Store each webhook URL in a secret-managed configuration source. A webhook URL
   authenticates requests for its Slack destination and must remain private.
 - Ensure that the host running Adder can make HTTPS requests to each webhook.
 
@@ -39,10 +39,10 @@ The equivalent command line options are
 
 | Field | Required | Default | Description |
 | --- | --- | --- | --- |
-| `webhook-urls` | Yes | None | Comma separated Slack incoming webhook URLs. Adder requires at least one destination. |
-| `event-types` | No | `blocks,transactions,rollbacks,governance` | Comma separated event names to send to Slack. Adder requires at least one supported name when this field is set. |
+| `webhook-urls` | Yes | None | Comma-separated Slack incoming webhook URLs. Adder requires at least one destination. |
+| `event-types` | No | `blocks,transactions,rollbacks,governance` | Comma-separated event names to send to Slack. Adder requires at least one supported name when this field is set. |
 
-Adder trims surrounding whitespace from comma separated values. An empty value
+Adder trims surrounding whitespace from comma-separated values. An empty value
 does not provide a destination or event type.
 
 ### Webhook validation and secret handling
@@ -85,7 +85,7 @@ shape:
 {"text":"..."}
 ```
 
-The `text` value contains a human readable event summary. Adder does not expose
+The `text` value contains a human-readable event summary. Adder does not expose
 a configurable Slack message format. The summary includes the following
 information for the supported event types:
 
@@ -104,7 +104,7 @@ destinations.
 ## Delivery contract
 
 Adder considers a request successful only when Slack returns HTTP status `200`
-with the response body `ok`. Each request uses a 15 second HTTP client timeout.
+with the response body `ok`. Each request uses a 15-second HTTP client timeout.
 Adder does not treat another status or response body as successful.
 
 After a successful request, Adder waits at least one second before sending the
@@ -116,16 +116,17 @@ each destination.
 When Slack returns HTTP `429`, Adder reads `Retry-After` as a nonnegative whole
 number of seconds:
 
-1. For a delay from `0` through `60` seconds, Adder records a per destination
+1. For a delay from `0` through `60` seconds, Adder records a cooldown for each
+   destination
    cooldown and retries the same message up to three times after the initial
    request.
 2. The cooldown also applies to later events for that destination. If the retry
    budget ends, Adder reports the delivery failure but keeps the cooldown.
 3. A missing, invalid, negative, or nonnumeric `Retry-After` value fails the
-   affected delivery and applies a one minute cooldown.
+   affected delivery and applies a one-minute cooldown.
 4. A `Retry-After` delay greater than one minute fails the affected delivery and
-   leaves the destination cooling down. Adder does not wait beyond the one
-   minute retry window for that delivery.
+   leaves the destination cooling down. Adder does not wait beyond the
+   one-minute retry window for that delivery.
 
 Adder retries transport failures and HTTP `5xx` responses up to three times
 after the initial request. The retry waits use bounded exponential delays of
@@ -139,7 +140,7 @@ pause another webhook.
 
 ### Errors, shutdown, and restart behavior
 
-Adder logs delivery errors and sends them through the output plugin error
+Adder logs delivery errors and sends them through the output error
 channel. Error messages identify the affected destination and failure without
 exposing webhook URLs or other webhook secret values.
 
@@ -156,7 +157,7 @@ or paste a production webhook URL into a test file or diagnostic output.
 2. Configure `output: slack` with the test URL and select one event type, such
    as `blocks`.
 3. Start Adder and trigger one matching Cardano event.
-4. Confirm that the test channel receives one human readable Slack message and
+4. Confirm that the test channel receives one human-readable Slack message and
    that Adder reports no output error.
 5. If multiple test destinations are configured, confirm that each receives the
    same event summary. Trigger an unselected event to confirm that Adder does
