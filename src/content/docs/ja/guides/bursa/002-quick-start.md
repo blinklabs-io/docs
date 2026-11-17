@@ -58,8 +58,8 @@ LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabs�
 > ヒント: 最新のBursaリリースは<a href="https://github.com/blinklabs-io/bursa/releases" target="_blank">https://github.com/blinklabs-io/bursa/releases</a>ページからダウンロードできます。
 
 ```
-wget -O bursa-v0.21.1-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.21.1/bursa-v0.21.1-linux-amd64.tar.gz
-tar xzf bursa-v0.21.1-linux-amd64.tar.gz
+wget -O bursa-v0.23.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.23.0/bursa-v0.23.0-linux-amd64.tar.gz
+tar xzf bursa-v0.23.0-linux-amd64.tar.gz
 ```
 
 LinuxとFreeBSDのCLIダウンロードにはアーキテクチャ別の`.tar.gz`アーカイブを使用し、WindowsのCLIダウンロードには`.exe`ファイル、macOSのCLIダウンロードには`.zip`ファイルを使用します。Windowsではアーキテクチャ別の署名済み`.msi`インストーラーを、macOSではアーキテクチャ別の公証済み`.pkg`インストーラーをデスクトップウォレット向けに配布します。オプションのWebView2 Evergreenブートストラッパーを含むリリースでは、WebView2ランタイムが未インストールの場合に限り、Windowsの`.msi`がブートストラッパーを含むことがあります。
@@ -98,7 +98,7 @@ chmod +x bursa
 
 <br>
 
-APIはデフォルトで`127.0.0.1:8080`で待ち受けます。ローカルクライアントは `localhost:8080` に、ファイアウォールでポートを開かずに接続できます。リモートアクセスが必要な場合は、YAMLの`api.address`または環境変数`API_LISTEN_ADDRESS`で非ループバックアドレスを明示的に設定してください。非ループバックで待ち受ける場合は、TLSとBearer認証を含むセキュリティ要件を適用します。設定の詳細は[設定リファレンス](../009-configuration-reference)を参照してください。
+APIはデフォルトで`127.0.0.1:8080`で待ち受けます。ローカルクライアントは `localhost:8080` に、ファイアウォールでポートを開かずに接続できます。リモートアクセスが必要な場合は、YAMLの`api.address`または環境変数`API_LISTEN_ADDRESS`で非ループバックアドレスを明示的に設定してください。非ループバックで待ち受ける場合は、TLSとBearer認証を含むセキュリティ要件を適用します。非ループバックAPIで`API_JWT_SECRET`または`API_JWKS_URL`を設定する場合は、`API_JWT_AUDIENCE`（YAMLでは`api.jwt_audience`）に空でない値を設定し、Bearerトークンの`aud`クレームに同じ値を含めてください。設定の詳細は[設定リファレンス](../009-configuration-reference)を参照してください。
 
 ***
 

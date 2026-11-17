@@ -5,7 +5,7 @@ description: YAML and environment-variable reference for Bursa `kes-agent` and l
 
 ## Overview
 
-This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, and `confidential-space` signer backends.
+This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, `confidential-space`, and `sops` signer backends.
 
 ## Load a configuration file
 
@@ -15,7 +15,7 @@ The `kes-agent` command accepts a YAML file with `--config`. When the flag is no
 bursa kes-agent --config /etc/bursa/config.yaml
 ```
 
-The command validates the loaded values before it opens either Unix socket. For command usage, see the [API section of the CLI guide](../003-commands#api) and the [kes-agent section of the CLI guide](../003-commands#kes-agent).
+The command validates the loaded values before it opens either Unix socket. It checks the [remote listener](#remote-listener) settings when it opens that listener, after the Unix sockets. For command usage, see the [API section of the CLI guide](../003-commands#api) and the [kes-agent section of the CLI guide](../003-commands#kes-agent).
 
 ## Wallet environment variable
 
@@ -60,7 +60,7 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
-| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, or `confidential-space`. |
+| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, `confidential-space`, or `sops`. |
 | `signer.backends[].address` | Specifies the endpoint for an attested signer backend. | Set to an `http://`, `https://`, or `unix:///` endpoint. |
 | `signer.backends[].module` | Specifies the path to the `PKCS#11` module, including the `.so` file. | Set this field. Bursa rejects an empty value. |
 | `signer.backends[].token_label` | Selects the token or slot by its label. | Set this field or `slot`. Bursa requires at least one selection field. |
@@ -69,11 +69,21 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 | `signer.backends[].keys[]` | Defines an optional allowlist of token objects. | When present, give every entry a `name` and `type`. |
 | `signer.backends[].keys[].name` | Matches the token object's `CKA_LABEL`. | Set this field for each `keys` entry. |
 | `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Set this field for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
+| `signer.backends[].profile` | Binds a Confidential Space or SOPS backend to a profile. | Optional. Use 1 to 32 letters, digits, `.`, `_`, `@`, or `-`. Leave unset for Nitro because its enclave protocol does not implement profile binding. |
 | `signer.backends[].root_ca_file` | Specifies the AWS Nitro Enclaves root certificate. | Required for `nitro`; use the pinned AWS Nitro root certificate. |
 | `signer.backends[].pcrs` | Specifies expected Nitro PCR index and hexadecimal value pairs. | Required for `nitro`; PCR0 must be present and nonzero. |
+| `signer.backends[].host_key_file` | Supplies the signer authority key for Nitro challenge-bound signing. | Required for `nitro`; use an owner-only key file. The signer authority must differ from the provisioning authority. |
 | `signer.backends[].audience` | Specifies the audience that a Confidential Space attestation token must contain. | Required for `confidential-space`. |
 | `signer.backends[].image_digest` | Specifies the required Confidential Space container image digest. | Required for `confidential-space`; use a `sha256:` digest. |
 | `signer.backends[].jwks_url` | Specifies the token-signing key set for Confidential Space attestation tokens. | Optional for `confidential-space`; defaults to Google's published token-signing set. |
+
+Profile routing applies to Confidential Space and SOPS backends. A request must select the matching profile. A request without a profile is usable only when one backend unambiguously holds the key. Each profile keeps independent counter and record scope. Nitro does not support `profile`; leave it unset.
+
+### Nitro custody persistence
+
+The Nitro proxy role needs `secretsmanager:GetSecretValue`, `secretsmanager:DescribeSecret`, and `secretsmanager:PutSecretValue` while it serves. The proxy persists sealed counter state with every signature. A failed or timed out persistence write makes the proxy stop later signing until an operator restarts or reloads it; after recovery, the proxy accepts a retry only when the payload matches the payload at the stored counter.
+
+The sealed counter state has a version. An older enclave or proxy cannot consume a newer state. To downgrade, restore the prior envelope-only Secrets Manager secret version documented for Nitro custody before starting the older components.
 
 ### Wallet storage and encryption
 
@@ -119,6 +129,17 @@ The `software`/`file` signer backend loads plaintext private key material into p
 | `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | Determines whether the signer listener uses a loopback address. |
 
 For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
+
+## Signer JWT authentication
+
+Configure at most one signer bearer-token trust source. Bursa requires a non-empty audience when an operator configures `signer.jwt_secret` or `signer.jwks_url`, and every bearer token must carry the same value in its `aud` claim. Bursa fails startup without the audience and rejects a token with a missing or mismatched audience. `signer.jwt_issuer` remains optional; if an operator omits it, Bursa accepts any issuer and logs a warning.
+
+| Configuration path | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `signer.jwt_secret` | `SIGNER_JWT_SECRET` | Authenticates bearer tokens with an HS256 secret. | Use instead of `signer.jwks_url`; provide at least 32 bytes. |
+| `signer.jwks_url` | `SIGNER_JWKS_URL` | Authenticates bearer tokens through a JWKS endpoint. | Use instead of `signer.jwt_secret`. |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | Matches the required `aud` claim in bearer tokens. | Required when an operator configures `signer.jwt_secret` or `signer.jwks_url`. |
+| `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | Restricts the issuer that bearer tokens can contain. | Optional when any issuer is acceptable. |
 
 ## Signer watermark
 
@@ -176,7 +197,7 @@ signer:
 
 ## `kes_agent`
 
-Configure the daemon under the `kes_agent` YAML key. Each field also accepts the corresponding `KESAGENT_*` environment variable.
+Configure the daemon under the `kes_agent` YAML key. Each field also accepts the corresponding `KESAGENT_*` environment variable, except `kes_agent.profiles` and `kes_agent.store`, which Bursa reads from YAML only.
 
 | YAML key | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
@@ -188,17 +209,20 @@ Configure the daemon under the `kes_agent` YAML key. Each field also accepts the
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | Load the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Load the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Set the Shelley genesis system start. | Set an RFC3339 timestamp. |
+| `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Set the first Shelley slot for networks whose earlier era used a different slot length. | Set this with `shelley_start_time` when the target network requires a Shelley anchor. |
+| `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | Set the wall clock time of `shelley_start_slot`. | Set this with `shelley_start_slot` when the target network requires a Shelley anchor. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Set the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | Set the number of slots in one KES period. | Set a value greater than `0`. |
+| `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | Limit how far a requested header may be ahead of the agent clock. | Bursa uses `5s` by default; set a Go duration. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Limit the number of operational certificate evolutions. | Bursa uses `62` by default. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Set the scheduler interval as a Go duration, such as `1m`. | Bursa uses `1m` by default; set a Go duration. |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path; leave unset with a [shared store](#shared-store). |
 
 The daemon requires different service and control socket paths. It accepts octal socket modes and defaults both modes to owner-only `0600` access. A service socket can grant group access when the producer needs a different user ID, but it cannot grant write access to other users. The control socket must remain owner-only for write access because it accepts commands that can install or remove KES keys.
 
-The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and a durable `guard_file` path before startup can continue.
+Without [`kes_agent.profiles`](#profiles), these single-pool fields form one profile named `default`. The daemon then requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and, unless a [shared store](#shared-store) is configured, a durable `guard_file` path before startup can continue.
 
-Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
+Without a shared store, Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
 
 ```yaml
 kes_agent:
@@ -216,6 +240,109 @@ kes_agent:
   guard_file: /var/lib/bursa/kes-period.guard
 ```
 
+### Remote listener
+
+Set `kes_agent.attested_listen_address` to serve `sign` mode to a block producer on another host over TCP. The agent keeps serving its Unix sockets as well. The listener uses TLS by default. Add these keys to the `kes_agent` block alongside the socket settings.
+
+| YAML key | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `kes_agent.attested_listen_address` | `KESAGENT_ATTESTED_LISTEN_ADDRESS` | Serve `sign` mode to a remote producer on this TCP address, such as `:7000`. | Optional; leave unset to serve only the Unix sockets. Requires `kes_agent.mode` set to `sign`. |
+| `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | Present the server TLS certificate from this file on the remote listener. | Required with `attested_tls_key_file` unless `attested_plaintext` is `true`. |
+| `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | Present the server TLS private key from this file on the remote listener. | Required with `attested_tls_cert_file` unless `attested_plaintext` is `true`. On Unix, Bursa refuses a key file that grants group or other access. |
+| `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | Verify producer client certificates against the CA certificates in this PEM file. | Optional. When set, every connection must present a client certificate that this CA verifies; when unset, the listener does not request client certificates. The file must contain at least one certificate. |
+| `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | Serve the remote listener on plain TCP instead of TLS. | Defaults to `false`. When `true`, leave `attested_tls_cert_file`, `attested_tls_key_file`, and `attested_client_ca_file` unset. |
+| `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | Name the attestation verifier that the producer must use. | Required when `attested_listen_address` is set. The `none` provider sends no attestation evidence. |
+| `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | Reach the attestation adapter inside the protected workload that produces nonce-bound evidence. | Required for every provider except `none`, which rejects it. Use an `https://` URL, a loopback `http://` URL, or a `unix://` socket URL. |
+
+With TLS, the listener requires TLS 1.3 and a certificate and key. At startup the agent logs the SHA-256 fingerprint of the served certificate's public key as `server_spki_sha256`; a producer can pin that value. With `attested_plaintext`, the agent does not authenticate the remote peer. Bursa exits at startup when a remote listener setting is invalid.
+
+```yaml
+kes_agent:
+  mode: sign
+  attested_listen_address: ":7000"
+  attested_tls_cert_file: /etc/bursa/kes-agent/tls.crt
+  attested_tls_key_file: /etc/bursa/kes-agent/tls.key
+  attested_client_ca_file: /etc/bursa/kes-agent/client-ca.crt
+  attestation_provider: none
+```
+
+### Profiles
+
+Set `kes_agent.profiles` to serve several pools from one agent, on one network or on several. Each entry is one pool on one network. Configure profiles in YAML only.
+
+| Configuration path | Purpose | Default or requirement |
+| --- | --- | --- |
+| `kes_agent.profiles[].name` | Names the profile. | Required and unique. Use 1 to 64 letters, digits, `.`, `_`, or `-`, starting with a letter or digit. |
+| `kes_agent.profiles[].cold_vkey_file` | Loads the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
+| `kes_agent.profiles[].cold_vkey_hex` | Loads the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
+| `kes_agent.profiles[].system_start` | Sets the Shelley genesis system start. | Required; set an RFC3339 timestamp. |
+| `kes_agent.profiles[].shelley_start_slot` | Sets the first Shelley slot. | Set with `shelley_start_time` on networks whose Byron era used longer slots, such as `4492800` on mainnet and `86400` on preprod. Without them, Bursa counts slots from `system_start` at `slot_length`. |
+| `kes_agent.profiles[].shelley_start_time` | Sets the time of the first Shelley slot. | Set with `shelley_start_slot` as an RFC3339 timestamp, such as `2020-07-29T21:44:51Z` on mainnet and `2022-06-21T00:00:00Z` on preprod. |
+| `kes_agent.profiles[].slot_length` | Sets the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
+| `kes_agent.profiles[].slots_per_kes_period` | Sets the number of slots in one KES period. | Set a value greater than `0`. |
+| `kes_agent.profiles[].max_kes_evolutions` | Limits the number of operational certificate evolutions. | Bursa uses `62` by default. |
+| `kes_agent.profiles[].max_clock_skew` | Sets how far ahead of the agent's clock a header's slot can be before `sign` refuses it. | Bursa uses `5s` by default; set a positive Go duration. |
+| `kes_agent.profiles[].guard_file` | Stores the profile's monotonic KES period guard at this durable path. | Required with the default file store; leave unset with a [shared store](#shared-store). Each profile needs its own file. |
+
+When `profiles` is set, leave the top-level single-pool fields unset: `cold_vkey_file`, `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew`, and `guard_file`. Leave `slot_length` and `max_kes_evolutions` at their defaults of `1` and `62`. Bursa refuses startup when any of these top-level fields is set, and asks for the setting in each profile instead.
+
+Bursa also refuses startup when two profiles share a guard file, including the same file reached through a symbolic or hard link, and when two profiles have the same cold verification key and the same `system_start`. One cold key can serve several networks, which a different `system_start` tells apart. The `serve-key` mode takes exactly one profile; serve several pools in `sign` mode.
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  profiles:
+    - name: pool-a
+      cold_vkey_file: /etc/bursa/pool-a-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+      guard_file: /var/lib/bursa/pool-a.guard
+    - name: pool-b
+      cold_vkey_file: /etc/bursa/pool-b-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+      guard_file: /var/lib/bursa/pool-b.guard
+```
+
+### Shared store
+
+Set `kes_agent.store` to keep every profile's KES period floor and signed slot records in a PostgreSQL database instead of guard files, so several agent replicas can share them. The store applies to the single-pool `default` profile as well as to `profiles`. Configure the store in YAML only.
+
+| Configuration path | Purpose | Default or requirement |
+| --- | --- | --- |
+| `kes_agent.store.type` | Selects where the agent keeps each profile's slot guard. | Defaults to `file`, which uses each profile's `guard_file`. Set `postgres` to use a shared PostgreSQL database. Bursa rejects other values. |
+| `kes_agent.store.dsn_env` | Names an environment variable that contains the PostgreSQL connection string. | Required when `type` is `postgres`; the named variable must contain a nonempty value. Bursa rejects this field with the `file` store. A non-loopback database host requires `sslmode=verify-full`. |
+| `kes_agent.store.age_recipients` | Lists the age recipients that the agent seals each staged KES signing key to before it stores the key in the database. | Set together with `age_identity_file`, and only when `type` is `postgres`. |
+| `kes_agent.store.age_identity_file` | Specifies the file of age identities that every replica uses to unseal the installed KES key. | Set together with `age_recipients`, and only when `type` is `postgres`. On Unix, Bursa refuses a file that grants group or other access. |
+| `kes_agent.store.key_poll_interval` | Sets how often each replica checks the database for a newly installed key. | Bursa uses `10s` by default; set a positive Go duration. Requires `age_recipients` and `age_identity_file`. |
+
+With the `postgres` store, leave `guard_file` unset in every profile and at the top level. Bursa refuses startup when a guard file is set next to the shared store rather than ignoring it.
+
+Without `age_recipients` and `age_identity_file`, each replica keeps its own KES key in memory only, and the database holds only the slot guard. With them, the agent seals a staged key with age to `age_recipients` and keeps it in the database, and every replica unseals the installed key with the identities in `age_identity_file`.
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  profiles:
+    - name: pool-a
+      cold_vkey_file: /etc/bursa/pool-a-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+  store:
+    type: postgres
+    dsn_env: BURSA_KES_AGENT_STORE_DSN
+    age_recipients:
+      - age1examplerecipient
+    age_identity_file: /etc/bursa/kes-agent/age-identity.txt
+    key_poll_interval: 10s
+```
+
+Provide the DSN through the named environment variable rather than embedding a password in the YAML file.
+
 ### Migrate socket permissions
 
 Replace the former `kes_agent.socket_mode` key with both `kes_agent.service_socket_mode` and `kes_agent.control_socket_mode`. The old key is not valid. Keep the control socket at `0600`; widen only the service socket when the producer requires group access.
@@ -231,10 +358,10 @@ Configure the legacy API under the `api` YAML key.
 | `api.jwt_secret` | `API_JWT_SECRET` | Authenticate bearer tokens with an HS256 secret. | Use instead of `api.jwks_url`; provide at least 32 bytes. |
 | `api.jwks_url` | `API_JWKS_URL` | Authenticate bearer tokens through a JWKS endpoint. | Use instead of `api.jwt_secret`; Bursa requires HTTPS except for loopback development. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Constrain the issuer that bearer tokens can contain. | Set to constrain the accepted issuer. |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Constrain the audience that bearer tokens can contain. | Set to constrain the accepted audience. |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Matches the required `aud` claim in bearer tokens. | Required when `api.jwt_secret` or `api.jwks_url` is configured. |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | Defines the non-empty JWT subject allowlist for persisted wallet administration. | Whenever any wallet-storage backend is configured, include at least one non-empty subject. Bursa refuses startup when the list is empty or missing. |
 
-A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
+A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. When an operator configures either trust source, `api.jwt_audience` is mandatory and every bearer token must carry the same value in its `aud` claim; Bursa rejects a missing or mismatched audience. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 

@@ -79,7 +79,7 @@ echo $DINGO_ARCH
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 バイナリのバージョンを確認してから、システム全体からアクセスできるように`/usr/local/bin/`にコピーします：
@@ -97,7 +97,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 ### ステップ3 - Leios Cardano-CLIバイナリのダウンロード
 
-Musashiには、ネットワークに対応するLeiosプロトタイプリリースの`cardano-cli`が必要です。ネットワークのバージョンは、Musashiの<a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>の`MinNodeVersion`フィールドで確認できます。たとえば、`11.1.0.164-prototype-2026w42`は<a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leiosリリース</a>ページの`rc-2026w42`リリースに対応します。
+Musashiには、ネットワークに対応するLeiosプロトタイプリリースの`cardano-cli`が必要です。ネットワークのバージョンは、Musashiの<a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>の`MinNodeVersion`フィールドで確認できます。たとえば、`11.2.0.164-rc-2026w44`は<a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leiosリリース</a>ページの`rc-2026w44`リリースに対応します。
 
 ディレクトリを作成して移動します：
 
@@ -108,7 +108,7 @@ mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
 LeiosリリースのLinuxビルドの名前は`x86_64`と`aarch64`です。リリースタグとアーキテクチャを設定し、アーカイブとそのチェックサムをダウンロードします：
 
 ```
-LEIOS_RELEASE=rc-2026w42
+LEIOS_RELEASE=rc-2026w44
 LEIOS_ARCH=$(uname -m)
 [ "$LEIOS_ARCH" = arm64 ] && LEIOS_ARCH=aarch64
 wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
@@ -218,8 +218,8 @@ socketPath: \"$DINGO_HOME/dingo.socket\"
 # Path to the topology configuration file for Cardano node
 topology: \"$DINGO_HOME/config/topology.json\"
 
-# Mempool: 25 MiB, the Leios size. Dingo v0.88.0 keeps the 1 MiB
-# default on Musashi, which fills and expires transactions.
+# Mempool: Dingo v0.92.3 defaults to 25 MiB when the
+# network is Musashi or runMode is leios.
 plugins:
   mempool:
     config:
@@ -227,7 +227,7 @@ plugins:
 EOF"
 ```
 
-> 💡 `plugins.mempool`ブロックは、mempoolをDingoのデフォルトの1 MiBから、DingoがLeiosで使う25 MiBに引き上げます。1 MiBではMusashiでmempoolが満杯になり、トランザクションが取り込まれる前に期限切れになります。
+> 💡 Musashiでは、Dingo v0.92.3がmempoolのデフォルト容量として25 MiBを使用します。`plugins.mempool`ブロックでこの容量を明示的に設定します。
 
 以下を実行して`dingo.yaml`ファイルを表示し、確認できます：
 
@@ -761,14 +761,16 @@ shelleyOperationalCertificate: \"$DINGO_HOME/keys/node.cert\"
 # Leios voting: the BLS key registered with your pool in Step 9
 leiosVoteSigningKeyFile: \"$DINGO_HOME/keys/bls.skey\"
 
-# Mempool: 25 MiB, the Leios size. Dingo v0.88.0 keeps the 1 MiB
-# default on Musashi, which fills and expires transactions.
+# Mempool: Dingo v0.92.3 defaults to 25 MiB when the
+# network is Musashi or runMode is leios.
 plugins:
   mempool:
     config:
       capacity: 26214400
 EOF"
 ```
+
+> 💡 ブロックプロデューサーの設定でも、Dingo v0.92.3はMusashiのmempoolに25 MiBのデフォルト容量を使用します。
 
 > 💡 `leiosVoteSigningKeyFile`を設定しない場合でもプールはブロックを生成しますが、Leiosのエンドーサーブロックには投票しません。
 
@@ -910,3 +912,14 @@ curl -s 127.0.0.1:12798/metrics | grep -E '^dingo_metrics_leios_(committee_size|
 <br>
 
 > 元のガイドと追加リソースはこちらです：<a href="https://leios.cardano-scaling.org/docs/testnet/getting-started" target="_blank">Getting started</a>と<a href="https://leios.cardano-scaling.org/docs/testnet/register-stake-pool" target="_blank">Register a stake pool</a>
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
