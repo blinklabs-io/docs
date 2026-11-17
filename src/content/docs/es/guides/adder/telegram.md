@@ -5,7 +5,7 @@ description: Configuración y controles de la salida de Telegram de Adder.
 
 # Controles de salida de Telegram
 
-La salida de Telegram envía eventos seleccionados de Adder a un chat configurado y responde a comandos en ese chat. Configure un token de bot, un ID de chat y un archivo local para conservar las preferencias de notificación después de reiniciar Adder:
+La salida de Telegram envía eventos seleccionados de Adder a un chat configurado y responde a comandos en ese chat. La configuración requiere un token de bot, un ID de chat y un archivo local para conservar las preferencias de notificación después de reiniciar Adder:
 
 ```yaml
 output: telegram
