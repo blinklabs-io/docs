@@ -54,7 +54,7 @@ El servidor genera registros de acceso estructurados y recupera los errores ines
 
 | Método | Ruta | Comportamiento |
 | --- | --- | --- |
-| `POST` | `/v1/fcm` | Recibe un objeto JSON con un campo `fcmToken` no vacío y devuelve `201` cuando guarda el token. También acepta `/v1/fcm/`. El JSON mal formado o la ausencia de `fcmToken` devuelve una respuesta JSON con estado `400`. |
+| `POST` | `/v1/fcm` | Recibe un objeto JSON con un campo `fcmToken` no vacío y devuelve `201` cuando guarda el token. También acepta `/v1/fcm/`. El servidor devuelve una respuesta JSON con estado `400` cuando recibe JSON mal formado o cuando falta `fcmToken`. |
 | `GET` | `/v1/fcm/{token}` | Devuelve el token en JSON con estado `200`, o `404` si no existe. También acepta una barra final. |
 | `DELETE` | `/v1/fcm/{token}` | Elimina el token y devuelve `204`, o devuelve `404` si no existe. También acepta una barra final. |
 | `GET` | `/v1/qrcode` | Devuelve la página HTML que genera el código QR de conexión. También acepta `/v1/qrcode/`. |
