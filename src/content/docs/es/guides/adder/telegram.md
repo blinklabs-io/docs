@@ -29,9 +29,9 @@ El archivo de preferencias contiene el `chat_id` y cuatro claves de notificació
 - `rollbacks`
 - `governance`
 
-Las cuatro preferencias están habilitadas de forma predeterminada. Un archivo escrito manualmente debe incluir `chat_id`, y su valor debe coincidir con el `chat-id` configurado. Adder rechaza un archivo con formato incorrecto, campos desconocidos, varios documentos YAML o un `chat_id` que falte, sea `0` o pertenezca a otro chat. El archivo debe contener un solo documento YAML.
+Las cuatro preferencias están habilitadas de forma predeterminada. Un archivo escrito manualmente debe incluir `chat_id`, y su valor debe coincidir con el `chat-id` configurado. Adder rechaza un archivo con formato incorrecto, campos desconocidos, varios documentos YAML o un `chat_id` que falte, tenga el valor `0` o pertenezca a otro chat. El archivo debe contener un solo documento YAML.
 
-Si se omite `settings-file`, Adder mantiene habilitadas las cuatro categorías y permite consultar `/settings`, pero no permite cambiar las preferencias dentro del chat. Adder guarda cada cambio de preferencia mediante una escritura atómica antes de aplicarlo a la configuración activa.
+Sin `settings-file`, Adder mantiene habilitadas las cuatro categorías y permite consultar `/settings`, pero no permite cambiar las preferencias dentro del chat. Adder aplica cada cambio de preferencia a la configuración activa solo después de guardarlo correctamente.
 
 Cuando una categoría está deshabilitada, Adder suprime los mensajes de Telegram de esa categoría, pero continúa procesando los eventos.
 
