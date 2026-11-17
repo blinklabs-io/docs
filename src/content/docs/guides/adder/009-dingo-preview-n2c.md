@@ -55,7 +55,7 @@ Inspect the most recent Adder output:
 docker compose logs adder | tail -n 20
 ```
 
-Confirm that the output shows a successful connection to the UNIX socket, completion of the ChainSync intersection, and `BLOCK` records. The configured `intersect-tip: true` setting requests an intersection at Dingo's current tip instead of starting at slot `0`.
+Confirm that the output shows a successful connection to the UNIX socket, completion of the ChainSync intersection, and `BLOCK` records.
 
 ### Verify intersection at the tip after a restart
 
