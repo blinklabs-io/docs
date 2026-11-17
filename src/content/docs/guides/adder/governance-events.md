@@ -7,7 +7,7 @@ description: Reference for Adder input.governance events and governance deposit 
 
 ## Overview
 
-This reference describes the `input.governance` event emitted for a transaction that contains Cardano governance data. The event identifies the transaction and chain position, then groups proposal, voting, certificate, and committee data in the `payload` object.
+This reference describes the `input.governance` event that Adder emits for a transaction that contains Cardano governance data. The event identifies the transaction and chain position, then groups proposal, voting, certificate, and committee data in the `payload` object.
 
 Adder emits one `input.governance` event for each transaction that contains governance data. Adder omits the event when a transaction contains no governance data. Adder can emit the same transaction again after a rollback or replay.
 
