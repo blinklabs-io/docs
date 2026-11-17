@@ -36,3 +36,14 @@ Ya puedes ejecutar Adder con filtros y comandos para seguir la información que 
 <br />
 
 Consulta los [ejemplos](../examples/001-using-adder-examples-desc) para conocer las posibilidades de Adder.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
