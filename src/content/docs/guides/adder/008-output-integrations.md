@@ -20,10 +20,10 @@ Each output selects events with `event-types`. Supported values include
 selection. Adder rejects an empty selection and rejects event names that the
 selected plugin does not support.
 
-## Output references
+## Dedicated output references
 
-The dedicated references below document each output's configuration options and
-delivery contract:
+These pages provide the detailed configuration options and delivery contracts
+for the outputs listed below:
 
 - [Discord bot output](./discord.md)
 - [Slack output](./slack.md)
