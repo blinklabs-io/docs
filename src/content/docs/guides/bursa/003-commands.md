@@ -103,6 +103,44 @@ Check KES agent readiness without starting the daemon:
 
 The command exits successfully only when the KES agent is ready and exits with a failure status otherwise. Use it as an `exec` readiness probe.
 
+### Control the KES agent
+
+Use `bursa kes-agent control` to send a command to a running local KES agent through its control socket:
+
+```
+./bursa kes-agent control [--config /path/to/kes-agent.yaml] [--socket /run/bursa/kes-agent-control.sock] [--profile PROFILE] <command>
+```
+
+An explicit `--socket` value takes precedence. Without `--socket`, the command reads `kes_agent.control_socket` from the YAML file selected by `--config`; when `--config` is omitted, `BURSA_CONFIG` selects that file. The command does not discover a control socket from another source. See the [configuration reference](../009-configuration-reference) for `kes_agent.control_socket`, socket permissions, and configuration-file selection.
+
+Use `--profile` to select the profile affected when the agent serves several profiles. Without `--profile`, `info` lists every profile; a single-profile agent can omit the profile name.
+
+The control command provides these subcommands:
+
+- `info` prints the agent state. It does not require additional flags.
+- `gen-staged-key [--out FILE]` generates a staged key. The optional `--out` flag writes the KES verification key as a `cardano-cli` envelope, prints the JSON reply before attempting the write, and refuses to overwrite an existing file.
+- `install-key --opcert FILE` installs a staged key from a `NodeOperationalCertificate` `cardano-cli` envelope. The command requires the `--opcert` flag.
+- `drop-key --target VALUE` drops key material. The `--target` flag is required and accepts only `staged`, `active`, or `all`.
+
+The command prints agent replies as JSON and represents byte fields as hexadecimal. An agent refusal causes a non-zero CLI exit. Each control request has a 30-second limit, and cancellation ends blocked socket I/O promptly.
+
+Rotate a KES key in three steps:
+
+1. Generate the staged key and write its verification key to an envelope:
+
+   ```
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml gen-staged-key --out kes.vkey
+   ```
+
+2. Issue an operational certificate for `kes.vkey` offline with the pool cold key. The agent does not issue the certificate.
+
+3. Install the certificate and inspect the result:
+
+   ```
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml install-key --opcert node.cert
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml info
+   ```
+
 ***
 
 <a name="tx"></a>
@@ -177,7 +215,7 @@ Reset an operational certificate counter with the signer configuration and the c
 
 ```
 ./bursa signer counter-reset --config /path/to/signer.yaml \
-  --key <56-character cold key hash> --chain-counter 10 --yes
+  --key "$COLD_KEY_HASH" --chain-counter 10 --yes
 ```
 
 Use `--profile <configured-profile>` when the selected backend has a profile, including a SOPS backend. When the configuration contains profiled backends and the selected backend has no profile, use `--unprofiled`. A configuration with no profiled backend needs neither selector. Bursa refuses requests without a profile or with a mismatched profile when the selected backend requires one. See the [signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) for the complete reset procedure.
@@ -191,6 +229,15 @@ Start a Confidential Space workload with repeatable profile options:
 ```
 ./bursa confidential-space-workload \
   --listen :8080 \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --wrapped-key-file /var/lib/bursa/pool-key.wrapped \
+  --counter-bucket "$COUNTER_BUCKET" \
+  --counter-object pool-counter \
+  --wif-credentials /etc/bursa/wif.json \
+  --tls-cert-file /etc/bursa/workload.crt \
+  --tls-key-file /etc/bursa/workload.key \
+  --client-ca-file /etc/bursa/signer-ca.crt \
   --profile pool@mainnet \
   --profile pool@preview \
   --create-profile-counter pool@mainnet \
@@ -219,7 +266,15 @@ The provisioning and signer authorities must not be the same.
 Set `--socket-mode` when the proxy socket requires group access:
 
 ```
-./bursa nitro proxy --socket /run/bursa/nitro.sock --socket-mode 0660
+./bursa nitro proxy \
+  --enclave-cid "$ENCLAVE_CID" \
+  --region "$AWS_REGION" \
+  --secret-id "$NITRO_SECRET_ID" \
+  --enclave-ca-file /etc/bursa/nitro/enclave-ca.pem \
+  --client-cert-file /etc/bursa/nitro/proxy.pem \
+  --client-key-file /etc/bursa/nitro/proxy-key.pem \
+  --enclave-server-name "$ENCLAVE_SERVER_NAME" \
+  --socket /run/bursa/nitro.sock --socket-mode 0660
 ```
 
 Mode `0660` supports owner and group access. Bursa rejects world-writable socket modes.

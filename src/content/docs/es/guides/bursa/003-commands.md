@@ -107,6 +107,36 @@ El comando termina correctamente solo cuando el agente está preparado. El coman
 
 Consulte la [referencia de configuración](../009-configuration-reference) para `kes_agent.mode`, `kes_agent.service_socket`, `kes_agent.control_socket`, `kes_agent.service_socket_mode`, `kes_agent.control_socket_mode`, `kes_agent.cold_vkey_file`, `kes_agent.cold_vkey_hex`, `kes_agent.system_start`, `kes_agent.slot_length`, `kes_agent.slots_per_kes_period`, `kes_agent.max_kes_evolutions`, `kes_agent.evolve_interval` y `kes_agent.guard_file`.
 
+### Controlar un agente KES en ejecución
+
+`bursa kes-agent control` envía un comando a un agente KES en ejecución mediante su socket de control local. `--socket` tiene prioridad sobre todas las demás fuentes y establece directamente la ruta del socket. Sin `--socket`, el comando consulta `kes_agent.control_socket` en el archivo YAML seleccionado por `--config` o `BURSA_CONFIG`.
+
+Las opciones de control son:
+
+- `--config`: selecciona el archivo YAML del agente.
+- `--socket`: ruta explícita del socket de control; sustituye la ruta obtenida de la configuración.
+- `--profile`: selecciona el perfil sobre el que actúa el comando cuando el agente tiene varios perfiles. El comando permite omitir esta opción con un solo perfil. `info` sin `--profile` muestra todos los perfiles.
+
+Los subcomandos disponibles son:
+
+- `info`: muestra el estado de las claves del agente.
+- `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; con esta opción, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El comando no sobrescribe un archivo existente.
+- `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
+- `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
+
+Cada subcomando imprime la respuesta del agente como JSON y codifica en hexadecimal los campos de bytes.
+
+El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación detiene de inmediato la lectura o escritura bloqueada del socket.
+
+La rotación de una clave KES sigue este orden: generar la clave staged, emitir sin conexión su certificado operativo con la clave fría del pool, instalar el certificado y comprobar el resultado con `info`. El agente no emite el certificado operativo.
+
+```bash
+./bursa kes-agent control --config /path/to/kes-agent.yaml gen-staged-key --out kes.vkey
+# Emitir node.cert sin conexión para kes.vkey con la clave fría del pool
+./bursa kes-agent control --config /path/to/kes-agent.yaml install-key --opcert node.cert
+./bursa kes-agent control --config /path/to/kes-agent.yaml info
+```
+
 <a name="tx"></a>
 
 ## Operaciones de transacciones sin conexión
@@ -183,7 +213,7 @@ Use `counter-reset` para restablecer el contador de un firmante:
 
 ```sh
 ./bursa signer counter-reset --config /path/to/signer.yaml \
-  --key <hash hexadecimal de 56 caracteres> --chain-counter <contador> --yes
+  --key "$COLD_KEY_HASH" --chain-counter 10 --yes
 ```
 
 Cuando la configuración incluye backends con perfil, use `--profile <perfil-configurado>` para seleccionar el perfil correspondiente, incluidos los backends `sops`. Para seleccionar un backend sin perfil en una configuración que también tiene backends con perfil, use `--unprofiled`. Ninguna de las dos opciones es necesaria cuando ningún backend tiene perfil. Consulte la [guía operativa del firmante](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md) para conocer el procedimiento completo.
@@ -194,6 +224,15 @@ Cuando la configuración incluye backends con perfil, use `--profile <perfil-con
 
 ```sh
 ./bursa confidential-space-workload \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --wrapped-key-file /var/lib/bursa/pool-key.wrapped \
+  --counter-bucket "$COUNTER_BUCKET" \
+  --counter-object pool-counter \
+  --wif-credentials /etc/bursa/wif.json \
+  --tls-cert-file /etc/bursa/workload.crt \
+  --tls-key-file /etc/bursa/workload.key \
+  --client-ca-file /etc/bursa/signer-ca.crt \
   --profile pool@mainnet --profile pool@preview \
   --create-profile-counter pool@mainnet
 ```
@@ -203,7 +242,10 @@ Cuando la configuración incluye backends con perfil, use `--profile <perfil-con
 El comando `bursa nitro enclave` requiere `--signer-authority-file` junto con `--provision-authority-file`. Los dos archivos deben contener autoridades distintas:
 
 ```sh
-bursa nitro enclave \
+./bursa nitro enclave \
+  --server-cert-file /etc/bursa/nitro/server.pem \
+  --server-key-file /etc/bursa/nitro/server-key.pem \
+  --client-ca-file /etc/bursa/nitro/proxy-ca.pem \
   --provision-authority-file /etc/bursa/nitro/provision-authority.hex \
   --signer-authority-file /etc/bursa/nitro/signer-authority.hex
 ```
@@ -211,7 +253,15 @@ bursa nitro enclave \
 `bursa nitro proxy` admite `--socket-mode` para controlar el acceso al socket. Use, por ejemplo, `--socket-mode 0660` para permitir el acceso al grupo; el comando rechaza los modos con permisos de escritura para todo el mundo:
 
 ```sh
-bursa nitro proxy --socket-mode 0660
+./bursa nitro proxy \
+  --enclave-cid "$ENCLAVE_CID" \
+  --region "$AWS_REGION" \
+  --secret-id "$NITRO_SECRET_ID" \
+  --enclave-ca-file /etc/bursa/nitro/enclave-ca.pem \
+  --client-cert-file /etc/bursa/nitro/proxy.pem \
+  --client-key-file /etc/bursa/nitro/proxy-key.pem \
+  --enclave-server-name "$ENCLAVE_SERVER_NAME" \
+  --socket /run/bursa/nitro.sock --socket-mode 0660
 ```
 
 ***

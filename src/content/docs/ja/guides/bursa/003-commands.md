@@ -101,6 +101,42 @@ http://localhost:8080/swagger/index.html
 
 `--config` にはYAML設定ファイルのパスを指定します。フラグを省略した場合は、`BURSA_CONFIG` 環境変数で設定ファイルのパスを指定できます。
 
+<a id="kes-agent-control"></a>
+### `kes-agent` の制御コマンド
+
+稼働中の `kes-agent` にローカル制御ソケット経由でコマンドを送るには、`bursa kes-agent control` を使用します。制御ソケットは次の規則で選択します。
+
+- `--socket <path>` を指定すると、そのパスを使用します。この指定は設定ファイルの値より優先されます。
+- `--socket` を省略すると、`--config <path>` で指定した YAML ファイルの `kes_agent.control_socket` を使用します。
+- `--config` も省略した場合は、環境変数 `BURSA_CONFIG` で選択した YAML ファイルの `kes_agent.control_socket` を使用します。これ以外の方法では制御ソケットを検出しません。
+
+`--profile <name>` は、複数のプロファイルを持つエージェントでコマンドを実行するプロファイルを指定します。プロファイルを指定しない `info` はすべてのプロファイルを一覧表示し、単一プロファイルのエージェントでは `--profile` を省略できます。
+
+次のサブコマンドを使用できます。
+
+- `info` はエージェントの鍵の状態を表示します。
+- `gen-staged-key [--out <path>]` はステージ済み KES 鍵を生成し、検証鍵を表示します。`--out` を指定すると、検証鍵を `cardano-cli` エンベロープとして指定したファイルに書き込みます。エージェントからの応答を先に表示し、既存のファイルは置き換えません。
+- `install-key --opcert <path>` は、必須の `--opcert` で指定した `NodeOperationalCertificate` の `cardano-cli` エンベロープを読み込み、ステージ済み鍵をインストールします。
+- `drop-key --target <value>` は、必須の `--target` で指定した鍵を削除します。`<value>` には `staged`、`active`、`all` のいずれかだけを指定できます。
+
+各サブコマンドはエージェントの応答を JSON として出力し、バイト列のフィールドを 16 進数で表示します。エージェントがコマンドを拒否すると、CLI は応答を表示したうえで 0 以外の終了コードを返します。1 回の制御要求には 30 秒の制限があり、要求をキャンセルすると待機中のソケット入出力を直ちに停止します。
+
+#### KES 鍵のローテーション
+
+次の順序で KES 鍵をローテーションします。運用証明書はエージェントではなく、プールのコールド鍵を使ってオフラインで発行します。
+
+1. `gen-staged-key` でステージ済み鍵を生成します。
+2. 生成した検証鍵に対する運用証明書を、プールのコールド鍵でオフライン発行します。
+3. `install-key` で運用証明書をインストールします。
+4. `info` でエージェントの状態を確認します。
+
+```sh
+./bursa kes-agent control --config /path/to/kes-agent.yaml gen-staged-key --out kes.vkey
+# kes.vkey に対する運用証明書をプールのコールド鍵でオフライン発行し、node.cert として保存
+./bursa kes-agent control --config /path/to/kes-agent.yaml install-key --opcert node.cert
+./bursa kes-agent control --config /path/to/kes-agent.yaml info
+```
+
 `kes_agent.mode` に `serve-key` または `sign` を設定します。`kes_agent` YAML のフィールドと環境変数、および必須のソケット、鍵、タイミング設定については[設定リファレンス](../009-configuration-reference)を参照してください。
 
 ### `kes-agent` の準備状態を確認
@@ -210,7 +246,7 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 
 ```sh
 ./bursa signer counter-reset --config /path/to/signer.yaml \
-  --key <56文字のコールドキーのハッシュ> --chain-counter 10 --yes
+  --key "$COLD_KEY_HASH" --chain-counter 10 --yes
 ```
 
 プロファイル付きバックエンド（SOPSを含む）のカウンターを選択する場合は、設定済みのプロファイルを `--profile <configured-profile>` で指定します。プロファイル付きバックエンドが存在し、プロファイルなしのバックエンドを選択する場合は `--unprofiled` を指定します。プロファイル付きバックエンドが存在しない設定では、どちらのセレクターも必要ありません。完全な手順は[署名サービス運用ガイド](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md)を参照してください。
@@ -223,6 +259,15 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 
 ```sh
 ./bursa confidential-space-workload \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --wrapped-key-file /var/lib/bursa/pool-key.wrapped \
+  --counter-bucket "$COUNTER_BUCKET" \
+  --counter-object pool-counter \
+  --wif-credentials /etc/bursa/wif.json \
+  --tls-cert-file /etc/bursa/workload.crt \
+  --tls-key-file /etc/bursa/workload.key \
+  --client-ca-file /etc/bursa/signer-ca.crt \
   --profile pool@mainnet --profile pool@preview \
   --create-profile-counter pool@preview
 ```
@@ -233,6 +278,9 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 
 ```sh
 ./bursa nitro enclave \
+  --server-cert-file /etc/bursa/nitro/server.pem \
+  --server-key-file /etc/bursa/nitro/server-key.pem \
+  --client-ca-file /etc/bursa/nitro/proxy-ca.pem \
   --provision-authority-file /etc/bursa/nitro/provision-authority.hex \
   --signer-authority-file /etc/bursa/nitro/signer-authority.hex
 ```
@@ -242,7 +290,15 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
 `bursa nitro proxy` の `--socket-mode` は、グループアクセス用に `0660` などを指定できます。Bursaは全ユーザーが書き込めるモードを拒否します。
 
 ```sh
-./bursa nitro proxy --socket-mode 0660
+./bursa nitro proxy \
+  --enclave-cid "$ENCLAVE_CID" \
+  --region "$AWS_REGION" \
+  --secret-id "$NITRO_SECRET_ID" \
+  --enclave-ca-file /etc/bursa/nitro/enclave-ca.pem \
+  --client-cert-file /etc/bursa/nitro/proxy.pem \
+  --client-key-file /etc/bursa/nitro/proxy-key.pem \
+  --enclave-server-name "$ENCLAVE_SERVER_NAME" \
+  --socket /run/bursa/nitro.sock --socket-mode 0660
 ```
 
 ***

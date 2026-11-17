@@ -15,7 +15,7 @@ The `kes-agent` command accepts a YAML file with `--config`. When the flag is no
 bursa kes-agent --config /etc/bursa/config.yaml
 ```
 
-The command validates the loaded values before it opens either Unix socket. For command usage, see the [API section of the CLI guide](../003-commands#api) and the [kes-agent section of the CLI guide](../003-commands#kes-agent).
+The command validates the loaded values before it opens either Unix socket. It checks the [remote listener](#remote-listener) settings when it opens that listener, after the Unix sockets. For command usage, see the [API section of the CLI guide](../003-commands#api) and the [kes-agent section of the CLI guide](../003-commands#kes-agent).
 
 ## Wallet environment variable
 
@@ -197,7 +197,7 @@ signer:
 
 ## `kes_agent`
 
-Configure the daemon under the `kes_agent` YAML key. Only fields with a documented environment mapping accept the corresponding `KESAGENT_*` variable; fields marked `YAML only` must remain in YAML.
+Configure the daemon under the `kes_agent` YAML key. Each field also accepts the corresponding `KESAGENT_*` environment variable, except `kes_agent.profiles` and `kes_agent.store`, which Bursa reads from YAML only.
 
 | YAML key | Environment variable | Purpose | Default or requirement |
 | --- | --- | --- | --- |
@@ -216,42 +216,13 @@ Configure the daemon under the `kes_agent` YAML key. Only fields with a document
 | `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | Limit how far a requested header may be ahead of the agent clock. | Bursa uses `5s` by default; set a Go duration. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Limit the number of operational certificate evolutions. | Bursa uses `62` by default. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Set the scheduler interval as a Go duration, such as `1m`. | Bursa uses `1m` by default; set a Go duration. |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path unless `kes_agent.store.type: postgres` is configured. |
-| `kes_agent.profiles` | YAML only | Define multiple KES pools in one agent. | Profiles replace the single-pool fields. Each name is 1 to 64 characters, starts with an ASCII letter or digit, and then uses ASCII letters, digits, `.`, `_`, or `-`. |
-| `kes_agent.store.type` | YAML only | Select the shared KES guard and key store. | Set `postgres` to share state across replicas; the default is the file store. |
-| `kes_agent.store.dsn_env` | YAML only | Names the environment variable containing the PostgreSQL DSN. | Required with `store.type: postgres`; a non-loopback database requires `sslmode=verify-full`. |
-| `kes_agent.store.age_recipients` | YAML only | Lists age recipients for sealing shared KES keys. | Optional; use only with `store.type: postgres` and with `age_identity_file`. |
-| `kes_agent.store.age_identity_file` | YAML only | Identifies the age key used to unseal shared KES keys. | Optional; use only with `store.type: postgres` and with `age_recipients`. Restrict the file to its owner. |
-| `kes_agent.store.key_poll_interval` | YAML only | Sets how often replicas check for an installed shared KES key. | Optional; Bursa uses `10s` by default. |
-| `kes_agent.attested_listen_address` | YAML only | Enables the attested remote signing listener. | Use only in `sign` mode with exactly one profile. |
-| `kes_agent.attested_tls_cert_file` | YAML only | Provides the attested listener's TLS certificate. | Use with `attested_tls_key_file`; omit both for plaintext transport. |
-| `kes_agent.attested_tls_key_file` | YAML only | Provides the attested listener's TLS private key. | Use with `attested_tls_cert_file`; omit both for plaintext transport. |
-| `kes_agent.attested_client_ca_file` | YAML only | Identifies the CA for attested listener client certificates. | Optional; the agent requests and verifies client certificates only when set. |
-| `kes_agent.attested_plaintext` | YAML only | Enables plain TCP for the attested listener. | Do not combine with any attested TLS or client CA file. |
-| `kes_agent.attestation_provider` | YAML only | Selects the evidence provider. | Use `nitro`, `confidential-space`, or `none`. `none` returns empty evidence and requires no attester. |
-| `kes_agent.attester_address` | YAML only | Sets the provider adapter endpoint. | Required for `nitro` and `confidential-space`; omit it for `none`. |
-| `metrics.address` | `METRICS_LISTEN_ADDRESS` | Sets the dedicated health and metrics listener address. | Loopback only; Bursa uses `127.0.0.1` by default. |
-| `metrics.port` | `METRICS_LISTEN_PORT` | Sets the dedicated health and metrics listener port. | Set `0` to disable the listener and its endpoints. |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path; leave unset with a [shared store](#shared-store). |
 
 The daemon requires different service and control socket paths. It accepts octal socket modes and defaults both modes to owner-only `0600` access. A service socket can grant group access when the producer needs a different user ID, but it cannot grant write access to other users. The control socket must remain owner-only for write access because it accepts commands that can install or remove KES keys.
 
-The daemon requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and either a durable `guard_file` path or `kes_agent.store.type: postgres` before startup can continue.
+Without [`kes_agent.profiles`](#profiles), these single-pool fields form one profile named `default`. The daemon then requires one cold verification key from `cold_vkey_file` or `cold_vkey_hex`. The key must resolve to 32 bytes. It requires `system_start` in RFC3339 format, a positive `slot_length`, a nonzero `slots_per_kes_period`, and, unless a [shared store](#shared-store) is configured, a durable `guard_file` path before startup can continue.
 
-Bursa refuses KES-agent startup when the configuration has neither a durable `kes_agent.guard_file` nor `kes_agent.store.type: postgres`. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
-
-Set `shelley_start_slot` together with `shelley_start_time` when the network used a different slot length before Shelley. The agent derives absolute KES periods from that anchor. The agent refuses a header more than `max_clock_skew` ahead of its clock before it evolves the key or persists guard state.
-
-Use `kes_agent.profiles` for multiple pools or networks. Profiles replace the single-pool `cold_vkey_file`, `cold_vkey_hex`, `system_start`, Shelley anchor, schedule, `max_clock_skew`, and `guard_file` settings; do not combine `profiles` with those fields. Top-level `slot_length` and `max_kes_evolutions` must be omitted or remain at their defaults. Each profile has its own cold verification key, schedule, guard, staged and active key, operational certificate, period floor, and signed-slot state. In `sign` mode, the agent routes a header by its issuer and KES key. A profile name must be unique and follow the validation shown in the table.
-
-Set `kes_agent.store.type: postgres` and `dsn_env` to share each profile's period and signed-slot records across replicas. Leave `guard_file` unset because PostgreSQL and a guard file are mutually exclusive. `age_recipients`, `age_identity_file`, and `key_poll_interval` optionally share age-sealed KES keys; configure the recipient and identity together, restrict the identity file to its owner, and use these fields only with PostgreSQL. The stored key remains readable to anything holding the age identity and does not retain KES forward security as it evolves.
-
-Set `attested_listen_address` to enable remote attested signing. Configure both TLS files for TLS, or set `attested_plaintext` without any TLS or client CA file for plain TCP. Set `attested_client_ca_file` to require and verify client certificates. Set `attestation_provider` to `none` when no platform evidence is available; unset `attester_address` in that mode, and the agent returns empty evidence. `nitro` and `confidential-space` require `attester_address`.
-
-The loopback-only `metrics` listener serves unauthenticated `GET /healthz`, `GET /readyz`, and `GET /metrics`. `/healthz` returns `200` while the process runs. `/readyz` returns `200` when the agent's dependencies are healthy, including when a profile has no installed key, and `503` when PostgreSQL is unavailable or a replica cannot load an installed shared key. `bursa kes-agent ready --config <file>` checks `/readyz` and exits `0` when ready or `1` otherwise. Set `metrics.port` to `0` to disable the listener and all three endpoints.
-
-The KES slot guard persists the last signed slot and header body in the configured guard state. The agent may retry a slot with an identical header body, refuses a different body as equivocation, and refuses a lower slot as rollback. PostgreSQL shares these records across replicas; a guard file persists them for one agent state.
-
-The attested listener gives each TLS handshake a 10-second deadline and permits at most 64 pending handshakes globally and 4 from one source. The source means an IPv4 address or an IPv6 `/64`. When the limit is full, the listener evicts the oldest pending handshake. Pending handshakes do not consume authenticated slots.
+Without a shared store, Bursa refuses KES-agent startup when `kes_agent.guard_file` is empty. The period guard persists the highest KES period that the agent authorizes, restores that period after a restart, and refuses a period rollback. The daemon does not support an in-memory fallback for this guard.
 
 ```yaml
 kes_agent:
@@ -268,6 +239,109 @@ kes_agent:
   evolve_interval: 1m
   guard_file: /var/lib/bursa/kes-period.guard
 ```
+
+### Remote listener
+
+Set `kes_agent.attested_listen_address` to serve `sign` mode to a block producer on another host over TCP. The agent keeps serving its Unix sockets as well. The listener uses TLS by default. Add these keys to the `kes_agent` block alongside the socket settings.
+
+| YAML key | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `kes_agent.attested_listen_address` | `KESAGENT_ATTESTED_LISTEN_ADDRESS` | Serve `sign` mode to a remote producer on this TCP address, such as `:7000`. | Optional; leave unset to serve only the Unix sockets. Requires `kes_agent.mode` set to `sign`. |
+| `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | Present the server TLS certificate from this file on the remote listener. | Required with `attested_tls_key_file` unless `attested_plaintext` is `true`. |
+| `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | Present the server TLS private key from this file on the remote listener. | Required with `attested_tls_cert_file` unless `attested_plaintext` is `true`. On Unix, Bursa refuses a key file that grants group or other access. |
+| `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | Verify producer client certificates against the CA certificates in this PEM file. | Optional. When set, every connection must present a client certificate that this CA verifies; when unset, the listener does not request client certificates. The file must contain at least one certificate. |
+| `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | Serve the remote listener on plain TCP instead of TLS. | Defaults to `false`. When `true`, leave `attested_tls_cert_file`, `attested_tls_key_file`, and `attested_client_ca_file` unset. |
+| `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | Name the attestation verifier that the producer must use. | Required when `attested_listen_address` is set. The `none` provider sends no attestation evidence. |
+| `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | Reach the attestation adapter inside the protected workload that produces nonce-bound evidence. | Required for every provider except `none`, which rejects it. Use an `https://` URL, a loopback `http://` URL, or a `unix://` socket URL. |
+
+With TLS, the listener requires TLS 1.3 and a certificate and key. At startup the agent logs the SHA-256 fingerprint of the served certificate's public key as `server_spki_sha256`; a producer can pin that value. With `attested_plaintext`, the agent does not authenticate the remote peer. Bursa exits at startup when a remote listener setting is invalid.
+
+```yaml
+kes_agent:
+  mode: sign
+  attested_listen_address: ":7000"
+  attested_tls_cert_file: /etc/bursa/kes-agent/tls.crt
+  attested_tls_key_file: /etc/bursa/kes-agent/tls.key
+  attested_client_ca_file: /etc/bursa/kes-agent/client-ca.crt
+  attestation_provider: none
+```
+
+### Profiles
+
+Set `kes_agent.profiles` to serve several pools from one agent, on one network or on several. Each entry is one pool on one network. Configure profiles in YAML only.
+
+| Configuration path | Purpose | Default or requirement |
+| --- | --- | --- |
+| `kes_agent.profiles[].name` | Names the profile. | Required and unique. Use 1 to 64 letters, digits, `.`, `_`, or `-`, starting with a letter or digit. |
+| `kes_agent.profiles[].cold_vkey_file` | Loads the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
+| `kes_agent.profiles[].cold_vkey_hex` | Loads the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
+| `kes_agent.profiles[].system_start` | Sets the Shelley genesis system start. | Required; set an RFC3339 timestamp. |
+| `kes_agent.profiles[].shelley_start_slot` | Sets the first Shelley slot. | Set with `shelley_start_time` on networks whose Byron era used longer slots, such as `4492800` on mainnet and `86400` on preprod. Without them, Bursa counts slots from `system_start` at `slot_length`. |
+| `kes_agent.profiles[].shelley_start_time` | Sets the time of the first Shelley slot. | Set with `shelley_start_slot` as an RFC3339 timestamp, such as `2020-07-29T21:44:51Z` on mainnet and `2022-06-21T00:00:00Z` on preprod. |
+| `kes_agent.profiles[].slot_length` | Sets the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
+| `kes_agent.profiles[].slots_per_kes_period` | Sets the number of slots in one KES period. | Set a value greater than `0`. |
+| `kes_agent.profiles[].max_kes_evolutions` | Limits the number of operational certificate evolutions. | Bursa uses `62` by default. |
+| `kes_agent.profiles[].max_clock_skew` | Sets how far ahead of the agent's clock a header's slot can be before `sign` refuses it. | Bursa uses `5s` by default; set a positive Go duration. |
+| `kes_agent.profiles[].guard_file` | Stores the profile's monotonic KES period guard at this durable path. | Required with the default file store; leave unset with a [shared store](#shared-store). Each profile needs its own file. |
+
+When `profiles` is set, leave the top-level single-pool fields unset: `cold_vkey_file`, `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew`, and `guard_file`. Leave `slot_length` and `max_kes_evolutions` at their defaults of `1` and `62`. Bursa refuses startup when any of these top-level fields is set, and asks for the setting in each profile instead.
+
+Bursa also refuses startup when two profiles share a guard file, including the same file reached through a symbolic or hard link, and when two profiles have the same cold verification key and the same `system_start`. One cold key can serve several networks, which a different `system_start` tells apart. The `serve-key` mode takes exactly one profile; serve several pools in `sign` mode.
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  profiles:
+    - name: pool-a
+      cold_vkey_file: /etc/bursa/pool-a-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+      guard_file: /var/lib/bursa/pool-a.guard
+    - name: pool-b
+      cold_vkey_file: /etc/bursa/pool-b-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+      guard_file: /var/lib/bursa/pool-b.guard
+```
+
+### Shared store
+
+Set `kes_agent.store` to keep every profile's KES period floor and signed slot records in a PostgreSQL database instead of guard files, so several agent replicas can share them. The store applies to the single-pool `default` profile as well as to `profiles`. Configure the store in YAML only.
+
+| Configuration path | Purpose | Default or requirement |
+| --- | --- | --- |
+| `kes_agent.store.type` | Selects where the agent keeps each profile's slot guard. | Defaults to `file`, which uses each profile's `guard_file`. Set `postgres` to use a shared PostgreSQL database. Bursa rejects other values. |
+| `kes_agent.store.dsn_env` | Names an environment variable that contains the PostgreSQL connection string. | Required when `type` is `postgres`; the named variable must contain a nonempty value. Bursa rejects this field with the `file` store. A non-loopback database host requires `sslmode=verify-full`. |
+| `kes_agent.store.age_recipients` | Lists the age recipients that the agent seals each staged KES signing key to before it stores the key in the database. | Set together with `age_identity_file`, and only when `type` is `postgres`. |
+| `kes_agent.store.age_identity_file` | Specifies the file of age identities that every replica uses to unseal the installed KES key. | Set together with `age_recipients`, and only when `type` is `postgres`. On Unix, Bursa refuses a file that grants group or other access. |
+| `kes_agent.store.key_poll_interval` | Sets how often each replica checks the database for a newly installed key. | Bursa uses `10s` by default; set a positive Go duration. Requires `age_recipients` and `age_identity_file`. |
+
+With the `postgres` store, leave `guard_file` unset in every profile and at the top level. Bursa refuses startup when a guard file is set next to the shared store rather than ignoring it.
+
+Without `age_recipients` and `age_identity_file`, each replica keeps its own KES key in memory only, and the database holds only the slot guard. With them, the agent seals a staged key with age to `age_recipients` and keeps it in the database, and every replica unseals the installed key with the identities in `age_identity_file`.
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  profiles:
+    - name: pool-a
+      cold_vkey_file: /etc/bursa/pool-a-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+  store:
+    type: postgres
+    dsn_env: BURSA_KES_AGENT_STORE_DSN
+    age_recipients:
+      - age1examplerecipient
+    age_identity_file: /etc/bursa/kes-agent/age-identity.txt
+    key_poll_interval: 10s
+```
+
+Provide the DSN through the named environment variable rather than embedding a password in the YAML file.
 
 ### Migrate socket permissions
 
