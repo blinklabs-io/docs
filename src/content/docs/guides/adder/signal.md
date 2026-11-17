@@ -116,9 +116,8 @@ production account or real credentials in a test configuration.
 4. Confirm that the daemon accepts the JSON-RPC request and that Adder reports no output error.
 5. Confirm that the separate test recipient receives the event message.
 
-Treat receipt as an observation of the test environment, not as a delivery
-guarantee. A successful daemon response confirms acceptance by `signal-cli`,
-not recipient reading.
+Use the observed receipt to validate the test account, recipient, and event
+selection in the test environment.
 
 ---
 
