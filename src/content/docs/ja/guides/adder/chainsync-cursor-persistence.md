@@ -96,3 +96,13 @@ ChainSyncは状態ストアの所有権を次のように扱います。
 ## 関連情報
 
 - [ChainSync入力設定とコマンド一覧](./006-command_list.md#input-chainsync)
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

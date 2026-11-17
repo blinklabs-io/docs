@@ -168,3 +168,14 @@ not suppress errors unrelated to an already closed connection.
 
 - [Output integrations guide](./008-output-integrations.md)
 - [Command reference](./006-command_list.md)
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

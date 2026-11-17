@@ -69,3 +69,13 @@ La instancia que abre su propio almacén administra su ciclo de vida y lo cierra
 ## Navegación
 
 - Consulte la sección de [configuración de entrada](./006-command_list.md#entrada) para ubicar `--input-chainsync-state-path` junto con las demás opciones de entrada.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
