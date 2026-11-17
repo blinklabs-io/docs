@@ -5,7 +5,7 @@ description: Configure Adder to publish selected events to Core NATS subjects.
 
 # NATS output
 
-This guide describes the `nats` output for publishing selected Adder events as complete JSON messages to Core NATS subjects.
+This guide describes the `nats` output, its Core NATS subjects, and its delivery behavior.
 
 ## Configuration
 
@@ -45,7 +45,7 @@ Adder trims each comma-separated server entry and accepts only URLs that meet al
 
 Adder rejects an empty `servers` value and stops startup when any server entry fails validation.
 
-Use `tls://` when the connection carries a token. The output does not derive TLS credentials from the token or accept credentials embedded in a server URL.
+The output does not derive TLS credentials from the token or accept credentials embedded in a server URL.
 
 ## Subject and event mapping
 
@@ -66,7 +66,7 @@ The output also supports these event names:
 - `drep-update`, which publishes to `<subject-prefix>.drep-update`.
 - `drep-retirement`, which publishes to `<subject-prefix>.drep-retirement`.
 
-Each message contains the complete Adder event serialized as JSON. The output does not reduce the event to a summary or select individual fields.
+Adder serializes the complete event as JSON in each message. The output does not reduce the event to a summary or select individual fields.
 
 ### Subject prefix validation
 
@@ -84,7 +84,7 @@ For example, `adder.events` passes validation, while `.adder.events`, `adder..ev
 Adder uses Core NATS publishing semantics:
 
 1. The output ignores events outside the configured `event-types` selection.
-2. For each selected event, Adder serializes the complete event as JSON and publishes it to the mapped subject.
+2. For each selected event, Adder publishes the JSON message to the mapped subject.
 3. After each successful publish, Adder flushes the connection and waits up to five seconds for the server response.
 
 A successful flush confirms that the NATS server processed the publish command. It does not confirm that a subscriber received or processed the message. Core NATS does not provide JetStream persistence through this output.
