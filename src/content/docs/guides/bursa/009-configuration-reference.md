@@ -5,7 +5,7 @@ description: YAML and environment-variable reference for Bursa `kes-agent` and l
 
 ## Overview
 
-This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, and `confidential-space` signer backends.
+This guide describes Bursa signer and KES-agent configuration. The `signer.backends` settings support the `pkcs11`, `nitro`, `confidential-space`, and `sops` signer backends.
 
 ## Load a configuration file
 
@@ -60,7 +60,7 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 
 | Configuration path | Purpose | Validation |
 | --- | --- | --- |
-| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, or `confidential-space`. |
+| `signer.backends[].type` | Selects the signer backend. | Set to `pkcs11`, `nitro`, `confidential-space`, or `sops`. |
 | `signer.backends[].address` | Specifies the endpoint for an attested signer backend. | Set to an `http://`, `https://`, or `unix:///` endpoint. |
 | `signer.backends[].module` | Specifies the path to the `PKCS#11` module, including the `.so` file. | Set this field. Bursa rejects an empty value. |
 | `signer.backends[].token_label` | Selects the token or slot by its label. | Set this field or `slot`. Bursa requires at least one selection field. |
@@ -69,11 +69,21 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 | `signer.backends[].keys[]` | Defines an optional allowlist of token objects. | When present, give every entry a `name` and `type`. |
 | `signer.backends[].keys[].name` | Matches the token object's `CKA_LABEL`. | Set this field for each `keys` entry. |
 | `signer.backends[].keys[].type` | Assigns a Cardano key type to the matching token object. | Set this field for each `keys` entry. Use `payment`, `stake`, `drep`, `cc-hot`, `cc-cold`, `pool`, or `policy`. |
+| `signer.backends[].profile` | Binds a Confidential Space or SOPS backend to a profile. | Optional. Use 1 to 32 letters, digits, `.`, `_`, `@`, or `-`. Leave unset for Nitro because its enclave protocol does not implement profile binding. |
 | `signer.backends[].root_ca_file` | Specifies the AWS Nitro Enclaves root certificate. | Required for `nitro`; use the pinned AWS Nitro root certificate. |
 | `signer.backends[].pcrs` | Specifies expected Nitro PCR index and hexadecimal value pairs. | Required for `nitro`; PCR0 must be present and nonzero. |
+| `signer.backends[].host_key_file` | Supplies the signer authority key for Nitro challenge-bound signing. | Required for `nitro`; use an owner-only key file. The signer authority must differ from the provisioning authority. |
 | `signer.backends[].audience` | Specifies the audience that a Confidential Space attestation token must contain. | Required for `confidential-space`. |
 | `signer.backends[].image_digest` | Specifies the required Confidential Space container image digest. | Required for `confidential-space`; use a `sha256:` digest. |
 | `signer.backends[].jwks_url` | Specifies the token-signing key set for Confidential Space attestation tokens. | Optional for `confidential-space`; defaults to Google's published token-signing set. |
+
+Profile routing applies to Confidential Space and SOPS backends. A request must select the matching profile. A request without a profile is usable only when one backend unambiguously holds the key. Each profile keeps independent counter and record scope. Nitro does not support `profile`; leave it unset.
+
+### Nitro custody persistence
+
+The Nitro proxy role needs `secretsmanager:GetSecretValue`, `secretsmanager:DescribeSecret`, and `secretsmanager:PutSecretValue` while it serves. The proxy persists sealed counter state with every signature. A failed or timed out persistence write makes the proxy stop later signing until an operator restarts or reloads it; after recovery, the proxy accepts a retry only when the payload matches the payload at the stored counter.
+
+The sealed counter state has a version. An older enclave or proxy cannot consume a newer state. To downgrade, restore the prior envelope-only Secrets Manager secret version documented for Nitro custody before starting the older components.
 
 ### Wallet storage and encryption
 
@@ -119,6 +129,17 @@ The `software`/`file` signer backend loads plaintext private key material into p
 | `signer.listen_address` | `SIGNER_LISTEN_ADDRESS` | `""` | Determines whether the signer listener uses a loopback address. |
 
 For a configured `software`/`file` backend, Bursa refuses startup when `signer.listen_address` is non-loopback unless `signer.allow_insecure_file_backend` is `true`. The empty `signer.listen_address` value means all interfaces and counts as non-loopback for this check. A loopback listener or an explicit `true` opt-in permits startup, but Bursa emits a warning whenever the backend is in use. Use a custody backend such as `Vault` or `SOPS` instead of plaintext key material in production.
+
+## Signer JWT authentication
+
+Configure at most one signer bearer-token trust source. Bursa requires a non-empty audience when an operator configures `signer.jwt_secret` or `signer.jwks_url`, and every bearer token must carry the same value in its `aud` claim. Bursa fails startup without the audience and rejects a token with a missing or mismatched audience. `signer.jwt_issuer` remains optional; if an operator omits it, Bursa accepts any issuer and logs a warning.
+
+| Configuration path | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `signer.jwt_secret` | `SIGNER_JWT_SECRET` | Authenticates bearer tokens with an HS256 secret. | Use instead of `signer.jwks_url`; provide at least 32 bytes. |
+| `signer.jwks_url` | `SIGNER_JWKS_URL` | Authenticates bearer tokens through a JWKS endpoint. | Use instead of `signer.jwt_secret`. |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | Matches the required `aud` claim in bearer tokens. | Required when an operator configures `signer.jwt_secret` or `signer.jwks_url`. |
+| `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | Restricts the issuer that bearer tokens can contain. | Optional when any issuer is acceptable. |
 
 ## Signer watermark
 
@@ -188,8 +209,11 @@ Configure the daemon under the `kes_agent` YAML key. Each field also accepts the
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | Load the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Load the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Set the Shelley genesis system start. | Set an RFC3339 timestamp. |
+| `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Set the first Shelley slot for networks whose earlier era used a different slot length. | Set this with `shelley_start_time` when the target network requires a Shelley anchor. |
+| `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | Set the wall clock time of `shelley_start_slot`. | Set this with `shelley_start_slot` when the target network requires a Shelley anchor. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Set the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | Set the number of slots in one KES period. | Set a value greater than `0`. |
+| `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | Limit how far a requested header may be ahead of the agent clock. | Bursa uses `5s` by default; set a Go duration. |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | Limit the number of operational certificate evolutions. | Bursa uses `62` by default. |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | Set the scheduler interval as a Go duration, such as `1m`. | Bursa uses `1m` by default; set a Go duration. |
 | `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | Store the monotonic KES period guard at this durable path. | Set a durable path; leave unset with a [shared store](#shared-store). |
@@ -334,10 +358,10 @@ Configure the legacy API under the `api` YAML key.
 | `api.jwt_secret` | `API_JWT_SECRET` | Authenticate bearer tokens with an HS256 secret. | Use instead of `api.jwks_url`; provide at least 32 bytes. |
 | `api.jwks_url` | `API_JWKS_URL` | Authenticate bearer tokens through a JWKS endpoint. | Use instead of `api.jwt_secret`; Bursa requires HTTPS except for loopback development. |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Constrain the issuer that bearer tokens can contain. | Set to constrain the accepted issuer. |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Constrain the audience that bearer tokens can contain. | Set to constrain the accepted audience. |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Matches the required `aud` claim in bearer tokens. | Required when `api.jwt_secret` or `api.jwks_url` is configured. |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | Defines the non-empty JWT subject allowlist for persisted wallet administration. | Whenever any wallet-storage backend is configured, include at least one non-empty subject. Bursa refuses startup when the list is empty or missing. |
 
-A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
+A non-loopback legacy API listener must provide both readable TLS files and exactly one bearer trust source: `api.jwt_secret` or `api.jwks_url`. Bursa rejects startup unless it receives exactly one source. When an operator configures either trust source, `api.jwt_audience` is mandatory and every bearer token must carry the same value in its `aud` claim; Bursa rejects a missing or mismatched audience. An HS256 secret must contain at least 32 bytes. A JWKS URL must use HTTPS, while loopback development can use HTTP.
 
 The default API listener uses loopback. Bursa can keep loopback development in plaintext when operators omit TLS files, but Bursa requires TLS and bearer authentication for a non-loopback listener.
 
