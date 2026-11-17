@@ -7,13 +7,13 @@ Este documento describe cómo comparar las capacidades de los búferes de entrad
 
 ## Benchmarks representativos
 
-Ejecute el siguiente comando desde la raíz del repositorio para medir los benchmarks representativos del flujo de eventos, los filtros de Cardano y la serialización JSON:
+Use el siguiente comando desde la raíz del repositorio para ejecutar los benchmarks representativos del flujo de eventos, los filtros de Cardano y la serialización JSON:
 
 ```sh
 go test ./pipeline ./filter/cardano ./event -run '^$' -bench 'Benchmark(PipelineEventFlow|CardanoFilter|EventJSON)' -benchmem -benchtime=1s -count=5
 ```
 
-`BenchmarkPipelineEventFlow` mide el paso de un evento a la vez por un pipeline en ejecución con cero, uno o tres filtros de paso. `BenchmarkCardanoFilter` utiliza datos de prueba fijos para casos coincidentes y no coincidentes de filtros de direcciones, activos y pools de Cardano. `BenchmarkEventJSON` mide por separado la serialización y deserialización JSON de un evento de transacción, sin incluir una transacción completa del ledger ya decodificada.
+`BenchmarkPipelineEventFlow` mide el paso de un evento a la vez por un pipeline en ejecución con cero, uno o tres filtros de paso. `BenchmarkCardanoFilter` utiliza datos de prueba fijos para casos coincidentes y no coincidentes de filtros de direcciones, activos y pools de Cardano. `BenchmarkEventJSON` mide por separado la serialización y deserialización JSON de un evento de transacción, sin incluir una transacción completa del libro mayor ya decodificada.
 
 La preparación queda fuera de las secciones cronometradas relevantes. Las asignaciones y los tiempos dependen de la carga de trabajo; compare las ejecuciones únicamente con la misma máquina, la misma versión de Go y la misma carga de trabajo.
 
