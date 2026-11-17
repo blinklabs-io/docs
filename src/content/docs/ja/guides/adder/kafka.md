@@ -23,8 +23,8 @@ plugins:
 
 - `brokers`には、カンマ区切りのKafka bootstrap `host:port`アドレスを指定します。既定値は`127.0.0.1:9092`です。
 - `topic`にはKafka topicを指定します。既定値は`adder.events`です。Adderの起動前にtopicを作成してください。
-- `username`と`password`は、SASL PLAINの任意の認証情報です。両方を設定し、`tls: true`を指定してください。シークレット管理機能を通じて認証情報を渡します。
-- `tls`はブローカー接続でTLSを使用します。既定値は`false`です。SASL PLAINの認証情報にはTLSが必要です。
+- `username`と`password`は、SASL PLAINの任意の認証情報です。既定値は空です。両方を設定し、認証情報を使用する場合は`tls: true`を指定してください。シークレット管理機能を通じて認証情報を渡します。
+- `tls`はブローカー接続でTLSを使用します。既定値は`false`です。
 - `event-types`には、カンマ区切りで配信するイベント種別を指定します。既定値は`blocks,rollbacks,governance`です。追加で`transactions`、`drep-registration`、`drep-update`、`drep-retirement`を指定できます。
 
 ## 配信動作
