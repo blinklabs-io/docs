@@ -808,6 +808,92 @@ description: Lista de Comandos de Adder.
 
 > límite configurado de tamaño de mensaje del topic SNS (predeterminado `262144`)
 
+### Salida `redis`
+
+```text
+  --output-redis-address string
+```
+
+> host:port TCP de Redis (predeterminado `127.0.0.1:6379`)
+<br />
+
+```text
+  --output-redis-username string
+```
+
+> nombre de usuario ACL opcional de Redis (predeterminado "")
+<br />
+
+```text
+  --output-redis-password string
+```
+
+> contraseña opcional de Redis (predeterminado "")
+<br />
+
+```text
+  --output-redis-tls
+```
+
+> usar TLS para la conexión a Redis (predeterminado `false`); las credenciales de Redis requieren TLS
+<br />
+
+```text
+  --output-redis-stream string
+```
+
+> clave del Stream de Redis (predeterminado `adder.events`); es obligatoria
+<br />
+
+```text
+  --output-redis-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `kafka`
+
+```text
+  --output-kafka-brokers string
+```
+
+> direcciones host:port de bootstrap de Kafka separadas por comas (predeterminado `127.0.0.1:9092`)
+<br />
+
+```text
+  --output-kafka-topic string
+```
+
+> topic de Kafka (predeterminado `adder.events`)
+<br />
+
+```text
+  --output-kafka-username string
+```
+
+> nombre de usuario SASL PLAIN opcional (predeterminado "")
+<br />
+
+```text
+  --output-kafka-password string
+```
+
+> contraseña SASL PLAIN opcional (predeterminado "")
+<br />
+
+```text
+  --output-kafka-tls
+```
+
+> usar TLS para las conexiones con los brokers (predeterminado `false`)
+<br />
+
+```text
+  --output-kafka-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
 ***
 
 ## Notificaciones:
