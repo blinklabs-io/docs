@@ -21,7 +21,7 @@ La migración de un plugin personalizado sigue este checklist:
 
 - `plugin.Base` centraliza el contexto de ejecución, la cancelación, los canales y la coordinación de inicio y parada.
 - `plugin.ManagedPlugin` define `StartContext(ctx context.Context)`, `Stop`, `Role`, `ErrorChan`, `InputChan`, `OutputChan`, `Failed` y `Failure`. Cada plugin declara los puertos que corresponden a su rol.
-- El plugin comunica los fallos terminales con `Fail(err)`, mientras el pipeline observa `Failed` y consulta `Failure()`.
+- Cada plugin comunica los fallos terminales con `Fail(err)`; el pipeline observa `Failed` y consulta `Failure()`.
 - La migración elimina `plugin.PluginOption.Dest`, `plugin.ProcessConfig` y `plugin.ProcessEnvVars`. `ResolveConfig` y `Configuration.New` construyen la configuración en su lugar.
 - Cada fábrica devuelve `plugin.ManagedPlugin` y recibe `plugin.Options` inmutables ya resueltas.
 - La resolución de opciones sigue esta precedencia: valores predeterminados < datos de YAML < variables de entorno < flags de CLI modificados. Una fuente posterior reemplaza el valor anterior.
@@ -30,9 +30,9 @@ La migración de un plugin personalizado sigue este checklist:
 
 El pipeline valida la topología antes de iniciar cualquier plugin. La validación exige plugins no nulos y únicos, roles correctos y puertos compatibles con cada conexión.
 
-`StartContext` inicia primero los consumidores y después los productores: comienza por los plugins de salida, continúa con los filtros en orden inverso de inicio para conservar el orden declarado de la cadena y termina con los plugins de entrada. El pipeline conecta los filtros en el orden declarado, por lo que cada evento atraviesa la cadena prevista.
+`StartContext` inicia primero los consumidores y después los productores: comienza por los plugins de salida, inicia los filtros desde el último hasta el primero para conservar el orden declarado de la cadena y termina con los plugins de entrada. El pipeline conecta los filtros en el orden declarado, por lo que cada evento atraviesa la cadena prevista.
 
-`Stop` detiene los plugins iniciados en orden inverso. La cancelación del contexto detiene las tareas cooperativas de cada plugin; un fallo terminal también cancela el contexto del pipeline y detiene sus componentes. Los autores pueden observar `Pipeline.Failed` y consultar `Pipeline.Failure()` para detectar el primer fallo terminal y su error asociado.
+`Stop` detiene los plugins iniciados en orden inverso. La cancelación del contexto detiene las tareas cooperativas de cada plugin; un fallo terminal también cancela el contexto del pipeline y detiene sus componentes. La API del pipeline expone `Pipeline.Failed` y `Pipeline.Failure()` para detectar el primer fallo terminal y su error asociado.
 
 ## Entrada
 
