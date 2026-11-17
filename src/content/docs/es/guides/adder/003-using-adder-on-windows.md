@@ -109,9 +109,9 @@ Marca las casillas de los eventos sobre los que quieras recibir alertas de escri
 
 ### Controles de inicio y actividad en segundo plano
 
-Marca `Start Adder automatically on login / reboot` para configurar el inicio automático de Adder Tray al iniciar sesión o reiniciar Windows.
+La casilla `Start Adder automatically on login / reboot` configura el inicio automático de Adder Tray al iniciar sesión o reiniciar Windows.
 
-El estado de actividad en segundo plano indica si Adder está registrado y en ejecución. Pulsa `Open Login Items Settings...` para abrir la configuración de aplicaciones de inicio de Windows.
+El estado de actividad en segundo plano indica si Adder está registrado y en ejecución. La opción `Open Login Items Settings...` abre la configuración de aplicaciones de inicio de Windows.
 
 ### Paso 3.5 - Enviar una notificación de prueba
 
@@ -139,13 +139,13 @@ Para ver eventos recientes, ajustar la configuración o iniciar, detener o reini
 
 ### Editar las reglas de notificación
 
-Selecciona `Notification Rules...` en el menú de la bandeja para editar los objetivos `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. Activa o desactiva las categorías de notificación disponibles o utiliza `Monitor Everything` de forma exclusiva en lugar de mantener listas de objetivos explícitas.
+La opción `Notification Rules...` del menú de la bandeja permite editar los objetivos `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. El editor permite activar o desactivar las categorías de notificación disponibles o utilizar `Monitor Everything` de forma exclusiva en lugar de mantener listas de objetivos explícitas.
 
-Al aplicar los cambios, Adder guarda la configuración y actualiza las reglas y los límites de frecuencia sin reiniciar el proceso de la bandeja. La eliminación de un objetivo requiere confirmación. Si la reconexión muestra una advertencia recuperable, el editor permanece abierto y vuelve a habilitar sus entradas para permitir un nuevo intento.
+Al aplicar los cambios, Adder guarda la configuración y actualiza las reglas y los límites de frecuencia sin reiniciar el proceso de la bandeja. El editor solicita confirmación antes de eliminar un objetivo. Si la reconexión muestra una advertencia recuperable, el editor permanece abierto y vuelve a habilitar sus entradas para permitir un nuevo intento.
 
 ### Consultar la versión
 
-Selecciona `About` para abrir el diálogo integrado. Cuando los metadatos del commit están disponibles, muestra `Version: <version> (commit: <hash>)`; de lo contrario, muestra únicamente la versión.
+La opción `About` abre el diálogo integrado. Cuando los metadatos del commit están disponibles, el diálogo muestra `Version: <version> (commit: <hash>)`; de lo contrario, muestra únicamente la versión.
 
 ---
 
