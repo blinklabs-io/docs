@@ -5,10 +5,7 @@ description: Referencia de configuración y comportamiento de la salida del bot 
 
 # Salida del bot de Discord
 
-La salida `discord` publica eventos seleccionados en un único servidor y canal de Discord configurados. También registra dos comandos de barra del servidor:
-
-- `/adder-status`: confirma que la salida de Adder está activa.
-- `/adder-recent`: muestra hasta cinco eventos entregados desde el inicio del proceso.
+La salida `discord` publica eventos seleccionados en un único servidor y canal de Discord configurados. También registra comandos de barra de solo lectura en el servidor configurado.
 
 La integración usa Discord Gateway v10 y las API REST correspondientes. El bot mantiene la conexión mediante heartbeats, reanuda la sesión cuando es posible y se reconecta con un retroceso limitado.
 
