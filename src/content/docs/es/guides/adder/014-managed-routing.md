@@ -136,9 +136,10 @@ nombrado. Los tipos de evento canónicos admitidos son:
 - `input.drep-retirement`
 
 `criteria` puede contener opcionalmente matrices llamadas `addresses`,
-`policies`, `asset_fingerprints`, `pool_ids` y `drep_ids`. Los criterios de
-dirección, política y activo se combinan con AND. Las identidades de pool y DRep
-se combinan con OR cuando aparecen ambas. El matcher acepta criterios de pool
+`policies`, `asset_fingerprints`, `pool_ids` y `drep_ids`. El motor de
+coincidencias combina con AND los criterios de dirección, política y activo.
+También combina con OR las identidades de pool y DRep cuando aparecen ambas.
+El motor acepta criterios de pool
 para reglas de bloque, todos los criterios para reglas de transacción,
 criterios de dirección, pool y DRep para reglas de gobernanza, criterios de
 DRep para reglas de certificados DRep y ningún criterio de Cardano para reglas
@@ -222,8 +223,8 @@ versión de credencial y el valor:
 ```
 
 Las referencias a credenciales pertenecen a una instancia, están confinadas
-al directorio de credenciales y no se pueden compartir entre clientes. Adder
-no permite cambiar el contenido de una versión de referencia aplicada, aunque
+al directorio de credenciales y los operadores no pueden compartirlas entre
+clientes. Adder no permite cambiar el contenido de una versión de referencia aplicada, aunque
 aumente la revisión del cliente. Publique una versión nueva para rotar una
 credencial. El operador debe restringir los archivos de credenciales del mismo
 modo que el archivo de token del operador.
@@ -257,8 +258,8 @@ cuerpos de configuración de reemplazo.
 | `GET /healthcheck` | None | Devuelve la preparación del enrutador. La conectividad de la fuente y la degradación de los destinos siguen siendo señales de estado independientes. |
 | `GET /metrics` | None | Devuelve los contadores administrados agregados sin etiquetas de cliente ni de credencial. |
 
-El endpoint administrado autenticado `/metrics` es independiente de las
-métricas del pipeline normal descritas en la [referencia de
+La ruta administrada autenticada `/metrics` es independiente de las
+métricas del flujo normal descritas en la [referencia de
 métricas](./010-metrics). Los plugins de salida normales y su configuración
 habitual aparecen en la [guía de integraciones de salida](./008-output-integrations);
 el modo administrado no habilita esos adaptadores.
@@ -266,9 +267,9 @@ el modo administrado no habilita esos adaptadores.
 ## Semántica de recarga y cambio de configuración
 
 Adder serializa las recargas, valida y prepara la configuración nueva antes de
-cambiarla. El plazo de preparación predeterminado es de 10 segundos. Una
-preparación fallida mantiene activa la configuración existente y limpia los
-plugins preparados. La limpieza puede tardar hasta cinco segundos; la limpieza
+cambiarla. El plazo de preparación predeterminado es de 10 segundos. Si la
+preparación falla, Adder mantiene activa la configuración existente y limpia los
+componentes preparados. La limpieza puede tardar hasta cinco segundos; la limpieza
 sin terminar continúa consumiendo el presupuesto de trabajo administrado y
 puede producir un error de limpieza pendiente.
 
