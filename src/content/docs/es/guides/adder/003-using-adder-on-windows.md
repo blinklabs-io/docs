@@ -17,6 +17,8 @@ La forma más sencilla de instalar Adder en Windows es utilizar el instalador MS
 
 Selecciona la versión adecuada para tu sistema: Windows x64 o Windows arm64.
 
+El MSI firmado es compatible con Windows x64 y arm64 e instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. La aplicación de bandeja está disponible en el menú Inicio, y la instalación aparece en **Agregar o quitar programas**. El instalador no crea ninguna tarea programada.
+
 ### Paso 1.2 - Abrir el archivo .msi
 
 Cuando termine la descarga, pulsa `Open` para abrir el archivo `.msi`.
@@ -133,15 +135,21 @@ Pulsa `Finish Setup`.
 
 Para ver eventos recientes, ajustar la configuración o iniciar, detener o reiniciar la aplicación, haz clic derecho en Adder en la bandeja del sistema y elige la opción que necesites.
 
+Adder guarda el registro de la bandeja de Windows en `%LOCALAPPDATA%/Adder/Logs/adder-tray.log`, incluidos los detalles de los pánicos recuperados. Solo se ejecuta una instancia de la bandeja por sesión de inicio de sesión.
+
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Los enlaces del explorador para los eventos recientes utilizan la red configurada. Los eventos de transacción y gobernanza utilizan el hash de transacción, mientras que los eventos de bloque utilizan el hash de bloque.
 
 ### Editar las reglas de notificación
 
 La opción `Notification Rules...` del menú de la bandeja permite editar los objetivos `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. El editor también ofrece controles para activar o desactivar las categorías de notificación disponibles o utilizar `Monitor Everything` de forma exclusiva en lugar de mantener listas de objetivos explícitas.
 
 Al aplicar los cambios, Adder guarda la configuración y actualiza las reglas y los límites de frecuencia sin reiniciar el proceso de la bandeja. El editor solicita confirmación antes de eliminar un objetivo. Si la reconexión muestra una advertencia recuperable, el editor permanece abierto y vuelve a habilitar sus entradas para permitir un nuevo intento.
+
+Las notificaciones de bloques de pools solo coinciden con los pools seguidos. Las notificaciones de gobernanza de DRep solo coinciden con los DRep seguidos. Cuando un evento contiene varios votos, el texto muestra el voto del DRep seguido.
 
 ### Consultar la versión
 
