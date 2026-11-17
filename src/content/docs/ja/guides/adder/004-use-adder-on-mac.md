@@ -6,7 +6,7 @@ description: MacでAdderを使用する方法。
 # MacでAdderを使う
 
 Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケージとして配布されます。
-このパッケージには、トレイ GUI と `adder` CLI を含む `Adder.app` が含まれています。
+このパッケージは、トレイ GUI と `adder` CLI を備えた `Adder.app` をインストールします。
 
 ## Adder をインストールする
 
@@ -16,7 +16,7 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 
 ## Adder を更新する
 
-更新時も、以前のアプリ単体の配布物ではなく、macOS の `.pkg` パッケージを使用します。インストーラは `/usr/local/bin/adder` が存在しない場合、または `/Applications/Adder.app/Contents/MacOS/adder` を指している場合に限り、CLI のシンボリックリンクを作成します。別のコマンドを指す既存のパスは上書きしません。
+更新時は、以前のアプリ単体の配布物ではなく、macOS の `.pkg` パッケージを使用します。インストーラは `/usr/local/bin/adder` が存在しない場合、または `/Applications/Adder.app/Contents/MacOS/adder` を指している場合に限り、CLI のシンボリックリンクを作成します。別のコマンドを指す既存のパスは上書きしません。
 
 ## Adder を起動する
 
@@ -25,13 +25,13 @@ Adder は、署名済みでノータライズ済みの macOS `.pkg` パッケー
 
 ## ローカルでパッケージをビルドする
 
-ローカルで通知機能を確認する場合は、次のコマンドを実行します。
+ローカルで通知機能を確認するには、次のコマンドを実行します。
 
 ```sh
 make pkg-macos-adhoc
 ```
 
-このコマンドは `ADHOC=1` でビルドし、アプリバンドルをアドホック署名します。生成される `.pkg` 自体は署名されず、Gatekeeper の承認対象になりません。
+このコマンドは `ADHOC=1` を指定し、アプリバンドルにアドホック署名を付けます。生成した `.pkg` は署名されないため、Gatekeeper は承認しません。
 
 
 ---
