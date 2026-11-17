@@ -80,8 +80,8 @@ description: "Adderコマンドの一覧です。"
 > 3. `input.transaction` - トランザクションはブロックで見られた。
 > 4. `input.governance` - ガバナンス関連イベント(CIP-1694時代)。
 > 5. `input.drep-registration` - DRep登録が発生しました。
-> 6. `input.drep-update` - DRepの更新が発生しました。
-> 7. `input.drep-retirement` - DRepの退任が発生しました。
+> 6. `input.drep-update` - DRep更新が発生しました。
+> 7. `input.drep-retirement` - DRep退任が発生しました。
 
 ***
 
