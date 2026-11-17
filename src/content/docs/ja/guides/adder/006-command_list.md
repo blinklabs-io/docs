@@ -380,6 +380,77 @@ description: "Adderコマンドの一覧です。"
 
 ***
 
+```
+  --output-signal-endpoint string
+```
+
+> signal-cliデーモンのHTTP JSON-RPC URLを指定します（デフォルト `http://127.0.0.1:8081/api/v1/rpc`）。
+<br />
+
+```
+  --output-signal-account string
+```
+
+> 複数アカウントのデーモンで使用するSignalアカウントを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-signal-recipients string
+```
+
+> Signalの受信者番号またはIDをカンマ区切りで指定します（デフォルトは空）。少なくとも1つの受信者が必要です。
+<br />
+
+```
+  --output-signal-event-types string
+```
+
+> 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。少なくとも1つのタイプが必要です。
+<br />
+
+```
+  --output-nats-servers string
+```
+
+> NATSサーバーURLをカンマ区切りで指定します（デフォルト `nats://127.0.0.1:4222`）。各URLは`nats://`または`tls://`で始め、認証情報とパスを含めないでください。ポートを指定する場合は`1`から`65535`の範囲が必要です。
+<br />
+
+```
+  --output-nats-token string
+```
+
+> 任意のNATS認証トークンを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-nats-subject-prefix string
+```
+
+> イベントsubjectのプレフィックスを指定します（デフォルト `adder.events`）。
+<br />
+
+```
+  --output-nats-event-types string
+```
+
+> 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。少なくとも1つのタイプが必要です。
+<br />
+
+```
+  --output-webhook-state-path string
+```
+
+> 再起動後も保留中の配信を保持するSQLiteファイルへのパスを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-webhook-max-pending int
+```
+
+> 保持する保留中の配信の最大数を指定します（デフォルト `1024`）。`state-path`を設定する場合は`11`以上が必要です。
+
+***
+
 <a id="notifications"></a>
 
 ## 通知:
