@@ -29,7 +29,7 @@ Replace the token placeholder with an authentication token when the NATS deploym
 | Field | Default | Description |
 | --- | --- | --- |
 | `servers` | `nats://127.0.0.1:4222` | Comma-separated NATS server URLs. Adder requires at least one URL. |
-| `token` | Empty | Optional NATS authentication token. |
+| `token` | `""` | Optional NATS authentication token. |
 | `subject-prefix` | `adder.events` | Prefix for the subjects that carry Adder events. |
 | `event-types` | `blocks,rollbacks,governance` | Comma-separated event names to publish. Adder requires at least one supported name. |
 
