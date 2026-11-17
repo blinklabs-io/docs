@@ -9,7 +9,7 @@ Esta referencia describe la configuración y el comportamiento de entrega de las
 
 ## Referencias relacionadas
 
-Cada página enlazada explica cómo configurar la salida y cómo entrega los eventos:
+Cada página enlazada explica la configuración de la salida y la forma en que entrega los eventos:
 
 - [Salida del bot de Discord](./discord.md)
 - [Referencia de la salida Slack](./slack.md)
