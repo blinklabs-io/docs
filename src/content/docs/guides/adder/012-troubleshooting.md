@@ -7,10 +7,10 @@ description: How to troubleshoot Adder profiling.
 
 ### Symptom
 
-The `/debug/pprof` endpoint and goroutine leak HTTP collection are unavailable through Adder's debug listener. Adder's debug listener does not register HTTP `pprof` handlers.
+The `/debug/pprof` endpoint and goroutine leak HTTP collection are unavailable through Adder's debug listener. This listener does not register HTTP `pprof` handlers.
 
 ### Correction
 
-Follow the [benchmarks and profiling guide](./011-benchmarks-and-profiling) for supported local commands. It provides bounded Go test runs with `-cpuprofile`, `-memprofile`, and `-trace`, followed by analysis with `go tool pprof` and `go tool trace`.
+Use the [benchmarks and profiling guide](./011-benchmarks-and-profiling) for supported local commands. The guide provides bounded Go test runs with `-cpuprofile`, `-memprofile`, and `-trace`, followed by analysis with `go tool pprof` and `go tool trace`.
 
-Keep profiles in a private temporary directory because they can contain application data and file paths. The local commands use Go's test profiler and open no network listener. Never expose a profiling listener on a public interface.
+Keep profile files in a private temporary directory because they can contain application data and file paths. The local commands invoke Go's test profiler and open no network listener. Do not expose a profiling listener on a public interface.
