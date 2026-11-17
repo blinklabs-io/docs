@@ -106,7 +106,7 @@ description: "Adderコマンドの一覧です。"
 
 ### `input.governance` イベント
 
-`input.governance`イベントは、Conway時代のオンチェーンガバナンスデータを含むトランザクションごとに1件発生します。1つのトランザクションに含まれるすべてのガバナンスデータを1件のイベントにまとめます。ロールバックや再処理では同じトランザクションが再び処理されることがあります。同じトランザクションの`input.transaction`イベントに加えて発生します。
+Adderは、Conway時代のオンチェーンガバナンスデータを含むトランザクションごとに`input.governance`イベントを1件発生させます。1つのトランザクションに含まれるすべてのガバナンスデータを1件のイベントにまとめます。ロールバックや再処理では同じトランザクションを再び処理することがあります。Adderは同じトランザクションの`input.transaction`イベントに加えてこのイベントを発生させます。
 
 次のいずれかを含むトランザクションでイベントを発生させます。
 
@@ -128,7 +128,7 @@ description: "Adderコマンドの一覧です。"
 
 #### `payload`
 
-`payload`には常に`blockHash`が含まれます。`transactionCbor`は`--input-chainsync-include-cbor`を有効にした場合だけ含まれます。次の配列は、空の場合は省略されます。
+Adderは`payload`に常に`blockHash`を含めます。`--input-chainsync-include-cbor`を有効にした場合だけ`transactionCbor`を含めます。空の配列は省略します。
 
 | フィールド | 型 | 説明 |
 | --- | --- | --- |
@@ -140,7 +140,7 @@ description: "Adderコマンドの一覧です。"
 | `voteDelegationCertificates` | array | 投票委任の証明書 |
 | `committeeCertificates` | array | 憲法委員会のホットキー承認・コールドキー辞任の証明書 |
 
-アンカーオブジェクトは常にシリアライズされ、アンカーがない場合は`url`と`dataHash`が空文字列になります。証明書の`deposit`は値が0の場合に省略されます。
+Adderはアンカーオブジェクトを常にシリアライズし、アンカーがない場合は`url`と`dataHash`に空文字列を設定します。`deposit`が0の場合、証明書からこのフィールドを省略します。
 
 各配列の項目は次の情報を含みます。
 
@@ -152,12 +152,12 @@ description: "Adderコマンドの一覧です。"
 
 #### ガバナンスイベントのフィルタリング
 
-`input.governance`イベントには`--filter-drep`、`--filter-pool`、`--filter-address`が適用されます。リスト内のデータのいずれかがフィルター値に一致すると、イベントはそのフィルターに一致します。
+Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--filter-address`を適用します。リスト内のデータのいずれかがフィルター値に一致すると、Adderはそのイベントをフィルターに一致すると判定します。
 
 - `--filter-drep`は、DRep証明書、DRepへの委任を示す投票委任証明書、DRepが投票者である投票手続きに一致します。
 - `--filter-pool`は、SPOとしてプールが行った投票手続きと、プールのキー ハッシュを参照する投票委任証明書に一致します。
 - `--filter-address`はアドレスの種類で照合対象が異なります。ステークアドレス（`stake1...`）は提案の`rewardAccount`、資金引き出し先アドレス、投票委任証明書のステーク資格情報に一致します。支払いアドレス（`addr1...`）は資金引き出し先アドレスだけに一致します。
-- `--filter-asset`と`--filter-policy`はガバナンスイベントに適用されません。`input.governance`イベントはこれらのフィルターをそのまま通過します。
+- Adderは`--filter-asset`と`--filter-policy`をガバナンスイベントに適用しません。`input.governance`イベントはこれらのフィルターをそのまま通過します。
 
 `--filter-drep`は、Bech32形式の`drep1...`と`drep_script1...`を受け付けます。Bech32をデコードしたペイロードが29バイトの場合だけ先頭の1バイトを除去し、28バイトの資格情報ハッシュとして扱います。その他の長さは無視します。16進数形式にはヘッダーを付けず、56文字の生の資格情報ハッシュを指定します。16進数の値から先頭バイトを除去しません。
 
