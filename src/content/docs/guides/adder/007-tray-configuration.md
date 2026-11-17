@@ -68,7 +68,7 @@ The wizard exposes both settings under **Advanced — Rate Limiting**:
 - **Max notifications per window** accepts an integer.
 - **Window duration** accepts a positive Go duration such as `5s`, `30s`, or `1m`.
 - Leave either field blank to use its default.
-- Enter a negative rate limit to disable coalescing. Each matching event then produces an individual notification.
+- Enter a negative rate limit to disable combining. Each matching event then produces an individual notification.
 
 With a positive rate limit, matches beyond the limit wait until the window ends and combine into one **Multiple events occurred** notification. Connection issue notifications bypass this event rate limit so connection loss and reconnection alerts remain immediate.
 
