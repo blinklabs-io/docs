@@ -101,10 +101,9 @@ automatically retry an ambiguous failed insert because repeating the request
 can create duplicate rows.
 
 ClickHouse keeps every row that it accepts successfully, including identical
-event duplicates. The `event_hash` is the SHA-256 content hash used to
-compare complete event payloads; it does not identify a unique row. ClickHouse
-also keeps rollback events as ordinary `input.rollback` rows; Adder does not
-delete earlier rows when a rollback occurs. Query the retained rows
+event duplicates. It also keeps rollback events as ordinary `input.rollback`
+rows; Adder does not delete earlier rows when a rollback occurs. Query the
+retained rows
 with the event fields, for example:
 
 ```sql
