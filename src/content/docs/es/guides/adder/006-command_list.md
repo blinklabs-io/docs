@@ -68,7 +68,7 @@ description: Lista de Comandos de Adder.
 >
 > Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder elimina los espacios al principio y al final de cada entrada separada por comas e ignora las entradas vacías.
 >
-> Cada filtro acepta varios valores separados por comas; los valores de una misma opción se combinan con OR. Por ejemplo:
+> Cada filtro acepta varios valores separados por comas; Adder combina con OR los valores de una misma opción. Por ejemplo:
 >
 > ```text
 > --filter-address <dirección-1>,<dirección-2>
@@ -146,11 +146,11 @@ Adder aplica los siguientes filtros a `input.governance` cuando cualquier dato c
 - `--filter-pool` coincide con procedimientos de votación emitidos por la pool como SPO y certificados de delegación de voto que contienen el hash de clave de la pool.
 - Con `--filter-address`, Adder compara una dirección de stake (`stake1…`) con `rewardAccount` de propuestas, destinos de retiros del tesoro y la credencial de stake de certificados de delegación de voto. Adder compara una dirección de pago (`addr1…`) únicamente con destinos de retiros del tesoro.
 
-Los filtros `--filter-policy` y `--filter-asset` no se aplican a eventos de gobernanza y dejan pasar `input.governance` sin modificaciones.
+Adder no aplica los filtros `--filter-policy` y `--filter-asset` a eventos de gobernanza; ambos filtros dejan pasar `input.governance` sin modificaciones.
 
 ### Normalización de entradas DRep
 
-`--filter-drep` acepta las formas bech32 `drep1...` y `drep_script1...`. Adder espera una credencial de 28 bytes después de decodificarla; solo elimina el byte inicial cuando el payload decodificado tiene 29 bytes y no inspecciona ni valida ese byte. Ignora los payloads decodificados de cualquier otra longitud y descarta silenciosamente ese identificador del filtro.
+Adder acepta las formas bech32 `drep1...` y `drep_script1...` en `--filter-drep`. Adder espera una credencial de 28 bytes después de decodificarla; solo elimina el byte inicial cuando el payload decodificado tiene 29 bytes y no inspecciona ni valida ese byte. Adder ignora los payloads decodificados de cualquier otra longitud y descarta silenciosamente ese identificador del filtro.
 
 La forma hexadecimal debe contener únicamente los 56 caracteres hexadecimales de la credencial sin procesar. Adder no elimina ningún byte inicial de la entrada hexadecimal, por lo que un valor que incluya una cabecera no coincide.
 
