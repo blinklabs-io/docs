@@ -26,7 +26,7 @@ The benchmark compares these synthetic output modes for each buffer case:
 - `fast_output` drains continuously.
 - `periodic_output_pause` pauses for 100 microseconds after every 64 events to model intermittent sink backpressure.
 
-Each operation sends and drains `4,096` block event envelopes. The benchmark reports events per second, time per operation, and allocations per `4,096` event operation. Startup and shutdown occur outside the timed section.
+Each operation sends and drains `4,096` block event envelopes. The benchmark reports events per second, time per operation, and allocations per `4,096-event` operation. Startup and shutdown occur outside the timed section.
 
 ## Compare results
 
@@ -68,8 +68,8 @@ The profiles provide these views:
 
 A short run can produce too few samples. Increase `-benchtime` only when the machine has capacity. This synthetic channel workload can be dominated by Go runtime scheduling and does not identify a bottleneck in a real Adder deployment. Keep the Go version, machine, workload, and benchmark duration fixed for comparisons, collect multiple unprofiled runs, and compare events per second with `B/op`.
 
-Profile instrumentation changes timings, so profiled runs are not the throughput baseline.
+Profile instrumentation changes timings. Do not use profiled runs as the throughput baseline.
 
 ## Profiling safety boundary
 
-Adder's debug listener is disabled by default and does not register HTTP pprof handlers. The commands in this guide use Go's test profiler and open no network listener. Do not expose a profiling listener on a public interface; use this private local workflow instead of an HTTP pprof or goroutine leak listener workflow.
+Adder disables its debug listener by default and does not register HTTP pprof handlers. The commands in this guide use Go's test profiler and open no network listener. Do not expose a profiling listener on a public interface; use this private local workflow instead of an HTTP pprof or goroutine leak listener workflow.
