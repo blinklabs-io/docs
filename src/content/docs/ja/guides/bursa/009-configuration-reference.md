@@ -6,7 +6,7 @@ description: Bursa の kes-agent と従来の API のセキュリティに関す
 
 ## 概要
 
-このガイドは Bursa の署名サービスと KES エージェントの設定を説明します。`signer.backends` は `pkcs11`、`nitro`、`confidential-space` の署名バックエンドに対応します。
+このガイドは Bursa の署名サービスと KES エージェントの設定を説明します。`signer.backends` は `pkcs11`、`nitro`、`confidential-space`、`sops` の署名バックエンドに対応します。
 
 <a id="load-a-configuration-file"></a>
 
@@ -18,7 +18,7 @@ description: Bursa の kes-agent と従来の API のセキュリティに関す
 bursa kes-agent --config /etc/bursa/config.yaml
 ```
 
-コマンドは、どちらの Unix ソケットを開くよりも前に設定値を検証します。使い方は CLI ガイドの [API セクション](../003-commands#api)と [kes-agent セクション](../003-commands#kes-agent)を参照してください。
+コマンドは、どちらの Unix ソケットを開くよりも前に設定値を検証します。[リモートリスナー](#remote-listener)の設定は、Unix ソケットの後にそのリスナーを開くときに確認します。使い方は CLI ガイドの [API セクション](../003-commands#api)と [kes-agent セクション](../003-commands#kes-agent)を参照してください。
 
 <a id="wallet-environment-variable"></a>
 
@@ -73,8 +73,9 @@ PUT /wallet/settings/history-expiry
 
 | 設定パス | 用途 | 検証 |
 | --- | --- | --- |
-| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、`confidential-space` を指定します。 |
+| `signer.backends[].type` | 署名バックエンドを選択します。 | `pkcs11`、`nitro`、`confidential-space`、`sops` を指定します。 |
 | `signer.backends[].address` | アテステーション付き署名バックエンドのエンドポイントです。 | `http://`、`https://`、`unix:///` のエンドポイントを指定します。 |
+| `signer.backends[].profile` | Confidential Space または SOPS バックエンドをネットワークのプロファイルに結び付けます。 | 1〜32 文字で、英字、数字、`.`、`_`、`@`、`-` を使用します。`nitro` では設定できません。 |
 | `signer.backends[].module` | `.so` ファイルを含む `PKCS#11` モジュールのパスです。 | 必須です。空の値は拒否されます。 |
 | `signer.backends[].token_label` | ラベルでトークンまたはスロットを選択します。 | このフィールドまたは `slot` の少なくとも一方が必須です。 |
 | `signer.backends[].slot` | スロット ID を明示して選択します。 | このフィールドまたは `token_label` の少なくとも一方が必須です。 |
@@ -84,9 +85,33 @@ PUT /wallet/settings/history-expiry
 | `signer.backends[].keys[].type` | 一致するトークンオブジェクトに Cardano の鍵の種類を割り当てます。 | 各 `keys` 項目に必須です。`payment`、`stake`、`drep`、`cc-hot`、`cc-cold`、`pool`、`policy` を使用します。 |
 | `signer.backends[].root_ca_file` | AWS Nitro Enclaves のルート証明書です。 | `nitro` で必須です。固定された AWS Nitro ルート証明書を使用します。 |
 | `signer.backends[].pcrs` | 期待する Nitro PCR インデックスと 16 進数値の組です。 | `nitro` で必須です。PCR0 が存在し、0 以外である必要があります。 |
+| `signer.backends[].host_key_file` | Nitro への署名要求を認可する署名者権限鍵ファイルです。 | `nitro` で必須です。所有者だけが読み取れるファイルを指定します。プロビジョニング権限鍵とは別の鍵を使用します。 |
 | `signer.backends[].audience` | Confidential Space アテステーショントークンに必要な audience です。 | `confidential-space` で必須です。 |
 | `signer.backends[].image_digest` | 必要な Confidential Space コンテナイメージのダイジェストです。 | `confidential-space` で必須です。`sha256:` ダイジェストを使用します。 |
 | `signer.backends[].jwks_url` | Confidential Space アテステーショントークンの署名鍵セットです。 | `confidential-space` で任意です。既定では Google の公開トークン署名セットを使用します。 |
+
+プロファイルを指定したバックエンドは、要求の `profile` と一致する場合だけその要求を処理します。同じ鍵を複数のプロファイルで保持する場合も、各プロファイルのカウンター、ウォーターマーク、発行済み記録を別々に保持します。プロファイルを指定しない要求は、その鍵を保持するバックエンドが 1 つだけの場合に限り処理します。`nitro` バックエンドはプロファイルをサポートしないため、`profile` を設定しないでください。
+
+Nitro では `root_ca_file` と PCR の検証に加えて、`host_key_file` に署名者権限の秘密鍵を設定します。この鍵は所有者だけが読み取れるようにし、エンクレーブの測定済みイメージに登録する署名者権限公開鍵に対応させます。プロビジョニング権限は別の鍵であり、プロビジョニング専用に管理します。
+
+### 署名サービスの JWT 認証
+
+署名サービスで JWT を使用する場合は、次のいずれか 1 つの JWT 信頼元を設定します。
+
+| 設定パス | 環境変数 | 用途 | 既定値または要件 |
+| --- | --- | --- | --- |
+| `signer.jwt_secret` | `SIGNER_JWT_SECRET` | HS256 で Bearer トークンを検証します。 | `signer.jwks_url` と同時に設定せず、32 バイト以上のシークレットを指定します。 |
+| `signer.jwks_url` | `SIGNER_JWKS_URL` | JWKS エンドポイントの鍵で Bearer トークンを検証します。 | `signer.jwt_secret` と同時に設定しません。 |
+| `signer.jwt_audience` | `SIGNER_JWT_AUDIENCE` | トークンの対象 audience を指定します。 | 空でない値を指定します。 |
+| `signer.jwt_issuer` | `SIGNER_JWT_ISSUER` | トークンの issuer を制限します。 | 任意です。設定した場合はトークンの `iss` と一致させます。 |
+
+`signer.jwt_secret` または `signer.jwks_url` のいずれかを設定した場合、`signer.jwt_audience` も必ず設定します。すべてのトークンは同じ値を `aud` クレームに含める必要があります。audience がない場合、または値が一致しない場合、起動または認証に失敗します。JWT を使用する場合、信頼元は `jwt_secret` と `jwks_url` のどちらか一方だけを設定します。
+
+### Nitro の永続化
+
+Nitro の署名プロキシには、稼働中に `secretsmanager:GetSecretValue`、`secretsmanager:DescribeSecret`、`secretsmanager:PutSecretValue` の権限が必要です。プロキシは署名ごとに封印したカウンター状態を保存します。保存に失敗すると後続の署名を停止し、再起動または再読み込みまで署名を再開しません。同じペイロードは保存済みカウンターで再試行できますが、同じカウンターの別のペイロードは拒否されます。
+
+封印状態にはバージョンがあり、新しい状態を古いプロキシとエンクレーブの組み合わせで読み取ることはできません。ダウングレードする場合は、アップグレード前に保存した封印状態を含まないエンベロープだけの Secrets Manager のバージョンを復元してから、以前の組み合わせを起動します。
 
 <a id="wallet-storage-and-encryption"></a>
 
@@ -205,7 +230,7 @@ signer:
 
 ## `kes_agent`
 
-`kes_agent` YAML キーにデーモンを設定します。各フィールドは、対応する `KESAGENT_*` 環境変数でも指定できます。
+`kes_agent` YAML キーにデーモンを設定します。各フィールドは、対応する `KESAGENT_*` 環境変数でも指定できます。ただし `kes_agent.profiles` と `kes_agent.store` は YAML からのみ読み込みます。
 
 | YAML キー | 環境変数 | 用途 | 既定値または要件 |
 | --- | --- | --- | --- |
@@ -217,17 +242,20 @@ signer:
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley ジェネシスの開始時刻です。 | RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Shelley 開始時点の絶対スロットです。 | `shelley_start_time` と組み合わせて、20 秒スロットの Byron 期を持つネットワークで指定します。 |
+| `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | `shelley_start_slot` に対応する時刻です。 | RFC3339 のタイムスタンプを指定します。 |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
 | `kes_agent.slots_per_kes_period` | `KESAGENT_SLOTS_PER_KES_PERIOD` | 1 KES 期間のスロット数です。 | `0` より大きい値を指定します。 |
+| `kes_agent.max_clock_skew` | `KESAGENT_MAX_CLOCK_SKEW` | ホストの時計より先に進んだヘッダーのスロットを許容する範囲です。 | Go の期間で指定します。既定値は `5s` です。 |
 | `kes_agent.max_kes_evolutions` | `KESAGENT_MAX_KES_EVOLUTIONS` | 運用証明書の進化回数を制限します。 | 既定値は `62` です。 |
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | スケジューラーの間隔を `1m` などの Go の期間で指定します。 | 既定値は `1m`。Go の期間を指定します。 |
-| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加する KES 期間ガードを永続的なパスに保存します。 | 永続的なパスを指定します。 |
+| `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | 単調増加する KES 期間ガードを永続的なパスに保存します。 | 永続的なパスを指定します。[共有ストア](#shared-store)では設定しないでください。 |
 
 サービスソケットと制御ソケットには異なるパスが必要です。8 進数の権限モードを指定でき、両方の既定値は所有者のみの `0600` です。異なるユーザー ID で動くプロデューサーのため、サービスソケットにはグループアクセスを許可できますが、その他のユーザーに書き込みは許可できません。制御ソケットは KES 鍵のインストールや削除を受け付けるため、書き込みは所有者のみに制限する必要があります。
 
-`cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、永続的な `guard_file` のパスも必要です。
+[`kes_agent.profiles`](#profiles) を設定しない場合、これらの単一プール用フィールドは `default` という名前の 1 つのプロファイルになります。このとき `cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、および[共有ストア](#shared-store)を設定しない場合は永続的な `guard_file` のパスも必要です。
 
-`kes_agent.guard_file` が空の場合、KES エージェントは起動を拒否します。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。このガードをメモリ内で代替する機能はありません。
+共有ストアがない場合、`kes_agent.guard_file` が空だと KES エージェントは起動を拒否します。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。このガードをメモリ内で代替する機能はありません。
 
 ```yaml
 kes_agent:
@@ -244,6 +272,115 @@ kes_agent:
   evolve_interval: 1m
   guard_file: /var/lib/bursa/kes-period.guard
 ```
+
+<a id="remote-listener"></a>
+
+### リモートリスナー
+
+別のホストのブロックプロデューサーに TCP で `sign` モードを提供するには、`kes_agent.attested_listen_address` を設定します。エージェントは引き続き Unix ソケットも提供します。リスナーは既定で TLS を使用します。これらのキーは、ソケットの設定とともに `kes_agent` ブロックに追加します。
+
+| YAML キー | 環境変数 | 用途 | 既定値または要件 |
+| --- | --- | --- | --- |
+| `kes_agent.attested_listen_address` | `KESAGENT_ATTESTED_LISTEN_ADDRESS` | `:7000` などの TCP アドレスで、リモートのプロデューサーに `sign` モードを提供します。 | 省略可能。未設定の場合は Unix ソケットのみを提供します。`kes_agent.mode` に `sign` が必要です。 |
+| `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | リモートリスナーで、このファイルのサーバー TLS 証明書を提示します。 | `attested_plaintext` が `true` でない限り、`attested_tls_key_file` とともに必須です。 |
+| `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | リモートリスナーで、このファイルのサーバー TLS 秘密鍵を使用します。 | `attested_plaintext` が `true` でない限り、`attested_tls_cert_file` とともに必須です。Unix では、グループやその他のユーザーにアクセスを許可する鍵ファイルを拒否します。 |
+| `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | この PEM ファイルの CA 証明書で、プロデューサーのクライアント証明書を検証します。 | 省略可能。設定した場合、すべての接続はこの CA が検証するクライアント証明書を提示する必要があります。未設定の場合、リスナーはクライアント証明書を要求しません。ファイルには少なくとも 1 つの証明書が必要です。 |
+| `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | リモートリスナーを TLS ではなく平文の TCP で提供します。 | 既定値は `false`。`true` の場合、`attested_tls_cert_file`、`attested_tls_key_file`、`attested_client_ca_file` は設定しないでください。 |
+| `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | プロデューサーが使用する必要がある構成証明の検証方式を指定します。 | `attested_listen_address` を設定した場合は必須です。`none` プロバイダーは構成証明のエビデンスを送りません。 |
+| `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | 保護されたワークロード内で、ナンスに結び付いたエビデンスを生成する構成証明アダプターに接続します。 | `none` 以外のすべてのプロバイダーで必須です。`none` では指定すると拒否されます。`https://` URL、ループバックの `http://` URL、または `unix://` ソケット URL を指定します。 |
+
+TLS を使う場合、リスナーには TLS 1.3 と証明書および鍵が必要です。起動時に、エージェントは提供する証明書の公開鍵の SHA-256 フィンガープリントを `server_spki_sha256` としてログに出力します。プロデューサーはこの値をピン留めできます。`attested_plaintext` の場合、エージェントはリモートのピアを認証しません。リモートリスナーの設定が無効な場合、Bursa は起動時に終了します。
+
+```yaml
+kes_agent:
+  mode: sign
+  attested_listen_address: ":7000"
+  attested_tls_cert_file: /etc/bursa/kes-agent/tls.crt
+  attested_tls_key_file: /etc/bursa/kes-agent/tls.key
+  attested_client_ca_file: /etc/bursa/kes-agent/client-ca.crt
+  attestation_provider: none
+```
+
+<a id="profiles"></a>
+
+### プロファイル
+
+1 つのエージェントで、1 つまたは複数のネットワーク上の複数のプールを提供するには、`kes_agent.profiles` を設定します。各エントリは 1 つのネットワーク上の 1 つのプールです。プロファイルは YAML でのみ設定します。
+
+| 設定パス | 用途 | 既定値または要件 |
+| --- | --- | --- |
+| `kes_agent.profiles[].name` | プロファイルの名前です。 | 必須で、一意である必要があります。英字または数字で始まる、1 から 64 文字の英字、数字、`.`、`_`、`-` を使用します。 |
+| `kes_agent.profiles[].cold_vkey_file` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
+| `kes_agent.profiles[].cold_vkey_hex` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
+| `kes_agent.profiles[].system_start` | Shelley ジェネシスの開始時刻です。 | 必須。RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.profiles[].shelley_start_slot` | 最初の Shelley スロットです。 | Byron 期により長いスロットを使っていたネットワークでは `shelley_start_time` とともに設定します。例として mainnet は `4492800`、preprod は `86400` です。未設定の場合、`system_start` から `slot_length` でスロットを数えます。 |
+| `kes_agent.profiles[].shelley_start_time` | 最初の Shelley スロットの時刻です。 | `shelley_start_slot` とともに RFC3339 のタイムスタンプで設定します。例として mainnet は `2020-07-29T21:44:51Z`、preprod は `2022-06-21T00:00:00Z` です。 |
+| `kes_agent.profiles[].slot_length` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
+| `kes_agent.profiles[].slots_per_kes_period` | 1 KES 期間のスロット数です。 | `0` より大きい値を指定します。 |
+| `kes_agent.profiles[].max_kes_evolutions` | 運用証明書の進化回数を制限します。 | 既定値は `62` です。 |
+| `kes_agent.profiles[].max_clock_skew` | `sign` が拒否するまでに、ヘッダーのスロットがエージェントの時計より先行できる幅です。 | 既定値は `5s`。正の Go の期間を指定します。 |
+| `kes_agent.profiles[].guard_file` | プロファイルの単調増加する KES 期間ガードを、この永続的なパスに保存します。 | 既定のファイルストアでは必須です。[共有ストア](#shared-store)では設定しないでください。プロファイルごとに別のファイルが必要です。 |
+
+`profiles` を設定する場合、トップレベルの単一プール用フィールド `cold_vkey_file`、`cold_vkey_hex`、`system_start`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file` は設定しないでください。`slot_length` と `max_kes_evolutions` は既定値の `1` と `62` のままにします。これらのトップレベルのフィールドを設定すると、Bursa は起動を拒否し、各プロファイルで設定するよう求めます。
+
+2 つのプロファイルが同じガードファイル (シンボリックリンクやハードリンクで到達する同じファイルを含む) を共有する場合や、同じコールド検証鍵と同じ `system_start` を持つ場合も、Bursa は起動を拒否します。1 つのコールド鍵で複数のネットワークを提供でき、異なる `system_start` で区別します。`serve-key` モードはプロファイルを 1 つだけ受け付けます。複数のプールは `sign` モードで提供します。
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  profiles:
+    - name: pool-a
+      cold_vkey_file: /etc/bursa/pool-a-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+      guard_file: /var/lib/bursa/pool-a.guard
+    - name: pool-b
+      cold_vkey_file: /etc/bursa/pool-b-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+      guard_file: /var/lib/bursa/pool-b.guard
+```
+
+<a id="shared-store"></a>
+
+### 共有ストア
+
+各プロファイルの KES 期間の下限と署名済みスロットの記録をガードファイルではなく PostgreSQL データベースに保存し、複数のエージェントレプリカで共有するには、`kes_agent.store` を設定します。ストアは単一プールの `default` プロファイルにも `profiles` にも適用されます。ストアは YAML でのみ設定します。
+
+| 設定パス | 用途 | 既定値または要件 |
+| --- | --- | --- |
+| `kes_agent.store.type` | 各プロファイルのスロットガードの保存先を選択します。 | 既定値は `file` で、各プロファイルの `guard_file` を使用します。共有の PostgreSQL データベースを使うには `postgres` を設定します。その他の値は拒否されます。 |
+| `kes_agent.store.dsn_env` | PostgreSQL 接続文字列を含む環境変数の名前です。 | `type` が `postgres` の場合は必須で、指定した変数は空でない値を含む必要があります。`file` ストアでは拒否されます。ループバック以外のデータベースホストには `sslmode=verify-full` が必要です。 |
+| `kes_agent.store.age_recipients` | エージェントが各ステージ済み KES 署名鍵をデータベースに保存する前に、age で封印する宛先の一覧です。 | `age_identity_file` とともに、`type` が `postgres` の場合にのみ設定します。 |
+| `kes_agent.store.age_identity_file` | 各レプリカがインストール済みの KES 鍵の封印を解くために使う age アイデンティティのファイルです。 | `age_recipients` とともに、`type` が `postgres` の場合にのみ設定します。Unix では、グループやその他のユーザーにアクセスを許可するファイルを拒否します。 |
+| `kes_agent.store.key_poll_interval` | 各レプリカが新しくインストールされた鍵をデータベースで確認する間隔です。 | 既定値は `10s`。正の Go の期間を指定します。`age_recipients` と `age_identity_file` が必要です。 |
+
+`postgres` ストアでは、すべてのプロファイルとトップレベルで `guard_file` を設定しないでください。共有ストアと並べてガードファイルを設定すると、Bursa は無視せずに起動を拒否します。
+
+`age_recipients` と `age_identity_file` がない場合、各レプリカは自身の KES 鍵をメモリ内にのみ保持し、データベースはスロットガードのみを保存します。設定した場合、エージェントはステージ済みの鍵を `age_recipients` 宛てに age で封印してデータベースに保存し、各レプリカは `age_identity_file` のアイデンティティでインストール済みの鍵の封印を解きます。
+
+```yaml
+kes_agent:
+  mode: sign
+  service_socket: /run/bursa/kes-agent.sock
+  control_socket: /run/bursa/kes-agent-control.sock
+  profiles:
+    - name: pool-a
+      cold_vkey_file: /etc/bursa/pool-a-cold.vkey
+      system_start: "2022-10-25T00:00:00Z"
+      slots_per_kes_period: 129600
+  store:
+    type: postgres
+    dsn_env: BURSA_KES_AGENT_STORE_DSN
+    age_recipients:
+      - age1examplerecipient
+    age_identity_file: /etc/bursa/kes-agent/age-identity.txt
+    key_poll_interval: 10s
+```
+
+DSN は、YAML ファイルにパスワードを埋め込まず、指定した環境変数で渡してください。
 
 <a id="migrate-socket-permissions"></a>
 
@@ -264,10 +401,10 @@ kes_agent:
 | `api.jwt_secret` | `API_JWT_SECRET` | HS256 シークレットで Bearer トークンを認証します。 | `api.jwks_url` の代わりに使用し、32 バイト以上を指定します。 |
 | `api.jwks_url` | `API_JWKS_URL` | JWKS エンドポイントで Bearer トークンを認証します。 | `api.jwt_secret` の代わりに使用します。ループバックでの開発を除き HTTPS が必須です。 |
 | `api.jwt_issuer` | `API_JWT_ISSUER` | Bearer トークンの issuer を制限します。 | 受け入れる issuer を制限する場合に設定します。 |
-| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの audience を制限します。 | 受け入れる audience を制限する場合に設定します。 |
+| `api.jwt_audience` | `API_JWT_AUDIENCE` | Bearer トークンの対象 audience を指定します。 | 空でない値を指定します。 |
 | `api.jwt_admin_subjects` | `API_JWT_ADMIN_SUBJECTS` | 永続化したウォレットの管理用 JWT subject の、空でない許可リストです。 | いずれかのウォレットストレージを設定する場合、1 つ以上の空でない subject が必要です。リストが空または未設定なら起動を拒否します。 |
 
-ループバック以外の従来の API リスナーには、読み取り可能な TLS ファイルの両方と、Bearer の信頼元 `api.jwt_secret` または `api.jwks_url` のちょうど一方が必要です。信頼元がちょうど 1 つでなければ起動を拒否します。HS256 シークレットは 32 バイト以上が必要です。JWKS URL は HTTPS を使用し、ループバックでの開発に限り HTTP を使用できます。
+ループバック以外の従来の API リスナーには、読み取り可能な TLS ファイルの両方と、Bearer の信頼元 `api.jwt_secret` または `api.jwks_url` のちょうど一方が必要です。信頼元がちょうど 1 つでなければ起動を拒否します。どちらかの信頼元を設定する場合は `api.jwt_audience` も必須で、すべての Bearer トークンの `aud` クレームを同じ値にします。audience がない、または一致しないトークンは認証に失敗します。HS256 シークレットは 32 バイト以上が必要です。JWKS URL は HTTPS を使用し、ループバックでの開発に限り HTTP を使用できます。
 
 API は既定でループバックを使用します。TLS ファイルを省略したループバックでの開発は平文で利用できますが、ループバック以外のリスナーでは TLS と Bearer 認証が必須です。
 

@@ -87,6 +87,7 @@ export default defineConfig({
 							description: 'Dingo, cardano-up, cDNSd, and container operations',
 							paths: [
 								'guides/dingo/**',
+								'guides/dingo-operator/**',
 								'guides/cardano-up/**',
 								'guides/cdnsd',
 								'guides/docker-images',
@@ -198,6 +199,7 @@ export default defineConfig({
 					label: 'Nodes and operations', translations: { es: 'Nodos y operaciones', ja: 'ノードと運用' },
 					items: [
 						{ label: 'Dingo', collapsed: true, items: [{ autogenerate: { directory: 'guides/dingo' } }] },
+						{ label: 'dingo-operator', collapsed: true, items: [{ autogenerate: { directory: 'guides/dingo-operator' } }] },
 						{ label: 'cardano-up', collapsed: true, items: [{ autogenerate: { directory: 'guides/cardano-up' } }] },
 						{ label: 'Bursa', collapsed: true, items: [{ autogenerate: { directory: 'guides/bursa' } }] },
 						{ label: 'nview', collapsed: true, items: [{ autogenerate: { directory: 'guides/nview' } }] },

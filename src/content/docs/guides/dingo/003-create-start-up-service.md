@@ -96,9 +96,8 @@ plugins:
         # Blockfrost uses this provider-specific host independently of bindAddr.
         # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: "127.0.0.1"
-        # Set authToken to protect transaction submission and evaluation mutations.
-        # authToken: ""
-        # Authenticated mutation access on a non-loopback host requires server TLS.
+        # Mutation routes accept anonymous requests.
+        # Existing maxConcurrentMutations and maxConcurrentMutationsPerClient limits still apply.
         # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
         # Per-client concurrent mutation limit. Default: 1.
@@ -144,7 +143,7 @@ maxNtCConns: 100
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 maxNtCConnectionsPerIP: 5
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -181,6 +180,8 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF
 ```
+
+> 📝 The default `privatePort: 0` keeps the Unix socket at `socketPath` available and disables the NtC TCP listener. Set a nonzero `privatePort` to enable TCP access.
 
 > 📝 By default, Mithril requires `HTTPS` and rejects local, private, or otherwise non-public destinations. Mithril v2 bootstrap accepts artifact origins and redirects only from the configured aggregator or the official Mithril GCS origin (`storage.googleapis.com`), enforces aggregate download and extraction safety checks, performs signed ancillary preflight before extraction, and uses only authenticated ledger content. Set `mithril.allowInsecureHttp: true` only for local development or testing. Do not enable it in production.
 
@@ -252,6 +253,9 @@ network: preview
 
 # Pre-production testnet
 network: preprod
+
+# Prime mainnet
+network: prime-mainnet
 
 # Mainnet - NOT CURRENTLY RECOMMENDED
 network: mainnet

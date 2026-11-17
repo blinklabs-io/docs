@@ -78,9 +78,8 @@ plugins:
         # Blockfrost uses this provider-specific host independently of bindAddr.
         # Default: 127.0.0.1. Set host for access from a service network or a remote host.
         host: "127.0.0.1"
-        # Set authToken to protect transaction submission and evaluation mutations.
-        # authToken: ""
-        # Authenticated mutation access on a non-loopback host requires server TLS.
+        # Las rutas de mutación aceptan solicitudes anónimas.
+        # Los límites maxConcurrentMutations y maxConcurrentMutationsPerClient siguen vigentes.
         # Global concurrent mutation limit. Default: 4.
         maxConcurrentMutations: 4
         # Per-client concurrent mutation limit. Default: 1.
@@ -125,7 +124,7 @@ maxNtCConns: 100
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 maxNtCConnectionsPerIP: 5
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -161,6 +160,8 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF
 ```
+
+📝 De forma predeterminada, Dingo no inicia el oyente TCP de NtC cuando `privatePort` vale `0` y mantiene disponible el socket Unix configurado en `socketPath`. Configura un valor distinto de cero en `privatePort` cuando necesites conexiones TCP.
 
 📝 Mithril exige `HTTPS` de forma predeterminada y rechaza los destinos locales, privados o no públicos. El arranque Mithril v2 solo acepta orígenes de artefactos y redirecciones del agregador configurado o del origen GCS oficial de Mithril, `storage.googleapis.com`. Aplica comprobaciones agregadas de seguridad de descarga y extracción, verifica el archivo auxiliar firmado antes de extraer y utiliza únicamente contenido autenticado del ledger. Establece `mithril.allowInsecureHttp: true` solo para desarrollo o pruebas locales; no lo actives en producción.
 
@@ -232,6 +233,9 @@ network: preprod
 
 # Red de pruebas Dijkstra (network magic 6)
 network: dijkstra
+
+# Red principal de Prime
+network: prime-mainnet
 
 # Mainnet - NOT CURRENTLY RECOMMENDED
 network: mainnet

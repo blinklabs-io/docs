@@ -79,7 +79,7 @@ Then download and extract the release:
 
 ```
 cd $DINGO_HOME
-wget https://github.com/blinklabs-io/dingo/releases/download/v0.88.0/dingo-v0.88.0-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
+wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-$DINGO_ARCH.tar.gz -O - | tar -xz
 ```
 
 Verify the binary version, then copy it to `/usr/local/bin/` so it is accessible system-wide:
@@ -97,7 +97,7 @@ sudo cp $DINGO_HOME/dingo /usr/local/bin/
 
 ### Step 3 - Download the Leios Cardano-CLI Binary
 
-Musashi needs the `cardano-cli` from the Leios prototype release that matches the network. Find the network's version in the `MinNodeVersion` field of the Musashi <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>. For example, `11.1.0.164-prototype-2026w42` matches the `rc-2026w42` release on the <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leios releases</a> page.
+Musashi needs the `cardano-cli` from the Leios prototype release that matches the network. Find the network's version in the `MinNodeVersion` field of the Musashi <a href="https://book.play.dev.cardano.org/environments-pre/leios/config.json" target="_blank">config.json</a>. For example, `11.2.0.164-rc-2026w44` matches the `rc-2026w44` release on the <a href="https://github.com/input-output-hk/ouroboros-leios/releases" target="_blank">ouroboros-leios releases</a> page.
 
 Make a directory and move into it:
 
@@ -108,7 +108,7 @@ mkdir -p "$DINGO_HOME/cli" && cd "$DINGO_HOME/cli"
 The Leios release names its Linux builds `x86_64` and `aarch64`. Set the release tag and your architecture, then download the archive and its checksum:
 
 ```
-LEIOS_RELEASE=rc-2026w42
+LEIOS_RELEASE=rc-2026w44
 LEIOS_ARCH=$(uname -m)
 [ "$LEIOS_ARCH" = arm64 ] && LEIOS_ARCH=aarch64
 wget https://github.com/input-output-hk/ouroboros-leios/releases/download/$LEIOS_RELEASE/cardano-node-leios-$LEIOS_ARCH-linux.tar.gz
@@ -218,8 +218,7 @@ socketPath: \"$DINGO_HOME/dingo.socket\"
 # Path to the topology configuration file for Cardano node
 topology: \"$DINGO_HOME/config/topology.json\"
 
-# Mempool: 25 MiB, the Leios size. Dingo v0.88.0 keeps the 1 MiB
-# default on Musashi, which fills and expires transactions.
+# Mempool: Dingo v0.92.3 uses a 25 MiB default when the network is Musashi.
 plugins:
   mempool:
     config:
@@ -227,7 +226,7 @@ plugins:
 EOF"
 ```
 
-> 💡 The `plugins.mempool` block raises the mempool from Dingo's 1 MiB default to 25 MiB, the size Dingo uses for Leios. At 1 MiB the mempool fills on Musashi and transactions expire before they are included.
+> 💡 In Dingo v0.92.3, Musashi uses a 25 MiB mempool by default. The `plugins.mempool` block sets the default capacity explicitly.
 
 You can view and verify the `dingo.yaml` file by running:
 
@@ -761,8 +760,7 @@ shelleyOperationalCertificate: \"$DINGO_HOME/keys/node.cert\"
 # Leios voting: the BLS key registered with your pool in Step 9
 leiosVoteSigningKeyFile: \"$DINGO_HOME/keys/bls.skey\"
 
-# Mempool: 25 MiB, the Leios size. Dingo v0.88.0 keeps the 1 MiB
-# default on Musashi, which fills and expires transactions.
+# Mempool: Dingo v0.92.3 uses a 25 MiB default when the network is Musashi.
 plugins:
   mempool:
     config:
@@ -770,7 +768,7 @@ plugins:
 EOF"
 ```
 
-> 💡 Without `leiosVoteSigningKeyFile`, the pool still forges blocks but does not vote on Leios endorser blocks.
+> 💡 For Musashi, the Dingo v0.92.3 mempool default is 25 MiB. Without `leiosVoteSigningKeyFile`, the pool still forges blocks but does not vote on Leios endorser blocks.
 
 You can view and verify the `dingo.yaml` file by running:
 
@@ -910,3 +908,14 @@ curl -s 127.0.0.1:12798/metrics | grep -E '^dingo_metrics_leios_(committee_size|
 <br>
 
 > Credit to original guides and additional resources here: <a href="https://leios.cardano-scaling.org/docs/testnet/getting-started" target="_blank">Getting started</a> and <a href="https://leios.cardano-scaling.org/docs/testnet/register-stake-pool" target="_blank">Register a stake pool</a>
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
