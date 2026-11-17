@@ -9,6 +9,22 @@ This guide covers the streaming and backpressure benchmark for the Adder pipelin
 
 Run all commands from the repository root.
 
+## Run representative benchmarks
+
+Run the event flow, Cardano filter, and event JSON benchmarks from the repository root:
+
+```sh
+go test ./pipeline ./filter/cardano ./event -run '^$' -bench 'Benchmark(PipelineEventFlow|CardanoFilter|EventJSON)' -benchmem -benchtime=1s -count=5
+```
+
+The command runs three representative workloads:
+
+- `BenchmarkPipelineEventFlow` sends one event at a time through a running pipeline with zero, one, or three pass-through filters and one output. The producer waits for each event to reach the output, and the benchmark starts and stops the plugin outside the timed section. This workload models a single producer without downstream backpressure; it does not measure peak throughput with concurrent inputs.
+- `BenchmarkCardanoFilter` measures matching and nonmatching address and asset filters on a transaction with one output and one resolved input, plus matching and nonmatching pool filters on a block. The benchmark constructs the fixtures and configuration outside the timed section and invokes the same filtering function used by the plugin event loop.
+- `BenchmarkEventJSON` measures transaction event JSON marshaling and unmarshaling separately. The event includes transaction context, a block hash, a fee, a withdrawal, and CBOR bytes. The workload does not include a full decoded ledger transaction. Unmarshaling into `Event` leaves `any` fields as generic JSON values, as in a normal round trip.
+
+Compare runs on the same machine with the same Go version and workload. Reported allocations and timings describe these workloads only; they do not identify a production bottleneck or guarantee production throughput.
+
 ## Run the streaming benchmark
 
 Execute the following loop to compare the three input buffer capacities in a balanced order:
@@ -30,7 +46,7 @@ Each operation sends and drains `4,096` block event envelopes. The benchmark rep
 
 ## Compare results
 
-Compare the same named case across repeated runs on the same machine, with the same Go version and workload. The six runs in the command balance the three buffer orders. Compare both events per second and allocations, rather than using producer completion time alone as a measure of end to end delivery.
+For streaming cases, the six runs in the command balance the three buffer orders. Compare both events per second and allocations, rather than using producer completion time alone as a measure of end to end delivery.
 
 The benchmark does not include the following production concerns:
 
@@ -66,7 +82,7 @@ The profiles provide these views:
 - The memory profile includes process startup and benchmark setup.
 - The scheduler profile highlights runnable delays.
 
-A short run can produce too few samples. Increase `-benchtime` only when the machine has capacity. This synthetic channel workload can be dominated by Go runtime scheduling and does not identify a bottleneck in a real Adder deployment. Keep the Go version, machine, workload, and benchmark duration fixed for comparisons, collect multiple unprofiled runs, and compare events per second with `B/op`.
+A short run can produce too few samples. Increase `-benchtime` only when the machine has capacity. This synthetic channel workload can be dominated by Go runtime scheduling and does not identify a bottleneck in a real Adder deployment. Collect multiple unprofiled runs and compare events per second with `B/op`.
 
 Profile instrumentation changes timings. Do not use profiled runs as the throughput baseline.
 
