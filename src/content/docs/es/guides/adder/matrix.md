@@ -68,11 +68,11 @@ La salida comunica cada fallo de entrega mediante el canal de errores del plugin
 Use una sala exclusiva de prueba antes de configurar una sala operativa:
 
 1. Cree una sala de prueba y haga que la cuenta asociada a `access-token` se una a ella.
-2. Conceda a esa cuenta permiso para enviar mensajes y confirme que `room-ids` contiene el ID completo de la sala, incluido el prefijo `!`.
-3. Configure `output: matrix` con esa sala y `event-types: blocks`. Proteja `access-token` como un secreto y use HTTPS para un homeserver remoto. Para una prueba local, use HTTP solo con un destino de loopback.
+2. Conceda a esa cuenta permiso para enviar mensajes y configure su ID en `room-ids`.
+3. Configure `output: matrix` con esa sala y `event-types: blocks`.
 4. Inicie Adder y produzca un evento seleccionado. Compruebe que aparece un `m.room.message` de texto en la sala de prueba y que el registro no muestra errores de `output.matrix`.
-5. Compruebe la validación de permisos con una cuenta que no tenga permiso para enviar o con una sala a la que no se haya unido. Adder debe informar el error HTTP sin reintentar las respuestas permanentes `4xx`.
-6. Revise la configuración antes de cambiar `room-ids` a salas operativas. No reutilice el token en registros, comandos compartidos ni ejemplos públicos.
+5. Pruebe una cuenta sin permiso de envío o una sala a la que la cuenta no se haya unido. Adder debe informar el error HTTP sin reintentar las respuestas permanentes `4xx`.
+6. Revise la configuración antes de cambiar `room-ids` a salas operativas y elimine las credenciales de prueba que ya no necesite.
 
 ## Referencias relacionadas
 
