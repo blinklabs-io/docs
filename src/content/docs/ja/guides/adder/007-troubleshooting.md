@@ -192,7 +192,7 @@ Webhookのメトリクスと、設定済みAPIリスナーでの確認方法は�
 
 次のメトリクスで、Webhook配信の試行、最終結果、試行ごとの所要時間を確認します。
 
-```bash
+```sh
 curl http://localhost:8080/metrics
 ```
 
