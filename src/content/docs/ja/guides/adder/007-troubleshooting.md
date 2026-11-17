@@ -15,7 +15,7 @@ description: "Adderの接続、設定、イベント配信、ヘルスチェッ�
 
 ### A. ソケットパスの問題（NtC）
 
-* **症状**: ローカルのNode-to-Client（NtC）ソケットへの接続時に、接続拒否または`no such file or directory`がログに出力されます。
+* **症状**: ローカルのNode-to-Client（NtC）ソケットへの接続時に、Adderのログに接続拒否または`no such file or directory`が現れます。
 * **原因**: 指定したパスにUNIXソケットファイルがないか、Adderを実行するユーザーにソケットの読み取りまたは書き込み権限がありません。
 * **解決**:
   1. Cardanoノードが完全に起動し、ソケットファイルを作成したことを確認します。
@@ -76,7 +76,7 @@ Adderは設定を、**CLIフラグ、YAML設定ファイル、環境変数、デ
 
 ### B. YAMLファイルが見つからない、または値が不正
 
-* **症状**: `failed to read configuration file`または`yaml: unmarshal errors`が出力されます。
+* **症状**: Adderが`failed to read configuration file`または`yaml: unmarshal errors`を出力します。
 * **原因**: ファイルパスの誤り、不正なインデント、または整数を要求する項目に文字列を指定するなどの型の不一致です。
 * **解決**: YAMLの構文と値の型を確認します。次のコマンドでYAMLファイルの構文を確認できます。
 
