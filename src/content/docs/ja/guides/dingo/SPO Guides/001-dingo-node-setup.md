@@ -45,7 +45,7 @@ mkdir -p "$DINGO_HOME"
 
 ```
 cd $DINGO_HOME
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.4/dingo-v0.90.4-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 <br>
@@ -241,14 +241,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-# systemd の停止猶予期間は shutdownTimeout と durable storage の close に必要な時間をカバーする値に設定します。
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
 
-⚠️ 終了処理は Dingo の `shutdownTimeout` や停止要求の期限を超えて継続することがあります。Dingo は処理中の進捗と期限超過の警告をログに記録します。close がハングした場合に close を放棄できるのは `SIGKILL` だけです。
+この例では [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) を設定し、systemd が永続ストレージの終了を待つようにします。有限の停止期限を設定する場合は、`shutdownTimeout` とストレージの終了に必要な時間を確保してください。終了処理は Dingo やリモート要求の期限を超えて継続することがあり、Dingo は進捗と期限超過の警告を記録します。停止した終了処理を意図的に放棄する場合にのみ `SIGKILL` を使用してください。
 
 ***
 

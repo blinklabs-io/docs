@@ -128,7 +128,7 @@ maxNtCConns: 100
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 maxNtCConnectionsPerIP: 5
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -164,6 +164,8 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF
 ```
+
+📝 De forma predeterminada, Dingo no inicia el oyente TCP de NtC cuando `privatePort` vale `0` y mantiene disponible el socket Unix configurado en `socketPath`. Configura un valor distinto de cero en `privatePort` cuando necesites conexiones TCP.
 
 📝 Mithril exige `HTTPS` de forma predeterminada y rechaza los destinos locales, privados o no públicos. El arranque Mithril v2 solo acepta orígenes de artefactos y redirecciones del agregador configurado o del origen GCS oficial de Mithril, `storage.googleapis.com`. Aplica comprobaciones agregadas de seguridad de descarga y extracción, verifica el archivo auxiliar firmado antes de extraer y utiliza únicamente contenido autenticado del ledger. Establece `mithril.allowInsecureHttp: true` solo para desarrollo o pruebas locales; no lo actives en producción.
 
@@ -281,13 +283,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
 
-⚠️ El periodo de gracia de systemd debe cubrir `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento durable. Configura `TimeoutStopSec` con un valor que cubra ambos intervalos; una duración fija que deje fuera cualquiera de ellos no es suficiente. El cierre puede prolongarse más allá del plazo de Dingo o del plazo de una solicitud remota. Dingo registra el progreso y el exceso de plazo. Un supervisor u operador no debe usar `SIGKILL` salvo que pretenda abandonar un cierre bloqueado.
+El ejemplo usa [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) para que systemd espere al cierre del almacenamiento durable. Si configura un plazo finito, debe cubrir `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento. El cierre puede superar el plazo de Dingo o de una solicitud remota; Dingo registra el progreso y el exceso de plazo. Use `SIGKILL` solo para abandonar intencionalmente un cierre bloqueado.
 
 Visualiza y verifica `dingo.service`:
 

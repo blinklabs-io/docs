@@ -45,7 +45,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 
 ```
 cd $DINGO_HOME
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.4/dingo-v0.90.4-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 <br>
@@ -241,14 +241,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-# Set TimeoutStopSec to cover Dingo's configured shutdownTimeout plus the time required to close durable storage.
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
 
-> **Important:** Set the systemd grace period to cover Dingo's configured `shutdownTimeout` plus the time required to close durable storage. Shutdown may continue after Dingo's `shutdownTimeout` or a remote request deadline. Progress messages and overrun warnings are expected during this period. Only `SIGKILL` abandons a close.
+> **Important:** The sample uses [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) so systemd waits for durable storage to close. If you set a finite timeout, allow Dingo's configured `shutdownTimeout` plus the time required to close durable storage. Shutdown may continue after Dingo's `shutdownTimeout` or a remote request deadline. Progress messages and overrun warnings are expected during this period. Only `SIGKILL` abandons a close.
 
 ***
 

@@ -150,7 +150,7 @@ maxNtCConns: 100
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 maxNtCConnectionsPerIP: 5
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -186,6 +186,8 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF
 ```
+
+> 📝 `privatePort: 0` では、NtC の TCP リスナーは無効です。設定した Unix ソケットは引き続き利用できます。TCP 接続が必要な場合は、`privatePort` に `0` 以外のポートを設定してください。
 
 > 📝 既定で Mithril は `HTTPS` を必須とし、ローカル、プライベート、その他の非公開の接続先を拒否します。Mithril v2 ブートストラップは、設定したアグリゲーターまたは公式 Mithril GCS オリジン（`storage.googleapis.com`）からのアーティファクトとリダイレクトのみを受け入れます。ダウンロード全体と展開の安全性を検査し、展開前に署名付き付属データの事前検証を行い、認証済みの台帳内容のみを使用します。`mithril.allowInsecureHttp: true` はローカル開発やテストに限って設定し、本番環境では有効にしないでください。
 
@@ -319,13 +321,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
 
-`systemd` の停止猶予期間 (`TimeoutStopSec`) は、設定済みの `shutdownTimeout` と durable storage（永続ストレージ）の終了に必要な時間を合わせてカバーできるように設定してください。Dingo は、Dingo 自身の `shutdownTimeout` またはリモート要求の期限を超えても、Badger と SQL メタデータの durable close が完了するまで停止処理を継続します。停止処理の進捗と期限超過の警告をログに記録します。停止処理がハングし、意図的に放棄する場合を除き、`SIGKILL` で中断しないでください。
+この例では [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) を設定し、systemd が永続ストレージの終了を待つようにします。有限の停止期限を設定する場合は、`shutdownTimeout` とストレージの終了に必要な時間を確保してください。終了処理は Dingo やリモート要求の期限を超えて継続することがあり、Dingo は進捗と期限超過の警告を記録します。停止した終了処理を意図的に放棄する場合にのみ `SIGKILL` を使用してください。
 
 ***
 
