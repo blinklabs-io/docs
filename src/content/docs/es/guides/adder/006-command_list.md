@@ -330,6 +330,20 @@ description: Lista de Comandos de Adder.
 <br />
 
 ```text
+  --output-telegram-settings-file string
+```
+
+> archivo YAML local con las preferencias de notificaciones de Telegram (predeterminado "")
+<br />
+
+```text
+  --output-telegram-operator-user-ids string
+```
+
+> IDs de usuario de Telegram separados por comas que pueden cambiar las preferencias del grupo (predeterminado ""); cada ID debe ser un entero positivo
+<br />
+
+```text
   --output-webhook-format string
 ```
 
