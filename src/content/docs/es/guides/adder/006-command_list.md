@@ -136,7 +136,7 @@ El objeto `payload` siempre contiene `blockHash` y puede contener `transactionCb
 | `voteDelegationCertificates` | Certificados de delegación de voto, con credencial de stake, tipo e identificador del DRep y, cuando corresponde, hash de la pool y depósito. |
 | `committeeCertificates` | Certificados `AuthHot` de autorización de clave activa o `ResignCold` de renuncia de clave fría, con las credenciales del comité y el ancla. |
 
-Los objetos `anchor` siempre aparecen en los elementos que los admiten; cuando no existe un ancla, sus campos `url` y `dataHash` son cadenas vacías. Los campos `deposit` de los certificados se omiten cuando su valor es cero.
+Adder serializa siempre los objetos `anchor` en los elementos que los admiten; cuando no existe un ancla, Adder establece sus campos `url` y `dataHash` como cadenas vacías. Adder omite los campos `deposit` de los certificados cuando su valor es cero.
 
 ### Filtrado de eventos de gobernanza
 
@@ -399,7 +399,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
 >
-> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Al cargar YAML, Adder acepta el ajuste heredado de nivel superior `logging.level` y lo migra a `plugins.output.log.level` si la clave moderna no está presente. Si ambas claves están presentes, prevalece `plugins.output.log.level`; al guardar la configuración, solo se conserva la clave moderna. Los valores heredados no válidos siguen produciendo errores. La opción `--logging-level` y la variable `LOGGING_LEVEL` no son compatibles; los controles preferidos son `--output-log-level`, `OUTPUT_LOG_LEVEL` y `plugins.output.log.level`.
+> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Al cargar YAML, Adder acepta el ajuste heredado de nivel superior `logging.level` y lo migra a `plugins.output.log.level` si la clave moderna no está presente. Si ambas claves están presentes, prevalece `plugins.output.log.level`; al guardar la configuración, Adder conserva únicamente la clave moderna. Los valores heredados no válidos siguen produciendo errores. La opción `--logging-level` y la variable `LOGGING_LEVEL` no son compatibles; los controles preferidos son `--output-log-level`, `OUTPUT_LOG_LEVEL` y `plugins.output.log.level`.
 <br />
 
 ```text
@@ -438,7 +438,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > especifica la ruta al archivo de cuenta de servicio
 > Cuando se selecciona `--output push`, `--output-push-serviceAccountFilePath` debe especificar una ruta no vacía. El JSON de cuenta de servicio indicado debe incluir `project_id` como una cadena no vacía. La configuración falla cuando falta `project_id`, no es una cadena o está vacío.
-> Los errores de token y FCM se entregan mediante `ErrorChan`. Cada solicitud HTTP a FCM tiene un tiempo de espera de 10 segundos.
+> Adder entrega los errores de token y FCM mediante `ErrorChan`. Cada solicitud HTTP a FCM tiene un tiempo de espera de 10 segundos.
 <br />
 
 ```text
