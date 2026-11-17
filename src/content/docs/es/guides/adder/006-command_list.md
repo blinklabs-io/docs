@@ -106,11 +106,11 @@ description: Lista de Comandos de Adder.
 
 ## Eventos de gobernanza:
 
-La entrada `chainsync` emite un evento `input.governance` por cada transacción que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce un único evento de gobernanza que reúne todos sus datos de gobernanza. El evento se emite además del evento `input.transaction`; las transacciones sin datos de gobernanza no producen este evento.
+La entrada `chainsync` emite un evento `input.governance` por cada transacción que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce un único evento de gobernanza que reúne todos sus datos de gobernanza. Adder emite el evento además del evento `input.transaction`; las transacciones sin datos de gobernanza no producen este evento.
 
 ### Cuándo se emite
 
-`input.governance` se emite cuando la transacción contiene uno o más procedimientos de propuesta, procedimientos de votación o certificados de gobernanza: registro, actualización o retiro de DRep; delegación de voto; o autorización de clave activa y renuncia de clave fría del Comité Constitucional.
+Adder emite `input.governance` cuando la transacción contiene uno o más procedimientos de propuesta, procedimientos de votación o certificados de gobernanza: registro, actualización o retiro de DRep; delegación de voto; o autorización de clave activa y renuncia de clave fría del Comité Constitucional.
 
 ### Contexto
 
@@ -140,11 +140,11 @@ Los objetos `anchor` siempre aparecen en los elementos que los admiten; cuando n
 
 ### Filtrado de eventos de gobernanza
 
-Los siguientes filtros se aplican a `input.governance` cuando cualquier dato correspondiente coincide con el valor filtrado:
+Adder aplica los siguientes filtros a `input.governance` cuando cualquier dato correspondiente coincide con el valor filtrado:
 
 - `--filter-drep` coincide con certificados de DRep, delegaciones de voto hacia el DRep y procedimientos de votación cuyo votante es el DRep.
 - `--filter-pool` coincide con procedimientos de votación emitidos por la pool como SPO y certificados de delegación de voto que contienen el hash de clave de la pool.
-- `--filter-address` con una dirección de stake (`stake1…`) coincide con `rewardAccount` de propuestas, destinos de retiros del tesoro y la credencial de stake de certificados de delegación de voto. Con una dirección de pago (`addr1…`), coincide únicamente con destinos de retiros del tesoro.
+- Con `--filter-address`, Adder compara una dirección de stake (`stake1…`) con `rewardAccount` de propuestas, destinos de retiros del tesoro y la credencial de stake de certificados de delegación de voto. Adder compara una dirección de pago (`addr1…`) únicamente con destinos de retiros del tesoro.
 
 Los filtros `--filter-policy` y `--filter-asset` no se aplican a eventos de gobernanza y dejan pasar `input.governance` sin modificaciones.
 
