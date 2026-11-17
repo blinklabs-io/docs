@@ -12,9 +12,9 @@ ClickHouse seleccionada y escribe los eventos como filas `JSONEachRow` mediante
 HTTP. Esta referencia describe la configuración YAML, el esquema de la tabla y
 el comportamiento de lotes, errores, duplicados, rollbacks y apagado.
 
-Consulta la [referencia de comandos](./006-command_list.md) para las opciones de
-línea de comandos y la [guía general de Adder](../001-adder.md) para obtener una
-visión general de las salidas y los modos de funcionamiento.
+La [referencia de comandos](./006-command_list.md) documenta las opciones de
+línea de comandos. La [guía general de Adder](../001-adder.md) ofrece una visión
+general de las salidas y los modos de funcionamiento.
 
 ## Configuración
 
