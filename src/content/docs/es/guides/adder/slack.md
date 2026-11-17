@@ -35,7 +35,7 @@ Adder separa `webhook-urls` y `event-types` por comas, elimina los espacios al p
 
 `webhook-urls` debe contener al menos una URL HTTPS. Adder rechaza una URL que incluya información de usuario, como un nombre de usuario o una contraseña incrustados. La validación ocurre al iniciar la salida, por lo que una configuración incorrecta impide el arranque.
 
-El valor predeterminado de `event-types` incluye `blocks`, `transactions`, `rollbacks` y `governance`. Adder también acepta `drep-registration`, `drep-update` y `drep-retirement`.
+ Adder también acepta `drep-registration`, `drep-update` y `drep-retirement`.
 
 ## Selección y formato de eventos
 
@@ -70,7 +70,7 @@ La salida aplica estas reglas de entrega:
 - La salida no reintenta otros errores HTTP del cliente. Un `HTTP 400`, por ejemplo, termina la entrega y genera un error.
 - Adder envía cada destino de forma independiente. Un fallo en un webhook se registra y se comunica por el canal de errores sin impedir que los demás destinos reciban el evento.
 
-La salida no dispone de una cola duradera. El worker usa un búfer de entrada acotado y no guarda eventos pendientes para entregarlos después.
+La salida no dispone de una cola duradera. El proceso de entrega usa un búfer de entrada acotado y no guarda eventos pendientes para entregarlos después.
 
 ## Límites de frecuencia y `Retry-After`
 
@@ -88,7 +88,7 @@ La cabecera `Retry-After` puede impedir la entrega de un destino mientras otros 
 
 Adder registra los fallos de formato y entrega, y los envía al canal de errores del plugin. Los mensajes de error identifican el destino por su posición o describen el estado HTTP, pero no incluyen las URL de webhook ni sus secretos.
 
-Al apagar la salida, Adder cancela el worker y las esperas o solicitudes asociadas con el contexto de ejecución. El proceso no conserva los mensajes que permanecen en el búfer o en una solicitud cancelada. Un reinicio no recupera ni vuelve a enviar esos mensajes, y tampoco conserva los periodos de enfriamiento en un almacenamiento duradero.
+Al apagar la salida, Adder cancela el proceso de entrega y las esperas o solicitudes asociadas con el contexto de ejecución. El proceso no conserva los mensajes que permanecen en el búfer o en una solicitud cancelada. Un reinicio no recupera ni vuelve a enviar esos mensajes, y tampoco conserva los periodos de enfriamiento en un almacenamiento duradero.
 
 ## Comprobación segura mediante un webhook de prueba
 
