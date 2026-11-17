@@ -433,6 +433,19 @@ description: Lista de Comandos de Adder.
 
 > especifica el nombre de usuario para autenticación básica
 
+```text
+  --output-webhook-state-path string
+```
+
+> ruta SQLite para las entregas pendientes persistentes y seguras frente a reinicios (predeterminado "")
+<br />
+
+```text
+  --output-webhook-max-pending int
+```
+
+> máximo de entregas pendientes persistentes (predeterminado `1024`); cuando `state-path` no está vacío, debe ser al menos `11`
+
 ***
 
 ## Notificaciones:
