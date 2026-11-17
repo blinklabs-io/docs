@@ -61,8 +61,8 @@ remote operator access through a separately administered secure tunnel. The
 webhook receivers used in local tests. Other webhook targets require HTTPS,
 an approved hostname, and a public destination address.
 
-The operator must store the token in a restricted regular file that contains one line
-with at least 32 characters, and remain outside URLs. On Unix, credential and
+Store the token in a restricted regular file. Keep one line with at least 32
+characters in the file and keep the token out of URLs. On Unix, credential and
 operator token files require mode `0600` or stricter. On Windows, ownership
 must belong to the running account, `LocalSystem`, or `Administrators`, and
 the Windows access control list can grant access only to those identities.
@@ -214,8 +214,8 @@ version, and the value:
 Credential references are instance-owned, confined to the credentials
 directory, and cannot be shared across customers. Adder does not allow the
 contents of an applied reference version to change, even when the customer
-revision advances. Publish a new version to rotate a credential. Credential
-the operator must restrict credential files in the same way as the operator token file.
+revision advances. Publish a new version to rotate a credential. The operator
+must restrict credential files in the same way as the operator token file.
 
 Adder validates webhook targets, credential bindings, formats, approved
 hosts, local target exceptions, redirects, and provider quota groups. It
@@ -326,12 +326,12 @@ Status and process totals distinguish these counters:
 | Counter | Meaning |
 | --- | --- |
 | `input_dropped` | Counts events that a customer lane rejects during admission. |
-| `matched` | Rule matches, counted per rule. |
+| `matched` | Counts rule matches per rule. |
 | `destination_dropped` | Counts items that a destination queue rejects. |
-| `submitted_to_plugin` | Items accepted by a managed plugin channel. |
-| `plugin_errors` | Plugin processing errors. |
+| `submitted_to_plugin` | Counts items that a managed plugin channel accepts. |
+| `plugin_errors` | Counts plugin processing errors. |
 | `unknown_outcomes` | Submissions whose external result remains uncertain. |
-| `canceled` | Work canceled during revocation or shutdown. |
+| `canceled` | Counts work that revocation or shutdown cancels. |
 | `diagnostic_dropped` | Counts metadata diagnostics that overflow the diagnostic queue. |
 
 Customer counters cover admission and matching. Destination counters cover
