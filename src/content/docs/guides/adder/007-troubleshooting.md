@@ -110,7 +110,7 @@ Adder resolves settings in this order, from lowest to highest precedence:
 3. Environment variables
 4. Explicit CLI flags
 
-The command reference lists the registered flags and their YAML and environment forms. Core environment names use families such as `INPUT_`, `OUTPUT_`, `API_`, and `DEBUG_`; plugin names follow the plugin type and name. Adder does not add a global `ADDER_` prefix.
+The command reference lists the flags and their YAML and environment forms. Core environment names use families such as `INPUT_`, `OUTPUT_`, `API_`, and `DEBUG_`; plugin names follow the plugin type and name. Adder does not add a global `ADDER_` prefix.
 
 Inspect the relevant environment names without printing unrelated variables:
 
@@ -118,7 +118,7 @@ Inspect the relevant environment names without printing unrelated variables:
 env | grep -E '^(INPUT|OUTPUT|API|DEBUG|KUPO_URL|FILTER_|SHELLEY_TRANS_EPOCH|BYRON_GENESIS_|SHELLEY_GENESIS_)' | sort
 ```
 
-Use `--help` to verify that a CLI option exists before adding it to a startup command. For example, `--output-webhook-url`, `--output-webhook-username`, `--output-webhook-password`, `--output-webhook-format`, and `--output-webhook-tls-skip-verify` are registered webhook options. `--output-webhook-max-retries` and `--output-webhook-initial-backoff` are not public CLI flags and cause an unknown-flag error.
+Use `--help` to verify that a CLI option exists before adding it to a startup command. For example, Adder registers `--output-webhook-url`, `--output-webhook-username`, `--output-webhook-password`, `--output-webhook-format`, and `--output-webhook-tls-skip-verify` as webhook options. Adder does not register `--output-webhook-max-retries` or `--output-webhook-initial-backoff`; either option causes an unknown-flag error.
 
 ### Filter logic and formatting
 
@@ -156,7 +156,7 @@ TOKEN='replace-with-fcm-token'
 curl -i -X DELETE "http://localhost:8080/v1/fcm/${TOKEN}"
 ```
 
-The `/v1` segment is required for this operation. A response from `/fcm/<token>` does not test the registered FCM route.
+This operation requires the `/v1` segment. A response from `/fcm/<token>` does not test the registered FCM route.
 
 ### Webhook connectivity and TLS
 
@@ -179,7 +179,7 @@ curl -i --verbose --insecure \
   "$WEBHOOK_URL"
 ```
 
-If the insecure request succeeds while the normal request fails, repair the certificate chain or hostname configuration. Do not use `--output-webhook-tls-skip-verify` as a general TLS fix; that registered Adder option disables certificate verification for the webhook output.
+If the insecure request succeeds while the normal request fails, repair the certificate chain or hostname configuration. Do not use `--output-webhook-tls-skip-verify` as a general TLS fix; that Adder option disables certificate verification for the webhook output.
 
 Configure the webhook with registered options only:
 
@@ -190,7 +190,7 @@ Configure the webhook with registered options only:
   --output-webhook-format adder
 ```
 
-Adder does not expose retry count or backoff duration as CLI flags. The retry policy is an implementation and configuration behavior described in [Webhook delivery behavior](#webhook-delivery-behavior), not a pair of command-line options.
+Adder does not expose retry count or backoff duration as CLI flags. The retry policy is runtime behavior described in [Webhook delivery behavior](#webhook-delivery-behavior), not a pair of command-line options.
 
 ## Webhook delivery behavior
 
