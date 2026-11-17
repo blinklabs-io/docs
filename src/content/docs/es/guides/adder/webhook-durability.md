@@ -26,9 +26,9 @@ Cada ejecución de entrega usa la política de reintentos existente: un intento 
 
 ## Validación y apagado seguro
 
-Antes de procesar un evento, Adder comprueba que la carga útil y el contexto coincidan con el tipo de evento. Rechaza las cargas útiles nulas o inesperadas, los contextos nulos cuando son necesarios, los contextos inesperados y los tipos de evento desconocidos. El complemento envía estos errores a su canal de errores sin provocar un pánico; si el canal está lleno, Adder registra el error.
+Antes de procesar un evento, Adder comprueba que la carga útil y el contexto coincidan con el tipo de evento. Rechaza las cargas útiles nulas o inesperadas, los contextos nulos cuando son necesarios, los contextos inesperados y los tipos de evento desconocidos. El complemento envía estos errores a su canal de errores sin provocar un pánico; si el canal no puede recibir el error inmediatamente, Adder lo registra.
 
-Adder propaga como errores los fallos al formatear o serializar un evento y los fallos al preparar o transportar una entrega. En el modo durable, un fallo antes de guardar la entrega impide que Adder la añada a SQLite; un fallo durante la reproducción deja la entrada pendiente para conservar la recuperación existente.
+Adder propaga como errores los fallos al formatear o serializar un evento y los fallos al preparar o enviar una entrega. En el modo durable, un fallo antes de guardar la entrega impide que Adder la añada a SQLite; un fallo durante la reproducción deja la entrada pendiente para conservar la recuperación existente.
 
 `Start` y `Stop` protegen el estado del ciclo de vida y los canales compartidos. `Stop` indica al trabajador que termine, espera su finalización y cierra los canales compartidos después. El apagado también cancela las esperas entre reintentos, por lo que Adder no inicia otra espera cuando el complemento ya se está deteniendo. Esta cancelación no confirma la recepción: las entradas que SQLite ya guardó siguen el contrato de reproducción y entrega al menos una vez documentado en esta página.
 
