@@ -20,6 +20,80 @@ description: List of Adder Commands.
 
 ***
 
+## Managed routing:
+
+Managed routing starts when `--managed-config-dir` is set. See the [managed routing reference](./014-managed-routing.md) for file schemas, API semantics, live-tail validation, limits, supported adapters, and delivery behavior.
+
+```
+  --managed-config-dir string
+```
+
+> enables managed routing using this configuration directory (default empty)
+
+> The directory must contain a valid managed configuration bundle before managed mode starts.
+
+<br />
+
+```
+  --managed-credentials-dir string
+```
+
+> restricted managed credential directory (default empty)
+
+> Credential files must be restricted files.
+
+<br />
+
+```
+  --managed-log-dir string
+```
+
+> trusted local managed event file directory (default empty)
+
+<br />
+
+```
+  --managed-allow-hosts stringSlice
+```
+
+> operator-approved webhook hostnames (default empty)
+
+> Remote webhook targets must use an approved hostname.
+
+<br />
+
+```
+  --managed-allow-local-targets
+```
+
+> allow loopback webhook receivers for local tests (default false)
+
+> Local webhook targets require this explicit exception.
+
+<br />
+
+```
+  --managed-address string
+```
+
+> private managed API listener (loopback only) (default `127.0.0.1:8081`)
+
+> The address must use a literal loopback address.
+
+<br />
+
+```
+  --managed-token-file string
+```
+
+> restricted file containing the operator API token (default empty)
+
+> The token file must be a restricted regular file.
+
+<br />
+
+***
+
 ## Filter:
 
 ```
