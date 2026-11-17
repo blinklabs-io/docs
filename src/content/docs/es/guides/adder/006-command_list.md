@@ -916,7 +916,7 @@ La configuración utiliza JSON con `schemaVersion` establecido en `1`. Adder rec
 | Campo | Descripción |
 | --- | --- |
 | `schemaVersion` | Valor obligatorio: `1`. |
-| `network.name` | Red Cardano admitida obligatoria: `mainnet`, `preprod` o `preview`. |
+| `network.name` | Red Cardano admitida obligatoria: `mainnet`, `preprod`, `preview` o `dijkstra`. |
 | `network.customAddress` y `network.customPort` | Dirección y puerto de nodo personalizados opcionales. Configura ambos campos juntos; `customPort` debe estar entre `1` y `65535`. |
 | `monitor.everything` | Establécelo en `true` para monitorizar todos los objetivos admitidos. Configura este campo o al menos un objetivo en `wallets`, `dreps`, `pools`, `assets` o `policies`. |
 | `monitor.wallets` | Direcciones de wallets que se monitorizarán. |
@@ -933,7 +933,7 @@ Las listas de objetivos deben contener direcciones de wallets, IDs de DRep, IDs 
 
 ### Salida `notify-json`
 
-La salida `notify-json` escribe un objeto JSON por línea en stdout. Cada registro utiliza la versión de esquema `1`. Los registros de estado indican `starting`, `connected` o `stale` e incluyen una marca de tiempo y un mensaje opcional. Los registros de notificación incluyen `ruleId`, un `eventType` opcional, `title` y `body` con el texto generado, y los campos de agrupación `batched` y `count`.
+La salida `notify-json` escribe un objeto JSON por línea en stdout. Cada registro debe utilizar la versión de esquema `1`. Los registros de estado deben indicar `starting`, `connected` o `stale` e incluir una marca de tiempo y un mensaje opcional. Los registros de notificación deben incluir `ruleId`, un `eventType` opcional, `title` y `body` con el texto generado, y los campos de agrupación `batched` y `count`.
 
 ***
 
