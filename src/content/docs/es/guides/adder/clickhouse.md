@@ -40,8 +40,8 @@ La salida admite estas claves:
 
 Los nombres admitidos para `event-types` son `blocks`, `transactions`,
 `rollbacks`, `governance`, `drep-registration`, `drep-update` y
-`drep-retirement`. La salida selecciona todos estos tipos cuando se usa el
-valor predeterminado.
+`drep-retirement`. Con el valor predeterminado, la salida selecciona todos
+estos tipos.
 
 ## Esquema de `adder_events_v1`
 
