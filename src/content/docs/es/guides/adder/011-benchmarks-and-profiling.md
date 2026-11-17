@@ -7,7 +7,7 @@ Este documento describe cómo comparar las capacidades de los búferes de entrad
 
 ## Benchmarks representativos
 
-Ejecute el siguiente comando desde la raíz del repositorio para ejecutar los benchmarks representativos del flujo de eventos, los filtros de Cardano y la serialización JSON:
+Ejecute el siguiente comando desde la raíz del repositorio para medir los benchmarks representativos del flujo de eventos, los filtros de Cardano y la serialización JSON:
 
 ```sh
 go test ./pipeline ./filter/cardano ./event -run '^$' -bench 'Benchmark(PipelineEventFlow|CardanoFilter|EventJSON)' -benchmem -benchtime=1s -count=5
@@ -58,7 +58,7 @@ go tool trace -pprof=sched "$profile_dir/trace.out" > "$profile_dir/sched.pprof"
 go tool pprof -top "$profile_dir/sched.pprof"
 ```
 
-El perfil de CPU toma muestras del trabajo activo de la CPU. `alloc_space` informa las asignaciones acumuladas, no el heap conservado; use `-inuse_space` para inspeccionar el heap conservado en el momento de la captura. El perfil de memoria también incluye el arranque del proceso y la preparación del benchmark. El perfil del planificador destaca las esperas de las goroutines listas para ejecutarse. Una ejecución corta puede producir muy pocas muestras; incremente `-benchtime` solo cuando la máquina tenga capacidad. Capture cada perfil por separado para evitar que un profiler distorsione a otro. Esta carga sintética de canales puede estar dominada por la planificación del runtime de Go y no identifica un cuello de botella en un despliegue real de Adder. Para comparar, mantenga fija la versión de Go, la máquina, la carga y la duración del benchmark, recopile varias ejecuciones sin perfilado y compare tanto `events/s` como `B/op`. La instrumentación del perfil modifica los tiempos; no use ejecuciones con perfilado como referencia de rendimiento.
+El perfil de CPU toma muestras del trabajo activo de la CPU. `alloc_space` informa las asignaciones acumuladas, no el heap conservado; use `-inuse_space` para inspeccionar el heap conservado en el momento de la captura. El perfil de memoria también incluye el arranque del proceso y la preparación del benchmark. El perfil del planificador destaca las esperas de las goroutines listas para ejecutarse. Una ejecución corta puede producir muy pocas muestras; incremente `-benchtime` solo cuando la máquina tenga capacidad. Capture cada perfil por separado para evitar que un profiler distorsione a otro. Esta carga sintética de canales puede estar dominada por la planificación del runtime de Go y no identifica un cuello de botella en un despliegue real de Adder. Para comparar perfiles, recopile varias ejecuciones sin perfilado y compare tanto `events/s` como `B/op`. La instrumentación del perfil modifica los tiempos; no use ejecuciones con perfilado como referencia de rendimiento.
 
 Adder mantiene deshabilitado el listener de depuración de forma predeterminada y no registra handlers HTTP de `pprof`. Estos comandos usan el profiler de pruebas de Go y no abren ningún listener de red. No exponga un listener de perfilado en una interfaz pública.
 
