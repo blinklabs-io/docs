@@ -38,8 +38,8 @@ plugins:
 | --- | --- |
 | `homeserver-url` | 接続先MatrixホームサーバーのベースURL。リモート接続には`https://`を指定します。HTTPはループバックアドレスへのテスト接続だけに使用できます。既定値は空です。 |
 | `access-token` | Matrix APIのBearerアクセストークン。既定値は空です。 |
-| `room-ids` | 送信先ルームIDをコンマ区切りで指定します。少なくとも1つのIDが必要です。各IDは`!`で始まり、空白を含めることはできません。既定値は空です。 |
-| `event-types` | 送信対象のイベント種別をコンマ区切りで指定します。既定値は`blocks,rollbacks,governance`です。 |
+| `room-ids` | 送信先ルームIDをコンマ区切りで指定します。既定値は空です。 |
+| `event-types` | 送信対象のイベント種別をコンマ区切りで指定します。 |
 
 `room-ids`には、通常の`!room:server.example`形式のIDと、Matrix room version 12で使用するサーバーサフィックスなしの`!roomid`形式のIDを指定できます。Adderは設定したルームごとに、選択した各イベントを送信します。これにより、複数のルームへ同じ通知を配信できます。
 
