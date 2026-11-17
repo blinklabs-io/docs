@@ -7,7 +7,7 @@ description: Configure structured monitoring and notification rate controls for 
 
 ## Overview
 
-This reference describes the monitoring and notification settings that Adder Tray saves in `adder-tray.yaml`. Configure monitoring targets under `filter`, and configure notification coalescing with `notify_rate_limit` and `notify_rate_window`.
+This reference describes the monitoring and notification settings that Adder Tray saves in `adder-tray.yaml`. Configure monitoring targets under `filter`, and configure notification combining with `notify_rate_limit` and `notify_rate_window`.
 
 Adder Tray uses its `filter` as the authoritative source for notification target matching. The engine configuration no longer controls the per-target lists used by tray notifications.
 
@@ -59,7 +59,7 @@ Configure these tray-level keys in `adder-tray.yaml`:
 | YAML key | Description |
 | --- | --- |
 | `notify_rate_limit` | Maximum number of notifications allowed in one window. |
-| `notify_rate_window` | Length of the coalescing window. |
+| `notify_rate_window` | Length of the combining window. |
 
 The default is one notification per five seconds. An omitted or zero `notify_rate_limit` uses `1`, and an omitted or zero `notify_rate_window` uses `5s`.
 
