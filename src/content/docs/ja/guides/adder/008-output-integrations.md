@@ -5,7 +5,7 @@ description: "Adderイベントを外部サービスへ配信する出力プラ�
 
 # Adder出力連携
 
-このリファレンスでは、Adderが選択したイベントをPostgreSQL、MQTT、RabbitMQ、Google Cloud Pub/Sub、Elasticsearch、S3、AWS SQS、AWS SNS、Redis Streamsへ配信する方法を説明します。各出力は`event-types`で対象イベントを選択します。`blocks`、`transactions`、`rollbacks`、`governance`、`drep-registration`、`drep-update`、`drep-retirement`を指定できますが、利用できる既定値は出力ごとに異なります。
+このリファレンスでは、Adderが選択したイベントをPostgreSQL、MQTT、RabbitMQ、Google Cloud Pub/Sub、Elasticsearch、S3、AWS SQS、AWS SNS、Redis Streamsへ配信する方法を説明します。各出力は`event-types`で対象イベントを選択し、利用できる既定値は出力ごとに異なります。
 
 ## PostgreSQL
 
@@ -137,7 +137,7 @@ plugins:
 
 `region`と`bucket`の既定値は空で、`prefix`の既定値は`adder/events`です。バケット名とプレフィックスを検証し、最終的なオブジェクトキーが1,024バイト以内に収まるようにします。`event-types`の既定値は`blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`です。
 
-オブジェクトキーは`<prefix>/YYYY/MM/DD/<UTC timestamp>-<SHA-256 of JSON>.json`です。JSONにはAdderの`timestamp`、`context`、`payload`、`type`フィールドが含まれます。日付にはイベントのタイムスタンプをUTCで使用します。同じイベントを再生すると同じバイト列を同じキーへ書き込み、同じタイムスタンプを持つ異なるイベントには異なるキーを作成します。ロールバックは通常の`input.rollback`アーカイブレコードであり、以前のオブジェクトを削除または書き換えません。コンシューマーはチェーン状態を構築するときにロールバックを適用してください。
+オブジェクトキーは`<prefix>/YYYY/MM/DD/<UTC timestamp>-<SHA-256 of JSON>.json`です。JSONはAdderの`timestamp`、`context`、`payload`、`type`フィールドを持ちます。日付にはイベントのタイムスタンプをUTCで使用します。同じイベントを再生すると同じバイト列を同じキーへ書き込み、同じタイムスタンプを持つ異なるイベントには異なるキーを作成します。ロールバックは通常の`input.rollback`アーカイブレコードであり、以前のオブジェクトを削除または書き換えません。コンシューマーはチェーン状態を構築するときにロールバックを適用してください。
 
 バッチバッファーやバックグラウンドのフラッシュはなく、各`PutObject`応答を待ってから次のイベントを処理します。共有入力チャネルは10件を保持できます。AWS SDKはそのリクエスト内で再試行可能なエラーを再試行し、リクエスト全体の制限時間は30秒です。停止時には実行中のアップロードをキャンセルし、キューに残るイベントを破棄します。エラーはログに記録し、空きがある場合はプラグインのエラーチャネルへ報告します。失敗したイベントを再生用に保持せず、タイムアウトでは配送結果が不明になることがあります。プロセス再起動後に再生するには、再生可能な上流ソースを使用してください。
 
@@ -170,7 +170,7 @@ plugins:
       event-types: blocks,rollbacks,governance
 ```
 
-`region`と`group-id`の既定値は空です。`sqs`では`queue-url`、`sns`では`topic-arn`の既定値も空です。`sns`の`max-message-bytes`の既定値は`262144`です。SQSの標準AWSホスト名を使用する場合、キューURLのリージョンは`region`と一致する必要があります。宛先はHTTPSのSQSキューURL、または正しい形式のSNSトピックARNでなければなりません。キューとトピックは事前に作成してください。
+`region`と`group-id`の既定値は空です。`sqs`では`queue-url`、`sns`では`topic-arn`の既定値も空です。`sns`の`max-message-bytes`の既定値は`262144`です。SQSの標準AWSホスト名を使用する場合、キューURLのリージョンは`region`と一致する必要があります。HTTPSのSQSキューURL、または正しい形式のSNSトピックARNを指定します。キューとトピックは事前に作成します。
 
 イベントJSONを[SQS SendMessage](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html)の`MessageBody`、または[SNS Publish](https://docs.aws.amazon.com/sns/latest/api/API_Publish.html)の`Message`に設定します。各イベントを個別のAPI呼び出しで送信し、バッチ処理や永続的なローカルキューは使用しません。AWS SDKは10秒のリクエスト期限内で通常の一時的な再試行を行います。失敗したリクエストはエラーチャネルへ報告し、再生しません。API成功は、SQSがメッセージをキューへ受け入れたこと、またはSNSがファンアウト用の公開を受け入れたことだけを示し、コンシューマーの受信を証明しません。ロールバックはロールバックイベントレコードとして公開し、以前のイベントの解釈はコンシューマーに委ねます。
 
