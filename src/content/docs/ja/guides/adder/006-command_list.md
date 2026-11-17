@@ -543,6 +543,126 @@ description: "Adderコマンドの一覧です。"
 
 ***
 
+```
+  --output-rabbitmq-url string
+```
+
+> AMQPブローカーURLを指定します（デフォルト `amqp://127.0.0.1:5672/`）。
+<br />
+
+```
+  --output-rabbitmq-exchange string
+```
+
+> 既存のexchangeを指定します。空の場合はデフォルトexchangeを使用します（デフォルトは空）。
+<br />
+
+```
+  --output-rabbitmq-routing-key string
+```
+
+> デフォルトexchangeで使用するrouting keyまたはキュー名を指定します（デフォルト `adder.events`）。
+<br />
+
+```
+  --output-rabbitmq-persistent
+```
+
+> 永続メッセージを発行します（デフォルト `true`）。
+<br />
+
+```
+  --output-rabbitmq-event-types string
+```
+
+> 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-mqtt-broker string
+```
+
+> MQTT 5ブローカーのTCPまたはTLS URLを指定します（デフォルト `mqtt://127.0.0.1:1883`）。
+<br />
+
+```
+  --output-mqtt-client-id string
+```
+
+> MQTTクライアント識別子を指定します（デフォルト `adder-output`）。
+<br />
+
+```
+  --output-mqtt-username string
+```
+
+> 任意のMQTTユーザー名を指定します（デフォルトは空）。
+<br />
+
+```
+  --output-mqtt-password string
+```
+
+> 任意のMQTTパスワードを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-mqtt-topic-prefix string
+```
+
+> イベントトピックのプレフィックスを指定します（デフォルト `adder/events`）。
+<br />
+
+```
+  --output-mqtt-qos int
+```
+
+> MQTT発行のQoSを指定します（デフォルト `1`）。指定できる値は`0`、`1`、`2`です。
+<br />
+
+```
+  --output-mqtt-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-pubsub-project-id string
+```
+
+> Google CloudプロジェクトIDを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-pubsub-topic-id string
+```
+
+> Pub/SubトピックIDを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-pubsub-event-types string
+```
+
+> イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+<br />
+
+```
+  --output-postgres-database-url string
+```
+
+> PostgreSQL接続URLを指定します（デフォルトは空）。
+<br />
+
+```
+  --output-postgres-event-types string
+```
+
+> 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`）。
+
+***
+
 <a id="notifications"></a>
 
 ## 通知:
