@@ -19,7 +19,7 @@ Connect to `/events` to receive Adder events. Add the optional `replay` query pa
 
 The endpoint applies these rules:
 
-- If the parameter is omitted, Adder uses `replay=true` and enables buffered replay.
+- When a client omits the parameter, Adder uses `replay=true` and enables buffered replay.
 - `replay=true` enables buffered replay.
 - `replay=false` delivers live events only. Adder does not replay buffered events.
 
