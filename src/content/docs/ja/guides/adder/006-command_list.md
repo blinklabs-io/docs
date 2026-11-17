@@ -144,10 +144,10 @@ Adderはアンカーオブジェクトを常にシリアライズし、アンカ
 
 各配列の項目は次の情報を含みます。
 
-- `proposalProcedures[]`: `index`（トランザクション内の提案インデックス）、`deposit`（提案にロックされたlovelace）、`rewardAccount`（預託金の返還先ステークアドレス）、`actionType`（`ParameterChange`、`HardForkInitiation`、`TreasuryWithdrawal`、`NoConfidence`、`UpdateCommittee`、`NewConstitution`、`Info`、`Unknown`のいずれか）、`actionData`（アクション固有のデータ）、`anchor`（提案メタデータの`url`と`dataHash`）
-- `votingProcedures[]`: `voterType`（`DRep`、`SPO`、`CCHot`、`Unknown`のいずれか）、`voterHash`、`voterId`、`govActionTxId`、`govActionIndex`、`vote`（`Yes`、`No`、`Abstain`、`Unknown`のいずれか）、`anchor`
-- `drepCertificates[]`: `certificateType`（`Registration`、`Update`、`Deregistration`のいずれか）、`drepHash`、`drepId`、`deposit`、`anchor`
-- `voteDelegationCertificates[]`: `certificateType`（`VoteDelegation`、`StakeVoteDelegation`、`VoteRegistrationDelegation`、`StakeVoteRegistrationDelegation`のいずれか）、`stakeCredential`、`drepType`（`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか）、該当する場合の`drepHash`と`drepId`、複合ステーク・投票委任の場合の`poolKeyHash`、`deposit`
+- `proposalProcedures[]`: `index`（トランザクション内の提案インデックス）、`deposit`（提案にロックされたlovelace）、`rewardAccount`（預託金の返還先ステークアドレス）、`actionType`（`ParameterChange`、`HardForkInitiation`、`TreasuryWithdrawal`、`NoConfidence`、`UpdateCommittee`、`NewConstitution`、`Info`、`Unknown`のいずれか）、`actionData`（アクション固有のデータ。認識したアクションでは`parameterChange`などアクション名に対応するキーを設定）、`anchor`（提案メタデータの`url`と`dataHash`）
+- `votingProcedures[]`: `voterType`（`DRep`、`SPO`、`CCHot`、`Unknown`のいずれか）、`voterHash`（投票者の資格情報ハッシュ）、`voterId`（投票者識別子）、`govActionTxId`（投票対象アクションのトランザクションID）、`govActionIndex`（そのトランザクション内のアクションインデックス）、`vote`（`Yes`、`No`、`Abstain`、`Unknown`のいずれか）、`anchor`
+- `drepCertificates[]`: `certificateType`（`Registration`、`Update`、`Deregistration`のいずれか）、`drepHash`（DRep資格情報ハッシュ）、`drepId`（Bech32形式のDRep ID）、`deposit`、`anchor`
+- `voteDelegationCertificates[]`: `certificateType`（`VoteDelegation`、`StakeVoteDelegation`、`VoteRegistrationDelegation`、`StakeVoteRegistrationDelegation`のいずれか）、`stakeCredential`（委任元のステーク資格情報ハッシュ）、`drepType`（`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか）、該当する場合の`drepHash`と`drepId`、複合ステーク・投票委任の場合の`poolKeyHash`、`deposit`
 - `committeeCertificates[]`: `certificateType`（`AuthHot`または`ResignCold`）、`coldCredential`、`AuthHot`の場合の`hotCredential`、`anchor`
 
 #### ガバナンスイベントのフィルタリング
