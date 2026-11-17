@@ -35,7 +35,7 @@ Adder separa `webhook-urls` y `event-types` por comas, elimina los espacios al p
 
 `webhook-urls` debe contener al menos una URL HTTPS. Adder rechaza una URL que incluya información de usuario, como un nombre de usuario o una contraseña incrustados. La validación ocurre al iniciar la salida, por lo que una configuración incorrecta impide el arranque.
 
- Adder también acepta `drep-registration`, `drep-update` y `drep-retirement`.
+Adder también acepta `drep-registration`, `drep-update` y `drep-retirement`.
 
 ## Selección y formato de eventos
 
