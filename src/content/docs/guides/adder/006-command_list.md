@@ -255,6 +255,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 > path to a SQLite database file for persisting the chainsync cursor across restarts (default empty)
 >
 > Leave this option empty to disable cursor persistence. Set a SQLite filename to create or reopen the cursor file and resume from the persisted state after a restart.
+>
+> See the [ChainSync cursor persistence reference](./chainsync-cursor-persistence.md) for restart, flush, rollback, and Go API details.
 
 ***
 
@@ -339,9 +341,9 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
   --output-log-level string
 ```
   
-> sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The threshold also filters Adder application diagnostics on stderr, even when another output plugin is selected.
+> sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The selected output's threshold also filters Adder application diagnostics on stderr.
 >
-> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder no longer provides the `--logging-level` flag. Adder accepts the legacy YAML `logging.level` setting and maps it to `plugins.output.log.level` when the replacement setting is absent. Adder ignores the old `LOGGING_LEVEL` environment variable.
+> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. The top-level `logging.level` YAML setting, `--logging-level` flag, `LOGGING_LEVEL` environment variable, and `Config.Logging` configuration are removed. Use `--output-log-level` or the selected output's `output.log.level` setting instead.
 <br />
 
 ```
@@ -584,6 +586,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 >
 > Select one or more supported Slack event types.
 
+> See the [Slack output reference](./slack.md).
+
 <br />
 
 ```
@@ -626,6 +630,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 >
 > Select one or more supported Discord event types.
 
+> See the [Discord bot output reference](./discord.md).
+
 <br />
 
 ```
@@ -663,6 +669,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 > comma-separated Matrix event types (default `blocks,rollbacks,governance`)
 >
 > Select one or more supported Matrix event types.
+
+> See the [Matrix output reference](./matrix.md).
 
 <br />
 
@@ -857,6 +865,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 > comma-separated ClickHouse event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
 >
 > Select one or more supported ClickHouse event types.
+
+> See the [ClickHouse output reference](./clickhouse.md).
 
 <br />
 
@@ -1107,6 +1117,8 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 > comma-separated Kafka event types (default `blocks,rollbacks,governance`)
 >
 > Select one or more supported Kafka event types.
+
+> See the [Kafka output reference](./kafka.md).
 
 > See the [webhook durability reference](./webhook-durability.md).
 ***
