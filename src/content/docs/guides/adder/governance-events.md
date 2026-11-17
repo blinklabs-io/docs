@@ -120,7 +120,7 @@ JSON represents the three `deposit` fields as numeric values. The JSON format do
 
 Values greater than `9,223,372,036,854,775,807` exceed the signed 64-bit maximum. Consumers must not convert these values to signed integers or clamp them at that maximum.
 
-The following example shows the three deposit fields, including values above the signed 64 bit maximum:
+The following example shows the three deposit fields, including values above the signed 64-bit maximum:
 
 ```json
 {
