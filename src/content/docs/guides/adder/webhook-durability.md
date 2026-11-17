@@ -28,7 +28,7 @@ plugins:
 
 ### State path requirements
 
-Provide a plain on-disk SQLite filename. Adder rejects a state path that:
+Provide a plain filename that refers to an on-disk SQLite file. Adder rejects a state path that:
 
 - Uses `:memory:` or a SQLite URI.
 - Includes SQLite query parameters, such as `?mode=memory`.
@@ -47,7 +47,7 @@ Adder handles a durable event in this order:
 3. Send the pending requests in their original order.
 4. Remove an entry only after the receiver returns an HTTP `2xx` response.
 
-At startup, Adder opens the state file and replays all pending entries in order before startup returns. If replay cannot complete, startup fails and the entries remain in SQLite. During normal operation, Adder also sends each newly appended entry and continues with the queue in order.
+When Adder starts, it opens the state file and replays all pending entries in order before startup returns. If replay cannot complete, startup fails and the entries remain in SQLite. During normal operation, Adder also sends each newly appended entry and continues with the queue in order.
 
 An HTTP `2xx` response confirms that the receiver accepted the request according to HTTP semantics. It does not confirm that the receiver completed its own downstream work. Pending entries have no automatic age expiry. An entry remains until the receiver returns `2xx` or an operator removes it explicitly.
 
