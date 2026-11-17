@@ -344,6 +344,62 @@ description: Lista de Comandos de Adder.
 <br />
 
 ```text
+  --output-signal-endpoint string
+```
+
+> URL HTTP JSON-RPC del daemon `signal-cli` (predeterminado `http://127.0.0.1:8081/api/v1/rpc`)
+<br />
+
+```text
+  --output-signal-account string
+```
+
+> cuenta de `signal-cli` para un daemon con varias cuentas (predeterminado "")
+<br />
+
+```text
+  --output-signal-recipients string
+```
+
+> números o IDs de destinatarios de Signal separados por comas (predeterminado ""); debe incluir al menos un destinatario
+<br />
+
+```text
+  --output-signal-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,rollbacks,governance"); debe incluir al menos un tipo admitido
+<br />
+
+```text
+  --output-nats-servers string
+```
+
+> URL de servidores NATS separadas por comas (predeterminado `nats://127.0.0.1:4222`); cada URL debe usar `nats://` o `tls://`, no incluir credenciales ni ruta, y usar un puerto entre `1` y `65535` cuando se especifique
+<br />
+
+```text
+  --output-nats-token string
+```
+
+> token opcional de autenticación de NATS (predeterminado "")
+<br />
+
+```text
+  --output-nats-subject-prefix string
+```
+
+> prefijo de los subjects de eventos (predeterminado `adder.events`)
+<br />
+
+```text
+  --output-nats-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+<br />
+
+```text
   --output-webhook-format string
 ```
 
