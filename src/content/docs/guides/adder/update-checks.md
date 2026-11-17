@@ -39,8 +39,6 @@ When the window reports an available release, select `Skip This Version` to dism
 5. Wait for Adder to download the installer and verify its SHA-256 digest.
 6. Select `Quit & Install` after Adder launches the installer. Adder quits so the installer can complete the update.
 
-Adder downloads the `.pkg` file only after the window presents an available release. Adder verifies the file before it launches the installer. A missing or invalid SHA-256 digest prevents the download from proceeding to installation.
-
 ## Install an update on Windows
 
 1. Open `Check for Updates...` from the Adder tray menu.
@@ -50,7 +48,7 @@ Adder downloads the `.pkg` file only after the window presents an available rele
 5. Wait for Adder to download the installer and verify its SHA-256 digest.
 6. Select `Quit & Install` after Adder launches the installer. Adder quits so the installer can complete the update.
 
-Adder downloads the `.msi` file only after the window presents an available release. Adder verifies the file before it launches the installer. A missing or invalid SHA-256 digest prevents the download from proceeding to installation.
+Adder downloads a matching installer only after the window presents an available release. Adder verifies the installer with its SHA-256 digest before launching it. A missing or invalid digest prevents installation.
 
 ## Update Linux and FreeBSD manually
 
@@ -60,6 +58,4 @@ Adder does not install updates automatically on Linux or FreeBSD. When the `Soft
 2. Download the package for the platform and architecture from the release page.
 3. Install the downloaded package using the platform's normal installation procedure.
 
-macOS and Windows also use `Open Release Page` when a release does not provide an installer for the current architecture. Adder never substitutes an installer for another architecture, so select an asset that matches the system before installing manually.
-
-If the release page does not provide a matching macOS or Windows installer, the release does not support the current architecture. The release page lists the platforms and architectures that the release supports.
+macOS and Windows also use `Open Release Page` when a release does not provide an installer for the current architecture. Adder never substitutes an installer for another architecture. The release page lists the supported platforms and architectures for manual installation.
