@@ -83,7 +83,7 @@ Adderは`event-types`で選択したイベントを、既存のDiscord webhook�
 
 ## Gateway接続
 
-Adderは、まず`GET /gateway/bot`からGateway接続先を取得し、Discord Gateway v10へWSS接続します。接続URLには`?v=10&encoding=json`を指定します。コマンドは、次のGateway動作を使用します。
+Adderは、まず`GET`で`/gateway/bot`へアクセスしてGateway接続先を取得し、Discord Gateway v10へWSS接続します。接続URLには`?v=10&encoding=json`を指定します。コマンドは、次のGateway動作を使用します。
 
 - Gatewayから`Hello`を受け取った後、ボットトークンと`intents: 0`を含む`Identify`を送信します。
 - Gatewayが通知する間隔でハートビートを送信し、最新のシーケンス番号を使用します。`Heartbeat ACK`を受け取れない場合は接続を閉じて再接続します。
