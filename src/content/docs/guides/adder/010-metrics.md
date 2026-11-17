@@ -15,7 +15,7 @@ Adder exposes the Prometheus text format at:
 GET /metrics
 ```
 
-The endpoint uses the API listener configured by `API_ADDRESS` and `API_PORT`. The default listener is `0.0.0.0:8080`.
+The `API_ADDRESS` and `API_PORT` settings configure the API listener. Adder uses `0.0.0.0:8080` by default.
 
 Unlike the versioned API routes, `/metrics` does not use the `/v1` route group. A scrape against the default listener uses the following command:
 
@@ -31,9 +31,7 @@ Replace the host and port when the API listener uses different values. Restrict 
 | --- | --- |
 | `adder_pipeline_received_events_total` | Counts input events when the pipeline reads them from input plugin channels. |
 | `adder_pipeline_processed_events_total` | Counts events after all configured output channels accept their event copies. This count does not confirm successful delivery by an external sink. |
-| `adder_pipeline_filtered_events_total` | Counts drops reported by built in filters. A custom filter contributes to this count only when it reports the drop through the pipeline drop observer. |
+| `adder_pipeline_filtered_events_total` | Counts drops that built in filters report. A custom filter contributes to this count only when it reports the drop through the pipeline drop observer. |
 | `adder_pipeline_processing_duration_seconds` | Measures the time from pipeline ingress until all configured output channels accept their event copies. This histogram does not measure delivery by an external sink. |
 
-The metrics do not include event derived or user data labels. Metric values reset when the Adder process restarts.
-
-The processed event count and processing duration stop at acceptance by the configured output channels. They do not indicate whether an external destination, such as a webhook or notification service, successfully handled the event.
+The metrics do not include labels derived from events or user data. Metric values reset when the Adder process restarts.
