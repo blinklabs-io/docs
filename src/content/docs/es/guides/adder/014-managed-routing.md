@@ -36,7 +36,7 @@ El modo administrado utiliza la fuente ChainSync como una cola activa. Adder no
 inicia la API HTTP normal ni el flujo público `/events`. Un reinicio del proceso
 puede perder eventos entre ejecuciones porque Adder comienza en la punta actual
 en ese momento. Durante una reconexión dentro del proceso, Adder puede repetir
-eventos recientes o emitir un rollback. Ni el enrutador ni sus plugins
+eventos recientes o emitir un rollback. Ni el enrutador ni sus componentes
 habilitados conservan una cola de entrega.
 
 La fuente puede conectarse a Dingo o a un par Cardano público. Todos los
@@ -53,12 +53,12 @@ Los indicadores administrados son:
 | `--managed-credentials-dir` | Empty | Identifica el directorio que contiene los archivos de credenciales restringidos. |
 | `--managed-log-dir` | Empty | Identifica el directorio local de confianza para los destinos administrados `log`. |
 | `--managed-token-file` | Empty | Identifica el archivo restringido que contiene el token de la API del operador. |
-| `--managed-address` | `127.0.0.1:8081` | Establece la dirección del listener privado de la API administrada. Adder solo acepta una dirección de loopback literal. |
+| `--managed-address` | `127.0.0.1:8081` | Establece la dirección del servidor privado de la API administrada. Adder solo acepta una dirección de loopback literal. |
 | `--managed-allow-hosts` | Empty | Enumera los nombres de host de webhook aprobados por el operador. |
 | `--managed-allow-local-targets` | `false` | Permite receptores webhook de loopback para pruebas locales. |
 
 El servidor de la API administrada solo acepta una dirección de loopback
-literal. Un túnel seguro administrado por separado proporciona el acceso remoto
+literal. El operador debe proporcionar el acceso remoto mediante un túnel seguro
 administrado por separado. El indicador `--managed-allow-local-targets` es una
 excepción explícita para los receptores webhook de loopback que se utilizan en
 pruebas locales. Los demás destinos webhook requieren HTTPS, un nombre de host
