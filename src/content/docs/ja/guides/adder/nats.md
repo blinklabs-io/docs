@@ -69,13 +69,13 @@ plugins:
 
 ### subjectとJSONペイロード
 
-Adderは選択したイベントごとに、`subject-prefix`、`.`、`input.`を除いたイベントタイプを連結してsubjectを作成します。既定のsubjectは`adder.events.block`、`adder.events.rollback`、`adder.events.governance`です。
+Adderは選択したイベントごとに、`subject-prefix`、`.`、`input.`を除いたイベントタイプを連結してsubjectを作成します。
 
 各ペイロードには、Adderイベント全体をJSONとして含めます。
 
 ### flushとエラー
 
-Adderは各publishの後に接続をflushします。各イベントでこのラウンドトリップを実行するため、サーバーがpublish commandを受け取ったことを確認できますが、ブローカーとのラウンドトリップ1回あたりおよそ1イベントに処理量が制限されます。flushは5秒でタイムアウトします。
+Adderは各publishの後に接続をflushします。各イベントでこのラウンドトリップを実行するため、サーバーがpublish commandを処理したことを確認できますが、ブローカーとのラウンドトリップ1回あたりおよそ1イベントに処理量が制限されます。flushは5秒でタイムアウトします。
 
 flushの成功は、サーバーが先行するpublish commandを処理したことを示します。subscriberがイベントを受け取ったことや、Core NATSが配信を永続化したことは示しません。
 
