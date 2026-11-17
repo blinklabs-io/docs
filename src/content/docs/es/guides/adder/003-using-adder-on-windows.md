@@ -111,7 +111,7 @@ Marca las casillas de los eventos sobre los que quieras recibir alertas de escri
 
 La casilla `Start Adder automatically on login / reboot` configura el inicio automático de Adder Tray al iniciar sesión o reiniciar Windows.
 
-El estado de actividad en segundo plano indica si Adder está registrado y en ejecución. La opción `Open Login Items Settings...` abre la configuración de aplicaciones de inicio de Windows.
+El indicador de actividad en segundo plano muestra si Adder está registrado y en ejecución. La opción `Open Login Items Settings...` abre la configuración de aplicaciones de inicio de Windows.
 
 ### Paso 3.5 - Enviar una notificación de prueba
 
@@ -139,7 +139,7 @@ Para ver eventos recientes, ajustar la configuración o iniciar, detener o reini
 
 ### Editar las reglas de notificación
 
-La opción `Notification Rules...` del menú de la bandeja permite editar los objetivos `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. El editor permite activar o desactivar las categorías de notificación disponibles o utilizar `Monitor Everything` de forma exclusiva en lugar de mantener listas de objetivos explícitas.
+La opción `Notification Rules...` del menú de la bandeja permite editar los objetivos `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. El editor también ofrece controles para activar o desactivar las categorías de notificación disponibles o utilizar `Monitor Everything` de forma exclusiva en lugar de mantener listas de objetivos explícitas.
 
 Al aplicar los cambios, Adder guarda la configuración y actualiza las reglas y los límites de frecuencia sin reiniciar el proceso de la bandeja. El editor solicita confirmación antes de eliminar un objetivo. Si la reconexión muestra una advertencia recuperable, el editor permanece abierto y vuelve a habilitar sus entradas para permitir un nuevo intento.
 
