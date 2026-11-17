@@ -13,7 +13,7 @@ HTTP. Esta referencia describe la configuración YAML, el esquema de la tabla y
 el comportamiento de lotes, errores, duplicados, rollbacks y apagado.
 
 La [referencia de comandos](./006-command_list.md) documenta las opciones de
-línea de comandos. La [guía general de Adder](../001-adder.md) ofrece una visión
+línea de comandos. La [guía general de Adder](./001-adder.md) ofrece una visión
 general de las salidas y los modos de funcionamiento.
 
 ## Configuración
