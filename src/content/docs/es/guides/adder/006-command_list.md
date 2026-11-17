@@ -446,6 +446,86 @@ description: Lista de Comandos de Adder.
 
 > máximo de entregas pendientes persistentes (predeterminado `1024`); cuando `state-path` no está vacío, debe ser al menos `11`
 
+### Salida `slack`
+
+```text
+  --output-slack-webhook-urls string
+```
+
+> URL de webhooks entrantes de Slack separadas por comas; debe incluir al menos una URL HTTPS
+<br />
+
+```text
+  --output-slack-event-types string
+```
+
+> tipos de eventos para la entrega a Slack separados por comas (predeterminado "blocks,transactions,rollbacks,governance")
+
+### Salida `discord`
+
+```text
+  --output-discord-bot-token string
+```
+
+> token del bot de Discord (predeterminado "")
+<br />
+
+```text
+  --output-discord-application-id string
+```
+
+> ID de la aplicación de Discord (predeterminado "")
+<br />
+
+```text
+  --output-discord-guild-id string
+```
+
+> ID del servidor de Discord permitido (predeterminado "")
+<br />
+
+```text
+  --output-discord-channel-id string
+```
+
+> ID del canal de Discord permitido (predeterminado "")
+<br />
+
+```text
+  --output-discord-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `matrix`
+
+```text
+  --output-matrix-homeserver-url string
+```
+
+> URL base del homeserver de Matrix (predeterminado "")
+<br />
+
+```text
+  --output-matrix-access-token string
+```
+
+> token de acceso de Matrix; es obligatorio
+<br />
+
+```text
+  --output-matrix-room-ids string
+```
+
+> IDs de salas de Matrix separados por comas; debe incluir al menos una sala
+<br />
+
+```text
+  --output-matrix-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
 ***
 
 ## Notificaciones:
