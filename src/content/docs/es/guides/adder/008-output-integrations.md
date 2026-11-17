@@ -7,6 +7,19 @@ description: Referencia de configuración y entrega para las integraciones de sa
 
 Esta referencia describe la configuración y el comportamiento de entrega de las integraciones de salida de Adder para PostgreSQL, MQTT, RabbitMQ, Google Cloud Pub/Sub, Elasticsearch, S3, AWS SQS/SNS y Redis Streams.
 
+## Referencias relacionadas
+
+Cada referencia enlazada documenta la configuración y el contrato de entrega específico de su salida:
+
+- [Salida del bot de Discord](./discord.md)
+- [Referencia de la salida Slack](./slack.md)
+- [Salida de Matrix de Adder](./matrix.md)
+- [Referencia de la salida ClickHouse](./clickhouse.md)
+- [Salida de Kafka](./kafka.md)
+- [Salida NATS](./nats.md)
+- [Referencia de la salida Signal](./signal.md)
+- [Entrega de webhooks segura frente a reinicios](./webhook-durability.md)
+
 ## PostgreSQL
 
 La salida `postgres` agrega los eventos seleccionados de Adder a `adder_events` en una base de datos PostgreSQL existente. Adder crea la tabla y el índice temporal al iniciarse.
