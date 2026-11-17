@@ -12,7 +12,7 @@ The `clickhouse` output sends selected Adder events to the versioned
 batches over the ClickHouse HTTP interface, and ClickHouse receives each
 event as a separate row after a successful insert.
 
-See the [Adder integration overview](./001-adder.md) and the [command
+See the [Adder integration overview](./008-output-integrations.md) and the [command
 reference](./006-command_list.md) for related configuration and output
 options.
 
