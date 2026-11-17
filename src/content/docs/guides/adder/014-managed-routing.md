@@ -7,7 +7,7 @@ description: Configure Adder managed customer routing, reload its configuration,
 
 ## Overview
 
-This reference describes Adder's opt in managed mode. Managed mode reads one
+This reference describes Adder's opt-in managed mode. Managed mode reads one
 ChainSync stream, applies independent filter lanes for named customers, and
 sends matching events to customer destinations. The [operating mode
 overview](./002-operating-mode-overview) explains how managed mode fits with
@@ -32,9 +32,9 @@ Set `--managed-config-dir` to select managed mode. Adder then requires the
 - no global filter options
 
 Managed mode uses the ChainSync source as a live tail. The ordinary HTTP API
-and public `/events` stream do not start. Adder starts at the then current tip
-after a process restart, so events between process runs can be lost. An
-in process reconnect can replay recent events or emit a rollback. Neither the
+and public `/events` stream do not start. A process restart can lose events
+between runs because Adder starts at the then current tip. During an
+in-process reconnect, Adder can replay recent events or emit a rollback. Neither the
 router nor its enabled plugins persists a delivery queue.
 
 The source can connect to Dingo or a public Cardano peer. All customer lanes
@@ -52,7 +52,7 @@ The managed flags are:
 | `--managed-log-dir` | Empty | Identifies the trusted local directory for managed `log` destinations. |
 | `--managed-token-file` | Empty | Identifies the restricted file containing the operator API token. |
 | `--managed-address` | `127.0.0.1:8081` | Sets the private managed API listener address. Adder accepts only a literal loopback address. |
-| `--managed-allow-hosts` | Empty | Lists operator approved webhook hostnames. |
+| `--managed-allow-hosts` | Empty | Lists operator-approved webhook hostnames. |
 | `--managed-allow-local-targets` | `false` | Allows loopback webhook receivers for local tests. |
 
 The managed API listener accepts only a literal loopback address. Provide
@@ -65,7 +65,7 @@ The operator token file must be a restricted regular file, contain one line
 with at least 32 characters, and remain outside URLs. On Unix, credential and
 operator token files require mode `0600` or stricter. On Windows, ownership
 must belong to the running account, `LocalSystem`, or `Administrators`, and
-the DACL can grant access only to those identities.
+the Windows access control list can grant access only to those identities.
 
 ## Publish configuration files
 
@@ -77,8 +77,8 @@ these files. Publish a complete bundle by atomic replacement in this order:
 3. Publish `manifest.json` last.
 
 Increment the manifest `generation` for a full publication and increment each
-changed customer `revision`. Use private operator owned directories. Keep a
-protected known good bundle outside the live publication directory so a
+changed customer `revision`. Use private operator-owned directories. Keep a
+protected known-good bundle outside the live publication directory so a
 rejected update can be restored or replaced with a corrected revision.
 
 The initial bundle must contain at least one customer before Adder starts.
@@ -86,7 +86,7 @@ Adder confines every manifest and customer file reference to its configured
 directory and accepts only safe basenames. Customer IDs must remain unique
 when compared without ASCII letter case, including identities removed earlier
 in the same run. Manifest file references must also remain unique without
-ASCII letter case. Restart clears the in memory history of applied identities
+ASCII letter case. Restart clears the in-memory history of applied identities
 and revisions.
 
 ### Manifest
@@ -211,7 +211,7 @@ version, and the value:
 }
 ```
 
-Credential references are instance owned, confined to the credentials
+Credential references are instance-owned, confined to the credentials
 directory, and cannot be shared across customers. Adder does not allow the
 contents of an applied reference version to change, even when the customer
 revision advances. Publish a new version to rotate a credential. Credential
