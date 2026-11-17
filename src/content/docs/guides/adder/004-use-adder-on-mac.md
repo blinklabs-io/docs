@@ -32,7 +32,7 @@ Run the following command to create a package for local testing:
 make pkg-macos-adhoc
 ```
 
-This command ad hoc signs the `Adder.app` bundle so local notifications work. The resulting `.pkg` remains unsigned and does not pass Gatekeeper, so use it for local testing only. If a regular local package build has no signing identities, the build skips signing and notarization with warnings, and the resulting package does not have Gatekeeper acceptance.
+This command ad hoc signs the `Adder.app` bundle so local notifications work. The resulting `.pkg` remains unsigned and does not pass Gatekeeper; it is suitable only for local testing. If a regular local package build has no signing identities, the build skips signing and notarization with warnings, and Gatekeeper does not accept the resulting package.
 
 
 ---
