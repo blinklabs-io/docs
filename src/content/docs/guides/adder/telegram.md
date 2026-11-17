@@ -89,7 +89,7 @@ Telegram privacy mode may require a group member to address a command to the bot
 
 ## Failure behavior
 
-- Adder ignores unknown commands and commands sent outside the configured chat.
+- Adder ignores unknown commands.
 - Adder returns the `/notify` usage text when the category or state is invalid.
 - Adder reports that only the configured chat owner or an operator can change notifications when authorization fails.
 - Adder reports that `output.telegram.settings-file` must be configured when a preference change has no settings file.
