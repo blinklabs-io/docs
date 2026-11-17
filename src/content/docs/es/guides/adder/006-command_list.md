@@ -634,6 +634,86 @@ description: Lista de Comandos de Adder.
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 
+### Salida `postgres`
+
+```text
+  --output-postgres-database-url string
+```
+
+> URL de conexión de PostgreSQL (predeterminado "")
+<br />
+
+```text
+  --output-postgres-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
+### Salida `clickhouse`
+
+```text
+  --output-clickhouse-url string
+```
+
+> origen HTTP de ClickHouse (predeterminado `http://127.0.0.1:8123`)
+<br />
+
+```text
+  --output-clickhouse-database string
+```
+
+> base de datos de ClickHouse (predeterminado `default`)
+<br />
+
+```text
+  --output-clickhouse-username string
+```
+
+> usuario de ClickHouse (predeterminado `default`)
+<br />
+
+```text
+  --output-clickhouse-password string
+```
+
+> contraseña opcional de ClickHouse (predeterminado "")
+<br />
+
+```text
+  --output-clickhouse-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
+### Salida `elasticsearch`
+
+```text
+  --output-elasticsearch-url string
+```
+
+> URL de origen de Elasticsearch (predeterminado `http://127.0.0.1:9200`)
+<br />
+
+```text
+  --output-elasticsearch-index string
+```
+
+> nombre versionado del índice (predeterminado `adder-events-v1`)
+<br />
+
+```text
+  --output-elasticsearch-api-key string
+```
+
+> clave API opcional de Elasticsearch (predeterminado "")
+<br />
+
+```text
+  --output-elasticsearch-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
 ***
 
 ## Notificaciones:
