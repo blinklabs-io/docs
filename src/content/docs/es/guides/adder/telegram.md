@@ -20,7 +20,7 @@ plugins:
 
 ## Configuración y preferencias persistentes
 
-Use un archivo `settings-file` diferente para cada instancia de Adder y para cada chat configurado. El proceso debe poder escribir en el directorio principal del archivo. Adder crea ese directorio con permisos privados y guarda el archivo YAML de forma atómica.
+Cada instancia de Adder y cada chat configurado requieren un archivo `settings-file` diferente. El proceso debe poder escribir en el directorio principal del archivo. Adder crea ese directorio con permisos privados y guarda el archivo YAML de forma atómica.
 
 El archivo de preferencias contiene el `chat_id` y cuatro claves de notificación:
 
