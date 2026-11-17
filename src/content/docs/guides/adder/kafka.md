@@ -57,7 +57,7 @@ For every selected event, Adder sends one record with these properties:
 - Kafka receives the record with `acks=all`, so the producer waits for acknowledgement from all in-sync replicas.
 - Adder waits for the result of each selected record before it reads the next selected event.
 - Each delivery has a ten-second deadline.
-- The Kafka client uses idempotence internally. Adder does not resend records at the application level after an uncertain result.
+- The Kafka client uses idempotence internally.
 
 When Kafka rejects a record or Adder cannot determine whether Kafka accepted it, Adder reports the failure through the plugin error channel. Adder does not resend an uncertain record at the application level because Kafka may have accepted it before the response failed. A successful acknowledgement confirms the broker's configured replication policy, not consumer processing.
 
