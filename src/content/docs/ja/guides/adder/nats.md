@@ -23,12 +23,12 @@ plugins:
 
 ### オプション
 
-| オプション | 必須 | 既定値 | 説明 |
-| --- | --- | --- | --- |
-| `servers` | はい | `nats://127.0.0.1:4222` | NATS server URLをコンマ区切りで指定します。 |
-| `token` | いいえ | 空文字列 | NATS認証トークンを指定します。 |
-| `subject-prefix` | はい | `adder.events` | イベントsubjectのプレフィックスを指定します。 |
-| `event-types` | はい | `blocks,rollbacks,governance` | 配信するイベントタイプをコンマ区切りで指定します。少なくとも1つの対応タイプを指定します。 |
+| オプション | 省略時の値 | 説明 |
+| --- | --- | --- |
+| `servers` | `nats://127.0.0.1:4222` | NATS server URLをコンマ区切りで指定します。 |
+| `token` | 空文字列 | NATS認証トークンを指定します。 |
+| `subject-prefix` | `adder.events` | イベントsubjectのプレフィックスを指定します。 |
+| `event-types` | `blocks,rollbacks,governance` | 配信するイベントタイプをコンマ区切りで指定します。少なくとも1つの対応タイプを指定します。 |
 
 ### `servers`
 
