@@ -412,7 +412,7 @@ description: List of Adder Commands.
   --output-signal-recipients string
 ```
   
-> comma-separated Signal recipient numbers or IDs
+> comma-separated Signal recipient numbers or IDs (default empty)
 >
 > At least one recipient is required.
 
@@ -562,7 +562,7 @@ description: List of Adder Commands.
   --output-matrix-access-token string
 ```
   
-> Matrix access token
+> Matrix access token (default empty)
 >
 > Set a non-empty access token.
 
@@ -572,7 +572,7 @@ description: List of Adder Commands.
   --output-matrix-room-ids string
 ```
   
-> comma-separated Matrix room IDs
+> comma-separated Matrix room IDs (default empty)
 >
 > At least one room ID is required, and every room ID must pass Matrix room ID validation.
 
@@ -778,7 +778,7 @@ description: List of Adder Commands.
   
 > comma-separated ClickHouse event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
 >
-> Include at least one supported event type.
+> Select one or more supported ClickHouse event types.
 
 <br />
 
@@ -812,7 +812,7 @@ description: List of Adder Commands.
   
 > comma-separated Elasticsearch event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
 >
-> Include at least one supported event type.
+> Select one or more supported Elasticsearch event types.
 
 <br />
 
