@@ -12,6 +12,7 @@ description: gOuroboros Release Notes
 - Version: v0.220.3 - *[View Release Notes](../v0-220-3)*
 - Version: v0.220.2 - *[View Release Notes](../v0-220-2)*
 - Version: v0.220.1 - *[View Release Notes](../v0-220-1)*
+- Version: v0.219.0 - *[View Release Notes](../v0-219-0)*
 - Version: v0.218.3 - *[View Release Notes](../v0-218-3)*
 - Version: v0.218.2 - *[View Release Notes](../v0-218-2)*
 - Version: v0.218.1 - *[View Release Notes](../v0-218-1)*
