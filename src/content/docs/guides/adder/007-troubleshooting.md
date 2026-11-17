@@ -15,7 +15,7 @@ This guide provides operational checks for Adder input connections, configuratio
 
 ## API diagnostics
 
-The health and metrics endpoints are outside the versioned `/v1` route group. The default API listener is `0.0.0.0:8080`; use the configured `API_ADDRESS` and `API_PORT` when the listener differs.
+Adder serves the health and metrics endpoints outside the versioned `/v1` route group. The default API listener uses `0.0.0.0:8080`; use the configured `API_ADDRESS` and `API_PORT` when the listener differs.
 
 ### Check process health
 
@@ -243,7 +243,7 @@ Capture the leak profile from the debug listener:
 go tool pprof http://127.0.0.1:6060/debug/pprof/goroutineleak
 ```
 
-The default debug port is `0`, which disables a reachable debug listener for this procedure. Set `--debug-port` or the corresponding `DEBUG_PORT` environment variable explicitly, and restrict the debug listener to an appropriate address.
+Port `0` disables a reachable debug listener for this procedure. Set `--debug-port` or the corresponding `DEBUG_PORT` environment variable explicitly, and restrict the debug listener to an appropriate address.
 
 Stop the profiling process after collecting the profile. Compare repeated profiles during a controlled start and stop cycle; a goroutine that remains after shutdown requires investigation in the component that owns it.
 
