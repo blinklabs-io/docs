@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.92.3"
-description: Referencia y ejemplo completo de configuración de Dingo v0.92.3.
+title: "Referencia de configuración de Dingo v0.94.1"
+description: Referencia y ejemplo completo de configuración de Dingo v0.94.1.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.92.3. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.3/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.92.3](https://github.com/blinklabs-io/dingo/blob/v0.92.3/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.94.1. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.94.1](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -17,7 +17,8 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | La configuración integrada de Musashi utiliza `TxSubmissionLogicV2` para el envío de transacciones. |
+| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Acepta `TxSubmissionLogicV1` y `TxSubmissionLogicV2`; la configuración integrada de Musashi utiliza `TxSubmissionLogicV2`. Dingo rechaza los valores desconocidos durante la carga de la configuración. |
+| Antelación mínima de oferta Leios | `LeiosMinOfferLead` | — | — | Clave del archivo de configuración del nodo Cardano. Indica cuántos `slots` debe estar un bloque endorser por encima de la punta inmutable para que Dingo lo ofrezca a un par. Dingo utiliza `3600` `slots` cuando la clave está ausente. |
 
 El archivo de configuración del nodo Cardano admite tanto el formato plano existente como el formato envolvente con `Version: 2`. En el formato envolvente, `Version` debe ser el entero `2` y `Configuration` debe ser un objeto. Un ejemplo compacto es:
 
@@ -46,14 +47,14 @@ Dingo rechaza los datos del formato envolvente si falta `Version` o `Configurati
 
 | Zona | Ajustes principales | Propósito |
 | --- | --- | --- |
-| Redes y rutas | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath` | Selecciona una red Cardano y las rutas de configuración del nodo, topología y datos. |
-| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. `privatePort` vale `0` de forma predeterminada; `0` desactiva la escucha TCP NtC y mantiene disponible el socket Unix. Para habilitar el acceso TCP, configura un puerto distinto de cero. |
+| Redes y rutas | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Selecciona una red Cardano y las rutas de configuración del nodo, topología y datos. |
+| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `trustedNtCIdleTimeout`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. |
 | Registro y TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Selecciona la salida de registros y protege los servicios compatibles de API o Bark. |
 | Almacenamiento y API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Elige el historial almacenado, proveedores de almacenamiento, orden de transacciones y API de aplicaciones. |
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
-| Arranque y sincronización | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configura el arranque desde instantáneas o génesis, la sincronización y la validación histórica. |
+| Arranque y sincronización | `mithril`, `mithril.downloadMaxBytes`, `mithril.server`, `mithril.server.aggregator`, `genesisBootstrap`, `genesisBootstrap.corroborationPeers`, `genesisBootstrap.controlGroups`, `genesisBootstrap.chainSyncJumping`, `intersectTip`, `immutableDbPath`, `chainsync`, `validateHistorical`, `strictUtxoValidation` | Configura el arranque desde instantáneas o génesis, la sincronización y la validación histórica. |
 | Gestión de los pares | `targetNumberOfKnownPeers`, `targetNumberOfEstablishedPeers`, `targetNumberOfActivePeers`, `targetNumberOfRootPeers`, `activePeersTopologyQuota`, `activePeersGossipQuota`, `activePeersLedgerQuota`, `inboundWarmTarget`, `inboundHotQuota`, `inboundMinTenure`, `inboundHotScoreThreshold`, `inboundPruneAfter`, `inboundDuplexOnlyForHot`, `inboundCooldown` | Establece objetivos de pares, cuotas de origen y políticas de pares entrantes. |
-| Producción de bloques y reglas del ledger | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
+| Producción de bloques y reglas del ledger | `blockProducer`, `blockProducerPools`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | Configura claves de forjado, umbrales de seguridad y comportamientos opcionales del ledger. |
 | Archivo y ciclo de vida de bases de datos | `bark*`, `historyExpiry`, `databaseLifecycle` | Sirve o consume datos de archivo, hace caducar el historial local y gestiona instantáneas. |
 | Índices opcionales y diagnósticos | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | Configura índices opcionales, actualizaciones autenticadas del registro, diagnósticos de paridad, caché y validación de inicio. |
 
@@ -87,10 +88,19 @@ Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Dirección de escucha de métricas | `metricsBindAddr` | `--metrics-bind-addr` | `DINGO_METRICS_BIND_ADDR` | `127.0.0.1`. Es independiente de `bindAddr` y utiliza loopback de forma predeterminada. Establece explícitamente una dirección comodín o accesible remotamente si el recopilador está fuera del contenedor o del host. |
-| Token de autenticación de métricas | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Vacío de forma predeterminada, sin autenticación. No existe opción CLI porque otros usuarios pueden ver los argumentos del proceso. Si se configura, los clientes deben enviar `Authorization: Bearer <token>` tanto a las métricas del nodo como a las de Mithril. |
+| Token de autenticación de métricas | `metricsAuthToken` | — | `DINGO_METRICS_AUTH_TOKEN` | Entrada heredada que Dingo ignora y que no tiene efecto. Los extremos de métricas aceptan solicitudes anónimas y no requieren token, `Authorization: Bearer` ni TLS. |
 | Puerto de métricas | `metricsPort` | `--metrics-port` | — | `12798` de forma predeterminada. `0` desactiva el servicio Prometheus. |
 
-El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un proxy inverso TLS o un túnel cifrado y autenticado cuando el tráfico atraviese una red que no sea de confianza.
+El servicio de métricas utiliza HTTP sin cifrar. Dingo aplica controles de red cuando el tráfico atraviesa una red que no sea de confianza.
+
+### Servicio de depuración pprof
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Fracción de muestreo de mutex | `debugMutexProfileFraction` | `--debug-mutex-profile-fraction` | `DINGO_DEBUG_MUTEX_PROFILE_FRACTION` | `0`, desactivada. Muestrea, en promedio, un evento de contención de mutex de cada `N` para el perfil pprof de mutex. |
+| Tasa de perfilado de bloqueos | `debugBlockProfileRate` | `--debug-block-profile-rate` | `DINGO_DEBUG_BLOCK_PROFILE_RATE` | `0`, desactivada. Muestrea un evento de bloqueo por cada `N` nanosegundos bloqueado; `1` registra todos los eventos. |
+
+Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Dingo ignora una tasa configurada sin un puerto de depuración activo y muestra una advertencia.
 
 ### Trazas
 
@@ -110,6 +120,14 @@ El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un p
 | --- | --- | --- | --- | --- | --- |
 | Tiempo de inactividad de NtC local confiable | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0` | `0` desactiva el límite de inactividad. Un valor positivo establece la duración tras la que Dingo cierra una conexión local confiable inactiva. Dingo rechaza los valores negativos. |
 
+### Socket del nodo
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
+| --- | --- | --- | --- | --- |
+| Modo de permisos del socket Cardano | `socketMode` | `--socket-mode` | `CARDANO_SOCKET_MODE` | `0600`. Introduce un modo octal para el socket Unix del nodo. |
+
+Dingo aplica a `socketMode` y `dmq.socketMode` un valor predeterminado de `0600` independiente de `umask`. En Unix, Dingo rechaza los modos que permiten escritura a otros usuarios. El directorio padre de cada socket debe pertenecer al usuario actual o a root. Dingo acepta la escritura del grupo o de otros usuarios únicamente cuando el directorio tiene el `sticky bit`; rechaza un directorio padre escribible sin ese bit. Para corregirlo, ejecuta `chmod +t` o elimina el permiso de escritura del grupo y de otros usuarios.
+
 ### Configuración DMQ
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
@@ -123,10 +141,11 @@ El servicio de métricas utiliza HTTP sin cifrar. Protege el token mediante un p
 | Puerto de pares N2N | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` desactiva el puerto N2N. Un puerto distinto de cero activa la escucha entre nodos DMQ y la gestión de pares cuando `dmq.maxPeers` también es distinto de cero. |
 | Dirección IPv4 de escucha | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | Si `dmq.n2nPort` no es cero y se configura este campo, exige un literal IPv4. |
 | Dirección IPv6 de escucha | `dmq.listenIpv6Address` | `--dmq-listen-ipv6-address` | `DINGO_DMQ_LISTEN_IPV6_ADDRESS` | `::` | Si `dmq.n2nPort` no es cero y se configura este campo, exige un literal IPv6. |
+| Modo de permisos del socket DMQ | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600` | Introduce un modo octal para el socket DMQ. |
 | Archivo de topología DMQ | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Sin configurar | Si se configura, la ruta no puede incluir recorridos `..` y debe identificar un archivo regular existente. Dingo lo carga y valida antes de abrir el socket DMQ. |
 | Mínimo de pares DMQ | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` permite no requerir pares. Solo las conexiones salientes cuentan para cumplir este mínimo; las conexiones entrantes no lo satisfacen. |
 | Máximo de pares DMQ | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` no permite pares cuando `minPeers` también es `0`. Limita el total de conexiones y reserva espacio para las conexiones salientes según `minPeers` y la valencia total de las raíces locales. |
-| Intervalo mínimo entre mensajes del mismo pool | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` segundos | Dingo mantiene separados los anuncios de mensajes del mismo pool al menos durante el intervalo configurado y añade `1` segundo de margen. `0` desactiva el espaciado. Dingo rechaza un valor mayor que `dmq.messageTtl`. |
+| Intervalo mínimo entre mensajes del mismo pool | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` segundos | `0` desactiva el espaciado. Un entero positivo establece el intervalo mínimo, en segundos, entre anuncios del mismo pool. Dingo rechaza los valores mayores que `9223372036` segundos. |
 
 Dingo valida estos seis ajustes de pares al iniciar DMQ. Con `dmq.n2nPort: 0`, omite la validación de las direcciones de escucha. Si `dmq.n2nPort` no es cero, cada dirección debe utilizar su versión IP correspondiente. Cuando `dmq.n2nPort` y `dmq.maxPeers` son distintos de cero, Dingo escucha en las direcciones configuradas y el gestor mantiene los pares dentro de `dmq.minPeers` y `dmq.maxPeers`. El archivo de topología configurado proporciona pares al gestor, que intenta primero las raíces locales y después las raíces públicas. El tema activado también puede descubrir pares relay del ledger mediante registros SRV de DNS asociados al prefijo del tema.
 
@@ -152,8 +171,15 @@ El ajuste `immutableDbPath` y el argumento posicional de `dingo load` aceptan un
 | --- | --- | --- | --- | --- |
 | Pares de corroboración | `genesisBootstrap.corroborationPeers` | `--genesis-bootstrap-corroboration-peers` | `DINGO_GENESIS_BOOTSTRAP_CORROBORATION_PEERS` | `0` de forma predeterminada. El valor predeterminado desactiva la barrera de corroboración. El operador debe configurar un valor positivo explícito cuando necesite exigir pares de corroboración antes de permitir que una fuente rápida impulse la selección Genesis. |
 | Grupos de control de Genesis | `genesisBootstrap.controlGroups` | — | — | Dingo ya no proporciona grupos de control específicos de red de forma implícita. Los operadores deben configurar este campo explícitamente cuando necesiten un conjunto fijo de grupos de control. |
+| ChainSync Jumping de Genesis | `genesisBootstrap.chainSyncJumping` | `--genesis-csj` | `DINGO_GENESIS_CSJ` | `true`, activado. Controla ChainSync Jumping mientras la selección Genesis está activa. |
 
 En Musashi, una configuración Cardano con `ConsensusMode: PraosMode` desactiva la selección de cadena Genesis aunque `genesisBootstrap` esté activado y el nodo comience desde el origen sin punto de intersección. Dingo sigue la configuración Cardano en lugar de aplicar selección por densidad, corroboración o paciencia de Genesis.
+
+### Validación histórica
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Validación histórica | `validateHistorical` | `--validate-historical` | `CARDANO_VALIDATE_HISTORICAL` | `true` de forma predeterminada. `false` omite la validación histórica completa, pero Dingo mantiene las comprobaciones del sobre de entrada y del contador del certificado operativo para bloques históricos recibidos de pares no confiables. Solo el replay confiable y el historial certificado por Mithril omiten esas comprobaciones. |
 
 ### Proveedor UTxO RPC
 
@@ -165,16 +191,16 @@ Configura explícitamente el host cuando el proveedor deba aceptar conexiones UT
 
 ### Proveedor Blockfrost
 
-El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada. Las solicitudes de solo lectura no están sujetas a los límites de admisión de modificaciones, aunque puede aplicarse la autenticación compartida de API si está configurada.
+El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada. Las solicitudes de solo lectura no están sujetas a los límites de admisión de modificaciones.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
 | Host | `plugins.api.blockfrost.config.host` | — | — | `127.0.0.1` de forma predeterminada. Un valor explícitamente vacío utiliza el `bindAddr` raíz. Configura un host para exponer el proveedor en otra interfaz. |
-| Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Vacío de forma predeterminada. El envío y la evaluación de transacciones requieren este token en `project_id`, `X-Blockfrost-Project-Id` o `Authorization: Bearer <token>`. Las credenciales ausentes o no válidas devuelven HTTP `401`. |
-| Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `4` de forma predeterminada. Debe ser positivo y limita el envío y la evaluación de transacciones en todo el proveedor. |
-| Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `1` de forma predeterminada. Debe ser positivo y no superar `maxConcurrentMutations`; limita el trabajo de una dirección remota. |
+| Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Entrada heredada que Dingo ignora y que no tiene efecto; no es obligatoria. El envío y la evaluación de transacciones aceptan solicitudes anónimas. |
+| Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite global para el envío y la evaluación de transacciones. |
+| Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite por cliente. Un límite positivo por cliente puede coexistir con `maxConcurrentMutations: 0`; cuando el límite global es positivo, el límite por cliente no puede superarlo. |
 
-Cuando `authToken` está configurado y el proveedor escucha fuera de loopback, configura TLS de servidor mediante `plugins.api.blockfrost.config.tls`. Dingo rechaza el inicio del acceso autenticado de modificación sin TLS. Tras autenticar y antes de leer el cuerpo, aplica ambos límites de modificaciones. Si alguno se agota, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
+Dingo no exige TLS para el acceso de modificación de Blockfrost. Antes de leer el cuerpo, aplica los límites de modificaciones que tengan un valor positivo. Si se agota un límite configurado y activo, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
 
 ### Agente de usuario HTTP saliente compartido
 
@@ -195,8 +221,11 @@ El agente de usuario HTTP saliente compartido no tiene clave YAML ni opción CLI
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Sincronización Mithril gestionada | `mithril.enabled` | `--mithril-enabled` | `DINGO_MITHRIL_ENABLED` | `false`, desactivada. En `serve` con almacenamiento core puede sincronizar desde una punta certificada de Mithril v2 y recurrir a Ouroboros si falla. Los comandos manuales funcionan independientemente de este ajuste. |
+| Limpieza después de cargar Mithril | `mithril.cleanupAfterLoad` | `--mithril-cleanup-after-load` | `DINGO_MITHRIL_CLEANUP` | `true`. Después de que Dingo confirma de forma duradera cada lote de bloques, retira los fragmentos extraídos anteriores y conserva como ancla el fragmento que contiene el bloque comprometido más reciente. Si la sincronización se interrumpe, Dingo reanuda desde el primer fragmento conservado mediante el marcador interno `mithril_immutable_retired_below`; este marcador solo sirve para reanudar y no requiere edición manual. |
 | Backend de artefactos Mithril | `mithril.backend` | `--mithril-backend` | `DINGO_MITHRIL_BACKEND` | `v2`; un valor vacío también selecciona `v2`. Dingo rechaza `v1` y sus rutas CLI. El backend v2 utiliza artefactos incrementales de bases de datos Cardano y requiere estado auxiliar del ledger y resúmenes de inmutables verificados durante el arranque. La estructura v2 es la referencia autoritativa. |
 | Resumen fijado de Mithril | `mithril.pinnedDigest` | `--mithril-pinned-digest` | `DINGO_MITHRIL_PINNED_DIGEST` | Vacío de forma predeterminada. Si se configura para un arranque nuevo, debe identificar un artefacto v2 de base de datos Cardano. Dingo rechaza las fijaciones y resúmenes de instantáneas v1. |
+
+Las importaciones de estados del ledger admiten Conway y las eras posteriores. Dingo rechaza los estados de Shelley a Babbage antes de persistirlos y devuelve el error `ErrPreConwaySnapshotUnsupported`.
 
 ### Límite de descarga de Mithril
 
@@ -214,12 +243,12 @@ Cuando `mithril.downloadMaxBytes` es `0`, Dingo utiliza estos límites integrado
 
 ### Servidor de artefactos Mithril
 
-Los ajustes de `mithril.server` controlan `dingo mithril snapshot create` y `dingo mithril serve`. La lectura de los artefactos de instantáneas es pública. El registro de firmantes y el cierre del registro del agregador requieren el token Bearer de `mithril.server.aggregator.operatorTokenFile`. El agregador requiere TLS si escucha fuera de loopback. Establece `mithril.server.publicBaseUrl` en el origen público de las descargas; exige HTTPS salvo para un origen HTTP de loopback.
+Los ajustes de `mithril.server` controlan `dingo mithril snapshot create` y `dingo mithril serve`. La lectura de los artefactos de instantáneas es pública. El registro de firmantes y el cierre del registro del agregador aceptan solicitudes anónimas. Dingo conserva `mithril.server.aggregator.operatorTokenFile` y sus entradas CLI y de entorno por compatibilidad, pero ignora sus valores y no exige el token. El agregador no exige TLS. Establece `mithril.server.publicBaseUrl` en el origen público de las descargas.
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
 | Puerto del servidor de artefactos | `mithril.server.port` | `--mithril-server-port` | `DINGO_MITHRIL_SERVER_PORT` | `8081`. `dingo mithril serve` escucha en este puerto y en el `bindAddr` raíz. |
-| Origen público de las instantáneas | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Obligatorio para `dingo mithril serve`. Debe ser un origen sin credenciales, ruta, consulta ni fragmento. Requiere HTTPS salvo para HTTP de loopback. |
+| Origen público de las instantáneas | `mithril.server.publicBaseUrl` | `--mithril-server-public-base-url` | `DINGO_MITHRIL_SERVER_PUBLIC_BASE_URL` | Obligatorio para `dingo mithril serve`. Acepta un origen absoluto HTTP o HTTPS sin credenciales, ruta, consulta ni fragmento. |
 | Almacén de artefactos | `mithril.server.artifactStore` | `--mithril-server-artifact-store` | `DINGO_MITHRIL_SERVER_ARTIFACT_STORE` | Vacío. Configura un directorio, `s3://bucket/prefix` o `gcs://bucket/prefix`. Los dos últimos requieren una compilación con `dingo_extra_plugins`. |
 | URL base de redirección | `mithril.server.redirectBaseUrl` | `--mithril-server-redirect-base-url` | `DINGO_MITHRIL_SERVER_REDIRECT_BASE_URL` | Vacía. Si se configura, las solicitudes de archivos se redirigen a esta URL base más la clave del objeto, en lugar de transmitir el objeto. Úsala solo si los objetos remotos son públicos. |
 | Retención de instantáneas | `mithril.server.keepSnapshots` | `--mithril-server-keep-snapshots` | `DINGO_MITHRIL_SERVER_KEEP_SNAPSHOTS` | `0` conserva todas las instantáneas producidas. Un valor positivo conserva esa cantidad de las más recientes. |
@@ -231,7 +260,7 @@ Los ajustes de `mithril.server` controlan `dingo mithril snapshot create` y `din
 | Tamaño de la lotería STM | `mithril.server.aggregator.m` | `--mithril-aggregator-m` | `DINGO_MITHRIL_AGGREGATOR_M` | `0` hasta configurarlo. Debe ser positivo si el agregador está activo. |
 | Probabilidad de victoria STM | `mithril.server.aggregator.phiF` | `--mithril-aggregator-phi-f` | `DINGO_MITHRIL_AGGREGATOR_PHI_F` | `0` hasta configurarlo. Debe ser mayor que `0` y menor o igual que `1`. |
 | Clave de firma de génesis del agregador | `mithril.server.aggregator.genesisSigningKeyFile` | `--mithril-aggregator-genesis-signing-key-file` | `DINGO_MITHRIL_AGGREGATOR_GENESIS_SIGNING_KEY_FILE` | Obligatoria si el agregador está activo. Configura una clave Ed25519 de Mithril en formato JSON hexadecimal. |
-| Token del operador del agregador | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Obligatorio si el agregador está activo. Configura un archivo con al menos 32 bytes aleatorios. |
+| Token del operador del agregador | `mithril.server.aggregator.operatorTokenFile` | `--mithril-aggregator-operator-token-file` | `DINGO_MITHRIL_AGGREGATOR_OPERATOR_TOKEN_FILE` | Entrada heredada que Dingo ignora y que no tiene efecto. No es obligatoria y no requiere un archivo con un token. |
 
 ### Validación del almacenamiento de metadatos SQLite
 
@@ -301,18 +330,18 @@ El servicio remoto de ciclo de vida de Bark está desactivado de forma predeterm
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y requisitos |
 | --- | --- | --- | --- | --- |
-| Activar el servicio de ciclo de vida | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Requiere `barkPort` distinto de cero, `barkClientCaFilePath`, `tlsCertFilePath`, `tlsKeyFilePath` y al menos un valor en `barkLifecycleOperatorCertificateFingerprints`. |
-| Certificados de operadores de ciclo de vida | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Vacío de forma predeterminada. Cada valor es la huella SHA-256 hexadecimal de los bytes DER del certificado de cliente; admite dos puntos e ignora mayúsculas y minúsculas. Estas credenciales solo autorizan `Stop` y `Restart`. |
+| Activar el servicio de ciclo de vida | `barkLifecycleEnabled` | `--bark-lifecycle-enabled` | `DINGO_BARK_LIFECYCLE_ENABLED` | `false`. Requiere `barkPort` distinto de cero. |
+| Certificados de operadores de ciclo de vida | `barkLifecycleOperatorCertificateFingerprints` | `--bark-lifecycle-operator-certificate-fingerprints` | `DINGO_BARK_LIFECYCLE_OPERATOR_CERTIFICATE_FINGERPRINTS` | Entrada heredada sin efecto. No configura autorización ni requiere huellas para el ciclo de vida. |
 | Direcciones privadas o especiales para descargas | `barkBlockDownloadAllowPrivateAddresses` | `--bark-block-download-allow-private-addresses` | `DINGO_BARK_BLOCK_DOWNLOAD_ALLOW_PRIVATE_ADDRESSES` | `false`. Con `true`, permite direcciones resueltas privadas o de uso especial para las descargas de bloques Bark. Mantiene la lista de orígenes permitidos, HTTPS, la validación de redirecciones y la desactivación de proxies. Solo afecta a las descargas, no al tráfico RPC. |
 
-Todas las operaciones de ciclo de vida requieren un certificado de cliente verificado con `barkClientCaFilePath`. `Stop` y `Restart` también requieren una huella coincidente de la lista de operadores. `GetStatus` requiere mTLS, pero no pertenecer a esa lista. Las credenciales de operadores de DatabaseService son independientes y no conceden acceso al ciclo de vida. `Restart` está disponible en Unix; las demás plataformas devuelven un error de operación no admitida.
+`GetStatus`, `Stop` y `Restart` aceptan solicitudes HTTP anónimas sin cifrar. Dingo ignora las entradas heredadas `barkClientCaFilePath`, `barkOperatorCertificateFingerprints` y `barkLifecycleOperatorCertificateFingerprints`; no requiere certificados de cliente, certificados ni claves de servidor, ni huellas de operadores para estas operaciones. `Restart` está disponible únicamente en Unix; las demás plataformas devuelven un error de operación no admitida.
 
 ### Presupuestos de consulta de archivos Bark
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
 | --- | --- | --- | --- | --- |
-| Consultas globales de archivo por segundo | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | `200` cuando vale `0`. Cubre todos los llamadores anónimos de `ArchiveService`. Se rechazan los valores negativos. |
-| Consultas de archivo por llamador y segundo | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | `50` cuando vale `0`. Identifica a los llamadores por dirección IPv4 o prefijo IPv6 `/64`. Se rechazan los valores negativos. |
+| Consultas globales de archivo por segundo | `barkArchiveLookupsPerSecond` | `--bark-archive-lookups-per-second` | `DINGO_BARK_ARCHIVE_LOOKUPS_PER_SECOND` | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las consultas de todos los llamadores anónimos de `ArchiveService`. Se rechazan los valores negativos. |
+| Consultas de archivo por llamador y segundo | `barkArchiveCallerLookupsPerSecond` | `--bark-archive-caller-lookups-per-second` | `DINGO_BARK_ARCHIVE_CALLER_LOOKUPS_PER_SECOND` | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las consultas de un llamador identificado por dirección IPv4 o prefijo IPv6 `/64`. Se rechazan los valores negativos. |
 
 Dingo cobra en ambos presupuestos un cargo base por cada referencia de `FetchBlock`. Cuando el lote contiene referencias por altura, reserva por adelantado en ambos presupuestos, una sola vez, el coste de resolver el límite superior (`66` unidades de consulta). Después, reserva en ambos presupuestos el trabajo de búsqueda binaria de cada referencia según el límite resuelto. Los reintentos por un tramo final obsoleto del índice y los saltos de entradas interiores obsoletas también reservan por adelantado, en ambos presupuestos, el coste de cada operación. Si alguno de los dos presupuestos no cubre el siguiente trabajo, Dingo rechaza la solicitud con `RESOURCE_EXHAUSTED` antes de iniciar la resolución, búsqueda o lectura correspondiente del archivo o del almacenamiento en nube. Los lotes grandes que contienen referencias por altura pueden necesitar dividirse.
 
@@ -370,13 +399,33 @@ Dingo oculta los valores de los encabezados en la configuración presentada y en
 
 ### Producción de bloques
 
-Dingo v0.92.3 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
+Dingo v0.94.0 no admite `ForgePrimaryChainTipToleranceSlots` ni `forgePrimaryChainTipToleranceSlots` en YAML, CLI o variables de entorno. Elimina esos ajustes sin sustituirlos por otro campo.
 
 Configura opcionalmente `forgeAppliedTipStalenessSlots` en YAML, `--forge-applied-tip-staleness-slots` en CLI o `DINGO_FORGE_APPLIED_TIP_STALENESS_SLOTS` en el entorno. El valor predeterminado `0` desactiva el límite. Dingo solo lo evalúa cuando existe un objetivo de origen corroborado y lo ignora si el objetivo es desconocido.
+
+### Pools de productores de bloques en YAML
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
+| --- | --- | --- | --- | --- |
+| Pools de productores de bloques | `blockProducerPools` | — | — | Solo YAML. Si falta la lista o está vacía, Dingo mantiene la configuración de un solo pool en las claves de nivel superior. Una lista con elementos reemplaza las claves de nivel superior `shelley*` y los ajustes de origen KES relacionados; cada entrada define su propio pool. |
+
+Cada entrada de `blockProducerPools` requiere `shelleyVrfKey`, `shelleyOperationalCertificate` y exactamente un origen KES: `shelleyKesKey`, `shelleyKesAgentSocket` o `shelleyKesAgentAddress`/`shelleyKesAgentAddresses`. `shelleyKesAgentSignTimeout` y `shelleyKeyWatchInterval` de nivel superior se aplican a todos los pools. Las entradas anidadas no tienen opciones CLI ni variables de entorno independientes.
+
+Dingo rechaza una lista con ajustes de pool único heredados de nivel superior, rutas duplicadas de certificados operativos y configuraciones remotas compartidas sin perfiles distintos. Varios pools pueden usar el mismo listener remoto cuando cada uno define un valor diferente para `shelleyKesAgentProfile`; Dingo rechaza un perfil ausente o repetido para ese listener.
 
 #### Socket del agente KES de Shelley
 
 La opción `--shelley-kes-agent-socket` admite rutas de sockets del sistema de archivos y direcciones abstractas de Linux. Dingo resuelve las rutas relativas una vez al construir el cliente y reutiliza la ruta resuelta al reconectar. Conserva las direcciones abstractas con prefijo `@`, rechaza las direcciones literales con prefijo NUL al construir el cliente y aplica los límites de longitud de sockets de la plataforma.
+
+#### Ajustes del agente KES remoto
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
+| --- | --- | --- | --- | --- |
+| Dirección del agente KES remoto | `shelleyKesAgentAddress` o `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Sin configurar. Introduce una dirección `host:port` para firmar mediante un agente remoto. En cada entrada de `blockProducerPools`, esta clave es una de las fuentes KES mutuamente excluyentes. |
+| Direcciones del agente KES remoto | `shelleyKesAgentAddresses` o `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Sin configurar. Introduce una lista ordenada de direcciones `host:port`; Dingo valida cada entrada y utiliza la lista para el cambio ordenado entre agentes. No combines este campo con `shelleyKesAgentAddress` en el mismo nivel. |
+| Perfil del agente KES remoto | `shelleyKesAgentProfile` o `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Sin configurar. El perfil selecciona la sesión de firma del agente remoto. Un perfil requiere `shelleyKesAgentAddress` o `shelleyKesAgentAddresses` del mismo nivel; los pools que comparten un listener remoto deben usar perfiles distintos. |
+
+Las opciones CLI y las variables de entorno de estos campos configuran únicamente los ajustes de nivel superior; las entradas de `blockProducerPools` utilizan sus claves YAML correspondientes.
 
 ### Proveedor Kupo
 

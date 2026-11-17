@@ -19,6 +19,12 @@ dingo serve --config ./dingo.yaml
 
 初回実行の詳しい手順は[クイックスタート](/ja/guides/dingo/002-quick-start-overview/)を参照してください。スナップショットのサイズ、ディスク使用量、ロード時間はネットワークによって異なり、チェーンの進行とともに増えます。インポート中は、ダウンロードファイルとデータベースの両方に必要な空き領域を確保してください。
 
+### Mithril ロード時のクリーンアップと再開
+
+`mithril.cleanupAfterLoad` は既定で有効です。有効にすると、Dingo は Mithril の ImmutableDB をロードするとき、各チャンクのブロックを blob ストアへ永続的にコミットした後、そのチャンクより前の抽出済み `.chunk`、`.primary`、`.secondary` ファイルを段階的に削除します。最新のコミット済みチャンクは再開用の基準として保持するため、抽出済みツリーと blob ストアがチェーン全体を同時に保持する期間を短縮できます。
+
+ロードが中断した場合、Dingo は内部の一時的な `mithril_immutable_retired_below` 境界を使って、削除されずに残った最初のチャンクから再開し、すでに削除したチャンクを再ダウンロードしません。インポートが完了すると、Dingo はこの境界を自動的に削除します。設定項目ではないため、手動で編集しないでください。動作を変更する場合は、`mithril.cleanupAfterLoad`、`--mithril-cleanup-after-load`、または `DINGO_MITHRIL_CLEANUP` を使用します。
+
 <a id="produce-and-serve-mithril-artifacts"></a>
 
 ### Mithril アーティファクトの作成と配信
@@ -30,9 +36,9 @@ dingo mithril snapshot create --db-dir <cardano-node db>
 dingo mithril serve --config ./dingo.yaml
 ```
 
-作成や配信の前に `mithril.server.artifactStore` を設定します。`mithril.server.publicBaseUrl` は公開の `https://` オリジンを指定します。`http://` はループバックのみで許可されます。配信ポートは `mithril.server.port` です。サーバーはアーティファクトの読み取りを公開し、クライアントは HTTP Range リクエストでダウンロードできます。
+作成や配信の前に `mithril.server.artifactStore` を設定します。`mithril.server.publicBaseUrl` には、認証情報、パス、クエリ、フラグメントを含まない有効な絶対オリジンを指定し、スキームには `http://` または `https://` を使用します。配信ポートは `mithril.server.port` です。サーバーはアーティファクトの読み取りを公開し、クライアントは HTTP Range リクエストでダウンロードできます。
 
-公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。登録と署名操作に用いる Bearer トークンを `mithril.server.aggregator.operatorTokenFile` で指定してください。ループバック以外へのアグリゲーターのバインドには TLS も必要です。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.3/dingo.yaml.example)を参照してください。
+公開オブジェクトストアへのアーカイブリクエストのリダイレクトには `mithril.server.redirectBaseUrl`、共有 Dingo 証明書による HTTPS の有効化には `mithril.server.tlsEnabled`、最新のスナップショットの保持数には `mithril.server.keepSnapshots` を使用します。Dingo が署名を収集してスナップショットを認証する必要がある場合は、任意の `mithril.server.aggregator` 設定を有効にします。署名者の登録と登録の終了は匿名で実行できるため、オペレーター用のトークンを構成する必要はありません。`server` と `aggregator` の全設定は、[`mithril` の設定リファレンス](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example)を参照してください。
 
 Mithril v2 ブートストラップは、設定されたアグリゲーターのオリジンまたは公式の `storage.googleapis.com` Mithril オリジンからの取得先とリダイレクトのみを受け入れます。`https://` の要件と、ループバック宛てのローカル開発例外は維持されます。各ブートストラップは、アーティファクトとリダイレクトのリクエスト数およびバイト数をまとめて全体予算に計上し、24 時間のダウンロード期限を適用します。immutable アーカイブは 100000 個に制限し、アーティファクトの各構成要素の取得先を重複排除して最大 4 個に制限します。展開時もエントリー数と展開後のバイト数を制限し、必要な空き領域を予約します。これらの保護には組み込みの上限を適用します。
 
@@ -63,7 +69,7 @@ NNNNN.secondary
 
 ### 台帳状態のインポート検証
 
-インポートした台帳状態を永続化する前に、先端ハッシュと nonce の幅、証明書とステークスナップショット、プール分布とガバナンス状態、プロトコルパラメーター、手数料ポット間の関係などのコンセンサス入力を検証します。事前検証が入力を拒否すると、UTxO フェーズの前に失敗し、部分的な UTxO 状態は永続化しません。
+インポートした台帳状態を永続化する前に、先端ハッシュと nonce の幅、証明書とステークスナップショット、プール分布とガバナンス状態、プロトコルパラメーター、手数料ポット間の関係などのコンセンサス入力を検証します。スナップショットの現在の時代が Conway より前（Shelley から Babbage）の場合、解析中に `ErrPreConwaySnapshotUnsupported` で直ちに拒否されます。Dingo は台帳状態や UTxO 状態を部分的に永続化する前にこの検証を実行するため、Conway 以降のスナップショットだけをインポートできます。
 
 <a id="snapshot-restore-and-truncate"></a>
 
@@ -89,7 +95,7 @@ MySQL のスナップショットと復元は `tls=skip-verify` を拒否しま�
 
 ## 履歴の期限切れとアーカイブ
 
-履歴の期限切れ処理は、台帳のインデックスとメタデータを保持したまま、古い immutable ブロックファイルをローカルストレージから削除します。そのブロックを読むには設定済みの [Bark アーカイブ](/ja/guides/dingo/006-apis-and-archive/)が必要で、なければ履歴期限切れエラーを返します。アーカイブサービスは、署名付きダウンロード URL を発行できるオブジェクトストレージプロバイダーを使用します。期限切れ処理の頻度、アーカイブストレージ、ダウンロードホストの許可リストは、Dingo v0.92.3 の[設定サンプル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.92.3/dingo.yaml.example)で設定してください。設定オプションはバージョン間で変わる場合があるため、このサンプルは Dingo v0.92.3 でのみ使用してください。
+履歴の期限切れ処理は、台帳のインデックスとメタデータを保持したまま、古い immutable ブロックファイルをローカルストレージから削除します。そのブロックを読むには設定済みの [Bark アーカイブ](/ja/guides/dingo/006-apis-and-archive/)が必要で、なければ履歴期限切れエラーを返します。アーカイブサービスは、署名付きダウンロード URL を発行できるオブジェクトストレージプロバイダーを使用します。期限切れ処理の頻度、アーカイブストレージ、ダウンロードホストの許可リストは、Dingo v0.94.1 の[設定サンプル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example)で設定してください。設定オプションはバージョン間で変わる場合があるため、このサンプルは Dingo v0.94.1 でのみ使用してください。
 
 Mithril オブジェクトごとの圧縮ダウンロードサイズ上限は、`dingo.yaml` の `mithril.downloadMaxBytes`、CLI の `--mithril-download-max-bytes`、環境変数の `DINGO_MITHRIL_DOWNLOAD_MAX_BYTES` で設定します。`0` は組み込み上限を使用します。`v1` は `512 GiB`、`v2` は immutable アーカイブに `1 GiB`、ダイジェスト一覧に `256 MiB`、付属データに `64 GiB` です。正のバイト数を設定すると、各ダウンロードオブジェクトで組み込み上限をその値に置き換えます。負の値は無効で、設定検証に失敗します。
 
