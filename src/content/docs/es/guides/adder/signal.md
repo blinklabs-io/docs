@@ -62,9 +62,9 @@ Adder rechaza endpoints con cualquiera de estas características:
 
 ## Entrega y validación JSON-RPC
 
-Cada mensaje contiene el JSON del evento. Adder envía una solicitud JSON-RPC `send` con los destinatarios, el mensaje y, cuando se configura, `account`.
+Cada mensaje contiene el JSON del evento. Adder envía una solicitud JSON-RPC `send` con los destinatarios, el mensaje y `account` cuando la configuración incluye ese campo.
 
-Adder acepta la respuesta solo cuando se cumplen todas estas condiciones:
+Adder acepta la respuesta únicamente cuando todas estas condiciones son verdaderas:
 
 - La respuesta HTTP tiene estado `200`.
 - La respuesta JSON-RPC usa la versión `2.0`.
@@ -80,7 +80,7 @@ Una respuesta RPC correcta confirma que `signal-cli` aceptó el envío. No confi
 
 Adder no reintenta automáticamente las solicitudes. Un tiempo de espera puede producirse después de que Signal envíe el mensaje, y un reintento podría duplicarlo.
 
-Adder no conserva los eventos pendientes cuando se reinicia. Los eventos pendientes se pierden al detenerse o reiniciarse el proceso.
+Adder no conserva los eventos pendientes después de un reinicio.
 
 ## Comprobación en vivo
 
@@ -90,7 +90,7 @@ Adder no conserva los eventos pendientes cuando se reinicia. Los eventos pendien
 4. Inicia Adder y genera el evento seleccionado.
 5. Confirma que el mensaje llega al destinatario de comprobación.
 
-La comprobación local puede usar un demonio HTTP de prueba para verificar la solicitud JSON-RPC y el contrato de respuesta documentados.
+Las pruebas locales usan un demonio HTTP de prueba para verificar la solicitud JSON-RPC y el contrato de respuesta documentados.
 
 ---
 
