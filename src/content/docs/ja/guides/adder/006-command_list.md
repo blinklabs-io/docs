@@ -74,6 +74,27 @@ description: "Adderコマンドの一覧です。"
 >
 > `--filter-address`、`--filter-asset`、`--filter-policy`、`--filter-pool`、`--filter-drep`、`--filter-type`では、カンマ区切りの各項目の前後にある空白を除去し、空の項目を無視します。
 >
+> 1つのオプションに複数の値を指定する場合は、値をカンマで区切ります。同じオプション内では、指定した値のいずれか1つに一致すればフィルターに一致します。
+>
+> ```
+> --filter-address addr1...,addr1...
+> --filter-pool pool1...,a1b2...
+> --filter-drep drep1...,drep_script1...
+> ```
+>
+> 異なる種類のフィルターはANDで組み合わせます。ただし、`--filter-pool`と`--filter-drep`を同時に指定した場合はORで組み合わせます。他に設定したフィルターは、この組み合わせに対してもANDで適用されます。`--filter-drep`はブロックイベントには適用されません。
+>
+> フィルターフラグはプラグイン名を省略しますが、環境変数と設定ファイルの名前にはプラグイン名が含まれます。
+>
+> | フラグ | 環境変数 | 設定ファイルのキー |
+> | --- | --- | --- |
+> | `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+> | `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+> | `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+> | `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+> | `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+> | `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
+>
 > **イベントの種類:**
 > 1. `input.block` - 新しいブロックが観察されました。
 > 2. `input.rollback` - 前のチェーン ポイントにロールバックが発生しました。
@@ -82,6 +103,63 @@ description: "Adderコマンドの一覧です。"
 > 5. `input.drep-registration` - DRep登録が発生しました。
 > 6. `input.drep-update` - DRep更新が発生しました。
 > 7. `input.drep-retirement` - DRep退任が発生しました。
+
+### `input.governance` イベント
+
+`input.governance`イベントは、Conway時代のオンチェーンガバナンスデータを含むトランザクションごとに1件発生します。1つのトランザクションに含まれるすべてのガバナンスデータを1件のイベントにまとめます。ロールバックや再処理では同じトランザクションが再び処理されることがあります。同じトランザクションの`input.transaction`イベントに加えて発生します。
+
+次のいずれかを含むトランザクションでイベントを発生させます。
+
+- 1つ以上の提案手続き（新しいガバナンスアクション）
+- 1つ以上の投票手続き（ガバナンスアクションへの投票）
+- DRepの登録、更新、退任、投票委任、または憲法委員会のホットキー承認・コールドキー辞任の証明書
+
+ガバナンスデータを含まないトランザクションではイベントを発生させません。
+
+#### `context`
+
+| フィールド | 型 | 説明 |
+| --- | --- | --- |
+| `transactionHash` | string | トランザクションのハッシュ（16進数） |
+| `blockNumber` | number | トランザクションを含むブロックの高さ |
+| `slotNumber` | number | トランザクションを含むブロックのスロット |
+| `transactionIdx` | number | ブロック内のトランザクションのインデックス |
+| `networkMagic` | number | 接続先ノードのネットワークマジック |
+
+#### `payload`
+
+`payload`には常に`blockHash`が含まれます。`transactionCbor`は`--input-chainsync-include-cbor`を有効にした場合だけ含まれます。次の配列は、空の場合は省略されます。
+
+| フィールド | 型 | 説明 |
+| --- | --- | --- |
+| `blockHash` | string | 含まれるブロックのハッシュ（16進数） |
+| `transactionCbor` | string | トランザクションの生CBOR（16進数）。`--input-chainsync-include-cbor`指定時だけ含まれます |
+| `proposalProcedures` | array | このトランザクションで提案されたガバナンスアクション |
+| `votingProcedures` | array | このトランザクションで行われた投票 |
+| `drepCertificates` | array | DRepの登録・更新・退任の証明書 |
+| `voteDelegationCertificates` | array | 投票委任の証明書 |
+| `committeeCertificates` | array | 憲法委員会のホットキー承認・コールドキー辞任の証明書 |
+
+アンカーオブジェクトは常にシリアライズされ、アンカーがない場合は`url`と`dataHash`が空文字列になります。証明書の`deposit`は値が0の場合に省略されます。
+
+各配列の項目は次の情報を含みます。
+
+- `proposalProcedures[]`: `index`（トランザクション内の提案インデックス）、`deposit`（提案にロックされたlovelace）、`rewardAccount`（預託金の返還先ステークアドレス）、`actionType`（`ParameterChange`、`HardForkInitiation`、`TreasuryWithdrawal`、`NoConfidence`、`UpdateCommittee`、`NewConstitution`、`Info`、`Unknown`のいずれか）、`actionData`（アクション固有のデータ）、`anchor`（提案メタデータの`url`と`dataHash`）
+- `votingProcedures[]`: `voterType`（`DRep`、`SPO`、`CCHot`、`Unknown`のいずれか）、`voterHash`、`voterId`、`govActionTxId`、`govActionIndex`、`vote`（`Yes`、`No`、`Abstain`、`Unknown`のいずれか）、`anchor`
+- `drepCertificates[]`: `certificateType`（`Registration`、`Update`、`Deregistration`のいずれか）、`drepHash`、`drepId`、`deposit`、`anchor`
+- `voteDelegationCertificates[]`: `certificateType`（`VoteDelegation`、`StakeVoteDelegation`、`VoteRegistrationDelegation`、`StakeVoteRegistrationDelegation`のいずれか）、`stakeCredential`、`drepType`（`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか）、該当する場合の`drepHash`と`drepId`、複合ステーク・投票委任の場合の`poolKeyHash`、`deposit`
+- `committeeCertificates[]`: `certificateType`（`AuthHot`または`ResignCold`）、`coldCredential`、`AuthHot`の場合の`hotCredential`、`anchor`
+
+#### ガバナンスイベントのフィルタリング
+
+`input.governance`イベントには`--filter-drep`、`--filter-pool`、`--filter-address`が適用されます。リスト内のデータのいずれかがフィルター値に一致すると、イベントはそのフィルターに一致します。
+
+- `--filter-drep`は、DRep証明書、DRepへの委任を示す投票委任証明書、DRepが投票者である投票手続きに一致します。
+- `--filter-pool`は、SPOとしてプールが行った投票手続きと、プールのキー ハッシュを参照する投票委任証明書に一致します。
+- `--filter-address`はアドレスの種類で照合対象が異なります。ステークアドレス（`stake1...`）は提案の`rewardAccount`、資金引き出し先アドレス、投票委任証明書のステーク資格情報に一致します。支払いアドレス（`addr1...`）は資金引き出し先アドレスだけに一致します。
+- `--filter-asset`と`--filter-policy`はガバナンスイベントに適用されません。`input.governance`イベントはこれらのフィルターをそのまま通過します。
+
+`--filter-drep`は、Bech32形式の`drep1...`と`drep_script1...`を受け付けます。Bech32をデコードしたペイロードが29バイトの場合だけ先頭の1バイトを除去し、28バイトの資格情報ハッシュとして扱います。その他の長さは無視します。16進数形式にはヘッダーを付けず、56文字の生の資格情報ハッシュを指定します。16進数の値から先頭バイトを除去しません。
 
 ***
 
@@ -277,7 +355,7 @@ description: "Adderコマンドの一覧です。"
 
 > `output.log`のログ出力のしきい値を設定します。指定できる値は`debug`、`info`、`warn`、`error`です（デフォルトは"info"）。`debug`と`info`ではイベントレコードを出力し、`warn`と`error`では出力を抑制します。他の出力プラグインを選択した場合も、このしきい値によってstderrに出力するAdderアプリケーションの診断情報を絞り込みます。
 >
-> YAMLでは`plugins.output.log.level`、環境変数では`OUTPUT_LOG_LEVEL`でも指定できます。Adderはトップレベルの`logging.level`、`--logging-level`フラグ、`LOGGING_LEVEL`環境変数をサポートしません。
+> 推奨される設定方法は、`--output-log-level`、環境変数の`OUTPUT_LOG_LEVEL`、YAMLの`plugins.output.log.level`です。YAMLの読み込みでは、後方互換性のためトップレベルの`logging.level`も受け付けます。`plugins.output.log.level`が未設定の場合に限り、`logging.level`の値を`plugins.output.log.level`へ移行します。両方が設定されている場合は、`plugins.output.log.level`を優先します。設定を保存すると、最新の形式だけを書き込み、`logging.level`は保存しません。旧形式の値が不正な場合は、引き続きエラーになります。旧形式の`--logging-level`フラグと`LOGGING_LEVEL`環境変数はサポートしません。
 <br />
 
 ```
@@ -317,6 +395,8 @@ description: "Adderコマンドの一覧です。"
 > サービスアカウントファイルへのパスを指定します。この値は、`--output push` を使用した場合、非空でなければなりません。
 >
 > サービスアカウント JSON には、`project_id` を非空の文字列として含まなければなりません。 欠損、非文字列、または空の `project_id` 値が起動/構成障害を引き起こします。
+>
+> プッシュトークンの取得またはFCM送信で発生したエラーは`ErrorChan`から通知されます。FCMへの各HTTPリクエストは10秒で打ち切られます。
 >
 <br />
 
