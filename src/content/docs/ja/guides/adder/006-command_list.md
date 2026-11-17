@@ -277,7 +277,7 @@ description: "Adderコマンドの一覧です。"
 
 > `output.log`のログ出力のしきい値を設定します。指定できる値は`debug`、`info`、`warn`、`error`です（デフォルトは"info"）。`debug`と`info`ではイベントレコードを出力し、`warn`と`error`では出力を抑制します。他の出力プラグインを選択した場合も、このしきい値によってstderrに出力するAdderアプリケーションの診断情報を絞り込みます。
 >
-> YAMLでは`plugins.output.log.level`、環境変数では`OUTPUT_LOG_LEVEL`でも指定できます。トップレベルの`logging.level`、`--logging-level`フラグ、`LOGGING_LEVEL`環境変数は削除されており、サポートされていません。
+> YAMLでは`plugins.output.log.level`、環境変数では`OUTPUT_LOG_LEVEL`でも指定できます。Adderはトップレベルの`logging.level`、`--logging-level`フラグ、`LOGGING_LEVEL`環境変数をサポートしません。
 <br />
 
 ```
