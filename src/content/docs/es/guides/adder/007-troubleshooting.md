@@ -11,7 +11,7 @@ Esta guía cubre los problemas operativos más frecuentes de Adder e incluye com
 
 ## 1. Problemas de conexión
 
-Estos problemas aparecen cuando el plugin de entrada `chainsync` no puede conectarse al nodo Cardano o completar el handshake.
+Estos problemas aparecen cuando el plugin de entrada `chainsync` no puede conectarse al nodo Cardano o completar la negociación inicial.
 
 ### A. Problemas con la ruta del socket (NtC)
 
@@ -47,7 +47,7 @@ Estos problemas aparecen cuando el plugin de entrada `chainsync` no puede conect
     ```bash
     nc -zv relays-new.cardano-mainnet.iohk.io 3001
     ```
-  - Usa `--input-chainsync-ntc-tcp` solo cuando un socket NtC se exponga mediante TCP con `socat` u otra herramienta equivalente.
+  - Usa `--input-chainsync-ntc-tcp` solo cuando `socat` u otra herramienta equivalente exponga un socket NtC mediante TCP.
 
 ---
 
@@ -145,7 +145,7 @@ Los filtros aplican lógica **AND** entre tipos de filtro. Dentro de una lista d
     ```bash
     ./adder --output webhook --output-webhook-url="https://your-webhook-url.com"
     ```
-  - Usa las opciones registradas `--output-webhook-format`, `--output-webhook-username`, `--output-webhook-password`, `--output-webhook-tls-skip-verify`, `--output-webhook-state-path` y `--output-webhook-max-pending` según corresponda. Adder no registra opciones CLI `--output-webhook-max-retries` ni `--output-webhook-initial-backoff`.
+  - Usa las opciones registradas `--output-webhook-format`, `--output-webhook-username`, `--output-webhook-password`, `--output-webhook-tls-skip-verify`, `--output-webhook-state-path` y `--output-webhook-max-pending` según corresponda. El número de reintentos y el backoff forman parte del comportamiento interno y no se configuran mediante opciones CLI.
   - Los llamadores Go pueden usar `webhook.WithRetryConfig`; el comportamiento interno de reintentos no crea opciones CLI nuevas.
 
 ### B. Política de reintentos
@@ -164,7 +164,7 @@ Una respuesta `Retry-After` válida puede aumentar la espera, pero Adder la limi
 
 ## 6. Salud y métricas operativas
 
-Los endpoints de diagnóstico se sirven fuera del grupo de rutas `/v1`, en el listener de API configurado por `API_ADDRESS` y `API_PORT` (valores predeterminados: `0.0.0.0:8080`).
+La API sirve los endpoints de diagnóstico fuera del grupo de rutas `/v1`, en la dirección configurada por `API_ADDRESS` y `API_PORT` (valores predeterminados: `0.0.0.0:8080`).
 
 ### Endpoint de salud
 
@@ -174,7 +174,7 @@ Consulta `GET /healthcheck` para comprobar el estado del pipeline:
 curl -i http://localhost:8080/healthcheck
 ```
 
-La respuesta conserva el campo JSON `failed`. Adder devuelve HTTP `200` cuando todos los comprobadores registrados indican que siguen en ejecución y HTTP `503` cuando alguno indica que se detuvo. El estado HTTP mantiene el comportamiento de probe aunque la respuesta incluya diagnósticos adicionales.
+La respuesta conserva el campo JSON `failed`. Adder devuelve HTTP `200` cuando todos los comprobadores registrados indican que siguen en ejecución y HTTP `503` cuando alguno indica que se detuvo. El estado HTTP conserva el comportamiento de probe aunque la respuesta incluya diagnósticos adicionales.
 
 Cuando un componente proporciona detalles, la respuesta puede incluir `checks[]` con datos sanitizados:
 
@@ -220,7 +220,7 @@ Las métricas se mantienen en el proceso y se reinician cuando Adder se reinicia
 
 ## 8. Perfil de fugas de goroutines en Go 1.26 o posterior
 
-Go 1.26 o posterior puede generar un perfil de fugas de goroutines mediante `GOEXPERIMENT=goroutineleakprofile`. Activa el listener de depuración de Adder y ejecuta el proceso con la variable de entorno:
+Go 1.26 o posterior puede generar un perfil de fugas de goroutines mediante `GOEXPERIMENT=goroutineleakprofile`. Activa el servidor de depuración de Adder y ejecuta el proceso con la variable de entorno:
 
 ```bash
 GOEXPERIMENT=goroutineleakprofile \
@@ -235,7 +235,7 @@ Con el proceso en ejecución, solicita el perfil mediante `go tool pprof`:
 go tool pprof http://127.0.0.1:6060/debug/pprof/goroutineleak
 ```
 
-Usa el perfil para localizar goroutines que permanecen después de cancelar o detener el pipeline. Cierra el listener de depuración cuando termine el diagnóstico y protege el puerto si el proceso se ejecuta fuera de un entorno local.
+Usa el perfil para localizar goroutines que permanecen después de cancelar o detener el pipeline. Cierra el servidor de depuración cuando termine el diagnóstico y protege el puerto si el proceso se ejecuta fuera de un entorno local.
 
 ---
 
