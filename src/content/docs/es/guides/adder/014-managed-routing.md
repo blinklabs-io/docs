@@ -16,8 +16,8 @@ administrado con los demás modos de funcionamiento de Adder. La [referencia
 de comandos](./006-command_list) enumera la CLI completa; esta página describe
 los indicadores administrados y su comportamiento durante la ejecución.
 
-El modo administrado no cambia los pipelines normales de la CLI ni los
-integrados cuando falta `--managed-config-dir`. Esos pipelines conservan sus
+El modo administrado no cambia los flujos normales de la CLI ni los
+integrados cuando falta `--managed-config-dir`. Esos flujos conservan sus
 filtros, la presión inversa de salida, la precedencia de configuración, la API
 HTTP y el flujo público `/events` existentes.
 
@@ -32,8 +32,8 @@ requiere entonces la entrada `chainsync` con estos ajustes:
 - sin `intersect-point` explícito
 - sin opciones de filtro globales
 
-El modo administrado utiliza la fuente ChainSync como una cola activa. La API
-HTTP normal y el flujo público `/events` no se inician. Un reinicio del proceso
+El modo administrado utiliza la fuente ChainSync como una cola activa. Adder no
+inicia la API HTTP normal ni el flujo público `/events`. Un reinicio del proceso
 puede perder eventos entre ejecuciones porque Adder comienza en la punta actual
 en ese momento. Durante una reconexión dentro del proceso, Adder puede repetir
 eventos recientes o emitir un rollback. Ni el enrutador ni sus plugins
@@ -57,8 +57,8 @@ Los indicadores administrados son:
 | `--managed-allow-hosts` | Empty | Enumera los nombres de host de webhook aprobados por el operador. |
 | `--managed-allow-local-targets` | `false` | Permite receptores webhook de loopback para pruebas locales. |
 
-El listener de la API administrada solo acepta una dirección de loopback
-literal. Proporcione acceso remoto del operador mediante un túnel seguro
+El servidor de la API administrada solo acepta una dirección de loopback
+literal. Un túnel seguro administrado por separado proporciona el acceso remoto
 administrado por separado. El indicador `--managed-allow-local-targets` es una
 excepción explícita para los receptores webhook de loopback que se utilizan en
 pruebas locales. Los demás destinos webhook requieren HTTPS, un nombre de host
