@@ -25,7 +25,7 @@ This page covers dingo-operator v0.2.0 (chart 0.8.0), the dingonodes chart
 | dingo-operator | Turns each `DingoNode` into a StatefulSet, Services and NetworkPolicies, validates key Secrets, and rotates KES keys | `dingo-operator` |
 | DingoNodes | Relays and block producers, one Helm release of the dingonodes chart per network | `dingo` |
 | Bursa signer | Holds pool cold keys and issues operational certificates for the operator over mTLS | `bursa-signer` |
-| Bursa KES agent | Holds KES keys and signs headers for producers that connect to it over TLS | `bursa-kes-agent` |
+| Bursa KES agent | Holds KES keys and signs headers for producers that connect to it | `bursa-kes-agent` |
 | PostgreSQL | Keeps the signer's counter records, and the KES agent's sealed keys and slot guard | your database |
 
 A producer gets its KES key in one of two ways. Choose one per pool:
@@ -113,9 +113,12 @@ Helmfile `presync` hook.
 
 ## Create the certificates
 
-The operator talks to the signer over mutual TLS, and producers talk to the
-KES agent over TLS with a client certificate. Create one CA for each link. The
-commands below use ECDSA P-256 keys; any key type Go's TLS 1.3 accepts works.
+The operator talks to the signer over mutual TLS: Auto rotation requires an
+`https` signer endpoint and a client certificate. The link from producers to
+the KES agent uses TLS by default, and each part of it is optional: a server
+key pin, a client certificate, or plain TCP when something else secures the
+link, such as a service mesh. The commands below use ECDSA P-256 keys; any key
+type Go's TLS 1.3 accepts works.
 
 ### The signer link
 
@@ -145,13 +148,25 @@ its identity is `dingo-operator`.
 
 ### The KES agent link
 
-Repeat the same steps with a second CA. Give the agent's server certificate
-the agent's Service names (`bursa-kes-agent.bursa-kes-agent.svc` and
-`bursa-kes-agent.bursa-kes-agent.svc.cluster.local`), and issue one client
-certificate for the producers.
+This guide secures the link with TLS, a pinned server key, and a client
+certificate. Each is optional:
 
-Producers pin the agent's server key instead of trusting a CA. Compute the pin
-from the agent's server certificate:
+- **Server certificate.** Repeat the steps above with a second CA, and give
+  the agent's server certificate the agent's Service names
+  (`bursa-kes-agent.bursa-kes-agent.svc` and
+  `bursa-kes-agent.bursa-kes-agent.svc.cluster.local`).
+- **Client certificate.** Issue one for the producers from that CA. The agent
+  asks for one only when its client CA is set.
+- **Pin.** With a pin, the node checks the agent's server key instead of a
+  CA chain. Without one, it verifies the agent's certificate against its
+  trusted CAs by host name.
+
+For plain TCP, skip this section: set `kes_agent.attested_plaintext: true` in
+the agent's config and leave out its `tls` Secrets, and set
+`signingAgent.plaintext: true` on each producer in place of the pin and client
+certificate.
+
+Compute the pin from the agent's server certificate:
 
 ```sh
 openssl x509 -in kes-agent.crt -pubkey -noout \
@@ -320,6 +335,7 @@ age-keygen -o kes-agent-age.txt
 age-keygen -y kes-agent-age.txt   # goes into store.age_recipients below
 kubectl -n bursa-kes-agent create secret tls bursa-kes-agent-tls \
   --cert=kes-agent.crt --key=kes-agent.key --dry-run=client -o yaml
+# Only with client certificates:
 kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-client-ca \
   --from-file=ca.crt=kes-agent-ca.crt --dry-run=client -o yaml
 kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-age \
@@ -363,6 +379,7 @@ kesAgent:
           slots_per_kes_period: 129600
   tls:
     secretName: bursa-kes-agent-tls
+    # Leave out to accept producers without a client certificate.
     clientCASecretName: bursa-kes-agent-client-ca
   ageIdentity:
     secretName: bursa-kes-agent-age
@@ -414,7 +431,8 @@ rbac:
   keySecretNames:
     - pool-a-keys
     - pool-b-keys
-  # Every other Secret the operator reads.
+  # Every other Secret the operator reads. kes-agent-client only with
+  # client certificates on the KES agent link.
   readSecretNames:
     - bursa-signer-mtls
     - kes-agent-client
@@ -447,7 +465,7 @@ kubectl -n dingo create secret generic bursa-signer-mtls \
   --from-file=ca.crt=signer-ca.crt --dry-run=client -o yaml
 ```
 
-The producers' client certificate for the KES agent:
+The producers' client certificate for the KES agent, when you use one:
 
 ```sh
 kubectl -n dingo create secret tls kes-agent-client \
@@ -572,6 +590,7 @@ nodes:
           mode: Assisted
         signingAgent:
           address: bursa-kes-agent.bursa-kes-agent.svc:9443
+          # Both optional. For plain TCP, replace them with plaintext: true.
           serverSpkiSha256: <agent pin>
           clientCertSecretRef: kes-agent-client
 ```
