@@ -45,7 +45,7 @@ mkdir -p "$DINGO_HOME"
 
 ```
 cd $DINGO_HOME
-  wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.4/dingo-v0.90.4-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 <br>

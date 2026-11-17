@@ -33,7 +33,7 @@ Download the latest release from the <a href="https://github.com/blinklabs-io/di
 ```
 mkdir -p ~/dingo
 cd ~/dingo
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.93.0/dingo-v0.93.0-linux-amd64.tar.gz -O - | tar -xz
+  wget https://github.com/blinklabs-io/dingo/releases/download/v0.94.1/dingo-v0.94.1-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 You can verify the binary works by running:
@@ -137,12 +137,18 @@ data.
 
 ## Step 2 - Create dingo.yaml Configuration File
 
-For all Dingo v0.93.0 settings, defaults, and environment or command-line
+For all Dingo v0.94.1 settings, defaults, and environment or command-line
 overrides, see the [configuration reference](/guides/dingo/009-configuration-reference/).
-Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.93.0/dingo.yaml.example)
+Download the release-matched [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example)
 to use as a starting point for your own settings.
 
-Dingo ships with embedded Cardano network configurations (genesis files, config.json) for `preview`, `preprod`, `mainnet`, and DijkstraNet (`dijkstra`). You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
+Dingo ships with embedded Cardano network configurations for `preview`, `preprod`, `mainnet`, DijkstraNet (`dijkstra`), and `prime-mainnet`. You do not need to download them separately. Set `network: "dijkstra"` to select DijkstraNet; its network magic is `6`.
+
+Set the network value as follows to select Prime Mainnet:
+
+```yaml
+network: "prime-mainnet"
+```
 
 Create a `dingo.yaml` file in your dingo directory. The `$HOME` variable will automatically expand to your home directory path:
 
@@ -212,7 +218,7 @@ healthReadyGapSlots: 1000
 debugPort: 0
 network: "preview"
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 # Total NtC connection limit. Dingo ignores non-positive values.
@@ -229,6 +235,8 @@ storageMode: "core"
 
 EOF
 ```
+
+> 📝 A `privatePort` value of `0` disables the NtC TCP listener while keeping the Unix socket available. Set `privatePort` to a nonzero value when TCP access is required.
 
 > 📝 Leave `debugPort` set to `0` unless profiling is required. `debugPort` controls an optional pprof listener, stays separate from `metricsPort`, and remains disabled at `0`.
 
