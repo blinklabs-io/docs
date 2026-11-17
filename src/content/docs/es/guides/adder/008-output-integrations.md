@@ -21,6 +21,8 @@ plugins:
       event-types: blocks,transactions,rollbacks,governance
 ```
 
+`database-url` no tiene valor predeterminado. El valor predeterminado de `event-types` es `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`.
+
 El esquema contiene `arrival_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY`, `event_hash text`, `schema_version smallint` (actualmente `1`), `event_type text`, `event_time timestamptz` y `event_json jsonb`. Adder conserva todos los eventos seleccionados, incluido `input.rollback`, como registros de solo adición. Un rollback no elimina las filas históricas; los consumidores aplican los registros de rollback para obtener el estado activo de la cadena al reproducir las filas en orden de `arrival_id` para un único escritor de salida. Este orden también se mantiene cuando las marcas de tiempo se repiten o retroceden. Varios escritores simultáneos no proporcionan un orden global de la cadena. Las formas de almacenamiento incompatibles futuras requieren una nueva versión del esquema y una migración explícita.
 
 Adder ejecuta cada evento mediante una sentencia `INSERT` y, por tanto, una transacción de PostgreSQL. La salida no usa un lote ni un temporizador de vaciado. El canal de entrada compartido almacena como máximo diez eventos; el productor espera a que haya espacio. Adder guarda en `event_hash` el SHA-256 del JSON completo para comparar los bytes codificados por Go, mientras que PostgreSQL normaliza la representación almacenada en `jsonb`. Adder conserva todos los eventos recibidos, incluidos los duplicados idénticos. Así, un bloque reaplicado después de un rollback se conserva aunque su JSON coincida con el bloque anterior. Adder no recibe un identificador de ocurrencia ascendente que distinga una retransmisión de una reaplicación.
@@ -45,7 +47,7 @@ plugins:
 
 Los topics predeterminados son `adder/events/block`, `adder/events/rollback` y `adder/events/governance`. Adder también permite seleccionar `transactions`, `drep-registration`, `drep-update` y `drep-retirement`. Cada carga contiene el JSON completo del evento de Adder. La salida no establece la marca MQTT `RETAIN`.
 
-`broker` acepta URL `mqtt://` y `tls://`. `username` y `password` son opcionales, pero las credenciales requieren `tls://`. Cada instancia de Adder en ejecución debe tener un `client-id` distinto, porque el broker MQTT desconecta una sesión existente cuando otro cliente se conecta con el mismo identificador.
+`broker` acepta URL `mqtt://` y `tls://`; su valor predeterminado es `mqtt://127.0.0.1:1883`. `client-id` usa `adder-output` de forma predeterminada. `username` y `password` son opcionales y tienen como valor predeterminado una cadena vacía, pero las credenciales requieren `tls://`. `topic-prefix` usa `adder/events` de forma predeterminada y `qos` usa `1`. Cada instancia de Adder en ejecución debe tener un `client-id` distinto, porque el broker MQTT desconecta una sesión existente cuando otro cliente se conecta con el mismo identificador.
 
 El valor de `qos` puede ser `0`, `1` o `2`. Con QoS 1, una publicación completada significa que el broker envió `PUBACK`; con QoS 2, significa que el broker completó el intercambio de QoS 2. Ninguno de los dos confirma la entrega a los suscriptores. Con QoS 0, la finalización no incluye una confirmación del broker. La salida comunica mediante el canal de errores los eventos desconectados y las publicaciones fallidas, y no los reproduce desde un almacenamiento duradero. La salida se reconecta antes del siguiente evento si la conexión se interrumpe.
 
@@ -91,6 +93,8 @@ plugins:
       event-types: blocks,rollbacks,governance
 ```
 
+`project-id` y `topic-id` no tienen valores predeterminados y deben identificar un topic existente. El valor predeterminado de `event-types` es `blocks,rollbacks,governance`.
+
 Pub/Sub usa el topic `projects/{project-id}/topics/{topic-id}`. La salida envía el JSON completo del evento de Adder como `Data` del mensaje y establece el atributo `event_type`. El identificador del proyecto puede ser un [ID de proyecto o número de proyecto](https://cloud.google.com/pubsub/docs/pubsub-basics); también acepta identificadores antiguos con ámbito de dominio como `example.com:my-project`. Adder también permite seleccionar `transactions`, `drep-registration`, `drep-update` y `drep-retirement`. Los rollbacks permanecen como registros de eventos independientes; los consumidores deciden cómo afectan a los eventos anteriores.
 
 La salida espera a `PublishResult.Get` antes de aceptar el siguiente evento. Esta operación termina cuando el servicio acepta o rechaza el mensaje; no confirma que un suscriptor lo haya procesado. El umbral de mensajes del publicador es uno, por lo que la salida no agrupa eventos de forma intencionada. Cada solicitud tiene un plazo de diez segundos. La salida comunica los fallos mediante el canal de errores y no ofrece una reproducción local duradera.
@@ -114,6 +118,8 @@ plugins:
       event-types: blocks,transactions,rollbacks,governance
 ```
 
+El valor predeterminado de `url` es `http://127.0.0.1:9200`, el de `index` es `adder-events-v1`, el de `api-key` es una cadena vacía y el de `event-types` es `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`.
+
 El ID del documento es el SHA-256 del JSON completo del evento. La repetición del mismo JSON sobrescribe el mismo documento. Si cambia la marca de tiempo o la carga, Adder crea otro documento. Los rollbacks son documentos `input.rollback` independientes; la salida no elimina ni reescribe los eventos indexados anteriormente. Los clientes de búsqueda deben aplicar los eventos de rollback al obtener el estado activo de la cadena. Los resultados de búsqueda de Elasticsearch no proporcionan orden de inserción, por lo que esta salida por sí sola no sirve para reproducir la cadena en orden.
 
 La salida no usa un búfer de lotes ni un temporizador de vaciado: espera la respuesta de cada documento antes de tomar el siguiente evento. El canal de entrada compartido almacena diez eventos. Cada solicitud de índice tiene un plazo de diez segundos y reintenta los errores de transporte y las respuestas HTTP `429`, `502`, `503` o `504` hasta cuatro veces con una breve espera entre intentos. El ID de documento determinista hace que un reintento no produzca copias adicionales; aun así, un plazo agotado puede dejar el resultado en estado incierto. La salida registra los fallos y los envía al canal de errores cuando el búfer de 16 entradas tiene espacio. Al detenerse, descarta los eventos en cola. Para un esquema incompatible, crea un índice nuevo `-vN` y actualiza la configuración; el plugin no migra los índices existentes.
@@ -135,6 +141,8 @@ plugins:
       event-types: blocks,transactions,rollbacks,governance
 ```
 
+El valor predeterminado de `region` y `bucket` es una cadena vacía. `prefix` usa `adder/events` de forma predeterminada y `event-types` usa `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`.
+
 La clave tiene el formato `<prefix>/YYYY/MM/DD/<UTC timestamp>-<SHA-256 of JSON>.json`. El JSON contiene los campos `timestamp`, `context`, `payload` y `type` de Adder. La fecha procede de la marca de tiempo del evento en UTC. Reproducir el mismo evento escribe los mismos bytes en la misma clave. Los eventos distintos con la misma marca de tiempo usan claves diferentes. Un rollback es un registro de archivo `input.rollback` ordinario; la salida no elimina ni reescribe los objetos archivados anteriormente. Los consumidores deben aplicar los registros de rollback al construir el estado de la cadena.
 
 La salida no usa un búfer de lotes ni un vaciado en segundo plano: espera la respuesta de cada `PutObject` antes de tomar otro evento. El canal de entrada compartido del plugin puede contener diez eventos; el productor espera a que haya espacio. Al detenerse, cancela la carga en curso y descarta los eventos en cola. El SDK de AWS reintenta los errores reintentables durante esa solicitud, con un límite total de 30 segundos para la solicitud. La salida registra un error y lo comunica mediante el canal de errores cuando hay espacio; los fallos persistentes pueden llenar su búfer de 16 entradas y provocar la pérdida de notificaciones posteriores. Adder no conserva un evento fallido para reproducirlo y un plazo agotado deja la entrega en estado incierto. La reproducción de eventos entre reinicios del proceso requiere una fuente ascendente que permita la reproducción.
@@ -144,6 +152,8 @@ El permiso de AWS requerido es `s3:PutObject` sobre el prefijo seleccionado. Si 
 ## Amazon SQS y SNS
 
 `sqs` envía los eventos seleccionados de Adder a una cola. `sns` publica los eventos seleccionados en un topic. Ambas salidas usan la cadena de credenciales predeterminada de AWS. La configuración debe proporcionar las credenciales mediante un rol de IAM, un perfil o el entorno; Adder no almacena claves de acceso en su configuración.
+
+La cola indicada por `queue-url` y el topic indicado por `topic-arn` deben existir antes de iniciar Adder. `region` y `group-id` tienen como valor predeterminado una cadena vacía. `event-types` usa `blocks,rollbacks,governance` de forma predeterminada y `max-message-bytes` usa `262144`.
 
 ```yaml
 output: sqs
