@@ -255,7 +255,7 @@ description: Lista de Comandos de Adder.
 
 > habilita el enrutamiento administrado mediante este directorio de configuración (predeterminado "")
 >
-> Activa el modo administrado y requiere la entrada `chainsync`. Consulta la [referencia de enrutamiento administrado](./014-managed-routing.md) para conocer el formato de archivos, la API, los límites y el contrato de entrega.
+> Requiere la entrada `chainsync`. Consulta la [referencia de enrutamiento administrado](./014-managed-routing.md) para conocer el formato de archivos, la API, los límites y el contrato de entrega.
 
 ```text
   --managed-credentials-dir string
@@ -287,7 +287,7 @@ description: Lista de Comandos de Adder.
 
 > permite receptores webhook de loopback para pruebas locales (predeterminado `false`)
 
-> Debe habilitarse de forma explícita para usar destinos webhook de loopback.
+> El modo administrado requiere esta opción para usar destinos webhook de loopback.
 
 ```text
   --managed-address string
@@ -295,7 +295,7 @@ description: Lista de Comandos de Adder.
 
 > especifica la dirección del listener de la API privada administrada (predeterminado `127.0.0.1:8081`)
 
-> Debe usar una dirección IP literal de loopback.
+> La API administrada solo admite una dirección IP literal de loopback.
 
 ```text
   --managed-token-file string
