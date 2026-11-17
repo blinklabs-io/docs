@@ -324,7 +324,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
 >
-> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Las configuraciones heredadas de nivel superior `logging.level`, `--logging-level` y `LOGGING_LEVEL` se eliminaron; usa `plugins.output.log.level`, `OUTPUT_LOG_LEVEL` o `--output-log-level` para configurar el nivel.
+> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Adder eliminó las configuraciones heredadas de nivel superior `logging.level`, `--logging-level` y `LOGGING_LEVEL`; las opciones `plugins.output.log.level`, `OUTPUT_LOG_LEVEL` y `--output-log-level` configuran el nivel.
 <br />
 
 ```text
