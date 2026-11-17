@@ -5,7 +5,7 @@ description: "Adderのinput.governanceイベントのスキーマとフィルタ
 
 # ガバナンスイベント
 
-Adderは、Cardanoブロックチェーン上のオンチェーンガバナンスアクションと証明書の活動について、構造化イベントを出力します。イベントにはConway時代のガバナンスデータが含まれ、提案、投票、DRep登録、投票委任、憲法委員会の変更を監視できます。
+Adderは、Cardanoブロックチェーン上のオンチェーンガバナンスアクションと証明書の活動について、構造化イベントを出力します。AdderはイベントにConway時代のガバナンスデータを含め、提案、投票、DRep登録、投票委任、憲法委員会の変更を監視できるようにします。
 
 ## 概要
 
@@ -23,7 +23,7 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 
 ### コンテキストフィールド
 
-`context`オブジェクトは、ガバナンスデータが見つかったトランザクションとチェーン上の位置を示します。
+`context`オブジェクトは、ガバナンスデータを検出したトランザクションとチェーン上の位置を示します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
@@ -40,7 +40,7 @@ Adderは、同じトランザクションの通常の`input.transaction`イベ�
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `blockHash` | string | トランザクションを含むブロックの16進数エンコード済みハッシュ。 |
-| `transactionCbor` | string | 16進数形式の生トランザクションCBOR。`--input-chainsync-include-cbor`を設定した場合だけ含まれます。 |
+| `transactionCbor` | string | 16進数形式の生トランザクションCBOR。Adderは`--input-chainsync-include-cbor`を設定した場合だけこのフィールドを含めます。 |
 | `proposalProcedures` | array | このトランザクションで提案したガバナンスアクションの一覧。 |
 | `votingProcedures` | array | このトランザクションで実行した投票の一覧。 |
 | `drepCertificates` | array | DRepの登録、更新、または登録解除証明書の一覧。 |
@@ -99,8 +99,8 @@ DRepの状態変更を表します。
 | `certificateType` | string | `VoteDelegation`、`StakeVoteDelegation`、`VoteRegistrationDelegation`、`StakeVoteRegistrationDelegation`のいずれか。 |
 | `stakeCredential` | string | 委任元のステーク資格情報ハッシュを16進数でエンコードした値。 |
 | `drepType` | string | 委任先。`KeyHash`、`ScriptHash`、`Abstain`、`NoConfidence`のいずれか。 |
-| `drepHash` | string | DRep資格情報ハッシュを16進数でエンコードした値。`Abstain`または`NoConfidence`では省略されます。 |
-| `drepId` | string | Bech32形式のDRep ID。`Abstain`または`NoConfidence`では省略されます。 |
+| `drepHash` | string | DRep資格情報ハッシュを16進数でエンコードした値。`Abstain`または`NoConfidence`ではAdderはこのフィールドを省略します。 |
+| `drepId` | string | Bech32形式のDRep ID。`Abstain`または`NoConfidence`ではAdderはこのフィールドを省略します。 |
 | `poolKeyHash` | string | プールキーのハッシュを16進数でエンコードした値。ステーク委任と投票委任を組み合わせたタイプだけに含まれます。 |
 | `deposit` | `uint64` | 登録委任タイプのLovelaceデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。下流のコンシューマーは符号付き値としてデシリアライズしたり、`MaxInt64`でクランプしたりしないでください。 |
 
@@ -135,9 +135,9 @@ Conway台帳は、次の7種類の提案アクションを定義します。
 
 ガバナンスイベントは、次のCardano固有のパイプラインフィルターに対応します。
 
-- **DRepフィルタリング（`--filter-drep`）**: 特定のDRepに関係するイベントに一致します。対象にはDRepの登録、更新、登録解除証明書、そのDRepを対象とする投票委任証明書、そのDRepが投票者である投票手順が含まれます。16進数形式とBech32形式（スクリプトDRep IDを含む）に対応します。
+- **DRepフィルタリング（`--filter-drep`）**: 特定のDRepに関係するイベントに一致します。対象はDRepの登録、更新、登録解除証明書、そのDRepを対象とする投票委任証明書、そのDRepが投票者である投票手順です。16進数形式とBech32形式（スクリプトDRep IDを含む）に対応します。
 - **プールフィルタリング（`--filter-pool`）**: ステークプールに関係するイベントに一致します。対象は、SPOとしてプールが実行した投票手順と、プールキーハッシュを参照する投票委任証明書です。
-- **アドレスフィルタリング（`--filter-address`）**: ガバナンスアクションに関係するアドレスに一致します。対象には、提案の報酬アカウント、国庫引き出し先アドレス、委任元のステーク資格情報が含まれます。
+- **アドレスフィルタリング（`--filter-address`）**: ガバナンスアクションに関係するアドレスに一致します。対象は、提案の報酬アカウント、国庫引き出し先アドレス、委任元のステーク資格情報です。
 
 ### フィルタリング例
 
