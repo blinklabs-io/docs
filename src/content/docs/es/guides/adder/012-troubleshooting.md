@@ -10,9 +10,9 @@ eso, `http://localhost:6060/debug/pprof/goroutineleak` no es una ruta
 disponible. `GOEXPERIMENT=goroutineleakprofile` tampoco habilita un flujo HTTP
 compatible en Adder.
 
-La captura local con las herramientas de pruebas de Go evita exponer un
-listener de red. Los perfiles pueden contener datos de la aplicación y rutas
-locales, por lo que la captura debe usar un directorio temporal privado.
+La captura local usa las herramientas de pruebas de Go y no abre un listener de
+red. Los perfiles pueden contener datos de la aplicación y rutas locales; un
+directorio temporal privado limita su exposición.
 
 ## Capturar perfiles localmente
 
@@ -40,7 +40,5 @@ de trabajo y la duración del benchmark, y compara varias ejecuciones sin
 perfilado. Para obtener el procedimiento completo, consulta la página de
 [benchmarks y profiling](011-benchmarks).
 
-El listener de depuración está desactivado de forma predeterminada y estos
-comandos no abren ningún listener de red. Mantén los archivos de perfil en un
-directorio privado y no expongas un listener de profiling en una interfaz
-pública.
+El listener de depuración permanece desactivado de forma predeterminada. El
+flujo local mantiene los archivos de perfil fuera de una interfaz pública.
