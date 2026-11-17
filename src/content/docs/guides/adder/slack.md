@@ -33,9 +33,7 @@ plugins:
 ```
 
 The equivalent command line options are
-`--output-slack-webhook-urls` and `--output-slack-event-types`. The
-[command reference](./006-command_list.md) lists these options with the other
-Adder output settings.
+`--output-slack-webhook-urls` and `--output-slack-event-types`.
 
 ### Configuration fields
 
@@ -145,9 +143,9 @@ Adder logs delivery errors and sends them through the output plugin error
 channel. Error messages identify the affected destination and failure without
 exposing webhook URLs or other webhook secret values.
 
-The output runs a background delivery worker. Shutdown stops the worker and
-waits for it to exit. The output has no durable queue: events that remain
-pending when Adder stops are not recovered after a restart.
+The output runs a background delivery worker. During shutdown, Adder stops the
+worker and waits for it to exit. The output has no durable queue: Adder does
+not recover events that remain pending when it stops and restarts.
 
 ## Live check
 
