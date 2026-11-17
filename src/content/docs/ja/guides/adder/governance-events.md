@@ -9,9 +9,9 @@ Adderは、Cardanoブロックチェーン上のオンチェーンガバナン�
 
 ## 概要
 
-`chainsync`入力プラグインは、Conway時代のオンチェーンガバナンスデータを含むブロック内トランザクションごとに、`input.governance`イベントを1件出力します。1件のトランザクションからは必ず1件の`input.governance`イベントが生成され、そのトランザクションから検出したすべてのガバナンスデータをイベントにまとめます。
+`chainsync`入力プラグインは、Conway時代のオンチェーンガバナンスデータを含むブロック内トランザクションごとに、`input.governance`イベントを1件出力します。1件のトランザクションからは必ず1件の`input.governance`イベントを出力し、そのトランザクションから検出したすべてのガバナンスデータをイベントにまとめます。
 
-ガバナンスイベントは、同じトランザクションの通常の`input.transaction`イベントに加えて出力されます。ロールバック後の再生または再処理では、同じトランザクションが再度出力されることがあります。ガバナンスデータを含まないトランザクションは、`input.governance`イベントを生成しません。
+Adderは、同じトランザクションの通常の`input.transaction`イベントに加えてガバナンスイベントも出力します。ロールバック後の再生または再処理では、Adderが同じトランザクションを再度出力することがあります。ガバナンスデータを含まないトランザクションは、`input.governance`イベントを生成しません。
 
 - **イベントタイプ名**: `input.governance`
 
@@ -35,14 +35,14 @@ Adderは、Cardanoブロックチェーン上のオンチェーンガバナン�
 
 ### ペイロードフィールド
 
-`payload`オブジェクトには、ブロック情報とガバナンス関連項目の配列が含まれます。各配列は空の場合に省略されます。
+`payload`オブジェクトは、ブロック情報とガバナンス関連項目の配列を含みます。Adderは各配列が空の場合にその配列を省略します。
 
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `blockHash` | string | トランザクションを含むブロックの16進数エンコード済みハッシュ。 |
 | `transactionCbor` | string | 16進数形式の生トランザクションCBOR。`--input-chainsync-include-cbor`を設定した場合だけ含まれます。 |
-| `proposalProcedures` | array | このトランザクションで提案されたガバナンスアクションの一覧。 |
-| `votingProcedures` | array | このトランザクションで実行された投票の一覧。 |
+| `proposalProcedures` | array | このトランザクションで提案したガバナンスアクションの一覧。 |
+| `votingProcedures` | array | このトランザクションで実行した投票の一覧。 |
 | `drepCertificates` | array | DRepの登録、更新、または登録解除証明書の一覧。 |
 | `voteDelegationCertificates` | array | ステーク資格情報からDRepへの投票委任証明書の一覧。 |
 | `committeeCertificates` | array | 憲法委員会の承認または辞任証明書の一覧。 |
@@ -87,7 +87,7 @@ DRepの状態変更を表します。
 | `certificateType` | string | `Registration`、`Update`、`Deregistration`のいずれか。 |
 | `drepHash` | string | DRep資格情報ハッシュを16進数でエンコードした値。 |
 | `drepId` | string | Bech32形式のDRep ID（`drep1...`または`drep_script1...`）。 |
-| `deposit` | `uint64` | 登録時に必要なLovelaceのデポジット、または登録解除時に返却されるLovelaceのデポジット。値は`uint64`として保持され、0の場合は省略されます。符号付き値への変換や`MaxInt64`でのクランプは行いません。 |
+| `deposit` | `uint64` | 登録時に必要なLovelaceのデポジット、または登録解除時に返すLovelaceのデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。符号付き値への変換や`MaxInt64`でのクランプは行いません。 |
 | `anchor` | object | `{ "url", "dataHash" }`。DRepメタデータがない場合、両方の文字列は空です。 |
 
 ### `voteDelegationCertificates[]`
@@ -102,7 +102,7 @@ DRepの状態変更を表します。
 | `drepHash` | string | DRep資格情報ハッシュを16進数でエンコードした値。`Abstain`または`NoConfidence`では省略されます。 |
 | `drepId` | string | Bech32形式のDRep ID。`Abstain`または`NoConfidence`では省略されます。 |
 | `poolKeyHash` | string | プールキーのハッシュを16進数でエンコードした値。ステーク委任と投票委任を組み合わせたタイプだけに含まれます。 |
-| `deposit` | `uint64` | 登録委任タイプのLovelaceデポジット。値は`uint64`として保持され、0の場合は省略されます。符号付き値としてデシリアライズしたり、`MaxInt64`でクランプしたりしないでください。 |
+| `deposit` | `uint64` | 登録委任タイプのLovelaceデポジット。Adderは値を`uint64`として保持し、0の場合は省略します。下流のコンシューマーは符号付き値としてデシリアライズしたり、`MaxInt64`でクランプしたりしないでください。 |
 
 ### `committeeCertificates[]`
 
@@ -113,7 +113,7 @@ DRepの状態変更を表します。
 | `certificateType` | string | ホット資格情報を承認する`AuthHot`、またはコールド資格情報を辞任する`ResignCold`。 |
 | `coldCredential` | string | 委員会のコールド資格情報ハッシュを16進数でエンコードした値。 |
 | `hotCredential` | string | 委員会のホット資格情報ハッシュを16進数でエンコードした値。`AuthHot`の場合だけ含まれます。 |
-| `anchor` | object | 常にシリアライズされます。`ResignCold`証明書がメタデータを提供しない場合、文字列は空です。 |
+| `anchor` | object | Adderは常にシリアライズします。`ResignCold`証明書がメタデータを提供しない場合、文字列は空です。 |
 
 ---
 
@@ -136,7 +136,7 @@ Conway台帳は、次の7種類の提案アクションを定義します。
 ガバナンスイベントは、次のCardano固有のパイプラインフィルターに対応します。
 
 - **DRepフィルタリング（`--filter-drep`）**: 特定のDRepに関係するイベントに一致します。対象にはDRepの登録、更新、登録解除証明書、そのDRepを対象とする投票委任証明書、そのDRepが投票者である投票手順が含まれます。16進数形式とBech32形式（スクリプトDRep IDを含む）に対応します。
-- **プールフィルタリング（`--filter-pool`）**: ステークプールに関係するイベントに一致します。対象には、SPOとしてプールが実行した投票手順と、プールのキー ハッシュを参照する投票委任証明書が含まれます。
+- **プールフィルタリング（`--filter-pool`）**: ステークプールに関係するイベントに一致します。対象は、SPOとしてプールが実行した投票手順と、プールキーハッシュを参照する投票委任証明書です。
 - **アドレスフィルタリング（`--filter-address`）**: ガバナンスアクションに関係するアドレスに一致します。対象には、提案の報酬アカウント、国庫引き出し先アドレス、委任元のステーク資格情報が含まれます。
 
 ### フィルタリング例
@@ -169,7 +169,7 @@ plugins:
 
 ## JSON出力例
 
-次の例は、**DRep登録証明書**を表す`input.governance`イベントのペイロードです。
+次の例は、**DRep登録証明書**を含む`input.governance`イベントのペイロードです。
 
 ```json
 {
