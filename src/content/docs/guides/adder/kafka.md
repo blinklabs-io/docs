@@ -48,7 +48,7 @@ Adder rejects an unknown event type or an empty `event-types` value. Store SASL 
 
 ## Startup and delivery behavior
 
-Before Adder starts the Kafka worker, it pings a configured broker. Adder does not start the worker when the broker connectivity check fails.
+Before Adder starts the Kafka output, it checks connectivity by pinging a configured broker. If the check fails, Adder does not start the output.
 
 For every selected event, Adder sends one record with these properties:
 
