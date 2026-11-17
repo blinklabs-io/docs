@@ -14,6 +14,23 @@ import openapi "github.com/blinklabs-io/adder/openapi"
 
 以前のモジュールパス `github.com/blinklabs-io/cardano-node-api/openapi` を使用するプロジェクトは、`github.com/blinklabs-io/adder/openapi` へ移行します。`openapi/go.mod` では、モジュール名として `github.com/blinklabs-io/adder/openapi` を指定します。
 
+## APIルートと動作
+
+Adder API は、次のルートを提供します。`/ping` と `/healthcheck`、および `/v1` 配下のルートは、末尾のスラッシュを付けた形式にも対応します。
+
+| 区分 | メソッドとパス | 動作 |
+| --- | --- | --- |
+| ルート | `GET /ping` | サーバーが到達可能な場合に `pong` を返します。 |
+| ルート | `GET /healthcheck` | ヘルスチェック結果を JSON で返します。すべてのチェックが成功すると `200`、いずれかが失敗すると `503` を返します。 |
+| ルート | `GET /events` | イベントをストリーミングします。通常は SSE を使用し、WebSocket のアップグレード要求には WebSocket で応答します。 |
+| `/v1` | `POST /v1/fcm` | JSON の `fcmToken` を保存します。`fcmToken` が空の場合、または JSON が不正な場合は JSON 形式の `400` エラーを返します。 |
+| `/v1` | `GET /v1/fcm/{token}` | 指定した FCM トークンを返します。トークンが存在しない場合は `404` を返します。 |
+| `/v1` | `DELETE /v1/fcm/{token}` | 指定した FCM トークンを削除します。削除できた場合は `204`、トークンが存在しない場合は `404` を返します。 |
+| `/v1` | `GET /v1/qrcode` | Adder Mobile の接続に使用する QR コードを含む HTML ページを返します。 |
+| Swagger | `GET /swagger/` | Swagger UI を表示します。URL には末尾の `/` を付けます。 |
+
+`/events` は SSE と WebSocket のストリーミングに対応します。HTTP サーバーは書き込みタイムアウトを設定しないため、書き込みタイムアウトによってストリームを終了しません。サーバーは構造化アクセスログを記録し、ハンドラーの panic を回復して異常終了を防ぎます。
+
 ---
 
 <!-- doc-holiday-watermark -->
