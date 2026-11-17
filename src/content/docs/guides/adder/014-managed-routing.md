@@ -234,9 +234,9 @@ Authorization: Bearer <operator token>
 ```
 
 Adder returns `401 Unauthorized` for a missing or invalid bearer token and
-sets `WWW-Authenticate: Bearer`. The token file must remain restricted and
-contain at least 32 characters. Requests read the published files; reload
-requests do not accept replacement configuration bodies.
+sets `WWW-Authenticate: Bearer`. Requests use the loaded token and read the
+published files; reload requests do not accept replacement configuration
+bodies.
 
 | Request | Body | Result |
 | --- | --- | --- |
@@ -286,7 +286,7 @@ queue. Already submitted work can have an uncertain outcome.
 
 ## Queue isolation, limits, and counters
 
-Managed dispatch uses bounded per customer and per destination queues. Each
+Managed dispatch uses bounded per-customer and per-destination queues. Each
 customer has one filter worker that preserves input order, while destination
 workers operate independently. A slow customer does not consume another
 customer's queue allowance. Overlapping rules coalesce into one submission
@@ -305,14 +305,14 @@ The default managed routing bounds are:
 | Destination queue | `256` items |
 | Event JSON representation | `1 MiB` |
 | Accounted retained data per queue | `16 MiB` |
-| Process wide managed reservation budget | `512 MiB` |
+| Process-wide managed reservation budget | `512 MiB` |
 
 Adder reserves queue capacity before a configuration switch. Each queue uses
 a conservative charge of eight times the encoded event size plus fixed
 overhead. Configuration objects, matched rule metadata, plugin channel
 slots, decoded credentials, and retired configurations with queued events
-also consume the process wide budget. These are routing work bounds, not a
-total RSS guarantee; Go runtime overhead, input plugin buffers, and transient
+also consume the process-wide budget. These are routing work bounds, not a
+total process memory guarantee; Go runtime overhead, input plugin buffers, and transient
 encoder allocations remain outside the guarantee.
 
 A full queue drops the new item and increments that lane's drop counters. A
@@ -348,14 +348,14 @@ handles one outstanding plugin event at a time and only observes that the
 plugin finished processing. Plugin channel acceptance therefore never proves
 that a provider accepted, stored, or delivered the event.
 
-External outcomes remain unknown, including an accept then disconnect failure
+External outcomes remain unknown, including an accept-then-disconnect failure
 that can cause a retry and a duplicate send. HTTP and log write errors remain
 separate diagnostics. A destination that fails or exhausts its active work
 budget remains degraded, while another customer's destination continues
 independently.
 
-HTTP attempts have a five second deadline. Managed destination processing has
-a 15 second active work budget, excluding time waiting for its shared quota.
+HTTP attempts have a five-second deadline. Managed destination processing has
+a 15-second active work budget, excluding time waiting for its shared quota.
 Webhook retries remain bounded. A provider's `429` response and
 `Retry-After` value delay every destination in the canonical target
 authority's shared limit group; another origin progresses independently. The
@@ -388,13 +388,13 @@ Managed mode restricts destinations to `log` and `webhook`:
 | Adapter | Managed disposition |
 | --- | --- |
 | `log` | Enabled for trusted local JSON append files whose basename starts with the owning customer ID followed by a period. |
-| `webhook` | Enabled for one target using `adder` or `discord` format, instance owned credentials, confined transport, authority quota, and bounded retries. |
-| `slack`, `telegram`, `discord`, `matrix`, `signal`, `push` | Rejected because bot or server lifecycle, multi target sending, or provider account quotas require a dedicated adapter. |
-| `sns`, `sqs`, `pubsub`, `s3`, `kafka`, `nats`, `mqtt`, `rabbitmq`, `redis`, `postgres`, `clickhouse`, `elasticsearch` | Rejected because SDK or broker buffers, retries, endpoint discovery, credentials, and quota boundaries require a dedicated adapter. |
-| `notify`, `notify-json` | Rejected because desktop and file side effects are not customer isolated. |
+| `webhook` | Enabled for one target using `adder` or `discord` format, instance-owned credentials, confined transport, authority quota, and bounded retries. |
+| `slack`, `telegram`, `discord`, `matrix`, `signal`, `push` | Managed mode rejects these adapters because bot or server lifecycle, multi-target sending, or provider account quotas require a dedicated adapter. |
+| `sns`, `sqs`, `pubsub`, `s3`, `kafka`, `nats`, `mqtt`, `rabbitmq`, `redis`, `postgres`, `clickhouse`, `elasticsearch` | Managed mode rejects these adapters because SDK or broker buffers, retries, endpoint discovery, credentials, and quota boundaries require a dedicated adapter. |
+| `notify`, `notify-json` | Managed mode rejects these adapters because desktop and file side effects are not customer-isolated. |
 
 The output registry alone does not make an adapter available in managed mode.
-An adapter must define its lifecycle, allowed events, fanout, retained
+An adapter must define its lifecycle, allowed events, delivery to multiple destinations, retained
 buffers, rate limits, credentials, target restrictions, and observable
 outcomes before managed mode can enable it.
 
