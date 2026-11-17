@@ -20,7 +20,7 @@ description: "Adderコマンドの一覧です。"
 
 > 読み込む設定ファイルへのパス
 
-> 複数の方法で同じ設定を指定した場合、Adderは次の優先順位を使用します。CLIフラグ > 環境変数 > YAML設定ファイル > デフォルト値。
+> 複数の方法で同じ設定を指定した場合、Adderは次の優先順位を使用します。CLIフラグ > YAML設定ファイル > 環境変数 > デフォルト値。
 
 ***
 
@@ -267,7 +267,7 @@ description: "Adderコマンドの一覧です。"
 
 > `output.log`のログ出力のしきい値を設定します。指定できる値は`debug`、`info`、`warn`、`error`です（デフォルトは"info"）。`debug`と`info`ではイベントレコードを出力し、`warn`と`error`では出力を抑制します。他の出力プラグインを選択した場合も、このしきい値によってstderrに出力するAdderアプリケーションの診断情報を絞り込みます。
 >
-> 同じ設定はYAMLの`plugins.output.log.level`または環境変数`OUTPUT_LOG_LEVEL`でも指定できます。従来の`--logging-level`フラグとトップレベルのYAML設定`logging.level`は削除されており、指定すると拒否されます。従来の環境変数`LOGGING_LEVEL`も削除されており、指定しても無視されます。
+> 同じ設定はYAMLの`plugins.output.log.level`または環境変数`OUTPUT_LOG_LEVEL`でも指定できます。従来のYAML設定`logging.level`は`plugins.output.log.level`へ移行されます。従来の`--logging-level`フラグは削除されており、指定すると拒否されます。従来の環境変数`LOGGING_LEVEL`は無視されます。
 <br />
 
 ```
@@ -396,7 +396,7 @@ adder notifications validate --config <path> [--json]
 | フィールド | 説明 |
 | --- | --- |
 | `schemaVersion` | 必須の値は`1`です。 |
-| `network.name` | サポートされるCardanoネットワーク`mainnet`、`preprod`、`preview`のいずれかを指定します。必須です。 |
+| `network.name` | サポートされるCardanoネットワーク`mainnet`、`preprod`、`preview`、`dijkstra`のいずれかを指定します。必須です。 |
 | `network.customAddress`と`network.customPort` | 任意のカスタムノードアドレスとポートです。両方を一緒に設定します。`customPort`は`1`から`65535`の範囲で指定します。 |
 | `monitor.everything` | サポートされるすべての対象を監視する場合は`true`にします。このフィールドを設定するか、`wallets`、`dreps`、`pools`、`assets`、`policies`のいずれかに少なくとも1つの対象を設定します。 |
 | `monitor.wallets` | 監視するウォレットアドレス。 |
