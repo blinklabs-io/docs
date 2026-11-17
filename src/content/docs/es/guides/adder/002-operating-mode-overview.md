@@ -3,7 +3,7 @@ title: Resumen de los modos de funcionamiento
 description: Modos de funcionamiento de Adder. Adder ofrece dos modos principales, Adder Tray y Adder CLI.
 ---
 
-Adder ofrece dos modos de funcionamiento, cada uno adaptado a distintos usuarios y entornos de despliegue. Elige el modo que proporcione el equilibrio adecuado entre facilidad de uso, configuración y control operativo.
+Adder ofrece tres modos de funcionamiento, cada uno adaptado a distintos usuarios y entornos de despliegue. Elige el modo que proporcione el equilibrio adecuado entre facilidad de uso, configuración y control operativo.
 
 ## 1. Adder Tray (Windows y macOS)
 
@@ -33,7 +33,7 @@ Adder Tray es una aplicación de escritorio que se ejecuta en la bandeja del sis
 
 ## 2. Adder CLI / Monitor de eventos (binario para Linux)
 
-El binario de línea de comandos ofrece acceso completo al procesamiento de eventos de Adder. Está pensado para operadores, desarrolladores e integradores que necesitan controlar cómo se filtran y emiten los eventos.
+El binario de línea de comandos ofrece acceso completo al procesamiento de eventos de Adder. Está pensado para operadores, desarrolladores e integradores que necesitan controlar cómo se filtran y emiten los eventos. Si la ejecución no incluye `--managed-config-dir`, Adder mantiene este flujo CLI normal, así como el pipeline integrado existente.
 
 - [Guía para Linux](../005-use-adder-on-linux)
 
@@ -63,6 +63,21 @@ El binario de línea de comandos ofrece acceso completo al procesamiento de even
 - Sistemas automáticos de alertas: webhooks, notificaciones push y procesamiento de JSON.
 - Desarrolladores que integran Adder como biblioteca Go.
 
+## 3. Enrutamiento administrado de clientes (CLI)
+
+El modo de enrutamiento administrado distribuye eventos de ChainSync entre clientes independientes, cada uno con sus propios filtros y destinos con nombre. Adder lo activa únicamente cuando la ejecución incluye `--managed-config-dir`; sin esta opción, el flujo CLI normal y el pipeline integrado permanecen sin cambios.
+
+### Características principales
+
+- Requiere la entrada `chainsync` con `intersect-tip=true` y `auto-reconnect=true`. No permite `state-path` ni un punto de intersección explícito.
+- Rechaza los filtros globales para que cada cliente defina su propio enrutamiento.
+- Expone una API privada para recargar configuraciones y consultar el estado. La API escucha únicamente en una dirección de loopback literal configurada con `--managed-address` y autentica todas las solicitudes mediante un token restringido indicado por `--managed-token-file`.
+- Admite únicamente los adaptadores `log` y `webhook` en este modo. Las configuraciones validan los destinos de webhook y las rutas de los archivos de registro según la política administrada.
+- Asigna una cola de entrada independiente a cada cliente y una cola independiente a cada destino. Las colas tienen límites definidos, impiden que un cliente lento bloquee a los demás y registran los eventos descartados cuando alcanzan su capacidad.
+- No inicia la API pública `/events` en este modo.
+
+Para conocer el formato de configuración, las restricciones de los destinos y las operaciones de recarga, consulta la [referencia de enrutamiento administrado](../014-managed-routing).
+
 ## Matriz de decisión rápida
 
 | Requisito | Modo recomendado |
@@ -70,6 +85,8 @@ El binario de línea de comandos ofrece acceso completo al procesamiento de even
 | Notificaciones sencillas | **Adder Tray** |
 | Sin experiencia con la línea de comandos | **Adder Tray** |
 | Personalización completa | **Adder CLI** |
+| Enrutamiento independiente por cliente | **Enrutamiento administrado** |
+| Recarga de clientes sin reiniciar ChainSync | **Enrutamiento administrado** |
 | Configuración YAML | **Adder CLI** |
 | Webhooks / salidas JSON | **Adder CLI** |
 | Notificaciones nativas del sistema operativo | **Adder Tray** |
