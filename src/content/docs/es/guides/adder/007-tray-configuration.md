@@ -84,7 +84,7 @@ Cuando una configuración existente no contiene un filtro estructurado, Adder Tr
 
 Durante la importación, Adder Tray separa los valores delimitados por comas, elimina los espacios al principio y al final e ignora las entradas vacías. Si la importación encuentra al menos un objetivo, desactiva `monitor_everything` para conservar la selección explícita.
 
-Después de guardar la configuración del asistente, los valores nuevos pertenecen a los campos estructurados del tray, no a las claves por objetivo de `filter.cardano`. Adder Tray elimina las claves heredadas del motor auxiliar cuando escribe la configuración actualizada.
+Después de guardar la configuración del asistente, los valores nuevos pertenecen a los campos estructurados de Adder Tray, no a las claves por objetivo de `filter.cardano`. Adder Tray elimina las claves heredadas del motor auxiliar cuando escribe la configuración actualizada.
 
 Si `adder-tray.yaml` no contiene un modo ni listas de objetivos, Adder Tray selecciona `monitor_everything: true` al reconstruir la configuración para que el asistente continúe con el modo general.
 
