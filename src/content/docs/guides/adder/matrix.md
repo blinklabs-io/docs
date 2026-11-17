@@ -7,7 +7,7 @@ description: Configure Adder to send selected events as Matrix room messages.
 
 The `matrix` output sends selected Adder events to one or more Matrix rooms as
 plain text `m.room.message` events. This guide covers configuration,
-authentication, room validation, Matrix Client Server API delivery, retry
+authentication, room validation, Matrix Client-Server API delivery, retry
 behavior, and operational limits.
 
 ## Prerequisites
@@ -65,7 +65,7 @@ that fails validation prevents the output from starting.
 
 ## Event selection
 
-The default selection sends these event types:
+By default, Adder sends these event types:
 
 - `blocks`
 - `rollbacks`
@@ -92,7 +92,7 @@ Authorization: Bearer <access-token>
 Content-Type: application/json
 ```
 
-The JSON body contains a plain text message:
+Adder sends a plain text message in this JSON body:
 
 ```json
 {
@@ -123,9 +123,9 @@ The output retries these conditions:
 The output uses exponential backoff between retries. For HTTP `429`, Adder
 uses a valid `Retry-After` value when the homeserver provides one. It accepts a
 decimal delay in seconds or an HTTP date. Adder also accepts the legacy
-`retry_after_ms` response field when the header is absent. A rate limit delay
-cannot exceed one minute. If no usable rate limit hint exists, Adder uses its
-bounded backoff instead.
+`retry_after_ms` response field when the homeserver omits the header. A rate
+limit delay cannot exceed one minute. If no usable rate limit hint exists, Adder
+uses its bounded backoff instead.
 
 Other HTTP `4xx` responses permanently fail delivery and do not trigger retries.
 After the retry limit, Adder reports the delivery failure in the `output.matrix`
