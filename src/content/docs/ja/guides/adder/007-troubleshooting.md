@@ -192,6 +192,10 @@ Webhookのメトリクスと、設定済みAPIリスナーでの確認方法は�
 
 次のメトリクスで、Webhook配信の試行、最終結果、試行ごとの所要時間を確認します。
 
+```bash
+curl http://localhost:8080/metrics
+```
+
 | メトリクス | 説明 |
 | --- | --- |
 | `adder_webhook_http_attempts_total{status_class}` | Webhookの論理HTTP試行数。`status_class`は`1xx`、`2xx`、`3xx`、`4xx`、`5xx`、`network`、`other`のいずれかです。リダイレクトは最終レスポンスのクラスで1回として数えます。 |
