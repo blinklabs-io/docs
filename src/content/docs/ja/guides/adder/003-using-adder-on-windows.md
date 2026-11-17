@@ -82,7 +82,7 @@ Adderアプリを検索して開きます。
 <a id="step-31---select-a-cardano-network-that-you-want-to-monitor"></a>
 
 ### ステップ 3.1 - 監視する Cardano ネットワークを選択します。
-`Mainnet`、`Preprod`、`Preview`、または`Dijkstra`（`DijkstraNet`）を選択して、監視するネットワークを指定します。
+`Mainnet`、`Preprod`、`Preview`、または`Dijkstra`（`DijkstraNet`）を選択し、監視するネットワークを指定します。
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -131,7 +131,7 @@ Adderは、デスクトップ通知を提供するように既に設定されて
 
 ### ステップ3.4 - イベントアラート
 デスクトップアラートを受信したいイベントのチェックボックスを選択します。
-`Chain rollbacks`チェックボックスでは、`Blocks minted`とは別にチェーンのロールバック通知を設定できます。`Chain rollbacks`を選択すると、ロールバック通知が有効になります。
+`Chain rollbacks`チェックボックスを使用すると、`Blocks minted`とは独立してチェーンのロールバック通知を設定できます。ロールバック通知を有効にするには、`Chain rollbacks`を選択します。
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
