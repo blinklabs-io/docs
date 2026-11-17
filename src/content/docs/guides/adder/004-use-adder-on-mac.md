@@ -24,6 +24,22 @@ After installation, the installer makes a best effort to create `/usr/local/bin/
 - Open `Adder` from `/Applications`.
 - Or run `open /Applications/Adder.app` in Terminal.
 
+## Configure startup and background activity
+
+During Adder setup, select `Start Adder automatically on login / reboot` to control whether Adder Tray starts automatically. The setting synchronizes the tray launch agent with macOS Login Items.
+
+The setup screen shows whether Adder Tray's background activity is registered and running. Select `Open Login Items Settings...` to review or change the macOS settings. In System Settings, open `General > Login Items & Extensions` and review `Open at Login` and `App Background Activity`.
+
+## Manage notification rules
+
+From the Adder Tray menu, select `Notification Rules...` to edit notification targets and categories for `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`. Select the notification categories that each target receives, or select `Monitor Everything` instead of individual targets. `Monitor Everything` is exclusive and cannot be selected with specific targets.
+
+Select `Apply` to persist the changes and hot refresh notification rules and rate limits without restarting Adder Tray. Deleting a target requires confirmation. If applying changes displays a reconnect warning, the editor remains open with its inputs re-enabled so the changes can be retried.
+
+## View Adder Tray details
+
+From the Adder Tray menu, select `About` to open the in-app dialog. When a commit hash is available, the dialog shows `Version: <version> (commit: <hash>)`; otherwise, it shows the version alone.
+
 ## Build a local package
 
 Run the following command to create a package for local testing:
