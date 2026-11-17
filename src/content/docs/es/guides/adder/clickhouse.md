@@ -12,6 +12,10 @@ ClickHouse seleccionada y escribe los eventos como filas `JSONEachRow` mediante
 HTTP. Esta referencia describe la configuración YAML, el esquema de la tabla y
 el comportamiento de lotes, errores, duplicados, rollbacks y apagado.
 
+Consulta la [referencia de comandos](./006-command_list.md) para las opciones de
+línea de comandos y la [guía general de Adder](../001-adder.md) para obtener una
+visión general de las salidas y los modos de funcionamiento.
+
 ## Configuración
 
 Configure la salida en YAML:
@@ -37,6 +41,10 @@ La salida admite estas claves:
 | `username` | `default` | Debe contener un nombre de usuario no vacío. |
 | `password` | `""` | Es opcional. Cuando contiene un valor, `url` debe usar `https://` fuera de `localhost` o de una dirección de loopback. |
 | `event-types` | `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement` | Debe contener al menos un tipo admitido separado por comas. |
+
+La salida no sigue redirecciones HTTP. Por tanto, las credenciales de ClickHouse
+no se envían a otro origen. La regla de `https://` para las contraseñas sigue
+aplicándose fuera de `localhost` y de las direcciones de loopback.
 
 Los nombres admitidos para `event-types` son `blocks`, `transactions`,
 `rollbacks`, `governance`, `drep-registration`, `drep-update` y
@@ -65,11 +73,12 @@ La salida acumula eventos y envía un lote cuando alcanza 100 eventos o cuando
 transcurre un segundo, lo que ocurra primero. Cada vaciado ejecuta una sola
 instrucción `INSERT` con formato `JSONEachRow`.
 
-La salida espera la finalización HTTP del lote antes de considerarlo completado.
-El ajuste `async_insert=0` mantiene la inserción síncrona aunque el perfil del
-usuario de ClickHouse habilite inserciones asíncronas. El ajuste
-`wait_end_of_query=1` y la inspección del cuerpo de la respuesta permiten
-detectar errores que ClickHouse comunica al finalizar la consulta.
+La salida usa una confirmación síncrona: espera la finalización HTTP del lote
+antes de considerarlo completado. El ajuste `async_insert=0` mantiene la
+inserción síncrona aunque el perfil del usuario de ClickHouse habilite
+inserciones asíncronas. El ajuste `wait_end_of_query=1` y la inspección del
+cuerpo de la respuesta permiten detectar errores que ClickHouse comunica al
+finalizar la consulta.
 
 Cuando Adder se detiene, la salida consume los eventos aceptados que aún están
 en su búfer e intenta un vaciado final con un límite de diez segundos.
