@@ -118,7 +118,7 @@ Each item represents a Constitutional Committee credential change.
 
 JSON represents the three `deposit` fields as numeric values. The JSON format does not enforce a language-specific integer type. Consumers must deserialize each present value as a non-negative unsigned 64-bit integer and preserve the full range from `0` through `18,446,744,073,709,551,615`.
 
-Values greater than `9,223,372,036,854,775,807` exceed the signed 64 bit maximum. Consumers must not convert these values to signed integers or clamp them at that maximum.
+Values greater than `9,223,372,036,854,775,807` exceed the signed 64-bit maximum. Consumers must not convert these values to signed integers or clamp them at that maximum.
 
 The following example shows the three deposit fields, including values above the signed 64 bit maximum:
 
