@@ -25,7 +25,7 @@ plugins:
 | Opción | Descripción |
 | --- | --- |
 | `homeserver-url` | URL base del homeserver de Matrix. Una URL remota debe usar `https://`. Adder solo permite `http://` para pruebas con `localhost`, `127.0.0.1` o `::1`. |
-| `access-token` | Token de acceso de la cuenta de Matrix. Es obligatorio y debe permanecer en una configuración administrada como secreto. La cuenta debe haberse unido a cada sala de destino y tener permiso para enviar mensajes. |
+| `access-token` | Token de acceso de la cuenta de Matrix. Es obligatorio. La configuración debe gestionarlo como un secreto. La cuenta debe haberse unido a cada sala de destino y tener permiso para enviar mensajes. |
 | `room-ids` | Lista de IDs de salas separados por comas. Debe incluir al menos un ID válido que empiece por `!` y no puede contener espacios en blanco. También acepta IDs de salas de la versión 12 sin sufijo de servidor, como los descritos en la [especificación de salas de la versión 12](https://spec.matrix.org/v1.19/rooms/v12/). |
 | `event-types` | Tipos de eventos separados por comas. El valor predeterminado es `blocks,rollbacks,governance`. Los tipos admitidos también incluyen `transactions`, `drep-registration`, `drep-update` y `drep-retirement`. |
 
@@ -49,7 +49,7 @@ El cuerpo JSON usa `m.text` y contiene el texto del evento:
 
 El campo `body` contiene `Adder <type>`, un salto de línea y el JSON completo del evento de Adder. La salida genera un ID de transacción con el formato `adder-<randomPrefix>-<counter>`. Adder conserva el mismo `txnId` para todos los reintentos del mismo evento en la misma sala, lo que permite al homeserver deduplicar esos reintentos. Cada sala recibe su propia solicitud.
 
-El homeserver acepta la entrega cuando responde con HTTP `200` y un `event_id`. Esta respuesta confirma que el homeserver aceptó el evento; no confirma que una persona haya leído el mensaje.
+El homeserver confirma la aceptación cuando responde con HTTP `200` y un `event_id`. Esta respuesta confirma que el homeserver aceptó el evento; no confirma que una persona haya leído el mensaje.
 
 ## Reintentos y límites de frecuencia
 
@@ -61,7 +61,7 @@ La entrega usa como máximo tres reintentos después del intento inicial:
 - Las esperas exponenciales comienzan con un segundo y aumentan hasta el siguiente intento. Una sugerencia de `Retry-After` o `retry_after_ms` que supere un minuto excede la ventana permitida y produce un error en lugar de una espera más larga.
 - Las respuestas HTTP `4xx` permanentes, excepto `408` y `429`, terminan la entrega sin reintento. Esto incluye errores de autorización o de permisos, como HTTP `401` y `403`.
 
-La salida comunica cada fallo de entrega mediante el canal de errores del plugin y lo registra con el componente `output.matrix`. No existe una cola persistente. Adder descarta los mensajes que sigan en curso o pendientes cuando el proceso se detiene o se reinicia.
+La salida comunica cada fallo de entrega mediante el canal de errores del plugin y lo registra con el componente `output.matrix`. No existe una cola persistente. Al apagar o reiniciar Adder, la salida cancela la entrega en curso y descarta los mensajes pendientes.
 
 ## Verificación
 
