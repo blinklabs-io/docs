@@ -256,7 +256,7 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
 >
 > Leave this option empty to disable cursor persistence. Set a SQLite filename to create or reopen the cursor file and resume from the persisted state after a restart.
 >
-> See the [ChainSync cursor persistence reference](./chainsync-cursor-persistence.md) for restart, flush, rollback, and Go API details.
+> See the [ChainSync cursor persistence reference](./chainsync-cursor-persistence.md) for restart behavior, flush timing, rollback handling, and Go API details.
 
 ***
 
@@ -343,7 +343,7 @@ Managed routing starts when `--managed-config-dir` is set. See the [managed rout
   
 > sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The selected output's threshold also filters Adder application diagnostics on stderr.
 >
-> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder removes the top-level `logging.level` YAML setting, `--logging-level` flag, `LOGGING_LEVEL` environment variable, and `Config.Logging` configuration. Use `--output-log-level` or the selected output's `output.log.level` setting instead.
+> Configure the same setting through YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder removes the top-level `logging.level` YAML setting, `--logging-level` flag, `LOGGING_LEVEL` environment variable, and `Config.Logging` configuration. Set `--output-log-level` or the selected output's `output.log.level` instead.
 <br />
 
 ```
