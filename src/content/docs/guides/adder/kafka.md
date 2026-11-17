@@ -25,12 +25,12 @@ Configure these parameters under `plugins.output.kafka`:
 
 | Parameter | Description |
 | --- | --- |
-| `brokers` | Comma separated Kafka bootstrap addresses in `host:port` format. The default is `127.0.0.1:9092`. Adder requires at least one valid address. |
+| `brokers` | Comma-separated Kafka bootstrap addresses in `host:port` format. The default is `127.0.0.1:9092`. Adder requires at least one valid address. |
 | `topic` | Kafka topic name. The default is `adder.events`. Use 1 to 249 ASCII letters, digits, dots, underscores, or hyphens, and do not use a dot-only name. |
 | `username` | Optional SASL PLAIN username. Set it together with `password`. |
 | `password` | Optional SASL PLAIN password. Set it together with `username`. |
 | `tls` | Enables TLS for broker connections. The default is `false`. Set it to `true` when using SASL PLAIN credentials. |
-| `event-types` | Comma separated event type names. The default is `blocks,rollbacks,governance`. |
+| `event-types` | Comma-separated event type names. The default is `blocks,rollbacks,governance`. |
 
 Adder accepts these event type names:
 
@@ -54,7 +54,7 @@ For every selected event, Adder sends one record with these properties:
 - Adder waits for the result of each selected record before it reads the next selected event.
 - Each delivery has a ten-second deadline.
 
-When Kafka rejects a record or Adder cannot determine whether Kafka accepted it, Adder reports the failure through the plugin error channel. Adder does not resend an uncertain record at the application-level because Kafka may have accepted it before the response failed. A successful acknowledgement confirms the broker's configured replication policy, not consumer processing.
+When Kafka rejects a record or Adder cannot determine whether Kafka accepted it, Adder reports the failure through the plugin error channel. Adder does not resend an uncertain record at the application level because Kafka may have accepted it before the response failed. A successful acknowledgement confirms the broker's configured replication policy, not consumer processing.
 
 ## Ordering
 
