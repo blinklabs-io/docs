@@ -7,7 +7,7 @@ description: Configure event delivery and implement the Adder Go API shutdown co
 
 ## Overview
 
-This reference describes the public `/events` replay option and the Go API shutdown contract. It covers event delivery and API lifecycle behavior.
+This reference describes the public `/events` replay option and the Go API shutdown contract.
 
 ## `/events` replay behavior
 
