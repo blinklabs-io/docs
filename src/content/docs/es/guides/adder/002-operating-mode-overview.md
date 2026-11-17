@@ -33,7 +33,7 @@ Adder Tray es una aplicación de escritorio que se ejecuta en la bandeja del sis
 
 ## 2. Adder CLI / Monitor de eventos (binario para Linux)
 
-El binario de línea de comandos ofrece acceso completo al procesamiento de eventos de Adder. Está pensado para operadores, desarrolladores e integradores que necesitan controlar cómo se filtran y emiten los eventos. Si la ejecución no incluye `--managed-config-dir`, Adder mantiene este flujo CLI normal, así como el pipeline integrado existente.
+El binario de línea de comandos ofrece acceso completo al procesamiento de eventos de Adder. Está pensado para operadores, desarrolladores e integradores que necesitan controlar cómo se filtran y emiten los eventos. Si la ejecución no incluye `--managed-config-dir`, Adder mantiene el flujo normal de `CLI` y el `pipeline` integrado existente.
 
 - [Guía para Linux](../005-use-adder-on-linux)
 
@@ -65,13 +65,13 @@ El binario de línea de comandos ofrece acceso completo al procesamiento de even
 
 ## 3. Enrutamiento administrado de clientes (CLI)
 
-El modo de enrutamiento administrado distribuye eventos de ChainSync entre clientes independientes, cada uno con sus propios filtros y destinos con nombre. Este modo está diseñado para operadores que necesitan separar el procesamiento y la entrega por cliente.
+El modo de enrutamiento administrado distribuye eventos de `ChainSync` entre clientes independientes, cada uno con sus propios filtros y destinos con nombre. Este modo está diseñado para operadores que necesitan separar el procesamiento y la entrega por cliente.
 
 ### Características principales
 
 - Requiere la entrada `chainsync` con `intersect-tip=true` y `auto-reconnect=true`. No permite `state-path` ni un punto de intersección explícito.
 - Rechaza los filtros globales para que cada cliente defina su propio enrutamiento.
-- Expone una API privada para recargar configuraciones y consultar el estado. La API escucha únicamente en una dirección de loopback literal configurada con `--managed-address` y autentica todas las solicitudes mediante un token restringido indicado por `--managed-token-file`.
+- Expone una API privada para recargar configuraciones y consultar el estado. La API escucha únicamente en una dirección literal de `loopback` configurada con `--managed-address` y autentica todas las solicitudes mediante un token restringido indicado por `--managed-token-file`.
 - Admite únicamente los adaptadores `log` y `webhook` en este modo. Las configuraciones validan los destinos de webhook y las rutas de los archivos de registro según la política administrada.
 - Asigna una cola de entrada independiente a cada cliente y una cola independiente a cada destino. Las colas tienen límites definidos, impiden que un cliente lento bloquee a los demás y registran los eventos descartados cuando alcanzan su capacidad.
 - No inicia la API pública `/events` en este modo.
@@ -86,7 +86,7 @@ La [referencia de enrutamiento administrado](../014-managed-routing) describe el
 | Sin experiencia con la línea de comandos | **Adder Tray** |
 | Personalización completa | **Adder CLI** |
 | Enrutamiento independiente por cliente | **Enrutamiento administrado** |
-| Recarga de clientes sin reiniciar ChainSync | **Enrutamiento administrado** |
+| Recarga de clientes sin reiniciar `ChainSync` | **Enrutamiento administrado** |
 | Configuración YAML | **Adder CLI** |
 | Webhooks / salidas JSON | **Adder CLI** |
 | Notificaciones nativas del sistema operativo | **Adder Tray** |
