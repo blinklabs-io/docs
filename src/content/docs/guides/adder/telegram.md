@@ -49,7 +49,7 @@ Set `chat_id` to the same numeric ID as the configured `chat-id`. The file store
 
 Adder enables all four categories by default. Adder also uses those defaults when the settings file does not exist yet, then creates the file when a user changes a preference. Adder writes each preference change atomically and keeps the configured chat ID in the file.
 
-At startup, Adder rejects the settings file when it contains malformed YAML, unknown fields, more than one YAML document, no `chat_id`, or a `chat_id` that differs from the configured chat. An unreadable file or a parent directory that does not permit writing also prevents Adder from using persisted preferences.
+At startup, Adder rejects the settings file when it contains malformed YAML, unknown fields, more than one YAML document, no `chat_id`, or a `chat_id` that differs from the configured chat. An unreadable file prevents startup. Adder requires write access to the parent directory to save changes; without it, a preference change fails.
 
 Omit `settings-file` to keep Telegram delivery enabled without persistence. Adder continues to show the current settings, but in-chat preference changes remain unavailable. Notification preferences affect Telegram delivery only; Adder continues processing events for every category.
 
