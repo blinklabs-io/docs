@@ -21,6 +21,42 @@ run context is canceled. `HandlerOutput` invokes a cancellation-aware callback;
 a callback error is terminal. Both implement `plugin.ManagedPlugin` and join
 their tracked workers during `Stop`. Handlers must return on cancellation.
 
+## Migration checklist
+
+Use the [plugin authoring contract](https://github.com/blinklabs-io/adder/blob/main/docs/plugin-authoring.md)
+for the complete API reference. Complete the migration with these changes:
+
+- Implement `plugin.ManagedPlugin` with `StartContext(ctx)`, `Stop`, `Failed`,
+  `Failure`, `Role`, `ErrorChan`, `InputChan`, and `OutputChan`.
+- Embed `plugin.Base` for shared lifecycle state, event ports, run cancellation,
+  and terminal failure handling. Configure its `plugin.BaseConfig` to match the
+  ports that the plugin exposes.
+- Remove uses of `plugin.PluginOption.Dest`, `plugin.ProcessConfig`, and
+  `plugin.ProcessEnvVars`; these configuration helpers no longer exist.
+- Change `plugin.PluginEntry.NewFromOptionsFunc` to return
+  `plugin.ManagedPlugin`. Create instances from resolved, immutable
+  `plugin.Options` through `ResolveConfig` and `Configuration.New`.
+- Apply configuration with this precedence: `defaults < YAML < environment
+  variables < changed CLI flags`. Later sources override earlier sources.
+
+## Pipeline contract
+
+Custom plugins must satisfy the pipeline's validation and ordering rules:
+
+- Validate the topology before starting. Each declared slot must contain one
+  non-nil plugin, its `Role` must match the slot, and its required input and
+  output ports must exist.
+- Start consumers before producers. The pipeline starts outputs first, filters
+  in reverse declaration order, and inputs last. This order allows downstream
+  components to receive events as upstream components start.
+- Preserve declared filter order when wiring ports. Events must pass through
+  filters in the order declared by the pipeline configuration.
+- Stop plugins in the reverse of their start order. A plugin's `Stop` method
+  must cancel its run and wait for its owned workers to exit.
+- Treat a terminal plugin failure as a pipeline failure. The pipeline records
+  the first terminal error, cancels the pipeline context, and signals
+  `Pipeline.Failed`; `Pipeline.Failure()` returns the recorded error.
+
 ## Input
 
 [Download input.go](/downloads/adder/library-examples/source/plugins/input.go).
@@ -220,3 +256,14 @@ func Example_eventTransformation() {
 	// transformed [9 2]
 }
 ```
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

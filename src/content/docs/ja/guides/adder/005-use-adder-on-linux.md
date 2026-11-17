@@ -13,7 +13,7 @@ description: LinuxでAdderを使用する方法。
 以下のコマンドを実行してAdderバイナリをダウンロードします。ダウンロードリンクを最新バージョンに調整してください。
 
 ```
- wget -c https://github.com/blinklabs-io/adder/releases/download/v0.46.0/adder-v0.46.0-linux-amd64.tar.gz -O - | tar -xz
+ wget -c https://github.com/blinklabs-io/adder/releases/download/v0.47.0/adder-v0.47.0-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 

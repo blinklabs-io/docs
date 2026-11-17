@@ -38,6 +38,8 @@ Windows上でAdderをインストールする最も簡単な方法は、<a href=
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+署名済みMSIはWindows x64およびWindows arm64に対応し、`%ProgramFiles%\Adder`にCLIの`adder.exe`とトレイアプリの`adder-tray.exe`をインストールします。トレイアプリはスタートメニューから起動でき、MSIはWindowsの「アプリと機能」（Add/Remove Programs）にインストール情報を表示します。MSIはScheduled Taskを登録しません。
+
 ***
 
 <a id="step-2---launch-adder"></a>
@@ -66,6 +68,8 @@ Adderアプリを検索して開きます。
 
 > **Welcome**設定画面が表示されない場合は、システムトレイを開き、Adderアプリを右クリックし、**Configure**を選択して設定ウィザードを開きます。
 
+Windows版のトレイアプリは、ログとパニックからの復旧情報を`%LOCALAPPDATA%/Adder/Logs/adder-tray.log`に記録します。Adderは、ログオンセッションごとにトレイアプリを1つだけ起動します。
+
 ***
 
 <a id="step-3---configure-adder"></a>
@@ -82,6 +86,7 @@ Adderアプリを検索して開きます。
 <a id="step-31---select-a-cardano-network-that-you-want-to-monitor"></a>
 
 ### ステップ 3.1 - 監視する Cardano ネットワークを選択します。
+`Mainnet`、`Preprod`、`Preview`、または`Dijkstra`（`DijkstraNet`）を選択し、監視するネットワークを指定します。
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -130,6 +135,7 @@ Adderは、デスクトップ通知を提供するように既に設定されて
 
 ### ステップ3.4 - イベントアラート
 デスクトップアラートを受信したいイベントのチェックボックスを選択します。
+`Chain rollbacks`チェックボックスを使用すると、`Blocks minted`とは独立してチェーンのロールバック通知を設定できます。ロールバック通知を有効にするには、`Chain rollbacks`を選択します。
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -154,6 +160,11 @@ Adderは、デスクトップ通知を提供するように既に設定されて
 ### ステップ3.6 - セットアップの完了
 `Finish Setup` をクリックします。
 
+### 起動設定
+`Start Adder automatically on login / reboot`を選択すると、ログインまたは再起動時にAdderを自動的に起動します。`Background Activity:`で始まるステータス表示は、Adderのバックグラウンドアクティビティの登録状態と実行状態を示します。
+
+`Open Login Items Settings...`をクリックすると、Windowsのスタートアップアプリ設定が開きます。
+
 ***
 
 <a id="congratulations-adder-will-now-alert-you-when-an-event-that-you-have-selected-to-track-occurs"></a>
@@ -167,9 +178,19 @@ Adderは、デスクトップ通知を提供するように既に設定されて
 ## トレイメニューの利用
 システムトレイでAdderアプリを右クリックすると、最近のイベントの表示、設定の変更、アプリの起動や再起動などを行えます。
 
+最近のイベントから開くエクスプローラーのリンクは、設定したネットワークを使用します。トランザクションおよびガバナンスイベントにはトランザクションハッシュ、ブロックイベントにはブロックハッシュを使用します。
+
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+`Notification Rules...`を選択すると、通知ルールエディターが開きます。このエディターでは、`Wallets`、`DReps`、`Pools`、`Assets`、`Policies`の監視対象を編集し、通知カテゴリを切り替えられます。`Monitor Everything`を選択すると、個別の対象リストを使わずに、サポートされるすべての対象を監視します。
+
+プールのブロック通知はフォローしているプールに限定され、DRepのガバナンス通知はフォローしているDRepに限定されます。複数の投票を含むイベントでは、通知テキストにフォローしているDRepの投票内容を表示します。
+
+`Apply & Restart`をクリックすると、設定を保存し、`Adder Tray`を再起動せずに通知ルールとレート制限を更新します。対象を削除するには確認が必要です。再接続の警告が表示された場合も、Adderはエディターを開いたまま入力を再び有効にします。設定を修正して再試行できます。
+
+`About`を選択すると、アプリ内のAboutダイアログが開きます。コミットメタデータを利用できる場合は`Version: <version> (commit: <hash>)`を表示し、利用できない場合はバージョンだけを表示します。
 
 
 ---

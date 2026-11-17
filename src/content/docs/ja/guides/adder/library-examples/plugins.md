@@ -8,6 +8,36 @@ sidebar:
 [バンドル](/downloads/adder/library-examples/adder-library-examples.tar.gz)には、タイマー入力、コールバック出力、およびライフサイクル、再起動、終了を伴う障害、元のイベントを変更しない変換のテストが含まれます。
 登録、設定、リソース所有権の要件については、[プラグイン作成の契約](https://github.com/blinklabs-io/adder/blob/main/docs/plugin-authoring.md)を参照してください。
 
+## 移行チェックリスト
+
+既存のカスタムプラグインを移行する場合は、次の契約を満たしてください。
+
+- `plugin.Plugin` ではなく `plugin.ManagedPlugin` を実装します。この契約は `StartContext`、`Stop`、`Role`、`ErrorChan`、`InputChan`、`OutputChan`、`Failed`、`Failure` を定義し、パイプラインは `StartContext` で実行を開始します。
+- `plugin.Base` を埋め込み、実行コンテキスト、入出力ポート、診断エラー、および終端失敗の共通処理を利用します。
+- `Role` で入力、フィルター、出力の種別を返し、各プラグインが使用するポート要件と一致させます。
+- リソースを取得する処理を `StartContext` に置き、`Stop` でキャンセルを伝播して追跡中のワーカーが終了するまで待機します。
+- 終端エラーを `plugin.Base` の `Fail` に渡します。パイプラインはその失敗を検出し、`Pipeline.Failed` で通知して実行をキャンセルします。
+
+### 設定 API の移行
+
+移行後の API は `plugin.PluginOption.Dest`、`plugin.ProcessConfig`、`plugin.ProcessEnvVars` を提供しません。ファクトリーは `PluginEntry.NewFromOptionsFunc` から `plugin.ManagedPlugin` を返し、解決済みで不変な `plugin.Options` を使ってインスタンスを作成します。設定の構築には `ResolveConfig` と `Configuration.New` の流れを使用してください。
+
+設定値は次の優先順位で解決します。右側の値が左側の値を上書きします。
+
+`defaults` < `YAML` < `環境変数` < `変更された CLI フラグ`
+
+詳細な設定移行の手順は、[プラグイン設定の移行ガイド](https://github.com/blinklabs-io/adder/blob/main/docs/plugin-configuration-migration.md)を参照してください。
+
+## パイプラインの動作
+
+パイプラインは起動前にトポロジーを検証します。各プラグインは `nil` ではなく、同じインスタンスを複数の場所で使用せず、宣言した `Role` と接続するポートの要件を満たす必要があります。検証に失敗したパイプラインは起動しません。
+
+`StartContext` は出力を先に起動し、設定で宣言したチェーン順を保つためにフィルターを逆順で起動し、最後に入力を起動します。この順序によって、入力がイベントを発行する前に受信側の準備が整います。フィルターと出力のチャンネルは設定で宣言した順序で接続されます。
+
+`Stop` は実際の起動順序を逆にたどってプラグインを停止します。各プラグインはキャンセルを監視し、ワーカーを終了してから自身のチャンネルを閉じます。
+
+プラグインが終端エラーを報告すると、パイプラインは最初のエラーを記録して実行コンテキストをキャンセルします。`Pipeline.Failed` は終端失敗を通知し、`Pipeline.Failure` はパイプラインが記録したエラーを返します。入力、フィルター、出力の各プラグインは、この通知とキャンセルを受けた後に再接続やイベント処理を続けてはいけません。
+
 展開したバンドルのルートで実行します。
 
 ```sh
@@ -224,3 +254,14 @@ func Example_eventTransformation() {
 	// transformed [9 2]
 }
 ```
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

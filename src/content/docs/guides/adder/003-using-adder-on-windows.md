@@ -30,6 +30,8 @@ The easiest way to install Adder on Windows is by using the MSI installer availa
      alt="adder-windows-run-msi"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
+The signed MSI is available for Windows x64 and arm64. It installs both the `adder.exe` command-line application and the `adder-tray.exe` tray application in `%ProgramFiles%\Adder`. The installation appears in Windows Add/Remove Programs, and the tray application appears in the Start Menu. The installer does not create a Scheduled Task.
+
 ***
 
 ### Step 2 - Launch Adder
@@ -52,6 +54,8 @@ Search for the Adder app and open it.
 
 >If you don't see the configuration **Welcome** screen, open your system tray, right-click the Adder app, and select **Configure** to open the setup wizard.
 
+On Windows, Adder writes tray logs, including recovered panic details, to `%LOCALAPPDATA%/Adder/Logs/adder-tray.log`. Only one Adder tray instance runs per logon session.
+
 ***
 
 ### Step 3 - Configure Adder
@@ -63,7 +67,7 @@ Once you open the *Adder Tray App*, you will see the **Welcome** screen, which w
 
 ***
 
-### Step 3.1 - Select a Cardano network that you want to monitor.
+### Step 3.1 - Select the Cardano network to monitor: `Mainnet`, `Preprod`, `Preview`, or `Dijkstra` (`DijkstraNet`).
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -105,14 +109,21 @@ Adder is already configured to provide desktop notifications. You can select oth
 ***
 
 ### Step 3.4 - Event Alerts
-Select the checkboxes for the events for which you would like to receive a desktop alert.
+Select the desired event checkboxes. The `Chain rollbacks` checkbox controls chain rollback alerts independently of the `Blocks minted` checkbox.
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
 
 ***
 
-### Step 3.5 - Send a Test Notification
+### Step 3.5 - Startup & Background Activity
+Select `Start Adder automatically on login / reboot` to configure Adder Tray to start automatically when the system logs in or reboots.
+
+The status text reports whether Adder's background activity is registered and running. Select `Open Login Items Settings...` to open the Windows startup app settings.
+
+***
+
+### Step 3.6 - Send a Test Notification
 
 Click `Test Notification` to confirm that you are receiving desktop alerts.
 <img src="/adder-windows-config-send-test.webp"
@@ -123,7 +134,7 @@ If you see the notification, click `Yes, I saw it`.
 
 ***
 
-### Step 3.6 - Finish Setup
+### Step 3.7 - Finish Setup
 Click `Finish Setup`.
 
 ***
@@ -138,6 +149,14 @@ If you want to view recent events, adjust the configuration, or start, stop, or 
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Select `Notification Rules...` to edit notification targets in `Wallets`, `DReps`, `Pools`, `Assets`, and `Policies`, and use the notification category checkboxes to choose which alerts Adder sends. Select `Monitor Everything` to replace the per-target lists with monitoring for all supported target types; this mode cannot be combined with individual targets.
+
+Recent event links use the selected network. Transaction and governance event links open the corresponding transaction using its transaction hash, while block event links use the block hash. Adder sends pool block notifications only for followed pools and DRep governance notifications only for followed DReps. When a governance event contains multiple votes, the notification displays the vote cast by the followed DRep.
+
+Applying changes saves the notification rules and immediately refreshes the running notification rules and rate limit without restarting Adder Tray. Deleting a target prompts for confirmation. If a soft reconnect warning appears, the editor remains open, re-enables its inputs, and supports a retry.
+
+Select `About` to open the in-app dialog. When commit metadata is available, the dialog displays `Version: <version> (commit: <hash>)`; otherwise, it displays the version alone.
 
 
 ---

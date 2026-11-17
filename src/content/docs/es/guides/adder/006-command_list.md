@@ -16,7 +16,7 @@ description: Lista de Comandos de Adder.
 
 > ruta al archivo de configuración a cargar
 
-> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: opciones de línea de comandos > variables de entorno > archivo de configuración YAML > valores predeterminados.
+> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: opciones de línea de comandos > archivo de configuración YAML > variables de entorno > valores predeterminados.
 
 ***
 
@@ -68,14 +68,91 @@ description: Lista de Comandos de Adder.
 >
 > Para `--filter-address`, `--filter-asset`, `--filter-policy`, `--filter-pool`, `--filter-drep` y `--filter-type`, Adder elimina los espacios al principio y al final de cada entrada separada por comas e ignora las entradas vacías.
 >
+> Cada filtro acepta varios valores separados por comas; Adder combina con OR los valores de una misma opción. Por ejemplo:
+>
+> ```text
+> --filter-address <dirección-1>,<dirección-2>
+> --filter-pool <pool-1>,<pool-2>
+> --filter-drep <drep-1>,<drep-2>
+> ```
+>
+> Adder combina los filtros de tipos distintos con AND: el evento debe coincidir con todos los filtros configurados. Como excepción, Adder combina `--filter-pool` y `--filter-drep` con OR; Adder sigue aplicando los demás filtros configurados con AND. `--filter-drep` no se aplica a los eventos `input.block`.
+>
+> **Correspondencia de filtros:**
+>
+> | Opción | Variable de entorno | Clave YAML |
+> | --- | --- | --- |
+> | `--filter-address` | `FILTER_CARDANO_ADDRESS` | `plugins.filter.cardano.address` |
+> | `--filter-asset` | `FILTER_CARDANO_ASSET` | `plugins.filter.cardano.asset` |
+> | `--filter-policy` | `FILTER_CARDANO_POLICY` | `plugins.filter.cardano.policy` |
+> | `--filter-pool` | `FILTER_CARDANO_POOL` | `plugins.filter.cardano.pool` |
+> | `--filter-drep` | `FILTER_CARDANO_DREP` | `plugins.filter.cardano.drep` |
+> | `--filter-type` | `FILTER_EVENT_TYPE` | `plugins.filter.event.type` |
+>
+> Las opciones usan una forma abreviada que omite el nombre del plugin. Las variables de entorno y las claves YAML incluyen el tipo y el nombre del plugin.
+>
 > **Tipos de Evento:**
 > 1. `input.block` - Se observó un nuevo bloque.
 > 2. `input.rollback` -	Ocurrió un rollback a un punto anterior de la cadena.
 > 3. `input.transaction` -	Se vio una transacción en un bloque.
 > 4. `input.governance` -	Un evento relacionado con gobernanza (era CIP-1694).
 > 5. `input.drep-registration` - Se registró un DRep.
+> 6. `input.drep-update` - Un DRep actualizó sus datos.
+> 7. `input.drep-retirement` - Un DRep se retiró.
 >
 
+
+***
+
+## Eventos de gobernanza:
+
+La entrada `chainsync` emite un evento `input.governance` por cada transacción que contiene datos de gobernanza en cadena de la era Conway. Cada transacción produce un único evento de gobernanza que reúne todos sus datos de gobernanza. Adder emite el evento además del evento `input.transaction`; las transacciones sin datos de gobernanza no producen este evento.
+
+### Cuándo se emite
+
+Adder emite `input.governance` cuando la transacción contiene uno o más procedimientos de propuesta, procedimientos de votación o certificados de gobernanza: registro, actualización o retiro de DRep; delegación de voto; o autorización de clave activa y renuncia de clave fría del Comité Constitucional.
+
+### Contexto
+
+El objeto `context` contiene la posición de la transacción y de la cadena:
+
+| Campo | Tipo | Descripción |
+| --- | --- | --- |
+| `transactionHash` | string | Hash hexadecimal de la transacción. |
+| `blockNumber` | number | Altura del bloque que contiene la transacción. |
+| `slotNumber` | number | Slot del bloque que contiene la transacción. |
+| `transactionIdx` | number | Índice de la transacción dentro del bloque. |
+| `networkMagic` | number | Network magic del nodo conectado. |
+
+### Payload
+
+El objeto `payload` siempre contiene `blockHash` y puede contener `transactionCbor` cuando se habilita `--input-chainsync-include-cbor`. También puede contener las siguientes matrices; Adder omite cada matriz vacía:
+
+| Campo | Contenido |
+| --- | --- |
+| `proposalProcedures` | Acciones de gobernanza propuestas, con índice, depósito, cuenta de recompensa, tipo y datos específicos de la acción, además del ancla de metadatos. |
+| `votingProcedures` | Votos, con tipo, hash e identificador del votante, acción de gobernanza, voto y ancla. |
+| `drepCertificates` | Certificados de registro, actualización o retiro de DRep, con hash e identificador del DRep, depósito cuando corresponde y ancla. |
+| `voteDelegationCertificates` | Certificados de delegación de voto, con credencial de stake, tipo e identificador del DRep y, cuando corresponde, hash de la pool y depósito. |
+| `committeeCertificates` | Certificados `AuthHot` de autorización de clave activa o `ResignCold` de renuncia de clave fría, con las credenciales del comité y el ancla. |
+
+Adder serializa siempre los objetos `anchor` en los elementos que los admiten; cuando no existe un ancla, Adder establece sus campos `url` y `dataHash` como cadenas vacías. Adder omite los campos `deposit` de los certificados cuando su valor es cero.
+
+### Filtrado de eventos de gobernanza
+
+Adder aplica los siguientes filtros a `input.governance` cuando cualquier dato correspondiente coincide con el valor filtrado:
+
+- `--filter-drep` coincide con certificados de DRep, delegaciones de voto hacia el DRep y procedimientos de votación cuyo votante es el DRep.
+- `--filter-pool` coincide con procedimientos de votación emitidos por la pool como SPO y certificados de delegación de voto que contienen el hash de clave de la pool.
+- Con `--filter-address`, Adder compara una dirección de stake (`stake1…`) con `rewardAccount` de propuestas, destinos de retiros del tesoro y la credencial de stake de certificados de delegación de voto. Adder compara una dirección de pago (`addr1…`) únicamente con destinos de retiros del tesoro.
+
+Adder no aplica los filtros `--filter-policy` y `--filter-asset` a eventos de gobernanza; ambos filtros dejan pasar `input.governance` sin modificaciones.
+
+### Normalización de entradas DRep
+
+Adder acepta las formas bech32 `drep1...` y `drep_script1...` en `--filter-drep`. Adder espera una credencial de 28 bytes después de decodificarla; solo elimina el byte inicial cuando el payload decodificado tiene 29 bytes y no inspecciona ni valida ese byte. Adder ignora los payloads decodificados de cualquier otra longitud y descarta silenciosamente ese identificador del filtro.
+
+La forma hexadecimal debe contener únicamente los 56 caracteres hexadecimales de la credencial sin procesar. Adder no elimina ningún byte inicial de la entrada hexadecimal, por lo que un valor que incluya una cabecera no coincide.
 
 ***
 
@@ -147,7 +224,7 @@ description: Lista de Comandos de Adder.
   --input-chainsync-network string
 ```
 
-> especifica un nombre de red Cardano conocido (predeterminado "mainnet")
+> especifica un nombre de red Cardano conocido, como `mainnet`, `preprod`, `preview` o `dijkstra` (predeterminado "mainnet")
 <br />
 
 ```text
@@ -169,6 +246,14 @@ description: Lista de Comandos de Adder.
 ```
 
 > especifica la ruta al socket UNIX al que conectarse
+
+```
+  --input-chainsync-state-path string
+```
+
+> ruta a un archivo de base de datos SQLite para conservar el cursor de ChainSync entre reinicios; si no se establece, no se conserva ningún cursor (predeterminado "")
+>
+> Consulta la [referencia de persistencia del cursor de ChainSync](/es/guides/adder/chainsync-cursor-persistence/) para obtener información sobre los reinicios, el vaciado cada cinco segundos y durante el apagado, los rollbacks y la API.
 
 ***
 
@@ -239,7 +324,67 @@ description: Lista de Comandos de Adder.
 
 ***
 
+## Enrutamiento administrado:
+
+```text
+  --managed-config-dir string
+```
+
+> habilita el enrutamiento administrado mediante este directorio de configuración (predeterminado "")
+>
+> Requiere la entrada `chainsync`. Consulta la [referencia de enrutamiento administrado](/es/guides/adder/014-managed-routing/) para conocer el formato de archivos, la API, los límites y el contrato de entrega.
+
+```text
+  --managed-credentials-dir string
+```
+
+> especifica el directorio restringido para las credenciales administradas (predeterminado "")
+>
+> Requiere un directorio accesible por el proceso; sus archivos de credenciales deben cumplir las restricciones de seguridad.
+
+```text
+  --managed-log-dir string
+```
+
+> especifica el directorio local de confianza para los archivos de eventos administrados (predeterminado "")
+
+> Los destinos de registro deben permanecer dentro del directorio configurado.
+
+```text
+  --managed-allow-hosts stringSlice
+```
+
+> lista los nombres de host de webhook aprobados por el operador (predeterminado "")
+
+> Los destinos remotos requieren un nombre de host aprobado y HTTPS.
+
+```text
+  --managed-allow-local-targets
+```
+
+> permite receptores webhook de loopback para pruebas locales (predeterminado `false`)
+
+> El modo administrado requiere esta opción para usar destinos webhook de loopback.
+
+```text
+  --managed-address string
+```
+
+> especifica la dirección del listener de la API privada administrada (predeterminado `127.0.0.1:8081`)
+
+> La API administrada solo admite una dirección IP literal de loopback.
+
+```text
+  --managed-token-file string
+```
+
+> especifica el archivo restringido que contiene el token de la API del operador (predeterminado "")
+
+> Requiere un archivo regular restringido con un token de al menos 32 caracteres.
+
 ## Salida:
+
+Las opciones de cada plugin de salida también se pueden establecer en YAML bajo `plugins.output.<plugin>.<option>`.
 
 ```text
   --output string
@@ -254,7 +399,7 @@ description: Lista de Comandos de Adder.
 
 > establece el umbral de registro de `output.log`. Acepta `debug`, `info`, `warn` y `error` (predeterminado: "info"). `debug` e `info` emiten registros de eventos; `warn` y `error` los suprimen. El umbral también filtra los diagnósticos de la aplicación Adder en stderr, incluso si se selecciona otro plugin de salida.
 >
-> Puedes configurar el mismo ajuste mediante YAML `plugins.output.log.level` o la variable de entorno `OUTPUT_LOG_LEVEL`. Adder ha eliminado la opción antigua `--logging-level` y el ajuste YAML de nivel superior `logging.level`, y los rechaza si se proporcionan. También ha eliminado la variable de entorno `LOGGING_LEVEL` y la ignora.
+> El YAML `plugins.output.log.level` y la variable de entorno `OUTPUT_LOG_LEVEL` configuran el mismo ajuste. Al cargar YAML, Adder acepta el ajuste heredado de nivel superior `logging.level` y lo migra a `plugins.output.log.level` si la clave moderna no está presente. Si ambas claves están presentes, prevalece `plugins.output.log.level`; al guardar la configuración, Adder conserva únicamente la clave moderna. Los valores heredados no válidos siguen produciendo errores. La opción `--logging-level` y la variable `LOGGING_LEVEL` no son compatibles; los controles preferidos son `--output-log-level`, `OUTPUT_LOG_LEVEL` y `plugins.output.log.level`.
 <br />
 
 ```text
@@ -293,6 +438,7 @@ description: Lista de Comandos de Adder.
 
 > especifica la ruta al archivo de cuenta de servicio
 > Cuando se selecciona `--output push`, `--output-push-serviceAccountFilePath` debe especificar una ruta no vacía. El JSON de cuenta de servicio indicado debe incluir `project_id` como una cadena no vacía. La configuración falla cuando falta `project_id`, no es una cadena o está vacío.
+> Adder entrega los errores de token y FCM mediante `ErrorChan`. Cada solicitud HTTP a FCM tiene un tiempo de espera de 10 segundos.
 <br />
 
 ```text
@@ -322,6 +468,78 @@ description: Lista de Comandos de Adder.
 
 > modo de parseo de mensajes (HTML, Markdown, MarkdownV2) (predeterminado "HTML")
 <br />
+
+```text
+  --output-telegram-settings-file string
+```
+
+> archivo YAML local con las preferencias de notificaciones de Telegram (predeterminado "")
+<br />
+
+```text
+  --output-telegram-operator-user-ids string
+```
+
+> IDs de usuario de Telegram separados por comas que pueden cambiar las preferencias del grupo (predeterminado ""); cada ID debe ser un entero positivo
+<br />
+
+```text
+  --output-signal-endpoint string
+```
+
+> URL HTTP JSON-RPC del daemon `signal-cli` (predeterminado `http://127.0.0.1:8081/api/v1/rpc`)
+<br />
+
+```text
+  --output-signal-account string
+```
+
+> cuenta de `signal-cli` para un daemon con varias cuentas (predeterminado "")
+<br />
+
+```text
+  --output-signal-recipients string
+```
+
+> números o IDs de destinatarios de Signal separados por comas (predeterminado ""); debe incluir al menos un destinatario
+<br />
+
+```text
+  --output-signal-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,rollbacks,governance"); debe incluir al menos un tipo admitido
+<br />
+> Consulta la [referencia de Signal](/es/guides/adder/signal/).
+
+```text
+  --output-nats-servers string
+```
+
+> URL de servidores NATS separadas por comas (predeterminado `nats://127.0.0.1:4222`); cada URL debe usar `nats://` o `tls://`, no incluir credenciales ni ruta, y usar un puerto entre `1` y `65535` cuando se especifique
+<br />
+
+```text
+  --output-nats-token string
+```
+
+> token opcional de autenticación de NATS (predeterminado "")
+<br />
+
+```text
+  --output-nats-subject-prefix string
+```
+
+> prefijo de los subjects de eventos (predeterminado `adder.events`)
+<br />
+
+```text
+  --output-nats-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+<br />
+> Consulta la [referencia de NATS](/es/guides/adder/nats/).
 
 ```text
   --output-webhook-format string
@@ -357,6 +575,478 @@ description: Lista de Comandos de Adder.
 
 > especifica el nombre de usuario para autenticación básica
 
+```text
+  --output-webhook-state-path string
+```
+
+> ruta SQLite para las entregas pendientes persistentes y seguras frente a reinicios (predeterminado "")
+<br />
+
+```text
+  --output-webhook-max-pending int
+```
+
+> máximo de entregas pendientes persistentes (predeterminado `1024`); cuando `state-path` no está vacío, debe ser al menos `11`
+> Consulta la [referencia de webhooks duraderos](/es/guides/adder/webhook-durability/).
+
+### Salida `slack`
+
+```text
+  --output-slack-webhook-urls string
+```
+
+> URL de webhooks entrantes de Slack separadas por comas; debe incluir al menos una URL HTTPS
+<br />
+
+```text
+  --output-slack-event-types string
+```
+
+> tipos de eventos para la entrega a Slack separados por comas (predeterminado "blocks,transactions,rollbacks,governance")
+>
+> Consulta la [referencia de Slack](/es/guides/adder/slack/).
+
+### Salida `discord`
+
+```text
+  --output-discord-bot-token string
+```
+
+> token del bot de Discord (predeterminado "")
+<br />
+
+```text
+  --output-discord-application-id string
+```
+
+> ID de la aplicación de Discord (predeterminado "")
+<br />
+
+```text
+  --output-discord-guild-id string
+```
+
+> ID del servidor de Discord permitido (predeterminado "")
+<br />
+
+```text
+  --output-discord-channel-id string
+```
+
+> ID del canal de Discord permitido (predeterminado "")
+<br />
+
+```text
+  --output-discord-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+>
+> Consulta la [referencia de Discord](/es/guides/adder/discord/).
+
+### Salida `matrix`
+
+```text
+  --output-matrix-homeserver-url string
+```
+
+> URL base del homeserver de Matrix (predeterminado "")
+<br />
+
+```text
+  --output-matrix-access-token string
+```
+
+> token de acceso de Matrix; es obligatorio
+<br />
+
+```text
+  --output-matrix-room-ids string
+```
+
+> IDs de salas de Matrix separados por comas; debe incluir al menos una sala
+<br />
+
+```text
+  --output-matrix-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+>
+> Consulta la [referencia de Matrix](/es/guides/adder/matrix/).
+
+### Salida `rabbitmq`
+
+```text
+  --output-rabbitmq-url string
+```
+
+> URL del broker AMQP (predeterminado `amqp://127.0.0.1:5672/`)
+<br />
+
+```text
+  --output-rabbitmq-exchange string
+```
+
+> exchange existente; un valor vacío usa el exchange predeterminado (predeterminado "")
+<br />
+
+```text
+  --output-rabbitmq-routing-key string
+```
+
+> clave de enrutamiento o nombre de cola para el exchange predeterminado (predeterminado `adder.events`); es obligatorio
+<br />
+
+```text
+  --output-rabbitmq-persistent
+```
+
+> publicar mensajes persistentes (predeterminado `true`)
+<br />
+
+```text
+  --output-rabbitmq-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `mqtt`
+
+```text
+  --output-mqtt-broker string
+```
+
+> URL TCP o TLS del broker MQTT 5 (predeterminado `mqtt://127.0.0.1:1883`)
+<br />
+
+```text
+  --output-mqtt-client-id string
+```
+
+> identificador del cliente MQTT (predeterminado `adder-output`); es obligatorio
+<br />
+
+```text
+  --output-mqtt-username string
+```
+
+> nombre de usuario MQTT opcional (predeterminado "")
+<br />
+
+```text
+  --output-mqtt-password string
+```
+
+> contraseña MQTT opcional (predeterminado "")
+<br />
+
+```text
+  --output-mqtt-topic-prefix string
+```
+
+> prefijo de los topics de eventos (predeterminado `adder/events`)
+<br />
+
+```text
+  --output-mqtt-qos int
+```
+
+> QoS de publicación MQTT (predeterminado `1`); los valores válidos son `0`, `1` y `2`
+<br />
+
+```text
+  --output-mqtt-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `pubsub`
+
+```text
+  --output-pubsub-project-id string
+```
+
+> ID del proyecto de Google Cloud (predeterminado "")
+<br />
+
+```text
+  --output-pubsub-topic-id string
+```
+
+> ID del topic de Pub/Sub (predeterminado "")
+<br />
+
+```text
+  --output-pubsub-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `postgres`
+
+```text
+  --output-postgres-database-url string
+```
+
+> URL de conexión de PostgreSQL (predeterminado "")
+<br />
+
+```text
+  --output-postgres-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
+### Salida `clickhouse`
+
+```text
+  --output-clickhouse-url string
+```
+
+> origen HTTP de ClickHouse (predeterminado `http://127.0.0.1:8123`)
+<br />
+
+```text
+  --output-clickhouse-database string
+```
+
+> base de datos de ClickHouse (predeterminado `default`)
+<br />
+
+```text
+  --output-clickhouse-username string
+```
+
+> usuario de ClickHouse (predeterminado `default`)
+<br />
+
+```text
+  --output-clickhouse-password string
+```
+
+> contraseña opcional de ClickHouse (predeterminado "")
+<br />
+
+```text
+  --output-clickhouse-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+>
+> Consulta la [referencia de ClickHouse](/es/guides/adder/clickhouse/).
+
+### Salida `elasticsearch`
+
+```text
+  --output-elasticsearch-url string
+```
+
+> URL de origen de Elasticsearch (predeterminado `http://127.0.0.1:9200`)
+<br />
+
+```text
+  --output-elasticsearch-index string
+```
+
+> nombre versionado del índice (predeterminado `adder-events-v1`)
+<br />
+
+```text
+  --output-elasticsearch-api-key string
+```
+
+> clave API opcional de Elasticsearch (predeterminado "")
+<br />
+
+```text
+  --output-elasticsearch-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
+### Salida `s3`
+
+```text
+  --output-s3-region string
+```
+
+> región de AWS (predeterminado "")
+<br />
+
+```text
+  --output-s3-bucket string
+```
+
+> bucket de S3 (predeterminado "")
+<br />
+
+```text
+  --output-s3-prefix string
+```
+
+> prefijo relativo de la clave del objeto (predeterminado `adder/events`)
+<br />
+
+```text
+  --output-s3-event-types string
+```
+
+> tipos de eventos seleccionados separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
+
+### Salida `sqs`
+
+```text
+  --output-sqs-region string
+```
+
+> región de AWS (predeterminado "")
+<br />
+
+```text
+  --output-sqs-group-id string
+```
+
+> ID del grupo de mensajes, obligatorio para una cola FIFO (predeterminado "")
+<br />
+
+```text
+  --output-sqs-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+<br />
+
+```text
+  --output-sqs-queue-url string
+```
+
+> URL de la cola SQS (predeterminado "")
+
+### Salida `sns`
+
+```text
+  --output-sns-region string
+```
+
+> región de AWS (predeterminado "")
+<br />
+
+```text
+  --output-sns-group-id string
+```
+
+> ID del grupo de mensajes, obligatorio para un topic FIFO (predeterminado "")
+<br />
+
+```text
+  --output-sns-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+<br />
+
+```text
+  --output-sns-topic-arn string
+```
+
+> ARN del topic SNS (predeterminado "")
+<br />
+
+```text
+  --output-sns-max-message-bytes int
+```
+
+> límite configurado de tamaño de mensaje del topic SNS (predeterminado `262144`)
+
+### Salida `redis`
+
+```text
+  --output-redis-address string
+```
+
+> host:port TCP de Redis (predeterminado `127.0.0.1:6379`)
+<br />
+
+```text
+  --output-redis-username string
+```
+
+> nombre de usuario ACL opcional de Redis (predeterminado "")
+<br />
+
+```text
+  --output-redis-password string
+```
+
+> contraseña opcional de Redis (predeterminado "")
+<br />
+
+```text
+  --output-redis-tls
+```
+
+> usar TLS para la conexión a Redis (predeterminado `false`)
+<br />
+
+```text
+  --output-redis-stream string
+```
+
+> clave del Stream de Redis (predeterminado `adder.events`); es obligatoria
+<br />
+
+```text
+  --output-redis-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+
+### Salida `kafka`
+
+```text
+  --output-kafka-brokers string
+```
+
+> direcciones host:port de bootstrap de Kafka separadas por comas (predeterminado `127.0.0.1:9092`)
+<br />
+
+```text
+  --output-kafka-topic string
+```
+
+> topic de Kafka (predeterminado `adder.events`)
+<br />
+
+```text
+  --output-kafka-username string
+```
+
+> nombre de usuario SASL PLAIN opcional (predeterminado "")
+<br />
+
+```text
+  --output-kafka-password string
+```
+
+> contraseña SASL PLAIN opcional (predeterminado "")
+<br />
+
+```text
+  --output-kafka-tls
+```
+
+> usar TLS para las conexiones con los brokers (predeterminado `false`)
+<br />
+
+```text
+  --output-kafka-event-types string
+```
+
+> tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
+>
+> Consulta la [referencia de Kafka](/es/guides/adder/kafka/).
+
 ***
 
 ## Notificaciones:
@@ -379,7 +1069,7 @@ La configuración utiliza JSON con `schemaVersion` establecido en `1`. Adder rec
 | Campo | Descripción |
 | --- | --- |
 | `schemaVersion` | Valor obligatorio: `1`. |
-| `network.name` | Red Cardano admitida obligatoria: `mainnet`, `preprod` o `preview`. |
+| `network.name` | Red Cardano admitida obligatoria: `mainnet`, `preprod`, `preview` o `dijkstra`. |
 | `network.customAddress` y `network.customPort` | Dirección y puerto de nodo personalizados opcionales. Configura ambos campos juntos; `customPort` debe estar entre `1` y `65535`. |
 | `monitor.everything` | Establécelo en `true` para monitorizar todos los objetivos admitidos. Configura este campo o al menos un objetivo en `wallets`, `dreps`, `pools`, `assets` o `policies`. |
 | `monitor.wallets` | Direcciones de wallets que se monitorizarán. |
@@ -396,7 +1086,7 @@ Las listas de objetivos deben contener direcciones de wallets, IDs de DRep, IDs 
 
 ### Salida `notify-json`
 
-La salida `notify-json` escribe un objeto JSON por línea en stdout. Cada registro utiliza la versión de esquema `1`. Los registros de estado indican `starting`, `connected` o `stale` e incluyen una marca de tiempo y un mensaje opcional. Los registros de notificación incluyen `ruleId`, un `eventType` opcional, `title` y `body` con el texto generado, y los campos de agrupación `batched` y `count`.
+La salida `notify-json` escribe un objeto JSON por línea en stdout. Cada registro debe utilizar la versión de esquema `1`. Los registros de estado deben indicar `starting`, `connected` o `stale` e incluir una marca de tiempo y un mensaje opcional. Los registros de notificación deben incluir `ruleId`, un `eventType` opcional, `title` y `body` con el texto generado, y los campos de agrupación `batched` y `count`.
 
 ***
 

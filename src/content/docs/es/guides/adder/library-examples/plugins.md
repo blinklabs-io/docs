@@ -15,6 +15,25 @@ go test -race ./plugins
 
 `TickerInput` incorpora `plugin.Base` y emite eventos `example.tick` hasta que se cancela el contexto de ejecución. `HandlerOutput` invoca un callback que responde a la cancelación; un error del callback es terminal. Ambos implementan `plugin.ManagedPlugin` y esperan a que terminen los trabajadores que registran durante `Stop`. Los manejadores deben retornar al recibir la cancelación.
 
+## Migración del contrato
+
+La migración de un plugin personalizado sigue este checklist:
+
+- `plugin.Base` centraliza el contexto de ejecución, la cancelación, los canales y la coordinación de inicio y parada.
+- `plugin.ManagedPlugin` define `StartContext(ctx context.Context)`, `Stop`, `Role`, `ErrorChan`, `InputChan`, `OutputChan`, `Failed` y `Failure`. Cada plugin declara los puertos que corresponden a su rol.
+- Cada plugin comunica los fallos terminales con `Fail(err)`; el pipeline observa `Failed` y consulta `Failure()`.
+- La migración elimina `plugin.PluginOption.Dest`, `plugin.ProcessConfig` y `plugin.ProcessEnvVars`. `ResolveConfig` y `Configuration.New` construyen la configuración en su lugar.
+- Cada fábrica devuelve `plugin.ManagedPlugin` y recibe `plugin.Options` inmutables ya resueltas.
+- La resolución de opciones sigue esta precedencia: valores predeterminados < datos de YAML < variables de entorno < flags de CLI modificados. Una fuente posterior reemplaza el valor anterior.
+
+## Comportamiento del pipeline
+
+El pipeline valida la topología antes de iniciar cualquier plugin. La validación exige plugins no nulos y únicos, roles correctos y puertos compatibles con cada conexión.
+
+`StartContext` inicia primero los consumidores y después los productores: comienza por los plugins de salida, inicia los filtros desde el último hasta el primero para conservar el orden declarado de la cadena y termina con los plugins de entrada. El pipeline conecta los filtros en el orden declarado, por lo que cada evento atraviesa la cadena prevista.
+
+`Stop` detiene los plugins iniciados en orden inverso. La cancelación del contexto detiene las tareas cooperativas de cada plugin; un fallo terminal también cancela el contexto del pipeline y detiene sus componentes. La API del pipeline expone `Pipeline.Failed` y `Pipeline.Failure()` para detectar el primer fallo terminal y su error asociado.
+
 ## Entrada
 
 [Descargar input.go](/downloads/adder/library-examples/source/plugins/input.go).
@@ -212,3 +231,14 @@ func Example_eventTransformation() {
 	// transformed [9 2]
 }
 ```
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

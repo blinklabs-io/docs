@@ -1,9 +1,9 @@
 ---
 title: 動作モードの概要
-description: Adderの動作モードの概要。Adderには、Adder TrayとAdder CLIの2つの主要モードがあります。
+description: Adderの動作モードの概要。Adderには、Adder Tray、Adder CLIとManaged customer routingの3つの主要モードがあります。
 ---
 
-Adderには、利用者や導入環境に合わせた2つの動作モードがあります。使いやすさ、設定の柔軟性、運用上の制御を考慮して、適切なモードを選択してください。
+Adderには、利用者や導入環境に合わせた3つの動作モードがあります。使いやすさ、設定の柔軟性、運用上の制御を考慮して、適切なモードを選択してください。
 
 <a id="1-adder-tray-windows--macos"></a>
 
@@ -75,6 +75,21 @@ Adder Trayはシステムトレイで動作するデスクトップアプリケ�
 - Webhook、プッシュ通知、JSONパイプラインを利用する自動アラートシステム。
 - GoライブラリとしてAdderを組み込む開発者。
 
+<a id="3-managed-customer-routing"></a>
+
+## 3. Managed customer routing（オプトインの顧客ルーティング）
+
+Managed customer routingは、1つのChainSync入力から複数の顧客へイベントを分離して配信する、運用者向けのオプトインモードです。`--managed-config-dir`を指定した場合だけ有効になります。指定しない場合は、既存のCLIおよび埋め込みパイプラインの動作が変わらず、通常の公開`/events`ストリームも利用できます。
+
+### 主な特徴
+
+- ChainSyncのライブテールを使用します。`intersect-tip`と`auto-reconnect`を有効にし、`state-path`と明示的な`intersect-point`は指定しません。グローバルフィルターも設定しません。
+- 管理APIはループバックアドレスに限定して待ち受け、Bearerトークンで認証します。
+- Adderは`log`と`webhook`アダプターだけを有効にし、その他のアダプターを受け付けません。
+- Adderは顧客ごとの入力レーンと送信先ごとのキューに上限を設けます。遅い顧客や送信先による他の顧客の処理停止を防ぎ、満杯になったキューのドロップ数を記録します。
+
+顧客ごとのフィルターと送信先を管理し、運用中に設定を更新したり、顧客ごとに処理を分離したりする場合に使用します。設定形式、APIのエンドポイント、送信先の制約については、[Managed customer routingリファレンス](/ja/guides/adder/014-managed-routing/)を参照してください。
+
 <a id="quick-decision-matrix"></a>
 
 ## モードの選択
@@ -84,6 +99,7 @@ Adder Trayはシステムトレイで動作するデスクトップアプリケ�
 | 簡単な通知 | **Adder Tray** |
 | CLIの経験がない | **Adder Tray** |
 | 完全なカスタマイズ | **Adder CLI** |
+| 顧客ごとのイベントルーティング | **Managed customer routing** |
 | YAML設定 | **Adder CLI** |
 | Webhook / JSON出力 | **Adder CLI** |
 | OS標準の通知 | **Adder Tray** |

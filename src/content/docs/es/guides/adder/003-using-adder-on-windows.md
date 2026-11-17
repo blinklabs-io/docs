@@ -17,6 +17,8 @@ La forma más sencilla de instalar Adder en Windows es utilizar el instalador MS
 
 Selecciona la versión adecuada para tu sistema: Windows x64 o Windows arm64.
 
+El MSI firmado admite Windows x64 y arm64 e instala `adder.exe` y `adder-tray.exe` en `%ProgramFiles%\Adder`. El menú Inicio incluye un acceso a la aplicación de bandeja, y la instalación aparece en **Agregar o quitar programas**. El instalador no crea ninguna tarea programada.
+
 ### Paso 1.2 - Abrir el archivo .msi
 
 Cuando termine la descarga, pulsa `Open` para abrir el archivo `.msi`.
@@ -61,6 +63,8 @@ Al abrir *Adder Tray App*, verás la pantalla **Welcome**, que te guía para con
 
 ### Paso 3.1 - Seleccionar la red Cardano que quieres observar
 
+Selecciona `Mainnet`, `Preprod`, `Preview` o `Dijkstra`. La opción `Dijkstra` utiliza la red `DijkstraNet`.
+
 <img src="/adder-windows-config-network.webp"
      alt="adder-windows-config-network"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
@@ -99,11 +103,17 @@ Pulsa `Next Step`.
 
 ### Paso 3.4 - Alertas de eventos
 
-Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio.
+Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio, incluida `Chain rollbacks`. Esta casilla controla las notificaciones de retroceso de forma independiente de `Blocks minted`.
 
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+### Controles de inicio y actividad en segundo plano
+
+La casilla `Start Adder automatically on login / reboot` configura el inicio automático de Adder Tray al iniciar sesión o reiniciar Windows.
+
+El indicador de actividad en segundo plano muestra si Adder está registrado y en ejecución. La opción `Open Login Items Settings...` abre la configuración de aplicaciones de inicio de Windows.
 
 ### Paso 3.5 - Enviar una notificación de prueba
 
@@ -125,9 +135,25 @@ Pulsa `Finish Setup`.
 
 Para ver eventos recientes, ajustar la configuración o iniciar, detener o reiniciar la aplicación, haz clic derecho en Adder en la bandeja del sistema y elige la opción que necesites.
 
+Adder guarda el registro de la bandeja de Windows en `%LOCALAPPDATA%/Adder/Logs/adder-tray.log` y registra allí los detalles de los pánicos recuperados. Solo se ejecuta una instancia de la bandeja por sesión de inicio de sesión.
+
 <img src="/adder-windows-tray-app-menu.webp"
      alt="adder-windows-tray-app-menu"
      style="max-width:100%; height:auto; max-height:500px; object-fit:contain; border:1px solid #ccc;" />
+
+Los enlaces del explorador para los eventos recientes utilizan la red configurada. Los eventos de transacción y gobernanza utilizan el hash de transacción, mientras que los eventos de bloque utilizan el hash de bloque.
+
+### Editar las reglas de notificación
+
+La opción `Notification Rules...` del menú de la bandeja permite editar los objetivos `Wallets`, `DReps`, `Pools`, `Assets` y `Policies`. El editor también ofrece controles para activar o desactivar las categorías de notificación disponibles o utilizar `Monitor Everything` de forma exclusiva en lugar de mantener listas de objetivos explícitas.
+
+Al aplicar los cambios, Adder guarda la configuración y actualiza las reglas y los límites de frecuencia sin reiniciar el proceso de la bandeja. El editor solicita confirmación antes de eliminar un objetivo. Si la reconexión muestra una advertencia recuperable, el editor permanece abierto y vuelve a habilitar sus entradas para permitir un nuevo intento.
+
+Las notificaciones de bloques de pools solo coinciden con los pools seguidos. Las notificaciones de gobernanza de DRep solo coinciden con los DRep seguidos. Cuando un evento contiene varios votos, el texto muestra el voto del DRep seguido.
+
+### Consultar la versión
+
+La opción `About` abre el diálogo integrado. Cuando los metadatos del commit están disponibles, el diálogo muestra `Version: <version> (commit: <hash>)`; de lo contrario, muestra únicamente la versión.
 
 ---
 
