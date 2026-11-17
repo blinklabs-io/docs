@@ -59,6 +59,14 @@ The Adder command‑line binary provides full access to Adder’s event‑proces
 - Automated alerting systems (webhooks, push notifications, JSON pipelines).
 - Developers embedding Adder as a Go library
 
+## 3. Adder Managed Routing (Opt In)
+
+Adder Managed Routing is an operator mode for deployments that route one ChainSync stream to independent customer filter lanes and named destinations. Enable it by setting `--managed-config-dir`; without this flag, the existing CLI and embedded pipeline behavior remains the default.
+
+Use managed routing when multiple customers need isolated filters and destinations. Configure `chainsync` with `intersect-tip=true` and `auto-reconnect=true`, and omit cursor state and an explicit intersect point. Managed mode does not start the ordinary public `/events` API and does not support global filters.
+
+Managed mode provides a private, authenticated configuration and status API. It supports only the managed `log` and `webhook` adapters. Bounded queues isolate each customer and destination; full queues record drops rather than blocking other lanes. See [Managed customer routing](014-managed-routing.md) for configuration, API, and limit details.
+
 ## Quick Decision Matrix
 
 | Requirement | Recommended Mode |
@@ -66,6 +74,8 @@ The Adder command‑line binary provides full access to Adder’s event‑proces
 | Simple notifications | **Adder Tray** |
 | No CLI experience | **Adder Tray** |
 | Full customization | **Adder CLI** |
+| Multiple customers with isolated routing | **Adder Managed Routing** |
+| Default CLI or embedded pipeline behavior | **Adder CLI** |
 | YAML configuration | **Adder CLI** |
 | Webhooks / JSON outputs | **Adder CLI** |
 | OS‑native notifications | **Adder Tray** |
