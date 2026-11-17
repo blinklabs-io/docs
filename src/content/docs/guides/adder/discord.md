@@ -96,8 +96,8 @@ Adder configuration, or change the recent event list.
 
 Adder sends each selected event to the configured channel. It formats event
 messages with Adder's Discord event layout and sets Discord's
-`allowed_mentions.parse` value to an empty list. Event content therefore does
- cannot notify users, roles, or everyone through mention syntax.
+`allowed_mentions.parse` value to an empty list. Event content therefore cannot
+notify users, roles, or everyone through mention syntax.
 
 Adder records an event in the recent list only after Discord accepts the event
 message. The output does not keep a durable queue. A failed or interrupted
