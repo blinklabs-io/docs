@@ -26,7 +26,7 @@ plugins:
 
 ## 通知設定の永続化
 
- Adder は `settings-file` に設定済みのチャットの通知設定を保存します。Adder のプロセスには、ファイルの親ディレクトリへの書き込み権限が必要です。Adder は必要なディレクトリをプライベートな権限で作成し、YAML ファイル全体を一度に保存します。Adder の各インスタンスと設定済みのチャットには、それぞれ別の設定ファイルを使用します。
+Adder は `settings-file` に設定済みのチャットの通知設定を保存します。Adder のプロセスには、ファイルの親ディレクトリへの書き込み権限が必要です。Adder は必要なディレクトリをプライベートな権限で作成し、途中の状態を残さず YAML ファイルを保存します。Adder の各インスタンスと設定済みのチャットには、それぞれ別の設定ファイルを使用します。
 
 設定ファイルには次のキーを使用します。
 
@@ -62,7 +62,7 @@ Adder は次のコマンドを設定済みのチャットで受け付けます�
 
 ### `/status`
 
- Adder パイプラインの状態を返します。状態を提供する機能を利用できる場合、`running`、`stopped`、または `unavailable` を表示します。状態を提供する機能が設定されていない場合も `unavailable` を表示します。
+Adder パイプラインの状態を返します。状態を取得できる場合は、`running`、`stopped`、または `unavailable` を表示します。状態を取得できない場合も `unavailable` を表示します。
 
 ### `/settings`
 
@@ -70,7 +70,7 @@ Adder は次のコマンドを設定済みのチャットで受け付けます�
 
 ### `/notify blocks|transactions|rollbacks|governance on|off`
 
- 指定した通知カテゴリを有効または無効にします。`blocks`、`transactions`、`rollbacks`、`governance` のいずれかと、`on` または `off` を指定します。Adder は変更後の設定を `settings-file` にファイル全体で保存します。
+指定した通知カテゴリを有効または無効にします。`blocks`、`transactions`、`rollbacks`、`governance` のいずれかと、`on` または `off` を指定します。Adder は変更後の設定を、途中の状態を残さず `settings-file` に保存します。
 
 構文、通知カテゴリ、または値が不正な場合、Adder は次の構文を表示します。
 
