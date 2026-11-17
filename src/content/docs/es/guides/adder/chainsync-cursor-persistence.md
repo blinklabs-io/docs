@@ -27,7 +27,7 @@ plugins:
       state-path: /var/lib/adder/chainsync.sqlite
 ```
 
-Use una ruta de archivo que el proceso pueda abrir para leer y escribir. Mantenga el archivo en un almacenamiento que sobreviva a los reinicios si la aplicación debe conservar el cursor. Adder crea y utiliza el archivo SQLite cuando el valor no está vacío.
+Configure una ruta de archivo que el proceso pueda abrir para leer y escribir. Conserve el archivo en un almacenamiento que sobreviva a los reinicios si la aplicación debe conservar el cursor. Adder crea y utiliza el archivo SQLite cuando el valor no está vacío.
 
 El valor predeterminado es `""`. Para desactivar la persistencia, omita `--input-chainsync-state-path` o configure `state-path: ""`; Adder no conserva ningún cursor y mantiene el comportamiento anterior.
 
@@ -41,7 +41,7 @@ Adder conserva únicamente bloques que ya emitió. Después de emitir correctame
 
 Cuando la cadena hace rollback, Adder retrocede el cursor pendiente hasta el último bloque emitido que todavía sobrevive en la cadena. La siguiente escritura conserva ese punto, y el siguiente reinicio reanuda la sincronización desde allí en lugar de continuar después del bloque eliminado por el rollback.
 
-La escritura periódica limita la cantidad de progreso reciente que puede perderse si el proceso termina antes de la siguiente escritura. Un reinicio puede volver a emitir eventos posteriores a la última escritura persistida; esta función no elimina la posibilidad de reemisión ni sustituye la deduplicación del consumidor. Si la persistencia está desactivada, Adder no restaura ni escribe ningún cursor y aplica las opciones configuradas de intersección en cada inicio.
+El intervalo de cinco segundos limita la cantidad de progreso reciente que puede perderse si el proceso termina antes de la siguiente escritura. Un reinicio puede volver a emitir eventos posteriores a la última escritura persistida; esta función no elimina la posibilidad de reemisión ni sustituye la deduplicación del consumidor. Si la persistencia está desactivada, Adder no restaura ni escribe ningún cursor y aplica las opciones configuradas de intersección en cada inicio.
 
 ## API de Go
 
@@ -64,9 +64,8 @@ chainSync := chainsync.New(
 
 La clave predeterminada es `chainsync-cursor`. Asigne una clave distinta a cada instancia que comparta un almacén para evitar que sus cursores colisionen.
 
-La instancia que crea su propio almacén administra su ciclo de vida y lo cierra durante el apagado. Un almacén proporcionado por el llamador mediante `WithStateStore` permanece abierto cuando `ChainSync` se detiene o inicia otra ejecución; el llamador administra su ciclo de vida y puede compartirlo entre instancias.
+La instancia que abre su propio almacén administra su ciclo de vida y lo cierra durante el apagado. Un almacén proporcionado por el llamador mediante `WithStateStore` permanece abierto cuando `ChainSync` se detiene o inicia otra ejecución; el llamador administra su ciclo de vida y puede compartirlo entre instancias.
 
 ## Navegación
 
-- Consulte la [referencia de comandos en español](./006-command_list.md) para las opciones de entrada y configuración de `ChainSync`.
 - Consulte la sección de [configuración de entrada](./006-command_list.md#entrada) para ubicar `--input-chainsync-state-path` junto con las demás opciones de entrada.
