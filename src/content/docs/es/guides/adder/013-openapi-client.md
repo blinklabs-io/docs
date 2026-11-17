@@ -14,12 +14,6 @@ go get github.com/stretchr/testify/assert
 go get golang.org/x/net/context
 ```
 
-Añade el paquete al proyecto con la importación siguiente:
-
-```go
-import openapi "github.com/blinklabs-io/adder/openapi"
-```
-
 ## Migración de la ruta del módulo
 
 El cliente OpenAPI generado ahora usa el módulo `github.com/blinklabs-io/adder/openapi`. Actualiza las referencias existentes al módulo anterior:
