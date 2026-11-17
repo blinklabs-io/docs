@@ -101,7 +101,7 @@ Pulsa `Next Step`.
 
 ### Paso 3.4 - Alertas de eventos
 
-Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio, incluida `Chain rollbacks` para recibir alertas de retrocesos de la cadena. Esta casilla controla las alertas de retrocesos de forma independiente de `Blocks minted`.
+Marca las casillas de los eventos sobre los que quieras recibir alertas de escritorio, incluida `Chain rollbacks`. Esta casilla controla las notificaciones de retroceso de forma independiente de `Blocks minted`.
 
 <img src="/adder-windows-config-events.webp"
      alt="adder-windows-config-events"
