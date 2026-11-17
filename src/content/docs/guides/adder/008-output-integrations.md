@@ -167,7 +167,7 @@ records affect earlier events.
 Adder waits for each publish result before accepting the next event. A result
 means that Pub/Sub accepted or rejected the message, not that a subscriber
 received or processed it. Adder sends events sequentially without intentional
-batching, applies a ten-second request deadline, and reports failures without
+batching, uses a ten-second request deadline, and reports failures without
 local durable replay. Pub/Sub limits the message data and publish request to
 10 MB; Adder rejects data over the data limit, and request overhead can cause
 the service to reject a message near the limit.
