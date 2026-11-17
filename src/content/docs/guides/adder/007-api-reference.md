@@ -36,3 +36,13 @@ Shutdown(context.Context) error
 ```
 
 `APIv1` implements `Shutdown` to shut down its listener. Code that implements or calls `api.API` must provide or handle this method and its returned error.
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
