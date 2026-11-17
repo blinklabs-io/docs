@@ -1,9 +1,9 @@
 ---
-title: "Referencia de configuración de Dingo v0.94.1"
-description: Referencia y ejemplo completo de configuración de Dingo v0.94.1.
+title: "Referencia de configuración de Dingo v0.94.2"
+description: Referencia y ejemplo completo de configuración de Dingo v0.94.2.
 ---
 
-Esta página describe la configuración incluida en Dingo v0.94.1. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.94.1](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example).
+Esta página describe la configuración incluida en Dingo v0.94.2. La referencia completa de campos, descripciones, valores predeterminados, variables de entorno, opciones CLI, ajustes de proveedores y patrones de despliegue está en el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example) de esa versión. También puedes consultarlo en el [código de Dingo v0.94.2](https://github.com/blinklabs-io/dingo/blob/v0.94.2/dingo.yaml.example).
 
 El ejemplo no contiene ajustes activos. Deja los valores comentados para utilizar los valores predeterminados de Dingo; descomenta un ajuste únicamente cuando quieras sustituir su valor predeterminado. No copies la configuración de otra versión sin revisar el ejemplo correspondiente, porque los campos y su comportamiento pueden cambiar.
 
@@ -17,7 +17,7 @@ Dingo busca cada ajuste primero en la línea de comandos, después en las variab
 
 | Configuración | Clave del archivo Cardano | Opción CLI de Dingo | Variable de entorno de Dingo | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Este es el único valor aceptado y corresponde a la estrategia heredada de recepción por par implementada por Dingo. Dingo rechaza `TxSubmissionLogicV2` y cualquier valor desconocido durante la carga de la configuración. |
+| Estrategia de envío de transacciones | `TxSubmissionLogicVersion` | — | — | Cuando falta la clave, Dingo utiliza `TxSubmissionLogicV1`. Acepta `TxSubmissionLogicV1` y `TxSubmissionLogicV2`; la configuración integrada de Musashi utiliza `TxSubmissionLogicV2`. Dingo rechaza los valores desconocidos durante la carga de la configuración. |
 | Antelación mínima de oferta Leios | `LeiosMinOfferLead` | — | — | Clave del archivo de configuración del nodo Cardano. Indica cuántos `slots` debe estar un bloque endorser por encima de la punta inmutable para que Dingo lo ofrezca a un par. Dingo utiliza `3600` `slots` cuando la clave está ausente. |
 
 El archivo de configuración del nodo Cardano admite tanto el formato plano existente como el formato envolvente con `Version: 2`. En el formato envolvente, `Version` debe ser el entero `2` y `Configuration` debe ser un objeto. Un ejemplo compacto es:
@@ -41,14 +41,14 @@ Configuration:
 
 Dingo asigna las secciones `Protocol`, `Testing`, `Consensus` y `Network` a los campos existentes de configuración del nodo. `Protocol` contiene la configuración de los archivos y hashes de génesis; `Testing` contiene la configuración de génesis de Dijkstra y las anulaciones de épocas de bifurcación; `Consensus` contiene `ConsensusMode`; y `Network` contiene los ajustes de red, incluido `PeerSharing` y los objetivos de pares. En `Network`, Dingo asigna `DeadlineTargetNumberOfRootPeers`, `DeadlineTargetNumberOfKnownPeers`, `DeadlineTargetNumberOfEstablishedPeers` y `DeadlineTargetNumberOfActivePeers` respectivamente a `TargetNumberOfRootPeers`, `TargetNumberOfKnownPeers`, `TargetNumberOfEstablishedPeers` y `TargetNumberOfActivePeers`.
 
-Dingo rechaza los datos del formato envolvente si falta `Version` o `Configuration`, si `Version` no es el entero `2`, si `Configuration` o una sección admitida no es un objeto, o si el archivo usa una versión no admitida. Dingo también rechaza cualquier clave duplicada, incluidas las que aparecen en distintas secciones o las que establecen el mismo campo efectivo, como un objetivo `TargetNumberOf*Peers` y su alias `DeadlineTargetNumberOf*Peers`. Dentro del formato envolvente, Dingo aplica igualmente la validación de `TxSubmissionLogicVersion`: solo acepta `TxSubmissionLogicV1` y rechaza los valores no válidos, incluido `TxSubmissionLogicV2`, durante la carga.
+Dingo rechaza los datos del formato envolvente si falta `Version` o `Configuration`, si `Version` no es el entero `2`, si `Configuration` o una sección admitida no es un objeto, o si el archivo usa una versión no admitida. Dingo también rechaza cualquier clave duplicada, incluidas las que aparecen en distintas secciones o las que establecen el mismo campo efectivo, como un objetivo `TargetNumberOf*Peers` y su alias `DeadlineTargetNumberOf*Peers`. Dentro del formato envolvente, Dingo aplica igualmente la validación de `TxSubmissionLogicVersion`; la configuración integrada de Musashi utiliza `TxSubmissionLogicV2`.
 
 ## Áreas de configuración
 
 | Zona | Ajustes principales | Propósito |
 | --- | --- | --- |
 | Redes y rutas | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Selecciona una red Cardano y las rutas de configuración del nodo, topología y datos. |
-| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. |
+| Servicios y diagnósticos | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `trustedNtCIdleTimeout`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configura los servicios públicos y privados, métricas, sondas de estado, perfiles, trazas y duración de instantáneas LocalStateQuery. |
 | Registro y TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Selecciona la salida de registros y protege los servicios compatibles de API o Bark. |
 | Almacenamiento y API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Elige el historial almacenado, proveedores de almacenamiento, orden de transacciones y API de aplicaciones. |
 | Consenso y selección de plugins | `plugins.consensus` | Seleccione el proveedor de consenso utilizado por el nodo. |
@@ -72,7 +72,7 @@ Praos es el proveedor predeterminado. Por compatibilidad con las bases de datos 
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y comportamiento |
 | --- | --- | --- | --- | --- |
-| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. `25 MiB` cuando el modo es Leios o la red es Musashi por nombre o por magic, incluso en `serve`. Un valor explícito prevalece sobre ambos valores predeterminados. |
+| Capacidad del mempool | `plugins.mempool.config.capacity` | — | — | `1 MiB` en los modos estándar y Praos. En modo Leios o en la red Musashi por nombre o por magic, Dingo usa `25 MiB` únicamente cuando el comité de Leios de la época actual puede alcanzar su umbral de quórum; si el comité no puede alcanzar el quórum o Dingo no puede resolverlo, mantiene `1 MiB`. Una capacidad explícita sustituye estos valores predeterminados y permanece fija; no cambia con el comité. |
 
 ### Procesamiento del ledger
 
@@ -114,6 +114,12 @@ Dingo solo activa ambos muestreos cuando `debugPort` es distinto de cero. Dingo 
 | Exportador de registros OpenTelemetry | — | — | `OTEL_LOGS_EXPORTER` | Activa la exportación OTLP opcional de registros. Un valor vacío o `none` la desactiva. Dingo avisa sobre una configuración de exportador no válida en lugar de hacer fallar el inicio y mantiene disponibles los registros de salida estándar. |
 | Exportador de métricas OpenTelemetry | — | — | `OTEL_METRICS_EXPORTER` | Activa la exportación OTLP opcional de las métricas del registro Prometheus. Un valor vacío o `none` la desactiva. Dingo avisa sobre una configuración de exportador no válida en lugar de hacer fallar el inicio; la exportación no altera el extremo Prometheus `/metrics`. |
 
+### Conexión local confiable de nodo a cliente
+
+| Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado | Validación y comportamiento |
+| --- | --- | --- | --- | --- | --- |
+| Tiempo de inactividad de NtC local confiable | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0` | `0` desactiva el límite de inactividad. Un valor positivo establece la duración tras la que Dingo cierra una conexión local confiable inactiva. Dingo rechaza los valores negativos. |
+
 ### Socket del nodo
 
 | Configuración | Clave YAML | Opción CLI | Variable de entorno | Valor predeterminado y validación |
@@ -139,6 +145,7 @@ Dingo aplica a `socketMode` y `dmq.socketMode` un valor predeterminado de `0600`
 | Archivo de topología DMQ | `dmq.topologyFile` | `--dmq-topology-file` | `DINGO_DMQ_TOPOLOGY_FILE` | Sin configurar | Si se configura, la ruta no puede incluir recorridos `..` y debe identificar un archivo regular existente. Dingo lo carga y valida antes de abrir el socket DMQ. |
 | Mínimo de pares DMQ | `dmq.minPeers` | `--dmq-min-peers` | `DINGO_DMQ_MIN_PEERS` | `3` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` permite no requerir pares. Solo las conexiones salientes cuentan para cumplir este mínimo; las conexiones entrantes no lo satisfacen. |
 | Máximo de pares DMQ | `dmq.maxPeers` | `--dmq-max-peers` | `DINGO_DMQ_MAX_PEERS` | `10` | Exige `dmq.minPeers <= dmq.maxPeers`; `0` no permite pares cuando `minPeers` también es `0`. Limita el total de conexiones y reserva espacio para las conexiones salientes según `minPeers` y la valencia total de las raíces locales. |
+| Intervalo mínimo entre mensajes del mismo pool | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` segundos | `0` desactiva el espaciado. Un entero positivo establece el intervalo mínimo, en segundos, entre anuncios del mismo pool. Dingo rechaza los valores mayores que `9223372036` segundos. |
 
 Dingo valida estos seis ajustes de pares al iniciar DMQ. Con `dmq.n2nPort: 0`, omite la validación de las direcciones de escucha. Si `dmq.n2nPort` no es cero, cada dirección debe utilizar su versión IP correspondiente. Cuando `dmq.n2nPort` y `dmq.maxPeers` son distintos de cero, Dingo escucha en las direcciones configuradas y el gestor mantiene los pares dentro de `dmq.minPeers` y `dmq.maxPeers`. El archivo de topología configurado proporciona pares al gestor, que intenta primero las raíces locales y después las raíces públicas. El tema activado también puede descubrir pares relay del ledger mediante registros SRV de DNS asociados al prefijo del tema.
 
@@ -192,8 +199,12 @@ El proveedor integrado de Blockfrost escucha en loopback de forma predeterminada
 | Token de autenticación | `plugins.api.blockfrost.config.authToken` | — | — | Entrada heredada que Dingo ignora y que no tiene efecto; no es obligatoria. El envío y la evaluación de transacciones aceptan solicitudes anónimas. |
 | Modificaciones concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite global para el envío y la evaluación de transacciones. |
 | Modificaciones concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo activa el límite por cliente. Un límite positivo por cliente puede coexistir con `maxConcurrentMutations: 0`; cuando el límite global es positivo, el límite por cliente no puede superarlo. |
+| Listas de pools concurrentes globales | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las solicitudes simultáneas de `GET /api/v0/pools` y `GET /api/v0/pools/retiring`. |
+| Listas de pools concurrentes por cliente | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | Sin configurar o con `0`, no impone un límite. Un valor positivo limita las solicitudes simultáneas por cliente en esas dos rutas. Cuando el límite global es positivo, el límite por cliente no puede superarlo. |
 
 Dingo no exige TLS para el acceso de modificación de Blockfrost. Antes de leer el cuerpo, aplica los límites de modificaciones que tengan un valor positivo. Si se agota un límite configurado y activo, devuelve HTTP `429` con `Retry-After: 1` sin leer el cuerpo.
+
+Antes de procesar cada solicitud de lista de pools, Dingo aplica los límites de listas que tengan un valor positivo. Si se agota un límite habilitado, devuelve HTTP `429` con `Retry-After: 1`.
 
 ### Agente de usuario HTTP saliente compartido
 
@@ -346,6 +357,7 @@ Las entradas desde archivos son alternativas a los valores literales. Se aplica 
 | --- | --- | --- | --- | --- |
 | Clave API de paridad Koios de Dingo | `koiosParity.apiKey` | Eliminada; no válida: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Vacía de forma predeterminada. YAML y esta variable de entorno siguen aceptando claves API literales. |
 | Archivo de clave API de paridad Koios de Dingo | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Vacío de forma predeterminada. La entrada CLI utiliza esta opción respaldada por archivo. El archivo se lee como una cadena de clave API. |
+| Modo estricto de paridad Koios | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | Al activarlo, un HTTP `429` de cuota diaria de Koios con el mensaje `Exceeded Tier Limit` no detiene el nodo. Dingo registra `ERROR` y reintenta según el calendario `ERROR` hasta que se restablece la cuota, incluso durante el muestreo de información de transacciones. Si no puede persistir el estado `ERROR`, el fallo sigue siendo fatal. |
 | Archivo de campo genérico de configuración de plugins | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Sustituye a `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo lee el archivo como una cadena de texto, sin interpretarlo como YAML. |
 | Archivo de clave API de `koios-parity` | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Sustituye a `--api-key` o `KOIOS_API_KEY`. Las opciones CLI tienen prioridad sobre las variables de entorno. |
 | Archivo de DSN de metadatos de `koios-parity` | — | `--metadata-dsn-file` | — | Sustituye a `--metadata-dsn`. Aporta la cadena de conexión como texto. |
@@ -358,7 +370,7 @@ Cada valor respaldado por archivos debe cumplir estos requisitos:
 
 - La ruta debe identificar un archivo regular. Dingo rechaza directorios, dispositivos y otros caminos no regulares.
 - Dingo acepta como máximo `64 KiB` de contenido. Elimina los caracteres `CR` y `LF` finales y rechaza el contenido vacío o compuesto únicamente de espacios.
-- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, deben pertenecer al usuario que ejecuta el proceso o a root; además, Dingo rechaza los directorios no sticky que permitan escritura al grupo o a otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
+- El archivo y cada entrada ancestral de su ruta deben tener una propiedad confiable. En Unix, el usuario que ejecuta el proceso o root debe ser propietario del archivo y de cada entrada ancestral. Si el grupo u otros usuarios pueden escribir en un directorio ancestral, ese directorio debe tener el sticky bit (`chmod +t`). El bit setgid por sí solo, incluido el de la raíz de un volumen de Kubernetes con `fsGroup`, no impide que otros miembros del grupo renombren entradas. Como alternativa, el operador puede eliminar los permisos de escritura del grupo y de otros usuarios. Unix permite acceso al propietario y al grupo en el archivo, pero no a otros usuarios. Windows solo permite al propietario, Administrators y SYSTEM mediante la ACL correspondiente.
 - Los errores identifican el valor o la ruta, pero nunca incluyen el contenido del archivo.
 
 ### Autenticación de manifiestos del registro de tokens

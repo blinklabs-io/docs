@@ -41,6 +41,8 @@ plugins:
         host: 127.0.0.1
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
+        maxConcurrentPoolLists: 4
+        maxConcurrentPoolListsPerClient: 1
     utxorpc:
       provider: builtin
       config:
@@ -54,6 +56,8 @@ El proveedor integrado de Blockfrost escucha en `127.0.0.1` de forma predetermin
 
 Las solicitudes de modificación son anónimas y no requieren credenciales. Dingo deja sin límite cada opción que se omite o se establece en `0`: `maxConcurrentMutations` controla el límite global y `maxConcurrentMutationsPerClient`, el límite por cliente. Un valor positivo activa el límite correspondiente. Dingo permite configurar un límite positivo por cliente aunque el límite global permanezca desactivado. Cuando `maxConcurrentMutations` es positivo, `maxConcurrentMutationsPerClient` debe ser menor o igual que ese valor.
 
+Configura límites de admisión opcionales e independientes para las listas de pools. `maxConcurrentPoolLists` limita el trabajo global y `maxConcurrentPoolListsPerClient` limita el trabajo de cada cliente para `GET /api/v0/pools` y `GET /api/v0/pools/retiring`. Un valor positivo activa el límite correspondiente. Si una solicitud supera un límite habilitado, Dingo devuelve HTTP `429` con `Retry-After: 1`. Estos límites no modifican los límites de las solicitudes de modificación.
+
 Las siguientes rutas aceptan solicitudes anónimas:
 
 | Ruta | Autenticación y admisión |
@@ -66,7 +70,7 @@ Conserva la validación de las solicitudes. Dingo comprueba la capacidad antes d
 
 Las rutas de modificación aceptan acceso HTTP sin TLS. Conserva el host de loopback predeterminado salvo que decidas expresamente permitir el acceso externo a estas operaciones.
 
-Este sitio incluye la referencia de configuración completa de v0.94.1 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
+Este sitio incluye la referencia de configuración completa de v0.94.2 y el archivo [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example) correspondiente. Utiliza archivos de configuración de la misma versión que el programa; las opciones de los proveedores pueden cambiar entre versiones.
 
 ## Acceso seguro a las API
 
@@ -96,6 +100,8 @@ Antes de iniciar el nodo, configura estos ajustes:
 - Establece `barkHost` para elegir la interfaz de red mediante `--bark-host` o `DINGO_BARK_HOST`. Si queda vacío, Bark escucha en `0.0.0.0`.
 
 El `LifecycleService` está disponible mediante HTTP sin TLS y no requiere certificados de cliente ni listas de operadores para `GetStatus`, `Stop` ni `Restart`. `GetStatus` es de solo lectura. `Stop` y `Restart` son operaciones destructivas: `Stop` solicita una parada ordenada y `Restart` solicita una parada ordenada seguida de un reinicio. `Restart` no está disponible en plataformas que no sean Unix.
+
+Las operaciones remotas `Stop` y `Restart` continúan después del plazo de la solicitud hasta que Dingo termina de cerrar el almacenamiento durable. `Restart` solo inicia el reinicio después de completar ese cierre. Configura el supervisor para permitir `shutdownTimeout` más el tiempo que necesita el almacenamiento durable para cerrarse. Dingo registra avisos de progreso mientras el cierre se prolonga y avisos cuando supera el plazo; solo `SIGKILL` puede interrumpir por la fuerza un cierre bloqueado.
 
 Cuando `barkHost` expone el servicio fuera de loopback, aplica controles de red para limitar el acceso al `LifecycleService`.
 

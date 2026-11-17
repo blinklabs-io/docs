@@ -11,14 +11,14 @@ description: "Adderイベントを外部サービスへ配信する出力プラ�
 
 各出力の設定項目と配信動作の詳細は、次のページで確認できます。
 
-- [Discordボット出力](./discord.md)
-- [Slack Webhook出力](./slack.md)
-- [Matrixルーム出力](./matrix.md)
-- [ClickHouse出力](./clickhouse.md)
-- [Kafka出力](./kafka.md)
-- [NATS出力](./nats.md)
-- [Signal出力](./signal.md)
-- [再起動安全なWebhook配信](./webhook-durability.md)
+- [Discordボット出力](/ja/guides/adder/discord/)
+- [Slack Webhook出力](/ja/guides/adder/slack/)
+- [Matrixルーム出力](/ja/guides/adder/matrix/)
+- [ClickHouse出力](/ja/guides/adder/clickhouse/)
+- [Kafka出力](/ja/guides/adder/kafka/)
+- [NATS出力](/ja/guides/adder/nats/)
+- [Signal出力](/ja/guides/adder/signal/)
+- [再起動安全なWebhook配信](/ja/guides/adder/webhook-durability/)
 
 ## PostgreSQL
 

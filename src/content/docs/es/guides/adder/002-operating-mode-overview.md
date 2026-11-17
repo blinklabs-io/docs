@@ -1,6 +1,6 @@
 ---
 title: Resumen de los modos de funcionamiento
-description: Modos de funcionamiento de Adder. Adder ofrece tres modos principales: Adder Tray, Adder CLI y Enrutamiento administrado de clientes.
+description: "Modos de funcionamiento de Adder. Adder ofrece tres modos principales: Adder Tray, Adder CLI y Enrutamiento administrado de clientes."
 ---
 
 Adder ofrece tres modos de funcionamiento, cada uno adaptado a distintos usuarios y entornos de despliegue. Elige el modo que proporcione el equilibrio adecuado entre facilidad de uso, configuración y control operativo.

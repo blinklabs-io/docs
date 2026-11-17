@@ -9,7 +9,7 @@ description: "AdderのClickHouse出力における設定とイベント保存動
 
 `clickhouse`出力は、選択したイベントをHTTP経由の`JSONEachRow`バッチとして、指定したClickHouseデータベースの`adder_events_v1`に保存します。この出力は、起動時に`MergeTree`テーブルを作成し、`event_time`の月単位でパーティションを分けます。
 
-関連情報は[コマンドリファレンス](./006-command_list.md)と[出力連携リファレンス](./008-output-integrations.md)です。
+関連情報は[コマンドリファレンス](/ja/guides/adder/006-command_list/)と[出力連携リファレンス](/ja/guides/adder/008-output-integrations/)です。
 
 ## 設定
 

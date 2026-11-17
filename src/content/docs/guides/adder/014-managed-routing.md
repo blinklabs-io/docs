@@ -10,8 +10,8 @@ description: Configure Adder managed customer routing, reload its configuration,
 This reference describes Adder's opt-in managed mode. Managed mode reads one
 ChainSync stream, applies independent filter lanes for named customers, and
 sends matching events to customer destinations. The [operating mode
-overview](./002-operating-mode-overview) explains how managed mode fits with
-Adder's other operating modes. The [command reference](./006-command_list)
+overview](/guides/adder/002-operating-mode-overview/) explains how managed mode fits with
+Adder's other operating modes. The [command reference](/guides/adder/006-command_list/)
 lists the complete CLI; this page describes the managed flags and their
 runtime behavior.
 
@@ -247,9 +247,9 @@ bodies.
 | `GET /metrics` | None | Returns aggregate managed counters without customer or credential labels. |
 
 The authenticated managed `/metrics` endpoint is separate from the ordinary
-pipeline metrics described in the [metrics reference](./010-metrics). The
+pipeline metrics described in the [metrics reference](/guides/adder/010-metrics/). The
 ordinary output plugins and their normal configuration appear in the
-[output integrations guide](./008-output-integrations); managed mode does
+[output integrations guide](/guides/adder/008-output-integrations/); managed mode does
 not enable those adapters.
 
 ## Reload and cutover semantics

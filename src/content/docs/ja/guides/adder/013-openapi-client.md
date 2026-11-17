@@ -1,4 +1,7 @@
-# Adder OpenAPI Goクライアント
+---
+title: "Adder OpenAPI Goクライアント"
+description: "AdderのOpenAPI Goクライアントを導入し、APIリクエストを実行します。"
+---
 
 ## 概要
 

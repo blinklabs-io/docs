@@ -7,7 +7,7 @@ description: Configure and operate Adder's Kafka output.
 
 The `kafka` output publishes selected Adder events as JSON records to one Kafka topic. Create the topic before Adder starts.
 
-See the [command reference](./006-command_list.md) for Kafka CLI flags and the [output integration overview](./008-output-integrations.md) for shared output configuration.
+See the [command reference](/guides/adder/006-command_list/) for Kafka CLI flags and the [output integration overview](/guides/adder/008-output-integrations/) for shared output configuration.
 
 ## Configuration
 

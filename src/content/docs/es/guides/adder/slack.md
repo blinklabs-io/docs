@@ -100,7 +100,7 @@ Al apagar la salida, Adder cancela el proceso de entrega y las esperas o solicit
 6. Revisa los registros y el canal de errores para confirmar que no muestran la URL ni el secreto del webhook.
 7. Elimina o revoca el webhook de prueba cuando termine la comprobación.
 
-Consulta la [referencia de comandos de Adder](./006-command_list.md) para las opciones `--output-slack-webhook-urls` y `--output-slack-event-types`, y la [referencia de integraciones de salida](./008-output-integrations.md) para el contexto de las salidas de Adder.
+Consulta la [referencia de comandos de Adder](/es/guides/adder/006-command_list/) para las opciones `--output-slack-webhook-urls` y `--output-slack-event-types`, y la [referencia de integraciones de salida](/es/guides/adder/008-output-integrations/) para el contexto de las salidas de Adder.
 
 ---
 

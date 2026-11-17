@@ -39,7 +39,7 @@ La instrumentación cambia los tiempos, así que los perfiles no sirven como
 referencia de rendimiento. Una comparación fiable mantiene constantes la
 versión de Go, la máquina, la carga de trabajo y la duración del benchmark, y
 compara varias ejecuciones sin perfilado. La página de [benchmarks y
-profiling](011-benchmarks) describe el procedimiento completo.
+profiling](/es/guides/adder/011-benchmarks-and-profiling/) describe el procedimiento completo.
 
 El listener de depuración permanece desactivado de forma predeterminada. El
 flujo local mantiene los archivos de perfil fuera de una interfaz pública.

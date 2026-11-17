@@ -99,7 +99,7 @@
 }
 
 /* Keep the mobile drawer aligned with the desktop navigation treatment. */
-starlight-menu-button button {
+.sl-menu-button {
   background: var(--sl-color-bg-sidebar);
   border: 1px solid var(--bl-blue-15);
   border-radius: 0.75rem;
@@ -107,7 +107,7 @@ starlight-menu-button button {
   box-shadow: var(--sl-shadow-md);
 }
 
-starlight-menu-button[aria-expanded='true'] button {
+.sl-menu-button:has(~ :popover-open) {
   background: var(--bl-blue);
   border-color: var(--bl-blue);
   color: var(--bl-text-on-accent);

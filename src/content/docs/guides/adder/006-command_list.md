@@ -22,7 +22,7 @@ description: List of Adder Commands.
 
 ## Managed routing:
 
-Managed routing starts when `--managed-config-dir` is set. See the [managed routing reference](./014-managed-routing.md) for file schemas, API semantics, live-tail validation, limits, supported adapters, and delivery behavior.
+Managed routing starts when `--managed-config-dir` is set. See the [managed routing reference](/guides/adder/014-managed-routing/) for file schemas, API semantics, live-tail validation, limits, supported adapters, and delivery behavior.
 
 ```
   --managed-config-dir string
@@ -381,7 +381,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Leave this option empty to disable cursor persistence. Set a SQLite filename to create or reopen the cursor file and resume from the persisted state after a restart.
 >
-> See the [ChainSync cursor persistence reference](./chainsync-cursor-persistence.md) for restart behavior, flush timing, rollback handling, and Go API details.
+> See the [ChainSync cursor persistence reference](/guides/adder/chainsync-cursor-persistence/) for restart behavior, flush timing, rollback handling, and Go API details.
 
 ***
 
@@ -633,7 +633,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more of `blocks`, `rollbacks`, or `governance`.
 >
-> See the [Signal output reference](./signal.md).
+> See the [Signal output reference](/guides/adder/signal/).
 
 <br />
 
@@ -673,7 +673,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more of `blocks`, `rollbacks`, or `governance`.
 >
-> See the [NATS output reference](./nats.md).
+> See the [NATS output reference](/guides/adder/nats/).
 
 <br />
 
@@ -713,7 +713,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more supported Slack event types.
 
-> See the [Slack output reference](./slack.md).
+> See the [Slack output reference](/guides/adder/slack/).
 
 <br />
 
@@ -757,7 +757,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more supported Discord event types.
 
-> See the [Discord bot output reference](./discord.md).
+> See the [Discord bot output reference](/guides/adder/discord/).
 
 <br />
 
@@ -797,7 +797,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more supported Matrix event types.
 
-> See the [Matrix output reference](./matrix.md).
+> See the [Matrix output reference](/guides/adder/matrix/).
 
 <br />
 
@@ -993,7 +993,7 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more supported ClickHouse event types.
 
-> See the [ClickHouse output reference](./clickhouse.md).
+> See the [ClickHouse output reference](/guides/adder/clickhouse/).
 
 <br />
 
@@ -1245,9 +1245,9 @@ Use a stake address to follow an account's governance activity. The
 >
 > Select one or more supported Kafka event types.
 
-> See the [Kafka output reference](./kafka.md).
+> See the [Kafka output reference](/guides/adder/kafka/).
 
-> See the [webhook durability reference](./webhook-durability.md).
+> See the [webhook durability reference](/guides/adder/webhook-durability/).
 ***
 
 ## Notifications:

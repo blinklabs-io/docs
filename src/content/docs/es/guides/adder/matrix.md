@@ -76,8 +76,8 @@ Use una sala exclusiva de prueba antes de configurar una sala operativa:
 
 ## Referencias relacionadas
 
-- [Referencia de comandos](./006-command_list.md)
-- [Integraciones de salida](./008-output-integrations.md)
+- [Referencia de comandos](/es/guides/adder/006-command_list/)
+- [Integraciones de salida](/es/guides/adder/008-output-integrations/)
 
 ---
 

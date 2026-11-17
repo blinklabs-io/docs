@@ -11,7 +11,7 @@ The `/debug/pprof` endpoint and goroutine leak HTTP collection are unavailable t
 
 ### Correction
 
-Use the [benchmarks and profiling guide](./011-benchmarks-and-profiling) for supported local commands. The guide provides bounded Go test runs with `-cpuprofile`, `-memprofile`, and `-trace`, followed by analysis with `go tool pprof` and `go tool trace`.
+Use the [benchmarks and profiling guide](/guides/adder/011-benchmarks-and-profiling/) for supported local commands. The guide provides bounded Go test runs with `-cpuprofile`, `-memprofile`, and `-trace`, followed by analysis with `go tool pprof` and `go tool trace`.
 
 Keep profile files in a private temporary directory because they can contain application data and file paths. The local commands invoke Go's test profiler and open no network listener. Do not expose a profiling listener on a public interface.
 

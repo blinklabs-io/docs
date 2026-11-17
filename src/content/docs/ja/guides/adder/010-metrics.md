@@ -1,4 +1,7 @@
-# Adder Prometheusメトリクス
+---
+title: "Adder Prometheusメトリクス"
+description: "AdderのPrometheusエンドポイントとパイプラインメトリクスを設定します。"
+---
 
 ## 概要
 

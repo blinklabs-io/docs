@@ -166,8 +166,8 @@ After the check, revoke the test webhook when it is no longer needed.
 
 ## Related references
 
-- [Adder output integration overview](./008-output-integrations.md)
-- [Command reference](./006-command_list.md)
+- [Adder output integration overview](/guides/adder/008-output-integrations/)
+- [Command reference](/guides/adder/006-command_list/)
 
 ---
 

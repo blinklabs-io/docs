@@ -25,14 +25,14 @@ selected plugin does not support.
 These pages provide the detailed configuration options and delivery contracts
 for the following outputs:
 
-- [Discord bot output](./discord.md)
-- [Slack output](./slack.md)
-- [Matrix output](./matrix.md)
-- [ClickHouse output](./clickhouse.md)
-- [Kafka output](./kafka.md)
-- [NATS output](./nats.md)
-- [Signal output](./signal.md)
-- [Durable webhook delivery](./webhook-durability.md)
+- [Discord bot output](/guides/adder/discord/)
+- [Slack output](/guides/adder/slack/)
+- [Matrix output](/guides/adder/matrix/)
+- [ClickHouse output](/guides/adder/clickhouse/)
+- [Kafka output](/guides/adder/kafka/)
+- [NATS output](/guides/adder/nats/)
+- [Signal output](/guides/adder/signal/)
+- [Durable webhook delivery](/guides/adder/webhook-durability/)
 
 ## PostgreSQL
 

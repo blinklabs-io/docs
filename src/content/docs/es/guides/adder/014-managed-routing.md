@@ -11,9 +11,9 @@ Esta referencia describe el modo administrado opcional de Adder. El modo
 administrado lee un único flujo de ChainSync, aplica carriles de filtros
 independientes para clientes identificados y envía los eventos coincidentes a
 los destinos de cada cliente. El [resumen de los modos de
-funcionamiento](./002-operating-mode-overview) explica cómo encaja el modo
+funcionamiento](/es/guides/adder/002-operating-mode-overview/) explica cómo encaja el modo
 administrado con los demás modos de funcionamiento de Adder. La [referencia
-de comandos](./006-command_list) enumera la CLI completa; esta página describe
+de comandos](/es/guides/adder/006-command_list/) enumera la CLI completa; esta página describe
 los indicadores administrados y su comportamiento durante la ejecución.
 
 El modo administrado no cambia los flujos normales de la CLI ni los
@@ -260,8 +260,8 @@ cuerpos de configuración de reemplazo.
 
 La ruta administrada autenticada `/metrics` es independiente de las
 métricas del flujo normal descritas en la [referencia de
-métricas](./010-metrics). Los componentes de salida normales y su configuración
-habitual aparecen en la [guía de integraciones de salida](./008-output-integrations);
+métricas](/es/guides/adder/010-metrics/). Los componentes de salida normales y su configuración
+habitual aparecen en la [guía de integraciones de salida](/es/guides/adder/008-output-integrations/);
 el modo administrado no habilita esos adaptadores.
 
 ## Semántica de recarga y cambio de configuración

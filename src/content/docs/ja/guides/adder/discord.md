@@ -118,8 +118,8 @@ RESTリクエストはDiscordのレート制限情報を使用してルート別
 
 ## 関連ページ
 
-- [コマンドリファレンス](./006-command_list.md)
-- [出力連携リファレンス](./008-output-integrations.md)
+- [コマンドリファレンス](/ja/guides/adder/006-command_list/)
+- [出力連携リファレンス](/ja/guides/adder/008-output-integrations/)
 
 ---
 <!-- doc-holiday-watermark -->

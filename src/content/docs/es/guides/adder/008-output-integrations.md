@@ -11,14 +11,14 @@ Esta referencia describe la configuración y el comportamiento de entrega de las
 
 Cada página enlazada explica la configuración de la salida y la forma en que entrega los eventos:
 
-- [Salida del bot de Discord](./discord.md)
-- [Referencia de la salida Slack](./slack.md)
-- [Salida de Matrix de Adder](./matrix.md)
-- [Referencia de la salida ClickHouse](./clickhouse.md)
-- [Salida de Kafka](./kafka.md)
-- [Salida NATS](./nats.md)
-- [Referencia de la salida Signal](./signal.md)
-- [Entrega de webhooks segura frente a reinicios](./webhook-durability.md)
+- [Salida del bot de Discord](/es/guides/adder/discord/)
+- [Referencia de la salida Slack](/es/guides/adder/slack/)
+- [Salida de Matrix de Adder](/es/guides/adder/matrix/)
+- [Referencia de la salida ClickHouse](/es/guides/adder/clickhouse/)
+- [Salida de Kafka](/es/guides/adder/kafka/)
+- [Salida NATS](/es/guides/adder/nats/)
+- [Referencia de la salida Signal](/es/guides/adder/signal/)
+- [Entrega de webhooks segura frente a reinicios](/es/guides/adder/webhook-durability/)
 
 ## PostgreSQL
 

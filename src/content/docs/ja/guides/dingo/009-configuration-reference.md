@@ -1,8 +1,8 @@
 ---
-title: Dingo v0.94.1 設定リファレンス
-description: Dingo v0.94.1 に対応する完全な設定リファレンスとサンプル。
+title: Dingo v0.94.2 設定リファレンス
+description: Dingo v0.94.2 に対応する完全な設定リファレンスとサンプル。
 ---
-このページは Dingo v0.94.1 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example)にあります。同じファイルは [Dingo v0.94.1 のソース](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example)にも含まれます。
+このページは Dingo v0.94.2 の設定を対象とします。説明、既定値、環境変数、コマンドラインフラグ、プロバイダー設定、デプロイ構成を含む完全なフィールドリファレンスは、リリースに対応する [`dingo.yaml.example` ファイル](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example)にあります。同じファイルは [Dingo v0.94.2 のソース](https://github.com/blinklabs-io/dingo/blob/v0.94.2/dingo.yaml.example)にも含まれます。
 
 サンプルでは設定値がすべてコメントアウトされています。Dingo の組み込みの既定値を使用するには、そのままにしてください。既定値を変更する項目だけコメントを解除します。利用可能なフィールドや動作は変わる場合があるため、リリースに対応するサンプルを確認せずに別の Dingo リリースの設定ファイルをコピーしないでください。
 
@@ -20,7 +20,7 @@ Cardano ノード設定ファイル（YAML または JSON）に記載する項�
 
 | 設定 | Cardano ノード設定キー | CLI フラグ | 環境変数 | 既定値、検証、動作 |
 | --- | --- | --- | --- | --- |
-| トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` の従来のピア単位の着信トランザクション送信戦略を実装しています。Dingo は `TxSubmissionLogicV2` と不明な値を設定の読み込み時に拒否します。 |
+| トランザクション送信ロジックのバージョン | `TxSubmissionLogicVersion` | — | — | 省略すると `TxSubmissionLogicV1` を使用します。Dingo は `TxSubmissionLogicV1` と `TxSubmissionLogicV2` を受け付け、組み込みの Musashi 設定は `TxSubmissionLogicV2` を使用します。不明な値は設定の読み込み時に拒否します。 |
 | エンドーサーブロックの最小オファー先行スロット数 | `LeiosMinOfferLead` | — | — | Cardano ノード設定ファイルのキーです。エンドーサーブロックをピアにオファーするには、ノードの immutable tip より何スロット先行している必要があるかを指定します。省略すると既定値は `3600` スロットです。 |
 
 Dingo は、Cardano ノード設定に従来のフラット形式と cardano-node の Version 2 エンベロープ形式の両方を受け付けます。Version 2 形式では、トップレベルに整数の `Version: 2` を置き、`Configuration` の下に設定を配置します。
@@ -59,7 +59,7 @@ Dingo は各セクションの設定を既存の Cardano ノード設定フィ�
 - `DeadlineTargetNumberOfEstablishedPeers` → `TargetNumberOfEstablishedPeers`
 - `DeadlineTargetNumberOfActivePeers` → `TargetNumberOfActivePeers`
 
-Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。Dingo は `Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値を拒否します。Dingo はルート、`Configuration`、セクション内の重複キーを拒否し、別のキーで同じ設定フィールドを指定する衝突も拒否します。従来のフラット形式は引き続き使用できます。エンベロープでも、表に示す `TxSubmissionLogicVersion` の検証を適用します。
+Version 2 のエンベロープには、整数値の `Version: 2` とオブジェクトの `Configuration` が必要です。`Protocol`、`Testing`、`Consensus`、`Network` を指定する場合、それぞれをオブジェクトにします。Dingo は `Version` または `Configuration` の欠落や形式不正、未対応のバージョン、対応セクションのオブジェクト以外の値を拒否します。Dingo はルート、`Configuration`、セクション内の重複キーを拒否し、別のキーで同じ設定フィールドを指定する衝突も拒否します。従来のフラット形式は引き続き使用できます。Version 2 エンベロープでは、表に示す `TxSubmissionLogicVersion` の検証を適用し、`TxSubmissionLogicV2` を指定できます。
 
 <a id="configuration-areas"></a>
 
@@ -68,7 +68,7 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 | 分野 | 主な設定 | 用途 |
 | --- | --- | --- |
 | ネットワークとパス | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Cardano ネットワークを選択し、ノード、トポロジー、データの各ファイルの場所を指定します。 |
-| リスナーと診断 | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | ノードとプライベートリスナー、メトリクス、ヘルスプローブ、プロファイリング、トレーシング、LocalStateQuery スナップショットの有効期間を設定します。 |
+| リスナーと診断 | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `trustedNtCIdleTimeout`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | ノードとプライベートリスナー、メトリクス、ヘルスプローブ、プロファイリング、トレーシング、LocalStateQuery スナップショットの有効期間を設定します。 |
 | ログと TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | ログ出力を選択し、対応する API または Bark リスナーを保護します。 |
 | ストレージと API | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | 保存する履歴、ストレージプロバイダー、トランザクションの順序、アプリケーション API を選択します。 |
 | コンセンサスとプラグインの選択 | `plugins.consensus` | ノードで使用するコンセンサスプロバイダーを選択します。 |
@@ -77,6 +77,12 @@ Version 2 のエンベロープには、整数値の `Version: 2` とオブジ�
 | ブロック生成と台帳ルール | `blockProducer`, `shelley*`, `forge*`, `validateForgedBlock`, `minPoolMargin`, `pledgeLeverage*`, `fullPotRewards*`, `delegatorInactivity*`, `ledgerApplyRowBatchingEnabled`, `ledgerPrefetchAheadEnabled`, `ledgerValidateAheadEnabled` | ブロック生成鍵、安全性のしきい値、オプションの台帳動作を設定します。 |
 | アーカイブとデータベースのライフサイクル | `bark*`, `historyExpiry`, `databaseLifecycle` | アーカイブデータの配信や取得、ローカル履歴の期限切れ、スナップショットの管理を設定します。 |
 | 任意のインデックスと診断 | `midnight`, `midnight.authTokenPolicyId`, `midnight.authTokenAssetName`, `tokenRegistry`, `tokenRegistry.manifestUrl`, `tokenRegistry.trustedManifestKey`, `tokenRegistry.allowRollback`, `koiosParity`, `cache`, `skipRewardLiveStakeBackfillCheck` | 任意のインデックス作成、認証付きレジストリ更新、パリティ診断、キャッシュ、起動時検証を設定します。 |
+
+### リスナーと診断
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
+| --- | --- | --- | --- | --- |
+| プライベートリスナーのポート | `privatePort` | — | — | 既定値は `0` です。`0` は NtC TCP リスナーを無効にしますが、Unix ソケットは引き続き使用できます。TCP アクセスには 0 以外のポートを設定します。 |
 
 <a id="consensus-provider"></a>
 
@@ -94,7 +100,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 
 | 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値と動作 |
 | --- | --- | --- | --- | --- |
-| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB`、`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合は `25 MiB` です。この既定値は `serve` の Musashi にも適用します。明示した値はこれらの既定値に優先します。 |
+| メモリプール容量 | `plugins.mempool.config.capacity` | — | — | バイト単位で指定します。設定を省略すると、標準モードまたは Praos では `1 MiB` を使用します。`runMode: leios` またはネットワークが Musashi（名前または network magic）の場合、現在の委員会が Leios quorum に到達可能なら `25 MiB`、到達不可能または判定不能なら `1 MiB` を使用します。この既定値は `serve` の Musashi にも適用します。Dingo は状態に応じてこの既定値を動的に更新します。`plugins.mempool.config.capacity` を明示した場合は既定値を上書きし、委員会の状態によって変更されません。 |
 
 <a id="ledger-processing"></a>
 
@@ -167,6 +173,7 @@ Dingo は、選択したプロバイダーのデータベース識別子をデ�
 | ネットワークマジック | `dmq.networkMagic` | `--dmq-network-magic` | `DINGO_DMQ_NETWORK_MAGIC` | 未設定の場合、トピックと Cardano ネットワークから導出します。 | 省略すると、トピックと Cardano ネットワークから値を導出します。明示した値は導出した値に優先します。ネットワークにそのトピックの既定値がない場合に設定してください。 |
 | ソケットパス | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | 有効な場合、空ではなく、Cardano の `socketPath` とは異なる値が必要です。 |
 | メッセージの TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` 秒 | 有効な場合、`9223372036` 秒以下の正の値が必要です。 |
+| プールメッセージの最小間隔 | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` 秒 | `0` はペーシングを無効にします。正の整数は同じプールからの通知の最小間隔を秒単位で指定します。Dingo は `9223372036` 秒を超える値を拒否します。 |
 | メモリプールの最大サイズ | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | 有効な場合、`8796093022207` MB 以下の正の値が必要です。 |
 | N2N ピアポート | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` は N2N ポートを無効にします。0 以外の値を設定し、かつ `dmq.maxPeers` が 0 以外の場合、DMQ のノード間リスナーとピア管理を有効にします。 |
 | IPv4 ピアリスナーのアドレス | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | `dmq.n2nPort` が 0 以外で、このフィールドを設定する場合は、IPv4 リテラルが必要です。 |
@@ -186,6 +193,14 @@ DMQ の起動時に、これら 6 つのピア設定を検証します。`dmq.n2
 - `bootstrapPeers` または `peerSnapshotFile` に値がある場合は警告し、両フィールドを無視します。`useLedgerAfterSlot` も無視します。
 
 ファイルの読み込み後に異なるピアの数をログに記録し、ピアが 1 つもない場合は警告します。不正なトポロジーの場合、DMQ ソケットを開く前に起動に失敗します。
+
+<a id="trusted-ntc-idle-timeout"></a>
+
+### 信頼されたローカル NtC のアイドルタイムアウト
+
+| 設定 | YAML キー | CLI フラグ | 環境変数 | 既定値 | 検証と動作 |
+| --- | --- | --- | --- | --- | --- |
+| 信頼されたローカル NtC のアイドルタイムアウト | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0`（無効） | `0` はアイドル時間の制限を無効にします。正の期間を設定すると、Dingo は信頼されたローカル NtC 接続のアイドル時間をその期間までに制限します。Dingo は負の値を設定検証で拒否します。 |
 
 <a id="immutabledb-source"></a>
 
@@ -232,8 +247,12 @@ Musashi では、Cardano ノード設定の `ConsensusMode: PraosMode` が Genes
 | 認証トークン | `plugins.api.blockfrost.config.authToken` | — | — | 既定では空です。設定しても従来互換のため受け付けますが、Dingo は認証に使用せず、効果を持ちません。トランザクションの送信と評価に必要ありません。 |
 | 変更操作全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、プロバイダー全体のトランザクション送信と評価の同時実行数に上限を設けます。 |
 | クライアントごとの変更操作の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの処理に上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
+| pool-list 全体の同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、pool-list リクエスト全体に上限を設けます。 |
+| クライアントごとの pool-list 同時実行数 | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0`（未設定も同じ）は無制限です。正の値を設定すると、1 つのリモートアドレスからの pool-list リクエストに上限を設けます。プロバイダー全体の上限が `0` でも、この上限だけを有効にできます。全体の上限が正の場合は、その値以下である必要があります。 |
 
 変更操作には認証は必要ありません。Dingo は本文を読む前に、設定した変更操作の上限を適用します。設定した上限を使い切った場合だけ、本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。上限を設定していない場合、変更操作の受け入れ制限はありません。
+
+pool-list の受け入れ制限は、active pool を返す `GET /api/v0/pools` と retiring pool を返す `GET /api/v0/pools/retiring` に適用します。設定した pool-list 上限のいずれかを使い切ると、Dingo は本文を読まずに `Retry-After: 1` を含む HTTP `429` を返します。上限を設定していない場合、pool-list の受け入れ制限はありません。
 
 <a id="shared-outbound-http-user-agent"></a>
 
@@ -412,6 +431,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 | --- | --- | --- | --- | --- |
 | Dingo Koios パリティ API 鍵 | `koiosParity.apiKey` | 削除済み・無効: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | 既定では空です。YAML とこの環境変数では、リテラルの API 鍵を引き続き使用できます。 |
 | Dingo Koios パリティ API 鍵ファイル | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | 既定では空です。CLI 入力にはこのファイル方式を使用します。ファイルを API 鍵の文字列として読み取ります。 |
+| Koios パリティの strict モード | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | `false`（無効）。`true` にすると、Koios の日次 tier quota 枯渇（HTTP `429` または `Exceeded Tier Limit`）を fatal ではなく ERROR として記録し、quota がリセットされるまで ERROR スケジュールで再試行します。Dingo は sampling の `/tx_info` で発生した quota エラーも同じ扱いにし、fatal な `dingo_db_missing` には変換しません。ERROR 状態を永続化できない場合、Dingo は引き続き fatal として扱います。 |
 | 汎用プラグイン設定フィールドのファイル | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>` の代わりに使用します。ファイルを通常の文字列として読み取り、YAML として解析しません。 |
 | `koios-parity` API 鍵ファイル | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | `--api-key` または `KOIOS_API_KEY` の代わりに使用します。CLI フラグは環境変数より優先されます。 |
 | `koios-parity` メタデータ DSN ファイル | — | `--metadata-dsn-file` | — | `--metadata-dsn` の代わりに使用します。ファイルは接続文字列を通常のテキストで指定します。 |
@@ -426,7 +446,7 @@ Dingo は各参照に基本検索コストを 1 件ずつ計上し、グロー�
 
 - パスは通常ファイルを指定する必要があります。ディレクトリ、デバイス、その他の通常ファイル以外は拒否されます。
 - ファイル内容は最大 `64 KiB` です。末尾の `CR` と `LF` を除去し、空または空白のみの内容を拒否します。
-- 権限または ACL はプラットフォームのセキュリティポリシーを満たす必要があります。Unix ではファイルとパスのすべての祖先ディレクトリをプロセスユーザーまたは root が所有している必要があります。sticky bit のないディレクトリがグループまたは他のユーザーによって書き込み可能な場合は拒否します。sticky bit のあるディレクトリはこの書き込み条件の対象外ですが、所有者の確認は行います。ファイルは所有者とグループのアクセスを許可できますが、その他のユーザーには許可できません。Windows の ACL では所有者、Administrators、SYSTEM のみを許可できます。
+- 権限または ACL はプラットフォームのセキュリティポリシーを満たす必要があります。Unix ではファイルとパスのすべての祖先ディレクトリをプロセスユーザーまたは root が所有している必要があります。ファイルによる信頼またはブートストラップの確認に関係する祖先ディレクトリがグループまたは他のユーザーに書き込み可能な場合、sticky bit が必要です。setgid だけでは不十分で、Kubernetes の `fsGroup` によるボリュームルートも、他のグループメンバーがエントリの名前を変更できるため要件を満たしません。sticky bit を設定するか、グループと他のユーザーの書き込み権限を削除してください。sticky bit のあるディレクトリはこの書き込み条件を満たしますが、所有者の確認は引き続き行います。ファイルは所有者とグループのアクセスを許可できますが、その他のユーザーには許可できません。Windows の ACL では所有者、Administrators、SYSTEM のみを許可できます。
 - エラーでは値またはパスを示しますが、ファイル内容は含めません。
 
 <a id="token-registry-manifest-authentication"></a>

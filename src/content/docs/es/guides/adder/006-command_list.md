@@ -253,7 +253,7 @@ La forma hexadecimal debe contener únicamente los 56 caracteres hexadecimales d
 
 > ruta a un archivo de base de datos SQLite para conservar el cursor de ChainSync entre reinicios; si no se establece, no se conserva ningún cursor (predeterminado "")
 >
-> Consulta la [referencia de persistencia del cursor de ChainSync](./chainsync-cursor-persistence.md) para obtener información sobre los reinicios, el vaciado cada cinco segundos y durante el apagado, los rollbacks y la API.
+> Consulta la [referencia de persistencia del cursor de ChainSync](/es/guides/adder/chainsync-cursor-persistence/) para obtener información sobre los reinicios, el vaciado cada cinco segundos y durante el apagado, los rollbacks y la API.
 
 ***
 
@@ -332,7 +332,7 @@ La forma hexadecimal debe contener únicamente los 56 caracteres hexadecimales d
 
 > habilita el enrutamiento administrado mediante este directorio de configuración (predeterminado "")
 >
-> Requiere la entrada `chainsync`. Consulta la [referencia de enrutamiento administrado](./014-managed-routing.md) para conocer el formato de archivos, la API, los límites y el contrato de entrega.
+> Requiere la entrada `chainsync`. Consulta la [referencia de enrutamiento administrado](/es/guides/adder/014-managed-routing/) para conocer el formato de archivos, la API, los límites y el contrato de entrega.
 
 ```text
   --managed-credentials-dir string
@@ -510,7 +510,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos seleccionados separados por comas (predeterminado "blocks,rollbacks,governance"); debe incluir al menos un tipo admitido
 <br />
-> Consulta la [referencia de Signal](./signal.md).
+> Consulta la [referencia de Signal](/es/guides/adder/signal/).
 
 ```text
   --output-nats-servers string
@@ -539,7 +539,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 <br />
-> Consulta la [referencia de NATS](./nats.md).
+> Consulta la [referencia de NATS](/es/guides/adder/nats/).
 
 ```text
   --output-webhook-format string
@@ -587,7 +587,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 ```
 
 > máximo de entregas pendientes persistentes (predeterminado `1024`); cuando `state-path` no está vacío, debe ser al menos `11`
-> Consulta la [referencia de webhooks duraderos](./webhook-durability.md).
+> Consulta la [referencia de webhooks duraderos](/es/guides/adder/webhook-durability/).
 
 ### Salida `slack`
 
@@ -604,7 +604,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos para la entrega a Slack separados por comas (predeterminado "blocks,transactions,rollbacks,governance")
 >
-> Consulta la [referencia de Slack](./slack.md).
+> Consulta la [referencia de Slack](/es/guides/adder/slack/).
 
 ### Salida `discord`
 
@@ -642,7 +642,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 >
-> Consulta la [referencia de Discord](./discord.md).
+> Consulta la [referencia de Discord](/es/guides/adder/discord/).
 
 ### Salida `matrix`
 
@@ -673,7 +673,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 >
-> Consulta la [referencia de Matrix](./matrix.md).
+> Consulta la [referencia de Matrix](/es/guides/adder/matrix/).
 
 ### Salida `rabbitmq`
 
@@ -834,7 +834,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos separados por comas (predeterminado "blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement")
 >
-> Consulta la [referencia de ClickHouse](./clickhouse.md).
+> Consulta la [referencia de ClickHouse](/es/guides/adder/clickhouse/).
 
 ### Salida `elasticsearch`
 
@@ -1045,7 +1045,7 @@ Las opciones de cada plugin de salida también se pueden establecer en YAML bajo
 
 > tipos de eventos separados por comas (predeterminado "blocks,rollbacks,governance")
 >
-> Consulta la [referencia de Kafka](./kafka.md).
+> Consulta la [referencia de Kafka](/es/guides/adder/kafka/).
 
 ***
 

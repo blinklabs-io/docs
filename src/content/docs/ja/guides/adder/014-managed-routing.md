@@ -7,7 +7,7 @@ description: "Adderのmanagedカスタマールーティングを設定し、設
 
 ## 概要
 
-このリファレンスでは、Adderのオプトイン方式であるmanaged modeを説明します。managed modeは1つのChainSync入力を読み取り、名前付き顧客ごとに独立したフィルターレーンを適用して、一致するイベントを顧客の宛先へ送信します。[動作モードの概要](./002-operating-mode-overview)では、managed modeとAdderの他の動作モードとの関係を説明します。[コマンドリファレンス](./006-command_list)には完全なCLIを記載しています。このページではmanaged modeのフラグと実行時の動作を説明します。
+このリファレンスでは、Adderのオプトイン方式であるmanaged modeを説明します。managed modeは1つのChainSync入力を読み取り、名前付き顧客ごとに独立したフィルターレーンを適用して、一致するイベントを顧客の宛先へ送信します。[動作モードの概要](/ja/guides/adder/002-operating-mode-overview/)では、managed modeとAdderの他の動作モードとの関係を説明します。[コマンドリファレンス](/ja/guides/adder/006-command_list/)には完全なCLIを記載しています。このページではmanaged modeのフラグと実行時の動作を説明します。
 
 `--managed-config-dir`を指定しない場合、managed modeは通常のAdder CLIや組み込みパイプラインを変更しません。これらのパイプラインでは、既存のフィルター、出力のバックプレッシャー、設定の優先順位、HTTP API、公開`/events`ストリームがそのまま動作します。
 
@@ -180,7 +180,7 @@ Bearerトークンがない場合や無効な場合、Adderは`401 Unauthorized`
 | `GET /healthcheck` | None | ルーターのreadinessを返します。ソース接続と宛先の機能低下は別の状態シグナルです。 |
 | `GET /metrics` | None | 顧客または認証情報のラベルを含まないmanagedカウンターの集計値を返します。 |
 
-認証済みmanaged `/metrics`エンドポイントは、[メトリクスリファレンス](./010-metrics)で説明する通常パイプラインのメトリクスとは別です。通常の出力プラグインと通常の設定については、[出力連携ガイド](./008-output-integrations)を参照してください。managed modeではこれらのアダプターを有効にしません。
+認証済みmanaged `/metrics`エンドポイントは、[メトリクスリファレンス](/ja/guides/adder/010-metrics/)で説明する通常パイプラインのメトリクスとは別です。通常の出力プラグインと通常の設定については、[出力連携ガイド](/ja/guides/adder/008-output-integrations/)を参照してください。managed modeではこれらのアダプターを有効にしません。
 
 ## Reloadとcutoverのセマンティクス
 

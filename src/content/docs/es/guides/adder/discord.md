@@ -86,8 +86,8 @@ Detener un Gateway que ya está cerrado es una operación idempotente y correcta
 
 ## Referencias relacionadas
 
-- Consulte la [referencia de comandos](./006-command_list.md) para las opciones de línea de comandos, incluida la configuración de `discord`.
-- Consulte la [referencia de integraciones de salida](./008-output-integrations.md) para la configuración general de las salidas de Adder.
+- Consulte la [referencia de comandos](/es/guides/adder/006-command_list/) para las opciones de línea de comandos, incluida la configuración de `discord`.
+- Consulte la [referencia de integraciones de salida](/es/guides/adder/008-output-integrations/) para la configuración general de las salidas de Adder.
 
 ---
 

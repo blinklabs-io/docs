@@ -65,8 +65,12 @@ plugins:
     provider: "default"
     config:
       # capacity is an optional override, not a required setting.
-      # Default: 1 MiB for Praos mode and normal serve mode, and 25 MiB for Musashi mode.
-      # Leave the key commented or omit it to use the mode default.
+      # Predeterminado: 1 MiB en modo Praos y en el modo normal de `serve`.
+      # En modo Musashi, el valor predeterminado es 25 MiB solo cuando el comité
+      # actual de Leios puede alcanzar el quórum; si el quórum es imposible o no se
+      # puede resolver, el valor predeterminado es 1 MiB.
+      # Una capacidad explícita permanece fija, independientemente del quórum.
+      # Deja la clave comentada u omítela para usar el valor predeterminado del modo.
       # capacity: 1048576
       # revalidationDeltaCap is optional. Default: 64. The value must be positive.
       # revalidationDeltaCap: 64
@@ -124,7 +128,7 @@ maxNtCConns: 100
 # CLI: --max-ntc-connections-per-ip; environment: DINGO_MAX_NTC_CONNECTIONS_PER_IP.
 maxNtCConnectionsPerIP: 5
 privateBindAddr: "127.0.0.1"
-privatePort: 3002
+privatePort: 0
 relayPort: 3001
 socketPath: "$HOME/dingo/dingo.socket"
 
@@ -160,6 +164,8 @@ databaseLifecycle:
   snapshotEveryNEpochs: 1
 EOF
 ```
+
+📝 De forma predeterminada, Dingo no inicia el oyente TCP de NtC cuando `privatePort` vale `0` y mantiene disponible el socket Unix configurado en `socketPath`. Configura un valor distinto de cero en `privatePort` cuando necesites conexiones TCP.
 
 📝 Mithril exige `HTTPS` de forma predeterminada y rechaza los destinos locales, privados o no públicos. El arranque Mithril v2 solo acepta orígenes de artefactos y redirecciones del agregador configurado o del origen GCS oficial de Mithril, `storage.googleapis.com`. Aplica comprobaciones agregadas de seguridad de descarga y extracción, verifica el archivo auxiliar firmado antes de extraer y utiliza únicamente contenido autenticado del ledger. Establece `mithril.allowInsecureHttp: true` solo para desarrollo o pruebas locales; no lo actives en producción.
 
@@ -277,12 +283,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+El ejemplo usa [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) para que systemd espere al cierre del almacenamiento durable. Si configura un plazo finito, debe cubrir `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento. El cierre puede superar el plazo de Dingo o de una solicitud remota; Dingo registra el progreso y el exceso de plazo. Use `SIGKILL` solo para abandonar intencionalmente un cierre bloqueado.
 
 Visualiza y verifica `dingo.service`:
 

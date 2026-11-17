@@ -34,7 +34,7 @@ Descarga la última versión desde la página de [versiones de Dingo](https://gi
 
 ```
 cd $DINGO_HOME
- wget https://github.com/blinklabs-io/dingo/releases/download/v0.90.4/dingo-v0.90.4-linux-amd64.tar.gz -O - | tar -xz
+ wget https://github.com/blinklabs-io/dingo/releases/download/v0.92.3/dingo-v0.92.3-linux-amd64.tar.gz -O - | tar -xz
 ```
 
 ✅ Comprueba la versión del binario:
@@ -186,12 +186,14 @@ RestartSec=10
 User=YOUR_USER
 ExecStart=/usr/local/bin/dingo serve --config /etc/dingo/dingo.yaml
 SyslogIdentifier=dingo
-TimeoutStopSec=5
+TimeoutStopSec=infinity
 
 [Install]
 WantedBy=multi-user.target
 ENDFILE
 ```
+
+El ejemplo usa [`TimeoutStopSec=infinity`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#TimeoutStopSec=) para que systemd espere al cierre del almacenamiento durable. Si configura un plazo finito, debe cubrir `shutdownTimeout` y el tiempo necesario para cerrar el almacenamiento. El cierre puede superar el plazo de Dingo o de una solicitud remota; Dingo registra el progreso y el exceso de plazo. Use `SIGKILL` solo para abandonar intencionalmente un cierre bloqueado.
 
 ✅ Visualiza y comprueba el archivo `dingo.service`:
 

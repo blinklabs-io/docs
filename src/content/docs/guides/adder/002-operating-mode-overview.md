@@ -1,6 +1,6 @@
 ---
 title: Operating Mode Overview
-description: Adder Operating Mode Overview. Adder supports three primary operating modes: Adder Tray, Adder CLI, and Adder Managed Routing.  
+description: "Adder Operating Mode Overview. Adder supports three primary operating modes: Adder Tray, Adder CLI, and Adder Managed Routing.  "
 ---
 
 Adder offers three distinct operating modes, each optimized for different types of users and deployment environment. Choosing the right mode ensures you get the correct balance of usability, configurability, and operational control.
@@ -65,7 +65,7 @@ Adder Managed Routing is an operator mode for operators who need to route events
 
 Use managed routing when multiple customers need isolated filters and destinations. Set `chainsync` to use `intersect-tip=true` and `auto-reconnect=true`, and leave `state-path` and `intersect-point` unset. Managed mode does not start the ordinary public `/events` API and rejects global filters.
 
-Managed mode exposes a private, authenticated configuration and status API. It supports only the managed `log` and `webhook` adapters. Bounded queues isolate customer and destination work; full queues record drops instead of blocking other routes. See [Managed customer routing](014-managed-routing.md) for configuration, API, and limits.
+Managed mode exposes a private, authenticated configuration and status API. It supports only the managed `log` and `webhook` adapters. Bounded queues isolate customer and destination work; full queues record drops instead of blocking other routes. See [Managed customer routing](/guides/adder/014-managed-routing/) for configuration, API, and limits.
 
 ## Quick Decision Matrix
 

@@ -80,7 +80,7 @@ Adder resuelve la configuración en este orden: valores predeterminados, archivo
 
 ## 3. Problemas con los filtros
 
-Los filtros aplican lógica **AND** entre tipos de filtro. Dentro de una lista de un mismo filtro, Adder aplica lógica **OR**; `--filter-pool` y `--filter-drep` también aplican **OR** entre sí. Las restricciones de política y activo reducen aún más las coincidencias de transacciones. Consulta la [referencia de comandos](./006-command_list.md#filtro).
+Los filtros aplican lógica **AND** entre tipos de filtro. Dentro de una lista de un mismo filtro, Adder aplica lógica **OR**; `--filter-pool` y `--filter-drep` también aplican **OR** entre sí. Las restricciones de política y activo reducen aún más las coincidencias de transacciones. Consulta la [referencia de comandos](/es/guides/adder/006-command_list/#filtro).
 
 ### A. Los eventos no pasan el filtro
 

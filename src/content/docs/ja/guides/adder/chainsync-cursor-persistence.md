@@ -45,7 +45,7 @@ plugins:
 
 保存済みカーソルがない場合、設定した交差点がそのまま使用されます。
 
-CLIフラグ、YAML設定、環境変数、デフォルト値の一般的な優先順位と、ChainSyncの各入力設定については、[コマンドリファレンスガイド](./006-command_list.md#input-chainsync)を参照してください。
+CLIフラグ、YAML設定、環境変数、デフォルト値の一般的な優先順位と、ChainSyncの各入力設定については、[コマンドリファレンスガイド](/ja/guides/adder/006-command_list/#input-chainsync)を参照してください。
 
 ## 再起動とロールバック
 
@@ -95,7 +95,7 @@ ChainSyncは状態ストアの所有権を次のように扱います。
 
 ## 関連情報
 
-- [ChainSync入力設定とコマンド一覧](./006-command_list.md#input-chainsync)
+- [ChainSync入力設定とコマンド一覧](/ja/guides/adder/006-command_list/#input-chainsync)
 
 ---
 

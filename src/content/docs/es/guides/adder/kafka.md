@@ -1,4 +1,7 @@
-# Salida de Kafka
+---
+title: "Salida de Kafka"
+description: "Publica eventos de Adder en Kafka y configura los brokers y la entrega."
+---
 
 La salida `kafka` publica eventos seleccionados de Adder como JSON en un topic de Kafka. El topic debe existir antes de iniciar Adder.
 
@@ -43,8 +46,8 @@ Adder no recupera los eventos almacenados en búfer después del apagado o reini
 
 ## Navegación
 
-- Consulte la [referencia de comandos](./006-command_list.md) para conocer las opciones de `kafka` disponibles en la línea de comandos.
-- Consulte el [resumen de los modos de funcionamiento](./008-output-integrations.md) para ubicar las salidas dentro de Adder.
+- Consulte la [referencia de comandos](/es/guides/adder/006-command_list/) para conocer las opciones de `kafka` disponibles en la línea de comandos.
+- Consulte el [resumen de los modos de funcionamiento](/es/guides/adder/008-output-integrations/) para ubicar las salidas dentro de Adder.
 
 ---
 

@@ -43,6 +43,8 @@ plugins:
         host: 127.0.0.1
         maxConcurrentMutations: 4
         maxConcurrentMutationsPerClient: 1
+        maxConcurrentPoolLists: 4
+        maxConcurrentPoolListsPerClient: 1
     utxorpc:
       provider: builtin
       config:
@@ -68,9 +70,11 @@ plugins:
 
 有効にした制限の範囲内でのみ、Dingo はリクエストを受け入れます。リクエスト本文を読み取る前に有効な制限の空きを確認し、明示的に有効にした制限が枯渇している場合は `Retry-After: 1` を含む HTTP `429` を返します。両方の値を `0` または省略した場合、Dingo は変更リクエストの受け入れ制限を適用しません。
 
+Blockfrost の pool-list ルートには、変更リクエストとは別に任意の受け入れ制限を設定できます。`maxConcurrentPoolLists` はサーバー全体、`maxConcurrentPoolListsPerClient` はリモートクライアントごとの pool-list リクエスト数を制限します。これらの制限は `GET /api/v0/pools` と `GET /api/v0/pools/retiring` の両方に適用されます。設定した制限が枯渇すると、Dingo は `Retry-After: 1` を含む HTTP `429` を返します。各値を `0` または省略すると、対応する pool-list 制限を無効にします。
+
 外部からの変更アクセスを意図的に公開する場合は、ネットワーク層のアクセス制御を設定してください。意図しない公開を避けるため、既定のループバックホストを維持してください。
 
-このサイトでは、完全な v0.94.1 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
+このサイトでは、完全な v0.94.2 設定リファレンスと、リリースに対応する [`dingo.yaml.example`](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example) を参照できます。プロバイダーのオプションはバージョンによって変わるため、設定ファイルは対応するリリースと組み合わせて使用してください。
 
 <a id="secure-api-access"></a>
 
@@ -103,6 +107,8 @@ Bark は、ノードのライフサイクル操作用にリモートの `Lifecyc
 - `barkHost` が空の場合はループバックにバインドします。別のインターフェイスで公開するには、`barkHost`、`--bark-host`、`DINGO_BARK_HOST` のいずれかを設定します。
 
 すべての LifecycleService RPC は認証なしで利用でき、クライアント証明書やオペレーター許可リストは必要ありません。`GetStatus` は読み取り専用です。`Stop` は正常な停止を要求し、`Restart` は正常な停止に続く再起動を要求します。Unix 以外のプラットフォームでは `Restart` はサポートされません。
+
+リモートの `Stop` と `Restart` は、要求期限を過ぎても durable storage の close が完了するまで処理を継続します。`Restart` は停止処理が完全に完了してから再起動します。スーパーバイザーは、設定した `shutdownTimeout` に durable store の close に要する時間を加えた猶予を許可してください。Dingo は close 中の進捗と期限超過をログに記録します。close を強制的に放棄する必要がある場合は、`SIGKILL` でプロセスを割り込みます。
 
 LifecycleService は平文 HTTP で利用できます。外部に公開する場合は、ネットワーク層のアクセス制御で保護してください。
 

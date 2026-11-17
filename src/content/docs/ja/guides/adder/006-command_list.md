@@ -264,7 +264,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 
 > ChainSyncカーソルを再起動後も保持するSQLiteデータベースファイルのパスを指定します。未設定の場合、カーソルを保持しません。
 >
-> [ChainSyncカーソル永続化の詳細](./chainsync-cursor-persistence.md)を参照してください。
+> [ChainSyncカーソル永続化の詳細](/ja/guides/adder/chainsync-cursor-persistence/)を参照してください。
 
 ***
 
@@ -492,7 +492,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 > 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。少なくとも1つのタイプが必要です。
 <br />
 
-> [Signal出力の詳細](./signal.md)を参照してください。
+> [Signal出力の詳細](/ja/guides/adder/signal/)を参照してください。
 
 ```
   --output-nats-servers string
@@ -522,7 +522,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 > 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。少なくとも1つのタイプが必要です。
 <br />
 
-> [NATS出力の詳細](./nats.md)を参照してください。
+> [NATS出力の詳細](/ja/guides/adder/nats/)を参照してください。
 
 ```
   --output-webhook-state-path string
@@ -537,7 +537,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 
 > 保持する保留中の配信の最大数を指定します（デフォルト `1024`）。`state-path`を設定する場合は`11`以上が必要です。
 
-> [再起動安全なWebhook配信の詳細](./webhook-durability.md)を参照してください。
+> [再起動安全なWebhook配信の詳細](/ja/guides/adder/webhook-durability/)を参照してください。
 
 ***
 
@@ -569,7 +569,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 > Slackへ配信するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance`）。
 <br />
 
-> [Slack出力の詳細](./slack.md)を参照してください。
+> [Slack出力の詳細](/ja/guides/adder/slack/)を参照してください。
 
 ```
   --output-discord-bot-token string
@@ -606,7 +606,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
 <br />
 
-> [Discord出力の詳細](./discord.md)を参照してください。
+> [Discord出力の詳細](/ja/guides/adder/discord/)を参照してください。
 
 ```
   --output-matrix-homeserver-url string
@@ -635,7 +635,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
 
-> [Matrix出力の詳細](./matrix.md)を参照してください。
+> [Matrix出力の詳細](/ja/guides/adder/matrix/)を参照してください。
 
 ***
 
@@ -794,7 +794,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 > 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`）。
 <br />
 
-> [ClickHouse出力の詳細](./clickhouse.md)を参照してください。
+> [ClickHouse出力の詳細](/ja/guides/adder/clickhouse/)を参照してください。
 
 ```
   --output-elasticsearch-url string
@@ -998,7 +998,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
 
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
 
-> [Kafka出力の詳細](./kafka.md)を参照してください。
+> [Kafka出力の詳細](/ja/guides/adder/kafka/)を参照してください。
 
 ***
 
@@ -1010,7 +1010,7 @@ Adderは`input.governance`イベントに`--filter-drep`、`--filter-pool`、`--
   --managed-config-dir string
 ```
 
-> [管理ルーティングの詳細](./014-managed-routing.md)。この設定ディレクトリを指定すると管理ルーティングが有効になります（デフォルトは空）。設定ディレクトリには有効なマニフェストが必要です。
+> [管理ルーティングの詳細](/ja/guides/adder/014-managed-routing/)。この設定ディレクトリを指定すると管理ルーティングが有効になります（デフォルトは空）。設定ディレクトリには有効なマニフェストが必要です。
 <br />
 
 ```

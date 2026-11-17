@@ -1,13 +1,13 @@
 ---
-title: Dingo v0.94.1 Configuration Reference
-description: Complete, release-specific Dingo v0.94.1 configuration reference and example.
+title: Dingo v0.94.2 Configuration Reference
+description: Complete, release-specific Dingo v0.94.2 configuration reference and example.
 ---
 
-This page covers the configuration shipped with Dingo v0.94.1. The complete
+This page covers the configuration shipped with Dingo v0.94.2. The complete
 field reference, including descriptions, defaults, environment variables,
 command-line flags, provider settings, and deployment patterns, is in the
-release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.1/dingo.yaml.example).
-The same file is available in the [Dingo v0.94.1 source](https://github.com/blinklabs-io/dingo/blob/v0.94.1/dingo.yaml.example).
+release-matched [`dingo.yaml.example` file](https://raw.githubusercontent.com/blinklabs-io/dingo/v0.94.2/dingo.yaml.example).
+The same file is available in the [Dingo v0.94.2 source](https://github.com/blinklabs-io/dingo/blob/v0.94.2/dingo.yaml.example).
 
 The example has no active settings. Leave values commented to use Dingo's
 built-in defaults; uncomment a setting only when you want to override its
@@ -28,7 +28,7 @@ for the main runtime choices.
 | Area | Main settings | Purpose |
 | --- | --- | --- |
 | Network and paths | `network`, `networkMagic`, `cardanoConfig`, `topology`, `databasePath`, `socketPath`, `socketMode` | Select a Cardano network and locate node, topology, data files, and the node-to-client socket mode. |
-| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
+| Listeners and diagnostics | `bindAddr`, `privateBindAddr`, `relayPort`, `privatePort`, `metricsBindAddr`, `metricsAuthToken`, `metricsPort`, `healthPort`, `debugPort`, `debugBindAddr`, `trustedNtCIdleTimeout`, `debugMutexProfileFraction`, `debugBlockProfileRate`, `tracing`, `tracingEndpoint`, `tracingServiceName`, `tracingSampleRatio`, `tracingAlwaysSamplePools`, `localStateQueryViewMaxLifetime` | Configure node and private listeners, metrics, health probes, profiling, tracing, and LocalStateQuery snapshot lifetime. |
 | Logging and TLS | `logging`, `tlsCertFilePath`, `tlsKeyFilePath`, `api.tls` | Select log output and secure supported API or Bark listeners. |
 | Storage and APIs | `storageMode`, `plugins.storage`, `plugins.mempool`, `plugins.api`, `corsAllowedOrigins` | Choose stored history, storage providers, transaction ordering, and application APIs. |
 | Consensus and plugin selection | `plugins.consensus` | Select the consensus provider used by the node. |
@@ -45,7 +45,7 @@ these keys through a native CLI flag or environment variable.
 
 | Setting | Cardano node configuration key | Default and behavior |
 | --- | --- | --- |
-| Transaction submission logic | `TxSubmissionLogicVersion` | When omitted, Dingo uses `TxSubmissionLogicV1`, the implemented legacy per-peer inbound transaction-submission strategy. `TxSubmissionLogicV1` is the only accepted value. Dingo rejects `TxSubmissionLogicV2` and any unknown value during configuration loading. |
+| Transaction submission logic | `TxSubmissionLogicVersion` | The embedded Musashi configuration sets `TxSubmissionLogicVersion` to `TxSubmissionLogicV2`. |
 | Minimum endorser-block offer lead | `LeiosMinOfferLead` | Sets the minimum slot lead above the immutable tip for an endorser block that Dingo offers to a peer. When omitted, Dingo uses `3600` slots. |
 
 ### Cardano node Version 2 envelope configuration
@@ -95,10 +95,10 @@ required value a different shape. Dingo also rejects duplicate keys in the
 envelope root,
 `Configuration`, or supported sections, including duplicates that resolve to
 the same flat field, such as `TargetNumberOfRootPeers` and
-`DeadlineTargetNumberOfRootPeers`. The envelope applies the same
-`TxSubmissionLogicVersion` validation as the flat format, so Dingo rejects
-invalid transaction submission logic in both formats. This format does not add
-support for unrelated or unknown cardano-node settings.
+`DeadlineTargetNumberOfRootPeers`. The envelope uses the same
+`TxSubmissionLogicVersion` setting as the flat format, including
+`TxSubmissionLogicV2` for the embedded Musashi configuration. This format does
+not add support for unrelated or unknown cardano-node settings.
 
 ### Consensus provider
 
@@ -119,7 +119,7 @@ before chain data import.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and behavior |
 | --- | --- | --- | --- | --- |
-| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. `25 MiB` (`26214400` bytes) applies when the run mode is Leios or the network is Musashi, identified by name or network magic. An explicit YAML or provider capacity overrides both defaults. |
+| Mempool capacity | `plugins.mempool.config.capacity` | — | — | `1 MiB` (`1048576` bytes) for standard modes and Praos. When Dingo uses the default capacity for Leios or Musashi, it selects `25 MiB` (`26214400` bytes) only when the current committee can reach the Leios quorum; Dingo uses `1 MiB` when the committee cannot reach quorum or Dingo cannot resolve quorum. When YAML or the provider supplies capacity, Dingo uses that value instead of these defaults and does not change it with committee quorum. |
 
 ### Ledger processing
 
@@ -174,6 +174,7 @@ before chain data import.
 | Socket path | `dmq.socketPath` | `--dmq-socket-path` | `DINGO_DMQ_SOCKET_PATH` | `dingo-dmq.socket` | When enabled, Dingo requires a nonempty value different from the Cardano `socketPath`. |
 | Socket mode | `dmq.socketMode` | `--dmq-socket-mode` | `DINGO_DMQ_SOCKET_MODE` | `0600` (owner only), regardless of the process umask. Enter an octal permission mode. On Unix, Dingo rejects modes that permit writes by other users. |
 | Message TTL | `dmq.messageTtl` | `--dmq-message-ttl` | `DINGO_DMQ_MESSAGE_TTL` | `1800` seconds | When enabled, Dingo requires a positive value no greater than `9223372036` seconds. |
+| Minimum pool message interval | `dmq.minPoolMessageInterval` | `--dmq-min-pool-message-interval` | `DINGO_DMQ_MIN_POOL_MESSAGE_INTERVAL` | `60` seconds | `0` disables pacing. A positive integer sets the minimum interval, in seconds, between announcements from one pool. Dingo rejects values greater than `9223372036` seconds. |
 | Maximum mempool size | `dmq.maxMempoolSize` | `--dmq-max-mempool-size` | `DINGO_DMQ_MAX_MEMPOOL_SIZE` | `128` MB | When enabled, Dingo requires a positive value no greater than `8796093022207` MB. |
 | N2N peer port | `dmq.n2nPort` | `--dmq-n2n-port` | `DINGO_DMQ_N2N_PORT` | `0` | `0` disables the N2N peer port. A nonzero value activates DMQ node-to-node listening and peer management when `dmq.maxPeers` is also nonzero. |
 | IPv4 peer listener address | `dmq.listenAddress` | `--dmq-listen-address` | `DINGO_DMQ_LISTEN_ADDRESS` | `0.0.0.0` | When `dmq.n2nPort` is nonzero, Dingo requires an IPv4 literal when this field is set. |
@@ -288,11 +289,15 @@ requests are not subject to the Blockfrost mutation admission limits.
 | Authentication token | `plugins.api.blockfrost.config.authToken` | — | — | Dingo accepts the legacy value for compatibility but ignores it; it has no effect. The setting is not required, and transaction submission and evaluation accept anonymous requests. |
 | Total concurrent mutations | `plugins.api.blockfrost.config.maxConcurrentMutations` | — | — | `0` or unset by default, which disables the global bound. Set a positive value to limit transaction submission and evaluation across the provider. |
 | Concurrent mutations per client | `plugins.api.blockfrost.config.maxConcurrentMutationsPerClient` | — | — | `0` or unset by default, which disables the per client bound. Set a positive value to limit work from one remote address. When `maxConcurrentMutations` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
+| Total concurrent pool lists | `plugins.api.blockfrost.config.maxConcurrentPoolLists` | — | — | `0` or unset by default, which disables the global bound for `GET /api/v0/pools` and `GET /api/v0/pools/retiring`. Set a positive value to limit active and retiring pool-list requests across the provider. |
+| Concurrent pool lists per client | `plugins.api.blockfrost.config.maxConcurrentPoolListsPerClient` | — | — | `0` or unset by default, which disables the per client bound for `GET /api/v0/pools` and `GET /api/v0/pools/retiring`. Set a positive value to limit pool-list work from one remote address. When `maxConcurrentPoolLists` is positive, this value cannot exceed it; a positive per client cap can also be used with an unlimited global cap. |
 
 Before reading the request body, the provider applies each configured positive
-mutation limit. When concurrent work reaches an active global or per-client
-limit, the provider returns HTTP `429` with `Retry-After: 1` without reading
-the body.
+mutation limit. For pool-list requests, the provider also applies each
+configured positive pool-list limit to `GET /api/v0/pools` and
+`GET /api/v0/pools/retiring`. When concurrent work reaches an enabled global or
+per-client limit, the provider returns HTTP `429` with `Retry-After: 1` without
+reading the body.
 
 ### Shared outbound HTTP user agent
 
@@ -307,6 +312,12 @@ The shared outbound HTTP user agent has no YAML key or CLI flag.
 | Setting | YAML key | CLI flag | Environment variable | Default | Validation and behavior |
 | --- | --- | --- | --- | --- | --- |
 | Maximum lifetime of an acquired ledger snapshot | `localStateQueryViewMaxLifetime` | `--local-state-query-view-max-lifetime` | `DINGO_LOCAL_STATE_QUERY_VIEW_MAX_LIFETIME` | `5m` | Use a positive duration string, such as `5m`. Dingo rejects an invalid, zero, or negative value during startup or configuration validation. After the maximum lifetime, Dingo closes the held snapshot. The next query reopens it at the acquired point and answers from that snapshot; tip acquires use their snapshotted tips. If a rollback removes the acquired point or retention pruning removes it, Dingo cannot reopen the snapshot and closes the connection. |
+
+### Trusted local node-to-client idle timeout
+
+| Setting | YAML key | CLI flag | Environment variable | Default and validation |
+| --- | --- | --- | --- | --- |
+| Trusted local node-to-client idle timeout | `trustedNtCIdleTimeout` | `--trusted-ntc-idle-timeout` | `DINGO_TRUSTED_NTC_IDLE_TIMEOUT` | `0` disables the trusted-local node-to-client idle limit. A positive duration enables the limit. Dingo rejects a negative value during configuration validation. |
 
 ### Mithril synchronization and backend
 
@@ -427,7 +438,7 @@ even when the Badger provider configuration sets
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
-| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
+| Local snapshot directory | `databaseLifecycle.snapshotDir` | `--db-snapshot-dir` | — | Empty by default. Set the local directory for automatic and Bark-triggered snapshots. Dingo requires it when `snapshotEnabled` is true and when Bark mounts its DatabaseService. On Unix, Dingo requires the directory to belong to the process user or root and to be writable. Any ancestor writable by the group or others must have the sticky bit; setgid alone, including a Kubernetes `fsGroup` volume root, does not stop other group members from renaming entries. On Windows, Dingo requires the current user or the Administrators group to own the directory and requires it to be writable. |
 
 Dingo keeps configured snapshot roots and generated local snapshot and staging
 paths private. Unix directories use `0700` permissions and files use `0600`.
@@ -452,7 +463,8 @@ mirroring. Dingo rejects unsigned legacy snapshots instead of automatically
 signing them for mirroring.
 
 On Unix, unkeyed local restores require a private snapshot location that the
-restoring process trusts. On Windows, they require an authenticated manifest.
+restoring process trusts. Dingo applies the same ancestor ownership and
+sticky-bit checks to that path. On Windows, they require an authenticated manifest.
 See the bootstrap and data maintenance guide for the required operational
 checks.
 
@@ -503,6 +515,7 @@ Dingo rejects a source that sets both the literal form and the file form.
 | --- | --- | --- | --- | --- |
 | Dingo Koios parity API key | `koiosParity.apiKey` | Removed; invalid: `--koios-parity-api-key` | `DINGO_KOIOS_PARITY_API_KEY` | Empty by default. YAML and this environment variable continue to accept literal API keys. |
 | Dingo Koios parity API key file | `koiosParity.apiKeyFile` | `--koios-parity-api-key-file` | `DINGO_KOIOS_PARITY_API_KEY_FILE` | Empty by default. CLI input uses this file-backed option. Dingo reads the file as the API key string. |
+| Koios parity strict mode | `koiosParity.strict` | `--koios-parity-strict` | `DINGO_KOIOS_PARITY_STRICT` | The release example sets this to `true`. When enabled, daily-tier quota exhaustion (`HTTP 429`, `Exceeded Tier Limit`) does not stop Dingo. Dingo records an `ERROR` state and retries on the `ERROR` schedule until Koios resets the daily quota, including quota errors from the sampled `/tx_info` path. Dingo does not turn these quota errors into `dingo_db_missing` results. If Dingo cannot persist the `ERROR` state, the failure remains fatal. |
 | Generic plugin configuration field file | — | — | `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>_FILE` | Use instead of `DINGO_PLUGINS_<CAPABILITY>_CONFIG_<FIELD>`. Dingo reads the file as a plain string and does not parse its contents as YAML. |
 | `koios-parity` API key file | — | `--api-key-file` | `KOIOS_API_KEY_FILE` | Use instead of `--api-key` or `KOIOS_API_KEY`. CLI flags take precedence over environment variables. |
 | `koios-parity` metadata DSN file | — | `--metadata-dsn-file` | — | Use instead of `--metadata-dsn`. The file supplies the connection string as plain text. |
@@ -516,8 +529,10 @@ Every file-backed value must meet these requirements:
 - The path must identify a regular file. Dingo rejects directories, devices,
   and other non-regular paths.
 - On Unix, Dingo requires the file and every ancestor path entry to belong to
-  the Dingo process user or root. Dingo rejects a non-sticky directory in the
-  path when group or other users can write to it.
+  the Dingo process user or root. Any ancestor writable by the group or others
+  must have the sticky bit. Setgid alone, including a Kubernetes `fsGroup`
+  volume root, does not stop other group members from renaming entries. Add the
+  sticky bit with `chmod +t` or remove group and other write access.
 - Dingo accepts at most `64 KiB` of file content. Dingo strips trailing `CR`
   and `LF` characters, then rejects empty or whitespace-only content.
 - File permissions or ACLs must satisfy the platform security policy. Unix

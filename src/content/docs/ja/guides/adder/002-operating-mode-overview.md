@@ -88,7 +88,7 @@ Managed customer routingは、1つのChainSync入力から複数の顧客へイ�
 - Adderは`log`と`webhook`アダプターだけを有効にし、その他のアダプターを受け付けません。
 - Adderは顧客ごとの入力レーンと送信先ごとのキューに上限を設けます。遅い顧客や送信先による他の顧客の処理停止を防ぎ、満杯になったキューのドロップ数を記録します。
 
-顧客ごとのフィルターと送信先を管理し、運用中に設定を更新したり、顧客ごとに処理を分離したりする場合に使用します。設定形式、APIのエンドポイント、送信先の制約については、[Managed customer routingリファレンス](014-managed-routing.md)を参照してください。
+顧客ごとのフィルターと送信先を管理し、運用中に設定を更新したり、顧客ごとに処理を分離したりする場合に使用します。設定形式、APIのエンドポイント、送信先の制約については、[Managed customer routingリファレンス](/ja/guides/adder/014-managed-routing/)を参照してください。
 
 <a id="quick-decision-matrix"></a>
 

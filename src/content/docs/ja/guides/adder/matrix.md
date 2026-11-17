@@ -118,8 +118,8 @@ Adderの停止処理は、進行中のMatrixリクエストをキャンセルし
 
 ## 関連リファレンス
 
-- [コマンドリファレンスガイド](./006-command_list.md): Matrix出力のCLIフラグと既定値
-- [Adder出力連携リファレンス](./008-output-integrations.md): 他の出力プラグインとイベント配信の概要
+- [コマンドリファレンスガイド](/ja/guides/adder/006-command_list/): Matrix出力のCLIフラグと既定値
+- [Adder出力連携リファレンス](/ja/guides/adder/008-output-integrations/): 他の出力プラグインとイベント配信の概要
 
 ---
 <!-- doc-holiday-watermark -->

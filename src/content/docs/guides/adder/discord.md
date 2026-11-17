@@ -166,8 +166,8 @@ not suppress errors unrelated to an already closed connection.
 
 ## Related references
 
-- [Output integrations guide](./008-output-integrations.md)
-- [Command reference](./006-command_list.md)
+- [Output integrations guide](/guides/adder/008-output-integrations/)
+- [Command reference](/guides/adder/006-command_list/)
 
 
 ---
