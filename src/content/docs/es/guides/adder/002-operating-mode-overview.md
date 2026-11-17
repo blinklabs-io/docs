@@ -65,7 +65,7 @@ El binario de línea de comandos ofrece acceso completo al procesamiento de even
 
 ## 3. Enrutamiento administrado de clientes (CLI)
 
-El modo de enrutamiento administrado distribuye eventos de ChainSync entre clientes independientes, cada uno con sus propios filtros y destinos con nombre. Adder lo activa únicamente cuando la ejecución incluye `--managed-config-dir`; sin esta opción, el flujo CLI normal y el pipeline integrado permanecen sin cambios.
+El modo de enrutamiento administrado distribuye eventos de ChainSync entre clientes independientes, cada uno con sus propios filtros y destinos con nombre. Este modo está diseñado para operadores que necesitan separar el procesamiento y la entrega por cliente.
 
 ### Características principales
 
@@ -76,7 +76,7 @@ El modo de enrutamiento administrado distribuye eventos de ChainSync entre clien
 - Asigna una cola de entrada independiente a cada cliente y una cola independiente a cada destino. Las colas tienen límites definidos, impiden que un cliente lento bloquee a los demás y registran los eventos descartados cuando alcanzan su capacidad.
 - No inicia la API pública `/events` en este modo.
 
-Para conocer el formato de configuración, las restricciones de los destinos y las operaciones de recarga, consulta la [referencia de enrutamiento administrado](../014-managed-routing).
+La [referencia de enrutamiento administrado](../014-managed-routing) describe el formato de configuración, las restricciones de los destinos y las operaciones de recarga.
 
 ## Matriz de decisión rápida
 
