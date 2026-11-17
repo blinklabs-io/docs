@@ -16,7 +16,7 @@ description: List of Adder Commands.
  
 > path to config file to load
 
-> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > environment variables > YAML configuration file > defaults.
+> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > YAML configuration file > environment variables > defaults.
 
 ***
 
@@ -145,7 +145,7 @@ description: List of Adder Commands.
   --input-chainsync-network string
 ```
   
-> specifies a well-known Cardano network name (default "mainnet")
+> specifies a well-known Cardano network name: `mainnet`, `preprod`, `preview`, or `dijkstra` (default "mainnet")
 <br />
 
 ```
@@ -167,6 +167,16 @@ description: List of Adder Commands.
 ```
   
 > specifies the path to the UNIX socket to connect to
+
+<br />
+
+```
+  --input-chainsync-state-path string
+```
+  
+> path to a SQLite database file for persisting the chainsync cursor across restarts (default empty)
+>
+> When unset, Adder does not persist the cursor. When set, Adder creates or reopens the SQLite cursor file and resumes from the persisted state after a restart.
 
 ***
 
@@ -205,7 +215,7 @@ description: List of Adder Commands.
   --input-mempool-network string
 ```
   
-> well-known Cardano network name (e.g. mainnet, preprod) (default "mainnet")
+> well-known Cardano network name (`mainnet`, `preprod`, `preview`, or `dijkstra`) (default "mainnet")
 <br />
 
 ```
@@ -253,7 +263,7 @@ description: List of Adder Commands.
   
 > sets the `output.log` logging threshold. Accepted values are `debug`, `info`, `warn`, and `error` (default "info"). `debug` and `info` emit event records; `warn` and `error` suppress event records. The threshold also filters Adder application diagnostics on stderr, even when another output plugin is selected.
 >
-> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder removed the old `--logging-level` flag and top-level YAML `logging.level` setting and rejects them when supplied. Adder removed the old `LOGGING_LEVEL` environment variable and ignores it.
+> Configure the same setting with YAML `plugins.output.log.level` or the `OUTPUT_LOG_LEVEL` environment variable. Adder no longer provides the `--logging-level` flag. Adder accepts the legacy YAML `logging.level` setting and maps it to `plugins.output.log.level` when the replacement setting is absent. Adder ignores the old `LOGGING_LEVEL` environment variable.
 <br />
 
 ```
@@ -358,6 +368,669 @@ description: List of Adder Commands.
   
 > specifies the username for basic auth
 
+<br />
+
+```
+  --output-webhook-state-path string
+```
+  
+> SQLite file for restart safe pending webhook deliveries (default empty)
+>
+> Set a persistent filename to enable durable delivery. An empty value disables durable delivery.
+
+<br />
+
+```
+  --output-webhook-max-pending int
+```
+  
+> maximum persisted pending webhook deliveries (default `1024`)
+>
+> When `--output-webhook-state-path` is set, this value must be at least `11`.
+
+<br />
+
+```
+  --output-signal-endpoint string
+```
+  
+> signal-cli daemon HTTP JSON-RPC endpoint (default `http://127.0.0.1:8081/api/v1/rpc`)
+>
+> Use the `/api/v1/rpc` path. HTTP endpoints must use loopback addresses; remote endpoints must use HTTPS.
+
+<br />
+
+```
+  --output-signal-account string
+```
+  
+> Signal account for a multi-account daemon (default empty)
+
+<br />
+
+```
+  --output-signal-recipients string
+```
+  
+> comma-separated Signal recipient numbers or IDs
+>
+> At least one recipient is required.
+
+<br />
+
+```
+  --output-signal-event-types string
+```
+  
+> comma-separated Signal event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+>
+> See the [Signal output reference](./signal.md).
+
+<br />
+
+```
+  --output-nats-servers string
+```
+  
+> comma-separated NATS server URLs (default `nats://127.0.0.1:4222`)
+>
+> Each URL must use the `nats://` or `tls://` scheme and cannot include credentials, a query, a fragment, or a path other than `/`. Explicit ports must be between `1` and `65535`.
+
+<br />
+
+```
+  --output-nats-token string
+```
+  
+> optional NATS authentication token (default empty)
+
+<br />
+
+```
+  --output-nats-subject-prefix string
+```
+  
+> subject prefix for event subjects (default `adder.events`)
+>
+> The value must satisfy NATS subject prefix validation.
+
+<br />
+
+```
+  --output-nats-event-types string
+```
+  
+> comma-separated NATS event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+>
+> See the [NATS output reference](./nats.md).
+
+<br />
+
+```
+  --output-telegram-settings-file string
+```
+  
+> local YAML file for Telegram notification preferences (default empty)
+
+<br />
+
+```
+  --output-telegram-operator-user-ids string
+```
+  
+> comma-separated Telegram user IDs allowed to change group preferences (default empty)
+>
+> Every value must be a positive Telegram user ID.
+
+<br />
+
+```
+  --output-slack-webhook-urls string
+```
+  
+> comma-separated Slack incoming webhook URLs
+>
+> At least one URL is required. Each URL must use HTTPS and cannot include credentials.
+
+<br />
+
+```
+  --output-slack-event-types string
+```
+  
+> comma-separated Slack event types (default `blocks,transactions,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-discord-bot-token string
+```
+  
+> Discord bot token (default empty)
+
+<br />
+
+```
+  --output-discord-application-id string
+```
+  
+> Discord application ID (default empty)
+
+<br />
+
+```
+  --output-discord-guild-id string
+```
+  
+> allowed Discord server ID (default empty)
+
+<br />
+
+```
+  --output-discord-channel-id string
+```
+  
+> allowed Discord channel ID (default empty)
+
+<br />
+
+```
+  --output-discord-event-types string
+```
+  
+> comma-separated Discord event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-matrix-homeserver-url string
+```
+  
+> Matrix homeserver base URL
+
+<br />
+
+```
+  --output-matrix-access-token string
+```
+  
+> Matrix access token
+>
+> This value is required.
+
+<br />
+
+```
+  --output-matrix-room-ids string
+```
+  
+> comma-separated Matrix room IDs
+>
+> At least one room ID is required, and every room ID must pass Matrix room ID validation.
+
+<br />
+
+```
+  --output-matrix-event-types string
+```
+  
+> comma-separated Matrix event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-rabbitmq-url string
+```
+  
+> AMQP broker URL (default `amqp://127.0.0.1:5672/`)
+
+<br />
+
+```
+  --output-rabbitmq-exchange string
+```
+  
+> existing exchange; an empty value uses the default exchange (default empty)
+
+<br />
+
+```
+  --output-rabbitmq-routing-key string
+```
+  
+> routing key or queue name for the default exchange (default `adder.events`)
+>
+> This value is required.
+
+<br />
+
+```
+  --output-rabbitmq-persistent
+```
+  
+> publish persistent messages (default true)
+
+<br />
+
+```
+  --output-rabbitmq-event-types string
+```
+  
+> comma-separated RabbitMQ event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-mqtt-broker string
+```
+  
+> MQTT 5 broker TCP or TLS URL (default `mqtt://127.0.0.1:1883`)
+
+<br />
+
+```
+  --output-mqtt-client-id string
+```
+  
+> MQTT client identifier (default `adder-output`)
+>
+> This value is required.
+
+<br />
+
+```
+  --output-mqtt-username string
+```
+  
+> optional MQTT username (default empty)
+
+<br />
+
+```
+  --output-mqtt-password string
+```
+  
+> optional MQTT password (default empty)
+
+<br />
+
+```
+  --output-mqtt-topic-prefix string
+```
+  
+> prefix for event topics (default `adder/events`)
+>
+> The value must satisfy MQTT topic prefix validation.
+
+<br />
+
+```
+  --output-mqtt-qos int
+```
+  
+> MQTT publish QoS: `0`, `1`, or `2` (default `1`)
+>
+> Only `0`, `1`, and `2` are valid values.
+
+<br />
+
+```
+  --output-mqtt-event-types string
+```
+  
+> comma-separated MQTT event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-pubsub-project-id string
+```
+  
+> Google Cloud project ID (default empty)
+
+<br />
+
+```
+  --output-pubsub-topic-id string
+```
+  
+> Pub/Sub topic ID (default empty)
+
+<br />
+
+```
+  --output-pubsub-event-types string
+```
+  
+> comma-separated Pub/Sub event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-postgres-database-url string
+```
+  
+> PostgreSQL connection URL
+
+<br />
+
+```
+  --output-postgres-event-types string
+```
+  
+> comma-separated PostgreSQL event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-clickhouse-url string
+```
+  
+> ClickHouse HTTP origin (default `http://127.0.0.1:8123`)
+
+<br />
+
+```
+  --output-clickhouse-database string
+```
+  
+> ClickHouse database (default `default`)
+
+<br />
+
+```
+  --output-clickhouse-username string
+```
+  
+> ClickHouse user (default `default`)
+
+<br />
+
+```
+  --output-clickhouse-password string
+```
+  
+> optional ClickHouse password (default empty)
+
+<br />
+
+```
+  --output-clickhouse-event-types string
+```
+  
+> comma-separated ClickHouse event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-elasticsearch-url string
+```
+  
+> Elasticsearch origin URL (default `http://127.0.0.1:9200`)
+
+<br />
+
+```
+  --output-elasticsearch-index string
+```
+  
+> versioned index name (default `adder-events-v1`)
+
+<br />
+
+```
+  --output-elasticsearch-api-key string
+```
+  
+> optional Elasticsearch API key (default empty)
+
+<br />
+
+```
+  --output-elasticsearch-event-types string
+```
+  
+> comma-separated Elasticsearch event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-s3-region string
+```
+  
+> AWS region
+
+<br />
+
+```
+  --output-s3-bucket string
+```
+  
+> S3 bucket
+
+<br />
+
+```
+  --output-s3-prefix string
+```
+  
+> relative object key prefix (default `adder/events`)
+
+<br />
+
+```
+  --output-s3-event-types string
+```
+  
+> comma-separated S3 event types (default `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-sqs-region string
+```
+  
+> AWS region (default empty)
+
+<br />
+
+```
+  --output-sqs-queue-url string
+```
+  
+> SQS queue URL (default empty)
+
+<br />
+
+```
+  --output-sqs-group-id string
+```
+  
+> message group ID for FIFO queues (default empty)
+
+<br />
+
+```
+  --output-sqs-event-types string
+```
+  
+> comma-separated SQS event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-sns-region string
+```
+  
+> AWS region (default empty)
+
+<br />
+
+```
+  --output-sns-topic-arn string
+```
+  
+> SNS topic ARN (default empty)
+
+<br />
+
+```
+  --output-sns-group-id string
+```
+  
+> message group ID for FIFO topics (default empty)
+
+<br />
+
+```
+  --output-sns-max-message-bytes int
+```
+  
+> configured SNS topic message size limit (default `262144`)
+
+<br />
+
+```
+  --output-sns-event-types string
+```
+  
+> comma-separated SNS event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-redis-address string
+```
+  
+> Redis TCP host and port (default `127.0.0.1:6379`)
+>
+> The value must use `host:port` syntax.
+
+<br />
+
+```
+  --output-redis-username string
+```
+  
+> optional Redis ACL username (default empty)
+
+<br />
+
+```
+  --output-redis-password string
+```
+  
+> optional Redis password (default empty)
+
+<br />
+
+```
+  --output-redis-tls
+```
+  
+> use TLS for the Redis connection (default false)
+>
+> Enable TLS when `username` or `password` is set.
+
+<br />
+
+```
+  --output-redis-stream string
+```
+  
+> Redis Stream key (default `adder.events`)
+>
+> This value is required.
+
+<br />
+
+```
+  --output-redis-event-types string
+```
+  
+> comma-separated Redis event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+<br />
+
+```
+  --output-kafka-brokers string
+```
+  
+> comma-separated Kafka bootstrap `host:port` addresses (default `127.0.0.1:9092`)
+
+<br />
+
+```
+  --output-kafka-topic string
+```
+  
+> Kafka topic (default `adder.events`)
+
+<br />
+
+```
+  --output-kafka-username string
+```
+  
+> optional SASL PLAIN username (default empty)
+
+<br />
+
+```
+  --output-kafka-password string
+```
+  
+> optional SASL PLAIN password (default empty)
+
+<br />
+
+```
+  --output-kafka-tls
+```
+  
+> use TLS for broker connections (default false)
+
+<br />
+
+```
+  --output-kafka-event-types string
+```
+  
+> comma-separated Kafka event types (default `blocks,rollbacks,governance`)
+>
+> Include at least one supported event type.
+
+> See the [webhook durability reference](./webhook.md).
 ***
 
 ## Notifications:
@@ -378,7 +1051,7 @@ The configuration uses JSON with `schemaVersion` set to `1`. Adder rejects unkno
 | Field | Description |
 | --- | --- |
 | `schemaVersion` | Required value: `1`. |
-| `network.name` | Required supported Cardano network: `mainnet`, `preprod`, or `preview`. |
+| `network.name` | Required supported Cardano network: `mainnet`, `preprod`, `preview`, or `dijkstra`. |
 | `network.customAddress` and `network.customPort` | Optional custom node address and port. Set both fields together; `customPort` must be between `1` and `65535`. |
 | `monitor.everything` | Set to `true` to monitor all supported targets. Set this field or configure at least one target in `wallets`, `dreps`, `pools`, `assets`, or `policies`. |
 | `monitor.wallets` | Wallet addresses to monitor. |
