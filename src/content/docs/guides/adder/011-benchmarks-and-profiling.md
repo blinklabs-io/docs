@@ -32,12 +32,12 @@ Each operation sends and drains `4,096` block event envelopes. The benchmark rep
 
 Compare the same named case across repeated runs on the same machine, with the same Go version and workload. The six runs in the command balance the three buffer orders. Compare both events per second and allocations, rather than using producer completion time alone as a measure of end to end delivery.
 
-The benchmark excludes the following production concerns:
+The benchmark does not include the following production concerns:
 
-- A Cardano node and network output
-- Decoding and filters
-- Serialization
-- Payload allocations
+- A Cardano node or network output
+- Decoding data or applying filters
+- Serializing output
+- Allocating payloads
 - Real sink latency
 
 The pause schedule is synthetic and does not measure sink latency. Because channel creation occurs outside the timer, `B/op` does not include the buffer's storage.
