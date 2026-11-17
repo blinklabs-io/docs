@@ -185,6 +185,8 @@ description: "Adderコマンドの一覧です。"
 ```
 
 > ChainSyncカーソルを再起動後も保持するSQLiteデータベースファイルのパスを指定します。未設定の場合、カーソルを保持しません。
+>
+> [ChainSyncカーソル永続化の詳細](./chainsync-cursor-persistence.md)を参照してください。
 
 ***
 
@@ -275,7 +277,7 @@ description: "Adderコマンドの一覧です。"
 
 > `output.log`のログ出力のしきい値を設定します。指定できる値は`debug`、`info`、`warn`、`error`です（デフォルトは"info"）。`debug`と`info`ではイベントレコードを出力し、`warn`と`error`では出力を抑制します。他の出力プラグインを選択した場合も、このしきい値によってstderrに出力するAdderアプリケーションの診断情報を絞り込みます。
 >
-> 同じ設定はYAMLの`plugins.output.log.level`または環境変数`OUTPUT_LOG_LEVEL`でも指定できます。従来のYAML設定`logging.level`は、`plugins.output.log.level`が未設定の場合に移行されます。従来の`--logging-level`フラグは削除されており、指定すると拒否されます。従来の環境変数`LOGGING_LEVEL`は無視されます。
+> YAMLでは`plugins.output.log.level`、環境変数では`OUTPUT_LOG_LEVEL`でも指定できます。トップレベルの`logging.level`、`--logging-level`フラグ、`LOGGING_LEVEL`環境変数は削除されており、サポートされていません。
 <br />
 
 ```
@@ -487,6 +489,8 @@ description: "Adderコマンドの一覧です。"
 > Slackへ配信するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance`）。
 <br />
 
+> [Slack出力の詳細](./slack.md)を参照してください。
+
 ```
   --output-discord-bot-token string
 ```
@@ -522,6 +526,8 @@ description: "Adderコマンドの一覧です。"
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
 <br />
 
+> [Discord出力の詳細](./discord.md)を参照してください。
+
 ```
   --output-matrix-homeserver-url string
 ```
@@ -548,6 +554,8 @@ description: "Adderコマンドの一覧です。"
 ```
 
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
+
+> [Matrix出力の詳細](./matrix.md)を参照してください。
 
 ***
 
@@ -705,6 +713,8 @@ description: "Adderコマンドの一覧です。"
 
 > 選択するイベントタイプをカンマ区切りで指定します（デフォルト `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`）。
 <br />
+
+> [ClickHouse出力の詳細](./clickhouse.md)を参照してください。
 
 ```
   --output-elasticsearch-url string
@@ -909,6 +919,8 @@ description: "Adderコマンドの一覧です。"
 > イベントタイプをカンマ区切りで指定します（デフォルト `blocks,rollbacks,governance`）。
 
 ***
+
+> [Kafka出力の詳細](./kafka.md)を参照してください。
 
 <a id="managed-routing"></a>
 
