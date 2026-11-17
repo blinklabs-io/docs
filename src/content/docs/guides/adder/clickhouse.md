@@ -12,6 +12,10 @@ The `clickhouse` output sends selected Adder events to the versioned
 batches over the ClickHouse HTTP interface, and ClickHouse receives each
 event as a separate row after a successful insert.
 
+See the [Adder integration overview](./001-adder.md) and the [command
+reference](./006-command_list.md) for related configuration and output
+options.
+
 ## Configuration
 
 Configure the output in the Adder YAML file:
@@ -47,6 +51,9 @@ use `https` for a remote ClickHouse server; plain HTTP with a password works
 only for localhost or another loopback address. Protect the configuration and
 password with the same access controls used for ClickHouse credentials.
 
+Adder does not follow HTTP redirects for ClickHouse requests. This prevents
+ClickHouse credentials from being sent to another origin.
+
 The `event-types` value must name at least one supported selection. If the
 configuration omits the value, the output uses the default shown in the table.
 
@@ -72,8 +79,11 @@ comparison; it does not identify a unique row.
 
 Adder sends a batch when it reaches 100 selected events or when one second
 passes, whichever occurs first. Each flush uses one synchronous `INSERT`
-request. Adder waits for the HTTP request and ClickHouse query to finish
-before it treats the batch as successful.
+request with `async_insert=0`, `wait_end_of_query=1`,
+`deduplicate_insert=disable`, and `insert_deduplicate=0`. These settings make
+the insert synchronous and disable ClickHouse insert deduplication. Adder
+treats successful HTTP response and query completion as the batch
+acknowledgement.
 
 When Adder stops, it drains events already accepted into the output buffer and
 attempts one final flush. The final request has a ten-second deadline. Adder
@@ -85,14 +95,16 @@ locally for later delivery.
 Adder checks each event timestamp before it adds the event to a batch. A
 timestamp outside the supported `DateTime64(9)` range produces an individual
 error, while other valid events continue through batching. Adder reports a
-failed batch and discards it locally. Adder does not automatically retry an
-ambiguous failed insert because repeating the request can create duplicate
-rows.
+failed HTTP or ClickHouse query, including an error discovered while reading
+the response body, and discards the batch locally. Adder does not
+automatically retry an ambiguous failed insert because repeating the request
+can create duplicate rows.
 
 ClickHouse keeps every row that it accepts successfully, including identical
-event duplicates. ClickHouse also keeps rollback events as ordinary
-`input.rollback` rows; Adder does not delete earlier rows when a rollback
-occurs. Query the retained rows
+event duplicates. The `event_hash` is the SHA-256 content hash used to
+compare complete event payloads; it does not identify a unique row. ClickHouse
+also keeps rollback events as ordinary `input.rollback` rows; Adder does not
+delete earlier rows when a rollback occurs. Query the retained rows
 with the event fields, for example:
 
 ```sql
