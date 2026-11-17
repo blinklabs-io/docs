@@ -49,9 +49,9 @@ plugins:
 
 `broker`の既定値は`mqtt://127.0.0.1:1883`で、`mqtt://`と`tls://`のURLを指定できます。`client-id`の既定値は`adder-output`で、空にはできません。`username`と`password`は任意ですが、認証情報を使用する場合は`tls://`が必須です。各Adderインスタンスには異なる`client-id`を割り当てます。同じ識別子で接続すると、MQTTブローカーが既存のセッションを切断します。
 
-`topic-prefix`の既定値は`adder/events`です。空でないトピックレベルだけを含め、MQTTワイルドカードの`+`と`#`、先頭または末尾の`/`、連続する`//`は使用できません。イベントタイプを末尾のトピックレベルとして追加するため、既定のトピックは`adder/events/block`、`adder/events/rollback`、`adder/events/governance`です。`transactions`、`drep-registration`、`drep-update`、`drep-retirement`も選択できます。ペイロードにはAdderイベント全体のJSONを使用し、MQTTのRETAINフラグは設定しません。
+`topic-prefix`の既定値は`adder/events`です。空でないトピックレベルだけを含め、MQTTワイルドカードの`+`と`#`、先頭または末尾の`/`、連続する`//`は使用できません。イベントタイプを末尾のトピックレベルとして追加するため、既定のトピックは`adder/events/block`、`adder/events/rollback`、`adder/events/governance`です。各トピックはイベントタイプの接尾辞を含めて65,535バイト以内にします。`transactions`、`drep-registration`、`drep-update`、`drep-retirement`も選択できます。ペイロードにはAdderイベント全体のJSONを使用し、MQTTのRETAINフラグは設定しません。
 
-`qos`の既定値は`1`で、`0`、`1`、`2`だけを指定できます。QoS 1では公開完了はブローカーが`PUBACK`を送信したことを意味し、QoS 2ではQoS 2の交換をブローカーが完了したことを意味します。どちらもサブスクライバーが受信または処理したことを確認しません。QoS 0にはブローカーの確認応答を含めません。切断されたイベントと失敗した公開はエラーチャネルへ報告し、永続ストレージから再生しません。接続が切れた場合、次のイベントの前に再接続します。確認応答がタイムアウトすると配送結果は不明になり、失敗を報告します。QoS 2の`PUBCOMP 0x92`も不明な結果として報告します。
+`qos`の既定値は`1`で、`0`、`1`、`2`だけを指定できます。QoS 1では公開完了はブローカーが`PUBACK`を送信したことを意味し、QoS 2ではQoS 2の交換をブローカーが完了したことを意味します。どちらもサブスクライバーが受信または処理したことを確認しません。QoS 0にはブローカーの確認応答を含めません。切断されたイベントと失敗した公開はエラーチャネルへ報告し、永続ストレージから再生しません。接続が切れた場合、次のイベントの前に再接続します。確認応答がタイムアウトすると配送結果は不明になり、失敗を報告します。QoS 2の`PUBCOMP 0x92`も不明な結果として報告します。Pahoの任意の公開キューは使用しません。
 
 ## RabbitMQ
 
@@ -69,7 +69,7 @@ plugins:
       event-types: blocks,rollbacks,governance
 ```
 
-`url`の既定値は`amqp://127.0.0.1:5672/`で、`amqp://`または`amqps://`だけを指定できます。信頼できるネットワークの外部へ接続する場合は`amqps://`を使用します。`exchange`の既定値は空で、空の場合はデフォルトexchangeを使用します。`routing-key`の既定値は`adder.events`で、空にはできません。デフォルトexchangeでは`routing-key`がキュー名になります。対象キューは事前に作成し、名前付きexchangeを使用する場合はexchangeとバインディングも事前に作成します。プラグインはブローカーのトポロジーを作成しません。
+`url`の既定値は`amqp://127.0.0.1:5672/`で、`amqp://`または`amqps://`だけを指定できます。URLにフラグメントは指定できません。信頼できるネットワークの外部へ接続する場合は`amqps://`を使用します。`exchange`の既定値は空で、空の場合はデフォルトexchangeを使用します。`routing-key`の既定値は`adder.events`で、空にはできません。デフォルトexchangeでは`routing-key`がキュー名になります。対象キューは事前に作成し、名前付きexchangeを使用する場合はexchangeとバインディングも事前に作成します。プラグインはブローカーのトポロジーを作成しません。
 
 `persistent`の既定値は`true`です。永続メッセージを使用するには、永続的な宛先キューと適切なブローカー設定が必要です。メッセージだけを永続化しても、配送の永続性は保証しません。`event-types`の既定値は`blocks,rollbacks,governance`で、`transactions`、`drep-registration`、`drep-update`、`drep-retirement`も選択できます。
 
@@ -135,7 +135,7 @@ plugins:
       event-types: blocks,transactions,rollbacks,governance
 ```
 
-`region`と`bucket`の既定値は空で、`prefix`の既定値は`adder/events`です。バケット名とプレフィックスを検証し、最終的なオブジェクトキーが1,024バイト以内に収まるようにします。`event-types`の既定値は`blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`です。
+`region`と`bucket`の既定値は空で、`prefix`の既定値は`adder/events`です。バケット名とプレフィックスには有効なUTF-8を指定し、最終的なオブジェクトキーを1,024バイト以内に収めます。`event-types`の既定値は`blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement`です。
 
 オブジェクトキーは`<prefix>/YYYY/MM/DD/<UTC timestamp>-<SHA-256 of JSON>.json`です。JSONはAdderの`timestamp`、`context`、`payload`、`type`フィールドを持ちます。日付にはイベントのタイムスタンプをUTCで使用します。同じイベントを再生すると同じバイト列を同じキーへ書き込み、同じタイムスタンプを持つ異なるイベントには異なるキーを作成します。ロールバックは通常の`input.rollback`アーカイブレコードであり、以前のオブジェクトを削除または書き換えません。コンシューマーはチェーン状態を構築するときにロールバックを適用してください。
 
@@ -174,9 +174,9 @@ plugins:
 
 イベントJSONを[SQS SendMessage](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html)の`MessageBody`、または[SNS Publish](https://docs.aws.amazon.com/sns/latest/api/API_Publish.html)の`Message`に設定します。各イベントを個別のAPI呼び出しで送信し、バッチ処理や永続的なローカルキューは使用しません。AWS SDKは10秒のリクエスト期限内で通常の一時的な再試行を行います。失敗したリクエストはエラーチャネルへ報告し、再生しません。API成功は、SQSがメッセージをキューへ受け入れたこと、またはSNSがファンアウト用の公開を受け入れたことだけを示し、コンシューマーの受信を証明しません。ロールバックはロールバックイベントレコードとして公開し、以前のイベントの解釈はコンシューマーに委ねます。
 
-宛先名が`.fifo`で終わるFIFO宛先では`group-id`が必須です。完全なイベントJSONのSHA-256を`MessageDeduplicationId`として設定します。同一のイベントJSONはサービスの重複排除期間内に重複排除されますが、新しいタイムスタンプで再出力したイベントは異なるダイジェストになります。標準宛先では`group-id`を省略できます。標準SQSキューで設定するとfair queueが有効になり、標準SNSトピックでは標準SQSサブスクリプションに対してのみfair queue用に転送します。標準宛先ではFIFOの順序付けや重複排除は提供しません。
+宛先名が`.fifo`で終わるFIFO宛先では`group-id`が必須で、使用できる文字も検証します。完全なイベントJSONのSHA-256を`MessageDeduplicationId`として設定します。同一のイベントJSONはサービスの重複排除期間内に重複排除されますが、新しいタイムスタンプで再出力したイベントは異なるダイジェストになります。標準宛先では`group-id`を省略できます。標準SQSキューで設定するとfair queueが有効になり、標準SNSトピックでは標準SQSサブスクリプションに対してのみfair queue用に転送します。標準宛先ではFIFOの順序付けや重複排除は提供しません。
 
-`event-types`の既定値は`blocks,rollbacks,governance`で、`transactions`、`drep-registration`、`drep-update`、`drep-retirement`も選択できます。SQSメッセージの上限は1 MiBです。SNSトピックの既定値は256 KiBで、`MaximumMessageSize`は最大1 MiBまで設定できます。その場合は`max-message-bytes`に同じ値を指定してください。宛先がより小さい上限を適用して、サービスがエラーを返す場合があります。
+`event-types`の既定値は`blocks,rollbacks,governance`で、`transactions`、`drep-registration`、`drep-update`、`drep-retirement`も選択できます。SQSメッセージの上限は1 MiBです。SNSトピックの既定値は256 KiBで、`max-message-bytes`には宛先の上限に合わせて256 KiBから1 MiBまでを指定します。その場合はSNSの`MaximumMessageSize`と同じ値を指定してください。宛先がより小さい上限を適用して、サービスがエラーを返す場合があります。
 
 ## Redis Streams
 
@@ -192,7 +192,7 @@ plugins:
       event-types: "blocks,rollbacks,governance"
 ```
 
-`address`の既定値は`127.0.0.1:6379`です。`username`と`password`の既定値は空で、`tls`の既定値は`false`です。`stream`の既定値は`adder.events`で、空にはできません。Redis ACL認証には`username`と`password`を設定し、デフォルトユーザーには`password`だけを設定します。認証情報を使用する場合は`tls: true`が必須で、サーバー側でも[Redis TLS](https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/)を設定してください。`address`は`host:port`形式で指定します。
+`address`の既定値は`127.0.0.1:6379`です。`username`と`password`の既定値は空で、`tls`の既定値は`false`です。`stream`の既定値は`adder.events`で、空にはできません。Redis ACL認証には`username`と`password`を設定し、デフォルトユーザーには`password`だけを設定します。認証情報を使用する場合は`tls: true`が必須で、サーバー側でも[Redis TLS](https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/)を設定してください。`address`は`host:port`形式で指定します。起動時にRedisへ接続して確認するため、接続できない場合は起動に失敗します。
 
 選択したイベントごとに、設定したStreamへ1つの`XADD`エントリを追加します。RedisがエントリIDを生成し、`type`フィールドにはAdderイベントタイプ、`event`フィールドにはイベント全体のJSONを設定します。Redisから成功応答を受け取った場合、Redisが追加を受け入れたことを確認しますが、ディスクへの永続化やコンシューマーによる消費は確認しません。エントリは[`XRANGE`](https://redis.io/docs/latest/commands/xrange/)で確認し、[`XREAD`](https://redis.io/docs/latest/commands/xread/)で読み取れます。
 
