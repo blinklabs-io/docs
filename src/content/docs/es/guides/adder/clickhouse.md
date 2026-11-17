@@ -42,9 +42,10 @@ La salida admite estas claves:
 | `password` | `""` | Es opcional. Cuando contiene un valor, `url` debe usar `https://` fuera de `localhost` o de una dirección de loopback. |
 | `event-types` | `blocks,transactions,rollbacks,governance,drep-registration,drep-update,drep-retirement` | Debe contener al menos un tipo admitido separado por comas. |
 
-La salida no sigue redirecciones HTTP. Por tanto, las credenciales de ClickHouse
-no se envían a otro origen. La regla de `https://` para las contraseñas sigue
-aplicándose fuera de `localhost` y de las direcciones de loopback.
+La salida no sigue redirecciones HTTP. Por tanto, la salida no envía las
+credenciales de ClickHouse a otro origen. La salida sigue aplicando la regla de
+`https://` para las contraseñas fuera de `localhost` y de las direcciones de
+loopback.
 
 Los nombres admitidos para `event-types` son `blocks`, `transactions`,
 `rollbacks`, `governance`, `drep-registration`, `drep-update` y
