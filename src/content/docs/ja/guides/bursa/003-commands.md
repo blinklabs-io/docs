@@ -276,6 +276,7 @@ Confidential Space の VM には永続ストレージがありません。ロー
 
 ```sh
 ./bursa confidential-space-workload \
+  --listen :8080 \
   --audience "$WORKLOAD_AUDIENCE" \
   --kms-key "$KMS_KEY_RESOURCE" \
   --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
@@ -293,6 +294,7 @@ Confidential Space の VM には永続ストレージがありません。ロー
 
 ```sh
 ./bursa confidential-space-workload \
+  --listen :8080 \
   --import \
   --import-authority-file /etc/bursa/import-authority.pub \
   --audience "$WORKLOAD_AUDIENCE" \
@@ -322,7 +324,7 @@ Confidential Space の VM には永続ストレージがありません。ロー
   --profile pool@mainnet=8 --profile pool@preview=0
 ```
 
-クライアントは、オーディエンスとイメージのダイジェストを含むワークロードのアテステーショントークンを検証してから、鍵をワークロード向けに封印して送信します。`--signing-key-file` には拡張されていない `StakePoolSigningKey_ed25519` ファイルを指定し、その鍵から `--vkey-file` の鍵が導出できる必要があります。`--authority-key-file` にはプロビジョニング権限の Ed25519 シードを 16 進数で保存します。各 `--profile` は `NAME=NEXT` の形式で、`NEXT` はそのプロファイルが次に署名できる運用証明書の発行番号です。オンチェーンかどうかにかかわらず鍵が署名した最大の発行番号に 1 を加えた値とし、プールのオンチェーンのカウンターに 1 を加えた値を下回らないようにします。一度も発行していないプールには `0` を指定します。先に以前の署名者での証明書の発行を停止してください。インポート後にワークロードが `NEXT` を修正することはできません。
+クライアントは、オーディエンスとイメージのダイジェストを含むワークロードのアテステーショントークンを検証してから、鍵をワークロード向けに封印して送信します。`--signing-key-file` には拡張されていない `StakePoolSigningKey_ed25519` ファイルを指定し、その鍵から `--vkey-file` の鍵が導出できる必要があります。`--authority-key-file` にはプロビジョニング権限の Ed25519 シードを 16 進数で保存します。各 `--profile` は `NAME=NEXT` の形式で、`NEXT` はそのプロファイルが次に署名できる運用証明書の発行番号です。オンチェーンかどうかにかかわらずそのプロファイルで署名した最大の発行番号に 1 を加えた値とし、そのプロファイルのネットワークにおけるプールのオンチェーンのカウンターに 1 を加えた値を下回らないようにします。一度も発行していないプロファイルには `0` を指定します。先に以前の署名者での証明書の発行を停止してください。インポート後にワークロードが `NEXT` を修正することはできません。
 
 インポート後は、`--import` を付けずに、インポートした各プロファイルの `--profile` を指定してワークロードを起動します。インポートしていないプロファイルを提供すると、`--create-profile-counter` で指定しない限り、Cloud Storage モードと同様に起動が停止します。
 

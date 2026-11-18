@@ -241,6 +241,7 @@ Una VM de Confidential Space no tiene almacenamiento persistente. Para ejecutar 
 
 ```sh
 ./bursa confidential-space-workload \
+  --listen :8080 \
   --audience "$WORKLOAD_AUDIENCE" \
   --kms-key "$KMS_KEY_RESOURCE" \
   --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
@@ -258,6 +259,7 @@ Inicia la carga de trabajo una vez en modo de importación sobre un secreto de e
 
 ```sh
 ./bursa confidential-space-workload \
+  --listen :8080 \
   --import \
   --import-authority-file /etc/bursa/import-authority.pub \
   --audience "$WORKLOAD_AUDIENCE" \
@@ -287,7 +289,7 @@ Ejecuta el cliente de importación en la máquina que guarda la clave fría:
   --profile pool@mainnet=8 --profile pool@preview=0
 ```
 
-El cliente verifica el token de atestación de la carga de trabajo, incluidos la audiencia y el digest de la imagen, antes de sellar la clave para la carga de trabajo y enviarla. `--signing-key-file` debe ser el archivo `StakePoolSigningKey_ed25519` no extendido y debe derivar la clave de `--vkey-file`. `--authority-key-file` contiene la semilla Ed25519 en hexadecimal de la autoridad de aprovisionamiento. Cada `--profile` es `NAME=NEXT`, donde `NEXT` es el siguiente número de emisión de certificado operativo que ese perfil puede firmar: uno más que el número de emisión más alto que la clave haya firmado, esté o no en la cadena, y nunca menor que el contador en cadena del pool más uno. Usa `0` para un pool que nunca ha emitido. Deja primero de emitir certificados con el firmante anterior; la carga de trabajo no puede corregir `NEXT` después de la importación.
+El cliente verifica el token de atestación de la carga de trabajo, incluidos la audiencia y el digest de la imagen, antes de sellar la clave para la carga de trabajo y enviarla. `--signing-key-file` debe ser el archivo `StakePoolSigningKey_ed25519` no extendido y debe derivar la clave de `--vkey-file`. `--authority-key-file` contiene la semilla Ed25519 en hexadecimal de la autoridad de aprovisionamiento. Cada `--profile` es `NAME=NEXT`, donde `NEXT` es el siguiente número de emisión de certificado operativo que ese perfil puede firmar: uno más que el número de emisión más alto firmado con ese perfil, esté o no en la cadena, y nunca menor que el contador en cadena del pool en la red de ese perfil más uno. Usa `0` para un perfil que nunca ha emitido. Deja primero de emitir certificados con el firmante anterior; la carga de trabajo no puede corregir `NEXT` después de la importación.
 
 Después de la importación, inicia la carga de trabajo sin `--import` y con una opción `--profile` por cada perfil importado. Un perfil servido que no se importó detiene el inicio, salvo que `--create-profile-counter` lo nombre, como en el modo de Cloud Storage.
 
