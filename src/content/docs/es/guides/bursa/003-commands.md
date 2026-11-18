@@ -237,6 +237,60 @@ Cuando la configuración incluye backends con perfil, use `--profile <perfil-con
   --create-profile-counter pool@mainnet
 ```
 
+Una VM de Confidential Space no tiene almacenamiento persistente. Para ejecutar la carga de trabajo sin estado local, guarda la clave de pool envuelta y todos los contadores de perfil en Secret Manager con `--state-secret`, y el certificado HTTPS de la carga de trabajo en otro secreto de Secret Manager con `--tls-secret`:
+
+```sh
+./bursa confidential-space-workload \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
+  --tls-secret "projects/$PROJECT/secrets/$TLS_SECRET" \
+  --wif-credentials /etc/bursa/wif.json \
+  --client-ca-file /etc/bursa/signer-ca.crt \
+  --profile pool@mainnet --profile pool@preview
+```
+
+`--state-secret` no se puede combinar con `--wrapped-key-file`, `--counter-bucket` ni `--counter-object`, y `--tls-secret` no se puede combinar con `--tls-cert-file` ni `--tls-key-file`. Cada contador de perfil es un registro dentro del secreto de estado en lugar de un objeto de Cloud Storage. Bursa no crea ninguno de los dos secretos y en este modo nunca genera una clave fría de pool: un inicio normal falla hasta que una importación escribe la clave en el secreto de estado. La CA de clientes y la configuración de Workload Identity Federation no son secretas; inclúyelas en una imagen derivada de la imagen de Bursa. Consulta [Persistencia de la custodia de Confidential Space](/es/guides/bursa/009-configuration-reference/#confidential-space-custody-persistence) para los permisos y el comportamiento ante fallos.
+
+#### Importar una clave fría de pool existente
+
+Inicia la carga de trabajo una vez en modo de importación sobre un secreto de estado vacío:
+
+```sh
+./bursa confidential-space-workload \
+  --import \
+  --import-authority-file /etc/bursa/import-authority.pub \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
+  --tls-secret "projects/$PROJECT/secrets/$TLS_SECRET" \
+  --wif-credentials /etc/bursa/wif.json \
+  --client-ca-file /etc/bursa/signer-ca.crt
+```
+
+`--import` requiere `--state-secret` y `--import-authority-file`, y excluye `--profile` y `--create-profile-counter`, porque los perfiles llegan en la solicitud de importación. `--import-authority-file` contiene la clave pública Ed25519 en hexadecimal de la autoridad de aprovisionamiento, que debe ser distinta de la identidad TLS del cliente firmante. En modo de importación la carga de trabajo solo sirve las rutas de importación, nunca firma y termina tras una importación correcta.
+
+Ejecuta el cliente de importación en la máquina que guarda la clave fría:
+
+```sh
+./bursa confidential-space import \
+  --address https://workload.example.internal:8080 \
+  --tls-ca-file ca.pem \
+  --tls-client-cert-file client.pem \
+  --tls-client-key-file client-key.pem \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --image-digest sha256:IMAGE_DIGEST \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --signing-key-file pool-cold.skey \
+  --vkey-file pool-cold.vkey \
+  --authority-key-file import-authority.key \
+  --profile pool@mainnet=8 --profile pool@preview=0
+```
+
+El cliente verifica el token de atestación de la carga de trabajo, incluidos la audiencia y el digest de la imagen, antes de sellar la clave para la carga de trabajo y enviarla. `--signing-key-file` debe ser el archivo `StakePoolSigningKey_ed25519` no extendido y debe derivar la clave de `--vkey-file`. `--authority-key-file` contiene la semilla Ed25519 en hexadecimal de la autoridad de aprovisionamiento. Cada `--profile` es `NAME=NEXT`, donde `NEXT` es el siguiente número de emisión de certificado operativo que ese perfil puede firmar: uno más que el número de emisión más alto que la clave haya firmado, esté o no en la cadena, y nunca menor que el contador en cadena del pool más uno. Usa `0` para un pool que nunca ha emitido. Deja primero de emitir certificados con el firmante anterior; la carga de trabajo no puede corregir `NEXT` después de la importación.
+
+Después de la importación, inicia la carga de trabajo sin `--import` y con una opción `--profile` por cada perfil importado. Un perfil servido que no se importó detiene el inicio, salvo que `--create-profile-counter` lo nombre, como en el modo de Cloud Storage.
+
 ### Custodia Nitro
 
 El comando `bursa nitro enclave` requiere `--signer-authority-file` junto con `--provision-authority-file`. Los dos archivos deben contener autoridades distintas:

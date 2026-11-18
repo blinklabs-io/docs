@@ -246,6 +246,64 @@ Start a Confidential Space workload with repeatable profile options:
 
 Repeat `--profile` for each explicitly configured profile and repeat `--create-profile-counter <profile>` for each profile that needs a counter. Bursa isolates each profile in its own Cloud Storage counter object. During active-key startup, Bursa does not silently recreate a missing profile counter; specify that profile with `--create-profile-counter` when adding it.
 
+A Confidential Space VM has no persistent storage. To run the workload without local state, keep the wrapped pool key and every profile counter in Secret Manager with `--state-secret`, and the workload HTTPS certificate in a separate Secret Manager secret with `--tls-secret`:
+
+```
+./bursa confidential-space-workload \
+  --listen :8080 \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
+  --tls-secret "projects/$PROJECT/secrets/$TLS_SECRET" \
+  --wif-credentials /etc/bursa/wif.json \
+  --client-ca-file /etc/bursa/signer-ca.crt \
+  --profile pool@mainnet \
+  --profile pool@preview
+```
+
+`--state-secret` cannot be combined with `--wrapped-key-file`, `--counter-bucket`, or `--counter-object`, and `--tls-secret` cannot be combined with `--tls-cert-file` or `--tls-key-file`. Each profile counter is a record in the state secret instead of a Cloud Storage object. Bursa creates neither secret, and in this mode it never generates a pool cold key: a normal start fails until an import has written the key into the state secret. The client CA and the Workload Identity Federation configuration are not secret; build them into an image derived from the Bursa image. See [Confidential Space custody persistence](/guides/bursa/009-configuration-reference/#confidential-space-custody-persistence) for the permissions and failure behavior.
+
+#### Import an existing pool cold key
+
+Start the workload once in import mode against an empty state secret:
+
+```
+./bursa confidential-space-workload \
+  --listen :8080 \
+  --import \
+  --import-authority-file /etc/bursa/import-authority.pub \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
+  --tls-secret "projects/$PROJECT/secrets/$TLS_SECRET" \
+  --wif-credentials /etc/bursa/wif.json \
+  --client-ca-file /etc/bursa/signer-ca.crt
+```
+
+`--import` requires `--state-secret` and `--import-authority-file`, and it excludes `--profile` and `--create-profile-counter` because the profiles come from the import request. `--import-authority-file` holds the hex Ed25519 public key of the provisioning authority, which must be a different key from the signer client's TLS identity. In import mode the workload serves only the import routes, never signs, and exits after one successful import.
+
+Run the import client on the machine that holds the cold key:
+
+```
+./bursa confidential-space import \
+  --address https://workload.example.internal:8080 \
+  --tls-ca-file ca.pem \
+  --tls-client-cert-file client.pem \
+  --tls-client-key-file client-key.pem \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --image-digest sha256:IMAGE_DIGEST \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --signing-key-file pool-cold.skey \
+  --vkey-file pool-cold.vkey \
+  --authority-key-file import-authority.key \
+  --profile pool@mainnet=8 \
+  --profile pool@preview=0
+```
+
+The client verifies the workload's attestation token, including the audience and the image digest, before it seals the key to the workload and sends it. `--signing-key-file` must be the non-extended `StakePoolSigningKey_ed25519` file, and it must derive the key in `--vkey-file`. `--authority-key-file` holds the provisioning authority's hex Ed25519 seed. Each `--profile` is `NAME=NEXT`, where `NEXT` is the next operational certificate issue number that profile may sign: one above the highest issue number the key has signed, whether or not that certificate is on chain, and never below the pool's on-chain counter plus one. Use `0` for a pool that has never issued. Stop issuing certificates with the previous signer first; the workload cannot correct `NEXT` after the import.
+
+After the import, start the workload without `--import` and with a `--profile` option for each imported profile. A served profile that was not imported stops startup unless `--create-profile-counter` names it, as in the Cloud Storage mode.
+
 ### Nitro enclave
 
 Start the Nitro enclave with separate provisioning and signer authority files:
