@@ -87,19 +87,22 @@ creation_rules:
     age: age1<deploy recipient>
 ```
 
-Write each Secret as a manifest, then encrypt it in place:
+Write each Secret as a manifest, then encrypt it in place. For example, the
+signer's age identity, which the signer section below uses:
 
 ```sh
-kubectl -n dingo create secret generic pool-a-keys \
-  --from-file=vrf.skey --from-file=node.cert \
-  --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
-sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
+kubectl -n bursa-signer create secret generic bursa-signer-age \
+  --from-file=keys.txt=signer-age.txt \
+  --dry-run=client -o yaml > bursa-signer/bursa-signer-age.enc.yaml
+sops encrypt -i bursa-signer/bursa-signer-age.enc.yaml
 ```
 
-Apply a Secret by decrypting it into `kubectl`:
+Writing the manifest does not need the namespace. Applying it does, so apply
+each Secret only after the section that creates its namespace. Apply a Secret
+by decrypting it into `kubectl`:
 
 ```sh
-sops decrypt dingo/keys/pool-a-keys.enc.yaml \
+sops decrypt bursa-signer/bursa-signer-age.enc.yaml \
   | kubectl apply --server-side --force-conflicts -f -
 ```
 
@@ -109,7 +112,9 @@ annotation, where anyone who can read the object's metadata can see it.
 
 The rest of this guide shows each Secret as a plain `kubectl` command. Encrypt
 the output the same way, and apply it on every deploy, for example from a
-Helmfile `presync` hook.
+Helmfile `presync` hook. The one exception is the keys Secret of an `Auto`
+pool: create it once and keep it out of the files applied on every deploy, as
+described in [Create the producer Secrets](#create-the-producer-secrets).
 
 ## Create the certificates
 
@@ -498,17 +503,32 @@ Apply these two kinds differently:
 
 For a new `Auto` pool, issue the first KES key and certificate yourself, on an
 offline machine with the decrypted cold key; the operator rotates from there.
-`kubectl create` refuses to replace an existing Secret, which keeps a later
-deploy from rolling it back:
+Put all three files in the bundle, and create it with `kubectl create`, which
+refuses to replace an existing Secret and so keeps a later deploy from rolling
+it back:
 
 ```sh
+kubectl -n dingo create secret generic pool-a-keys \
+  --from-file=kes.skey --from-file=vrf.skey --from-file=node.cert \
+  --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
+sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
 sops decrypt dingo/keys/pool-a-keys.enc.yaml | kubectl create -f -
 ```
 
 For a new `Assisted` pool, complete
 [Install the first KES key in the agent](#install-the-first-kes-key-in-the-agent)
 before creating its keys Secret. That procedure produces the `node.cert` the
-Secret requires.
+Secret requires. Then write the bundle without `kes.skey`, and apply it like
+any other Secret:
+
+```sh
+kubectl -n dingo create secret generic pool-b-keys \
+  --from-file=vrf.skey --from-file=node.cert \
+  --dry-run=client -o yaml > dingo/keys/pool-b-keys.enc.yaml
+sops encrypt -i dingo/keys/pool-b-keys.enc.yaml
+sops decrypt dingo/keys/pool-b-keys.enc.yaml \
+  | kubectl apply --server-side --force-conflicts -f -
+```
 
 ## Define the DingoNodes
 
