@@ -178,6 +178,14 @@ Keep both CA keys offline. Neither belongs in the cluster.
 
 ## Prepare PostgreSQL
 
+Create the namespaces before creating their Secrets or installing either
+chart:
+
+```sh
+kubectl create namespace bursa-signer
+kubectl create namespace bursa-kes-agent
+```
+
 Create a role and a database for each component:
 
 ```sql
@@ -373,8 +381,8 @@ kesAgent:
         dsn_env: KESAGENT_PG_DSN
         age_recipients: ["age1<kes agent recipient>"]
       profiles:
-        - name: pool-a
-          cold_vkey_hex: "<pool-a cold verification key, hex>"
+        - name: pool-b
+          cold_vkey_hex: "<pool-b cold verification key, hex>"
           system_start: "2022-10-25T00:00:00Z"
           slots_per_kes_period: 129600
   tls:
@@ -496,6 +504,11 @@ deploy from rolling it back:
 ```sh
 sops decrypt dingo/keys/pool-a-keys.enc.yaml | kubectl create -f -
 ```
+
+For a new `Assisted` pool, complete
+[Install the first KES key in the agent](#install-the-first-kes-key-in-the-agent)
+before creating its keys Secret. That procedure produces the `node.cert` the
+Secret requires.
 
 ## Define the DingoNodes
 
@@ -654,9 +667,15 @@ Secret is wrong, reports it there.
 Renew the TLS certificates before they expire. Re-encrypt the new material
 into the same file, apply it, and restart what reads it:
 
-- **Signer and KES agent:** restart the Deployment. A rollout through Helm
-  does not notice a changed Secret on its own. One way is a variable in
-  `extraEnv` whose value you raise with every rotation.
+- **Signer:** restart the Deployment. A rollout through Helm does not notice a
+  changed Secret on its own. One way is a variable in `extraEnv` whose value
+  you raise with every rotation.
+- **KES agent:** renew the certificate with the existing server private key so
+  its SPKI pin does not change, then restart the Deployment. If the private key
+  must change, compute the new pin first, update `serverSpkiSha256` in every
+  affected `DingoNode`, and restart the agent only after its replacement TLS
+  Secret and all new pins are in place. Producers may be unavailable during
+  this coordinated rotation; never remove the pin to make them reconnect.
 - **Producers:** the operator restarts a producer when its client certificate
   Secret changes.
 
