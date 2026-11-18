@@ -113,8 +113,10 @@ annotation, where anyone who can read the object's metadata can see it.
 The rest of this guide shows each Secret as a plain `kubectl` command. Encrypt
 the output the same way, and apply it on every deploy, for example from a
 Helmfile `presync` hook. The one exception is the keys Secret of an `Auto`
-pool: create it once and keep it out of the files applied on every deploy, as
-described in [Create the producer Secrets](#create-the-producer-secrets).
+pool, which is created once, as described in
+[Create the producer Secrets](#create-the-producer-secrets). Keep it in
+`dingo/keys-create-once/`, and have the hook apply the producer keys from
+`dingo/keys/` only, so it never applies that bundle.
 
 ## Create the certificates
 
@@ -510,9 +512,9 @@ it back:
 ```sh
 kubectl -n dingo create secret generic pool-a-keys \
   --from-file=kes.skey --from-file=vrf.skey --from-file=node.cert \
-  --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
-sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
-sops decrypt dingo/keys/pool-a-keys.enc.yaml | kubectl create -f -
+  --dry-run=client -o yaml > dingo/keys-create-once/pool-a-keys.enc.yaml
+sops encrypt -i dingo/keys-create-once/pool-a-keys.enc.yaml
+sops decrypt dingo/keys-create-once/pool-a-keys.enc.yaml | kubectl create -f -
 ```
 
 For a new `Assisted` pool, complete
