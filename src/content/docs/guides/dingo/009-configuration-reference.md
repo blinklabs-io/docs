@@ -631,14 +631,27 @@ addresses at client construction, and enforces platform socket-length limits.
 #### Remote Shelley KES agents
 
 The CLI flags and environment variables below configure the top-level remote
-KES settings. Each `blockProducerPools` entry accepts the YAML keys, but the
-CLI and environment bindings apply only to the top-level pool.
+KES settings. Each `blockProducerPools` entry accepts the YAML keys, except
+`shelleyKesAgentSignTimeout`, which is top-level only and applies to every
+pool. The CLI and environment bindings apply only to the top-level pool.
+
+The link to a remote agent is TLS 1.3 by default. Dingo authenticates the agent
+by the server key pin when one is set, and otherwise by standard x509
+verification. Each setting in this table except the addresses applies to every
+address in `shelleyKesAgentAddresses`. The pin, client certificate, client key,
+plain-TCP switch, and profile all require `shelleyKesAgentAddress` or
+`shelleyKesAgentAddresses`; Dingo rejects any of them without an address.
 
 | Setting | YAML key | CLI flag | Environment variable | Default and validation |
 | --- | --- | --- | --- | --- |
 | Single remote KES agent address | `shelleyKesAgentAddress` or `blockProducerPools[].shelleyKesAgentAddress` | `--shelley-kes-agent-address` | `SHELLEY_KES_AGENT_ADDRESS` | Empty. Use a `host:port` address for a remote signing listener; the setting selects sign mode. Use either this field or `shelleyKesAgentAddresses`, not both. |
 | Ordered remote KES agent addresses | `shelleyKesAgentAddresses` or `blockProducerPools[].shelleyKesAgentAddresses` | `--shelley-kes-agent-addresses` | `SHELLEY_KES_AGENT_ADDRESSES` | Empty. Enter an ordered list of `host:port` addresses. Dingo uses the list order for remote signing and validates every address. |
 | Remote KES agent profile | `shelleyKesAgentProfile` or `blockProducerPools[].shelleyKesAgentProfile` | `--shelley-kes-agent-profile` | `SHELLEY_KES_AGENT_PROFILE` | Empty. A profile requires a remote agent address. Shared remote listener addresses require a distinct profile for each pool; missing or duplicate profiles are invalid. |
+| Remote KES agent server key pin | `shelleyKesAgentServerSpkiSha256` or `blockProducerPools[].shelleyKesAgentServerSpkiSha256` | `--shelley-kes-agent-server-spki-sha256` | `SHELLEY_KES_AGENT_SERVER_SPKI_SHA256` | Empty. Enter the hex SHA-256 of the agent's TLS certificate SubjectPublicKeyInfo, which the agent logs at startup as `server_spki_sha256`. Dingo trims surrounding whitespace and requires exactly 64 hex characters. When set, Dingo authenticates the agent by this pin alone, not by a certificate authority. When empty, Dingo verifies the agent's certificate with standard x509 against the system roots for the address's host name; on Unix, `SSL_CERT_FILE` and `SSL_CERT_DIR` select a private CA. Cannot be combined with `shelleyKesAgentPlaintext`. |
+| Remote KES agent client certificate | `shelleyKesAgentClientCertFile` or `blockProducerPools[].shelleyKesAgentClientCertFile` | `--shelley-kes-agent-client-cert-file` | `SHELLEY_KES_AGENT_CLIENT_CERT_FILE` | Empty. Path to this node's PEM TLS client certificate for the remote agent. Optional; set it together with `shelleyKesAgentClientKeyFile` or leave both empty. With both set, Dingo presents the certificate when the agent requests one, and the link uses mutual TLS only in that case; the agent decides whether to request it, and Bursa requests one only when `kes_agent.attested_client_ca_file` is set. Without them, Dingo sends no client certificate. Cannot be combined with `shelleyKesAgentPlaintext`. |
+| Remote KES agent client key | `shelleyKesAgentClientKeyFile` or `blockProducerPools[].shelleyKesAgentClientKeyFile` | `--shelley-kes-agent-client-key-file` | `SHELLEY_KES_AGENT_CLIENT_KEY_FILE` | Empty. Path to this node's PEM TLS client key for the remote agent. Dingo rejects a client key without a client certificate, and a certificate without a key. |
+| Remote KES agent plain TCP | `shelleyKesAgentPlaintext` or `blockProducerPools[].shelleyKesAgentPlaintext` | `--shelley-kes-agent-plaintext` | `SHELLEY_KES_AGENT_PLAINTEXT` | `false`. Set `true` to run the remote agent link over plain TCP instead of TLS, for deployments where something else secures the link, such as a service mesh sidecar. The agent's counterpart setting is `kes_agent.attested_plaintext`. A server key pin and a client certificate need TLS, so Dingo rejects this setting together with `shelleyKesAgentServerSpkiSha256`, `shelleyKesAgentClientCertFile`, or `shelleyKesAgentClientKeyFile`. |
+| KES agent sign timeout | `shelleyKesAgentSignTimeout` | `--shelley-kes-agent-sign-timeout` | `SHELLEY_KES_AGENT_SIGN_TIMEOUT` | `0`, which uses the client default of `500ms`. Bounds one sign-mode round trip to the KES agent. Set a positive duration less than `1s`; Dingo rejects a negative value or a value of `1s` or more during configuration validation. Block production calls the signer synchronously on the slot-aligned loop, so the timeout must stay below one slot. Top-level only; it applies to every pool. |
 
 ### Kupo provider
 
