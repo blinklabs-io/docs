@@ -229,7 +229,18 @@ signer:
 
 `/healthz` provides static liveness and always returns HTTP `200`.
 
-`/readyz` checks the configured watermark store with a three-second timeout. For SQLite and PostgreSQL, Bursa verifies that the store accepts the watermark writes required for signing. A healthy and writable store returns HTTP `200`; an unavailable or non-writable store returns HTTP `503`. An in-memory store has no external dependency and remains ready with HTTP `200`.
+`/readyz` serves a cached result from a background watermark probe. Bursa runs the probe every 10 seconds with a three-second bound. The initial pending result, an unreachable or non-writable store, and a stale result return HTTP `503`; a healthy and current result returns HTTP `200`. Repeated `/readyz` requests read the cached result and do not initiate writes to the watermark store. An in-memory store has no external dependency and remains ready with HTTP `200`.
+
+## Metrics listener
+
+Bursa serves `/metrics`, `/healthz`, and `/readyz` from the global metrics listener.
+
+| Configuration path | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | Selects the host interface for the metrics and health listener. | An empty value resolves to `127.0.0.1`. Set a hostname, IP address, wildcard address such as `0.0.0.0`, or pod address. Do not include a port in the host value; Bursa rejects it. |
+| `metrics.port` | `METRICS_LISTEN_PORT` | Selects the TCP port for the metrics and health listener. | Defaults to `8081`. Set `0` to disable the listener. |
+
+The KES `ready` probe uses a loopback-reachable address when the listener binds to a wildcard address and uses the configured host for other explicit addresses. The probe bypasses environment proxy settings when it requests `/readyz`.
 
 ## `kes_agent`
 
