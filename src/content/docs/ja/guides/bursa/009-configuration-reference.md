@@ -92,6 +92,8 @@ PUT /wallet/settings/history-expiry
 
 プロファイルを指定したバックエンドは、要求の `profile` と一致する場合だけその要求を処理します。同じ鍵を複数のプロファイルで保持する場合も、各プロファイルのカウンター、ウォーターマーク、発行済み記録を別々に保持します。プロファイルを指定しない要求は、その鍵を保持するバックエンドが 1 つだけの場合に限り処理します。`nitro` バックエンドはプロファイルをサポートしないため、`profile` を設定しないでください。
 
+`armory` と `confidential-space` では、空でない `profile` を指定するとインベントリのアテステーション証拠がそのプロファイルに結び付きます。プロファイルを使用するプロデューサーと検証側は同時にアップグレードしてください。異なるプロファイルの証拠や従来のプロファイルなしの証拠を混在させると検証に失敗します。空の `profile` では従来のプロファイルなしの動作を使用します。`nitro` はプロファイルなしのインベントリだけを受け付けるため、`profile` を設定すると拒否します。
+
 Nitro では `root_ca_file` と PCR の検証に加えて、`host_key_file` に署名者権限の秘密鍵を設定します。この鍵は所有者だけが読み取れるようにし、エンクレーブの測定済みイメージに登録する署名者権限公開鍵に対応させます。プロビジョニング権限は別の鍵であり、プロビジョニング専用に管理します。
 
 ### 署名サービスの JWT 認証
@@ -126,6 +128,8 @@ Nitro の署名プロキシには、稼働中に `secretsmanager:GetSecretValue`
 Secret Manager は条件付きでバージョンを追加できないため、1 つのシークレットにつき 1 つのワークロードだけを実行してください。再発行されたカウンターを拒否する権限を持つのはシークレットではなく `enforce` モードの署名者のウォーターマークであり、シークレットが古いバージョンに戻された後も同様です。`warn` モードや `off` モードでは何も拒否しません。既存のプール鍵について、シークレットを古いバージョンに戻したり削除したりしないでください。
 
 `--tls-secret` を指定すると、ワークロードは別の Secret Manager シークレットから HTTPS 証明書を読み取ります。最新のバージョンには 1 つの PEM バンドルを保存します。リーフ証明書を先頭にした証明書チェーンと、ちょうど 1 つの鍵を含め、ブロックの間には空白以外を入れません。ワークロードは起動時に `latest` バージョンを一度だけ読み取るため、証明書のローテーションには新しいバージョンと再起動が必要です。最新のバージョンが無効化されている場合は、古いバージョンに戻らずに起動を停止します。`latest` エイリアスは結果整合性のため、新しいバージョンを追加した直後に再起動すると以前の証明書を読み込むことがあります。ワークロードが新しい証明書を提示していることを確認し、提示していない場合は再度再起動してください。バンドルが空の場合、PEM でない場合、別の種類のブロックを含む場合、鍵がリーフ証明書と一致しない場合も起動を停止します。ワークロードのプリンシパルには、そのシークレットに対する `secretmanager.versions.access` だけを付与してください。
+
+複数のプロファイルに異なるプール鍵を割り当てる状態は、プロファイルごとの鍵を含む `bursa-confidential-space-key/3` エンベロープに保存されます。この状態で起動する場合、設定した `--profile` の集合がエンベロープ内のプロファイル集合と完全に一致している必要があります。プロファイルなし、欠落したプロファイル、余分なプロファイルはいずれも起動を拒否します。`/3` エンベロープは以前の Bursa リリースと互換性がないため、その状態を使用した後は旧リリースへダウングレードできません。
 
 <a id="wallet-storage-and-encryption"></a>
 
@@ -232,13 +236,42 @@ signer:
         - opcert
 ```
 
+呼び出し元に運用証明書の発行を許可する場合は、`signer.callers[].opcerts` でコールド鍵と、発行対象にできる KES 検証鍵を個別に指定します。`opcerts[].key` は同じ呼び出し元の `keys` に含め、`kes_vkeys` には空でない、対象のステージ済み KES 検証鍵の一覧を指定します。呼び出し元は一覧にない KES 検証鍵の運用証明書を発行できません。
+
+```yaml
+signer:
+  callers:
+    - subject: "caller-subject"
+      keys:
+        - "0000000000000000000000000000000000000000000000000000000000000000"
+      opcerts:
+        - key: "0000000000000000000000000000000000000000000000000000000000000000"
+          kes_vkeys:
+            - "1111111111111111111111111111111111111111111111111111111111111111"
+```
+
+この許可はコールド鍵と指定された KES 検証鍵の組み合わせに対してのみ適用されます。両方の条件を満たさない要求は拒否します。
+
+<a id="metrics"></a>
+
+### メトリクス
+
+`metrics` は `/metrics` とヘルスエンドポイントのリスナーを設定します。
+
+| 設定パス | 環境変数 | 用途 | 既定値または要件 |
+| --- | --- | --- | --- |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | メトリクスリスナーが待ち受けるホストを指定します。 | 既定値は `127.0.0.1` です。空の値もループバックに割り当てます。明示したホスト名、IP アドレス、ワイルドカードアドレス、Pod のアドレスを使用できます。ポートを含むホスト値は拒否します。 |
+| `metrics.port` | `METRICS_LISTEN_PORT` | メトリクスリスナーのポートを指定します。 | 既定値は `8081` です。`0` を指定するとメトリクスとヘルスエンドポイントを無効にします。 |
+
+`kes-agent ready` はローカルの `/readyz` を確認します。メトリクスリスナーがワイルドカードアドレスにバインドされている場合、プローブは到達可能なローカルアドレスに置き換えます。それ以外の場合は設定したホストを使用します。このプローブは HTTP のプロキシ環境変数を使用しないため、Pod のアドレスを指定してもプロキシへ誤ってルーティングしません。`metrics.port` が `0` の場合、確認するエンドポイントはありません。
+
 <a id="signer-health-endpoints"></a>
 
 ## 署名サービスのヘルスエンドポイント
 
 `/healthz` は固定の生存性を示し、常に HTTP `200` を返します。
 
-`/readyz` は 3 秒のタイムアウトで設定済みのウォーターマークストアを確認します。SQLite と PostgreSQL では、署名に必要なウォーターマークの書き込みを受け入れることを検証します。正常で書き込み可能なら HTTP `200`、利用不能または書き込み不能なら HTTP `503` を返します。メモリ内ストアには外部依存がなく、準備完了として HTTP `200` を返します。
+`/readyz` は、設定済みのウォーターマークストアの確認結果をバックグラウンドで更新し、そのキャッシュ結果を返します。プローブは 10 秒ごとに 1 回実行し、各プローブに 3 秒の上限を設けます。最初のプローブが完了するまで、ストアに到達できない場合、または結果が古くなった場合は HTTP `503` を返します。正常な最新結果があれば HTTP `200` を返します。メモリ内ストアには外部依存がなく、準備完了として HTTP `200` を返します。HTTP の `/readyz` リクエスト自体はウォーターマークデータベースへの書き込みを開始しません。
 
 <a id="kes_agent"></a>
 
@@ -300,10 +333,14 @@ kes_agent:
 | `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | リモートリスナーで、このファイルのサーバー TLS 秘密鍵を使用します。 | `attested_plaintext` が `true` でない限り、`attested_tls_cert_file` とともに必須です。Unix では、グループやその他のユーザーにアクセスを許可する鍵ファイルを拒否します。 |
 | `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | この PEM ファイルの CA 証明書で、プロデューサーのクライアント証明書を検証します。 | 省略可能。設定した場合、すべての接続はこの CA が検証するクライアント証明書を提示する必要があります。未設定の場合、リスナーはクライアント証明書を要求しません。ファイルには少なくとも 1 つの証明書が必要です。 |
 | `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | リモートリスナーを TLS ではなく平文の TCP で提供します。 | 既定値は `false`。`true` の場合、`attested_tls_cert_file`、`attested_tls_key_file`、`attested_client_ca_file` は設定しないでください。 |
+| `kes_agent.control_client_spki_sha256` | `KESAGENT_CONTROL_CLIENT_SPKI_SHA256` | 単一プロファイルのリモート制御セッションを許可するクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェスト一覧です。 | 各値は 64 文字の 16 進数で指定します。`attested_listen_address`、`attested_client_ca_file`、TLS を使用するリスナーが必要です。`attested_plaintext` とは併用できません。 |
+| `kes_agent.sign_client_spki_sha256` | `KESAGENT_SIGN_CLIENT_SPKI_SHA256` | 単一プロファイルのリモート署名セッションを許可するクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェスト一覧です。 | 各値は 64 文字の 16 進数で指定します。`attested_listen_address`、`attested_client_ca_file`、TLS を使用するリスナーが必要です。`attested_plaintext` とは併用できません。 |
 | `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | プロデューサーが使用する必要がある構成証明の検証方式を指定します。 | `attested_listen_address` を設定した場合は必須です。`none` プロバイダーは構成証明のエビデンスを送りません。 |
 | `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | 保護されたワークロード内で、ナンスに結び付いたエビデンスを生成する構成証明アダプターに接続します。 | `none` 以外のすべてのプロバイダーで必須です。`none` では指定すると拒否されます。`https://` URL、ループバックの `http://` URL、または `unix://` ソケット URL を指定します。 |
 
 TLS を使う場合、リスナーには TLS 1.3 と証明書および鍵が必要です。起動時に、エージェントは提供する証明書の公開鍵の SHA-256 フィンガープリントを `server_spki_sha256` としてログに出力します。プロデューサーはこの値をピン留めできます。`attested_plaintext` の場合、エージェントはリモートのピアを認証しません。リモートリスナーの設定が無効な場合、Bursa は起動時に終了します。
+
+`control_client_spki_sha256` と `sign_client_spki_sha256` は別々の許可リストです。前者はリモート制御の許可だけを与え、署名の許可は与えません。後者はプロファイルごとのリモート署名を許可します。どちらのリストも、`attested_client_ca_file` で検証したクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェストと照合します。リモート制御で使用できるコマンドは `info`、`gen-staged-key`、`install-key` だけです。`drop-key` はリモートでは拒否し、ローカルの制御ソケットだけで使用できます。
 
 ```yaml
 kes_agent:
@@ -334,8 +371,10 @@ kes_agent:
 | `kes_agent.profiles[].max_kes_evolutions` | 運用証明書の進化回数を制限します。 | 既定値は `62` です。 |
 | `kes_agent.profiles[].max_clock_skew` | `sign` が拒否するまでに、ヘッダーのスロットがエージェントの時計より先行できる幅です。 | 既定値は `5s`。正の Go の期間を指定します。 |
 | `kes_agent.profiles[].guard_file` | プロファイルの単調増加する KES 期間ガードを、この永続的なパスに保存します。 | 既定のファイルストアでは必須です。[共有ストア](#shared-store)では設定しないでください。プロファイルごとに別のファイルが必要です。 |
+| `kes_agent.profiles[].control_client_spki_sha256` | このプロファイルのリモート制御セッションを許可するクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェスト一覧です。 | 各値は 64 文字の 16 進数で指定します。`attested_listen_address`、`attested_client_ca_file`、TLS を使用するリスナーが必要です。`attested_plaintext` とは併用できません。 |
+| `kes_agent.profiles[].sign_client_spki_sha256` | このプロファイルのリモート署名セッションを許可するクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェスト一覧です。 | 各値は 64 文字の 16 進数で指定します。`attested_listen_address`、`attested_client_ca_file`、TLS を使用するリスナーが必要です。`attested_plaintext` とは併用できません。 |
 
-`profiles` を設定する場合、トップレベルの単一プール用フィールド `cold_vkey_file`、`cold_vkey_hex`、`system_start`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file` は設定しないでください。`slot_length` と `max_kes_evolutions` は既定値の `1` と `62` のままにします。これらのトップレベルのフィールドを設定すると、Bursa は起動を拒否し、各プロファイルで設定するよう求めます。
+`profiles` を設定する場合、トップレベルの単一プール用フィールド `cold_vkey_file`、`cold_vkey_hex`、`system_start`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file`、`control_client_spki_sha256`、`sign_client_spki_sha256` は設定しないでください。`slot_length` と `max_kes_evolutions` は既定値の `1` と `62` のままにします。これらのトップレベルのフィールドを設定すると、Bursa は起動を拒否し、各プロファイルで設定するよう求めます。
 
 2 つのプロファイルが同じガードファイル (シンボリックリンクやハードリンクで到達する同じファイルを含む) を共有する場合や、同じコールド検証鍵と同じ `system_start` を持つ場合も、Bursa は起動を拒否します。1 つのコールド鍵で複数のネットワークを提供でき、異なる `system_start` で区別します。`serve-key` モードはプロファイルを 1 つだけ受け付けます。複数のプールは `sign` モードで提供します。
 
