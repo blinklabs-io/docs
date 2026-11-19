@@ -341,7 +341,28 @@ Confidential Space の VM には永続ストレージがありません。ロー
 
 クライアントは、オーディエンスとイメージのダイジェストを含むワークロードのアテステーショントークンを検証してから、鍵をワークロード向けに封印して送信します。`--signing-key-file` には拡張されていない `StakePoolSigningKey_ed25519` ファイルを指定し、その鍵から `--vkey-file` の鍵が導出できる必要があります。`--authority-key-file` にはプロビジョニング権限の Ed25519 シードを 16 進数で保存します。各 `--profile` は `NAME=NEXT` の形式で、`NEXT` はそのプロファイルが次に署名できる運用証明書の発行番号です。オンチェーンかどうかにかかわらずそのプロファイルで署名した最大の発行番号に 1 を加えた値とし、そのプロファイルのネットワークにおけるプールのオンチェーンのカウンターに 1 を加えた値を下回らないようにします。一度も発行していないプロファイルには `0` を指定します。先に以前の署名者での証明書の発行を停止してください。インポート後にワークロードが `NEXT` を修正することはできません。
 
-インポート後は、`--import` を付けずに、インポートした各プロファイルの `--profile` を指定してワークロードを起動します。インポートしていないプロファイルを提供すると、`--create-profile-counter` で指定しない限り、Cloud Storage モードと同様に起動が停止します。
+プロファイルごとに異なる鍵をインポートする場合は、両方の繰り返し指定可能な鍵フラグに、対応する `NAME=FILE` エントリを指定します。
+
+```sh
+./bursa confidential-space import \
+  --address https://workload.example.internal:8080 \
+  --tls-ca-file ca.pem \
+  --tls-client-cert-file client.pem \
+  --tls-client-key-file client-key.pem \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --image-digest sha256:IMAGE_DIGEST \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --signing-key-file pool@mainnet=mainnet-cold.skey \
+  --signing-key-file pool@preview=preview-cold.skey \
+  --vkey-file pool@mainnet=mainnet-cold.vkey \
+  --vkey-file pool@preview=preview-cold.vkey \
+  --authority-key-file import-authority.key \
+  --profile pool@mainnet=8 --profile pool@preview=0
+```
+
+共有鍵を使う場合は、プレーンなパスを `--signing-key-file` と `--vkey-file` にそれぞれ 1 つ指定します。プレーンなパスと `NAME=FILE` 形式は混在できません。`NAME=FILE` 形式では、各 `--profile` に対応するエントリを両方のフラグで 1 つずつ指定し、プロファイル間で異なる鍵を指定してください。同じ鍵を共有する場合はプレーンなパス形式を使用します。
+
+インポート後は、`--import` を付けずにワークロードを起動します。マルチキー状態では、起動時の `--profile` の集合をインポート時のプロファイル集合と完全に一致させてください。プロファイルを省略した場合、欠落させた場合、または追加した場合、ワークロードは起動を拒否します。マルチキー状態を作成した後は、以前のリリースでその状態を使用できません。
 
 ### Nitro enclave
 
