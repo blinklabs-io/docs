@@ -268,7 +268,7 @@ Configure `kes_agent.attested_listen_address` para ofrecer el modo `sign` por TC
 
 Con TLS, el listener requiere TLS 1.3 y un certificado y una clave. Al iniciar, el agente registra como `server_spki_sha256` la huella SHA-256 de la clave pública del certificado que sirve; un productor puede fijar ese valor. Con `attested_plaintext`, el agente no autentica al par remoto. Bursa termina al iniciar cuando un valor del listener remoto no es válido.
 
-Las listas `control_client_spki_sha256` y `sign_client_spki_sha256` conceden autoridades independientes. La primera permite, después de la atestación, las operaciones remotas `info`, `gen-staged-key` e `install-key`; no permite firmar y `drop-key` permanece disponible solo mediante el socket de control local. La segunda limita las sesiones remotas de firma al perfil que contiene el resumen SPKI coincidente. Bursa solo admite cualquiera de estas identidades fijadas mediante un listener TLS que verifique el certificado del cliente con `attested_client_ca_file`; el listener en texto plano y TLS sin verificación del cliente no pueden admitir clientes fijados.
+Las listas `control_client_spki_sha256` y `sign_client_spki_sha256` conceden autoridades independientes. La primera permite, después de la atestación, las operaciones remotas `info`, `gen-staged-key` e `install-key`; no permite firmar y `drop-key` permanece disponible solo mediante el socket de control local. La segunda limita las sesiones remotas de firma al perfil que contiene el resumen SPKI coincidente. Para admitir cualquiera de estas identidades fijadas, Bursa requiere un listener TLS que verifique el certificado del cliente con `attested_client_ca_file`; el listener en texto plano y TLS sin verificación del cliente no pueden admitir clientes fijados.
 
 ```yaml
 kes_agent:
@@ -465,9 +465,9 @@ signer:
   callers:
     - subject: caller-subject
       keys:
-        - "0000000000000000000000000000000000000000000000000000000000000000"
+        - "00000000000000000000000000000000000000000000000000000000"
       opcerts:
-        - key: "0000000000000000000000000000000000000000000000000000000000000000"
+        - key: "00000000000000000000000000000000000000000000000000000000"
           kes_vkeys:
             - "1111111111111111111111111111111111111111111111111111111111111111"
 ```
