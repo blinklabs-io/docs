@@ -86,6 +86,7 @@ Una entrada de backend en `signer.backends` selecciona el backend mediante `type
 Cuando una misma clave fría aparece en varios backends con perfiles, cada backend debe tener un perfil distinto. Bursa enruta una solicitud al backend cuyo perfil coincide con el perfil de la solicitud y conserva por separado los registros de contador y de emisión de cada perfil. Una solicitud sin perfil usa el único backend que contiene la clave; Bursa rechaza una solicitud sin perfil cuando existen varios titulares.
 
 Los backends `confidential-space` y `sops` aceptan perfiles. El backend Nitro no implementa perfiles y debe dejar `signer.backends[].profile` sin establecer.
+Los inventarios de `armory` y `confidential-space` con un `profile` no vacío vinculan la evidencia de inventario al perfil seleccionado, además del nonce y la lista de claves. Bursa rechaza la evidencia producida para otro perfil. Los productores y verificadores que usan perfiles deben actualizarse juntos; mezclar el comportamiento heredado sin perfil con la evidencia vinculada a un perfil provoca un fallo de verificación. Un perfil vacío conserva el comportamiento heredado. Nitro debe mantener `signer.backends[].profile` vacío; Bursa rechaza el inventario de Nitro cuando se configura un perfil.
 
 ### Métricas
 
