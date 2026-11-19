@@ -59,7 +59,7 @@ LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabs�
 
 ```
  wget -O bursa-v0.26.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.26.0/bursa-v0.26.0-linux-amd64.tar.gz
-tar xzf bursa-v0.23.0-linux-amd64.tar.gz
+ tar xzf bursa-v0.26.0-linux-amd64.tar.gz
 ```
 
 LinuxとFreeBSDのCLIダウンロードにはアーキテクチャ別の`.tar.gz`アーカイブを使用し、WindowsのCLIダウンロードには`.exe`ファイル、macOSのCLIダウンロードには`.zip`ファイルを使用します。Windowsではアーキテクチャ別の署名済み`.msi`インストーラーを、macOSではアーキテクチャ別の公証済み`.pkg`インストーラーをデスクトップウォレット向けに配布します。オプションのWebView2 Evergreenブートストラッパーを含むリリースでは、WebView2ランタイムが未インストールの場合に限り、Windowsの`.msi`がブートストラッパーを含むことがあります。
