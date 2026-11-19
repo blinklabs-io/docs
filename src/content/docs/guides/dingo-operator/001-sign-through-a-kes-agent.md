@@ -218,3 +218,14 @@ certificate, so the node cannot sign until it has switched over:
 
 In the reverse order, the Secret would hold a certificate the agent does not
 serve yet, and a restart in between would leave the node unable to sign.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>
