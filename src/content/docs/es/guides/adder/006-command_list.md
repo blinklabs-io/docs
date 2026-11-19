@@ -16,7 +16,7 @@ description: Lista de Comandos de Adder.
 
 > ruta al archivo de configuración a cargar
 
-> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: opciones de línea de comandos > archivo de configuración YAML > variables de entorno > valores predeterminados.
+> Si la misma configuración se proporciona por varios métodos, Adder usa este orden de precedencia: opciones de línea de comandos > variables de entorno > archivo de configuración YAML > valores predeterminados.
 
 ***
 
