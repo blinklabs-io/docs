@@ -81,7 +81,7 @@ Profile routing applies to Confidential Space and SOPS backends. A request must 
 
 ### Profile-bound inventory compatibility
 
-Armory and Confidential Space inventory evidence binds to a non-empty requested profile. The producer and verifier must use versions that support profile-bound inventory together; otherwise, inventory verification fails. Legacy unprofiled behavior remains available when the requested profile is empty. Nitro inventory remains unprofiled, so leave `profile` empty for Nitro; a configured Nitro profile is rejected for inventory.
+Armory and Confidential Space inventory evidence binds to a non-empty requested profile. The producer and verifier must use versions that support profile-bound inventory together; otherwise, inventory verification fails. Legacy unprofiled behavior remains available when the requested profile is empty. Nitro inventory remains unprofiled, so leave `profile` empty for Nitro; Bursa rejects a configured Nitro profile for inventory.
 
 ### Nitro custody persistence
 
@@ -218,7 +218,7 @@ signer:
       opcerts:
         - key: "000000000000000000000000000000000000000000000000000000000000"
           kes_vkeys:
-            - "staged-kes-verification-key"
+            - "1111111111111111111111111111111111111111111111111111111111111111"
 ```
 
 | Configuration path | Requirement | Result when missing or invalid |
@@ -299,8 +299,8 @@ Set `kes_agent.attested_listen_address` to serve `sign` mode to a block producer
 | `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | Present the server TLS certificate from this file on the remote listener. | Required with `attested_tls_key_file` unless `attested_plaintext` is `true`. |
 | `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | Present the server TLS private key from this file on the remote listener. | Required with `attested_tls_cert_file` unless `attested_plaintext` is `true`. On Unix, Bursa refuses a key file that grants group or other access. |
 | `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | Verify producer client certificates against the CA certificates in this PEM file. | Optional. When set, every connection must present a client certificate that this CA verifies; when unset, the listener does not request client certificates. The file must contain at least one certificate. |
-| `kes_agent.control_client_spki_sha256` | `KESAGENT_CONTROL_CLIENT_SPKI_SHA256` | Allow pinned client certificates to open remote control sessions for the implicit `default` profile. | Optional. Each value is a SHA-256 SPKI digest written as exactly 64 hexadecimal characters. When `kes_agent.profiles` is set, configure `kes_agent.profiles[].control_client_spki_sha256` in YAML for each profile instead; the top-level value is rejected. Requires verified client certificates on the attested TLS listener. |
-| `kes_agent.sign_client_spki_sha256` | `KESAGENT_SIGN_CLIENT_SPKI_SHA256` | Allow pinned client certificates to open remote signing sessions for the implicit `default` profile. | Optional. Each value is a SHA-256 SPKI digest written as exactly 64 hexadecimal characters. When `kes_agent.profiles` is set, configure `kes_agent.profiles[].sign_client_spki_sha256` in YAML for each profile instead; the top-level value is rejected. Requires verified client certificates on the attested TLS listener. |
+| `kes_agent.control_client_spki_sha256` | `KESAGENT_CONTROL_CLIENT_SPKI_SHA256` | Allow pinned client certificates to open remote control sessions for the implicit `default` profile. | Optional. Each value is a SHA-256 SPKI digest written as exactly 64 hexadecimal characters. When `kes_agent.profiles` is set, configure `kes_agent.profiles[].control_client_spki_sha256` in YAML for each profile instead; Bursa rejects the top-level value. Bursa requires verified client certificates on the attested TLS listener. |
+| `kes_agent.sign_client_spki_sha256` | `KESAGENT_SIGN_CLIENT_SPKI_SHA256` | Allow pinned client certificates to open remote signing sessions for the implicit `default` profile. | Optional. Each value is a SHA-256 SPKI digest written as exactly 64 hexadecimal characters. When `kes_agent.profiles` is set, configure `kes_agent.profiles[].sign_client_spki_sha256` in YAML for each profile instead; Bursa rejects the top-level value. Bursa requires verified client certificates on the attested TLS listener. |
 | `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | Serve the remote listener on plain TCP instead of TLS. | Defaults to `false`. When `true`, leave `attested_tls_cert_file`, `attested_tls_key_file`, and `attested_client_ca_file` unset. |
 | `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | Name the attestation verifier that the producer must use. | Required when `attested_listen_address` is set. The `none` provider sends no attestation evidence. |
 | `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | Reach the attestation adapter inside the protected workload that produces nonce-bound evidence. | Required for every provider except `none`, which rejects it. Use an `https://` URL, a loopback `http://` URL, or a `unix://` socket URL. |
