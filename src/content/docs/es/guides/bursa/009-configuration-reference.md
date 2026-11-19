@@ -92,10 +92,10 @@ Los inventarios de `armory` y `confidential-space` con un `profile` no vacío vi
 
 | Ruta de configuración | Variable de entorno | Valor predeterminado | Uso y validación |
 | --- | --- | --- | --- |
-| `metrics.address` | `METRICS_LISTEN_ADDRESS` | `127.0.0.1` | Dirección de escucha del endpoint de métricas y salud. Un valor vacío usa `127.0.0.1`. Se admiten hosts explícitos, incluidos `0.0.0.0` y la dirección IP del pod. No incluya un puerto en este valor; Bursa rechaza un host que contenga un puerto. |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | `127.0.0.1` | Dirección de escucha del endpoint de métricas y salud. Un valor vacío hace que Bursa use `127.0.0.1`. Bursa admite hosts explícitos, incluidos `0.0.0.0` y la dirección IP del pod. No incluya un puerto en este valor; Bursa rechaza un host que contenga un puerto. |
 | `metrics.port` | `METRICS_LISTEN_PORT` | `8081` | Puerto de escucha del endpoint de métricas y salud. El valor `0` deshabilita el listener. |
 
-El subcomando `bursa kes-agent ready` consulta el listener local. Cuando `metrics.address` usa una dirección comodín, el sondeo usa loopback; con otra dirección explícita usa esa dirección. El sondeo omite los proxies configurados en el entorno. Si `metrics.port` es `0`, el agente no ofrece un endpoint de disponibilidad y el subcomando no puede marcarlo como listo.
+El subcomando `bursa kes-agent ready` consulta el listener local. Cuando la configuración usa una dirección comodín, el comando consulta loopback; con otra dirección explícita consulta esa dirección. El comando omite los proxies configurados en el entorno. Si `metrics.port` es `0`, el agente no ofrece un endpoint de disponibilidad y el subcomando no puede marcarlo como listo.
 
 ### Autenticación JWT del firmante
 
