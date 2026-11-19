@@ -27,10 +27,12 @@ event's `resolvedInputs`, in addition to inspecting its new outputs.
 Set a shared endpoint with top-level YAML `kupo_url` or the `KUPO_URL`
 environment variable. There is no top-level `--kupo-url` flag. The ChainSync
 and mempool inputs also expose `plugins.input.<name>.kupo-url` in YAML and the
-input-specific flags listed below. An input-specific YAML value replaces the
-top-level YAML fallback. Environment variables override YAML, and an explicit
-input-specific flag overrides both. Passing an empty input-specific flag, such
-as `--input-mempool-kupo-url=`, disables Kupo for that input.
+input-specific flags listed below. When
+`plugins.input.<name>.kupo-url` is present in YAML, that endpoint wins over both
+top-level `kupo_url` and `KUPO_URL`. Otherwise `KUPO_URL` overrides top-level
+YAML `kupo_url`. An explicit input-specific flag overrides all YAML and
+environment values. Passing an empty input-specific flag, such as
+`--input-mempool-kupo-url=`, disables Kupo for that input.
 
 Kupo must use the same Cardano network as Adder and must index every output
 that Adder may need to resolve. See [Resolve transaction senders with Kupo](/guides/adder/kupo-input-resolution/)

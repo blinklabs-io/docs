@@ -27,7 +27,7 @@ uses Kupo's `*` match pattern. A narrower pattern is suitable only when it is
 guaranteed to include the sender outputs you monitor.
 
 Adder accepts an `http` or `https` Kupo endpoint. Use a loopback endpoint when
-Kupo runs on the same host:
+Kupo runs on the same host. Save this configuration as `adder.yaml`:
 
 ```yaml
 input: chainsync
@@ -64,6 +64,7 @@ whether input resolution worked.
 export SENDER_ADDRESS=addr1q...
 
 adder \
+  --config adder.yaml \
   --filter-type input.transaction \
   --filter-address "$SENDER_ADDRESS"
 ```
@@ -77,3 +78,9 @@ sender-side data for that input is unavailable. ChainSync continues with the
 transaction event without resolved inputs; the mempool input may retain other
 inputs it resolved successfully. Check Kupo synchronization and match patterns
 before changing the Adder filter.
+
+A ChainSync transaction emitted without resolved inputs is not retried when
+Kupo recovers. A mempool transaction that remains present is also not
+reprocessed on later polls. Sender-only filters therefore miss those events;
+replay the affected source data after Kupo is synchronized when completeness is
+required.
