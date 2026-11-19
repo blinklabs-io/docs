@@ -36,10 +36,11 @@ This page covers dingo-operator v0.5.0, Dingo v0.94.2, and Bursa v0.26.0.
   is resolved. This guide does not cover that setup.
 - **A mutual TLS link to the agent.** Bursa v0.26.0 admits a producer only
   when its client certificate is verified and its key is pinned for the
-  profile. Give the node a client certificate. Pinning the agent's server key
-  on the node is optional. A plain TCP link cannot admit a signing session,
-  so the agent refuses it even where something else, such as a service mesh,
-  secures the connection.
+  profile. Give the node a client certificate, and pin the agent's server key
+  unless the agent's certificate chains to a root in the Dingo image:
+  dingo-operator v0.5.0 has no setting that adds a private CA. A plain TCP
+  link cannot admit a signing session, so the agent refuses it even where
+  something else, such as a service mesh, secures the connection.
 
 ## Configure the agent
 

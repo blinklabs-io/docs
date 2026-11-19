@@ -133,7 +133,7 @@ The operator talks to the signer over mutual TLS: Auto rotation requires an
 `https` signer endpoint and a client certificate. The link from producers to
 the KES agent is mutual TLS. The agent refuses a producer without a client
 certificate that is pinned for its profile, and a plain TCP link cannot admit
-a signing session. Pinning the agent's server key is optional. The commands
+a signing session. The producers also pin the agent's server key. The commands
 below use ECDSA P-256 keys; any key type Go's TLS 1.3 accepts works.
 
 ### The signer link
@@ -174,9 +174,11 @@ certificate:
 - **Client certificate.** Issue one for the producers from that CA. The agent
   requires it, and admits a producer only when the certificate's key is in the
   profile's `sign_client_spki_sha256`.
-- **Pin.** Optional. With a pin, the node checks the agent's server key instead
-  of a CA chain. Without one, it verifies the agent's certificate against its
-  trusted CAs by host name.
+- **Pin.** Required in this setup. With a pin, the node checks the agent's
+  server key instead of a CA chain. Without one, Dingo verifies the agent's
+  certificate against the system roots in its image, which do not include
+  this guide's private CA, and dingo-operator v0.5.0 has no setting that adds
+  one.
 
 Compute the pin from the agent's server certificate, and each
 `sign_client_spki_sha256` entry the same way from the producers' client
@@ -299,6 +301,8 @@ signer:
       callers:
         - subject: dingo-operator
           keys: ["<pool-a cold key hash>"]
+          # No opcerts grant: Bursa v0.26.0 denies every opcert to this
+          # caller until dingo-operator#193 is resolved.
   tls:
     secretName: bursa-signer-tls
     clientCASecretName: bursa-signer-client-ca
@@ -331,6 +335,13 @@ signer:
 helm install bursa-signer oci://ghcr.io/blinklabs-io/helm-charts/charts/bursa \
   --version 0.0.16 -n bursa-signer -f bursa-signer.yaml
 ```
+
+This signer serves only `Auto` rotation. Bursa v0.26.0 issues an operational
+certificate only for a KES verification key listed in the caller's `opcerts`
+grant, and dingo-operator v0.5.0 generates a new KES key for every request, so
+no grant can name it in advance. Until
+[dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
+is resolved, the signer starts and denies each request.
 
 Two replicas share the counter records in PostgreSQL, so either one can serve
 a request. The operator sends the pool's on-chain counter with every request,
@@ -591,7 +602,9 @@ nodes:
     spec:
       role: relay
 
-  # KES key in the keys Secret, rotated by the operator.
+  # KES key in the keys Secret, rotated by the operator. With the Bursa
+  # v0.26.0 signer, this rotation cannot issue until dingo-operator#193 is
+  # resolved.
   pool-a-producer:
     spec:
       role: blockProducer
@@ -631,7 +644,7 @@ nodes:
           mode: Assisted
         signingAgent:
           address: bursa-kes-agent.bursa-kes-agent.svc:9443
-          serverSpkiSha256: <agent pin> # Optional.
+          serverSpkiSha256: <agent pin>
           clientCertSecretRef: kes-agent-client
 ```
 
