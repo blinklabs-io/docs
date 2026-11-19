@@ -121,6 +121,8 @@ http://localhost:8080/swagger/index.html
 
 各サブコマンドはエージェントの応答を JSON として出力し、バイト列のフィールドを 16 進数で表示します。エージェントがコマンドを拒否すると、CLI は応答を表示したうえで 0 以外の終了コードを返します。1 回の制御要求には 30 秒の制限があり、要求をキャンセルすると待機中のソケット入出力を直ちに停止します。
 
+リモート制御は、アテステーション対応リスナーに相互 TLS（mTLS）とクライアント証明書の検証を設定し、その証明書の SPKI SHA-256 が対象プロファイルの `control_client_spki_sha256` に登録されている場合にだけ許可されます。リモートで許可されるコマンドは `info`、`gen-staged-key`、`install-key` です。制御用のピンは署名権限を与えず、リモートの `drop-key` は拒否されます。`drop-key` はローカル制御ソケットからのみ実行できます。
+
 #### KES 鍵のローテーション
 
 次の順序で KES 鍵をローテーションします。運用証明書はエージェントではなく、プールのコールド鍵を使ってオフラインで発行します。
@@ -154,6 +156,19 @@ bursa kes-agent ready --config /path/to/kes-agent.yaml
 ## オフライントランザクション操作
 
 `tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。テキストエンベロープの型にEraが含まれている場合、BursaはそのEraを使用します。`--era`も指定する場合は、エンベロープのEraと一致させてください。
+
+`tx build` は例外で、ノードのプロトコルパラメータを取得してプール操作トランザクションを構築します。`--socket-path`、`--network`、`--change-address` を指定し、ノードに接続できる状態で実行してください。`tx decode`、`tx sign`、`tx witness`、`tx assemble` は既存ファイルの検査や署名を行うオフライン操作です。
+
+```sh
+./bursa tx build \
+  --socket-path /path/to/node.socket \
+  --network mainnet \
+  --change-address addr_test1... \
+  --max-fee 3_000_000 \
+  --out-file unsigned.tx
+```
+
+`--max-fee` の既定値は `2_000_000` lovelace（2 ADA）です。Bursa はノードから取得したパラメータに基づく最小手数料がこの上限を超えると、トランザクションの構築を失敗させます。必要な場合は、上の例のように `--max-fee` に、より大きい lovelace 値を明示してください。
 
 `tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`--era` には、たとえば `babbage` または `conway` を指定します。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
 
