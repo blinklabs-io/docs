@@ -18,7 +18,7 @@ There are currently 11 categories of commands that Bursa can run which makes it 
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 7. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
- > 9. [tx](#tx) - Transaction operations
+> 9. [tx](#tx) - Transaction operations
 > 10. [sign](#sign) - CIP-8/CIP-30 message signing and verification
 > 11. [signer](#signer) - Remote signing service
 
@@ -330,7 +330,7 @@ For distinct keys, use `NAME=FILE` for every value in both repeatable key flags:
 
 Use one plain path in each flag instead to share one key across all profiles. Do not mix plain paths with `NAME=FILE` values. In per-profile mode, name every `--profile` exactly once in each key flag, and use a distinct key for every profile.
 
-After the import, start the workload without `--import` and with a `--profile` option for each imported profile. For a multi-key import, the configured profile set must match the imported set exactly: an unprofiled start or any missing or extra profile refuses startup. Multi-key state uses the v3 state format, which older Bursa releases cannot read. For a shared-key import, a served profile that was not imported stops startup unless `--create-profile-counter` names it, as in the Cloud Storage mode.
+After the import, start the workload without `--import` and with a `--profile` option for each imported profile. For a multi-key import, the configured profile set must match the imported set exactly: an unprofiled start or any missing or extra profile refuses startup. Multi-key state uses the `bursa-confidential-space-key/3` envelope, which older Bursa releases cannot read. For a shared-key import, a served profile that was not imported stops startup unless `--create-profile-counter` names it, as in the Cloud Storage mode.
 
 ### Nitro enclave
 
@@ -378,7 +378,7 @@ Explore other Bursa Commands
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 7. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
- > 9. [tx](#tx) - Transaction operations
+> 9. [tx](#tx) - Transaction operations
 > 10. [sign](#sign) - CIP-8/CIP-30 message signing and verification
 > 11. [signer](#signer) - Remote signing service
 
