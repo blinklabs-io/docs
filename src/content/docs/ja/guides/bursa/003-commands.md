@@ -163,8 +163,8 @@ bursa kes-agent ready --config /path/to/kes-agent.yaml
 ./bursa tx build \
   --socket-path /path/to/node.socket \
   --network mainnet \
-  --change-address addr_test1... \
-  --max-fee 3_000_000 \
+  --change-address "$CHANGE_ADDRESS" \
+  --max-fee 3000000 \
   --out-file unsigned.tx
 ```
 
