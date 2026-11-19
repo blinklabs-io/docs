@@ -38,8 +38,9 @@ This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
 
 Add the remote listener and one profile per pool to the agent's `kes_agent`
 configuration. Set `attested_client_ca_file` to the CA that issued the
-producer's client certificate, then add that certificate's public-key digest
-to each profile allowed to sign through the listener.
+producer's client certificate. For each profile allowed to sign through the
+listener, set `sign_client_spki_sha256` to that certificate's public-key
+digest.
 
 ```yaml
 kes_agent:
@@ -58,11 +59,12 @@ kes_agent:
       guard_file: /var/lib/bursa/pool-a.guard
 ```
 
-`sign_client_spki_sha256` is the 64-hex SHA-256 digest of the client
-certificate's `SubjectPublicKeyInfo` (SPKI). The agent admits a remote signing
-session only when the verified client certificate matches the selected
-profile's pin. A `control_client_spki_sha256` pin grants control access only;
-it does not grant signing access.
+`sign_client_spki_sha256` is a 64-character hexadecimal SHA-256 digest of the
+client certificate's `SubjectPublicKeyInfo` (SPKI), which identifies its public
+key. The agent admits a remote signing session only when the verified client
+certificate matches the selected profile's pin. A
+`control_client_spki_sha256` pin grants control access only; configure the
+signing pin separately.
 
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
 `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`,
