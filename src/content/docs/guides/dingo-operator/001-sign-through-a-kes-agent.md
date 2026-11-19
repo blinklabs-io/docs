@@ -28,9 +28,9 @@ This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.25.0.
   the KES key inside the operator, and that key would never reach the agent.
   Rotate the key by hand as described below.
 - **A TLS link to the agent.** Pin the agent's server key, and give the node a
-  client certificate when the agent requires one. A plain TCP link is available
-  for setups where something else secures the connection, such as a service
-  mesh.
+  client certificate when the agent requires one. A plain TCP link is
+  available for setups where something else secures the connection, such as a
+  service mesh.
 
 ## Configure the agent
 
