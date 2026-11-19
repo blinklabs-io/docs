@@ -54,7 +54,7 @@ La clave pública de la extensión identifica el emparejamiento. La confirmació
 
 Para cada solicitud, el conector obtiene un desafío nuevo y de un solo uso. Firma el desafío para esa solicitud usando el método HTTP, la ruta y el cuerpo exactos, y envía el desafío en `X-Bursa-Challenge` junto con la firma en `X-Bursa-Signature`. Bursa ya no acepta `X-Bursa-Token`.
 
-El flujo de eventos del conector usa tickets de evento de corta duración y de un solo uso. Al reconectar, el conector obtiene un ticket nuevo. Al quitar o reemplazar el emparejamiento, Bursa invalida de inmediato la autorización anterior y cualquier trabajo pendiente del conector.
+El flujo de eventos del conector usa tickets de evento de corta duración y de un solo uso. Al reconectar, el conector obtiene un ticket nuevo. Al quitar o reemplazar el emparejamiento, Bursa invalida de inmediato y de forma permanente la autorización anterior y cualquier trabajo pendiente del conector.
 
 La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea cuando la red seleccionada tiene configuración de agregador de Mithril; de lo contrario, Bursa omite el arranque de Mithril y sincroniza desde la génesis. `musashi` y `dijkstra` no tienen configuración de agregador de Mithril. `BURSA_SYNC=genesis` también fuerza la sincronización desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 
