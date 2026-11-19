@@ -15,8 +15,8 @@ This guide builds a complete block-producer deployment on Kubernetes:
 - A Bursa KES agent with two replicas holds KES keys and signs block headers,
   so a producer never holds its KES key.
 
-This page covers dingo-operator v0.2.0 (chart 0.8.0), the dingonodes chart
-0.1.0, Bursa v0.25.0 (chart 0.0.15), and Dingo v0.94.0.
+This page covers dingo-operator v0.5.0 (chart 0.9.0), the dingonodes chart
+0.1.0, Bursa v0.26.0 (chart 0.0.16), and Dingo v0.94.2.
 
 ## How the parts connect
 
@@ -37,9 +37,17 @@ A producer gets its KES key in one of two ways. Choose one per pool:
 | Who rotates | The operator generates a KES key and asks the signer for its certificate | You, with the agent's control commands. See [Rotate the KES key](/guides/dingo-operator/001-sign-through-a-kes-agent/#rotate-the-kes-key) |
 | Needs | The signer | The KES agent |
 
-dingo-operator v0.2.0 refuses `signingAgent` together with `rotation.mode:
-Auto`, because Auto writes the new KES key into the keys Secret, and a node
-that signs through an agent never reads it.
+dingo-operator v0.5.0 also accepts `signingAgent` with `rotation.mode: Auto`,
+when `controlClientCertSecretRef`, `serverSpkiSha256` and
+`rotation.reloadInPlace` are set. The operator then rotates the key through
+the agent's control role. This guide uses `Assisted` for agent pools.
+
+With Bursa v0.26.0, the signer issues an operational certificate only for a KES
+key that its caller configuration grants explicitly. dingo-operator v0.5.0
+generates a new KES key on every issue, so `Auto` rotation through the Bursa
+signer cannot issue until
+[dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
+is resolved.
 
 ## Requirements
 
@@ -122,10 +130,10 @@ pool, which is created once, as described in
 
 The operator talks to the signer over mutual TLS: Auto rotation requires an
 `https` signer endpoint and a client certificate. The link from producers to
-the KES agent uses TLS by default, and each part of it is optional: a server
-key pin, a client certificate, or plain TCP when something else secures the
-link, such as a service mesh. The commands below use ECDSA P-256 keys; any key
-type Go's TLS 1.3 accepts works.
+the KES agent is mutual TLS. The agent refuses a producer without a client
+certificate that is pinned for its profile, and a plain TCP link cannot admit
+a signing session. Pinning the agent's server key is optional. The commands
+below use ECDSA P-256 keys; any key type Go's TLS 1.3 accepts works.
 
 ### The signer link
 
@@ -156,24 +164,22 @@ its identity is `dingo-operator`.
 ### The KES agent link
 
 This guide secures the link with TLS, a pinned server key, and a client
-certificate. Each is optional:
+certificate:
 
 - **Server certificate.** Repeat the steps above with a second CA, and give
   the agent's server certificate the agent's Service names
   (`bursa-kes-agent.bursa-kes-agent.svc` and
   `bursa-kes-agent.bursa-kes-agent.svc.cluster.local`).
 - **Client certificate.** Issue one for the producers from that CA. The agent
-  asks for one only when its client CA is set.
-- **Pin.** With a pin, the node checks the agent's server key instead of a
-  CA chain. Without one, it verifies the agent's certificate against its
+  requires it, and admits a producer only when the certificate's key is in the
+  profile's `sign_client_spki_sha256`.
+- **Pin.** Optional. With a pin, the node checks the agent's server key instead
+  of a CA chain. Without one, it verifies the agent's certificate against its
   trusted CAs by host name.
 
-For plain TCP, skip this section: set `kes_agent.attested_plaintext: true` in
-the agent's config and leave out its `tls` Secrets, and set
-`signingAgent.plaintext: true` on each producer in place of the pin and client
-certificate.
-
-Compute the pin from the agent's server certificate:
+Compute the pin from the agent's server certificate, and each
+`sign_client_spki_sha256` entry the same way from the producers' client
+certificate:
 
 ```sh
 openssl x509 -in kes-agent.crt -pubkey -noout \
@@ -260,7 +266,7 @@ the pool ID in hex, from `cardano-cli stake-pool id --output-format hex`:
 mode: signer
 replicaCount: 2
 image:
-  tag: "0.25.0"
+  tag: "0.26.0"
 podDisruptionBudget:
   enabled: true
 affinity:
@@ -322,7 +328,7 @@ signer:
 
 ```sh
 helm install bursa-signer oci://ghcr.io/blinklabs-io/helm-charts/charts/bursa \
-  --version 0.0.15 -n bursa-signer -f bursa-signer.yaml
+  --version 0.0.16 -n bursa-signer -f bursa-signer.yaml
 ```
 
 Two replicas share the counter records in PostgreSQL, so either one can serve
@@ -350,7 +356,6 @@ age-keygen -o kes-agent-age.txt
 age-keygen -y kes-agent-age.txt   # goes into store.age_recipients below
 kubectl -n bursa-kes-agent create secret tls bursa-kes-agent-tls \
   --cert=kes-agent.crt --key=kes-agent.key --dry-run=client -o yaml
-# Only with client certificates:
 kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-client-ca \
   --from-file=ca.crt=kes-agent-ca.crt --dry-run=client -o yaml
 kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-age \
@@ -365,7 +370,7 @@ verification key in hex, such as the `cborHex` of its `cold.vkey`.
 mode: kes-agent
 replicaCount: 2
 image:
-  tag: "0.25.0"
+  tag: "0.26.0"
 podDisruptionBudget:
   enabled: true
 affinity:
@@ -392,9 +397,10 @@ kesAgent:
           cold_vkey_hex: "<pool-b cold verification key, hex>"
           system_start: "2022-10-25T00:00:00Z"
           slots_per_kes_period: 129600
+          sign_client_spki_sha256:
+            - "<pool-b producer client certificate pin>"
   tls:
     secretName: bursa-kes-agent-tls
-    # Leave out to accept producers without a client certificate.
     clientCASecretName: bursa-kes-agent-client-ca
   ageIdentity:
     secretName: bursa-kes-agent-age
@@ -415,7 +421,7 @@ kesAgent:
 
 ```sh
 helm install bursa-kes-agent oci://ghcr.io/blinklabs-io/helm-charts/charts/bursa \
-  --version 0.0.15 -n bursa-kes-agent -f bursa-kes-agent.yaml
+  --version 0.0.16 -n bursa-kes-agent -f bursa-kes-agent.yaml
 ```
 
 The `system_start` and `slots_per_kes_period` above are Preview's. Take both
@@ -446,8 +452,7 @@ rbac:
   keySecretNames:
     - pool-a-keys
     - pool-b-keys
-  # Every other Secret the operator reads. kes-agent-client only with
-  # client certificates on the KES agent link.
+  # Every other Secret the operator reads.
   readSecretNames:
     - bursa-signer-mtls
     - kes-agent-client
@@ -456,7 +461,7 @@ rbac:
 ```sh
 kubectl create namespace dingo
 helm install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/charts/dingo-operator \
-  --version 0.8.0 -n dingo-operator --create-namespace -f dingo-operator.yaml
+  --version 0.9.0 -n dingo-operator --create-namespace -f dingo-operator.yaml
 kubectl label namespace dingo-operator \
   dingo.blinklabs.io/metrics=allowed dingo.blinklabs.io/node-to-client=allowed
 ```
@@ -480,7 +485,7 @@ kubectl -n dingo create secret generic bursa-signer-mtls \
   --from-file=ca.crt=signer-ca.crt --dry-run=client -o yaml
 ```
 
-The producers' client certificate for the KES agent, when you use one:
+The producers' client certificate for the KES agent:
 
 ```sh
 kubectl -n dingo create secret tls kes-agent-client \
@@ -542,7 +547,7 @@ in a common values file:
 defaults:
   spec:
     image:
-      tag: "0.94.0"
+      tag: "0.94.2"
     storageMode: core
 
 # One PodMonitor per node, with the pod name as the instance label.
@@ -625,7 +630,7 @@ nodes:
           mode: Assisted
         signingAgent:
           address: bursa-kes-agent.bursa-kes-agent.svc:9443
-          # Both optional. For plain TCP, replace them with plaintext: true.
+          # Optional.
           serverSpkiSha256: <agent pin>
           clientCertSecretRef: kes-agent-client
 ```
@@ -650,7 +655,7 @@ install it, as described in
 [Rotate the KES key](/guides/dingo-operator/001-sign-through-a-kes-agent/#rotate-the-kes-key).
 Then put that certificate into the pool's keys Secret.
 
-dingo-operator v0.2.0 calls the signer only for `Auto` rotation, so issue each
+dingo-operator v0.5.0 calls the signer only for `Auto` rotation, so issue each
 certificate for an agent pool with the cold key itself, decrypted on an
 offline machine. Repeat these steps for every rotation.
 
