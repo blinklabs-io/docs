@@ -16,7 +16,25 @@ description: List of Adder Commands.
  
 > path to config file to load
 
-> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > YAML configuration file > environment variables > defaults.
+> If the same setting is provided through multiple methods, Adder uses this precedence order: CLI flags > environment variables > YAML configuration file > defaults.
+
+### Optional Kupo input resolution
+
+Kupo resolves transaction input references to the outputs they spend. This lets
+address, asset, and policy filters inspect senders and spent assets through the
+event's `resolvedInputs`, in addition to inspecting its new outputs.
+
+Set a shared endpoint with top-level YAML `kupo_url` or the `KUPO_URL`
+environment variable. There is no top-level `--kupo-url` flag. The ChainSync
+and mempool inputs also expose `plugins.input.<name>.kupo-url` in YAML and the
+input-specific flags listed below. An input-specific YAML value replaces the
+top-level YAML fallback. Environment variables override YAML, and an explicit
+input-specific flag overrides both. Passing an empty input-specific flag, such
+as `--input-mempool-kupo-url=`, disables Kupo for that input.
+
+Kupo must use the same Cardano network as Adder and must index every output
+that Adder may need to resolve. See [Resolve transaction senders with Kupo](/guides/adder/kupo-input-resolution/)
+for configuration and a sender-address example.
 
 ***
 
@@ -389,7 +407,7 @@ Use a stake address to follow an account's governance activity. The
   --input-chainsync-kupo-url string
 ```
   
-> kupo-url address
+> optional Kupo HTTP endpoint for resolving transaction inputs
 <br />
 
 
@@ -413,7 +431,7 @@ Use a stake address to follow an account's governance activity. The
   --input-mempool-kupo-url string
 ```
   
-> Kupo API URL for resolving transaction inputs (e.g. http://localhost:1442). Kupo must index the outputs you need (e.g. run with --match "*") or resolution will be empty.
+> optional Kupo HTTP endpoint for resolving on-chain transaction inputs (for example, `http://127.0.0.1:1442`). Mempool outputs created during the same poll are resolved without Kupo. Kupo must index the outputs you need or on-chain resolution will be empty.
 <br />
 
 ```
