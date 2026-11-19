@@ -27,20 +27,19 @@ This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
   `signingAgent` together with `rotation.mode: Auto`. Its Auto mode generates
   the KES key inside the operator, and that key would never reach the agent.
   Rotate the key by hand as described below.
-- **A mutually authenticated TLS 1.3 link to the agent.** Pin the agent's
-  server key, set `attested_client_ca_file`, and give the node a client
-  certificate that the agent can verify. For profile-scoped remote signing,
-  the certificate's public key must match the selected profile's
+- **A TLS 1.3 link with mutual client certificate verification.** Pin the
+  agent's server key and set `attested_client_ca_file` so the agent verifies
+  the node's client certificate. For profile-scoped remote signing, that
+  certificate's public key must match the selected profile's
   `sign_client_spki_sha256` pin. Plain TCP and TLS without a verified client
   certificate cannot open a pinned signing session.
 
 ## Configure the agent
 
 Add the remote listener and one profile per pool to the agent's `kes_agent`
-configuration. The listener requires TLS 1.3. For profile-scoped remote
-signing, set `attested_client_ca_file` so the listener verifies the producer's
-client certificate, then pin that certificate's public key in the selected
-profile.
+configuration. Set `attested_client_ca_file` to the CA that issued the
+producer's client certificate, then add that certificate's public-key digest
+to each profile allowed to sign through the listener.
 
 ```yaml
 kes_agent:
@@ -53,7 +52,7 @@ kes_agent:
   profiles:
     - name: pool-a
       cold_vkey_hex: "<the pool's 32-byte cold verification key in hex>"
-      sign_client_spki_sha256: "<64 hex characters for the client certificate public key SHA-256 SPKI digest>"
+      sign_client_spki_sha256: "<64 hex characters: SHA-256 SPKI digest of client certificate public key>"
       system_start: "2022-10-25T00:00:00Z"
       slots_per_kes_period: 129600
       guard_file: /var/lib/bursa/pool-a.guard
