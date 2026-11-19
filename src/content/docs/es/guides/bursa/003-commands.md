@@ -182,7 +182,7 @@ Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. 
 
 ### Construir una transacción
 
-`tx build` usa `--socket-path`, `--network` y los parámetros del protocolo obtenidos del nodo para construir una transacción de operación del pool. `--max-fee` establece la tarifa máxima en lovelace y usa `2_000_000` lovelace de forma predeterminada. Bursa rechaza la construcción cuando la tarifa mínima calculada a partir de los parámetros del nodo supera ese límite. Para aceptar una tarifa mayor, indica explícitamente un valor superior:
+`tx build` usa `--socket-path`, `--network` y solicita al nodo los parámetros del protocolo para construir una transacción de operación del pool. `--max-fee` establece la tarifa máxima en lovelace y usa `2_000_000` lovelace de forma predeterminada. Bursa rechaza la construcción cuando la tarifa mínima calculada a partir de los parámetros del nodo supera ese límite. Para aceptar una tarifa mayor, indica explícitamente un valor superior:
 
 ```sh
 ./bursa tx build \
@@ -327,7 +327,7 @@ Para compartir una sola clave entre todos los perfiles, usa una ruta normal para
 
 No mezcles rutas normales con entradas `NAME=FILE`. Cada perfil debe aparecer exactamente una vez en ambas opciones de claves, y las claves de perfiles distintos deben ser diferentes. Si una ruta contiene `=`, antepón `./` para que Bursa la trate como una ruta normal.
 
-Después de la importación, inicia la carga de trabajo sin `--import` y con una opción `--profile` por cada perfil importado. En un estado con varias claves, el conjunto de perfiles de las opciones `--profile` debe coincidir exactamente con el conjunto importado: un inicio sin perfiles, con perfiles omitidos o con perfiles adicionales falla, y `--create-profile-counter` no cambia esta regla. Las versiones anteriores de Bursa no pueden leer el estado multiclave creado por esta importación.
+Después de la importación, inicia la carga de trabajo sin `--import` y con una opción `--profile` por cada perfil importado. En un estado con varias claves, el conjunto de perfiles de las opciones `--profile` debe coincidir exactamente con el conjunto importado: un inicio sin perfiles, con perfiles omitidos o con perfiles adicionales falla, y `--create-profile-counter` no cambia esta regla. Esta importación multiclave crea un estado que las versiones anteriores de Bursa no pueden leer.
 
 ### Custodia Nitro
 
@@ -369,7 +369,7 @@ Explora otros comandos de Bursa
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
-> 9. [tx](#tx) - Operaciones de transacciones sin conexión
+> 9. [tx](#tx) - Operaciones de transacciones
 > 10. [sign](#sign) - Firma y verificación de mensajes CIP-8/CIP-30
 > 11. [signer](#signer) - Servicio de firma remota
 
