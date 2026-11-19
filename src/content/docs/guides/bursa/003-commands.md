@@ -197,7 +197,7 @@ The resolved era selects the output envelope type and witness encoding for signi
   --out-file unsigned.tx
 ```
 
-If the minimum fee derived from the node exceeds `--max-fee`, Bursa refuses to construct the transaction. Raise `--max-fee` explicitly when the network or node parameters require a higher fee.
+If the node reports protocol parameters that produce a minimum fee above `--max-fee`, Bursa refuses to construct the transaction. Raise `--max-fee` explicitly when the network or node parameters require a higher fee.
 
 <a name="sign"></a>
 
@@ -378,7 +378,7 @@ Explore other Bursa Commands
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 7. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-> 9. [tx](#tx) - Offline transaction operations
+ > 9. [tx](#tx) - Transaction operations
 > 10. [sign](#sign) - CIP-8/CIP-30 message signing and verification
 > 11. [signer](#signer) - Remote signing service
 
