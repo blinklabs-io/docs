@@ -30,21 +30,23 @@ This page covers dingo-operator v0.5.0, Dingo v0.94.2, and Bursa v0.26.0.
   hand, as described below. `MonitorOnly` is the default. dingo-operator v0.5.0
   also accepts `Auto` with `signingAgent`, when `controlClientCertSecretRef`,
   `serverSpkiSha256` and `rotation.reloadInPlace` are set. The operator then
-  rotates the key through the agent's control role. This guide does not cover
-  that setup.
+  rotates the key through the agent's control role. With the Bursa v0.26.0
+  signer as the cold signer, that rotation cannot issue until
+  [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
+  is resolved. This guide does not cover that setup.
 - **A mutual TLS link to the agent.** Bursa v0.26.0 admits a producer only
   when its client certificate is verified and its key is pinned for the
-  profile. Pin the agent's server key on the node, and give the node a client
-  certificate. A plain TCP link cannot admit a signing session, so the agent
-  refuses it even where something else, such as a service mesh, secures the
-  connection.
+  profile. Give the node a client certificate. Pinning the agent's server key
+  on the node is optional. A plain TCP link cannot admit a signing session,
+  so the agent refuses it even where something else, such as a service mesh,
+  secures the connection.
 
 ## Configure the agent
 
 Add the remote listener and one profile per pool to the agent's `kes_agent`
-configuration. The listener requires TLS 1.3 and a client certificate that
-`attested_client_ca_file` verifies. A profile admits a producer only when the
-SHA-256 digest of the client certificate's public key is in the profile's
+configuration. The listener requires TLS 1.3. A profile admits a producer only
+when `attested_client_ca_file` verifies its client certificate and the SHA-256
+digest of the certificate's public key is in the profile's
 `sign_client_spki_sha256`. An empty list admits no producer.
 
 ```yaml
@@ -68,8 +70,8 @@ kes_agent:
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
 `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`,
 `slots_per_kes_period`, `max_clock_skew`, `guard_file`,
-`sign_client_spki_sha256`) unset at the top level,
-and leave `slot_length` and `max_kes_evolutions` at their defaults. Set them in
+`control_client_spki_sha256`, `sign_client_spki_sha256`) unset at the top
+level, and leave `slot_length` and `max_kes_evolutions` at their defaults. Set them in
 each profile instead. See [Profiles](/guides/bursa/009-configuration-reference/#profiles).
 
 With guard files, the agent keeps each KES key in memory only. A guard file

@@ -44,8 +44,9 @@ the agent's control role. This guide uses `Assisted` for agent pools.
 
 With Bursa v0.26.0, the signer issues an operational certificate only for a KES
 key that its caller configuration grants explicitly. dingo-operator v0.5.0
-generates a new KES key on every issue, so `Auto` rotation through the Bursa
-signer cannot issue until
+asks for a certificate for a newly generated KES key on every issue, with the
+KES key in the keys Secret or in the agent, so `Auto` rotation through the
+Bursa signer cannot issue until
 [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
 is resolved.
 
@@ -630,8 +631,7 @@ nodes:
           mode: Assisted
         signingAgent:
           address: bursa-kes-agent.bursa-kes-agent.svc:9443
-          # Optional.
-          serverSpkiSha256: <agent pin>
+          serverSpkiSha256: <agent pin> # Optional.
           clientCertSecretRef: kes-agent-client
 ```
 
