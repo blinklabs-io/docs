@@ -79,6 +79,10 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 
 Profile routing applies to Confidential Space and SOPS backends. A request must select the matching profile. A request without a profile is usable only when one backend unambiguously holds the key. Each profile keeps independent counter and record scope. Nitro does not support `profile`; leave it unset.
 
+### Profile-bound inventory compatibility
+
+Armory and Confidential Space inventory evidence binds to a non-empty requested profile. The producer and verifier must use versions that support profile-bound inventory together; otherwise, inventory verification fails. Legacy unprofiled behavior remains available when the requested profile is empty. Nitro inventory remains unprofiled, so leave `profile` empty for Nitro; Bursa rejects a configured Nitro profile for inventory.
+
 ### Nitro custody persistence
 
 The Nitro proxy role needs `secretsmanager:GetSecretValue`, `secretsmanager:DescribeSecret`, and `secretsmanager:PutSecretValue` while it serves. The proxy persists sealed counter state with every signature. A failed or timed out persistence write makes the proxy stop later signing until an operator restarts or reloads it; after recovery, the proxy accepts a retry only when the payload matches the payload at the stored counter.
@@ -94,6 +98,8 @@ The workload reads the secret once, at startup, and keeps the state in memory fr
 The workload seals each counter record under a key derived from the wrapped key's data-encryption key, which it unwraps through Cloud KMS, and binds the record to the pool key, the KMS key name and its profile. A record that is altered or moved to another profile stops startup. Each operational certificate the workload issues adds a new secret version before the certificate is returned; a repeat of the recorded `opcert-next` request writes nothing. After a write the workload destroys the older enabled versions. A failed destroy is logged and retried by the next write. A failed write stops later signing until the workload restarts and reloads the newest version.
 
 Secret Manager cannot add a version conditionally, so run exactly one workload per secret. The signer's watermark in `enforce` mode, not the secret, is the authority that refuses a reissued counter, including after the secret is restored to an older version; in `warn` or `off` mode nothing refuses it. Never restore the secret to an older version or remove it for an existing pool key.
+
+For a per-profile key import, the `bursa-confidential-space-key/3` envelope stores a distinct pool key for each imported profile. The startup `--profile` set must match the imported set exactly. Bursa refuses startup without profiles or with any missing or extra profile. Older releases cannot read the `/3` envelope. A shared-key import can serve several profiles without using that envelope. To add a served profile that was not imported, name it with `--create-profile-counter`.
 
 With `--tls-secret`, the workload reads its HTTPS certificate from a separate Secret Manager secret. The newest version holds one PEM bundle: the certificate chain, leaf first, and exactly one key, with only white space between the blocks. The workload reads the `latest` version once at startup, so rotating the certificate takes a new version and a restart, and a disabled newest version stops startup instead of falling back to an older one. The `latest` alias is eventually consistent, so a restart soon after the new version is added can still load the previous certificate; confirm that the workload presents the new certificate, and restart it again if it does not. Startup also stops when the bundle is empty, is not PEM, holds another block type, or its key does not match the leaf certificate. Grant the workload's principal only `secretmanager.versions.access` on that secret.
 
@@ -201,11 +207,42 @@ signer:
         - opcert
 ```
 
+Operational-certificate authorization also requires an explicit caller grant. List the cold key in the caller's `keys`, then list that same cold key under `opcerts[].key` with the exact staged KES verification keys that the caller may certify:
+
+```yaml
+signer:
+  callers:
+    - subject: producer.example
+      keys:
+        - "000000000000000000000000000000000000000000000000000000000000"
+      opcerts:
+        - key: "000000000000000000000000000000000000000000000000000000000000"
+          kes_vkeys:
+            - "1111111111111111111111111111111111111111111111111111111111111111"
+```
+
+| Configuration path | Requirement | Result when missing or invalid |
+| --- | --- | --- |
+| `signer.callers[].keys[]` | Include the cold key that the caller may use for operational certificates. | Bursa denies the caller's operational-certificate request. |
+| `signer.callers[].opcerts[].key` | Match a cold key in the same caller's `keys` list. | Bursa rejects the caller grant or denies the request. |
+| `signer.callers[].opcerts[].kes_vkeys[]` | List each exact staged KES verification key that the caller may certify. | An empty or missing list fails closed, and an unlisted KES verification key is denied. |
+
 ## Signer health endpoints
 
 `/healthz` provides static liveness and always returns HTTP `200`.
 
-`/readyz` checks the configured watermark store with a three-second timeout. For SQLite and PostgreSQL, Bursa verifies that the store accepts the watermark writes required for signing. A healthy and writable store returns HTTP `200`; an unavailable or non-writable store returns HTTP `503`. An in-memory store has no external dependency and remains ready with HTTP `200`.
+`/readyz` serves a cached result from a background watermark probe. Bursa runs the probe every 10 seconds with a three-second bound. The initial pending result, an unreachable or non-writable store, and a stale result return HTTP `503`; a healthy and current result returns HTTP `200`. Repeated `/readyz` requests read the cached result and do not initiate writes to the watermark store. An in-memory store has no external dependency and remains ready with HTTP `200`.
+
+## Metrics listener
+
+Bursa serves `/metrics`, `/healthz`, and `/readyz` from the global metrics listener.
+
+| Configuration path | Environment variable | Purpose | Default or requirement |
+| --- | --- | --- | --- |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | Selects the host interface for the metrics and health listener. | An empty value resolves to `127.0.0.1`. Set a hostname, IP address, wildcard address such as `0.0.0.0`, or pod address. Do not include a port in the host value; Bursa rejects it. |
+| `metrics.port` | `METRICS_LISTEN_PORT` | Selects the TCP port for the metrics and health listener. | Defaults to `8081`. Set `0` to disable the listener. |
+
+The KES `ready` probe uses a loopback-reachable address when the listener binds to a wildcard address and uses the configured host for other explicit addresses. The probe bypasses environment proxy settings when it requests `/readyz`.
 
 ## `kes_agent`
 
@@ -262,11 +299,15 @@ Set `kes_agent.attested_listen_address` to serve `sign` mode to a block producer
 | `kes_agent.attested_tls_cert_file` | `KESAGENT_ATTESTED_TLS_CERT_FILE` | Present the server TLS certificate from this file on the remote listener. | Required with `attested_tls_key_file` unless `attested_plaintext` is `true`. |
 | `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | Present the server TLS private key from this file on the remote listener. | Required with `attested_tls_cert_file` unless `attested_plaintext` is `true`. On Unix, Bursa refuses a key file that grants group or other access. |
 | `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | Verify producer client certificates against the CA certificates in this PEM file. | Optional. When set, every connection must present a client certificate that this CA verifies; when unset, the listener does not request client certificates. The file must contain at least one certificate. |
+| `kes_agent.control_client_spki_sha256` | `KESAGENT_CONTROL_CLIENT_SPKI_SHA256` | Allow pinned client certificates to open remote control sessions for the implicit `default` profile. | Optional. Each value is a SHA-256 SPKI digest written as exactly 64 hexadecimal characters. When `kes_agent.profiles` is set, configure `kes_agent.profiles[].control_client_spki_sha256` in YAML for each profile instead; Bursa rejects the top-level value. Bursa requires verified client certificates on the attested TLS listener. |
+| `kes_agent.sign_client_spki_sha256` | `KESAGENT_SIGN_CLIENT_SPKI_SHA256` | Allow pinned client certificates to open remote signing sessions for the implicit `default` profile. | Optional. Each value is a SHA-256 SPKI digest written as exactly 64 hexadecimal characters. When `kes_agent.profiles` is set, configure `kes_agent.profiles[].sign_client_spki_sha256` in YAML for each profile instead; Bursa rejects the top-level value. Bursa requires verified client certificates on the attested TLS listener. |
 | `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | Serve the remote listener on plain TCP instead of TLS. | Defaults to `false`. When `true`, leave `attested_tls_cert_file`, `attested_tls_key_file`, and `attested_client_ca_file` unset. |
 | `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | Name the attestation verifier that the producer must use. | Required when `attested_listen_address` is set. The `none` provider sends no attestation evidence. |
 | `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | Reach the attestation adapter inside the protected workload that produces nonce-bound evidence. | Required for every provider except `none`, which rejects it. Use an `https://` URL, a loopback `http://` URL, or a `unix://` socket URL. |
 
 With TLS, the listener requires TLS 1.3 and a certificate and key. At startup the agent logs the SHA-256 fingerprint of the served certificate's public key as `server_spki_sha256`; a producer can pin that value. With `attested_plaintext`, the agent does not authenticate the remote peer. Bursa exits at startup when a remote listener setting is invalid.
+
+The control and signing pin lists grant separate authorities. A control pin does not grant signing authority, and a signing pin does not grant control authority. Remote attested control supports only `info`, `gen-staged-key`, and `install-key`; `drop-key` remains available only through the local control socket. Bursa cannot admit a pinned remote session over plaintext or TLS without verified client certificates through `attested_client_ca_file`.
 
 ```yaml
 kes_agent:
