@@ -272,6 +272,62 @@ APIでは、`/api/tx/sign` と `/api/tx/assemble` の `tx_cbor` にも同じEra�
   --create-profile-counter pool@preview
 ```
 
+Confidential Space の VM には永続ストレージがありません。ローカルの状態を持たずにワークロードを実行するには、`--state-secret` でラップされたプール鍵とすべてのプロファイルのカウンターを Secret Manager に保存し、`--tls-secret` でワークロードの HTTPS 証明書を別の Secret Manager シークレットに保存します。
+
+```sh
+./bursa confidential-space-workload \
+  --listen :8080 \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
+  --tls-secret "projects/$PROJECT/secrets/$TLS_SECRET" \
+  --wif-credentials /etc/bursa/wif.json \
+  --client-ca-file /etc/bursa/signer-ca.crt \
+  --profile pool@mainnet --profile pool@preview
+```
+
+`--state-secret` は `--wrapped-key-file`、`--counter-bucket`、`--counter-object` と同時に指定できず、`--tls-secret` は `--tls-cert-file`、`--tls-key-file` と同時に指定できません。各プロファイルのカウンターは Cloud Storage のオブジェクトではなく、状態シークレット内のレコードになります。Bursa はどちらのシークレットも作成せず、このモードではプールのコールド鍵を生成しません。インポートで状態シークレットに鍵を書き込むまで、通常の起動は失敗します。クライアント CA と Workload Identity Federation の設定は秘密情報ではないため、Bursa のイメージから派生したイメージに含めてください。権限と障害時の動作は [Confidential Space のカストディの永続化](/ja/guides/bursa/009-configuration-reference/#confidential-space-custody-persistence) を参照してください。
+
+#### 既存のプールのコールド鍵をインポートする
+
+空の状態シークレットに対して、ワークロードをインポートモードで一度起動します。
+
+```sh
+./bursa confidential-space-workload \
+  --listen :8080 \
+  --import \
+  --import-authority-file /etc/bursa/import-authority.pub \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --state-secret "projects/$PROJECT/secrets/$STATE_SECRET" \
+  --tls-secret "projects/$PROJECT/secrets/$TLS_SECRET" \
+  --wif-credentials /etc/bursa/wif.json \
+  --client-ca-file /etc/bursa/signer-ca.crt
+```
+
+`--import` には `--state-secret` と `--import-authority-file` が必要で、`--profile` と `--create-profile-counter` は指定できません。プロファイルはインポートのリクエストで指定します。`--import-authority-file` にはプロビジョニング権限の Ed25519 公開鍵を 16 進数で保存します。この鍵は署名クライアントの TLS の ID とは別の鍵にする必要があります。インポートモードのワークロードはインポート用のルートだけを提供し、署名は行わず、インポートが 1 回成功すると終了します。
+
+コールド鍵を保持するマシンでインポートクライアントを実行します。
+
+```sh
+./bursa confidential-space import \
+  --address https://workload.example.internal:8080 \
+  --tls-ca-file ca.pem \
+  --tls-client-cert-file client.pem \
+  --tls-client-key-file client-key.pem \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --image-digest sha256:IMAGE_DIGEST \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --signing-key-file pool-cold.skey \
+  --vkey-file pool-cold.vkey \
+  --authority-key-file import-authority.key \
+  --profile pool@mainnet=8 --profile pool@preview=0
+```
+
+クライアントは、オーディエンスとイメージのダイジェストを含むワークロードのアテステーショントークンを検証してから、鍵をワークロード向けに封印して送信します。`--signing-key-file` には拡張されていない `StakePoolSigningKey_ed25519` ファイルを指定し、その鍵から `--vkey-file` の鍵が導出できる必要があります。`--authority-key-file` にはプロビジョニング権限の Ed25519 シードを 16 進数で保存します。各 `--profile` は `NAME=NEXT` の形式で、`NEXT` はそのプロファイルが次に署名できる運用証明書の発行番号です。オンチェーンかどうかにかかわらずそのプロファイルで署名した最大の発行番号に 1 を加えた値とし、そのプロファイルのネットワークにおけるプールのオンチェーンのカウンターに 1 を加えた値を下回らないようにします。一度も発行していないプロファイルには `0` を指定します。先に以前の署名者での証明書の発行を停止してください。インポート後にワークロードが `NEXT` を修正することはできません。
+
+インポート後は、`--import` を付けずに、インポートした各プロファイルの `--profile` を指定してワークロードを起動します。インポートしていないプロファイルを提供すると、`--create-profile-counter` で指定しない限り、Cloud Storage モードと同様に起動が停止します。
+
 ### Nitro enclave
 
 `bursa nitro enclave` では、プロビジョニング権限ファイルに加えて、`--signer-authority-file <file>` を指定する必要があります。2つの権限ファイルには、それぞれ別のプロビジョニング権限と署名者権限を指定してください。

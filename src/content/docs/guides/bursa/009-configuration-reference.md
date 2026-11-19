@@ -85,6 +85,18 @@ The Nitro proxy role needs `secretsmanager:GetSecretValue`, `secretsmanager:Desc
 
 The sealed counter state has a version. An older enclave or proxy cannot consume a newer state. To downgrade, restore the prior envelope-only Secrets Manager secret version documented for Nitro custody before starting the older components.
 
+### Confidential Space custody persistence
+
+With `--state-secret`, the Confidential Space workload keeps its wrapped pool key and its sealed counter state together in one Secret Manager secret. Bursa never creates or deletes the secret; create it outside Bursa. Grant the workload's Workload Identity Federation principal, on that secret only, `secretmanager.versions.access`, `secretmanager.versions.add`, `secretmanager.versions.list` and `secretmanager.versions.destroy`, together with Cloud KMS encrypt and decrypt on the wrapping key.
+
+The workload reads the secret once, at startup, and keeps the state in memory from then on. Startup reads the newest version by number rather than the `latest` alias, which is eventually consistent; if the newest version is disabled or destroyed, startup stops instead of loading an older one. A missing secret, a secret without a version, or an empty payload also stops a normal start. In this mode the workload never generates a pool key: only a start with `--import` writes one, and it accepts only a secret whose enabled versions all have an empty payload and that has no disabled version.
+
+The workload seals each counter record under a key derived from the wrapped key's data-encryption key, which it unwraps through Cloud KMS, and binds the record to the pool key, the KMS key name and its profile. A record that is altered or moved to another profile stops startup. Each operational certificate the workload issues adds a new secret version before the certificate is returned; a repeat of the recorded `opcert-next` request writes nothing. After a write the workload destroys the older enabled versions. A failed destroy is logged and retried by the next write. A failed write stops later signing until the workload restarts and reloads the newest version.
+
+Secret Manager cannot add a version conditionally, so run exactly one workload per secret. The signer's watermark in `enforce` mode, not the secret, is the authority that refuses a reissued counter, including after the secret is restored to an older version; in `warn` or `off` mode nothing refuses it. Never restore the secret to an older version or remove it for an existing pool key.
+
+With `--tls-secret`, the workload reads its HTTPS certificate from a separate Secret Manager secret. The newest version holds one PEM bundle: the certificate chain, leaf first, and exactly one key, with only white space between the blocks. The workload reads the `latest` version once at startup, so rotating the certificate takes a new version and a restart, and a disabled newest version stops startup instead of falling back to an older one. The `latest` alias is eventually consistent, so a restart soon after the new version is added can still load the previous certificate; confirm that the workload presents the new certificate, and restart it again if it does not. Startup also stops when the bundle is empty, is not PEM, holds another block type, or its key does not match the leaf certificate. Grant the workload's principal only `secretmanager.versions.access` on that secret.
+
 ### Wallet storage and encryption
 
 Configure wallet persistence and SOPS encryption with the following fields:
