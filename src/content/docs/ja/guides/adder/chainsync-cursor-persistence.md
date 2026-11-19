@@ -45,7 +45,7 @@ plugins:
 
 保存済みカーソルがない場合、設定した交差点がそのまま使用されます。
 
-CLIフラグ、YAML設定、環境変数、デフォルト値の一般的な優先順位と、ChainSyncの各入力設定については、[コマンドリファレンスガイド](/ja/guides/adder/006-command_list/#input-chainsync)を参照してください。
+設定の優先順位は、CLIフラグ > 環境変数 > YAML設定 > デフォルト値です。ChainSyncの各入力設定については、[コマンドリファレンスガイド](/ja/guides/adder/006-command_list/#input-chainsync)を参照してください。
 
 ## 再起動とロールバック
 

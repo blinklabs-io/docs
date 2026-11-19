@@ -38,7 +38,7 @@ plugins:
 
 The default value is an empty path. Leave the CLI option and YAML setting empty or unset to disable cursor persistence and preserve the normal ChainSync startup behavior.
 
-When a setting has multiple sources, Adder applies the general configuration precedence order: CLI flags override YAML configuration, YAML configuration overrides environment variables, and environment variables override defaults. See the [ChainSync options in the command reference](/guides/adder/006-command_list/#input-chainsync) for the complete option list.
+When a setting has multiple sources, Adder applies the general configuration precedence order: CLI flags override environment variables, environment variables override YAML configuration, and YAML configuration overrides defaults. See the [ChainSync options in the command reference](/guides/adder/006-command_list/#input-chainsync) for the complete option list.
 
 > **Warning:** After Adder saves a cursor, ChainSync uses that cursor as the startup intersection. The persisted cursor takes precedence over the configured `intersect-tip` and `intersect-point` values. The configured intersection applies only until the state store contains a cursor.
 

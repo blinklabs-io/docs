@@ -31,6 +31,8 @@ Configure una ruta de archivo que el proceso pueda abrir para leer y escribir. C
 
 El valor predeterminado es `""`. Para desactivar la persistencia, omita `--input-chainsync-state-path` o configure `state-path: ""`; Adder no conserva ningún cursor y mantiene el comportamiento anterior.
 
+Si una configuración tiene varias fuentes, las opciones de línea de comandos prevalecen sobre las variables de entorno, las variables de entorno sobre la configuración YAML y la configuración YAML sobre los valores predeterminados.
+
 Cuando el archivo contiene un cursor guardado, Adder lo restaura al iniciar `ChainSync`. El cursor guardado tiene prioridad sobre `intersect-tip` e `intersect-point`, por lo que la sincronización comienza en el último bloque emitido guardado en el archivo. Si el archivo todavía no contiene un cursor, Adder utiliza la intersección configurada.
 
 Consulte la [referencia de comandos en español](/es/guides/adder/006-command_list/) para ver la entrada de `--input-chainsync-state-path` junto con las demás opciones de `ChainSync`.
