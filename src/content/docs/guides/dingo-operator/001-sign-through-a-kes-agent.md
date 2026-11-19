@@ -8,7 +8,7 @@ With a KES agent, the key stays in a Bursa KES agent instead. Dingo sends each
 block header to the agent over TLS, and the agent signs it. The keys Secret
 carries only the VRF key and the operational certificate.
 
-This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.25.0.
+This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
 
 ## How the parts connect
 
@@ -27,17 +27,17 @@ This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.25.0.
   `signingAgent` together with `rotation.mode: Auto`. Its Auto mode generates
   the KES key inside the operator, and that key would never reach the agent.
   Rotate the key by hand as described below.
-- **A TLS link to the agent.** Pin the agent's server key, and give the node a
-  client certificate when the agent requires one. A plain TCP link is
-  available for setups where something else secures the connection, such as a
-  service mesh.
+- **Bursa v0.26.0 or later.** The example uses per-profile signing pins,
+  which require TLS with verified client certificates. Pin the agent's server
+  key in Dingo and give the node a client certificate.
 
 ## Configure the agent
 
 Add the remote listener and one profile per pool to the agent's `kes_agent`
 configuration. Set `attested_client_ca_file` to the CA that issued the
-producer's client certificate, then add that certificate's public-key digest
-to each profile allowed to sign through the listener.
+producer's client certificate. Add the SHA-256 digest of that certificate's
+SubjectPublicKeyInfo (SPKI), written as 64 hexadecimal characters, to
+`sign_client_spki_sha256` in each profile that producer may use.
 
 ```yaml
 kes_agent:
@@ -53,6 +53,8 @@ kes_agent:
       system_start: "2022-10-25T00:00:00Z"
       slots_per_kes_period: 129600
       guard_file: /var/lib/bursa/pool-a.guard
+      sign_client_spki_sha256:
+        - "<64 hex characters from the producer client certificate>"
 ```
 
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
@@ -70,6 +72,14 @@ replace the guard files with a PostgreSQL store under `kes_agent.store` and set
 its `age_recipients` and `age_identity_file`. The agent then seals each
 profile's key in the database and loads it again at startup. This works with
 one replica, and it is also how several replicas share a key.
+
+Compute the producer's client pin from `client.crt`:
+
+```sh
+openssl x509 -in client.crt -pubkey -noout \
+  | openssl pkey -pubin -outform der \
+  | sha256sum
+```
 
 The agent logs its server key fingerprint at startup as `server_spki_sha256`.
 That value is the pin the node uses. You can also compute it from the server
