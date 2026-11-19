@@ -8,7 +8,7 @@ With a KES agent, the key stays in a Bursa KES agent instead. Dingo sends each
 block header to the agent over TLS, and the agent signs it. The keys Secret
 carries only the VRF key and the operational certificate.
 
-This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
+This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.25.0.
 
 ## How the parts connect
 
@@ -27,20 +27,17 @@ This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
   `signingAgent` together with `rotation.mode: Auto`. Its Auto mode generates
   the KES key inside the operator, and that key would never reach the agent.
   Rotate the key by hand as described below.
-- **A TLS 1.3 link with mutual client certificate verification.** Pin the
-  agent's server key and set `attested_client_ca_file` so the agent verifies
-  the node's client certificate. For profile-scoped remote signing, that
-  certificate's public key must match the selected profile's
-  `sign_client_spki_sha256` pin. Plain TCP and TLS without a verified client
-  certificate cannot open a pinned signing session.
+- **A TLS link to the agent.** Pin the agent's server key, and give the node a
+  client certificate when the agent requires one. A plain TCP link is
+  available for setups where something else secures the connection, such as a
+  service mesh.
 
 ## Configure the agent
 
 Add the remote listener and one profile per pool to the agent's `kes_agent`
 configuration. Set `attested_client_ca_file` to the CA that issued the
-producer's client certificate. For each profile allowed to sign through the
-listener, set `sign_client_spki_sha256` to that certificate's public-key
-digest.
+producer's client certificate, then add that certificate's public-key digest
+to each profile allowed to sign through the listener.
 
 ```yaml
 kes_agent:
@@ -53,18 +50,10 @@ kes_agent:
   profiles:
     - name: pool-a
       cold_vkey_hex: "<the pool's 32-byte cold verification key in hex>"
-      sign_client_spki_sha256: "<64 hex characters: SHA-256 SPKI digest of client certificate public key>"
       system_start: "2022-10-25T00:00:00Z"
       slots_per_kes_period: 129600
       guard_file: /var/lib/bursa/pool-a.guard
 ```
-
-`sign_client_spki_sha256` is a 64-character hexadecimal SHA-256 digest of the
-client certificate's `SubjectPublicKeyInfo` (SPKI), which identifies its public
-key. The agent admits a remote signing session only when the verified client
-certificate matches the selected profile's pin. A
-`control_client_spki_sha256` pin grants control access only; configure the
-signing pin separately.
 
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
 `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`,
