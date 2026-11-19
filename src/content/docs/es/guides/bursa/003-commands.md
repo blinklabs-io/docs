@@ -124,7 +124,7 @@ Los subcomandos disponibles son:
 - `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
 - `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
 
-El control remoto requiere que el listener atestado use TLS con verificación de certificados de cliente mediante `attested_client_ca_file`. El certificado del cliente debe coincidir, por su huella SPKI SHA-256, con `kes_agent.control_client_spki_sha256` del perfil autorizado. Una sesión remota de control solo admite `info`, `gen-staged-key` e `install-key`; `drop-key` solo funciona mediante el socket de control local. Un pin de control no concede autorización para firmar: la firma remota usa `sign_client_spki_sha256` por separado.
+El listener atestado debe usar TLS y verificar el certificado del cliente mediante `attested_client_ca_file`. Bursa compara la huella SHA-256 del SPKI del certificado con `kes_agent.control_client_spki_sha256` del perfil autorizado. Una sesión remota de control solo admite `info`, `gen-staged-key` e `install-key`; `drop-key` solo funciona mediante el socket de control local. Un pin de control no concede autorización para firmar: la firma remota usa `sign_client_spki_sha256` por separado.
 
 Cada subcomando imprime la respuesta del agente como JSON y codifica en hexadecimal los campos de bytes.
 
@@ -182,7 +182,7 @@ Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. 
 
 ### Construir una transacción
 
-`tx build` usa `--socket-path`, `--network` y solicita al nodo los parámetros del protocolo para construir una transacción de operación del pool. `--max-fee` establece la tarifa máxima en lovelace y usa `2_000_000` lovelace de forma predeterminada. Bursa rechaza la construcción cuando la tarifa mínima calculada a partir de los parámetros del nodo supera ese límite. Para aceptar una tarifa mayor, indica explícitamente un valor superior:
+`tx build` usa `--socket-path`, `--network` y solicita al nodo los parámetros del protocolo para construir una transacción de operación del pool. `--max-fee` establece la tarifa máxima en lovelace y usa `2_000_000` lovelace de forma predeterminada. Bursa rechaza la construcción cuando los parámetros del nodo producen una tarifa mínima superior a ese límite. Para aceptar una tarifa mayor, indica explícitamente un valor superior:
 
 ```sh
 ./bursa tx build \
