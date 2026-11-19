@@ -79,6 +79,10 @@ Add a backend entry under `signer.backends`, set its `type` to the selected back
 
 Profile routing applies to Confidential Space and SOPS backends. A request must select the matching profile. A request without a profile is usable only when one backend unambiguously holds the key. Each profile keeps independent counter and record scope. Nitro does not support `profile`; leave it unset.
 
+### Profile-bound inventory compatibility
+
+Armory and Confidential Space inventory evidence binds to a non-empty requested profile. The producer and verifier must use versions that support profile-bound inventory together; otherwise, inventory verification fails. Legacy unprofiled behavior remains available when the requested profile is empty. Nitro inventory remains unprofiled, so leave `profile` empty for Nitro; a configured Nitro profile is rejected for inventory.
+
 ### Nitro custody persistence
 
 The Nitro proxy role needs `secretsmanager:GetSecretValue`, `secretsmanager:DescribeSecret`, and `secretsmanager:PutSecretValue` while it serves. The proxy persists sealed counter state with every signature. A failed or timed out persistence write makes the proxy stop later signing until an operator restarts or reloads it; after recovery, the proxy accepts a retry only when the payload matches the payload at the stored counter.
@@ -200,6 +204,26 @@ signer:
       allowed_requests:
         - opcert
 ```
+
+Operational-certificate authorization also requires an explicit caller grant. List the cold key in the caller's `keys`, then list that same cold key under `opcerts[].key` with the exact staged KES verification keys that the caller may certify:
+
+```yaml
+signer:
+  callers:
+    - subject: producer.example
+      keys:
+        - "000000000000000000000000000000000000000000000000000000000000"
+      opcerts:
+        - key: "000000000000000000000000000000000000000000000000000000000000"
+          kes_vkeys:
+            - "staged-kes-verification-key"
+```
+
+| Configuration path | Requirement | Result when missing or invalid |
+| --- | --- | --- |
+| `signer.callers[].keys[]` | Include the cold key that the caller may use for operational certificates. | Bursa denies the caller's operational-certificate request. |
+| `signer.callers[].opcerts[].key` | Match a cold key in the same caller's `keys` list. | Bursa rejects the caller grant or denies the request. |
+| `signer.callers[].opcerts[].kes_vkeys[]` | List each exact staged KES verification key that the caller may certify. | An empty or missing list fails closed, and an unlisted KES verification key is denied. |
 
 ## Signer health endpoints
 
