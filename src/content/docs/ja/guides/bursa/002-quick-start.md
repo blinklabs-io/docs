@@ -58,7 +58,7 @@ LinuxまたはFreeBSDのCLIアーカイブを使用する場合は、Blinklabs�
 > ヒント: 最新のBursaリリースは<a href="https://github.com/blinklabs-io/bursa/releases" target="_blank">https://github.com/blinklabs-io/bursa/releases</a>ページからダウンロードできます。
 
 ```
-wget -O bursa-v0.23.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.23.0/bursa-v0.23.0-linux-amd64.tar.gz
+ wget -O bursa-v0.26.0-linux-amd64.tar.gz https://github.com/blinklabs-io/bursa/releases/download/v0.26.0/bursa-v0.26.0-linux-amd64.tar.gz
 tar xzf bursa-v0.23.0-linux-amd64.tar.gz
 ```
 
