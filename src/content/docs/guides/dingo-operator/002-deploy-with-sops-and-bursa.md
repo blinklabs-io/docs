@@ -560,24 +560,41 @@ stops forging when its certificate's KES periods run out. Steps 2 and 3 run on
 the offline machine, in a new, empty directory, and need the pool's `vrf.skey`
 there. Do the whole renewal in one sitting.
 
-1. On the deploy machine, read the node's current KES period and the pool's
-   on-chain certificate counter:
+1. On the deploy machine, read the node's current KES period, the pool's
+   on-chain certificate counter, and the `OnChainCounterAvailable` condition
+   that records the operator's last read of that counter:
 
    ```sh
    kubectl -n dingo get dingonode pool-a-producer \
      -o jsonpath='{.status.kes.currentPeriod} {.status.opcert.onChainCounter} {.status.opcert.onChainCounterAt}{"\n"}'
+   kubectl -n dingo get dingonode pool-a-producer \
+     -o jsonpath='{range .status.conditions[?(@.type=="OnChainCounterAvailable")]}{.status} {.reason}: {.message}{"\n"}{end}'
    ```
 
-   An empty counter means the operator has not read one: the node did not
-   answer, or the pool has not forged a block under any certificate yet.
-   `onChainCounterAt` shows when the counter was last read.
+   The status omits a counter of zero, so an empty counter does not say
+   whether the read succeeded. The condition does:
+
+   - `True` with reason `Observed`: the read at `onChainCounterAt` succeeded.
+     The message states the counter, and an empty counter is 0: the pool has
+     forged under a certificate with counter 0.
+   - `False` with reason `PoolNotOnChain`: the read succeeded, and the chain
+     has no counter for the pool, because it has not forged a block under any
+     certificate yet.
+   - `False` with any other reason, such as `QueryFailed`, `NodeNotReady` or
+     `Disabled`: the operator could not read the counter. A counter and
+     `onChainCounterAt` still shown are from an earlier read and can be behind
+     the chain. Fix the cause the message names, and wait for `Observed` or
+     `PoolNotOnChain` before you issue the certificate. The operator retries
+     the read every few minutes.
 
 2. On the offline machine, generate a new KES key pair as `kes.skey` and
    `kes.vkey`, and issue an operational certificate for `kes.vkey` with the
    decrypted cold key. Start it at the current KES period. The ledger accepts
    a counter equal to the pool's on-chain counter or one above it. Use one
-   above. When the pool has not forged a block since its current certificate
-   was issued, that is the current certificate's counter again:
+   above, so 1 when the read recorded 0. When the pool has not forged a block
+   since its current certificate was issued, that is the current
+   certificate's counter again. When the condition reason is
+   `PoolNotOnChain`, use the counter of the pool's current certificate:
 
    ```sh
    sops decrypt cold-keys/pool-a.skey.enc.json > cold.skey

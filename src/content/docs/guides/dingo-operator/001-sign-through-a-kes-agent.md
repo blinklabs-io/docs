@@ -196,9 +196,24 @@ after the agent has staged the key.
 2. Issue an operational certificate for `kes.vkey` with the pool's cold key,
    offline. Start it at the current KES period, which is the current slot
    divided by the slots per KES period. The ledger accepts a counter equal to
-   the pool's on-chain counter or one above it. Use one above. When the pool
-   has not forged a block since its current certificate was issued, that is
-   the current certificate's counter again:
+   the pool's on-chain counter or one above it. Use one above, so 1 when the
+   counter is 0. When the pool has not forged a block since its current
+   certificate was issued, that is the current certificate's counter again.
+
+   With `spec.blockProducer.nodeToClient.enabled` set to `true`, the operator
+   reads the on-chain counter into `status.opcert.onChainCounter`, which the
+   status omits when it is 0. Read it together with the
+   `OnChainCounterAvailable` condition, as in
+   [Renew a KES key in the keys Secret](/guides/dingo-operator/002-deploy-with-sops-and-bursa/#renew-a-kes-key-in-the-keys-secret).
+   `True` with reason `Observed` means the read at `onChainCounterAt`
+   succeeded, and an empty counter is 0. `False` with reason `PoolNotOnChain`
+   means the pool has not forged under any certificate yet: use the counter of
+   its current certificate. Any other reason, including `Disabled` when
+   node-to-client is off, means the operator has no current reading, and a
+   counter still shown can be behind the chain.
+   Without a reading, use the current certificate's counter plus one when the
+   pool has forged a block under that certificate, and the same counter when
+   it has not:
 
    ```sh
    bursa cert op-cert --kes-vkey kes.vkey --cold-skey cold.skey \
