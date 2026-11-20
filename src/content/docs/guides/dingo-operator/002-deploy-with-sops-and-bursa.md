@@ -370,18 +370,23 @@ Apply both kinds on every deploy. After each renewal, commit the new files to
 git. The operator validates the bundle and restarts the producer when it
 changes.
 
-For a new pool with its KES key in the Secret, use the pool's current KES key
-and certificate, or issue a new pair on the offline machine as in step 2 of
-[Renew a KES key in the keys Secret](#renew-a-kes-key-in-the-keys-secret).
+For a new pool with its KES key in the Secret, either write the pool's current
+KES key and certificate into the bundle, or issue a new pair as in steps 2 and
+3 of [Renew a KES key in the keys Secret](#renew-a-kes-key-in-the-keys-secret).
 Before the producer runs, the operator reports no KES period, so take the
 current KES period from the current slot divided by the slots per KES period.
-Then write all three files into the bundle:
+On the offline machine, write the bundle with all three files:
 
 ```sh
 kubectl -n dingo create secret generic pool-a-keys \
   --from-file=kes.skey --from-file=vrf.skey --from-file=node.cert \
   --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
 sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
+```
+
+On the deploy machine, after committing it:
+
+```sh
 sops decrypt dingo/keys/pool-a-keys.enc.yaml \
   | kubectl apply --server-side --force-conflicts -f -
 ```
@@ -551,11 +556,12 @@ due for renewal, reports it there.
 
 Renew a pool whose KES key is in its keys Secret once its `RotationDue`
 condition is `True`, and before `REMAINING-KES` reaches zero: the producer
-stops forging when its certificate's KES periods run out. Do each renewal in
-one sitting, in a new, empty directory on the offline machine.
+stops forging when its certificate's KES periods run out. Steps 2 and 3 run on
+the offline machine, in a new, empty directory, and need the pool's `vrf.skey`
+there. Do the whole renewal in one sitting.
 
-1. Read the node's current KES period and the pool's on-chain certificate
-   counter:
+1. On the deploy machine, read the node's current KES period and the pool's
+   on-chain certificate counter:
 
    ```sh
    kubectl -n dingo get dingonode pool-a-producer \
@@ -580,21 +586,29 @@ one sitting, in a new, empty directory on the offline machine.
      --out node.cert
    ```
 
-   Delete `cold.skey` once the certificate is written.
-
-3. Write the new `kes.skey` and `node.cert`, with the pool's existing
-   `vrf.skey`, into the keys Secret, commit it, and apply it:
+3. Still on the offline machine, write the new `kes.skey` and `node.cert`,
+   with the pool's `vrf.skey`, into the keys Secret manifest and encrypt it.
+   Neither step needs the cluster, and SOPS encrypts to the deploy recipient
+   in `.sops.yaml`:
 
    ```sh
    kubectl -n dingo create secret generic pool-a-keys \
      --from-file=kes.skey --from-file=vrf.skey --from-file=node.cert \
      --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
    sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
+   ```
+
+   Then delete `cold.skey`, `kes.skey` and `vrf.skey`, so no key leaves the
+   offline machine unencrypted, and commit the encrypted file.
+
+4. On the deploy machine, apply the committed file:
+
+   ```sh
    sops decrypt dingo/keys/pool-a-keys.enc.yaml \
      | kubectl apply --server-side --force-conflicts -f -
    ```
 
-4. The operator validates the new bundle, including the certificate's
+   The operator validates the new bundle, including the certificate's
    signature, pool, counter and KES period, and rolls the producer onto it. It
    refuses to roll onto a bundle that fails, and reports why in the `KeysValid`
    condition. Once the producer has restarted,
