@@ -8,7 +8,7 @@ With a KES agent, the key stays in a Bursa KES agent instead. Dingo sends each
 block header to the agent over TLS, and the agent signs it. The keys Secret
 carries only the VRF key and the operational certificate.
 
-This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
+This page covers dingo-operator v0.5.0, Dingo v0.94.2, and Bursa v0.26.0.
 
 ## How the parts connect
 
@@ -20,24 +20,35 @@ This page covers dingo-operator v0.2.0, Dingo v0.94.0, and Bursa v0.26.0.
 
 ## Requirements
 
-- **Dingo v0.94.0 or later.** dingo-operator v0.2.0 refuses Dingo images older
+- **Dingo v0.94.0 or later.** dingo-operator v0.5.0 refuses Dingo images older
   than v0.93.0 when `signingAgent` is set. Agent profiles, which let one agent
   serve several pools, need v0.94.0. Set `spec.image.tag` explicitly.
-- **Rotation mode `Assisted` or `MonitorOnly`.** dingo-operator v0.2.0 refuses
-  `signingAgent` together with `rotation.mode: Auto`. Its Auto mode generates
-  the KES key inside the operator, and that key would never reach the agent.
-  Rotate the key by hand as described below.
-- **Bursa v0.26.0 or later.** The example uses per-profile signing pins,
-  which require TLS with verified client certificates. Pin the agent's server
-  key in Dingo and give the node a client certificate.
+  Dingo v0.94.0 refuses a socket directory that group or other can write, so
+  use dingo-operator v0.4.0 or later, which puts Dingo's socket in a directory
+  of its own.
+- **Rotation mode `Assisted` or `MonitorOnly`.** This guide rotates the key by
+  hand, as described below. `MonitorOnly` is the default. dingo-operator v0.5.0
+  also accepts `Auto` with `signingAgent`, when `controlClientCertSecretRef`,
+  `serverSpkiSha256` and `rotation.reloadInPlace` are set. The operator then
+  rotates the key through the agent's control role. With the Bursa v0.26.0
+  signer as the cold signer, that rotation cannot issue until
+  [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
+  is resolved. This guide does not cover that setup.
+- **A mutual TLS link to the agent.** Bursa v0.26.0 admits a producer only
+  when its client certificate is verified and its key is pinned for the
+  profile. Give the node a client certificate, and pin the agent's server key
+  unless the agent's certificate chains to a root in the Dingo image:
+  dingo-operator v0.5.0 has no setting that adds a private CA. A plain TCP
+  link cannot admit a signing session, so the agent refuses it even where
+  something else, such as a service mesh, secures the connection.
 
 ## Configure the agent
 
 Add the remote listener and one profile per pool to the agent's `kes_agent`
-configuration. Set `attested_client_ca_file` to the CA that issued the
-producer's client certificate. Add the SHA-256 digest of that certificate's
-SubjectPublicKeyInfo (SPKI), written as 64 hexadecimal characters, to
-`sign_client_spki_sha256` in each profile that producer may use.
+configuration. The listener requires TLS 1.3. A profile admits a producer only
+when `attested_client_ca_file` verifies its client certificate and the SHA-256
+digest of the certificate's public key is in the profile's
+`sign_client_spki_sha256`. An empty list admits no producer.
 
 ```yaml
 kes_agent:
@@ -54,13 +65,14 @@ kes_agent:
       slots_per_kes_period: 129600
       guard_file: /var/lib/bursa/pool-a.guard
       sign_client_spki_sha256:
-        - "<64 hex characters from the producer client certificate>"
+        - "<64 hex characters, the producer client certificate's pin>"
 ```
 
 With `profiles` set, leave the single-pool fields (`cold_vkey_file`,
 `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`,
-`slots_per_kes_period`, `max_clock_skew`, `guard_file`) unset at the top level,
-and leave `slot_length` and `max_kes_evolutions` at their defaults. Set them in
+`slots_per_kes_period`, `max_clock_skew`, `guard_file`,
+`control_client_spki_sha256`, `sign_client_spki_sha256`) unset at the top
+level, and leave `slot_length` and `max_kes_evolutions` at their defaults. Set them in
 each profile instead. See [Profiles](/guides/bursa/009-configuration-reference/#profiles).
 
 With guard files, the agent keeps each KES key in memory only. A guard file
@@ -91,6 +103,9 @@ openssl x509 -in tls.crt -pubkey -noout \
   | sha256sum
 ```
 
+Compute each `sign_client_spki_sha256` entry the same way, from the
+producer's client certificate.
+
 ## Configure the DingoNode
 
 Create two Secrets in the same namespace as the `DingoNode` resource. The
@@ -102,7 +117,8 @@ whichever namespace your `DingoNode` runs in.
   Dingo Helm chart uses. Leave `kes.skey` out: a node that signs through an
   agent does not use a local KES key, and the operator reports one as ignored.
 - The client certificate Secret holds `tls.crt` and `tls.key`, issued by the
-  CA in the agent's `attested_client_ca_file`.
+  CA in the agent's `attested_client_ca_file`. Its public key is the one in
+  `sign_client_spki_sha256`.
 
 ```sh
 kubectl -n cardano create secret generic producer-pool-keys \
@@ -123,7 +139,7 @@ spec:
   role: blockProducer
   network: preview
   image:
-    tag: "0.94.0"
+    tag: "0.94.2"
   environment:
     # The agent profile this pool signs under.
     CARDANO_SHELLEY_KES_AGENT_PROFILE: pool-a
@@ -180,9 +196,24 @@ after the agent has staged the key.
 2. Issue an operational certificate for `kes.vkey` with the pool's cold key,
    offline. Start it at the current KES period, which is the current slot
    divided by the slots per KES period. The ledger accepts a counter equal to
-   the pool's on-chain counter or one above it. Use one above. When the pool
-   has not forged a block since its current certificate was issued, that is
-   the current certificate's counter again:
+   the pool's on-chain counter or one above it. Use one above, so 1 when the
+   counter is 0. When the pool has not forged a block since its current
+   certificate was issued, that is the current certificate's counter again.
+
+   With `spec.blockProducer.nodeToClient.enabled` set to `true`, the operator
+   reads the on-chain counter into `status.opcert.onChainCounter`, which the
+   status omits when it is 0. Read it together with the
+   `OnChainCounterAvailable` condition, as in
+   [Renew a KES key in the keys Secret](/guides/dingo-operator/002-deploy-with-sops-and-bursa/#renew-a-kes-key-in-the-keys-secret).
+   `True` with reason `Observed` means the read at `onChainCounterAt`
+   succeeded, and an empty counter is 0. `False` with reason `PoolNotOnChain`
+   means the pool has not forged under any certificate yet: use the counter of
+   its current certificate. Any other reason, including `Disabled` when
+   node-to-client is off, means the operator has no current reading, and a
+   counter still shown can be behind the chain.
+   Without a reading, use the current certificate's counter plus one when the
+   pool has forged a block under that certificate, and the same counter when
+   it has not:
 
    ```sh
    bursa cert op-cert --kes-vkey kes.vkey --cold-skey cold.skey \
