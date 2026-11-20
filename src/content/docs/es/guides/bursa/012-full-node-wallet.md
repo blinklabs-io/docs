@@ -46,7 +46,15 @@ bursa-wallet --network musashi
 
 Las redes admitidas son `mainnet`, `preprod`, `preview`, `musashi` y `dijkstra`. Bursa selecciona la red en este orden: primero `-n` o `--network`, después `BURSA_NETWORK` y, si ambos faltan, `preview`; por tanto, la opción de línea de comandos tiene prioridad sobre `BURSA_NETWORK`. Bursa rechaza los nombres de red desconocidos y los argumentos posicionales adicionales, por lo que la billetera no se inicia en esos casos.
 
-La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento de sesión permite que la interfaz intercambie el token una sola vez mediante `POST /session` por la cookie HttpOnly `bursa-control-session` y después elimine el fragmento del historial del navegador. La billetera escucha en loopback, en `127.0.0.1:8090`.
+La versión de escritorio abre una ventana nativa. La versión sin ventana nativa sirve la interfaz en loopback, en `127.0.0.1:8090`; abre en el navegador la URL completa y autenticada que imprime el proceso, con un formato similar a `http://127.0.0.1:<puerto>/#session=<token>`. El fragmento `#session=...` establece una capacidad de sesión local al proceso: la interfaz extrae el valor, elimina el fragmento del historial y lo envía en la cabecera `X-Bursa-Session` de `POST /session`; después usa esa cabecera en las solicitudes protegidas. La sesión permanece solo en la memoria de la interfaz. Una recarga de la página elimina la sesión en memoria; después, hay que volver a abrir la URL completa de lanzamiento o reiniciar la billetera de escritorio para establecer una sesión nueva. La billetera escucha en loopback, en `127.0.0.1:8090`.
+
+### Autorización del conector
+
+La clave pública de la extensión identifica el emparejamiento. La confirmación requiere comparar la huella o el código que muestra la extensión con el código de confirmación de Bursa Settings para verificar que la autorización corresponde a la extensión esperada.
+
+Para cada solicitud, el conector obtiene un desafío nuevo y de un solo uso. Firma el desafío para esa solicitud usando el método HTTP, la ruta y el cuerpo exactos, y envía el desafío en `X-Bursa-Challenge` junto con la firma en `X-Bursa-Signature`. Bursa ya no acepta `X-Bursa-Token`.
+
+El flujo de eventos del conector usa tickets de evento de corta duración y de un solo uso. Al reconectar, el conector obtiene un ticket nuevo. Al quitar o reemplazar el emparejamiento, Bursa invalida de inmediato y de forma permanente la autorización anterior y cualquier trabajo pendiente del conector.
 
 La primera ejecución sincroniza el nodo integrado. El modo predeterminado `mithril` arranca desde una instantánea cuando la red seleccionada tiene configuración de agregador de Mithril; de lo contrario, Bursa omite el arranque de Mithril y sincroniza desde la génesis. `musashi` y `dijkstra` no tienen configuración de agregador de Mithril. `BURSA_SYNC=genesis` también fuerza la sincronización desde la génesis. La billetera conserva sus datos bajo `~/.bursa-wallet/<network>/`.
 

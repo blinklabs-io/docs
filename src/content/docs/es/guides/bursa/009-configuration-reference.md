@@ -86,6 +86,16 @@ Una entrada de backend en `signer.backends` selecciona el backend mediante `type
 Cuando una misma clave fría aparece en varios backends con perfiles, cada backend debe tener un perfil distinto. Bursa enruta una solicitud al backend cuyo perfil coincide con el perfil de la solicitud y conserva por separado los registros de contador y de emisión de cada perfil. Una solicitud sin perfil usa el único backend que contiene la clave; Bursa rechaza una solicitud sin perfil cuando existen varios titulares.
 
 Los backends `confidential-space` y `sops` aceptan perfiles. El backend Nitro no implementa perfiles y debe dejar `signer.backends[].profile` sin establecer.
+Los inventarios de `armory` y `confidential-space` con un `profile` no vacío vinculan la evidencia de inventario al perfil seleccionado, además del nonce y la lista de claves. Bursa rechaza la evidencia producida para otro perfil. Los productores y verificadores que usan perfiles deben actualizarse juntos; mezclar el comportamiento heredado sin perfil con la evidencia vinculada a un perfil provoca un fallo de verificación. Un perfil vacío conserva el comportamiento heredado. Nitro debe mantener `signer.backends[].profile` vacío; Bursa rechaza el inventario de Nitro cuando se configura un perfil.
+
+### Métricas
+
+| Ruta de configuración | Variable de entorno | Valor predeterminado | Uso y validación |
+| --- | --- | --- | --- |
+| `metrics.address` | `METRICS_LISTEN_ADDRESS` | `127.0.0.1` | Dirección de escucha del endpoint de métricas y salud. Un valor vacío hace que Bursa use `127.0.0.1`. Bursa admite hosts explícitos, incluidos `0.0.0.0` y la dirección IP del pod. No incluya un puerto en este valor; Bursa rechaza un host que contenga un puerto. |
+| `metrics.port` | `METRICS_LISTEN_PORT` | `8081` | Puerto de escucha del endpoint de métricas y salud. El valor `0` deshabilita el listener. |
+
+El subcomando `bursa kes-agent ready` consulta el listener local. Cuando la configuración usa una dirección comodín, el comando consulta loopback; con otra dirección explícita consulta esa dirección. El comando omite los proxies configurados en el entorno. Si `metrics.port` es `0`, el agente no ofrece un endpoint de disponibilidad y el subcomando no puede marcarlo como listo.
 
 ### Autenticación JWT del firmante
 
@@ -115,6 +125,7 @@ La carga de trabajo lee el secreto una vez, al iniciar, y a partir de entonces m
 La carga de trabajo sella cada registro de contador con una clave derivada de la clave de cifrado de datos de la clave envuelta, que desenvuelve mediante Cloud KMS, y vincula el registro a la clave de pool, al nombre de la clave de KMS y a su perfil. Un registro alterado o movido a otro perfil detiene el inicio. Cada certificado operativo que emite la carga de trabajo añade una nueva versión del secreto antes de devolver el certificado; repetir la solicitud `opcert-next` ya registrada no escribe nada. Después de cada escritura, la carga de trabajo destruye las versiones habilitadas anteriores. Un fallo al destruir se registra y se reintenta en la siguiente escritura. Un fallo de escritura detiene las firmas posteriores hasta que la carga de trabajo se reinicia y vuelve a cargar la versión más reciente.
 
 Secret Manager no puede añadir una versión de forma condicional, así que ejecuta exactamente una carga de trabajo por secreto. La marca de agua del firmante en modo `enforce`, y no el secreto, es la autoridad que rechaza un contador reemitido, también después de restaurar el secreto a una versión anterior; en modo `warn` u `off` nada lo rechaza. Nunca restaures el secreto a una versión anterior ni lo elimines para una clave de pool existente.
+En una importación de claves por perfil, la envoltura `bursa-confidential-space-key/3` guarda una clave de pool distinta para cada perfil importado. Al iniciar, el conjunto de valores de `--profile` debe coincidir exactamente con el conjunto importado. Bursa rechaza el inicio sin perfiles o con perfiles ausentes o adicionales. Las versiones anteriores no pueden leer la envoltura `/3`. Una importación con clave compartida puede atender varios perfiles sin usar esa envoltura. Para añadir un perfil que no se importó, indícalo con `--create-profile-counter`.
 
 Con `--tls-secret`, la carga de trabajo lee su certificado HTTPS de otro secreto de Secret Manager. La versión más reciente contiene un único paquete PEM: la cadena de certificados, con el certificado de entidad final (leaf) primero, y exactamente una clave, sin nada más que espacios en blanco entre los bloques. La carga de trabajo lee la versión `latest` una sola vez al iniciar, así que rotar el certificado requiere una versión nueva y un reinicio, y una versión más reciente deshabilitada detiene el inicio en lugar de volver a una anterior. El alias `latest` tiene consistencia eventual, así que un reinicio poco después de añadir la versión nueva todavía puede cargar el certificado anterior; comprueba que la carga de trabajo presenta el certificado nuevo y, si no es así, reiníciala de nuevo. El inicio también se detiene si el paquete está vacío, no es PEM, contiene otro tipo de bloque o su clave no coincide con el certificado de entidad final. Concede al principal de la carga de trabajo solo `secretmanager.versions.access` sobre ese secreto.
 
@@ -184,9 +195,9 @@ export BURSA_SIGNER_WATERMARK_DSN='postgres://bursa@db.example.com:5432/bursa?ss
 
 ### Sondeos de salud y disponibilidad
 
-`/healthz` solo comprueba que el proceso está vivo y devuelve HTTP `200`. `/readyz` comprueba el almacén de marcas de agua configurado y aplica un tiempo de espera de tres segundos.
+`/healthz` solo comprueba que el proceso está vivo y devuelve HTTP `200`. El firmante ejecuta la comprobación de disponibilidad de `/readyz` en segundo plano cada `10s`, con un límite de `3s`, y cada solicitud devuelve el resultado reciente almacenado en caché. La comprobación inicial permanece pendiente y `/readyz` devuelve HTTP `503` hasta que termina.
 
-Con SQLite o PostgreSQL, `/readyz` verifica que el almacén esté disponible y acepte operaciones de escritura. Devuelve HTTP `200` cuando la comprobación tiene éxito y HTTP `503` cuando el almacén no está disponible o no permite escribir. El almacenamiento en memoria no tiene una dependencia externa, por lo que `/readyz` devuelve HTTP `200` en ese modo.
+Con SQLite o PostgreSQL, la comprobación verifica que el almacén esté disponible y acepte operaciones de escritura. `/readyz` devuelve HTTP `200` cuando el resultado almacenado sigue siendo válido y HTTP `503` cuando el almacén no está disponible, cuando la comprobación falla o cuando el resultado queda obsoleto. El almacenamiento en memoria no tiene una dependencia externa, por lo que `/readyz` devuelve HTTP `200` en ese modo. Las solicitudes repetidas de `/readyz` no generan una escritura de marca de agua por solicitud.
 
 ## Archivo de configuración de `kes-agent`
 
@@ -250,10 +261,14 @@ Configure `kes_agent.attested_listen_address` para ofrecer el modo `sign` por TC
 | `kes_agent.attested_tls_key_file` | `KESAGENT_ATTESTED_TLS_KEY_FILE` | `""` | Clave privada TLS del servidor para el listener remoto. Requerida junto con `attested_tls_cert_file` salvo que `attested_plaintext` sea `true`. En Unix, Bursa rechaza un archivo de clave que conceda acceso al grupo o a otros usuarios. |
 | `kes_agent.attested_client_ca_file` | `KESAGENT_ATTESTED_CLIENT_CA_FILE` | `""` | Opcional. Archivo PEM con los certificados de CA que verifican los certificados de cliente del productor. Con este valor, cada conexión debe presentar un certificado de cliente que esta CA verifique; sin él, el listener no solicita certificados de cliente. El archivo debe contener al menos un certificado. |
 | `kes_agent.attested_plaintext` | `KESAGENT_ATTESTED_PLAINTEXT` | `false` | Sirve el listener remoto por TCP sin TLS. Con `true`, deje sin configurar `attested_tls_cert_file`, `attested_tls_key_file` y `attested_client_ca_file`. |
+| `kes_agent.control_client_spki_sha256` | `KESAGENT_CONTROL_CLIENT_SPKI_SHA256` | `[]` | Lista los resúmenes SHA-256 de SPKI de los certificados de cliente autorizados para abrir sesiones remotas de control del perfil único. Cada valor debe tener exactamente 64 caracteres hexadecimales. Requiere `attested_listen_address` con `attested_client_ca_file`; Bursa rechaza la configuración con `attested_plaintext` o sin verificación de certificados de cliente. |
+| `kes_agent.sign_client_spki_sha256` | `KESAGENT_SIGN_CLIENT_SPKI_SHA256` | `[]` | Lista los resúmenes SHA-256 de SPKI de los certificados de cliente autorizados para abrir sesiones remotas de firma del perfil único. Cada valor debe tener exactamente 64 caracteres hexadecimales. Requiere `attested_listen_address` con `attested_client_ca_file`; Bursa rechaza la configuración con `attested_plaintext` o sin verificación de certificados de cliente. |
 | `kes_agent.attestation_provider` | `KESAGENT_ATTESTATION_PROVIDER` | `""` | Requerido cuando se configura `attested_listen_address`. Nombra el verificador de atestación que debe usar el productor. El proveedor `none` no envía evidencia de atestación. |
 | `kes_agent.attester_address` | `KESAGENT_ATTESTER_ADDRESS` | `""` | Adaptador de atestación dentro de la carga de trabajo protegida que produce evidencia vinculada a un nonce. Requerido para todos los proveedores excepto `none`, que lo rechaza. Use una URL `https://`, una URL `http://` de loopback o una URL de socket `unix://`. |
 
 Con TLS, el listener requiere TLS 1.3 y un certificado y una clave. Al iniciar, el agente registra como `server_spki_sha256` la huella SHA-256 de la clave pública del certificado que sirve; un productor puede fijar ese valor. Con `attested_plaintext`, el agente no autentica al par remoto. Bursa termina al iniciar cuando un valor del listener remoto no es válido.
+
+Las listas `control_client_spki_sha256` y `sign_client_spki_sha256` conceden autoridades independientes. La primera permite, después de la atestación, las operaciones remotas `info`, `gen-staged-key` e `install-key`; no permite firmar y `drop-key` permanece disponible solo mediante el socket de control local. La segunda limita las sesiones remotas de firma al perfil que contiene el resumen SPKI coincidente. Para admitir cualquiera de estas identidades fijadas, Bursa requiere un listener TLS que verifique el certificado del cliente con `attested_client_ca_file`; el listener en texto plano y TLS sin verificación del cliente no pueden admitir clientes fijados.
 
 ```yaml
 kes_agent:
@@ -282,6 +297,8 @@ Configure `kes_agent.profiles` para atender varios pools desde un agente, en una
 | `kes_agent.profiles[].max_kes_evolutions` | Número máximo de evoluciones del certificado operativo. | El valor predeterminado es `62`. |
 | `kes_agent.profiles[].max_clock_skew` | Indica cuánto puede adelantarse el slot de un encabezado al reloj del agente antes de que `sign` lo rechace. | El valor predeterminado es `5s`; use una duración de Go positiva. |
 | `kes_agent.profiles[].guard_file` | Guarda el guardia monótono de periodos KES del perfil en esta ruta persistente. | Requerido con el almacén de archivos predeterminado; déjelo sin configurar con un [almacén compartido](#almacén-compartido). Cada perfil necesita su propio archivo. |
+| `kes_agent.profiles[].control_client_spki_sha256` | Lista los resúmenes SHA-256 de SPKI de los certificados de cliente autorizados para el control remoto de este perfil. | Cada valor debe tener exactamente 64 caracteres hexadecimales. Requiere TLS con verificación mediante `attested_client_ca_file`; no funciona con texto plano ni con TLS sin verificación del cliente. |
+| `kes_agent.profiles[].sign_client_spki_sha256` | Lista los resúmenes SHA-256 de SPKI de los certificados de cliente autorizados para la firma remota de este perfil. | Cada valor debe tener exactamente 64 caracteres hexadecimales. Requiere TLS con verificación mediante `attested_client_ca_file`; no funciona con texto plano ni con TLS sin verificación del cliente. |
 
 Cuando se configura `profiles`, deje sin configurar los campos de un solo pool del nivel superior: `cold_vkey_file`, `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew` y `guard_file`. Deje `slot_length` y `max_kes_evolutions` en sus valores predeterminados `1` y `62`. Bursa rechaza el inicio cuando se configura cualquiera de estos campos del nivel superior y pide el valor en cada perfil.
 
@@ -440,6 +457,22 @@ signer:
 | --- | --- | --- |
 | `signer.keys[].allowed_requests: [opcert]` | `POST /v1/sign` con `type: opcert` | Permite la firma del certificado operativo. |
 | Política ausente o lista sin `opcert` | `POST /v1/sign` con `type: opcert` | Bursa deniega la operación. |
+
+Para emitir un certificado operativo, el llamador también necesita una concesión explícita para la clave fría y para la clave de verificación KES exacta que solicita:
+
+```yaml
+signer:
+  callers:
+    - subject: caller-subject
+      keys:
+        - "00000000000000000000000000000000000000000000000000000000"
+      opcerts:
+        - key: "00000000000000000000000000000000000000000000000000000000"
+          kes_vkeys:
+            - "1111111111111111111111111111111111111111111111111111111111111111"
+```
+
+Cada `opcerts[].key` debe aparecer también en `signer.callers[].keys`. `kes_vkeys` debe enumerar de forma explícita las claves de verificación KES que ese llamador puede certificar; una lista vacía no es válida. Bursa deniega la solicitud si la clave fría o la clave de verificación KES exacta no aparece en la concesión.
 
 ### Restricciones de transacciones por llamador
 

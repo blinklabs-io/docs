@@ -85,6 +85,14 @@ its `age_recipients` and `age_identity_file`. The agent then seals each
 profile's key in the database and loads it again at startup. This works with
 one replica, and it is also how several replicas share a key.
 
+Compute the producer's client pin from `client.crt`:
+
+```sh
+openssl x509 -in client.crt -pubkey -noout \
+  | openssl pkey -pubin -outform der \
+  | sha256sum
+```
+
 The agent logs its server key fingerprint at startup as `server_spki_sha256`.
 That value is the pin the node uses. You can also compute it from the server
 certificate:
@@ -236,3 +244,14 @@ certificate, so the node cannot sign until it has switched over:
 
 In the reverse order, the Secret would hold a certificate the agent does not
 serve yet, and a restart in between would leave the node unable to sign.
+
+
+---
+
+<!-- doc-holiday-watermark -->
+<p align="center">
+  <a href="https://doc.holiday">
+    <img alt="Doc Holiday logo" src="https://doc.holiday/assets/docs-by-doc-holiday.png" width="200">
+  </a>
+</p>
+<p align="center">Docs authored by <a href="https://doc.holiday">Doc Holiday</a></p>

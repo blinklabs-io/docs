@@ -20,7 +20,7 @@ Actualmente hay 11 categorías de comandos que Bursa puede ejecutar, lo que la c
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
-> 9. [tx](#tx) - Operaciones de transacciones sin conexión
+> 9. [tx](#tx) - Operaciones de transacciones
 > 10. [sign](#sign) - Firma y verificación de mensajes CIP-8/CIP-30
 > 11. [signer](#signer) - Servicio de firma remota
 
@@ -124,6 +124,8 @@ Los subcomandos disponibles son:
 - `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
 - `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
 
+El listener atestado debe usar TLS y verificar el certificado del cliente mediante `attested_client_ca_file`. Bursa compara la huella SHA-256 del SPKI del certificado con `kes_agent.control_client_spki_sha256` del perfil autorizado. Una sesión remota de control solo admite `info`, `gen-staged-key` e `install-key`; `drop-key` solo funciona mediante el socket de control local. Un pin de control no concede autorización para firmar: la firma remota usa `sign_client_spki_sha256` por separado.
+
 Cada subcomando imprime la respuesta del agente como JSON y codifica en hexadecimal los campos de bytes.
 
 El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación detiene de inmediato la lectura o escritura bloqueada del socket.
@@ -139,9 +141,9 @@ La rotación de una clave KES sigue este orden: generar la clave staged, emitir 
 
 <a name="tx"></a>
 
-## Operaciones de transacciones sin conexión
+## Operaciones de transacciones
 
-Los comandos `tx` inspeccionan y firman una transacción existente sin conectarse a un nodo. Proporciona `unsigned.tx` como CBOR hexadecimal o como un sobre de texto JSON que contenga `cborHex`:
+Los comandos `tx decode`, `tx id`, `tx sign`, `tx witness` y `tx assemble` inspeccionan o firman una transacción existente sin conectarse a un nodo. `tx build` se conecta al nodo mediante su socket y usa los parámetros del protocolo que proporciona el nodo. Proporciona `unsigned.tx` como CBOR hexadecimal o como un sobre de texto JSON que contenga `cborHex`:
 
 ```sh
 ./bursa tx decode --tx-file unsigned.tx
@@ -177,6 +179,19 @@ El comando de creación de testigos escribe estos sobres de texto JSON:
 Bursa escribe los sobres en `--out-file`, o en la salida estándar si se omite. Repite `--witness-file` para incluir más testigos. `tx decode --protocol-params protocol-parameters.json` también estima la tarifa mínima a partir de un archivo JSON de parámetros del protocolo Cardano. Consulta las opciones con `./bursa tx --help` y el `--help` de cada subcomando.
 
 Las rutas `/api/tx/sign` y `/api/tx/assemble` resuelven la era desde `tx_cbor`. Cuando el CBOR sin era o el sobre sin era corresponde a varias eras, el cliente debe enviar `tx_cbor` como un sobre de texto cuyo tipo declare la era, como `Tx ConwayEra`; de lo contrario, la solicitud devuelve HTTP `400` con instrucciones para corregir el formato.
+
+### Construir una transacción
+
+`tx build` usa `--socket-path`, `--network` y solicita al nodo los parámetros del protocolo para construir una transacción de operación del pool. `--max-fee` establece la tarifa máxima en lovelace y usa `2_000_000` lovelace de forma predeterminada. Bursa rechaza la construcción cuando los parámetros del nodo producen una tarifa mínima superior a ese límite. Para aceptar una tarifa mayor, indica explícitamente un valor superior:
+
+```sh
+./bursa tx build \
+  --socket-path /run/cardano/node.socket \
+  --network mainnet \
+  --change-address "$CHANGE_ADDRESS" \
+  --max-fee 3000000 \
+  --out-file unsigned.tx
+```
 
 <a name="sign"></a>
 
@@ -291,7 +306,28 @@ Ejecuta el cliente de importación en la máquina que guarda la clave fría:
 
 El cliente verifica el token de atestación de la carga de trabajo, incluidos la audiencia y el digest de la imagen, antes de sellar la clave para la carga de trabajo y enviarla. `--signing-key-file` debe ser el archivo `StakePoolSigningKey_ed25519` no extendido y debe derivar la clave de `--vkey-file`. `--authority-key-file` contiene la semilla Ed25519 en hexadecimal de la autoridad de aprovisionamiento. Cada `--profile` es `NAME=NEXT`, donde `NEXT` es el siguiente número de emisión de certificado operativo que ese perfil puede firmar: uno más que el número de emisión más alto firmado con ese perfil, esté o no en la cadena, y nunca menor que el contador en cadena del pool en la red de ese perfil más uno. Usa `0` para un perfil que nunca ha emitido. Deja primero de emitir certificados con el firmante anterior; la carga de trabajo no puede corregir `NEXT` después de la importación.
 
-Después de la importación, inicia la carga de trabajo sin `--import` y con una opción `--profile` por cada perfil importado. Un perfil servido que no se importó detiene el inicio, salvo que `--create-profile-counter` lo nombre, como en el modo de Cloud Storage.
+Para compartir una sola clave entre todos los perfiles, usa una ruta normal para `--signing-key-file` y otra para `--vkey-file`, como en el ejemplo anterior. Para asignar una clave distinta a cada perfil, repite ambas opciones con entradas `NAME=FILE` que usen exactamente los mismos nombres de perfil:
+
+```sh
+./bursa confidential-space import \
+  --address https://workload.example.internal:8080 \
+  --tls-ca-file ca.pem \
+  --tls-client-cert-file client.pem \
+  --tls-client-key-file client-key.pem \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --image-digest sha256:IMAGE_DIGEST \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --signing-key-file pool@mainnet=pool-mainnet-cold.skey \
+  --signing-key-file pool@preview=pool-preview-cold.skey \
+  --vkey-file pool@mainnet=pool-mainnet-cold.vkey \
+  --vkey-file pool@preview=pool-preview-cold.vkey \
+  --authority-key-file import-authority.key \
+  --profile pool@mainnet=8 --profile pool@preview=0
+```
+
+No mezcles rutas normales con entradas `NAME=FILE`. Cada perfil debe aparecer exactamente una vez en ambas opciones de claves, y las claves de perfiles distintos deben ser diferentes. Si una ruta contiene `=`, antepón `./` para que Bursa la trate como una ruta normal.
+
+Después de la importación, inicia la carga de trabajo sin `--import` y con una opción `--profile` por cada perfil importado. En un estado con varias claves, el conjunto de perfiles de las opciones `--profile` debe coincidir exactamente con el conjunto importado: un inicio sin perfiles, con perfiles omitidos o con perfiles adicionales falla, y `--create-profile-counter` no cambia esta regla. Esta importación multiclave crea un estado que las versiones anteriores de Bursa no pueden leer.
 
 ### Custodia Nitro
 
@@ -333,7 +369,7 @@ Explora otros comandos de Bursa
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Comandos para operaciones multifirma
 > 7. [address](../007-address-commands) - Comandos para trabajar con direcciones de Cardano
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Comandos para derivar claves individuales a partir de una mnemónica
-> 9. [tx](#tx) - Operaciones de transacciones sin conexión
+> 9. [tx](#tx) - Operaciones de transacciones
 > 10. [sign](#sign) - Firma y verificación de mensajes CIP-8/CIP-30
 > 11. [signer](#signer) - Servicio de firma remota
 

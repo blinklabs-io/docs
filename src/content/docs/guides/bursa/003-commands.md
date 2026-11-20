@@ -18,7 +18,7 @@ There are currently 11 categories of commands that Bursa can run which makes it 
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 7. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-> 9. [tx](#tx) - Offline transaction operations
+> 9. [tx](#tx) - Transaction operations
 > 10. [sign](#sign) - CIP-8/CIP-30 message signing and verification
 > 11. [signer](#signer) - Remote signing service
 
@@ -124,6 +124,8 @@ The control command provides these subcommands:
 
 The command prints agent replies as JSON and represents byte fields as hexadecimal. An agent refusal causes a non-zero CLI exit. Each control request has a 30-second limit, and cancellation ends blocked socket I/O promptly.
 
+The local control socket accepts all four commands. The attested listener admits remote control only over TLS with verified client certificates and a client certificate SPKI fingerprint that matches the configured `control_client_spki_sha256` for the selected profile. Admitted remote control provides `info`, `gen-staged-key`, and `install-key`; `drop-key` remains local-only. A control pin does not authorize remote signing, which requires the separate `sign_client_spki_sha256` authorization.
+
 Rotate a KES key in three steps:
 
 1. Generate the staged key and write its verification key to an envelope:
@@ -145,9 +147,9 @@ Rotate a KES key in three steps:
 
 <a name="tx"></a>
 
-## Offline transaction operations
+## Transaction operations
 
-The `tx` commands inspect and sign an existing transaction without contacting a node. Supply `unsigned.tx` as hex CBOR or a JSON text envelope containing `cborHex`:
+The `tx decode`, `tx id`, `tx sign`, `tx witness`, and `tx assemble` commands inspect or modify an existing transaction without contacting a node. Supply `unsigned.tx` as hex CBOR or a JSON text envelope containing `cborHex`:
 
 ```sh
 ./bursa tx decode --tx-file unsigned.tx
@@ -181,6 +183,21 @@ The `--era` option is available on `tx sign`, `tx witness`, and `tx assemble`. F
 Bursa resolves the era from an era-typed JSON text envelope, such as one with type `Tx ConwayEra`, when the flag is absent. Without `--era`, Bursa accepts raw or era-less CBOR only when it decodes unambiguously. Provide `--era` or an era-typed envelope when the input is ambiguous. The command fails when `--era` conflicts with the era declared by the input envelope.
 
 The resolved era selects the output envelope type and witness encoding for signing, witnessing, and assembly.
+
+### Build a transaction
+
+`tx build` connects to the node specified by `--socket-path` and uses the node's protocol parameters while constructing a pool operation transaction. The `--max-fee` flag sets the maximum fee in lovelace and defaults to `2_000_000`:
+
+```sh
+./bursa tx build \
+  --socket-path /run/cardano/node.socket \
+  --network mainnet \
+  --change-address "$CHANGE_ADDRESS" \
+  --max-fee 3000000 \
+  --out-file unsigned.tx
+```
+
+If the node reports protocol parameters that produce a minimum fee above `--max-fee`, Bursa refuses to construct the transaction. Raise `--max-fee` explicitly when the network or node parameters require a higher fee.
 
 <a name="sign"></a>
 
@@ -302,7 +319,18 @@ Run the import client on the machine that holds the cold key:
 
 The client verifies the workload's attestation token, including the audience and the image digest, before it seals the key to the workload and sends it. `--signing-key-file` must be the non-extended `StakePoolSigningKey_ed25519` file, and it must derive the key in `--vkey-file`. `--authority-key-file` holds the provisioning authority's hex Ed25519 seed. Each `--profile` is `NAME=NEXT`, where `NEXT` is the next operational certificate issue number that profile may sign: one above the highest issue number signed under that profile, whether or not that certificate is on chain, and never below the pool's on-chain counter on that profile's network plus one. Use `0` for a profile that has never issued. Stop issuing certificates with the previous signer first; the workload cannot correct `NEXT` after the import.
 
-After the import, start the workload without `--import` and with a `--profile` option for each imported profile. A served profile that was not imported stops startup unless `--create-profile-counter` names it, as in the Cloud Storage mode.
+For distinct keys, use `NAME=FILE` for every value in both repeatable key flags:
+
+```sh
+--signing-key-file pool@mainnet=mainnet-cold.skey \
+--signing-key-file pool@preview=preview-cold.skey \
+--vkey-file pool@mainnet=mainnet-cold.vkey \
+--vkey-file pool@preview=preview-cold.vkey
+```
+
+Use one plain path in each flag instead to share one key across all profiles. Do not mix plain paths with `NAME=FILE` values. In per-profile mode, name every `--profile` exactly once in each key flag, and use a distinct key for every profile.
+
+After the import, start the workload without `--import` and with a `--profile` option for each imported profile. For a multi-key import, the configured profile set must match the imported set exactly: an unprofiled start or any missing or extra profile refuses startup. Multi-key state uses the `bursa-confidential-space-key/3` envelope, which older Bursa releases cannot read. For a shared-key import, a served profile that was not imported stops startup unless `--create-profile-counter` names it, as in the Cloud Storage mode.
 
 ### Nitro enclave
 
@@ -350,7 +378,7 @@ Explore other Bursa Commands
 > 6. [script](../006-script-commands) &nbsp;&nbsp; - Commands for multi-signature operations
 > 7. [address](../007-address-commands) - Commands for working with Cardano addresses
 > 8. [key](../008-key-commands)  &emsp;&nbsp;&nbsp; - Commands for deriving individual keys from a mnemonic
-> 9. [tx](#tx) - Offline transaction operations
+> 9. [tx](#tx) - Transaction operations
 > 10. [sign](#sign) - CIP-8/CIP-30 message signing and verification
 > 11. [signer](#signer) - Remote signing service
 

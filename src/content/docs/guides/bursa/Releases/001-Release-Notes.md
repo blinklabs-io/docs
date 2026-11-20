@@ -9,6 +9,7 @@ description: Bursa Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.26.0 - *[View Release Notes](../v0-26-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.26.0)
 - Version: v0.25.0 - *[View Release Notes](../v0-25-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.25.0)
 - Version: v0.24.0 - *[View Release Notes](../v0-24-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.24.0)
 - Version: v0.23.0 - *[View Release Notes](../v0-23-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.23.0)

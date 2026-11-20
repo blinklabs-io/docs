@@ -121,6 +121,8 @@ http://localhost:8080/swagger/index.html
 
 各サブコマンドはエージェントの応答を JSON として出力し、バイト列のフィールドを 16 進数で表示します。エージェントがコマンドを拒否すると、CLI は応答を表示したうえで 0 以外の終了コードを返します。1 回の制御要求には 30 秒の制限があり、要求をキャンセルすると待機中のソケット入出力を直ちに停止します。
 
+Bursa は、アテステーション対応リスナーに相互 TLS（mTLS）とクライアント証明書の検証を設定し、その証明書の SPKI SHA-256 が対象プロファイルの `control_client_spki_sha256` に登録されている場合にだけリモート制御を許可します。リモートで許可するコマンドは `info`、`gen-staged-key`、`install-key` です。制御用のピンは署名権限を与えません。Bursa はリモートの `drop-key` を拒否するため、`drop-key` はローカル制御ソケットからのみ実行できます。
+
 #### KES 鍵のローテーション
 
 次の順序で KES 鍵をローテーションします。運用証明書はエージェントではなく、プールのコールド鍵を使ってオフラインで発行します。
@@ -154,6 +156,19 @@ bursa kes-agent ready --config /path/to/kes-agent.yaml
 ## オフライントランザクション操作
 
 `tx` コマンドはノードに接続せず、既存のトランザクションを確認して署名します。`unsigned.tx` には16進数CBOR、または `cborHex` を含むJSONテキストエンベロープを指定します。テキストエンベロープの型にEraが含まれている場合、BursaはそのEraを使用します。`--era`も指定する場合は、エンベロープのEraと一致させてください。
+
+`tx build` は例外で、ノードのプロトコルパラメータを取得してプール操作トランザクションを構築します。`--socket-path`、`--network`、`--change-address` を指定し、ノードに接続できる状態で実行してください。`tx decode`、`tx sign`、`tx witness`、`tx assemble` は既存ファイルの検査や署名を行うオフライン操作です。
+
+```sh
+./bursa tx build \
+  --socket-path /path/to/node.socket \
+  --network mainnet \
+  --change-address "$CHANGE_ADDRESS" \
+  --max-fee 3000000 \
+  --out-file unsigned.tx
+```
+
+`--max-fee` の既定値は `2_000_000` lovelace（2 ADA）です。Bursa はノードから取得したパラメータに基づく最小手数料がこの上限を超えると、トランザクションの構築を失敗させます。必要な場合は、上の例のように `--max-fee` に、より大きい lovelace 値を明示してください。
 
 `tx sign`、`tx witness`、`tx assemble` は `--era` でトランザクションの era を指定できます。`--era` には、たとえば `babbage` または `conway` を指定します。入力が era を宣言せず、そのCBORが複数の era で有効になる場合は `--era` が必要です。
 
@@ -326,7 +341,28 @@ Confidential Space の VM には永続ストレージがありません。ロー
 
 クライアントは、オーディエンスとイメージのダイジェストを含むワークロードのアテステーショントークンを検証してから、鍵をワークロード向けに封印して送信します。`--signing-key-file` には拡張されていない `StakePoolSigningKey_ed25519` ファイルを指定し、その鍵から `--vkey-file` の鍵が導出できる必要があります。`--authority-key-file` にはプロビジョニング権限の Ed25519 シードを 16 進数で保存します。各 `--profile` は `NAME=NEXT` の形式で、`NEXT` はそのプロファイルが次に署名できる運用証明書の発行番号です。オンチェーンかどうかにかかわらずそのプロファイルで署名した最大の発行番号に 1 を加えた値とし、そのプロファイルのネットワークにおけるプールのオンチェーンのカウンターに 1 を加えた値を下回らないようにします。一度も発行していないプロファイルには `0` を指定します。先に以前の署名者での証明書の発行を停止してください。インポート後にワークロードが `NEXT` を修正することはできません。
 
-インポート後は、`--import` を付けずに、インポートした各プロファイルの `--profile` を指定してワークロードを起動します。インポートしていないプロファイルを提供すると、`--create-profile-counter` で指定しない限り、Cloud Storage モードと同様に起動が停止します。
+プロファイルごとに異なる鍵をインポートする場合は、両方の繰り返し指定可能な鍵フラグに、対応する `NAME=FILE` エントリを指定します。
+
+```sh
+./bursa confidential-space import \
+  --address https://workload.example.internal:8080 \
+  --tls-ca-file ca.pem \
+  --tls-client-cert-file client.pem \
+  --tls-client-key-file client-key.pem \
+  --audience "$WORKLOAD_AUDIENCE" \
+  --image-digest sha256:IMAGE_DIGEST \
+  --kms-key "$KMS_KEY_RESOURCE" \
+  --signing-key-file pool@mainnet=mainnet-cold.skey \
+  --signing-key-file pool@preview=preview-cold.skey \
+  --vkey-file pool@mainnet=mainnet-cold.vkey \
+  --vkey-file pool@preview=preview-cold.vkey \
+  --authority-key-file import-authority.key \
+  --profile pool@mainnet=8 --profile pool@preview=0
+```
+
+共有鍵を使う場合は、プレーンなパスを `--signing-key-file` と `--vkey-file` にそれぞれ 1 つ指定します。プレーンなパスと `NAME=FILE` 形式は混在できません。`NAME=FILE` 形式では、各 `--profile` に対応するエントリを両方のフラグで 1 つずつ指定し、プロファイル間で異なる鍵を指定してください。同じ鍵を共有する場合はプレーンなパス形式を使用します。
+
+インポート後は、`--import` を付けずにワークロードを起動します。マルチキー状態では、起動時の `--profile` の集合をインポート時のプロファイル集合と完全に一致させてください。プロファイルを省略した場合、欠落させた場合、または追加した場合、ワークロードは起動を拒否します。マルチキー状態を作成した後は、以前のリリースはその状態を使用できません。
 
 ### Nitro enclave
 
