@@ -585,7 +585,9 @@ there. Do the whole renewal in one sitting.
      `onChainCounterAt` still shown are from an earlier read and can be behind
      the chain. Fix the cause the message names, and wait for `Observed` or
      `PoolNotOnChain` before you issue the certificate. The operator retries
-     the read every few minutes.
+     the read every few minutes. If the read cannot be restored before the
+     KES periods run out, use the counter in the current `node.cert`, plus
+     one when the pool has forged a block under that certificate.
 
 2. On the offline machine, generate a new KES key pair as `kes.skey` and
    `kes.vkey`, and issue an operational certificate for `kes.vkey` with the
