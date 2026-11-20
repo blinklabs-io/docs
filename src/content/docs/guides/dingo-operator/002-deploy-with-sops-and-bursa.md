@@ -1,6 +1,6 @@
 ---
 title: Deploy Block Producers with SOPS and Bursa
-description: Run Dingo block producers on Kubernetes with dingo-operator, keep every key in git as SOPS-encrypted files, and sign through a Bursa signer and a highly available Bursa KES agent.
+description: Run Dingo block producers on Kubernetes with dingo-operator, keep every key in git as SOPS-encrypted files, issue operational certificates offline with Bursa, and sign through a highly available Bursa KES agent.
 ---
 
 This guide builds a complete block-producer deployment on Kubernetes:
@@ -10,8 +10,9 @@ This guide builds a complete block-producer deployment on Kubernetes:
   network.
 - Every private key lives in git as a SOPS-encrypted file and reaches the
   cluster as a Secret.
-- A Bursa signer issues operational certificates from SOPS-encrypted cold keys,
-  so the operator can rotate KES keys on its own.
+- Cold keys never reach the cluster. Operational certificates are issued from
+  them on an offline machine, and the operator validates each new key bundle
+  before it rolls a producer onto it.
 - A Bursa KES agent with two replicas holds KES keys and signs block headers,
   so a producer never holds its KES key.
 
@@ -22,41 +23,47 @@ This page covers dingo-operator v0.5.0 (chart 0.9.0), the dingonodes chart
 
 | Part | Role | Namespace in this guide |
 | --- | --- | --- |
-| dingo-operator | Turns each `DingoNode` into a StatefulSet, Services and NetworkPolicies, validates key Secrets, and rotates KES keys | `dingo-operator` |
+| dingo-operator | Turns each `DingoNode` into a StatefulSet, Services and NetworkPolicies, validates key Secrets, and reports when a KES key is due for renewal | `dingo-operator` |
 | DingoNodes | Relays and block producers, one Helm release of the dingonodes chart per network | `dingo` |
-| Bursa signer | Holds pool cold keys and issues operational certificates for the operator over mTLS | `bursa-signer` |
 | Bursa KES agent | Holds KES keys and signs headers for producers that connect to it | `bursa-kes-agent` |
-| PostgreSQL | Keeps the signer's counter records, and the KES agent's sealed keys and slot guard | your database |
+| PostgreSQL | Keeps the KES agent's sealed keys and slot guard | your database |
 
 A producer gets its KES key in one of two ways. Choose one per pool:
 
 | | KES key in the keys Secret | KES key in the KES agent |
 | --- | --- | --- |
 | Where the KES key lives | The producer's keys Secret and the node's memory | The KES agent only |
-| `rotation.mode` | `Auto` | `Assisted` |
-| Who rotates | The operator generates a KES key and asks the signer for its certificate | You, with the agent's control commands. See [Rotate the KES key](/guides/dingo-operator/001-sign-through-a-kes-agent/#rotate-the-kes-key) |
-| Needs | The signer | The KES agent |
+| `rotation.mode` | `Assisted` | `Assisted` |
+| Who rotates | You: a new KES key and certificate, issued offline, delivered in the keys Secret. See [Renew a KES key in the keys Secret](#renew-a-kes-key-in-the-keys-secret) | You, with the agent's control commands. See [Rotate the KES key](/guides/dingo-operator/001-sign-through-a-kes-agent/#rotate-the-kes-key) |
+| Needs | The cold key, on an offline machine | The KES agent, and the cold key on an offline machine |
+
+In `Assisted` mode the operator validates and rolls a certificate that you
+deliver. It never issues one itself.
 
 dingo-operator v0.5.0 also accepts `signingAgent` with `rotation.mode: Auto`,
 when `controlClientCertSecretRef`, `serverSpkiSha256` and
 `rotation.reloadInPlace` are set. The operator then rotates the key through
-the agent's control role. This guide uses `Assisted` for agent pools.
+the agent's control role.
 
-With Bursa v0.26.0, the signer issues an operational certificate only for a KES
-key that its caller configuration grants explicitly. dingo-operator v0.5.0
-asks for a certificate for a newly generated KES key on every issue, with the
-KES key in the keys Secret or in the agent, so `Auto` rotation through the
-Bursa signer cannot issue until
+This guide does not use `Auto` rotation, with or without an agent. `Auto`
+issues each new certificate through a cold signer. With Bursa v0.26.0, the
+signer issues an operational certificate only for a KES key that its caller
+configuration grants explicitly, and dingo-operator v0.5.0 asks for a
+certificate for a newly generated KES key on every issue. The first
+certificate, issued by hand, works, but every renewal through the Bursa signer
+is denied until
 [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
-is resolved.
+is resolved, and the producer stops forging when its KES key expires.
 
 ## Requirements
 
 - A Kubernetes cluster and Helm 3.
 - `sops` and `age` on the machine that deploys, and `openssl` for certificates.
-- A PostgreSQL server that the signer and the KES agent can reach over TLS.
-  Bursa requires `sslmode=verify-full` for any database that is not on
-  loopback, so you also need the CA that issued the server's certificate.
+- An offline machine with `sops` and `bursa`, for issuing operational
+  certificates.
+- A PostgreSQL server that the KES agent can reach over TLS. Bursa requires
+  `sslmode=verify-full` for any database that is not on loopback, so you also
+  need the CA that issued the server's certificate.
 - Each pool's cold signing key, VRF signing key, and current operational
   certificate, as `cardano-cli` text envelopes.
 
@@ -66,18 +73,16 @@ Use two age identities:
 
 - A **deploy identity** decrypts the Secret manifests at deploy time. Keep it on
   the machine that deploys.
-- A **signer identity** decrypts the cold keys and nothing else. It is given
-  only to the Bursa signer, which decrypts the cold keys in memory.
+- An **offline identity** decrypts the cold keys and nothing else. Keep it only
+  on the offline machine that issues operational certificates.
 
-A deploy never decrypts a cold key: the cold keys reach the cluster encrypted.
-The cold-key files are also encrypted to the deploy identity, for the steps
-that issue a certificate outside the signer. Run those on an offline machine.
+A deploy never decrypts a cold key, and no cold key reaches the cluster.
 
 ```sh
 age-keygen -o deploy.txt
-age-keygen -o signer-age.txt
-age-keygen -y deploy.txt       # the deploy recipient
-age-keygen -y signer-age.txt   # the signer recipient
+age-keygen -o offline.txt
+age-keygen -y deploy.txt    # the deploy recipient
+age-keygen -y offline.txt   # the offline recipient
 ```
 
 Add a `.sops.yaml` at the root of the repository. SOPS uses the first rule that
@@ -85,25 +90,32 @@ matches, so keep the cold-key rule first:
 
 ```yaml
 creation_rules:
-  # Cold keys: whole file encrypted, readable by the signer.
-  - path_regex: bursa-signer/cold-keys/.*\.enc\.json$
-    age: >-
-      age1<deploy recipient>,
-      age1<signer recipient>
+  # Cold keys: whole file encrypted, readable only offline.
+  - path_regex: cold-keys/.*\.enc\.json$
+    age: age1<offline recipient>
   # Secret manifests: only the data is encrypted, so names stay readable.
   - path_regex: .*\.enc\.yaml$
     encrypted_regex: ^(data|stringData)$
     age: age1<deploy recipient>
 ```
 
-Write each Secret as a manifest, then encrypt it in place. For example, the
-signer's age identity, which the signer section below uses:
+Encrypt each pool's cold signing key into the cold-key folder, on the offline
+machine:
 
 ```sh
-kubectl -n bursa-signer create secret generic bursa-signer-age \
-  --from-file=keys.txt=signer-age.txt \
-  --dry-run=client -o yaml > bursa-signer/bursa-signer-age.enc.yaml
-sops encrypt -i bursa-signer/bursa-signer-age.enc.yaml
+sops encrypt --filename-override cold-keys/pool-a.skey.enc.json \
+  pool-a-cold.skey > cold-keys/pool-a.skey.enc.json
+```
+
+Write each Secret as a manifest, then encrypt it in place. For example, the KES
+agent's age identity, created in
+[Deploy the Bursa KES agent](#deploy-the-bursa-kes-agent):
+
+```sh
+kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-age \
+  --from-file=identity.txt=kes-agent-age.txt \
+  --dry-run=client -o yaml > bursa-kes-agent/bursa-kes-agent-age.enc.yaml
+sops encrypt -i bursa-kes-agent/bursa-kes-agent-age.enc.yaml
 ```
 
 Writing the manifest does not need the namespace. Applying it does, so apply
@@ -111,7 +123,7 @@ each Secret only after the section that creates its namespace. Apply a Secret
 by decrypting it into `kubectl`:
 
 ```sh
-sops decrypt bursa-signer/bursa-signer-age.enc.yaml \
+sops decrypt bursa-kes-agent/bursa-kes-agent-age.enc.yaml \
   | kubectl apply --server-side --force-conflicts -f -
 ```
 
@@ -121,59 +133,45 @@ annotation, where anyone who can read the object's metadata can see it.
 
 The rest of this guide shows each Secret as a plain `kubectl` command. Encrypt
 the output the same way, and apply it on every deploy, for example from a
-Helmfile `presync` hook. The one exception is the keys Secret of an `Auto`
-pool, which is created once, as described in
-[Create the producer Secrets](#create-the-producer-secrets). Keep it in
-`dingo/keys-create-once/`, and have the hook apply the producer keys from
-`dingo/keys/` only, so it never applies that bundle.
+Helmfile `presync` hook. Keep the producers' keys Secrets in `dingo/keys/`.
 
 ## Create the certificates
 
-The operator talks to the signer over mutual TLS: Auto rotation requires an
-`https` signer endpoint and a client certificate. The link from producers to
-the KES agent is mutual TLS. The agent refuses a producer without a client
-certificate that is pinned for its profile, and a plain TCP link cannot admit
-a signing session. The producers also pin the agent's server key. The commands
-below use ECDSA P-256 keys; any key type Go's TLS 1.3 accepts works.
+The link from producers to the KES agent is mutual TLS. The agent refuses a
+producer without a client certificate that is pinned for its profile, and a
+plain TCP link cannot admit a signing session. The producers also pin the
+agent's server key. The commands below use ECDSA P-256 keys; any key type Go's
+TLS 1.3 accepts works.
 
-### The signer link
-
-Create the CA, the signer's server certificate for its Service name, and the
-operator's client certificate:
+Create the CA, the agent's server certificate for its Service names, and the
+producers' client certificate:
 
 ```sh
 openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes \
-  -keyout signer-ca.key -out signer-ca.crt -days 3650 -subj "/CN=bursa signer CA"
+  -keyout kes-agent-ca.key -out kes-agent-ca.crt -days 3650 \
+  -subj "/CN=bursa kes agent CA"
 
 openssl req -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes \
-  -keyout signer.key -out signer.csr -subj "/CN=bursa-signer"
-printf 'subjectAltName=DNS:bursa-signer.bursa-signer.svc,DNS:bursa-signer.bursa-signer.svc.cluster.local\nextendedKeyUsage=serverAuth\n' > server.ext
-openssl x509 -req -in signer.csr -CA signer-ca.crt -CAkey signer-ca.key \
-  -CAcreateserial -days 825 -extfile server.ext -out signer.crt
+  -keyout kes-agent.key -out kes-agent.csr -subj "/CN=bursa-kes-agent"
+printf 'subjectAltName=DNS:bursa-kes-agent.bursa-kes-agent.svc,DNS:bursa-kes-agent.bursa-kes-agent.svc.cluster.local\nextendedKeyUsage=serverAuth\n' > server.ext
+openssl x509 -req -in kes-agent.csr -CA kes-agent-ca.crt -CAkey kes-agent-ca.key \
+  -CAcreateserial -days 825 -extfile server.ext -out kes-agent.crt
 
 openssl req -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes \
-  -keyout operator.key -out operator.csr -subj "/CN=dingo-operator"
+  -keyout producer.key -out producer.csr -subj "/CN=dingo-producer"
 printf 'extendedKeyUsage=clientAuth\n' > client.ext
-openssl x509 -req -in operator.csr -CA signer-ca.crt -CAkey signer-ca.key \
-  -CAcreateserial -days 825 -extfile client.ext -out operator.crt
+openssl x509 -req -in producer.csr -CA kes-agent-ca.crt -CAkey kes-agent-ca.key \
+  -CAcreateserial -days 825 -extfile client.ext -out producer.crt
 ```
-
-The signer identifies a caller by its client certificate's first URI SAN, then
-its first DNS SAN, then its CN. The operator certificate above has no SAN, so
-its identity is `dingo-operator`.
-
-### The KES agent link
 
 This guide secures the link with TLS, a pinned server key, and a client
 certificate:
 
-- **Server certificate.** Repeat the steps above with a second CA, and give
-  the agent's server certificate the agent's Service names
+- **Server certificate.** It names the agent's Service
   (`bursa-kes-agent.bursa-kes-agent.svc` and
   `bursa-kes-agent.bursa-kes-agent.svc.cluster.local`).
-- **Client certificate.** Issue one for the producers from that CA. The agent
-  requires it, and admits a producer only when the certificate's key is in the
-  profile's `sign_client_spki_sha256`.
+- **Client certificate.** The agent requires it, and admits a producer only
+  when the certificate's key is in the profile's `sign_client_spki_sha256`.
 - **Pin.** Required in this setup. With a pin, the node checks the agent's
   server key instead of a CA chain. Without one, Dingo verifies the agent's
   certificate against the system roots in its image, which do not include
@@ -190,169 +188,37 @@ openssl x509 -in kes-agent.crt -pubkey -noout \
   | sha256sum
 ```
 
-Keep both CA keys offline. Neither belongs in the cluster.
+Keep the CA key offline. It does not belong in the cluster.
 
 ## Prepare PostgreSQL
 
-Create the namespaces before creating their Secrets or installing either
+Create the agent's namespace before creating its Secrets or installing its
 chart:
 
 ```sh
-kubectl create namespace bursa-signer
 kubectl create namespace bursa-kes-agent
 ```
 
-Create a role and a database for each component:
+Create a role and a database for the agent:
 
 ```sql
-CREATE ROLE bursa_signer LOGIN PASSWORD '<password>';
-CREATE DATABASE bursa_signer OWNER bursa_signer;
 CREATE ROLE bursa_kes_agent LOGIN PASSWORD '<password>';
 CREATE DATABASE bursa_kes_agent OWNER bursa_kes_agent;
 ```
 
-Each component creates its own tables on first use. Each one reads its
-connection string from a Secret and the database's CA from a mounted file, so
-the connection string names that file:
+The agent creates its own tables on first use. It reads its connection string
+from a Secret and the database's CA from a mounted file, so the connection
+string names that file:
 
 ```sh
-kubectl -n bursa-signer create secret generic bursa-signer-watermark \
-  --from-literal=dsn='postgres://bursa_signer:<password>@<db host>:5432/bursa_signer?sslmode=verify-full&sslrootcert=/etc/bursa/signer/pg-ca/ca.crt' \
+kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-store \
+  --from-literal=dsn='postgres://bursa_kes_agent:<password>@<db host>:5432/bursa_kes_agent?sslmode=verify-full&sslrootcert=/etc/bursa/kes-agent/pg-ca/ca.crt' \
   --dry-run=client -o yaml
-kubectl -n bursa-signer create secret generic bursa-signer-pg-ca \
+kubectl -n bursa-kes-agent create secret generic bursa-kes-agent-pg-ca \
   --from-file=ca.crt=db-ca.crt --dry-run=client -o yaml
 ```
 
-Create `bursa-kes-agent-store` and `bursa-kes-agent-pg-ca` the same way in the
-`bursa-kes-agent` namespace, with the path `/etc/bursa/kes-agent/pg-ca/ca.crt`.
 The database CA is public, so its Secret does not need encrypting.
-
-## Deploy the Bursa signer
-
-The signer loads every cold key at startup and issues an operational
-certificate only for a key and caller that its policy allows.
-
-Encrypt each pool's cold signing key into the cold-key folder. The signer reads
-SOPS-encrypted `cardano-cli` envelopes in JSON format:
-
-```sh
-sops encrypt --filename-override bursa-signer/cold-keys/pool-a.skey.enc.json \
-  pool-a-cold.skey > bursa-signer/cold-keys/pool-a.skey.enc.json
-```
-
-Deliver the cold keys to the cluster still encrypted. Do not run `sops
-decrypt` on them: the Secret holds the files exactly as committed. Each file
-name in the Secret must end in `.json` and must not contain `@`:
-
-```sh
-kubectl -n bursa-signer create secret generic bursa-signer-cold-keys \
-  --from-file=pool-a.json=bursa-signer/cold-keys/pool-a.skey.enc.json \
-  --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
-```
-
-The signer also needs these Secrets, encrypted as described above:
-
-```sh
-kubectl -n bursa-signer create secret tls bursa-signer-tls \
-  --cert=signer.crt --key=signer.key --dry-run=client -o yaml
-kubectl -n bursa-signer create secret generic bursa-signer-client-ca \
-  --from-file=ca.crt=signer-ca.crt --dry-run=client -o yaml
-kubectl -n bursa-signer create secret generic bursa-signer-age \
-  --from-file=keys.txt=signer-age.txt --dry-run=client -o yaml
-```
-
-Then install the `bursa` chart in signer mode. Get each pool's cold key hash,
-the pool ID in hex, from `cardano-cli stake-pool id --output-format hex`:
-
-```yaml
-# bursa-signer.yaml
-mode: signer
-replicaCount: 2
-image:
-  tag: "0.26.0"
-podDisruptionBudget:
-  enabled: true
-affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: bursa
-            app.kubernetes.io/instance: bursa-signer
-        topologyKey: kubernetes.io/hostname
-signer:
-  config:
-    signer:
-      # Client certificates are verified when presented. true would also
-      # fail the kubelet's HTTPS probes, which send none.
-      require_client_cert: false
-      watermark:
-        type: postgres
-        dsn_env: SIGNER_WATERMARK_DSN
-        mode: enforce
-      backends:
-        - name: cold
-          type: sops
-          path: /etc/bursa/signer/sops-keys
-      keys:
-        - hash: "<pool-a cold key hash>"
-          backend: cold
-          allowed_requests: ["opcert"]
-      callers:
-        - subject: dingo-operator
-          keys: ["<pool-a cold key hash>"]
-          # No opcerts grant: Bursa v0.26.0 denies every opcert to this
-          # caller until dingo-operator#193 is resolved.
-  tls:
-    secretName: bursa-signer-tls
-    clientCASecretName: bursa-signer-client-ca
-  sopsKeys:
-    secretName: bursa-signer-cold-keys
-  ageKey:
-    secretName: bursa-signer-age
-    key: keys.txt
-  extraEnv:
-    - name: SIGNER_WATERMARK_DSN
-      valueFrom:
-        secretKeyRef:
-          name: bursa-signer-watermark
-          key: dsn
-  extraVolumes:
-    - name: pg-ca
-      secret:
-        secretName: bursa-signer-pg-ca
-  extraVolumeMounts:
-    - {name: pg-ca, mountPath: /etc/bursa/signer/pg-ca, readOnly: true}
-  networkPolicy:
-    enabled: true
-    from:
-      - namespaceSelector:
-          matchLabels:
-            kubernetes.io/metadata.name: dingo-operator
-```
-
-```sh
-helm install bursa-signer oci://ghcr.io/blinklabs-io/helm-charts/charts/bursa \
-  --version 0.0.16 -n bursa-signer -f bursa-signer.yaml
-```
-
-This signer serves only `Auto` rotation. Bursa v0.26.0 issues an operational
-certificate only for a KES verification key listed in the caller's `opcerts`
-grant, and dingo-operator v0.5.0 generates a new KES key for every request, so
-no grant can name it in advance. Until
-[dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
-is resolved, the signer starts and denies each request.
-
-Two replicas share the counter records in PostgreSQL, so either one can serve
-a request. The operator sends the pool's on-chain counter with every request,
-so a new signer issues the next counter without earlier records of its own.
-
-The same cold key can serve a pool on several networks. Give it one backend
-per network, each with its own `profile`, and keep that key in a folder of its
-own: every backend loads every `*.json` file in its `path`. The operator
-selects the network's backend with `coldSigner.profile`. See the
-[signer runbook](https://github.com/blinklabs-io/bursa/blob/main/docs/signer/runbook.md#sops)
-for the details.
 
 ## Deploy the Bursa KES agent
 
@@ -452,21 +318,19 @@ kubectl -n bursa-kes-agent rollout restart deployment/bursa-kes-agent
 
 ## Install dingo-operator
 
-The operator reads the keys Secret of every producer, and the client Secrets
-those producers name. Grant it access only to those Secrets, by name:
+The operator reads the keys Secret of every producer, and the client Secret
+those producers name. Grant it read access only to those Secrets, by name.
+With `Assisted` rotation it never writes a keys Secret, so leave
+`rbac.keySecretsUpdate` at its default, `false`:
 
 ```yaml
 # dingo-operator.yaml
 rbac:
   keySecretsNamespaces: [dingo]
-  # Auto rotation writes the new KES key and certificate into the keys Secret.
-  keySecretsUpdate: true
-  keySecretNames:
+  # Every Secret the operator reads.
+  readSecretNames:
     - pool-a-keys
     - pool-b-keys
-  # Every other Secret the operator reads.
-  readSecretNames:
-    - bursa-signer-mtls
     - kes-agent-client
 ```
 
@@ -488,15 +352,6 @@ on-chain operational certificate counter over node-to-client.
 
 All of these live in the `dingo` namespace.
 
-The operator's client certificate for the signer, with the CA that verifies
-the signer:
-
-```sh
-kubectl -n dingo create secret generic bursa-signer-mtls \
-  --from-file=tls.crt=operator.crt --from-file=tls.key=operator.key \
-  --from-file=ca.crt=signer-ca.crt --dry-run=client -o yaml
-```
-
 The producers' client certificate for the KES agent:
 
 ```sh
@@ -506,39 +361,35 @@ kubectl -n dingo create secret tls kes-agent-client \
 
 One keys Secret per pool. Its contents depend on where the KES key lives:
 
-- **KES key in the Secret (`Auto`):** `kes.skey`, `vrf.skey`, and the
-  operational certificate for that KES key as `node.cert`.
-- **KES key in the agent (`Assisted`):** `vrf.skey` and the operational
-  certificate the agent serves, as `node.cert`. Leave `kes.skey` out.
+- **KES key in the Secret:** `kes.skey`, `vrf.skey`, and the operational
+  certificate for that KES key as `node.cert`.
+- **KES key in the agent:** `vrf.skey` and the operational certificate the
+  agent serves, as `node.cert`. Leave `kes.skey` out.
 
-Apply these two kinds differently:
+Apply both kinds on every deploy. After each renewal, commit the new files to
+git. The operator validates the bundle and restarts the producer when it
+changes.
 
-- Create an `Auto` keys Secret **once**, and never apply it again. Auto
-  rotation writes each new `kes.skey` and `node.cert` into it, and applying the
-  file from git would roll the producer back to an old KES key.
-- Apply an `Assisted` keys Secret on every deploy. After each rotation, commit
-  the new certificate to the file in git. The operator validates the bundle and
-  restarts the producer when it changes.
-
-For a new `Auto` pool, issue the first KES key and certificate yourself, on an
-offline machine with the decrypted cold key; the operator rotates from there.
-Put all three files in the bundle, and create it with `kubectl create`, which
-refuses to replace an existing Secret and so keeps a later deploy from rolling
-it back:
+For a new pool with its KES key in the Secret, use the pool's current KES key
+and certificate, or issue a new pair on the offline machine as in step 2 of
+[Renew a KES key in the keys Secret](#renew-a-kes-key-in-the-keys-secret).
+Before the producer runs, the operator reports no KES period, so take the
+current KES period from the current slot divided by the slots per KES period.
+Then write all three files into the bundle:
 
 ```sh
 kubectl -n dingo create secret generic pool-a-keys \
   --from-file=kes.skey --from-file=vrf.skey --from-file=node.cert \
-  --dry-run=client -o yaml > dingo/keys-create-once/pool-a-keys.enc.yaml
-sops encrypt -i dingo/keys-create-once/pool-a-keys.enc.yaml
-sops decrypt dingo/keys-create-once/pool-a-keys.enc.yaml | kubectl create -f -
+  --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
+sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
+sops decrypt dingo/keys/pool-a-keys.enc.yaml \
+  | kubectl apply --server-side --force-conflicts -f -
 ```
 
-For a new `Assisted` pool, complete
+For a new pool with its KES key in the agent, complete
 [Install the first KES key in the agent](#install-the-first-kes-key-in-the-agent)
 before creating its keys Secret. That procedure produces the `node.cert` the
-Secret requires. Then write the bundle without `kes.skey`, and apply it like
-any other Secret:
+Secret requires. Then write the bundle without `kes.skey`:
 
 ```sh
 kubectl -n dingo create secret generic pool-b-keys \
@@ -602,9 +453,7 @@ nodes:
     spec:
       role: relay
 
-  # KES key in the keys Secret, rotated by the operator. With the Bursa
-  # v0.26.0 signer, this rotation cannot issue until dingo-operator#193 is
-  # resolved.
+  # KES key in the keys Secret, renewed offline.
   pool-a-producer:
     spec:
       role: blockProducer
@@ -617,13 +466,8 @@ nodes:
         nodeToClient:
           enabled: true
         rotation:
-          mode: Auto
+          mode: Assisted
           renewBeforePeriods: 8
-          coldSigner:
-            type: bursa
-            endpoint: https://bursa-signer.bursa-signer.svc:8090
-            mtlsSecretRef: bursa-signer-mtls
-            coldKeyHash: <pool-a cold key hash>
 
   # KES key in the agent.
   pool-b-producer:
@@ -653,9 +497,11 @@ helm install dingo-preview oci://ghcr.io/blinklabs-io/helm-charts/charts/dingono
   --version 0.1.0 -n dingo -f dingo/defaults.yaml -f dingo/preview/values.yaml
 ```
 
-`renewBeforePeriods: 8` starts a rotation when eight KES periods remain. Auto
-requires `coldKeyHash` to equal the pool ID in hex. When the signer holds this
-cold key under a profile, also set `coldSigner.profile`.
+`renewBeforePeriods: 8` sets the producer's `RotationDue` condition to `True`,
+with reason `KESExpiringSoon`, when eight KES periods remain. With `Assisted`
+rotation the operator renews nothing itself: that condition is the signal to
+renew the key. Eight is also the default, so pool B reports the same
+condition.
 
 The operator runs only one producer per pool on a network, and scales any
 other `DingoNode` for that pool to zero.
@@ -668,9 +514,8 @@ install it, as described in
 [Rotate the KES key](/guides/dingo-operator/001-sign-through-a-kes-agent/#rotate-the-kes-key).
 Then put that certificate into the pool's keys Secret.
 
-dingo-operator v0.5.0 calls the signer only for `Auto` rotation, so issue each
-certificate for an agent pool with the cold key itself, decrypted on an
-offline machine. Repeat these steps for every rotation.
+Issue each certificate for an agent pool with the cold key itself, decrypted
+on the offline machine. Repeat these steps for every rotation.
 
 Run the control commands in either replica. The key is sealed into PostgreSQL,
 so the other replica loads it too, and both load it again after a restart:
@@ -699,17 +544,68 @@ preview-relay     relay           preview   Ready
 ```
 
 `kubectl -n dingo describe dingonode pool-a-producer` lists the conditions
-behind the phase. A producer that cannot reach the signer, or whose keys
-Secret is wrong, reports it there.
+behind the phase. A producer whose keys Secret is wrong, or whose KES key is
+due for renewal, reports it there.
+
+## Renew a KES key in the keys Secret
+
+Renew a pool whose KES key is in its keys Secret once its `RotationDue`
+condition is `True`, and before `REMAINING-KES` reaches zero: the producer
+stops forging when its certificate's KES periods run out. Do each renewal in
+one sitting, in a new, empty directory on the offline machine.
+
+1. Read the node's current KES period and the pool's on-chain certificate
+   counter:
+
+   ```sh
+   kubectl -n dingo get dingonode pool-a-producer \
+     -o jsonpath='{.status.kes.currentPeriod} {.status.opcert.onChainCounter} {.status.opcert.onChainCounterAt}{"\n"}'
+   ```
+
+   An empty counter means the operator has not read one: the node did not
+   answer, or the pool has not forged a block under any certificate yet.
+   `onChainCounterAt` shows when the counter was last read.
+
+2. On the offline machine, generate a new KES key pair as `kes.skey` and
+   `kes.vkey`, and issue an operational certificate for `kes.vkey` with the
+   decrypted cold key. Start it at the current KES period. The ledger accepts
+   a counter equal to the pool's on-chain counter or one above it. Use one
+   above. When the pool has not forged a block since its current certificate
+   was issued, that is the current certificate's counter again:
+
+   ```sh
+   sops decrypt cold-keys/pool-a.skey.enc.json > cold.skey
+   bursa cert op-cert --kes-vkey kes.vkey --cold-skey cold.skey \
+     --counter <on-chain counter + 1> --kes-period <current period> \
+     --out node.cert
+   ```
+
+   Delete `cold.skey` once the certificate is written.
+
+3. Write the new `kes.skey` and `node.cert`, with the pool's existing
+   `vrf.skey`, into the keys Secret, commit it, and apply it:
+
+   ```sh
+   kubectl -n dingo create secret generic pool-a-keys \
+     --from-file=kes.skey --from-file=vrf.skey --from-file=node.cert \
+     --dry-run=client -o yaml > dingo/keys/pool-a-keys.enc.yaml
+   sops encrypt -i dingo/keys/pool-a-keys.enc.yaml
+   sops decrypt dingo/keys/pool-a-keys.enc.yaml \
+     | kubectl apply --server-side --force-conflicts -f -
+   ```
+
+4. The operator validates the new bundle, including the certificate's
+   signature, pool, counter and KES period, and rolls the producer onto it. It
+   refuses to roll onto a bundle that fails, and reports why in the `KeysValid`
+   condition. Once the producer has restarted,
+   `kubectl -n dingo get dingonodes` shows the new counter under `OPCERT` and
+   the renewed periods under `REMAINING-KES`.
 
 ## Rotate a Secret
 
 Renew the TLS certificates before they expire. Re-encrypt the new material
 into the same file, apply it, and restart what reads it:
 
-- **Signer:** restart the Deployment. A rollout through Helm does not notice a
-  changed Secret on its own. One way is a variable in `extraEnv` whose value
-  you raise with every rotation.
 - **KES agent:** renew the certificate with the existing server private key so
   its SPKI pin does not change, then restart the Deployment. If the private key
   must change, compute the new pin first, update `serverSpkiSha256` in every
