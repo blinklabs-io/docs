@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Preview pool with Bursa and a USB armory</title>
+  <desc id="d">The pool mnemonic on an offline machine derives the cold key and owner key, which are imported once into the SE050 on the USB armory. Bursa on the host builds transactions, the armory signs them over USB, and the host submits them to the node. The armory issues the operational certificate for the block producer, which holds the VRF and KES keys.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5d6068"/>
+    </marker>
+  </defs>
+  <style>
+    .t{fill:#1c1d21;font-size:14px}
+    .s{fill:#5d6068;font-size:12px}
+    .h{fill:#1c1d21;font-size:15px;font-weight:700}
+    .m{font-family:ui-monospace, Menlo, monospace;font-size:12px;fill:#1c1d21}
+    .ln{stroke:#5d6068;stroke-width:2;fill:none}
+  </style>
+  <rect width="1000" height="520" rx="16" fill="#f6f5f1"/>
+
+  <!-- offline machine -->
+  <rect x="24" y="24" width="250" height="196" rx="14" fill="#eee6fd" stroke="#7c3aed" stroke-width="2"/>
+  <text class="h" x="42" y="54">Offline machine</text>
+  <text class="t" x="42" y="80">Pool mnemonic (24 words)</text>
+  <text class="s" x="42" y="98">written down: the only backup</text>
+  <text class="m" x="42" y="128">bursa key pool-cold</text>
+  <text class="m" x="42" y="148">bursa key pool-owner</text>
+  <text class="m" x="42" y="168">bursa key vrf / kes</text>
+  <text class="s" x="42" y="198">cold + owner skeys deleted</text>
+
+  <!-- host -->
+  <rect x="24" y="290" width="250" height="206" rx="14" fill="#e6eefb" stroke="#2f6fd6" stroke-width="2"/>
+  <text class="h" x="42" y="320">Host</text>
+  <text class="m" x="42" y="348">bursa tx build</text>
+  <text class="m" x="42" y="368">armory-pool witness</text>
+  <text class="m" x="42" y="388">armory-pool opcert</text>
+  <text class="m" x="42" y="408">bursa tx assemble</text>
+  <text class="m" x="42" y="428">bursa tx submit</text>
+  <text class="s" x="42" y="460">no pool keys; any wallet</text>
+  <text class="s" x="42" y="478">pays fees and deposits</text>
+
+  <!-- USB armory board -->
+  <g transform="translate(372 150)">
+    <rect x="0" y="0" width="300" height="220" rx="18" fill="#fbeadf" stroke="#c2410c" stroke-width="2"/>
+    <text class="h" x="18" y="30">USB armory Mk II</text>
+    <text class="s" x="18" y="48">TamaGo firmware, Ethernet over USB</text>
+    <!-- board -->
+    <rect x="18" y="62" width="196" height="96" rx="10" fill="#1f5f3a"/>
+    <rect x="214" y="88" width="36" height="44" rx="4" fill="#b8bcc4" stroke="#7a7f88"/>
+    <rect x="250" y="96" width="22" height="28" rx="3" fill="#d6d9de" stroke="#7a7f88"/>
+    <text class="s" x="216" y="152">USB-C</text>
+    <rect x="34" y="76" width="70" height="66" rx="4" fill="#2b2d33"/>
+    <text x="69" y="106" text-anchor="middle" fill="#e8e8e8" font-size="11">i.MX6UL</text>
+    <text x="69" y="122" text-anchor="middle" fill="#a8acb4" font-size="10">policy</text>
+    <rect x="122" y="84" width="74" height="50" rx="4" fill="#2b2d33" stroke="#ff9a5c" stroke-width="2"/>
+    <text x="159" y="106" text-anchor="middle" fill="#ffcfae" font-size="11" font-weight="700">SE050</text>
+    <text x="159" y="122" text-anchor="middle" fill="#a8acb4" font-size="10">keys</text>
+    <circle cx="28" cy="148" r="3" fill="#c9a227"/><circle cx="204" cy="72" r="3" fill="#c9a227"/>
+    <text class="t" x="18" y="184">SE050: cold key, owner key,</text>
+    <text class="t" x="18" y="202">identity key, opcert floor</text>
+  </g>
+
+  <!-- node and producer -->
+  <rect x="756" y="24" width="220" height="150" rx="14" fill="#fbf1d7" stroke="#a16207" stroke-width="2"/>
+  <text class="h" x="774" y="54">Node (Dingo)</text>
+  <text class="t" x="774" y="80">Preview chain</text>
+  <text class="s" x="774" y="100">UTxOs, protocol parameters,</text>
+  <text class="s" x="774" y="118">pool state, opcert counter</text>
+  <text class="s" x="774" y="148">over the local socket</text>
+
+  <rect x="756" y="290" width="220" height="206" rx="14" fill="#dff3ea" stroke="#0f8a5f" stroke-width="2"/>
+  <text class="h" x="774" y="320">Block producer</text>
+  <text class="t" x="774" y="348">VRF key</text>
+  <text class="t" x="774" y="372">KES key</text>
+  <text class="t" x="774" y="396">operational certificate</text>
+  <text class="s" x="774" y="430">hot keys, online;</text>
+  <text class="s" x="774" y="448">never on the armory</text>
+
+  <!-- arrows -->
+  <path class="ln" d="M274 120 C380 120 470 120 520 148" marker-end="url(#a)" stroke-dasharray="6 5"/>
+  <text class="s" x="290" y="112">import once</text>
+
+  <path class="ln" d="M274 360 L372 330" marker-end="url(#a)"/>
+  <text class="s" x="276" y="322">unsigned body</text>
+  <path class="ln" d="M372 350 L274 390" marker-end="url(#a)"/>
+  <text class="s" x="300" y="398">witnesses</text>
+
+  <path class="ln" d="M274 470 L712 470 L712 100 L756 100" marker-end="url(#a)"/>
+  <text class="s" x="460" y="462">query and submit</text>
+
+  <path class="ln" d="M672 330 L756 370" marker-end="url(#a)" stroke-dasharray="6 5"/>
+  <text class="s" x="690" y="392">opcert</text>
+</svg>
