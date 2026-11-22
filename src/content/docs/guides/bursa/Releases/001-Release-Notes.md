@@ -14,11 +14,11 @@ description: Bursa Release Notes
   * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the exclusion cannot be applied, preventing operation without the intended protection.
   * Strengthened firmware reset security by requiring host authentication after host-key registration, while preserving reset access during bootstrap.
   * Accelerated PostgreSQL connection recovery by limiting watermark liveness checks to `300ms`; dead idle connections now fail fast so replacement connections can connect within the caller's timeout.
-  * Updated pool relay networking to use standard network-order IPv6 bytes and brought the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
-  * Refined JWT verification with `keyfunc/v3` `v3.9.2`, allowing whitelisted tokens without a `kid` header and failing faster for unknown key IDs when no remote resources exist.
-  * Updated system support components to `golang.org/x/sys` `v0.50.0` for current platform behavior and compatibility.
+  * Standardized pool relay networking on network-order IPv6 bytes and updated the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
+  * Refined JWT checks with `keyfunc/v3` `v3.9.2`, allowing whitelisted tokens without a `kid` header and failing faster for unknown key IDs when no remote resources exist.
+  * Modernized system compatibility with `golang.org/x/sys` `v0.50.0` for current platform behavior and compatibility.
   * Refreshed Google Cloud integrations with KMS `v1.37.0` and long-running operation support `v1.5.0`.
-  * Updated AWS credential support to `v1.21.1` together with its related modules.
+  * Enhanced AWS credential support with `v1.21.1` and its related modules.
 - Version: v0.26.0 - *[View Release Notes](../v0-26-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.26.0)
 - Version: v0.25.0 - *[View Release Notes](../v0-25-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.25.0)
 - Version: v0.24.0 - *[View Release Notes](../v0-24-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.24.0)
