@@ -133,6 +133,24 @@ With `--signing-key-file -`, standard output uses bech32 format (pool_xsk prefix
 
 ***
 
+<a name="pool-id"></a>
+
+#### Pool ID
+The command computes a stake pool ID from a cold verification key by hashing the key with Blake2b-224. Use either `--cold-vkey <path>` for a cold verification key envelope or mnemonic input; these input sources are alternatives. When the command derives the key from a mnemonic, `--index <number>` selects the CIP-1853 pool-cold derivation index, which defaults to `0`.
+
+Only `StakePoolVerificationKey_ed25519` and the legacy `StakePoolVerificationKeyShelley_ed25519` envelope types are valid for `--cold-vkey`. Bursa rejects signing-key envelopes, other verification-key roles, bare hexadecimal input, and malformed input.
+
+The command outputs bech32 with the `pool1...` prefix by default. Use `--output-format hex` for the 56-character hexadecimal form. Use `--out-file <path>` to write the ID followed by a newline; Bursa sets the file to owner-only `0600` permissions, including when it overwrites an existing file.
+
+```
+./bursa key pool-id --cold-vkey pool-cold.vkey
+./bursa key pool-id --mnemonic-file seed.txt --index 1
+./bursa key pool-id --cold-vkey pool-cold.vkey --output-format hex
+./bursa key pool-id --cold-vkey pool-cold.vkey --out-file pool.id
+```
+
+***
+
 <a name="policy"></a>
 
 #### Policy Key
