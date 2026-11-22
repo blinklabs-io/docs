@@ -16,6 +16,9 @@ description: Bursa Release Notes
   * Accelerated PostgreSQL connection recovery by limiting watermark liveness checks to `300ms`; dead idle connections now fail fast so replacement connections can connect within the caller's timeout.
   * Updated pool relay networking to use standard network-order IPv6 bytes and brought the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
   * Refined JWT verification with `keyfunc/v3` `v3.9.2`, allowing whitelisted tokens without a `kid` header and failing faster for unknown key IDs when no remote resources exist.
+  * Updated system support components to `golang.org/x/sys` `v0.50.0` for current platform behavior and compatibility.
+  * Refreshed Google Cloud integrations with KMS `v1.37.0` and long-running operation support `v1.5.0`.
+  * Updated AWS credential support to `v1.21.1` together with its related modules.
 - Version: v0.26.0 - *[View Release Notes](../v0-26-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.26.0)
 - Version: v0.25.0 - *[View Release Notes](../v0-25-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.25.0)
 - Version: v0.24.0 - *[View Release Notes](../v0-24-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.24.0)
