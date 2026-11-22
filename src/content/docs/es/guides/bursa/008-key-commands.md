@@ -133,9 +133,9 @@ Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo pool
 <a name="pool-id"></a>
 
 ### ID del pool
-`bursa key pool-id` calcula el ID del stake pool como el hash Blake2b-224 de su clave de verificación fría. Use una sola fuente de entrada: `--cold-vkey <ruta>` para leer un sobre de clave de verificación fría, o una mnemónica para derivar la clave fría según CIP-1853. Los tipos de sobre válidos para `--cold-vkey` son `StakePoolVerificationKey_ed25519` y `StakePoolVerificationKeyShelley_ed25519`.
+`bursa key pool-id` calcula el ID del stake pool como el hash Blake2b-224 de su clave de verificación fría. El comando admite una sola fuente de entrada: `--cold-vkey <ruta>` para leer un sobre de clave de verificación fría o una mnemónica para derivar la clave fría según CIP-1853. Los tipos de sobre válidos para `--cold-vkey` son `StakePoolVerificationKey_ed25519` y `StakePoolVerificationKeyShelley_ed25519`.
 
-Cuando Bursa deriva la clave desde una mnemónica, `--index <número>` selecciona el índice de derivación de la clave fría de pool. El índice predeterminado es `0`.
+Si se omite `--cold-vkey`, Bursa deriva la clave desde una mnemónica. `--index <número>` selecciona el índice de derivación de la clave fría de pool y usa `0` de forma predeterminada.
 
 La salida usa bech32 (`pool1...`) de forma predeterminada. `--output-format hex` selecciona la representación hexadecimal de 56 caracteres. `--out-file <ruta>` escribe el ID seguido de un salto de línea en un archivo con permisos solo para el propietario (`0600`), incluso cuando el archivo ya existe.
 
