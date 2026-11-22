@@ -130,6 +130,8 @@ Con `--signing-key-file -`, la salida estándar usa formato bech32 (prefijo pool
 ./bursa key pool-cold --mnemonic-file seed.txt --index 0 --signing-key-file pool-cold.skey --verification-key-file pool-cold.vkey
 ```
 
+***
+
 <a name="pool-id"></a>
 
 ### ID del pool
