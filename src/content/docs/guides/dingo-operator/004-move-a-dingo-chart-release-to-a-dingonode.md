@@ -94,7 +94,7 @@ Carry these settings over to the `DingoNode` spec:
 | `service.private.enabled`, on a block producer | `spec.blockProducer.nodeToClient.enabled`, which binds node-to-client to the pod network and opens it in the NetworkPolicy |
 | `environment.DINGO_STORAGE_MODE` | `spec.storageMode` |
 | `service.ports.utxorpc`, `blockfrost`, `mesh`, `kupo`, `bark`, `midnight`, or their `DINGO_*` port variables | `spec.apis.utxorpc`, `blockfrost`, `mesh`, `kupo`, `bark`, `midnight` |
-| `apiTLS.existingSecret` | `spec.apis.utxorpcTLSSecretRef`, which covers UTxO RPC only |
+| `apiTLS.existingSecret` | `spec.apis.utxorpcTLSSecretRef`, which needs `spec.apis.utxorpc`. The operator mounts the Secret at `/var/run/dingo-api-tls` instead of `/tls`, and sets `TLS_CERT_FILE_PATH` and `TLS_KEY_FILE_PATH` to the files there |
 | `observability.tracing.*` | The fields of the same names under `spec.tracing` |
 | `observability.otlp.endpoint`, `protocol`, `logs`, `metrics`, and `observability.resourceAttributes` | `spec.otlp.endpoint`, `protocol`, `logs`, `metrics`, `resourceAttributes` |
 | `observability.otlp.headersSecret.name`, `key` | `spec.otlp.headersSecretRef.name`, `key` |
@@ -104,12 +104,12 @@ Carry these settings over to the `DingoNode` spec:
 | `topology.bootstrapPeers`, `useLedgerAfterSlot` | The fields of the same names under `spec.topology` |
 | `topology.publicRoots` | `spec.topology.publicRoots`, flattened: list the `address` and `port` of each entry in each group's `accessPoints`. The operator renders them as one group with `advertise: false`, so a group's own `advertise` does not carry over |
 | `topology.localRoots` | `spec.topology.relayRefs` for `DingoNode` relays in the namespace, and `externalRelays` for the rest, one entry per access point, each with its own `valency`, `trustable` and `advertise` |
-| Other `environment` entries | `spec.environment`. Leave out `CARDANO_NETWORK`, which `spec.network` sets, and `CARDANO_DATABASE_PATH`, which the operator sets to `/data`: an entry here overrides the operator's value. Leave out `CARDANO_PRIVATE_BIND_ADDR` too, and use `nodeToClient.enabled`: the operator's NetworkPolicy opens port 3002 only from that field. `CARDANO_PORT`, `CARDANO_PRIVATE_PORT`, `CARDANO_METRICS_PORT` and `DINGO_HEALTH_PORT` are rejected unless they equal the operator's ports: 3001 (or `relayService.port`), 3002, 12798 and 12799 |
+| Other `environment` entries | `spec.environment`. Leave out `CARDANO_NETWORK`, which `spec.network` sets, and `CARDANO_DATABASE_PATH`, which the operator sets to `/data`: an entry here overrides the operator's value. Leave out `CARDANO_PRIVATE_BIND_ADDR` too, and use `nodeToClient.enabled`: the operator's NetworkPolicy opens port 3002 only from that field. `CARDANO_PORT`, `CARDANO_PRIVATE_PORT`, `CARDANO_METRICS_PORT` and `DINGO_HEALTH_PORT` are rejected unless they equal the operator's ports: 3001 (or `relayService.port`), 3002, 12798 and 12799. Leave out `TLS_CERT_FILE_PATH` and `TLS_KEY_FILE_PATH`: with `utxorpcTLSSecretRef` set, the operator rejects any value other than its own. Keep `DINGO_API_TLS_MODE`, and in every other entry that names a file under `/tls/`, such as `DINGO_API_TLS_CERT_FILE_PATH` and `DINGO_API_TLS_KEY_FILE_PATH`, change `/tls/` to `/var/run/dingo-api-tls/` |
 
 These have no counterpart: node-to-client access over the pod network on a
-relay, `minReadySeconds`, `updateStrategy`,
-`automountServiceAccountToken`, `serviceAccount.annotations`, `sidecars`,
-`blockProducer.podAnnotations`, `service.ports.private` and
+relay, `apiTLS.existingSecret` without a UTxO RPC port, `minReadySeconds`,
+`updateStrategy`, `automountServiceAccountToken`, `serviceAccount.annotations`,
+`sidecars`, `blockProducer.podAnnotations`, `service.ports.private` and
 `service.ports.metrics` other than 3002 and 12798, the session affinity and
 annotations of the private, metrics and compatibility Services,
 `podMonitor.extraLabels` and `podTargetLabels`, and the other `availability`
