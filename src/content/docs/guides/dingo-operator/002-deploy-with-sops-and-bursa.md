@@ -16,7 +16,7 @@ This guide builds a complete block-producer deployment on Kubernetes:
 - A Bursa KES agent with two replicas holds KES keys and signs block headers,
   so a producer never holds its KES key.
 
-This page covers dingo-operator v0.5.0 (chart 0.9.0), the dingonodes chart
+This page covers dingo-operator v0.6.0 (chart 0.10.0), the dingonodes chart
 0.1.0, Bursa v0.26.0 (chart 0.0.16), and Dingo v0.94.2.
 
 ## How the parts connect
@@ -40,7 +40,7 @@ A producer gets its KES key in one of two ways. Choose one per pool:
 In `Assisted` mode the operator validates and rolls a certificate that you
 deliver. It never issues one itself.
 
-dingo-operator v0.5.0 also accepts `signingAgent` with `rotation.mode: Auto`,
+dingo-operator v0.6.0 also accepts `signingAgent` with `rotation.mode: Auto`,
 when `controlClientCertSecretRef`, `serverSpkiSha256` and
 `rotation.reloadInPlace` are set. The operator then rotates the key through
 the agent's control role.
@@ -48,7 +48,7 @@ the agent's control role.
 This guide does not use `Auto` rotation, with or without an agent. `Auto`
 issues each new certificate through a cold signer. With Bursa v0.26.0, the
 signer issues an operational certificate only for a KES key that its caller
-configuration grants explicitly, and dingo-operator v0.5.0 asks for a
+configuration grants explicitly, and dingo-operator v0.6.0 asks for a
 certificate for a newly generated KES key on every issue. The first
 certificate, issued by hand, works, but every renewal through the Bursa signer
 is denied until
@@ -175,7 +175,7 @@ certificate:
 - **Pin.** Required in this setup. With a pin, the node checks the agent's
   server key instead of a CA chain. Without one, Dingo verifies the agent's
   certificate against the system roots in its image, which do not include
-  this guide's private CA, and dingo-operator v0.5.0 has no setting that adds
+  this guide's private CA, and dingo-operator v0.6.0 has no setting that adds
   one.
 
 Compute the pin from the agent's server certificate, and each
@@ -337,7 +337,7 @@ rbac:
 ```sh
 kubectl create namespace dingo
 helm install dingo-operator oci://ghcr.io/blinklabs-io/helm-charts/charts/dingo-operator \
-  --version 0.9.0 -n dingo-operator --create-namespace -f dingo-operator.yaml
+  --version 0.10.0 -n dingo-operator --create-namespace -f dingo-operator.yaml
 kubectl label namespace dingo-operator \
   dingo.blinklabs.io/metrics=allowed dingo.blinklabs.io/node-to-client=allowed
 ```
