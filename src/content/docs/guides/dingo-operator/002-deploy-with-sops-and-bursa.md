@@ -57,7 +57,9 @@ is resolved, and the producer stops forging when its KES key expires.
 
 ## Requirements
 
-- A Kubernetes cluster and Helm 3.
+- A Kubernetes 1.30 or later cluster and Helm 3. The dingo-operator chart
+  0.10.0 refuses to install on an older cluster: its `DingoNode` CRD relies on
+  CRD validation ratcheting, which Kubernetes enables by default from 1.30.
 - `sops` and `age` on the machine that deploys, and `openssl` for certificates.
 - An offline machine with `sops` and `bursa`, for issuing operational
   certificates.
