@@ -11,7 +11,7 @@ description: Bursa Release Notes
 
 - Version: v0.27.0 - *[View Release Notes](../v0-27-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.27.0)
   * Added the `bursa key pool-id` command to derive a pool ID from a cold verification key or mnemonic, emit bech32 or hexadecimal output, write files with secure `0600` permissions, and validate input before writing.
-  * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the exclusion cannot be applied, preventing operation without the intended protection.
+  * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the system cannot exclude a file, preventing operation without the intended protection.
   * Strengthened firmware reset security by requiring host authentication after host-key registration, while preserving reset access during bootstrap.
   * Accelerated PostgreSQL connection recovery by limiting watermark liveness checks to `300ms`; dead idle connections now fail fast so replacement connections can connect within the caller's timeout.
   * Standardized pool relay networking on network-order IPv6 bytes and updated the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
