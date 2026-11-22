@@ -13,6 +13,9 @@ description: Bursa Release Notes
   * Added the `bursa key pool-id` command to derive a pool ID from a cold verification key or mnemonic, emit bech32 or hexadecimal output, write files with secure `0600` permissions, and validate input before writing.
   * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the exclusion cannot be applied, preventing operation without the intended protection.
   * Strengthened firmware reset security by requiring host authentication after host-key registration, while preserving reset access during bootstrap.
+  * Accelerated PostgreSQL connection recovery by limiting watermark liveness checks to `300ms`; dead idle connections now fail fast so replacement connections can connect within the caller's timeout.
+  * Updated pool relay networking to use standard network-order IPv6 bytes and brought the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
+  * Refined JWT verification with `keyfunc/v3` `v3.9.2`, allowing whitelisted tokens without a `kid` header and failing faster for unknown key IDs when no remote resources exist.
 - Version: v0.26.0 - *[View Release Notes](../v0-26-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.26.0)
 - Version: v0.25.0 - *[View Release Notes](../v0-25-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.25.0)
 - Version: v0.24.0 - *[View Release Notes](../v0-24-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.24.0)
