@@ -136,7 +136,7 @@ With `--signing-key-file -`, standard output uses bech32 format (pool_xsk prefix
 <a name="pool-id"></a>
 
 #### Pool ID
-The command computes a stake pool ID from a cold verification key by hashing the key with Blake2b-224. Use either `--cold-vkey <path>` for a cold verification key envelope or mnemonic input; these input sources are alternatives. When the command derives the key from a mnemonic, `--index <number>` selects the CIP-1853 pool-cold derivation index, which defaults to `0`.
+The command computes a stake pool ID from a cold verification key by hashing the key with Blake2b-224. The command accepts one input source at a time: either `--cold-vkey <path>` for a cold verification key envelope or mnemonic input. When mnemonic input supplies the key, `--index <number>` selects the CIP-1853 pool-cold derivation index, which defaults to `0`.
 
 Only `StakePoolVerificationKey_ed25519` and the legacy `StakePoolVerificationKeyShelley_ed25519` envelope types are valid for `--cold-vkey`. Bursa rejects signing-key envelopes, other verification-key roles, bare hexadecimal input, and malformed input.
 
