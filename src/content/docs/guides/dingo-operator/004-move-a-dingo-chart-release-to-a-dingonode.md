@@ -248,8 +248,8 @@ how long the node is unreachable.
 | | Uninstall, then create | Take over the StatefulSet |
 | --- | --- | --- |
 | Works for | Any release name | A release whose name contains `dingo`, on chart 0.4.32 or later |
-| The pod | Stops at uninstall, and starts again once the `DingoNode` exists | Keeps running until the operator rolls it once |
-| Through Services | Unreachable from the uninstall until the `DingoNode`'s pod is ready | The same: uninstall deletes the chart's Services, and the operator's Services select only its own pods |
+| The pod | Stops before the uninstall, and starts again once the `DingoNode` exists | Keeps running until the operator rolls it once |
+| Through Services | Unreachable from the scale-down until the `DingoNode`'s pod is ready | The same: uninstall deletes the chart's Services, and the operator's Services select only its own pods |
 | NetworkPolicy | No pod runs between the uninstall and the `DingoNode`'s pod | No policy selects the running pod from the uninstall until it rolls |
 | Needs | Nothing extra | A `helm upgrade` first, to keep the StatefulSet |
 
@@ -262,12 +262,15 @@ with `StatefulSetSelectorMismatch`. Use the first method for it.
 
 ### Uninstall, then create
 
-1. Uninstall the release, and wait for its pod to go. Helm does not own the data
-   volume claim, so the claim stays:
+1. Scale the StatefulSet to zero and wait for its pod to go, then uninstall the
+   release. Stopping the pod first keeps the chart's NetworkPolicy in place
+   until the pod has terminated. Helm does not own the data volume claim, so the
+   claim stays:
 
    ```sh
-   helm -n dingo uninstall <release>
+   kubectl -n dingo scale statefulset <name> --replicas=0
    kubectl -n dingo wait --for=delete pod/<name>-0 --timeout=10m
+   helm -n dingo uninstall <release>
    kubectl -n dingo get pvc dingo-data-<name>-0
    ```
 
