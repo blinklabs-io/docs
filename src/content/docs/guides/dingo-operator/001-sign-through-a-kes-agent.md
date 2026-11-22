@@ -8,7 +8,7 @@ With a KES agent, the key stays in a Bursa KES agent instead. Dingo sends each
 block header to the agent over TLS, and the agent signs it. The keys Secret
 carries only the VRF key and the operational certificate.
 
-This page covers dingo-operator v0.5.0, Dingo v0.94.2, and Bursa v0.26.0.
+This page covers dingo-operator v0.6.0, Dingo v0.94.2, and Bursa v0.26.0.
 
 ## How the parts connect
 
@@ -20,25 +20,32 @@ This page covers dingo-operator v0.5.0, Dingo v0.94.2, and Bursa v0.26.0.
 
 ## Requirements
 
-- **Dingo v0.94.0 or later.** dingo-operator v0.5.0 refuses Dingo images older
+- **Dingo v0.94.0 or later.** dingo-operator v0.6.0 refuses Dingo images older
   than v0.93.0 when `signingAgent` is set. Agent profiles, which let one agent
   serve several pools, need v0.94.0. Set `spec.image.tag` explicitly.
   Dingo v0.94.0 refuses a socket directory that group or other can write, so
   use dingo-operator v0.4.0 or later, which puts Dingo's socket in a directory
   of its own.
-- **Rotation mode `Assisted` or `MonitorOnly`.** This guide rotates the key by
-  hand, as described below. `MonitorOnly` is the default. dingo-operator v0.5.0
-  also accepts `Auto` with `signingAgent`, when `controlClientCertSecretRef`,
-  `serverSpkiSha256` and `rotation.reloadInPlace` are set. The operator then
-  rotates the key through the agent's control role. With the Bursa v0.26.0
-  signer as the cold signer, that rotation cannot issue until
+  To pin the image by digest, also set `spec.image.capabilityVersion` to the
+  Dingo release the image contains. The operator needs it to select the
+  user ID, health probes and signing-agent support. Once set, it must stay set
+  while the digest is.
+- **Rotation mode `Assisted`.** This guide rotates the key by hand, as
+  described below, and only `Assisted` delivers the keys Secret's new
+  certificate to the node. `MonitorOnly`, the default, reports a valid
+  replacement but never approves, loads or rolls it out, so set `Assisted`
+  explicitly. dingo-operator v0.6.0 also accepts `Auto` with `signingAgent`,
+  when `controlClientCertSecretRef`, `serverSpkiSha256` and
+  `rotation.reloadInPlace` are set. The operator then rotates the key through
+  the agent's control role. With the Bursa v0.26.0 signer as the cold signer,
+  that rotation cannot issue until
   [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
   is resolved. This guide does not cover that setup.
 - **A mutual TLS link to the agent.** Bursa v0.26.0 admits a producer only
   when its client certificate is verified and its key is pinned for the
   profile. Give the node a client certificate, and pin the agent's server key
   unless the agent's certificate chains to a root in the Dingo image:
-  dingo-operator v0.5.0 has no setting that adds a private CA. A plain TCP
+  dingo-operator v0.6.0 has no setting that adds a private CA. A plain TCP
   link cannot admit a signing session, so the agent refuses it even where
   something else, such as a service mesh, secures the connection.
 
