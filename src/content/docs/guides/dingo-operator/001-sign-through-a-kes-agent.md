@@ -31,13 +31,14 @@ This page covers dingo-operator v0.6.0, Dingo v0.94.2, and Bursa v0.26.0.
   user ID, health probes and signing-agent support. Once set, it must stay set
   while the digest is.
 - **Rotation mode `Assisted`.** This guide rotates the key by hand, as
-  described below, and only `Assisted` delivers the new certificate to the
-  node. `MonitorOnly`, the default, reports a valid replacement but never
-  approves, loads or rolls it out, so set `Assisted` explicitly.
-  dingo-operator v0.6.0 also accepts `Auto` with `signingAgent`, when
-  `controlClientCertSecretRef`, `serverSpkiSha256` and `rotation.reloadInPlace`
-  are set. The operator then rotates the key through the agent's control role. With the Bursa v0.26.0
-  signer as the cold signer, that rotation cannot issue until
+  described below, and only `Assisted` delivers the keys Secret's new
+  certificate to the node. `MonitorOnly`, the default, reports a valid
+  replacement but never approves, loads or rolls it out, so set `Assisted`
+  explicitly. dingo-operator v0.6.0 also accepts `Auto` with `signingAgent`,
+  when `controlClientCertSecretRef`, `serverSpkiSha256` and
+  `rotation.reloadInPlace` are set. The operator then rotates the key through
+  the agent's control role. With the Bursa v0.26.0 signer as the cold signer,
+  that rotation cannot issue until
   [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
   is resolved. This guide does not cover that setup.
 - **A mutual TLS link to the agent.** Bursa v0.26.0 admits a producer only
