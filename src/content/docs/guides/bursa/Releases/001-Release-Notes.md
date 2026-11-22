@@ -16,7 +16,7 @@ description: Bursa Release Notes
   * Protected signing-log integrity by validating the full durable chain and refusing subsequent appends when earlier durable records have changed.
   * Accelerated PostgreSQL connection recovery by limiting watermark liveness checks to `300ms`; dead idle connections now fail fast so replacement connections can connect within the caller's timeout.
   * Standardized pool relay networking on network-order IPv6 bytes and updated the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
-  * Refined JWT checks with `keyfunc/v3` `v3.9.2`, enforcing whitelist checks for tokens without a `kid` header and failing faster for unknown key IDs when no remote resources exist.
+  * Refined JWT validation with `keyfunc/v3` `v3.9.2`; it enforces whitelist checks for tokens without a `kid` header and fails faster for unknown key IDs when no remote resources exist.
   * Modernized system compatibility with `golang.org/x/sys` `v0.50.0` for current platform behavior and compatibility.
   * Refreshed Google Cloud integrations with KMS `v1.37.0` and long-running operation support `v1.5.0`.
   * Enhanced AWS credential support with `v1.21.1` and its related modules.
