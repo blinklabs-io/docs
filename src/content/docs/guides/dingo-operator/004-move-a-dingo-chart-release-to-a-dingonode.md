@@ -264,15 +264,19 @@ with `StatefulSetSelectorMismatch`. Use the first method for it.
 
 1. Scale the StatefulSet to zero and wait for its pod to go, then uninstall the
    release. Stopping the pod first keeps the chart's NetworkPolicy in place
-   until the pod has terminated. Helm does not own the data volume claim, so the
-   claim stays:
+   until the pod has terminated. The commands are chained with `&&`, so the
+   uninstall does not run if the scale fails or the wait times out. Helm does
+   not own the data volume claim, so the claim stays:
 
    ```sh
-   kubectl -n dingo scale statefulset <name> --replicas=0
-   kubectl -n dingo wait --for=delete pod/<name>-0 --timeout=10m
-   helm -n dingo uninstall <release>
+   kubectl -n dingo scale statefulset <name> --replicas=0 \
+     && kubectl -n dingo wait --for=delete pod/<name>-0 --timeout=10m \
+     && helm -n dingo uninstall <release>
    kubectl -n dingo get pvc dingo-data-<name>-0
    ```
+
+   If the wait times out, find out why the pod has not terminated before you
+   run the uninstall.
 
    The node is down from here until the `DingoNode` has a ready pod. Waiting for
    the pod keeps a producer from running beside its replacement.
