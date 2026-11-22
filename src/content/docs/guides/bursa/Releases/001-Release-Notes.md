@@ -9,6 +9,10 @@ description: Bursa Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.27.0 - *[View Release Notes](../v0-27-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.27.0)
+  * Added the `bursa key pool-id` command to derive a pool ID from a cold verification key or mnemonic, emit bech32 or hexadecimal output, write files with secure `0600` permissions, and validate input before writing.
+  * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the exclusion cannot be applied, preventing operation without the intended protection.
+  * Strengthened firmware reset security by requiring host authentication after host-key registration, while preserving reset access during bootstrap.
 - Version: v0.26.0 - *[View Release Notes](../v0-26-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.26.0)
 - Version: v0.25.0 - *[View Release Notes](../v0-25-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.25.0)
 - Version: v0.24.0 - *[View Release Notes](../v0-24-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.24.0)
