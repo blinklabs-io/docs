@@ -124,6 +124,36 @@ Bursa は通常ファイルからのみ鍵を読み込みます。Unix ではシ
 
 ***
 
+<a name="pool-id"></a>
+
+<a id="pool-id-command"></a>
+
+### ステークプール ID
+
+`bursa key pool-id` は、コールド検証鍵から Blake2b-224 ハッシュを計算してステークプール ID を生成します。入力には、`--cold-vkey <パス>` で指定するコールド検証鍵ファイル、またはニーモニックから導出するコールド鍵を使用します。`--cold-vkey` とニーモニック入力は同時に指定できません。ニーモニックから導出する場合、`--index <番号>` は CIP-1853 のプールコールド鍵の導出インデックスを指定し、省略時は `0` を使用します。
+
+`--cold-vkey` には、`StakePoolVerificationKey_ed25519` または従来の `StakePoolVerificationKeyShelley_ed25519` 型の検証鍵エンベロープだけを指定できます。署名鍵、別の役割の検証鍵、ベアの16進数、形式が不正な入力は使用できません。
+
+出力はデフォルトで `pool1...` 接頭辞の bech32 形式です。`--output-format hex` を指定すると、56文字の16進数形式で出力します。`--out-file <パス>` を指定すると、ID と改行をファイルに書き込みます。出力ファイルには所有者だけがアクセスできる `0600` 権限を設定し、既存のファイルを上書きする場合もこの権限を適用します。
+
+```bash
+./bursa key pool-id --cold-vkey pool-cold.vkey
+```
+
+```bash
+./bursa key pool-id --mnemonic-file seed.txt --index 1
+```
+
+```bash
+./bursa key pool-id --cold-vkey pool-cold.vkey --output-format hex
+```
+
+```bash
+./bursa key pool-id --cold-vkey pool-cold.vkey --out-file pool.id
+```
+
+***
+
 <a name="policy"></a>
 
 <a id="policy-key"></a>
