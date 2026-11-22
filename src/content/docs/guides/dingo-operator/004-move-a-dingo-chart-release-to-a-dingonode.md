@@ -76,7 +76,7 @@ Carry these settings over to the `DingoNode` spec:
 | Chart value | `DingoNode` field |
 | --- | --- |
 | `environment.CARDANO_NETWORK` (default `preview`) | `spec.network` |
-| `image.repository`, `image.tag`, `image.digest`, `image.pullPolicy` | `spec.image.repository`, `tag`, `digest`, `pullPolicy` |
+| `image.repository`, `image.tag`, `image.digest`, `image.pullPolicy` | `spec.image.repository`, `tag`, `digest`, `pullPolicy`. With a digest, also set `spec.image.capabilityVersion` to the Dingo release the image contains, such as `0.94.2`: the CRD refuses a new digest without it |
 | `replicaCount` (relays) | `spec.replicas` |
 | `persistence.size`, `persistence.storageClass`, `persistence.accessMode` | `spec.persistence.size`, `storageClass`, `accessMode` |
 | `resources`, `tolerations`, `affinity`, `podSecurityContext` | `spec.resources`, `spec.tolerations`, `spec.affinity`, `spec.podSecurityContext` |
@@ -101,8 +101,9 @@ Carry these settings over to the `DingoNode` spec:
 | `podMonitor.enabled`, and the `interval` of its endpoint | `spec.metrics.podMonitor.enabled`, `interval` |
 | `blockProducer.existingSecret`, or the copy of `<name>-keys` | `spec.blockProducer.keys.secretRef` |
 | `blockProducer.forgeSyncToleranceSlots`, `forgeStaleGapThresholdSlots`, `slotsPerKESPeriod`, `maxKESEvolutions` | The fields of the same names under `spec.blockProducer` |
-| `topology.bootstrapPeers`, `publicRoots`, `useLedgerAfterSlot` | The fields of the same names under `spec.topology` |
-| `topology.localRoots` | `spec.topology.relayRefs` for `DingoNode` relays in the namespace, and `externalRelays` for the rest |
+| `topology.bootstrapPeers`, `useLedgerAfterSlot` | The fields of the same names under `spec.topology` |
+| `topology.publicRoots` | `spec.topology.publicRoots`, flattened: list the `address` and `port` of each entry in each group's `accessPoints`. The operator renders them as one group with `advertise: false`, so a group's own `advertise` does not carry over |
+| `topology.localRoots` | `spec.topology.relayRefs` for `DingoNode` relays in the namespace, and `externalRelays` for the rest, one entry per access point, each with its own `valency`, `trustable` and `advertise` |
 | Other `environment` entries | `spec.environment`. Leave out `CARDANO_NETWORK`, which `spec.network` sets, and `CARDANO_DATABASE_PATH`, which the operator sets to `/data`: an entry here overrides the operator's value. Leave out `CARDANO_PRIVATE_BIND_ADDR` too, and use `nodeToClient.enabled`: the operator's NetworkPolicy opens port 3002 only from that field. `CARDANO_PORT`, `CARDANO_PRIVATE_PORT`, `CARDANO_METRICS_PORT` and `DINGO_HEALTH_PORT` are rejected unless they equal the operator's ports: 3001 (or `relayService.port`), 3002, 12798 and 12799 |
 
 These have no counterpart: node-to-client access over the pod network on a
@@ -158,6 +159,11 @@ well as `vote.skey`, so a chart keys Secret works unchanged. If the release set
 `kesKey`, `opCertKey`, `vrfKey` or `blsKey` to other names, rename those
 entries in the copy to `kes.skey`, `node.cert`, `vrf.skey` and `bls.skey`.
 
+A release that uses `blockProducer.existingSecret` can point
+`keys.secretRef` at that Secret directly when its entries have the names above,
+and skip steps 1 and 2. To rename entries, copy it as in step 1, with its name
+in place of `<name>-keys`, and rename the entries in the copy.
+
 1. Copy the chart's Secret to a Secret that the release does not own, under a
    different name. The `jq` filter keeps the type and the data and drops the
    rest of the metadata, including Helm's labels and annotations, and
@@ -184,9 +190,11 @@ entries in the copy to `kes.skey`, `node.cert`, `vrf.skey` and `bls.skey`.
    if the release had one. The count is `0`.
 
 3. Let the operator read the Secret. If the operator release sets
-   `rbac.readSecretNames`, add `pool-a-keys` to it. If the namespace is not
-   already in `rbac.keySecretsNamespaces`, add it. Then upgrade the operator
-   release. See
+   `rbac.readSecretNames`, add the Secret's name to it. An empty
+   `rbac.keySecretsNamespaces` grants access only in the operator's own
+   namespace. If the node's namespace is another one, list it there, along
+   with every other namespace that holds block producers, the operator's own
+   included when it holds one. Then upgrade the operator release. See
    [Install dingo-operator](/guides/dingo-operator/002-deploy-with-sops-and-bursa/#install-dingo-operator).
 
 Run only one producer for a pool at a time. Within a namespace, the operator
@@ -336,6 +344,9 @@ for that whole time. Grant the operator read access to the keys Secret before
 the uninstall, and check that `KeysValid` is `True` right after you create the
 `DingoNode`, so the window lasts only for the roll. The first method has no such
 window, because no pod runs between the uninstall and the `DingoNode`'s pod.
+Use the first method for a release with `service.private.enabled` or an API
+port, whose private listeners would otherwise be reachable by any pod in the
+cluster during the window.
 
 If you create the `DingoNode` before the uninstall, and without `keep`, Helm
 deletes the StatefulSet at uninstall. A chart-generated keys Secret is deleted
@@ -368,8 +379,10 @@ for them to take effect.
   and its namespace when it is not the node's own,
   `dingo.blinklabs.io/metrics=allowed`. Without it, status and KES monitoring
   cannot scrape the node.
-- **APIs.** With `spec.apis` ports set, clients need
-  `dingo.blinklabs.io/api=allowed`, or must match `spec.apis.ingressFrom`.
+- **APIs.** With `spec.apis` ports set and `spec.apis.ingressFrom` empty,
+  clients need `dingo.blinklabs.io/api=allowed`. Once `spec.apis.ingressFrom`
+  lists peers, only clients matching one of them are admitted, and the label
+  grants nothing.
 
 ## Write the DingoNode
 
