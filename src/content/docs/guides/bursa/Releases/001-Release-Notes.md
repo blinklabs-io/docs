@@ -13,7 +13,7 @@ description: Bursa Release Notes
   * Added the `bursa key pool-id` command to derive a pool ID from a cold verification key or mnemonic, emit bech32 or hexadecimal output, write files with secure `0600` permissions, and validate input before writing.
   * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the system cannot exclude a file, preventing operation without the intended protection.
   * Strengthened firmware reset security by requiring host authentication after host-key registration, while preserving reset access during bootstrap.
-  * Protected signing-log integrity by validating the full durable chain and refusing subsequent appends when earlier records have changed.
+  * Protected signing-log integrity by validating the full durable chain and refusing subsequent appends when earlier durable records have changed.
   * Accelerated PostgreSQL connection recovery by limiting watermark liveness checks to `300ms`; dead idle connections now fail fast so replacement connections can connect within the caller's timeout.
   * Standardized pool relay networking on network-order IPv6 bytes and updated the underlying Cardano networking library to `v0.220.1` with refreshed cryptography support.
   * Refined JWT checks with `keyfunc/v3` `v3.9.2`, enforcing whitelist checks for tokens without a `kid` header and failing faster for unknown key IDs when no remote resources exist.
