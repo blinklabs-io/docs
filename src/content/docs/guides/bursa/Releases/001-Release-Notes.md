@@ -9,6 +9,12 @@ description: Bursa Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.28.0 - *[View Release Notes](../v0-28-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.28.0)
+  * Enabled `gen-staged-key --attestation-out` to produce a signed staged-key attestation from an attested TLS KES agent.
+  * Authorized operational certificate issuance through trusted `opcerts[].kes_agents` pins, avoiding `opcerts[].kes_vkeys` edits and restarts for each staged key.
+  * Configured trusted agents with `spki_sha256` pins and optional `profile` values.
+  * Validated trusted-agent configuration at startup and refused invalid attestations.
+  * Retained the existing `kes_vkeys` authorization path for requests without attestations.
 - Version: v0.27.0 - *[View Release Notes](../v0-27-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.27.0)
   * Added the `bursa key pool-id` command to derive a pool ID from a cold verification key or mnemonic, emit bech32 or hexadecimal output, write files with secure `0600` permissions, and validate input before writing.
   * Improved iOS contact protection by excluding each existing contact file from backups. Startup now stops when the system cannot exclude a file, preventing operation without the intended protection.
