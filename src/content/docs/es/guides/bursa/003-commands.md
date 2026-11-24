@@ -120,13 +120,13 @@ Las opciones de control son:
 Los subcomandos disponibles son:
 
 - `info`: muestra el estado de las claves del agente.
-- `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; con esta opción, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El comando no sobrescribe un archivo existente. `--attestation-out <path>` es opcional. La opción guarda en un archivo JSON la atestación firmada de la clave staged que devuelve el agente para usarla como `attestation` en la solicitud de certificado operativo del firmante. El agente devuelve la atestación solo cuando ejecuta un listener TLS atestado con una identidad TLS de atestación. Si no devuelve una atestación, la solicitud de `--attestation-out` produce un error y no crea un archivo vacío.
+- `gen-staged-key`: genera una clave KES en estado staged y muestra su clave de verificación. `--out` es opcional; con esta opción, el comando imprime primero la respuesta y después escribe la clave como sobre de `cardano-cli`. El comando no sobrescribe un archivo existente. Con `--attestation-out <path>`, el comando guarda en un archivo JSON la atestación firmada de la clave staged que devuelve el agente. El archivo se puede usar como `attestation` en la solicitud de certificado operativo del firmante. El agente devuelve la atestación solo cuando ejecuta un listener TLS atestado con una identidad TLS de atestación. Si no devuelve una atestación, la solicitud de `--attestation-out` produce un error y no crea un archivo vacío.
 - `install-key`: instala la clave staged mediante un certificado operativo. Requiere `--opcert` y lee un sobre de `cardano-cli` de tipo `NodeOperationalCertificate`.
 - `drop-key`: elimina material de clave. Requiere `--target`, cuyo valor debe ser `staged`, `active` o `all`.
 
 El listener atestado debe usar TLS y verificar el certificado del cliente mediante `attested_client_ca_file`. Bursa compara la huella SHA-256 del SPKI del certificado con `kes_agent.control_client_spki_sha256` del perfil autorizado. Una sesión remota de control solo admite `info`, `gen-staged-key` e `install-key`; `drop-key` solo funciona mediante el socket de control local. Un pin de control no concede autorización para firmar: la firma remota usa `sign_client_spki_sha256` por separado.
 
-Cada subcomando imprime la respuesta del agente como JSON y codifica en hexadecimal los campos de bytes. Cuando la respuesta incluye una atestación, la salida también incluye `attestation_spki_sha256`, la huella SHA-256 del SPKI; esta huella se puede comparar con el pin del agente.
+Cada subcomando imprime la respuesta del agente como JSON y codifica en hexadecimal los campos de bytes. Cuando la respuesta incluye una atestación, la salida también incluye `attestation_spki_sha256` y permite comparar la huella SHA-256 del SPKI con el pin del agente.
 
 El comando termina con un estado distinto de cero cuando el agente rechaza una solicitud. Cada solicitud tiene un límite de 30 segundos; la cancelación detiene de inmediato la lectura o escritura bloqueada del socket.
 
