@@ -477,7 +477,7 @@ signer:
 
 `kes_vkeys` enumera la lista explícita de claves de verificación KES que el llamador puede certificar. `kes_agents` ofrece una fuente de confianza alternativa o adicional. Cada entrada de `signer.callers[].opcerts[].kes_agents[]` debe incluir `spki_sha256`, que contiene el resumen SHA-256 de la SPKI TLS o de atestación del agente de confianza y corresponde al valor `server_spki_sha256` que el agente registra al iniciar. `profile` es opcional y limita la confianza a ese perfil del agente.
 
-Cada entrada de `signer.callers[].opcerts[]` debe incluir `kes_vkeys`, `kes_agents` o ambos. Bursa valida estas entradas al iniciar y rechaza cualquier pin que no tenga exactamente 64 caracteres hexadecimales, los pines SPKI duplicados para la misma clave fría aunque difieran sus valores de `profile` y cualquier entrada que no tenga ninguna fuente de confianza. Bursa deniega la solicitud si la clave fría o la clave de verificación KES exacta no aparece en la concesión.
+Cada entrada de `signer.callers[].opcerts[]` debe incluir `kes_vkeys`, `kes_agents` o ambos. Bursa valida estas entradas al iniciar y rechaza cualquier pin que no tenga exactamente 64 caracteres hexadecimales, los pines SPKI duplicados para la misma clave fría aunque difieran sus valores de `profile` y cualquier entrada que no tenga ninguna fuente de confianza. Bursa deniega la solicitud si la clave fría no aparece en la concesión. Sin `attestation`, la clave de verificación KES exacta también debe aparecer en `kes_vkeys`.
 
 ### Campo `attestation` de la solicitud de opcert
 
