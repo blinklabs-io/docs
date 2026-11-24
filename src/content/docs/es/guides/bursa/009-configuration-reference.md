@@ -458,7 +458,7 @@ signer:
 | `signer.keys[].allowed_requests: [opcert]` | `POST /v1/sign` con `type: opcert` | Permite la firma del certificado operativo. |
 | Política ausente o lista sin `opcert` | `POST /v1/sign` con `type: opcert` | Bursa deniega la operación. |
 
-Para emitir un certificado operativo, el llamador también necesita una concesión explícita para la clave fría y para la clave de verificación KES exacta que solicita:
+Para emitir un certificado operativo, el llamador también necesita una concesión explícita para la clave fría y para la clave de verificación KES exacta que solicita. El llamador debe incluir la clave fría en `signer.callers[].keys` y `signer.callers[].opcerts[].key` debe identificar esa misma clave:
 
 ```yaml
 signer:
@@ -470,9 +470,20 @@ signer:
         - key: "00000000000000000000000000000000000000000000000000000000"
           kes_vkeys:
             - "1111111111111111111111111111111111111111111111111111111111111111"
+          kes_agents:
+            - spki_sha256: "<64 caracteres hexadecimales>"
+              profile: pool-a  # opcional: solo este perfil del agente
 ```
 
-Cada `opcerts[].key` debe aparecer también en `signer.callers[].keys`. `kes_vkeys` debe enumerar de forma explícita las claves de verificación KES que ese llamador puede certificar; una lista vacía no es válida. Bursa deniega la solicitud si la clave fría o la clave de verificación KES exacta no aparece en la concesión.
+`kes_vkeys` enumera la lista explícita de claves de verificación KES que el llamador puede certificar. `kes_agents` ofrece una fuente de confianza alternativa o adicional: `spki_sha256` identifica mediante el resumen SHA-256 de la SPKI TLS o de atestación al agente de confianza, y corresponde al valor `server_spki_sha256` que el agente registra al iniciar. `profile` es opcional y limita la confianza a ese perfil del agente.
+
+Cada entrada de `opcerts` debe incluir `kes_vkeys`, `kes_agents` o ambos. Bursa valida estas entradas al iniciar y rechaza cualquier pin que no tenga exactamente 64 caracteres hexadecimales, los pines SPKI duplicados para la misma clave fría aunque difieran sus valores de `profile` y cualquier entrada que no tenga ninguna fuente de confianza. Bursa deniega la solicitud si la clave fría o la clave de verificación KES exacta no aparece en la concesión.
+
+### Campo `attestation` de la solicitud de opcert
+
+Las solicitudes de opcert de `POST /v1/sign` pueden incluir el objeto `attestation` que produce `bursa kes-agent control gen-staged-key --attestation-out`. El llamador aún debe tener la clave fría en `signer.callers[].keys`, y `signer.keys[].allowed_requests: [opcert]` debe autorizar la solicitud. Bursa verifica la firma y la coincidencia exacta de la clave de verificación KES solicitada, el hash de la clave fría, el pin del agente de confianza y el `profile` opcional.
+
+Cuando la solicitud incluye `attestation`, Bursa deniega una atestación inválida o que no coincide, en lugar de ignorarla y usar `kes_vkeys`. Sin `attestation`, Bursa usa la autorización explícita de `kes_vkeys`.
 
 ### Restricciones de transacciones por llamador
 
