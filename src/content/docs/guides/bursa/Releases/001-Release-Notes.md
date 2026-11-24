@@ -9,6 +9,7 @@ description: Bursa Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.29.0 - *[View Release Notes](../v0-29-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.29.0)
 - Version: v0.28.0 - *[View Release Notes](../v0-28-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.28.0)
   * Enabled `gen-staged-key --attestation-out` to produce a signed staged-key attestation from an attested TLS KES agent.
   * Authorized operational certificate issuance through trusted `opcerts[].kes_agents` pins, avoiding `opcerts[].kes_vkeys` edits and restarts for each staged key.
