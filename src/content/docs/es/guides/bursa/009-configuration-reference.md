@@ -223,6 +223,7 @@ El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `""` | Ruta opcional a la clave de verificación fría. Admite un sobre de texto de `cardano-cli`, hexadecimal o 32 bytes sin procesar. Bursa requiere esta clave o `kes_agent.cold_vkey_hex`. |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | `""` | Clave de verificación fría en hexadecimal. Bursa requiere esta clave o `kes_agent.cold_vkey_file`; si aparecen ambas, Bursa usa este valor hexadecimal. |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | `""` | Requerida. La configuración debe indicar el inicio del sistema Shelley con formato `RFC3339`. |
+| `kes_agent.network_magic` | `KESAGENT_NETWORK_MAGIC` | `0` | Magic de red opcional de tipo `uint32`. El valor `0` o ausente conserva el ámbito de red heredado; un valor distinto de cero añade `/magic=<n>` al ámbito de red. |
 | `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | `0` | Define el primer slot Shelley del ancla de la red cuando la era Byron usaba slots de 20 segundos. Bursa cuenta los slots desde este valor en `shelley_start_time`; sin el ancla, Bursa cuenta desde el slot `0` en `system_start`. |
 | `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | `""` | Define la hora RFC3339 que corresponde a `shelley_start_slot`; ambos valores deben coincidir con el ancla Shelley de la red. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | `1` | Duración de cada slot en segundos. El valor debe ser positivo. |
@@ -232,7 +233,7 @@ El daemon se configura bajo `kes_agent`; cada campo admite su variable `KESAGENT
 | `kes_agent.evolve_interval` | `KESAGENT_EVOLVE_INTERVAL` | `1m` | Intervalo del planificador como cadena de duración de Go. El valor predeterminado es `1m`. |
 | `kes_agent.guard_file` | `KESAGENT_GUARD_FILE` | `""` | Requerida sin un [almacén compartido](#almacén-compartido). La configuración debe indicar una ruta de archivo persistente y no vacía que el agente pueda abrir. |
 
-Sin [`kes_agent.profiles`](#perfiles), estos campos de un solo pool forman un perfil llamado `default`. La clave de verificación fría debe proceder entonces de `cold_vkey_file` o `cold_vkey_hex` y resolver a 32 bytes. Antes del inicio también se requieren `system_start` en RFC3339, `slot_length` positivo, `slots_per_kes_period` distinto de cero y, salvo que haya un [almacén compartido](#almacén-compartido), una ruta durable `guard_file`. El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia conserva el periodo KES autorizado más alto, lo restaura después de un reinicio y rechaza una reducción del periodo. Sin almacén compartido, Bursa rechaza el inicio cuando `kes_agent.guard_file` está vacío y no usa una alternativa en memoria para este guardia.
+Sin [`kes_agent.profiles`](#perfiles), estos campos de un solo pool forman un perfil llamado `default`. La clave de verificación fría debe proceder entonces de `cold_vkey_file` o `cold_vkey_hex` y resolver a 32 bytes. Antes del inicio también se requieren `system_start` en RFC3339, `slot_length` positivo, `slots_per_kes_period` distinto de cero y, salvo que haya un [almacén compartido](#almacén-compartido), una ruta durable `guard_file`. `KESAGENT_NETWORK_MAGIC` establece el valor de `kes_agent.network_magic` para el perfil de ejecución `default`. Ese valor afecta a la identidad de duplicados y al ámbito del guardia y del almacén de claves compartidos, pero es opcional. El agente KES solo conserva la clave de verificación fría; la clave de firma fría no entra en el agente. El archivo de guardia conserva el periodo KES autorizado más alto, lo restaura después de un reinicio y rechaza una reducción del periodo. Sin almacén compartido, Bursa rechaza el inicio cuando `kes_agent.guard_file` está vacío y no usa una alternativa en memoria para este guardia.
 
 ```yaml
 kes_agent:
@@ -243,6 +244,7 @@ kes_agent:
   control_socket_mode: "0600"
   cold_vkey_file: /etc/bursa/pool-cold.vkey
   system_start: "2022-03-31T00:00:00Z"
+  network_magic: 42
   slot_length: 1
   slots_per_kes_period: 129600
   max_kes_evolutions: 62
@@ -290,6 +292,7 @@ Configure `kes_agent.profiles` para atender varios pools desde un agente, en una
 | `kes_agent.profiles[].cold_vkey_file` | Carga la clave de verificación fría del pool desde un sobre de texto de `cardano-cli`, bytes sin procesar o hexadecimal. | Indique este campo o `cold_vkey_hex`. |
 | `kes_agent.profiles[].cold_vkey_hex` | Carga la clave de verificación fría del pool desde hexadecimal en línea. | Indique este campo o `cold_vkey_file`; si aparecen ambos, Bursa usa el valor hexadecimal. |
 | `kes_agent.profiles[].system_start` | Indica el inicio del sistema de la génesis Shelley. | Requerido; use una marca de tiempo RFC3339. |
+| `kes_agent.profiles[].network_magic` | Distingue perfiles que, de otro modo, compartirían la clave de verificación fría y `system_start`. | Opcional; use un valor `uint32`. Los valores no nulos distintos permiten identidades de perfil separadas. |
 | `kes_agent.profiles[].shelley_start_slot` | Indica el primer slot de Shelley. | Configúrelo con `shelley_start_time` en redes cuya era Byron usaba slots más largos, como `4492800` en mainnet y `86400` en preprod. Sin ellos, Bursa cuenta los slots desde `system_start` con `slot_length`. |
 | `kes_agent.profiles[].shelley_start_time` | Indica la hora del primer slot de Shelley. | Configúrelo con `shelley_start_slot` como marca de tiempo RFC3339, como `2020-07-29T21:44:51Z` en mainnet y `2022-06-21T00:00:00Z` en preprod. |
 | `kes_agent.profiles[].slot_length` | Duración de cada slot en segundos. | El valor predeterminado es `1`; el valor debe ser positivo. |
@@ -300,9 +303,9 @@ Configure `kes_agent.profiles` para atender varios pools desde un agente, en una
 | `kes_agent.profiles[].control_client_spki_sha256` | Lista los resúmenes SHA-256 de SPKI de los certificados de cliente autorizados para el control remoto de este perfil. | Cada valor debe tener exactamente 64 caracteres hexadecimales. Requiere TLS con verificación mediante `attested_client_ca_file`; no funciona con texto plano ni con TLS sin verificación del cliente. |
 | `kes_agent.profiles[].sign_client_spki_sha256` | Lista los resúmenes SHA-256 de SPKI de los certificados de cliente autorizados para la firma remota de este perfil. | Cada valor debe tener exactamente 64 caracteres hexadecimales. Requiere TLS con verificación mediante `attested_client_ca_file`; no funciona con texto plano ni con TLS sin verificación del cliente. |
 
-Cuando se configura `profiles`, deje sin configurar los campos de un solo pool del nivel superior: `cold_vkey_file`, `cold_vkey_hex`, `system_start`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew` y `guard_file`. Deje `slot_length` y `max_kes_evolutions` en sus valores predeterminados `1` y `62`. Bursa rechaza el inicio cuando se configura cualquiera de estos campos del nivel superior y pide el valor en cada perfil.
+Cuando se configura `profiles`, deje sin configurar los campos de un solo pool del nivel superior: `cold_vkey_file`, `cold_vkey_hex`, `system_start`, `network_magic`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew` y `guard_file`. Deje `slot_length` y `max_kes_evolutions` en sus valores predeterminados `1` y `62`. Bursa rechaza el inicio cuando se configura cualquiera de estos campos del nivel superior y pide el valor en cada perfil.
 
-Bursa también rechaza el inicio cuando dos perfiles comparten un archivo de guardia, incluido el mismo archivo alcanzado mediante un enlace simbólico o un enlace duro, y cuando dos perfiles tienen la misma clave de verificación fría y el mismo `system_start`. Una clave fría puede atender varias redes, que se distinguen por un `system_start` diferente. El modo `serve-key` admite exactamente un perfil; para varios pools, use el modo `sign`.
+Bursa también rechaza el inicio cuando dos perfiles comparten un archivo de guardia, incluido el mismo archivo alcanzado mediante un enlace simbólico o un enlace duro, y cuando dos perfiles tienen la misma clave de verificación fría, el mismo `system_start` y el mismo ámbito resultante de `network_magic`. Dos perfiles con la misma clave de verificación fría y el mismo `system_start` pueden coexistir cuando sus valores no nulos de `network_magic` son distintos. Si el ámbito resultante es igual, incluido cuando ambos valores son `0` o están ausentes, Bursa los considera duplicados. Todas las réplicas que atienden una misma identidad de perfil deben usar el mismo valor de `network_magic`. Una clave fría puede atender varias redes, que se distinguen por un `system_start` diferente. El modo `serve-key` admite exactamente un perfil; para varios pools, use el modo `sign`.
 
 ```yaml
 kes_agent:
@@ -324,7 +327,7 @@ kes_agent:
 
 ### Almacén compartido
 
-Configure `kes_agent.store` para guardar el piso de periodo KES y los registros de slots firmados de cada perfil en una base de datos PostgreSQL en lugar de archivos de guardia, de modo que varias réplicas del agente puedan compartirlos. El almacén se aplica tanto al perfil `default` de un solo pool como a `profiles`. El almacén se configura solo en YAML.
+Configure `kes_agent.store` para guardar el piso de periodo KES y los registros de slots firmados de cada perfil en una base de datos PostgreSQL en lugar de archivos de guardia, de modo que varias réplicas del agente puedan compartirlos. `network_magic` delimita el piso de periodo, los registros de slots firmados y, cuando se configuran, las claves KES compartidas. El almacén se aplica tanto al perfil `default` de un solo pool como a `profiles`. El almacén se configura solo en YAML.
 
 | Ruta de configuración | Uso | Valor predeterminado o requisito |
 | --- | --- | --- |
@@ -337,6 +340,8 @@ Configure `kes_agent.store` para guardar el piso de periodo KES y los registros 
 Con el almacén `postgres`, deje `guard_file` sin configurar en cada perfil y en el nivel superior. Bursa rechaza el inicio cuando hay un archivo de guardia junto al almacén compartido, en lugar de ignorarlo.
 
 Sin `age_recipients` y `age_identity_file`, cada réplica conserva su propia clave KES solo en memoria y la base de datos solo guarda el guardia de slots. Con ellos, el agente sella con age una clave preparada para `age_recipients` y la guarda en la base de datos, y cada réplica abre la clave instalada con las identidades de `age_identity_file`.
+
+El valor `0` o ausente de `network_magic` conserva el ámbito y los registros existentes. Si se añade o cambia `network_magic` después de crear registros compartidos, el perfil selecciona un ámbito nuevo y vacío para esa identidad; no reutiliza el registro de slot firmado, el piso de periodo ni las claves compartidas del ámbito anterior.
 
 ```yaml
 kes_agent:
