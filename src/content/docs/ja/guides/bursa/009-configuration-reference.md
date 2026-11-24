@@ -296,6 +296,7 @@ opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --atte
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley ジェネシスの開始時刻です。 | RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.network_magic` | `KESAGENT_NETWORK_MAGIC` | ネットワークを識別する任意の `uint32` ネットワークマジックです。 | 省略可能です。`0` または未設定の場合は従来のスコープを維持します。0 以外の場合はネットワークスコープに `/magic=<n>` を追加します。 |
 | `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Shelley 開始時点の絶対スロットです。 | `shelley_start_time` と組み合わせて、20 秒スロットの Byron 期を持つネットワークで指定します。 |
 | `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | `shelley_start_slot` に対応する時刻です。 | RFC3339 のタイムスタンプを指定します。 |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
