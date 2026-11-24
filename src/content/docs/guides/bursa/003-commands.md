@@ -131,7 +131,7 @@ Rotate a KES key in three steps:
 1. Generate the staged key and write its verification key to an envelope:
 
    ```
-   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml gen-staged-key --out kes.vkey
+   ./bursa kes-agent control --config /etc/bursa/kes-agent/config.yaml gen-staged-key --out kes.vkey --attestation-out kes.attestation.json
    ```
 
 2. Issue an operational certificate for `kes.vkey` offline with the pool cold key. The agent does not issue the certificate.
