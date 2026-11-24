@@ -255,7 +255,7 @@ signer:
               profile: "pool-a"
 ```
 
-この許可は、`signer.callers[].keys` に記載したコールド鍵と、`kes_vkeys` の KES 検証鍵または検証済みの `attestation` の組み合わせに対して適用されます。
+この許可は、`signer.callers[].keys` に記載したコールド鍵と、`kes_vkeys` に一覧した KES 検証鍵、または `kes_agents` の検証に成功した `attestation` に基づいて適用されます。
 
 opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --attestation-out` で保存した JSON の `attestation` オブジェクトを含めることができます。認可には呼び出し元のコールド鍵の許可設定が必要であり、署名、要求された KES 検証鍵との完全一致、コールド鍵ハッシュ、設定済みエージェントの SPKI ピン、および設定した場合の `profile` を検証します。`attestation` が存在する場合、形式不正または検証不一致の attestation は、KES 検証鍵が `kes_vkeys` に含まれていても拒否します。`attestation` を含まない要求は `kes_vkeys` による許可経路を使用します。
 
