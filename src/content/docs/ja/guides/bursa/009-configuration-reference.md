@@ -236,9 +236,9 @@ signer:
         - opcert
 ```
 
-呼び出し元に運用証明書の発行を許可する場合は、`signer.callers[].opcerts` でコールド鍵と、発行対象にできる KES 検証鍵または信頼する KES エージェントを個別に指定します。`opcerts[].key` は同じ呼び出し元の `keys` に含めます。`kes_vkeys` には対象のステージ済み KES 検証鍵の明示的な許可リストを指定し、`kes_agents` には信頼する KES エージェントのピンを指定します。各運用証明書 grant には `kes_vkeys` または `kes_agents` の少なくとも一方が必要です。
+呼び出し元に運用証明書の発行を許可する場合は、`signer.callers[].opcerts` でコールド鍵と、発行対象にできる KES 検証鍵または信頼する KES エージェントを個別に指定します。`opcerts[].key` は同じ呼び出し元の `keys` に含めます。`kes_vkeys` には対象のステージ済み KES 検証鍵の明示的な許可リストを指定し、`kes_agents` には信頼する KES エージェントのピンを指定します。各運用証明書の許可設定には `kes_vkeys` または `kes_agents` の少なくとも一方が必要です。
 
-`kes_agents[].spki_sha256` は、アテステーション対象 KES エージェントの TLS およびアテステーション公開鍵の SPKI フィンガープリント (`server_spki_sha256`) であり、正確に 64 文字の 16 進数で指定します。`profile` は省略可能です。同じコールド鍵の grant に同じ SPKI ピンを重複して指定すると、`profile` の文字列が異なっていても起動時に拒否します。
+`kes_agents[].spki_sha256` は、アテステーション対象 KES エージェントの TLS/アテステーション公開鍵の SPKI フィンガープリント (`server_spki_sha256`) であり、正確に 64 文字の 16 進数で指定します。この形式でないピンは起動時に拒否します。`profile` は省略可能です。同じコールド鍵の許可設定に同じ SPKI ピンを重複して指定すると、`profile` の文字列が異なっていても起動時に拒否します。
 
 ```yaml
 signer:
@@ -255,9 +255,9 @@ signer:
               profile: "pool-a"
 ```
 
-この許可はコールド鍵と、指定された KES 検証鍵または信頼する KES エージェントの組み合わせに対してのみ適用されます。両方の条件を満たさない要求は拒否します。
+この許可は、`signer.callers[].keys` に記載したコールド鍵と、`kes_vkeys` の KES 検証鍵または検証済みの `attestation` の組み合わせに対して適用されます。
 
-opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --attestation-out` で保存した JSON の `attestation` オブジェクトを含めることができます。認可には呼び出し元のコールド鍵 grant が必要であり、署名、要求された KES 検証鍵との完全一致、コールド鍵ハッシュ、設定済みエージェントの SPKI ピン、および設定した場合の `profile` を検証します。`attestation` が存在する場合、形式不正または検証不一致の attestation は、KES 検証鍵が `kes_vkeys` に含まれていても拒否します。`attestation` を含まない要求は `kes_vkeys` による許可経路を使用します。
+opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --attestation-out` で保存した JSON の `attestation` オブジェクトを含めることができます。認可には呼び出し元のコールド鍵の許可設定が必要であり、署名、要求された KES 検証鍵との完全一致、コールド鍵ハッシュ、設定済みエージェントの SPKI ピン、および設定した場合の `profile` を検証します。`attestation` が存在する場合、形式不正または検証不一致の attestation は、KES 検証鍵が `kes_vkeys` に含まれていても拒否します。`attestation` を含まない要求は `kes_vkeys` による許可経路を使用します。
 
 <a id="metrics"></a>
 
