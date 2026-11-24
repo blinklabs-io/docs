@@ -228,12 +228,12 @@ signer:
 | --- | --- | --- |
 | `signer.callers[].keys[]` | Include the cold key that the caller may use for operational certificates. | Bursa denies the caller's operational-certificate request. |
 | `signer.callers[].opcerts[].key` | Match a cold key in the same caller's `keys` list. | Bursa rejects the caller grant or denies the request. |
-| `signer.callers[].opcerts[].kes_vkeys[]` | Optionally list each exact staged KES verification key that the caller may certify without an attestation. | An unlisted KES verification key is denied when the request has no attestation. |
+| `signer.callers[].opcerts[].kes_vkeys[]` | Optionally list each exact staged KES verification key that the caller may certify without an attestation. | Bursa denies an unlisted KES verification key when the request has no attestation. |
 | `signer.callers[].opcerts[].kes_agents[]` | Optionally trust an agent for this cold key. Each entry requires `spki_sha256`, the agent's attestation/TLS server SPKI SHA-256, and may include `profile`. | The pin must decode to exactly 64 hexadecimal characters (32 bytes). Bursa rejects duplicate SPKI pins for one cold-key grant, even when their `profile` values differ. |
 
 Every opcert grant must contain `kes_vkeys`, `kes_agents`, or both. The signer rejects a grant with neither list during startup.
 
-An opcert `POST /v1/sign` request may include the optional `attestation` object returned by `bursa kes-agent control gen-staged-key --attestation-out`. When present, the signer verifies the signed attestation and requires it to match the requested `kes_vkey`, the cold-key hash, and a configured `kes_agents[]` SPKI pin. When a pin includes `profile`, the attestation profile must match it. The signer refuses a present but invalid attestation, even when the requested vkey also appears in `kes_vkeys`; requests without an attestation continue through the explicit `kes_vkeys` path. The caller must still list the cold key in `signer.callers[].keys`, and `signer.keys[].allowed_requests` must include `opcert`.
+An opcert `POST /v1/sign` request may include the optional `attestation` object returned by `bursa kes-agent control gen-staged-key --attestation-out`. When present, the signer verifies the signed attestation and requires it to match the requested `kes_vkey`, the cold-key hash, and a configured `kes_agents[]` SPKI pin. When a pin includes `profile`, the attestation profile must match it. The signer refuses a present but invalid attestation, even when the requested vkey also appears in `kes_vkeys`; requests without an attestation continue through the explicit `kes_vkeys` path.
 
 ## Signer health endpoints
 
