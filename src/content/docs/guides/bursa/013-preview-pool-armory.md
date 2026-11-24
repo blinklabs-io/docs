@@ -715,7 +715,7 @@ Then set the producer's rotation to `Auto`:
         coldKeyHash: <pool id hex>
 ```
 
-- `nodeToClient.enabled` lets the operator read the on-chain counter from the node. The NetworkPolicy the operator renders admits the node-to-client port only from pods labelled `dingo.blinklabs.io/node-to-client=allowed`, and from another namespace only when that namespace carries the label too. The chart labels the operator pod; label its namespace yourself: `kubectl label namespace dingo-operator-system dingo.blinklabs.io/node-to-client=allowed`.
+- `nodeToClient.enabled` lets the operator read the on-chain counter from the node. The NetworkPolicy the operator renders admits the node-to-client port only from pods labelled `dingo.blinklabs.io/node-to-client=allowed`, and from another namespace only when that namespace carries the label too. The operator also reads the node's KES period from its metrics port, which the same policy admits from another namespace only when the pod and its namespace carry `dingo.blinklabs.io/metrics=allowed`. The chart labels the operator pod with both; label its namespace yourself: `kubectl label namespace dingo-operator-system dingo.blinklabs.io/node-to-client=allowed dingo.blinklabs.io/metrics=allowed`.
 - `endpoint` must be an `https` URL.
 - `coldKeyHash` is the pool ID in hex, as `armory-pool keys` prints it. The operator refuses any other value.
 - `renewBeforePeriods` is how many KES periods before expiry the operator rotates.
