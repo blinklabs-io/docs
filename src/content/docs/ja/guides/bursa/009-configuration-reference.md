@@ -308,7 +308,7 @@ opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --atte
 
 サービスソケットと制御ソケットには異なるパスが必要です。8 進数の権限モードを指定でき、両方の既定値は所有者のみの `0600` です。異なるユーザー ID で動くプロデューサーのため、サービスソケットにはグループアクセスを許可できますが、その他のユーザーに書き込みは許可できません。制御ソケットは KES 鍵のインストールや削除を受け付けるため、書き込みは所有者のみに制限する必要があります。
 
-[`kes_agent.profiles`](#profiles) を設定しない場合、これらの単一プール用フィールドは `default` という名前の 1 つのプロファイルになります。このとき `cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、および[共有ストア](#shared-store)を設定しない場合は永続的な `guard_file` のパスも必要です。
+[`kes_agent.profiles`](#profiles) を設定しない場合、これらの単一プール用フィールドは `default` という名前の 1 つのプロファイルになります。このとき `cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。`network_magic` は省略可能で、実行時の `default` プロファイルの識別と共有ガードおよび共有鍵ストアのスコープに影響します。`KESAGENT_NETWORK_MAGIC` はこの単一プールの `default` プロファイルに対応します。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、および[共有ストア](#shared-store)を設定しない場合は永続的な `guard_file` のパスも必要です。
 
 共有ストアがない場合、`kes_agent.guard_file` が空だと KES エージェントは起動を拒否します。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。このガードをメモリ内で代替する機能はありません。
 
@@ -321,6 +321,7 @@ kes_agent:
   control_socket_mode: "0600"
   cold_vkey_file: /etc/bursa/pool-cold.vkey
   system_start: "2022-03-31T00:00:00Z"
+  network_magic: 42
   slot_length: 1
   slots_per_kes_period: 129600
   max_kes_evolutions: 62
