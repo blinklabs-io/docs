@@ -386,7 +386,7 @@ kes_agent:
 
 `profiles` を設定する場合、トップレベルの単一プール用フィールド `cold_vkey_file`、`cold_vkey_hex`、`system_start`、`network_magic`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file`、`control_client_spki_sha256`、`sign_client_spki_sha256` は設定しないでください。`slot_length` と `max_kes_evolutions` は既定値の `1` と `62` のままにします。これらのトップレベルのフィールドを設定すると、Bursa は起動を拒否し、各プロファイルで設定するよう求めます。`network_magic` を使用する場合は、各プロファイルの `kes_agent.profiles[].network_magic` に設定します。
 
-2 つのプロファイルが同じガードファイル (シンボリックリンクやハードリンクで到達する同じファイルを含む) を共有する場合、Bursa は起動を拒否します。同じコールド検証鍵と同じ `system_start` を持つプロファイルでも、異なる 0 以外の `network_magic` を使用すれば共存できます。同じ `network_magic` を使用する場合は、両方が `0` または未設定の場合を含めて同じスコープ値となり、重複扱いになって Bursa は起動を拒否します。同じプロファイル ID を提供するすべてのレプリカは、同じ `network_magic` を使用する必要があります。1 つのコールド鍵で複数のネットワークを提供でき、異なる `system_start` または異なる 0 以外の `network_magic` で区別します。`serve-key` モードはプロファイルを 1 つだけ受け付けます。複数のプールは `sign` モードで提供します。
+2 つのプロファイルが同じガードファイル (シンボリックリンクやハードリンクで到達する同じファイルを含む) を共有する場合、Bursa は起動を拒否します。同じコールド検証鍵と同じ `system_start` を持つプロファイルでも、異なる 0 以外の `network_magic` を使用すれば共存できます。同じ `network_magic` を使用する場合は、両方が `0` または未設定の場合を含めて同じスコープ値となり、重複扱いになり、Bursa は起動を拒否します。同じプロファイル ID を提供するすべてのレプリカは、同じ `network_magic` を使用する必要があります。1 つのコールド鍵で複数のネットワークを提供でき、異なる `system_start` または異なる 0 以外の `network_magic` で区別します。`serve-key` モードはプロファイルを 1 つだけ受け付けます。複数のプールは `sign` モードで提供します。
 
 ```yaml
 kes_agent:
