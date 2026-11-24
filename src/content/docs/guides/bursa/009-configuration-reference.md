@@ -266,7 +266,7 @@ Configure the daemon under the `kes_agent` YAML key. Each single-pool field also
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | Load the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | Load the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Set the Shelley genesis system start. | Set an RFC3339 timestamp. |
-| `kes_agent.network_magic` | `KESAGENT_NETWORK_MAGIC` | Set an optional unsigned 32-bit network magic value. Bursa adds a non-zero value to the network scope as `/magic=<n>`. | Optional. A value of `0` or an unset value preserves the legacy scope. |
+| `kes_agent.network_magic` | `KESAGENT_NETWORK_MAGIC` | Set an optional unsigned 32-bit network magic value. Bursa includes a non-zero value in the network scope as `/magic=<n>`. | Optional. A value of `0` or an unset value preserves the legacy scope. |
 | `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Set the first Shelley slot for networks whose earlier era used a different slot length. | Set this with `shelley_start_time` when the target network requires a Shelley anchor. |
 | `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | Set the wall clock time of `shelley_start_slot`. | Set this with `shelley_start_slot` when the target network requires a Shelley anchor. |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | Set the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
@@ -339,7 +339,7 @@ Set `kes_agent.profiles` to serve several pools from one agent, on one network o
 | `kes_agent.profiles[].cold_vkey_file` | Loads the pool cold verification key from a `cardano-cli` text envelope, raw bytes, or hex input. | Provide this field or `cold_vkey_hex`. |
 | `kes_agent.profiles[].cold_vkey_hex` | Loads the pool cold verification key from inline hexadecimal input. | Provide this field or `cold_vkey_file`; Bursa uses inline hex when both are set. |
 | `kes_agent.profiles[].system_start` | Sets the Shelley genesis system start. | Required; set an RFC3339 timestamp. |
-| `kes_agent.profiles[].network_magic` | Distinguishes profiles that otherwise share a cold verification key and `system_start` with an optional unsigned 32-bit network magic value. | Optional; use `0` or leave unset for the legacy scope. |
+| `kes_agent.profiles[].network_magic` | Provides an optional unsigned 32-bit network magic value that distinguishes profiles that otherwise share a cold verification key and `system_start`. | Optional; use `0` or leave unset for the legacy scope. |
 | `kes_agent.profiles[].shelley_start_slot` | Sets the first Shelley slot. | Set with `shelley_start_time` on networks whose Byron era used longer slots, such as `4492800` on mainnet and `86400` on preprod. Without them, Bursa counts slots from `system_start` at `slot_length`. |
 | `kes_agent.profiles[].shelley_start_time` | Sets the time of the first Shelley slot. | Set with `shelley_start_slot` as an RFC3339 timestamp, such as `2020-07-29T21:44:51Z` on mainnet and `2022-06-21T00:00:00Z` on preprod. |
 | `kes_agent.profiles[].slot_length` | Sets the wall clock length of one slot in seconds. | Bursa uses `1` by default; set a positive value. |
@@ -350,7 +350,7 @@ Set `kes_agent.profiles` to serve several pools from one agent, on one network o
 
 When `profiles` is set, leave the top-level single-pool fields unset: `cold_vkey_file`, `cold_vkey_hex`, `system_start`, `network_magic`, `shelley_start_slot`, `shelley_start_time`, `slots_per_kes_period`, `max_clock_skew`, and `guard_file`. Leave `slot_length` and `max_kes_evolutions` at their defaults of `1` and `62`. Bursa refuses startup when any of these top-level fields is set, and asks for the setting in each profile instead.
 
-Bursa also refuses startup when two profiles share a guard file, including the same file reached through a symbolic or hard link, and when two profiles have the same cold verification key and the same resulting network scope. Different non-zero `network_magic` values let profiles with the same cold verification key and `system_start` coexist. Profiles with the same `network_magic`, or with both values set to zero or left unset, still conflict. All replicas serving one profile identity must use the same `network_magic`. One cold key can serve several networks, which a different `system_start` or `network_magic` distinguishes. The `serve-key` mode takes exactly one profile; serve several pools in `sign` mode.
+Bursa also refuses startup when two profiles share a guard file, including the same file reached through a symbolic or hard link, and when two profiles have the same cold verification key and the same resulting network scope. Profiles with different non-zero `network_magic` values and the same cold verification key and `system_start` can coexist. Profiles with the same `network_magic`, or with both values set to zero or left unset, still conflict. All replicas serving one profile identity must use the same `network_magic`. A different `system_start` or `network_magic` distinguishes networks that use one cold key. The `serve-key` mode takes exactly one profile; serve several pools in `sign` mode.
 
 ```yaml
 kes_agent:
@@ -386,7 +386,7 @@ With the `postgres` store, leave `guard_file` unset in every profile and at the 
 
 Without `age_recipients` and `age_identity_file`, each replica keeps its own KES key in memory only, and the database holds only the slot guard. With them, the agent seals a staged key with age to `age_recipients` and keeps it in the database, and every replica unseals the installed key with the identities in `age_identity_file`.
 
-A zero or unset `network_magic` preserves the existing scope, so existing period floors, signed-slot records, and shared KES keys continue to apply. Adding or changing `network_magic` after shared records exist makes Bursa use a new empty scope for that profile identity. Bursa then cannot reuse the previous period floor, signed-slot record, or shared keys. All replicas for the affected profile must use the same value.
+A zero or unset `network_magic` preserves the existing scope, so existing period floors, signed-slot records, and shared KES keys continue to apply. Adding or changing `network_magic` after shared records exist makes Bursa use a new empty scope for that profile identity. The affected profile starts without the previous period floor, signed-slot record, or shared keys, so Bursa cannot reuse those records. All replicas for the affected profile must use the same value.
 
 ```yaml
 kes_agent:
