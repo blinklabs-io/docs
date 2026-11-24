@@ -292,7 +292,7 @@ Configure `kes_agent.profiles` para atender varios pools desde un agente, en una
 | `kes_agent.profiles[].cold_vkey_file` | Carga la clave de verificación fría del pool desde un sobre de texto de `cardano-cli`, bytes sin procesar o hexadecimal. | Indique este campo o `cold_vkey_hex`. |
 | `kes_agent.profiles[].cold_vkey_hex` | Carga la clave de verificación fría del pool desde hexadecimal en línea. | Indique este campo o `cold_vkey_file`; si aparecen ambos, Bursa usa el valor hexadecimal. |
 | `kes_agent.profiles[].system_start` | Indica el inicio del sistema de la génesis Shelley. | Requerido; use una marca de tiempo RFC3339. |
-| `kes_agent.profiles[].network_magic` | Distingue perfiles que, de otro modo, compartirían la clave de verificación fría y `system_start`. | Opcional; use un valor `uint32`. Los valores no nulos distintos permiten identidades de perfil separadas. |
+| `kes_agent.profiles[].network_magic` | Distingue perfiles que, de otro modo, compartirían la clave de verificación fría y `system_start`. | Opcional; use un valor `uint32`. Dos valores no nulos distintos permiten identidades de perfil separadas. |
 | `kes_agent.profiles[].shelley_start_slot` | Indica el primer slot de Shelley. | Configúrelo con `shelley_start_time` en redes cuya era Byron usaba slots más largos, como `4492800` en mainnet y `86400` en preprod. Sin ellos, Bursa cuenta los slots desde `system_start` con `slot_length`. |
 | `kes_agent.profiles[].shelley_start_time` | Indica la hora del primer slot de Shelley. | Configúrelo con `shelley_start_slot` como marca de tiempo RFC3339, como `2020-07-29T21:44:51Z` en mainnet y `2022-06-21T00:00:00Z` en preprod. |
 | `kes_agent.profiles[].slot_length` | Duración de cada slot en segundos. | El valor predeterminado es `1`; el valor debe ser positivo. |
@@ -327,7 +327,7 @@ kes_agent:
 
 ### Almacén compartido
 
-Configure `kes_agent.store` para guardar el piso de periodo KES y los registros de slots firmados de cada perfil en una base de datos PostgreSQL en lugar de archivos de guardia, de modo que varias réplicas del agente puedan compartirlos. `network_magic` delimita el piso de periodo, los registros de slots firmados y, cuando se configuran, las claves KES compartidas. El almacén se aplica tanto al perfil `default` de un solo pool como a `profiles`. El almacén se configura solo en YAML.
+Configure `kes_agent.store` para guardar el piso de periodo KES y los registros de slots firmados de cada perfil en una base de datos PostgreSQL en lugar de archivos de guardia, de modo que varias réplicas del agente puedan compartirlos. `network_magic` delimita el piso de periodo, los registros de slots firmados y las claves KES compartidas cuando el almacén las guarda. El almacén se aplica tanto al perfil `default` de un solo pool como a `profiles`. El almacén se configura solo en YAML.
 
 | Ruta de configuración | Uso | Valor predeterminado o requisito |
 | --- | --- | --- |
@@ -341,7 +341,7 @@ Con el almacén `postgres`, deje `guard_file` sin configurar en cada perfil y en
 
 Sin `age_recipients` y `age_identity_file`, cada réplica conserva su propia clave KES solo en memoria y la base de datos solo guarda el guardia de slots. Con ellos, el agente sella con age una clave preparada para `age_recipients` y la guarda en la base de datos, y cada réplica abre la clave instalada con las identidades de `age_identity_file`.
 
-El valor `0` o ausente de `network_magic` conserva el ámbito y los registros existentes. Si se añade o cambia `network_magic` después de crear registros compartidos, el perfil selecciona un ámbito nuevo y vacío para esa identidad; no reutiliza el registro de slot firmado, el piso de periodo ni las claves compartidas del ámbito anterior.
+El valor `0` o ausente de `network_magic` conserva el ámbito y los registros existentes. Al añadir o cambiar `network_magic` después de crear registros compartidos, Bursa selecciona un ámbito nuevo y vacío para esa identidad y no reutiliza el registro de slot firmado, el piso de periodo ni las claves compartidas del ámbito anterior.
 
 ```yaml
 kes_agent:
