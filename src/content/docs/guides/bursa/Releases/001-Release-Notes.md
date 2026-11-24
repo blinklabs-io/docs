@@ -10,9 +10,9 @@ description: Bursa Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.29.0 - *[View Release Notes](../v0-29-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.29.0)
-  * Added optional `network_magic` settings through `KESAGENT_NETWORK_MAGIC` for single-pool deployments and `network_magic` in profile YAML, so each KES agent profile can identify its network explicitly.
-  * Improved pool identity and shared KES agent state by separating profiles with different non-zero `network_magic` values, allowing profiles that use the same cold verification key and `system_start` to coexist without duplicate-pool or shared-record collisions.
-  * Preserved the existing scope and records when `network_magic` is unset or `0`; changing the value for an existing profile creates a new scope and prevents reuse of its previous signed-slot, period-floor, and shared-key records.
+  * Added optional network selection for KES agent profiles through `KESAGENT_NETWORK_MAGIC` for single-pool deployments and `network_magic` in profile YAML, so each profile can identify its network explicitly.
+  * Improved pool identity and shared state by separating profiles with different non-zero `network_magic` values, allowing profiles that use the same cold verification key and `system_start` to coexist without duplicate pool detection or shared record collisions.
+  * Preserved existing scope and records when `network_magic` is unset or `0`; changing the value for an existing profile creates a new scope and prevents reuse of its previous signed-slot, period-floor, and shared-key records.
 - Version: v0.28.0 - *[View Release Notes](../v0-28-0)* - [Release](https://github.com/blinklabs-io/bursa/releases/tag/v0.28.0)
   * Enabled `gen-staged-key --attestation-out` to produce a signed staged-key attestation from an attested TLS KES agent.
   * Authorized operational certificate issuance through trusted `opcerts[].kes_agents` pins, avoiding `opcerts[].kes_vkeys` edits and restarts for each staged key.
