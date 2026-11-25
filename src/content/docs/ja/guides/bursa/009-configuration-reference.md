@@ -296,6 +296,7 @@ opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --atte
 | `kes_agent.cold_vkey_file` | `KESAGENT_COLD_VKEY_FILE` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
 | `kes_agent.cold_vkey_hex` | `KESAGENT_COLD_VKEY_HEX` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
 | `kes_agent.system_start` | `KESAGENT_SYSTEM_START` | Shelley ジェネシスの開始時刻です。 | RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.network_magic` | `KESAGENT_NETWORK_MAGIC` | ネットワークスコープを識別する任意の `uint32` ネットワークマジックです。 | 省略可能です。`0` または未設定の場合は従来のスコープを維持します。0 以外の場合はネットワークスコープに `/magic=<n>` を追加します。 |
 | `kes_agent.shelley_start_slot` | `KESAGENT_SHELLEY_START_SLOT` | Shelley 開始時点の絶対スロットです。 | `shelley_start_time` と組み合わせて、20 秒スロットの Byron 期を持つネットワークで指定します。 |
 | `kes_agent.shelley_start_time` | `KESAGENT_SHELLEY_START_TIME` | `shelley_start_slot` に対応する時刻です。 | RFC3339 のタイムスタンプを指定します。 |
 | `kes_agent.slot_length` | `KESAGENT_SLOT_LENGTH` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
@@ -307,7 +308,7 @@ opcert の `SignRequest` には、`bursa kes-agent control gen-staged-key --atte
 
 サービスソケットと制御ソケットには異なるパスが必要です。8 進数の権限モードを指定でき、両方の既定値は所有者のみの `0600` です。異なるユーザー ID で動くプロデューサーのため、サービスソケットにはグループアクセスを許可できますが、その他のユーザーに書き込みは許可できません。制御ソケットは KES 鍵のインストールや削除を受け付けるため、書き込みは所有者のみに制限する必要があります。
 
-[`kes_agent.profiles`](#profiles) を設定しない場合、これらの単一プール用フィールドは `default` という名前の 1 つのプロファイルになります。このとき `cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、および[共有ストア](#shared-store)を設定しない場合は永続的な `guard_file` のパスも必要です。
+[`kes_agent.profiles`](#profiles) を設定しない場合、これらの単一プール用フィールドは `default` という名前の 1 つのプロファイルになります。このとき `cold_vkey_file` または `cold_vkey_hex` のいずれかから、32 バイトのコールド検証鍵が必要です。`network_magic` は省略可能で、実行時の `default` プロファイルを識別し、共有ガードおよび共有鍵ストアのスコープを決定します。`KESAGENT_NETWORK_MAGIC` はこの単一プールの `default` プロファイルに対応します。起動には、RFC3339 形式の `system_start`、正の `slot_length`、0 以外の `slots_per_kes_period`、および[共有ストア](#shared-store)を設定しない場合は永続的な `guard_file` のパスも必要です。
 
 共有ストアがない場合、`kes_agent.guard_file` が空だと KES エージェントは起動を拒否します。期間ガードは認可した最大の KES 期間を永続化し、再起動後に復元して、期間のロールバックを拒否します。このガードをメモリ内で代替する機能はありません。
 
@@ -320,6 +321,7 @@ kes_agent:
   control_socket_mode: "0600"
   cold_vkey_file: /etc/bursa/pool-cold.vkey
   system_start: "2022-03-31T00:00:00Z"
+  network_magic: 42
   slot_length: 1
   slots_per_kes_period: 129600
   max_kes_evolutions: 62
@@ -371,6 +373,7 @@ kes_agent:
 | `kes_agent.profiles[].cold_vkey_file` | `cardano-cli` テキストエンベロープ、生バイト、16 進数からプールのコールド検証鍵を読み込みます。 | このフィールドまたは `cold_vkey_hex` が必須です。 |
 | `kes_agent.profiles[].cold_vkey_hex` | プールのコールド検証鍵をインラインの 16 進数から読み込みます。 | このフィールドまたは `cold_vkey_file` が必須です。両方がある場合はインラインの 16 進数を使用します。 |
 | `kes_agent.profiles[].system_start` | Shelley ジェネシスの開始時刻です。 | 必須。RFC3339 のタイムスタンプを指定します。 |
+| `kes_agent.profiles[].network_magic` | 任意の `uint32` ネットワークマジックです。同じコールド検証鍵と `system_start` を持つプロファイルを区別します。 | 省略可能です。`0` または未設定の場合は従来のスコープを使用します。 |
 | `kes_agent.profiles[].shelley_start_slot` | 最初の Shelley スロットです。 | Byron 期により長いスロットを使っていたネットワークでは `shelley_start_time` とともに設定します。例として mainnet は `4492800`、preprod は `86400` です。未設定の場合、`system_start` から `slot_length` でスロットを数えます。 |
 | `kes_agent.profiles[].shelley_start_time` | 最初の Shelley スロットの時刻です。 | `shelley_start_slot` とともに RFC3339 のタイムスタンプで設定します。例として mainnet は `2020-07-29T21:44:51Z`、preprod は `2022-06-21T00:00:00Z` です。 |
 | `kes_agent.profiles[].slot_length` | 1 スロットの実時間の長さを秒で指定します。 | 既定値は `1`。正の値が必要です。 |
@@ -381,9 +384,9 @@ kes_agent:
 | `kes_agent.profiles[].control_client_spki_sha256` | このプロファイルのリモート制御セッションを許可するクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェスト一覧です。 | 各値は 64 文字の 16 進数で指定します。`attested_listen_address`、`attested_client_ca_file`、TLS を使用するリスナーが必要です。`attested_plaintext` とは併用できません。 |
 | `kes_agent.profiles[].sign_client_spki_sha256` | このプロファイルのリモート署名セッションを許可するクライアント証明書の SubjectPublicKeyInfo の SHA-256 ダイジェスト一覧です。 | 各値は 64 文字の 16 進数で指定します。`attested_listen_address`、`attested_client_ca_file`、TLS を使用するリスナーが必要です。`attested_plaintext` とは併用できません。 |
 
-`profiles` を設定する場合、トップレベルの単一プール用フィールド `cold_vkey_file`、`cold_vkey_hex`、`system_start`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file`、`control_client_spki_sha256`、`sign_client_spki_sha256` は設定しないでください。`slot_length` と `max_kes_evolutions` は既定値の `1` と `62` のままにします。これらのトップレベルのフィールドを設定すると、Bursa は起動を拒否し、各プロファイルで設定するよう求めます。
+`profiles` を設定する場合、トップレベルの単一プール用フィールド `cold_vkey_file`、`cold_vkey_hex`、`system_start`、`network_magic`、`shelley_start_slot`、`shelley_start_time`、`slots_per_kes_period`、`max_clock_skew`、`guard_file`、`control_client_spki_sha256`、`sign_client_spki_sha256` は設定しないでください。`slot_length` と `max_kes_evolutions` は既定値の `1` と `62` のままにします。これらのトップレベルのフィールドを設定すると、Bursa は起動を拒否し、各プロファイルで設定するよう求めます。`network_magic` を使用する場合は、各プロファイルの `kes_agent.profiles[].network_magic` に設定します。
 
-2 つのプロファイルが同じガードファイル (シンボリックリンクやハードリンクで到達する同じファイルを含む) を共有する場合や、同じコールド検証鍵と同じ `system_start` を持つ場合も、Bursa は起動を拒否します。1 つのコールド鍵で複数のネットワークを提供でき、異なる `system_start` で区別します。`serve-key` モードはプロファイルを 1 つだけ受け付けます。複数のプールは `sign` モードで提供します。
+2 つのプロファイルが同じガードファイル (シンボリックリンクやハードリンクで到達する同じファイルを含む) を共有する場合、Bursa は起動を拒否します。同じコールド検証鍵と同じ `system_start` を持つプロファイルでも、異なる 0 以外の `network_magic` を使用すれば共存できます。同じ `network_magic` を使用する場合は、両方が `0` または未設定の場合を含めて同じスコープ値となり、重複扱いになり、Bursa は起動を拒否します。同じプロファイル ID を提供するすべてのレプリカは、同じ `network_magic` を使用する必要があります。1 つのコールド鍵で複数のネットワークを提供でき、異なる `system_start` または異なる 0 以外の `network_magic` で区別します。`serve-key` モードはプロファイルを 1 つだけ受け付けます。複数のプールは `sign` モードで提供します。
 
 ```yaml
 kes_agent:
@@ -394,11 +397,13 @@ kes_agent:
     - name: pool-a
       cold_vkey_file: /etc/bursa/pool-a-cold.vkey
       system_start: "2022-10-25T00:00:00Z"
+      network_magic: 1
       slots_per_kes_period: 129600
       guard_file: /var/lib/bursa/pool-a.guard
     - name: pool-b
       cold_vkey_file: /etc/bursa/pool-b-cold.vkey
       system_start: "2022-10-25T00:00:00Z"
+      network_magic: 2
       slots_per_kes_period: 129600
       guard_file: /var/lib/bursa/pool-b.guard
 ```
@@ -420,6 +425,8 @@ kes_agent:
 `postgres` ストアでは、すべてのプロファイルとトップレベルで `guard_file` を設定しないでください。共有ストアと並べてガードファイルを設定すると、Bursa は無視せずに起動を拒否します。
 
 `age_recipients` と `age_identity_file` がない場合、各レプリカは自身の KES 鍵をメモリ内にのみ保持し、データベースはスロットガードのみを保存します。設定した場合、エージェントはステージ済みの鍵を `age_recipients` 宛てに age で封印してデータベースに保存し、各レプリカは `age_identity_file` のアイデンティティでインストール済みの鍵の封印を解きます。
+
+`network_magic` は、各プロファイルの KES 期間の下限、署名済みスロットの記録、および任意で保存する共有 KES 鍵をネットワークスコープごとに分離します。`0` または未設定の場合は従来のスコープを使用するため、既存の共有ストア記録を引き続き使用できます。既存の共有ストア記録があるプロファイルに値を追加または変更するとスコープが変わり、Bursa は新しい空の記録領域を使用します。その場合、以前の署名済みスロットの記録、期間の下限、共有 KES 鍵を再利用できません。
 
 ```yaml
 kes_agent:
