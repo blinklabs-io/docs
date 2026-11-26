@@ -37,10 +37,14 @@ This page covers dingo-operator v0.6.0, Dingo v0.94.2, and Bursa v0.26.0.
   explicitly. dingo-operator v0.6.0 also accepts `Auto` with `signingAgent`,
   when `controlClientCertSecretRef`, `serverSpkiSha256` and
   `rotation.reloadInPlace` are set. The operator then rotates the key through
-  the agent's control role. With the Bursa v0.26.0 signer as the cold signer,
-  that rotation cannot issue until
-  [dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
-  is resolved. This guide does not cover that setup.
+  the agent's control role. With the Bursa signer as the cold signer, use
+  dingo-operator v0.7.0 or later: when the caller's grant refuses the staged
+  key, the `OpCertIssued` condition message names its KES verification key in
+  hex, and each retry offers that same key. List the key in the caller's
+  `opcerts[].kes_vkeys` (see the
+  [Bursa configuration reference](/guides/bursa/009-configuration-reference/#operational-certificate-signer-policy))
+  and the next retry issues the certificate. This guide does not cover that
+  setup.
 - **A mutual TLS link to the agent.** Bursa v0.26.0 admits a producer only
   when its client certificate is verified and its key is pinned for the
   profile. Give the node a client certificate, and pin the agent's server key

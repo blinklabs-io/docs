@@ -46,14 +46,17 @@ when `controlClientCertSecretRef`, `serverSpkiSha256` and
 the agent's control role.
 
 This guide does not use `Auto` rotation, with or without an agent. `Auto`
-issues each new certificate through a cold signer. With Bursa v0.26.0, the
-signer issues an operational certificate only for a KES key that its caller
-configuration grants explicitly, and dingo-operator v0.6.0 asks for a
-certificate for a newly generated KES key on every issue. The first
-certificate, issued by hand, works, but every renewal through the Bursa signer
-is denied until
-[dingo-operator#193](https://github.com/blinklabs-io/dingo-operator/issues/193)
-is resolved, and the producer stops forging when its KES key expires.
+issues each new certificate through a cold signer. The Bursa signer issues an
+operational certificate only for a KES verification key that its caller
+configuration grants explicitly, in `opcerts[].kes_vkeys` (see the
+[Bursa configuration reference](/guides/bursa/009-configuration-reference/#operational-certificate-signer-policy)).
+dingo-operator v0.6.0 asks for a certificate for a newly generated KES key on
+every issue, so no renewal can be granted. Use dingo-operator v0.7.0 or later
+for `Auto` with the Bursa signer. When the grant refuses a key, the
+`OpCertIssued` condition message names its verification key in hex, and each
+retry offers that same key. List it in the caller's `opcerts[].kes_vkeys` and
+the next retry issues the certificate. Until then, a local KES key waits as
+`kes.pending.skey` in the keys Secret and does not trigger a rollout.
 
 ## Requirements
 
