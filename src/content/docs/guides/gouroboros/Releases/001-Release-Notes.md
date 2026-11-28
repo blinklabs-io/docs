@@ -20,7 +20,7 @@ description: gOuroboros Release Notes
   * Matched DMQ expiry bounds with protocol behavior.
   * Aligned message submission timeouts with protocol behavior.
   * Resolved handshake negotiation, simultaneous open, and agreed data handling.
-  * Changed pipeline draining and result delivery with `LosslessResults` and `ResultsDropped`.
+  * Updated pipeline draining and result delivery with `LosslessResults` and `ResultsDropped`.
   * Reshaped `LeiosVote` messages to the CIP-0164 three-element form and added `LeiosLegacyVote` for older full-vote offers, changing the wire format.
   * Restricted protocol timers to receiver-only operation and removed default Local State Query and Local Tx Monitor timeouts.
   * Restarted six protocol servers after done messages.
