@@ -9,6 +9,15 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.222.0 - *[View Release Notes](https://github.com/blinklabs-io/gouroboros/releases/tag/v0.222.0)*
+  * Reduced local transaction monitor cache memory use and handled transaction ID collisions safely.
+  * Aligned fee, size, and minimum coin calculations with `cardano-ledger`; `Mary MinCoinTxOut` now accepts a `TransactionOutput`, which changes the API.
+  * Removed the default `Busy` timeout from local transaction submission, so submissions no longer apply that timeout automatically.
+  * Added Conway mainnet header validation for protocol versions.
+  * Hardened CBOR map decoding against oversized malformed input.
+  * Strengthened general constructor decoding against oversized malformed input.
+  * Validated TPraos overlay schedules and added `VerifyConfig.TPraosOverlay` for verification configuration.
+  * Matched DMQ expiry bounds with protocol behavior.
 - Version: v0.221.0 - *[View Release Notes](../v0-221-0)*
 - Version: v0.220.4 - *[View Release Notes](../v0-220-4)*
 - Version: v0.220.3 - *[View Release Notes](../v0-220-3)*
