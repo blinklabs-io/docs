@@ -18,6 +18,14 @@ description: gOuroboros Release Notes
   * Strengthened general constructor decoding against oversized malformed input.
   * Validated TPraos overlay schedules and added `VerifyConfig.TPraosOverlay` for verification configuration.
   * Matched DMQ expiry bounds with protocol behavior.
+  * Aligned message submission timeouts with protocol behavior.
+  * Resolved handshake negotiation, simultaneous open, and agreed data handling.
+  * Changed pipeline draining and result delivery with `LosslessResults` and `ResultsDropped`.
+  * Reshaped `LeiosVote` messages to the CIP-0164 three-element form and added `LeiosLegacyVote` for older full-vote offers, changing the wire format.
+  * Restricted protocol timers to receiver-only operation and removed default Local State Query and Local Tx Monitor timeouts.
+  * Restarted six protocol servers after done messages.
+  * Corrected Dijkstra committee proposals that originate from earlier levels.
+  * Enabled segmented handshakes.
 - Version: v0.221.0 - *[View Release Notes](../v0-221-0)*
 - Version: v0.220.4 - *[View Release Notes](../v0-220-4)*
 - Version: v0.220.3 - *[View Release Notes](../v0-220-3)*
