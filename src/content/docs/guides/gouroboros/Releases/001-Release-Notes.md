@@ -9,6 +9,7 @@ description: gOuroboros Release Notes
 
 ☑️ Select a version below to view the full release notes.
 
+- Version: v0.223.1 - *[View Release Notes](../v0-223-1)*
 - Version: v0.223.0 - *[View Release Notes](../v0-223-0)*
 - Version: v0.222.0 - *[View Release Notes](../v0-222-0)*
   * Reduced local transaction monitor cache memory use and handled transaction ID collisions safely.
