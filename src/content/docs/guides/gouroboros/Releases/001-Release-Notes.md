@@ -10,6 +10,32 @@ description: gOuroboros Release Notes
 ☑️ Select a version below to view the full release notes.
 
 - Version: v0.223.1 - *[View Release Notes](../v0-223-1)*
+- Version: v0.223.0 - *[View Release Notes](../v0-223-0)*
+- Version: v0.222.0 - *[View Release Notes](../v0-222-0)*
+  * Reduced local transaction monitor cache memory use and handled transaction ID collisions safely.
+  * Aligned fee, size, and minimum coin calculations with `cardano-ledger`; `Mary MinCoinTxOut` now accepts a `TransactionOutput`, which changes the API.
+  * Removed the default `Busy` timeout from local transaction submission, so submissions no longer apply that timeout automatically.
+  * Added Conway mainnet header validation for protocol versions.
+  * Hardened CBOR map decoding against oversized malformed input.
+  * Strengthened general constructor decoding against oversized malformed input.
+  * Validated TPraos overlay schedules and added `VerifyConfig.TPraosOverlay` for verification configuration.
+  * Matched DMQ expiry bounds with protocol behavior.
+  * Aligned message submission timeouts with protocol behavior.
+  * Resolved handshake negotiation, simultaneous open, and agreed data handling.
+  * Updated pipeline draining and result delivery with `LosslessResults` and `ResultsDropped`.
+  * Reshaped `LeiosVote` messages to the CIP-0164 three-element form and added `LeiosLegacyVote` for older full-vote offers, changing the wire format.
+  * Restricted protocol timers to receiver-only operation and removed default Local State Query and Local Tx Monitor timeouts.
+  * Restarted six protocol servers after done messages.
+  * Corrected Dijkstra committee proposals that originate from earlier levels.
+  * Enabled segmented handshakes.
+  * Fixed rolling nonce derivation and combination.
+  * Clamped node-to-node transaction ID requests for version 16 and later.
+  * Added `PerasVotes` await and server-idle handling with reference timeouts.
+  * Hashed transaction-body encodings when no stored CBOR exists to derive transaction IDs.
+  * Refined PPUP and MIR edge case handling.
+  * Updated constructor encoding to use Plutus-compatible CBOR, changing the encoded wire format.
+  * Expanded reference-model test coverage for protocol behavior.
+  * Strengthened validation through additional reference-model test coverage.
 - Version: v0.221.0 - *[View Release Notes](../v0-221-0)*
 - Version: v0.220.4 - *[View Release Notes](../v0-220-4)*
 - Version: v0.220.3 - *[View Release Notes](../v0-220-3)*
